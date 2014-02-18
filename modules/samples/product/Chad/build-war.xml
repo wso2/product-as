@@ -1,0 +1,148 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project default="build-all">
+
+    <property name="wso2appserver.home" value="../../"/>
+    <property name="lib" value="${wso2appserver.home}/lib"/>
+    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="classes" value="${temp.dir}/classes"/>
+    <property name="src" value="src"/>
+    <property name="services" value="services"/>
+
+    <path id="axis2.class.path">
+        <pathelement path="${java.class.path}"/>
+        <fileset dir="${wso2appserver.home}">
+            <include name="lib/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${temp.dir}"/>
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${services}"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${temp.dir}"/>
+    </target>
+
+    <target name="compile-all" depends="init">
+        <javac debug="on" destdir="${classes}">
+            <src path="${src}"/>
+            <classpath refid="axis2.class.path"/>
+        </javac>
+    </target>
+
+    <target name="build-service" depends="compile-all">
+        <property name="aar.dir" value="${temp.dir}/Chad"/>
+        <property name="war.dir" value="${temp.dir}/Chad-war"/>
+        <mkdir dir="${aar.dir}"/>
+        <mkdir dir="${war.dir}/WEB-INF/classes"/>
+        <mkdir dir="${war.dir}/Chad"/>
+        <mkdir dir="${war.dir}/images"/>
+        <mkdir dir="${war.dir}/js"/>
+        <mkdir dir="${war.dir}/css"/>
+
+        <mkdir dir="${aar.dir}/META-INF"/>
+        <mkdir dir="${aar.dir}/www/extensions/core"/>
+        <mkdir dir="${aar.dir}/www/images"/>
+        <copy file="conf/services.xml" tofile="${aar.dir}/META-INF/services.xml"/>
+        <copy file="wsdl/Chad.wsdl" tofile="${aar.dir}/META-INF/Chad.wsdl"/>
+        <copy toDir="${aar.dir}">
+            <fileset dir="${classes}">
+                <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="conf/hibernate">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+
+        <copy toDir="${aar.dir}/www/extensions/core">
+            <fileset dir="www">
+                <include name="**"/>
+                <exclude name="**/index.html"/>
+            </fileset>
+        </copy>
+        <copy toDir="${aar.dir}/www">
+            <fileset dir="main_www">
+                <include name="**"/>
+            </fileset>
+            <fileset dir="www">
+                <include name="**/index.html"/>
+            </fileset>
+        </copy>
+
+        <copy toDir="${aar.dir}/www">
+            <fileset dir="extensions_www">
+                <include name="**"/>
+            </fileset>
+        </copy>
+
+        
+        <jar destfile="${services}/Chad.aar">
+            <fileset dir="${aar.dir}"/>
+        </jar>
+
+        <!-- Create Chad.war -->
+        <copy toDir="${war.dir}/WEB-INF">
+            <fileset file="conf/web.xml"/>
+        </copy>
+        <property name="chad.war.dir" value="${war.dir}/Chad"/>
+        <copy toDir="${chad.war.dir}">
+            <fileset dir="www">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <mkdir dir="${chad.war.dir}/images" />
+        <copy toDir="${chad.war.dir}/images">
+            <fileset dir=".">
+                <include name="images"/>
+                <include name="js"/>
+                <include name="css"/>
+            </fileset>
+        </copy>
+        <copy toDir="${chad.war.dir}/images">
+            <fileset dir="images">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${chad.war.dir}/js">
+            <fileset dir="js">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${chad.war.dir}/css">
+            <fileset dir="css">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <jar destfile="wservices.war">
+            <fileset dir="${war.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-all"
+            depends="build-service">
+        <echo message="Copying the created aar files in to the repository"/>
+        <copy toDir="${repo.location}/services">
+            <fileset dir="${services}">
+                <include name="**/*.aar"/>
+            </fileset>
+        </copy>
+    </target>
+</project>

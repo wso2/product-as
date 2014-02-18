@@ -1,0 +1,106 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<config>
+    <!-- Trader Sample-->
+    <set>
+        <uri>./wsdl/Trader_Client.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.trader.client</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.trader.client</ns2p>
+        <u/>
+        <Emp>org.wso2.www.types.trader.client.mapper</Emp>
+    </set>
+
+    <set>
+        <uri>./wsdl/Trader_Client.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.trader.client</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.trader.client.service</ns2p>
+        <u/>
+        <ss/>
+        <ssi/>
+        <Emp>org.wso2.www.types.trader.client.mapper.service</Emp>
+    </set>
+
+    <set>
+        <uri>./wsdl/Exchange_Client.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.exchange.client</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.exchange.client</ns2p>
+        <u/>
+        <Emp>org.wso2.www.types.exchange.client.mapper</Emp>
+    </set>
+
+    <set>
+        <uri>./wsdl/Exchange_Client.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.exchange.client</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.exchange.client.service</ns2p>
+        <u/>
+        <ss/>
+        <ssi/>
+        <Emp>org.wso2.www.types.exchange.client.mapper.service</Emp>
+    </set>
+
+    <set>
+        <uri>./wsdl/Exchange_Trader.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.exchange.trader</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.exchange.trader</ns2p>
+        <u/>
+        <Emp>org.wso2.www.types.exchange.trader.mapper</Emp>
+    </set>
+
+    <set>
+        <uri>./wsdl/Exchange_Trader.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.exchange.trader</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.exchange.trader.service</ns2p>
+        <u/>
+        <ss/>
+        <ssi/>
+        <Emp>org.wso2.www.types.exchange.trader.mapper.service</Emp>
+    </set>
+
+    <set>
+        <uri>./wsdl/Trader_Exchange.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.trader.exchange</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.trader.exchange</ns2p>
+        <u/>
+        <Emp>org.wso2.www.types.trader.exchange.mapper</Emp>
+    </set>
+
+    <set>
+        <uri>./wsdl/Trader_Exchange.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.sample.trader.exchange</p>
+        <d>adb</d>
+        <ns2p>http://www.wso2.org/types=org.wso2.www.types.trader.exchange.service</ns2p>
+        <u/>
+        <ss/>
+        <ssi/>
+        <Emp>org.wso2.www.types.trader.exchange.mapper.service</Emp>
+    </set>
+</config>

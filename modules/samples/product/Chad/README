@@ -1,0 +1,15 @@
+WSO2 Application Server
+====================================
+
+Sample : Chad
+=============
+
+1. Run "ant" on AS_HOME/samples/Chad directory. This will deploy the Chad service in WSO2 AS.
+2. Start the server and access the Management Console at https://localhost:9443/carbon. Go to
+   the service listing page. You will see the deployed Chad service.
+3. Access the Chad client at http://localhost:9763/Chad and execute operations.
+
+Please note that Safari and Chrome browsers are not supported in this sample. Please use a compatible browser like Firefox, Opera, Internet Explorer.
+
+Please download the Documentation Distribution and refer to the Chad sample document for
+detailed instructions on how to run the Chad sample.

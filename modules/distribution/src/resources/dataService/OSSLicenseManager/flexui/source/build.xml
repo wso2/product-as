@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<project default="main" name="My App Builder" basedir=".">
+    <taskdef resource="flexTasks.tasks" classpath="${basedir}/libs/flexTasks.jar"/>
+    <property name="FLEX_HOME" value="F:/Resources/software/prog tools/flex_sdk_3"/>
+    <property name="APP_ROOT" value="src"/>
+    <property name="HOST_DIR" value="http://localhost:8400/wso2ls/web" />
+    <property name="DEPLOY_DIR" value="F:/tomcat/webapps/wso2ls/web"/>
+    <property name="SERVICE_CONFIG" value= "F:/tomcat/webapps/wso2ls/WEB-INF/flex/services-config.xml"/>
+    <property name="LIB_DIR" value="${basedir}/libs"/>
+    <property name="APP" value="Main.swf"/>
+    <property name="APP_MXML" value="Main.mxml"/>
+    <property name="BROWSER" value="F:/Program Files/Mozilla Firefox/firefox.exe"/>
+    <!--Wrapper properties-->
+    <property name="version.major" value="0"/>
+    <property name="version.minor" value="9"/>
+    <property name="version.revision" value="0"/>
+    <property name="APP_TITLE" value="WSO2 License Manager"/>
+    <property name="APP_WIDTH" value="100%"/>
+    <property name="APP_HEIGHT" value="100%"/>
+
+    <target name="main">
+        <delete dir="${DEPLOY_DIR}/assets" quiet="true"/>
+        <mkdir dir="${DEPLOY_DIR}/assets"/>
+        <copy todir="${DEPLOY_DIR}/assets">
+            <fileset dir="${APP_ROOT}/assets"/>
+        </copy>
+
+        <mxmlc file="${APP_ROOT}/${APP_MXML}"
+               output="${DEPLOY_DIR}/${APP}"
+               services="${SERVICE_CONFIG}"
+                context-root="/wso2ls"
+                warnings="false">
+            <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+            <source-path path-element="${FLEX_HOME}/frameworks"/>
+            <compiler.include-libraries dir="${LIB_DIR}" append="true">
+                <include name="Cairngorm.swc"/>
+            </compiler.include-libraries>
+        </mxmlc>
+        <html-wrapper title="${APP_TITLE}" file="index.html"
+                      application="app" swf="Main" width="${APP_WIDTH}"
+                      height="${APP_HEIGHT}" version-major="${version.major}"
+                      version-minor="${version.minor}" version-revision="${version.revision}"
+                      template="express-installation"
+                      output="${DEPLOY_DIR}"/>
+    </target>
+    <target name="run" depends="main">
+        <exec executable="${BROWSER}" spawn="yes" dir="${DEPLOY_DIR}">
+            <arg line="'${APP}'"/>
+        </exec>
+    </target>
+</project>

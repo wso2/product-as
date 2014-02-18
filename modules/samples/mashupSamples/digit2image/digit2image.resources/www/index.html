@@ -1,0 +1,227 @@
+<!--
+  ~ Copyright 2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Digit2Image test</title>
+<style type="text/css">
+    body {font: 75%/1.5 "Lucida Grande","Lucida Sans","Microsoft Sans Serif", "Lucida Sans Unicode",verdana,sans-serif,"trebuchet ms"; color: #111; }
+    img {margin-bottom: 0.5em}
+    span {font-weight: bold}
+    .template {margin-left:1em; margin-bottom:1em; font-size:125%}
+	#download {font-size:125%; background-color:#F88; display:none; padding:.5em; border:2px solid black; margin:1em;}
+    #console {color:red; font-weight:bold}
+</style>
+<script type="text/javascript" src="?wsdl2form&contentType=text/javascript&resource=js/WSRequest.js"></script>
+<script type="text/javascript" src="../digit2image?stub"></script>
+<script type="text/javascript">
+	var size = "s";
+	//digit2image.proxyAddress = "../../../carbon/admin/jsp/WSRequestXSSproxy_ajaxprocessor.jsp";
+	function refresh() {
+		size = document.getElementById("imageSize").value;
+		
+		var image1 = services["admin/digit2image"].operations["digit2image"];
+		var payload1 = image1.payloadJSON();
+		
+		
+		payload1["p:digit2image"].digit.$ = 1;
+		payload1["p:digit2image"].size.$ = size;
+
+		image1.callback = function(payload1) {
+			var responseXML1 = WSRequest.util._serializeToString(payload1);
+			var responseJSON1 = WebService.utils.xml2bf(payload1);
+			var url1 = responseJSON1["ws:digit2imageResponse"]["return"].$;
+			loadImage(1, url1);
+		};
+		image1.onError = handleError;
+		image1(payload1);
+
+                var image2 = services["admin/digit2image"].operations["digit2image"];
+		var payload2= image2.payloadJSON();
+		
+		
+		payload2["p:digit2image"].digit.$ = 2;
+		payload2["p:digit2image"].size.$ = size;
+
+		image2.callback = function(payload2) {
+			var responseXML2 = WSRequest.util._serializeToString(payload2);
+			var responseJSON2 = WebService.utils.xml2bf(payload2);
+			var url2 = responseJSON2["ws:digit2imageResponse"]["return"].$;
+			loadImage(2, url2);
+		};
+		image2.onError = handleError;
+		image2(payload2);
+
+                var image3 = services["admin/digit2image"].operations["digit2image"];
+		var payload3 = image3.payloadJSON();
+		
+		
+		payload3["p:digit2image"].digit.$ = 3;
+		payload3["p:digit2image"].size.$ = size;
+
+		image3.callback = function(payload3) {
+			var responseXML3 = WSRequest.util._serializeToString(payload3);
+			var responseJSON3 = WebService.utils.xml2bf(payload3);
+			var url3 = responseJSON3["ws:digit2imageResponse"]["return"].$;
+			loadImage(3, url3);
+		};
+		image3.onError = handleError;
+		image3(payload3);
+		
+               	var image4 = services["admin/digit2image"].operations["digit2image"];
+		var payload4 = image4.payloadJSON();
+		
+		
+		payload4["p:digit2image"].digit.$ = 4;
+		payload4["p:digit2image"].size.$ = size;
+
+		image4.callback = function(payload4) {
+			var responseXML4 = WSRequest.util._serializeToString(payload4);
+			var responseJSON4 = WebService.utils.xml2bf(payload4);
+			var url4 = responseJSON4["ws:digit2imageResponse"]["return"].$;
+			loadImage(4, url4);
+		};
+		image4.onError = handleError;
+		image4(payload4);
+
+		var image5 = services["admin/digit2image"].operations["digit2image"];
+		var payload5 = image5.payloadJSON();
+		
+		
+		payload5["p:digit2image"].digit.$ = 5;
+		payload5["p:digit2image"].size.$ = size;
+
+		image5.callback = function(payload5) {
+			var responseXML5 = WSRequest.util._serializeToString(payload5);
+			var responseJSON5 = WebService.utils.xml2bf(payload5);
+			var url5 = responseJSON5["ws:digit2imageResponse"]["return"].$;
+			loadImage(5, url5);
+		};
+		image5.onError = handleError;
+		image5(payload5);
+
+		var image6= services["admin/digit2image"].operations["digit2image"];
+		var payload6 = image6.payloadJSON();
+
+		payload6["p:digit2image"].digit.$ = 6;
+		payload6["p:digit2image"].size.$ = size;
+
+		image6.callback = function(payload6) {
+			var responseXML6 = WSRequest.util._serializeToString(payload6);
+			var responseJSON6 = WebService.utils.xml2bf(payload6);
+			var url6 = responseJSON6["ws:digit2imageResponse"]["return"].$;
+			loadImage(6, url6);
+		};
+		image6.onError = handleError;
+		image6(payload6);
+
+		var image7= services["admin/digit2image"].operations["digit2image"];
+		var payload7 = image7.payloadJSON();
+
+		payload7["p:digit2image"].digit.$ = 7;
+		payload7["p:digit2image"].size.$ = size;
+
+		image7.callback = function(payload7) {
+			var responseXML7 = WSRequest.util._serializeToString(payload7);
+			var responseJSON7 = WebService.utils.xml2bf(payload7);
+			var url7 = responseJSON7["ws:digit2imageResponse"]["return"].$;
+			loadImage(7, url7);
+		};
+		image7.onError = handleError;
+		image7(payload7);
+		
+		var image8= services["admin/digit2image"].operations["digit2image"];
+		var payload8 = image8.payloadJSON();
+
+		payload8["p:digit2image"].digit.$ = 8;
+		payload8["p:digit2image"].size.$ = size;
+
+		image8.callback = function(payload8) {
+			var responseXML8 = WSRequest.util._serializeToString(payload8);
+			var responseJSON8 = WebService.utils.xml2bf(payload8);
+			var url8 = responseJSON8["ws:digit2imageResponse"]["return"].$;
+			loadImage(8, url8);
+		};
+		image8.onError = handleError;
+		image8(payload8);
+
+		var image9= services["admin/digit2image"].operations["digit2image"];
+		var payload9 = image9.payloadJSON();
+
+		payload9["p:digit2image"].digit.$ = 9;
+		payload9["p:digit2image"].size.$ = size;
+
+		image9.callback = function(payload9) {
+			var responseXML9 = WSRequest.util._serializeToString(payload9);
+			var responseJSON9 = WebService.utils.xml2bf(payload9);
+			var url9 = responseJSON9["ws:digit2imageResponse"]["return"].$;
+			loadImage(9, url9);
+		};
+		image9.onError = handleError;
+		image9(payload9);
+		
+		
+		
+			
+		
+	}
+
+    function loadImage(digit, url) {
+		document.getElementById("digit" + digit).src = url;
+	}
+	
+	function handleError(error) {
+        log (console, "Fault: " + error.reason + "\n\n" + error.detail);
+    };
+    
+    function log(console, data) {
+        var browser = WSRequest.util._getBrowser();
+        if (browser == "ie" || browser == "ie7")
+            console.innerText = data;
+        else
+            console.textContent = data;
+    }
+</script>
+</head>
+<body onload="refresh()">
+<h3>Digit2Image tester</h3>
+<div>Select an image size to display:
+	<select id="imageSize">
+		<option value="small">small (75x75 square)</option>
+        <option value="thumbnail">thumbnail (100 on longest side)</option>
+        <option value="medium">medium (240 on longest side)</option>
+        <option value="normal">normal (500 on longest side)</option>
+        <option value="big">big (1024 on longest side)</option>
+        <option value="original">original image</option>
+	</select>
+	<input type="button" value="Refresh" onclick="refresh()"/>
+</div>
+<div>Or invoke the digit2image service directly from the <strong><a href="../digit2image?tryit">Try-it</a></strong> page.</div>
+<hr />
+<div id="images">
+	<img id="digit1" src=""/>
+	<img id="digit2" src=""/>
+	<img id="digit3" src=""/>
+	<img id="digit4" src=""/>
+	<img id="digit5" src=""/>
+	<img id="digit6" src=""/>
+	<img id="digit7" src=""/>
+	<img id="digit8" src=""/>
+	<img id="digit9" src=""/>
+</div>
+<div id="console"></div></body>
+</html>

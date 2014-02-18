@@ -1,0 +1,228 @@
+<!--
+  ~ Copyright 2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Upgrade Checker</title>
+<style type="text/css">
+    body {
+    	font: 90%/1.5 "Lucida Grande","Lucida Sans","Microsoft Sans Serif", "Lucida Sans Unicode",verdana,sans-serif,"trebuchet ms";
+		color: #111;
+		text-align:center;
+	}
+	a.imglink:link img {border:none}
+ 	a.imglink:visited img {border:none}
+ 	a.imglink:hover img {border:none}
+	.normal {padding:0.5em}
+    table {margin: 1em}
+	th {background-color:red}
+	h1 {font-size:150%; margin:0.25em}
+    td {text-align:center}
+    .build_date {font-size:70%}
+	#console {color:red; font-weight:bold; text-align:left}
+	.footer {font-size:75%}
+</style>
+<script type="text/javascript" src="?wsdl2form&contentType=text/javascript&resource=js/WSRequest.js"></script>
+<script type="text/javascript" src="../upgradeChecker?stub"></script>
+<script type="text/javascript">
+		//upgradeChecker.proxyAddress = "../../../carbon/admin/jsp/WSRequestXSSproxy_ajaxprocessor.jsp";
+    function load() {
+        // Fetch recommendation for upgrading
+        var operation = services["admin/upgradeChecker"].operations["getRecommendation"];
+	var payload=null;
+
+	operation.callback = function(payload) {
+                var responseXML = WSRequest.util._serializeToString(payload);
+                var responseJSON = WebService.utils.xml2bf(payload);
+	        
+
+				 
+display(responseJSON);	
+		};
+		operation.onError = handleError;
+		operation(null);
+	
+       
+    }
+
+    function display(responseJSON) {
+		var buildCurrentNightly = responseJSON["ws:getRecommendationResponse"]["return"]["current"]["nightly"].$;
+	        
+	        var buildCurrentVersion=responseJSON["ws:getRecommendationResponse"]["return"]["current"]["version"].$;
+		var buildCurrentDate=new Date(responseJSON["ws:getRecommendationResponse"]["return"]["current"]["date"].$);
+		
+
+		var buildReleaseAction=responseJSON["ws:getRecommendationResponse"]["return"]["release"]["action"].$;
+		var buildReleaseVersion=responseJSON["ws:getRecommendationResponse"]["return"]["release"]["version"].$;	
+		var buildReleaseAge=responseJSON["ws:getRecommendationResponse"]["return"]["release"]["age"].$;	
+		var buildReleaseDownload=responseJSON["ws:getRecommendationResponse"]["return"]["release"]["download"].$;
+		var buildReleaseDate=new Date(responseJSON["ws:getRecommendationResponse"]["return"]["release"]["date"].$);
+		
+		var buildNightlyAction=responseJSON["ws:getRecommendationResponse"]["return"]["nightly"]["action"].$;
+		var buildNightlyAge=responseJSON["ws:getRecommendationResponse"]["return"]["nightly"]["age"].$;	
+		var buildNightlyDownload=responseJSON["ws:getRecommendationResponse"]["return"]["nightly"]["download"].$;
+		var buildNightlyDate=new Date(responseJSON["ws:getRecommendationResponse"]["return"]["nightly"]["date"].$);
+
+		var buildName = buildCurrentNightly? (buildNightlyAge > 0 ? "Nightly Build" : "Custom Build") : buildCurrentVersion + " Release";
+		stuff("rec_user_type", buildName);
+		stuff("sug_user_type", buildName);
+		stuff("norec_type", buildName);
+		stuff("norec_type2", buildName);
+		stuff("rec_user_build_date", buildCurrentDate.toLocaleDateString());
+		stuff("sug_user_build_date", buildCurrentDate.toLocaleDateString());
+		stuff("norec_user_build_date", buildCurrentDate.toLocaleDateString());
+
+		if (buildReleaseAction == 'recommended') {
+			stuff("rec_type",  buildReleaseVersion + " release");
+			stuff("rec_type2",  buildReleaseVersion + " Release");
+			stuff("rec_age", ageToString(buildReleaseAge));
+			document.getElementById("rec_downloadPage").href = buildReleaseDownload;
+			stuff("rec_downloadPage2", "<a href='" + buildReleaseDownload + "'>" + buildReleaseDownload + "</a>");
+			stuff("rec_build_date", buildReleaseDate.toLocaleDateString());
+
+			document.getElementById("recommendation").style.display = "block";
+		} else if (buildNightlyAction == 'recommended') {
+			stuff("rec_type", "latest nightly build");
+			stuff("rec_type2", "Nightly Build");
+			stuff("rec_age", ageToString(buildNightlyAge));
+			document.getElementById("rec_downloadPage").href = buildNightlyDownload;
+			stuff("rec_downloadPage2", "<a href='" +buildNightlyDownload + "'>" + buildNightlyDownload + "</a>");
+			stuff("rec_build_date", buildNightlyDate.toLocaleDateString());
+
+			document.getElementById("recommendation").style.display = "block";
+		} else {
+			stuff("norec_type", buildCurrentNightly ? "nightly build" : "release");
+
+			document.getElementById("norecommendation").style.display = "block";
+		}
+
+		if (buildReleaseAction == 'suggested') {
+			stuff("sug_type", buildReleaseVersion + " release");
+			stuff("sug_type2", buildReleaseVersion + " Release");
+			stuff("sug_age", ageToString(buildReleaseAge));
+			document.getElementById("sug_downloadPage").href = buildReleaseDownload;
+			stuff("sug_downloadPage2", "<a href='" + buildReleaseDownload+ "'>" + buildReleaseDownload + "</a>");
+			stuff("sug_build_date", buildReleaseDate.toLocaleDateString());
+
+			document.getElementById("suggestion").style.display = "block";
+		} else if (buildNightlyAction == 'suggested') {
+			stuff("sug_type", "latest nightly build");
+			stuff("sug_type2", "Nightly Build");
+			stuff("sug_age", ageToString(buildNightlyAge));
+			document.getElementById("sug_downloadPage").href = buildNightlyDownload;
+			stuff("sug_downloadPage2", "<a href='" + buildNightlyDownload + "'>" + buildNightlyDownload + "</a>");
+			stuff("sug_build_date", buildNightlyDate.toLocaleDateString());
+
+			document.getElementById("suggestion").style.display = "block";
+		}
+		document.getElementById("checking").style.display = "none";
+	}
+
+	function stuff(id, value) {
+    	document.getElementById(id).innerHTML = value;
+    }
+
+    function ageToString(age) {
+    	var ageString;
+
+    	if (age < 48) {
+			ageString = age + " hours";
+    	} else if (age < 24*14) {
+			ageString = Math.floor(age/24) + " days";
+	   	} else {
+			ageString = Math.floor(age/(24*7)) + " weeks";
+	   	}
+	   	return ageString;
+    }
+
+	function handleError(error) {
+        log (document.getElementById('console'), "Fault: " + error.reason + "\n\n" + error.detail);
+    };
+
+    function log(console, data) {
+        var browser = WSRequest.util._getBrowser();
+        if (browser == "ie" || browser == "ie7")
+            console.innerText = data;
+        else
+            console.textContent = data;
+    }
+</script>
+</head>
+<body onload="load()">
+<div id="checking">
+	<h1>Checking for available upgrades...</h1>
+	<div class="normal">Accessing the version service and the wso2.org website.</div>
+	<p><img src="images/mashup_logo.gif" alt="WSO2 Mashup Server logo"/></p>
+	<p><img src="/images/wso2pulse.gif" alt="checking..."/></p>
+</div>
+<div id="norecommendation" style="display:none">
+	<h1>Your <span id="norec_type">---</span> is current.</h1>
+	<div class="normal">No new releases or nightly builds are available.</div>
+	<table style="margin-left:auto; margin-right:auto;">
+		<tr>
+			<td>
+				<div class="build_date" id="norec_type2">---</div>
+				<img src="images/mashup_logo.gif" alt="WSO2 Mashup Server"/>
+				<div id="norec_user_build_date" class="build_date">---</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="recommendation" style="display:none">
+	<h1>Recommendation</h1>
+	<div class="normal"><i>Upgrade now</i> to the <span id="rec_type">---</span>, which was released <span id="rec_age">---</span> ago.</div>
+	<table style="margin-left:auto; margin-right:auto;">
+		<tr>
+			<td>
+				<div class="build_date" id="rec_user_type">---</div>
+				<img src="/images/wso2_mashup_logo.gif" alt="WSO2 Mashup Server"/>
+				<div id="rec_user_build_date" class="build_date">---</div>
+			</td>
+			<td><img src="upgrade-arrow.jpg" style="padding:0.25em"/></td>
+			<td>
+				<div class="build_date" id="rec_type2">---</div>
+				<a id="rec_downloadPage" href="" class="imglink"><img src="/images/rmashup_download.gif" alt="WSO2 Mashup Server Download"/></a>
+				<div id="rec_build_date" class="build_date">---</div>
+			</td>
+		</tr>
+	</table>
+	<div class="normal">Find it at <span id="rec_downloadPage2">---</span>.</div>
+</div>
+
+<div id="suggestion" style="display:none; margin-top:3em">
+	<div class="normal">Consider upgrading to the <span id="sug_type">---</span>, which was released <span id="sug_age">---</span> ago.</div>
+	<table style="margin-left:auto; margin-right:auto;">
+		<tr>
+			<td>
+				<div class="build_date" id="sug_user_type">---</div>
+				<img src="images/mashup_logo.gif" alt="WSO2 Mashup Server"/>
+				<div id="sug_user_build_date" class="build_date">---</div>
+			</td>
+			<td><img src="upgrade-arrow.jpg" style="padding:0.25em"/></td>
+			<td>
+				<div class="build_date" id="sug_type2">---</div>
+				<a id="sug_downloadPage" href="" class="imglink"><img src="/images/rmashup_download.gif" alt="WSO2 Mashup Server Download"/></a>
+				<div id="sug_build_date" class="build_date">---</div>
+			</td>
+		</tr>
+	</table>
+	<div class="normal">Find it at <span id="sug_downloadPage2">---</span>.</div>
+</div>
+<hr/>
+<div class="footer">This page provides a friendly user interface for the <strong><a href="../upgradeChecker?tryit">upgradeChecker</a></strong> service.</div>
+<div id="console"></div></body>
+</html>

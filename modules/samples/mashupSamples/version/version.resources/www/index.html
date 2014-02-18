@@ -1,0 +1,94 @@
+<!--
+  ~ Copyright 2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>WSO2 Mashup Server 'version' Service</title>
+<style type="text/css">
+    body {font: 75%/1.5 "Lucida Grande","Lucida Sans","Microsoft Sans Serif", "Lucida Sans Unicode",verdana,sans-serif,"trebuchet ms"; color: #111; }
+    img {margin-bottom: 0.5em}
+    span {font-weight: bold}
+    .template {margin-left:1em; margin-bottom:1em; font-size:125%}
+    #console {color:red; font-weight:bold}
+</style>
+<script type="text/javascript" src="?wsdl2form&contentType=text/javascript&resource=js/WSRequest.js"></script>
+<script type="text/javascript" src="../version?stub"></script>
+<script type="text/javascript">
+		//version.proxyAddress = "../../../carbon/admin/jsp/WSRequestXSSproxy_ajaxprocessor.jsp";
+    function load() {
+	var getVersion = services["admin/version"].operations["getVersion"];
+	var payload = null;
+				
+
+		getVersion.callback = function(payload) {
+			var responseXML = WSRequest.util._serializeToString(payload);
+			
+			document.getElementById("number").innerHTML = responseXML;
+		};
+		getVersion.onError = handleError;
+		getVersion(payload);
+	
+	var friendlyBuildDate = services["admin/version"].operations["friendlyBuildDate"];
+	var payload1 = null;
+				
+
+		friendlyBuildDate.callback = function(payload1) {
+			var responseXML1 = WSRequest.util._serializeToString(payload1);
+			
+			document.getElementById("date").innerHTML = responseXML1;
+		};
+		friendlyBuildDate.onError = handleError;
+		friendlyBuildDate(payload1);
+
+    	var isNightly = services["admin/version"].operations["isNightly"];
+	var payload2=null;
+			
+
+		isNightly.callback = function(payload2) {
+			var responseXML2 = WSRequest.util._serializeToString(payload2);			
+			document.getElementById("nightly").innerHTML = responseXML2 ? "nightly build" : "release";	
+		};
+		isNightly.onError = handleError;
+		isNightly(payload2);
+	
+    	
+    	
+    }
+    
+    function handleError(error) {
+        log (document.getElementById('console'), "Fault: " + error.reason + "\n\n" + error.detail);
+    };
+    
+    function log(console, data) {
+        var browser = WSRequest.util._getBrowser();
+        if (browser == "ie" || browser == "ie7")
+            console.innerText = data;
+        else
+            console.textContent = data;
+    }
+</script>
+</head>
+<body onload="load()">
+<img src="images/mashup_logo.gif" alt="WSO2 Mashup Server logo"/>
+<div>This <span id="nightly">release</span> is version:</div>
+<div class="template"><span id="number"></span></div>
+<div>This version was built on:</div>
+<div class="template"><span id="date"></span>.</div>
+<div>Access all the operations of the version service through the <a href="../version?tryit">Try-it page</a>.</div>
+<div style="font-style:italic">Download the latest version from the <a href="http://dist.wso2.org/products/mashup/nightly-build/" alt="WSO2 Mashup Server, Nightly Build">WSO2 Oxygen Tank</a>.</div>
+<div id="console"></div></body>
+</html>

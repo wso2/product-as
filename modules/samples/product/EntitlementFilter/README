@@ -1,0 +1,25 @@
+   EntitlementFilter Sample
+##########################################
+
+Pre Requests
+---------------------------------------
+  * Start WSO2 IS
+  * Import the sample XACML policy to the IS, which is given in src/main/resources, enable it and Promote To PDP.
+  * Please see the web.xml file given in the src/main/webapp/WEB-INF/web.xml
+  * If you are running WSO2 IS in a  configuration other than default please edit the web.xml as needed.
+
+Building and running the demo using Ant
+---------------------------------------
+The base directory of this sample (i.e., where this README file is located) has the build.xml file
+which is used to build the necessary webapp and deploy it in WSO2 App Server.
+
+To build and deploy the sample,type :
+  * ant
+
+To run the sample demo :
+  * Start the App Server and access the Management Console. Go to the webapp service listing
+    page. You will see the deployed service.
+  * You can Access the URL of EntitlementFilterSampleWebApp to see the demo. The URL to access the protected resoruce is http://localhost:9763/ 
+    Entitlement_Sample_WebApp/protected.jsp  
+  * You have to run the run-client.sh or run-client.bat script. It has all the arguments and classpaths configured to run the sample in console.
+  * In the console it will show the result for several Entitlement Decision Scenarios.

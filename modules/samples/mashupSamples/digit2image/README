@@ -1,0 +1,40 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'Digit2image' mashup sample demonstrates the using of a flickr API. It returns digit image url from flickr while user passes digital number (0-9) with size of image that user expected to see.  
+
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It.
+
+operation 'digit2image'
+
+The digit parameter must be a single digit from 0 to 9. The size parameter is one of:
+"small": 75x75 square
+"thumbnail": 100 on longest side
+"medium": 240 on longest side
+"normal": 500 on longest side
+"big": 1024 on longest side
+"original": original image
+
+Request Example:
+
+<body>
+   <p:digit2image xmlns:p="http://services.mashup.wso2.org/digit2image?xsd">
+      <digit>1</digit>
+      <size>small</size>
+   </p:digit2image>
+</body>

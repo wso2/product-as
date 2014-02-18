@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<config>
+    <!-- CommodityQuote Sample-->
+    <set>
+        <uri>./wsdl/jibx_wsdl.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.jibx.client</p>
+        <d>jibx</d>
+        <u/>
+        <uw/>
+        <ns2p>http://jibx.appserver.wso2.org/library/types=org.wso2.appserver.jibx.library.types.client</ns2p>
+        <Emp>org.wso2.appserver.jibx.mapper.client</Emp>
+        <Ebindingfile>./conf/jibx_unwrapped.xml</Ebindingfile>
+    </set>
+
+    <set>
+        <uri>wsdl/jibx_wsdl.wsdl</uri>
+        <o>./target/generated</o>
+        <p>org.wso2.appserver.jibx.services</p>
+        <d>jibx</d>
+        <ss/>
+        <ssi/>
+        <u/>
+        <uw/>
+        <sd/>
+        <ns2p>http://jibx.appserver.wso2.org/library/types=org.wso2.appserver.jibx.library.types.services</ns2p>
+        <Emp>org.wso2.appserver.jibx.mapper.services</Emp>
+        <Ebindingfile>./conf/jibx_unwrapped.xml</Ebindingfile>
+    </set>
+</config>

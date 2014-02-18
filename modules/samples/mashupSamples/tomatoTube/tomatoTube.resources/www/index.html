@@ -1,0 +1,136 @@
+<!--
+  ~ Copyright 2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>Welcome to TomatoTube</title>
+
+    <link rel="stylesheet" type="text/css" href="tomato-tube.css">
+
+    <script type="text/javascript" src="?wsdl2form&contentType=text/javascript&resource=js/WSRequest.js"></script>
+    <script type="text/javascript" src="../tomatoTube?stub"></script>
+    <script type="text/javascript" language="javascript">				
+        function getData() {
+            //Displaying the loading animation
+            var contentDiv = document.getElementById("content");
+            contentDiv.innerHTML = "<img src='loading.gif'/>     Gathering reviews and trailers. Please wait ...";
+
+            var userMode = document.getElementById("mode").value;
+	    var operation = services["admin/tomatoTube"].operations["readTomatoTubeFeed"];
+	    var payload = operation.payloadJSON();
+	
+	payload["p:readTomatoTubeFeed"].mode.$ = userMode;	    
+
+        operation.callback = function(payload) {
+			var responseXML = WSRequest.util._serializeToString(payload);
+			var responseJSON = WebService.utils.xml2bf(payload);
+			
+			fillData(responseJSON);
+		};
+		operation.onError = handleError;
+		operation(payload);            
+
+        }
+
+        function handleError(error) {
+            alert("An Error occured: " + error.reason);
+        }
+
+        function fillData(responseJSON)
+        {
+            //writing RSS feed subscription info
+
+            var rssLink =  responseJSON["ws:readTomatoTubeFeedResponse"]["return"]["rss"]["channel"]["link"].$;
+            var rssInfoDiv = document.getElementById("rss_links");
+            rssInfoDiv.innerHTML = '<p class="rss"><a type="application/rss+xml" rel="alternate" title="Subscribe to the RSS 2.0 feed of this result" href="' +
+                                   rssLink + '"><img style="border: 0pt none ; width: 20px; height: 20px;" alt="" src="rss_button.png"/></a> Subscribe to the RSS 2.0 feed of this result </p>';
+           
+	var contentDiv= document.getElementById("content");
+        contentDiv.innerHTML = "";
+        var entry=new Array();
+	var titleContent =new Array();
+	var rottenLink=new Array();
+	var description=new Array();
+	var entryContentDiv=new Array();
+         
+	for(var i=0;i<10;i++){            
+                var entryContentDiv = document.createElement("div");
+                titleContent[i] = responseJSON["ws:readTomatoTubeFeedResponse"]["return"]["rss"]["channel"]["item"][i]["title"].$;
+                rottenLink[i] = responseJSON["ws:readTomatoTubeFeedResponse"]["return"]["rss"]["channel"]["item"][i]["link"].$;
+                description[i] = removeCDATA(responseJSON["ws:readTomatoTubeFeedResponse"]["return"]["rss"]["channel"]["item"][i]["description"].$);
+                entryContentDiv.innerHTML = "<div class='item'><h2>#" + (i + 1) + ": " + titleContent[i] + "</h2>"+
+                                            "<p>" + description[i] + "</p><p><a href='" + rottenLink[i] + "' target='_blank'> Read the reviews at Rotten Tomatoes </a>" +
+                                            "</p></div>";
+                contentDiv.appendChild(entryContentDiv);
+           
+        }
+}
+
+        function removeCDATA(candidateString) {
+            //Verify whether this is a CDATA string
+            if (candidateString.substring(0, 9) == "<![CDATA[") {
+                //Removing <![CDATA[
+                candidateString = candidateString.substring(9, candidateString.length);
+                //Removing ]]>
+                candidateString = candidateString.substring(0, candidateString.length - 3);
+            } else if (candidateString.substring(0, 12) == "&lt;![CDATA[") {
+                //Removing &lt;![CDATA[
+                candidateString = candidateString.substring(12, candidateString.length);
+                //Removing ]]&lt;
+                candidateString = candidateString.substring(0, candidateString.length - 6);
+            }
+            return candidateString;
+        }
+    </script>
+</head>
+<body>
+<div id="page">
+<div id="intro">
+    <div class="intro">
+        <img src="tomatotube.jpg" style="float:left; padding-right:1em"/>
+        <div class="welcome">Welcome to TomatoTube</div>
+        Bringing you the top 10 rated movies in theaters and released on DVDs this week as reviewed by
+        <a href='http://www.rottentomatoes.com' target='_blank'>Rotten Tomatoes</a>, complete with their
+        teasers/trailers
+        from <a href='http://www.youtube.com' target='_blank'>YouTube</a>.
+
+    </div>
+    <br/>
+    <div class="intro">Powered
+    by the <a href='http://wso2.org/projects/mashup' target='_blank'>WSO2 Mashup Server</a>.</div>
+
+</div>
+<hr/>
+<div style="padding-top:10px; clear:both"><label for="mode">Choose query: </label>
+    <select id="mode">
+        <option value="theater">Get Top 10 in Theaters</option>
+        <option value="dvd">Get Top 10 DVD releases</option>
+    </select>
+    <input type="button" value="Get data" onclick="getData();"/>
+</div>
+
+<div id="rss_links" class="rssinfo"></div>
+
+<div id="content" class="contents"></div>
+
+<div id="footer"><p class="footer">Copyright 2007 <a href='http://www.wso2.com' target='_blank'>WSO2</a></p></div>
+
+</div>
+</body>
+</html>

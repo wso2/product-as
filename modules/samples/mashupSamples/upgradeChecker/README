@@ -1,0 +1,15 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'UpgradeChecker' mashup service checks the running build of the mashup server against the current release and nightly build versions available.
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).

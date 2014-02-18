@@ -1,0 +1,99 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project default="build-all">
+
+    <property name="ejb.dir" value="ejb"/>
+    <property name="ear.dir" value="ear"/>
+    <property name="ejb.lib" value="${ejb.dir}/lib"/>
+    <property name="ejb.target" value="${ejb.dir}/target"/>
+    <property name="jar.target" value="${ejb.target}/sourcesJar"/>
+    <property name="ear.target" value="${ear.dir}/target"/>
+    <property name="classes" value="${ejb.target}/classes"/>
+    <property name="src" value="ejb/src"/>
+    <property name="ejbName" value="libraryEJB.jar"/>
+    <property name="jarName" value="library.jar"/>
+    <property name="earName" value="library.ear"/>
+
+    <path id="j2ee.class.path">
+        <pathelement path="${java.class.path}"/>
+        <fileset dir="${ejb.lib}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean">
+        <delete dir="${ejb.target}"/>
+        <delete dir="${jar.target}"/>
+        <delete dir="${ear.target}"/>
+    </target>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${ejb.target}"/>
+        <mkdir dir="${jar.target}"/>
+        <mkdir dir="${ear.target}"/>
+        <mkdir dir="${classes}"/>
+    </target>
+
+    <target name="compile-all" depends="init">
+        <javac debug="on" destdir="${classes}">
+            <src path="${src}"/>
+            <classpath refid="j2ee.class.path"/>
+        </javac>
+    </target>
+
+    <target name="build-ejb" depends="compile-all">
+        <echo message="Building ejb archive - ${ejbName}."/>
+        <copy toDir="${classes}">
+            <fileset dir="${src}/main/resources/">
+                <include name="**/*.xml"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${ejb.target}/${ejbName}">
+            <fileset dir="${ejb.target}/classes/"/>
+        </jar>
+    </target>
+
+    <target name="build-sources-jar" depends="build-ejb">
+        <echo message="Building sources jar - ${jarName}."/>
+        <copy toDir="${jar.target}">
+            <fileset dir="${classes}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${ejb.target}/${jarName}">
+            <fileset dir="${jar.target}"/>
+        </jar>
+    </target>
+
+    <target name="build-ear" depends="build-sources-jar">
+        <echo message="Building ear archive - ${earName}."/>
+
+        <copy file="${ejb.target}/${ejbName}" toDir="${ear.target}"/>
+
+        <ear destfile="${ear.target}/${earName}" appxml="${ear.dir}/application.xml">
+            <fileset dir="${ear.target}"/>
+        </ear>
+    </target>
+
+
+    <target name="build-all" depends="build-ear">
+        <echo message="Completed building EJBLibrary."/>
+    </target>
+
+</project>

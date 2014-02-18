@@ -1,0 +1,60 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'StoreXML' stores a blob of uniquely-named XML for later retrieval.
+
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It.
+First of all you have to 'store' XML content before doing retrieve and remove operations of a XML content
+
+Operations
+- store
+
+The store operation stores an XML element for later retrieval. The XML element can be given a name token (xs:NCName) to aid in retrieval, update, or removal of the element. This operation returns a copy of the XML element stored (when successful) or a element when it fails. If the name already exists, the XML associated with it is replaced by the submitted value.
+
+example request
+<body>
+   <p:store xmlns:p="http://services.mashup.wso2.org/storexml?xsd">
+      <name>wso2</name>
+      <value><product>ms</product></value>
+   </p:store>
+</body>
+
+- retrieve
+The retrieve operation fetches an XML element previously stored, using the "name" under which the element was stored. This operation returns a copy of the requested XML element (when successful) or a element when it fails (e.g. no element has been stored with that name).
+
+example request
+<body>
+   <p:retrieve xmlns:p="http://services.mashup.wso2.org/storexml?xsd">
+      <name>wso2</name>
+   </p:retrieve>
+</body>
+
+- remove
+The remove operation deletes an XML element previously stored, using the "name" under which the element was stored. This operation returns a copy of the XML element that has just been deleted (when successful) or a element when it fails.
+
+example request
+<body>
+   <p:remove xmlns:p="http://services.mashup.wso2.org/storexml?xsd">
+      <name>wso2</name>
+   </p:remove>
+</body>
+
+
+
+
+

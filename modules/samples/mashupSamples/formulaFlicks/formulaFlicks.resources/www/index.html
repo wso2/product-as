@@ -1,0 +1,107 @@
+<!--
+  ~ Copyright 2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+  <html>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Formula Flicks</title>
+        <link rel="stylesheet" type="text/css" href="formulaFlicks.css">
+        <script type="text/javascript" src="?wsdl2form&type=js&resource=WSRequest.js"></script>
+        <script type="text/javascript" src="../formulaFlicks?stub"></script>
+        <script type="text/javascript">
+					formulaFlicks.proxyAddress = "../../../carbon/admin/jsp/WSRequestXSSproxy_ajaxprocessor.jsp";	
+        var responseXml;
+        
+        // Called on page load, invokes the information retrieval method asynchronously.
+        function load() {            
+			
+			// Call the method that retrieves race information asynchronously.
+            formulaFlicks.videoList.callback = function (payload) {
+				responseXml = payload;
+				showVideos();        		
+			};
+			formulaFlicks.videoList.onError = showError;
+			formulaFlicks.videoList();
+        }
+        
+        // Show the videos returned by the search on the page.
+        function showVideos() {
+                try {
+					var searchElement = responseXml.getElementsByTagName("search");
+					
+					// Check if the returned message has an error; continue if not.
+					if (searchElement.item(0).getAttribute("error") != null) {
+						errorMessage = searchElement.item(0).getAttribute("error");
+						showError(errorMessage);
+					} else {
+						searchUsed = searchElement.item(0).getAttribute("keywords");
+							
+						// Set the last race name as the title.
+						var headText = document.createTextNode(searchUsed);
+						var heading = document.getElementById("heading");
+						heading.removeChild(heading.childNodes[0]);
+						heading.appendChild(headText);
+		
+						// Get the root div and create the content divs.
+						var rootDiv = document.getElementById("raceDisp");
+						if (rootDiv) {
+							var videos = responseXml.getElementsByTagName("video");
+							for (var i=0; i < videos.length; i++) {
+								  var url = videos.item(i).getAttribute("url");
+								  var title = videos.item(i).getAttribute("title");
+								  var summary = videos.item(i).getAttribute("description");
+								  var published = videos.item(i).getAttribute("published");
+								
+								  // Add video div.
+								  var embedText = title + '<br/>Published:' + published + '<br/><object width="425" height="350"><param name="movie" value="' 
+											+ url + '"></param><param name="wmode" value="transparent"></param><embed src="'
+											+ url + '" type="application/x-shockwave-flash" wmode="transparent" width="425"'
+											+ ' height="350"></embed></object>';
+								  var videoNode = document.createElement("div");
+								  rootDiv.appendChild(videoNode);
+								  videoNode.innerHTML = embedText;
+							}
+						}
+					}
+				} catch (ex) {
+					showError(ex);
+                } 				
+		}
+		
+		// Display a given error message on the page.
+		function showError(message) {
+                var errorText = document.createTextNode(message);
+				var error = document.getElementById("error");
+				error.appendChild(errorText);
+		}
+        </script>
+    </head>
+    <body onload = "load()" >
+        <form id="form1">
+            <p>
+                <div><h1 id="pageTitle">Formula Flicks</h1></div>
+                <div>This page displays the newest youTube videos available for the most recently concluded Formula 1 racing event.</div>
+            </p>
+            <p>
+                <div>Visit the <a href="http://www.formula1.com">Formula 1</a> page for complete details of this event or search for more videos at <a href="http://www.youtube.com">YouTube</a>.</div>
+				<div>You can try the individual methods of the mashup at the <a href="../formulaFlicks?tryit">Try-it</a> page.</div>
+				<div><h3 id="heading">Retrieving race details and videos...</h3></div>
+				<div><h4 id="error"></h4></div>
+            <div id="raceDisp">
+            </div>
+            </p>
+        </form>
+    </body>
+</html>

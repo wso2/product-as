@@ -1,0 +1,36 @@
+Sample : JSON
+=============
+
+Introductions
+=============
+
+This is a simple sample that demonstrates the functionality of the JSON Support
+in WSO2 Application Server.
+
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/JSON/ to build the service.
+2. This will create the JSON service (JSONService.aar file) in the "services" directory and
+copy it to the <CARBON_HOME>/repository/deployment/server/axis2services directory.
+If you start AppServer, JSONService will be available as a deployed service.
+
+The WSDL for the service should be viewable at:
+http://<host>:<port>/services/JSONService?wsdl
+
+
+Running the client
+==================
+
+Use the script run-client.sh or run-client.bat file to invoke the client using following
+optional parameters
+   -help {For help on available options}
+   -e {Endpoint URL}
+   -ct {Content type to be used}
+        aj  (application/json)
+        ajb (application/json/badgerfish)
+
+   ex: ./run-client.sh -ct ajb
+
+

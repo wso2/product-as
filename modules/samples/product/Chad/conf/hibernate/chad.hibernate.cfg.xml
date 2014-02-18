@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
+        <property name="connection.url">jdbc:derby:samples/Chad/target/database/CHAD_DB;create=true</property>
+        <property name="connection.username">chad</property>
+        <property name="connection.password">chad</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.DerbyDialect</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">false</property>
+
+        <!-- Posible values for hbm2ddl.auto (update | create | create-drop)-->
+        <property name="hbm2ddl.auto">update</property>
+
+        <property name="current_session_context_class">thread</property>
+
+        <property name="hibernate.transaction.flush_before_completion">true</property>
+
+        <property name="hibernate.transaction.auto_close_session">true</property>
+
+        <mapping resource="chad.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>

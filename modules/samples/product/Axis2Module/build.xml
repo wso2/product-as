@@ -1,0 +1,62 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project default="build-all">
+
+    <property name="wso2appserver.home" value="../../"/>
+    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="moduleName" value="LogModule-1.0.0.mar"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes" value="${build.dir}/classes"/>
+    <property name="lib" value="${wso2appserver.home}/repository/components/plugins"/>
+    <property name="axis2modules" value="${build.dir}/axis2modules"/>
+
+
+    <path id="compile.classpath">
+        <fileset dir="${lib}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init" depends="clean">
+
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${axis2modules}"/>
+    </target>
+
+    <target name="compile-all" depends="init" >
+        <javac includeantruntime="false" destdir="${classes}" debug="true" srcdir="src">
+            <classpath refid="compile.classpath"/>
+        </javac>
+	<copy file="./src/main/resources/META-INF/module.xml" todir="${classes}/META-INF"/>
+    </target>
+
+    <target name="mar" depends="compile-all">
+        <echo message="Creating axis2modules ${moduleName}."/>
+        <jar destfile="${axis2modules}/${moduleName}" basedir="${classes}">
+        </jar>
+    </target>
+
+    <target name="build-all" depends ="mar">
+        <echo message="Copying the created module file in to the module deployment directory"/>
+        <copy file="${axis2modules}/${moduleName}" todir="${repo.location}/axis2modules"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+    </target>
+
+</project>

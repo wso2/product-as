@@ -1,0 +1,59 @@
+Sample: Jibx
+============
+
+Introduction
+============
+
+This sample demonstrate a usage  of Jibx data binding that comes with Axis2. JiBX differs from the
+other data binding techniques supported by Axis2 in that it allows you to use your own Java data
+objects (as opposed to Java data objects generated from a schema definition). JiBX also provides a
+nicer form of unwrapped Web services interface than is supported by the other data binding techniques.
+ On the downside, JiBX requires more setup than the other data binding techniques - in particular, you
+ need to come up with a set of data classes and a binding definition in order to work with JiBX in Axis2.
+
+JDK requirements
+================
+
+* If you are running this sample on JDK 1.6, you don't need to do anything additional and the sample
+  will run out of the box.
+
+* But if you are running this sample on JDK 1.7, you have to do the following steps.
+
+    - Before executing the "ant" command to build the source, you have to set the environment
+      variable ANT_OPTS="-XX:-UseSplitVerifier".
+        Ex : On linux > export ANT_OPTS="-XX:-UseSplitVerifier"
+
+    - Before running the Application Server, open up wso2server.sh or wso2server.bat file inside the
+      <CARBON_HOME>/bin folder and add the above JVM option under $JAVACMD.
+        Ex : $JAVACMD \
+                -XX:-UseSplitVerifier \
+                -Xbootclasspath/a:"$CARBON_XBOOTCLASSPATH" \
+                ....
+
+Building the Service
+====================
+
+To build the sample service, go to samples directory and type: "ant" 
+
+This will build LibraryService.aar in the target directory and copy it to the
+<CARBON_HOME>/repository/deployment/server/axis2services directory.
+
+The WSDL for this service should be viewable at:
+
+http://<host>:<port>/services/LibraryService?wsdl
+
+
+Running the Client
+==================
+
+To run the sample client for the service, go to samples directory and user either run-client.sh in Linux or
+run-client.bat in Windows. 
+
+Or else you can use AppServer features to generate the client stubs pointing to the wsdl and invoke the service with that
+Or invoke the service with Try-It 
+
+Help
+====
+Please contact our user list (user@wso2.org), if you have any trouble running the sample.
+
+

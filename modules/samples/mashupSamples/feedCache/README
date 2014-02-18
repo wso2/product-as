@@ -1,0 +1,31 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+' FeedCache' mashup sample demonstrates feed cache setting feature of mashup server. 
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It.
+
+operations 
+
+- cacheSettings
+Set the caching properties for a feed. prefetch determines whether the feed should be fetched regularly in the background (true), or only on demand (false). lifespan is the number of milliseconds that the feed should be cached; when prefetch=true, this is the refresh interval, when prefetch=false, this is how long a cached version should be used until it is considered stale.
+
+- feedContent
+Return the XML representation of the feed directly (updating the cache in the process). If the feed is stale, it will be refreshed. If the feed has not been cached before, it will be using the default settings of no prefetching, cache lifespan 24 hours.
+
+- feedReference
+Return a local reference to a cached feed. If the feed is stale, it will be refreshed. If the feed has not been cached before, it will be using the default settings of no prefetching, cache lifespan 24 hours.

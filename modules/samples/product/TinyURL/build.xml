@@ -1,0 +1,104 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project default="build-all" basedir=".">
+
+    <property name="wso2appserver.home" value="../../"/>
+    <property name="carbon.home" value="${wso2appserver.home}"/>
+    <property name="appserver.lib" value="${wso2appserver.home}/lib"/>
+    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="src.dir" value="src"/>
+    <property name="classes.dir" value="classes"/>
+    <property name="TinyUrl.dir" value="TinyUrl"/>
+    <property name="services.dir" value="services"/>
+	<property name="webapps.dir" value="webapps"/>
+    <property name="META-INF.dir" value="${temp.dir}/${TinyUrl.dir}/META-INF"/>
+    <property name="setup" value="ROOT"/>
+    <property name="repo.services" value="axis2services"/>
+	<property name="repo.webapps" value="webapps"/>
+
+    <ant antfile="${wso2appserver.home}/bin/build.xml"/>
+
+    <path id="turl.classpath">
+        <pathelement path="${java.class.path}"/>
+        <fileset dir="${wso2appserver.home}">
+            <include name="repository/lib/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${META-INF.dir}"/>
+        <mkdir dir="${temp.dir}/${classes.dir}"/>
+        <mkdir dir="${temp.dir}/${TinyUrl.dir}"/>
+        <mkdir dir="${services.dir}"/>
+		<mkdir dir="${webapps.dir}"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${temp.dir}"/>
+        <delete dir="${services.dir}"/>
+    </target>
+
+    <target name="compile-all" depends="init">
+        <javac destdir="${temp.dir}/${TinyUrl.dir}">
+            <src path="${src.dir}"/>
+            <classpath refid="turl.classpath"/>
+        </javac>
+
+        <!-- <javac destdir="${temp.dir}/${classes.dir}">
+            <src path="${src.dir}"/>
+            <classpath refid="turl.classpath"/>
+        </javac>-->
+    </target>
+
+    <target name="build-service" depends="compile-all">
+		<property name="war.dir" value="${temp.dir}/TinyURLWAR"/>
+        <copy file="conf/services.xml" tofile="${temp.dir}/${TinyUrl.dir}/META-INF/services.xml"/>
+
+
+        <copy toDir="${war.dir}/extensions/core">
+            <fileset dir="www">
+                <include name="**"/>
+                <exclude name="**/index.html"/>
+            </fileset>
+        </copy>
+
+        <copy toDir="${war.dir}">
+            <fileset dir="www">
+                <include name="**/index.html"/>
+            </fileset>
+        </copy>
+
+		<jar destfile="${webapps.dir}/TinyURL.war">
+            <fileset dir="${war.dir}"/>
+        </jar>
+
+        <jar destfile="${services.dir}/TinyURL.aar">
+            <fileset dir="${temp.dir}/${TinyUrl.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-all" depends="build-service">
+        <echo message="Copying the created aar and war files in to the repository"/>
+        <copy file="${services.dir}/TinyURL.aar" toDir="${repo.location}/${repo.services}"/>
+        <copy toDir="${repo.location}/${repo.webapps}">
+			<fileset dir="${webapps.dir}">
+               <include name="**/*.war"/>
+            </fileset>
+        </copy>
+    </target>
+</project>

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <!-- #################################################### -->
+    <!-- ##### ChadPoll(poll_t) ##### -->
+    <!-- #################################################### -->
+    <class name="org.wso2.appserver.sample.chad.data.ChadPoll"
+           table="poll_t">
+        <id name="id" column="c_id">
+            <generator class="native"/>
+        </id>
+        <property name="lastUpdatedTime" type="timestamp" column="c_last_updated" not-null="true"/>
+
+        <property name="pollId" column="c_poll_id" not-null="true" unique="true"/>
+        <property name="title" column="c_title" not-null="true" unique="true"/>
+        <property name="description" column="c_description"/>
+        <property name="isSingleVote" column="c_is_single_vote" not-null="true"/>
+        <property name="isStopped" column="c_is_stopped" not-null="true"/>
+        <set name="choiceSet" inverse="true" cascade="all-delete-orphan" lazy="false">
+            <key column="c_poll_id"/>
+            <one-to-many class="org.wso2.appserver.sample.chad.data.ChadChoice"/>
+        </set>
+        <set name="votedIPs" inverse="true" cascade="all-delete-orphan" lazy="false">
+            <key column="c_poll_id"/>
+            <one-to-many class="org.wso2.appserver.sample.chad.data.VotedIPAddress"/>
+        </set>
+    </class>
+
+    <!-- #################################################### -->
+    <!-- ##### ChadChoice(choice_t) ##### -->
+    <!-- #################################################### -->
+    <class name="org.wso2.appserver.sample.chad.data.ChadChoice"
+           table="choice_t">
+        <id name="id" column="c_id">
+            <generator class="native"/>
+        </id>
+        <property name="lastUpdatedTime" type="timestamp" column="c_last_updated" not-null="true"/>
+
+        <property name="choiceName" column="c_choice_name" not-null="true"/>
+        <property name="numberOfVotes" column="c_num_of_votes" not-null="true"/>
+        <many-to-one name="poll" column="c_poll_id" not-null="true"
+                     class="org.wso2.appserver.sample.chad.data.ChadPoll"/>
+    </class>
+
+    <!-- #################################################### -->
+    <!-- ##### VotedIPAddress(voted_ip_t) ##### -->
+    <!-- #################################################### -->
+    <class name="org.wso2.appserver.sample.chad.data.VotedIPAddress"
+           table="voted_ip_t">
+        <id name="id" column="c_id">
+            <generator class="native"/>
+        </id>
+        <property name="lastUpdatedTime" type="timestamp" column="c_last_updated" not-null="true"/>
+
+        <property name="ip" column="c_ip" not-null="true"/>
+        <many-to-one name="poll" column="c_poll_id" not-null="true"
+                     class="org.wso2.appserver.sample.chad.data.ChadPoll"/>
+    </class>
+
+    <!-- #################################################### -->
+    <!-- ##### ChadPoll(poll_t) ##### -->
+    <!-- #################################################### -->
+    <class name="org.wso2.appserver.sample.chad.data.AdminUser"
+           table="admin_user_t">
+        <id name="id" column="c_id">
+            <generator class="native"/>
+        </id>
+        <property name="lastUpdatedTime" type="timestamp" column="c_last_updated" not-null="true"/>
+
+        <property name="username" column="c_username" not-null="true" unique="true"/>
+        <property name="password" column="c_password" not-null="true"/>
+    </class>
+</hibernate-mapping>

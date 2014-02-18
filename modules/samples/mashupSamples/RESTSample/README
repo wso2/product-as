@@ -1,0 +1,49 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'RESTsampele' demonstrates rest full verbs. such post, get, put and delete. 
+
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It.
+First of all you have to POST Weather before other operations (put/get/delete) Weather
+
+Operations
+
+- POSTWeather 
+
+We can store weather for city from this operation. 
+Request Example:
+
+<body>
+   <p:POSTWeather xmlns:p="http://services.mashup.wso2.org/RESTSample?xsd">
+      <city>colombo</city>
+      <weatherDetails>30</weatherDetails>
+   </p:POSTWeather>
+</body>
+
+- getWeather 
+
+We can retrieve the stored weather with passing city name. 
+Request Example:
+
+<body>
+   <p:getWeather xmlns:p="http://services.mashup.wso2.org/RESTSample?xsd">
+      <city>colombo</city>
+   </p:getWeather>
+</body>
+
+

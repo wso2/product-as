@@ -1,0 +1,2114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<wsdl:description
+        xmlns:wsdl="http://www.w3.org/ns/wsdl"
+        xmlns:wsoap="http://www.w3.org/ns/wsdl/soap"
+        xmlns:whttp="http://www.w3.org/ns/wsdl/http"
+        xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:fl="urn:flickr"
+        xmlns="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl"
+        xmlns:tns="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl"
+        targetNamespace="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl">
+    <wsdl:documentation>
+        This service describes the flickr api.
+        Currently it is a limited demonstration of WSDL 2.0, focusing on the
+        flickr.peopple.* methods under the HTTP binding.
+    </wsdl:documentation>
+    <wsdl:types>
+        <xs:schema targetNamespace="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl">
+
+            <xs:complexType name="flickrRequest">
+                <xs:sequence>
+                    <xs:element name="api_key" type="xs:string"/>
+                    <xs:any minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="signedFlickrRequest">
+                <xs:complexContent>
+                    <xs:extension base="flickrRequest">
+                        <xs:sequence>
+                            <xs:element name="api_sig" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="authenticatedFlickrRequest">
+                <xs:complexContent>
+                    <xs:extension base="signedFlickrRequest">
+                        <xs:sequence>
+                            <xs:element name="auth_token" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+
+            <!-- flickr.activity.* -->
+            <xs:element name="activity.userComments">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="activity.userPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="timeframe" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.auth.* -->
+            <xs:element name="auth.checkToken">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="signedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="auth_token" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="auth.getFrob" type="signedFlickrRequest"/>
+            <xs:element name="auth.getFullToken">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="signedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="mini_token" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="auth.getToken">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="signedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="frob" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.blogs.* -->
+            <xs:element name="blogs.getList" type="authenticatedFlickrRequest"/>
+            <xs:element name="blogs.postPhoto">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="blog_id" type="xs:string"/>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="title" type="xs:string"/>
+                                <xs:element name="description" type="xs:string"/>
+                                <xs:element name="blog_password" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.contacts.* -->
+            <xs:simpleType name="filter">
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="friends"/>
+                    <xs:enumeration value="family"/>
+                    <xs:enumeration value="both"/>
+                    <xs:enumeration value="neither"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="contacts.getList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="filter" type="filter" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="contacts.getPublicList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.favorites.* -->
+            <xs:element name="favorites.add">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="favorites.getList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="favorites.getPublicList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="favorites.remove">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.groups.* -->
+            <xs:element name="groups.browse">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="cat_id" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groups.getInfo">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="group_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groups.search">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="text" type="xs:string"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.groups.pools.* -->
+            <xs:element name="groups.pools.add">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="group_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groups.pools.getContext">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="group_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groups.pools.getGroups">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groups.pools.getPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="group_id" type="xs:string"/>
+                                <xs:element name="tags" type="xs:string" minOccurs="0"/>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="groups.pools.remove">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="group_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.interestingness.* -->
+            <xs:element name="interestingness.getList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="date" type="xs:date" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="page" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.people.* -->
+            <xs:element name="people.findByEmail">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="find_email" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="people.findByUsername">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="username" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="people.getInfo">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="people.getPublicGroups">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="people.getPublicPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="people.getUploadStatus">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photos.* -->
+            <xs:simpleType name="anyOrAll">
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="any"/>
+                    <xs:enumeration value="all"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="sortOrder">
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="date-posted-asc"/>
+                    <xs:enumeration value="date-posted-desc"/>
+                    <xs:enumeration value="date-taken-asc"/>
+                    <xs:enumeration value="date-taken-desc"/>
+                    <xs:enumeration value="interestingness-desc"/>
+                    <xs:enumeration value="interestingness-asc"/>
+                    <xs:enumeration value="relevance"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="unixTimeStamp">
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+            <xs:element name="photos.addTags">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="tags" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.delete">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getAllContexts">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getContactsPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="count" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="just_friends" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="single_photo" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="include_self" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getContactsPublicPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string"/>
+                                <xs:element name="count" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="just_friends" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="single_photo" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="include_self" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getContext">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getCounts">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="dates" type="xs:string" minOccurs="0"/>
+                                <xs:element name="taken_dates" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getExif">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="secret" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getFavorites">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="page" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getInfo">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="secret" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getNotInSet">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="min_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="min_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="privacy_filter" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getPerms">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getRecent">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getSizes">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getUntagged">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="min_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="min_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="privacy_filter" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getWithGeoData">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="min_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="min_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="sort" type="sortOrder" minOccurs="0"/>
+                                <xs:element name="privacy_filter" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.getWithoutGeoData">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="min_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="min_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="sort" type="sortOrder" minOccurs="0"/>
+                                <xs:element name="privacy_filter" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.recentlyUpdated">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="min_date" type="unixTimeStamp"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.removeTag">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="tag_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.search">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                                <xs:element name="tags" type="xs:string" minOccurs="0"/>
+                                <xs:element name="tag_mode" type="anyOrAll" minOccurs="0"/>
+                                <xs:element name="text" type="xs:string" minOccurs="0"/>
+                                <xs:element name="min_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_upload_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="min_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="max_taken_date" type="unixTimeStamp"
+                                            minOccurs="0"/>
+                                <xs:element name="license" type="xs:string" minOccurs="0"/>
+                                <xs:element name="sort" type="sortOrder" minOccurs="0"/>
+                                <xs:element name="privacy_filter" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="bbox" type="xs:string" minOccurs="0"/>
+                                <xs:element name="accuracy" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="machine_tags" type="xs:string" minOccurs="0"/>
+                                <xs:element name="machine_tag_mode" type="anyOrAll" minOccurs="0"/>
+                                <xs:element name="group_id" type="xs:string" minOccurs="0"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.setDates">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="date_posted" type="xs:string" minOccurs="0"/>
+                                <xs:element name="date_taken" type="xs:string" minOccurs="0"/>
+                                <xs:element name="date_taken_granularity" type="xs:string"
+                                            minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.setMeta">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="title" type="xs:string"/>
+                                <xs:element name="description" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.setPerms">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="is_public" type="xs:integer"/>
+                                <xs:element name="is_friend" type="xs:integer"/>
+                                <xs:element name="is_family" type="xs:integer"/>
+                                <xs:element name="perm_comment" type="xs:integer"/>
+                                <xs:element name="perm_addmeta" type="xs:integer"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.setTags">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="tags" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photos.comments.* -->
+            <xs:element name="photos.comments.addComment">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="comment_text" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.comments.deleteComment">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.comments.editComment">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="comment_id" type="xs:string"/>
+                                <xs:element name="comment_text" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.comments.getList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photos.geo.* -->
+            <xs:element name="photos.geo.getLocation">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.geo.getPerms">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.geo.removeLocation">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.geo.setLocation">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="lat" type="xs:string"/>
+                                <xs:element name="lon" type="xs:string"/>
+                                <xs:element name="accuracy" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.geo.setPerms">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="is_public" type="xs:integer"/>
+                                <xs:element name="is_contact" type="xs:integer"/>
+                                <xs:element name="is_friend" type="xs:integer"/>
+                                <xs:element name="is_family" type="xs:integer"/>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photos.licenses.* -->
+            <xs:element name="photos.licenses.getInfo" type="flickrRequest"/>
+            <xs:element name="photos.licenses.setLicense">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="license_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photos.notes.* -->
+            <xs:element name="photos.notes.add">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="note_x" type="xs:integer"/>
+                                <xs:element name="note_y" type="xs:integer"/>
+                                <xs:element name="note_w" type="xs:integer"/>
+                                <xs:element name="note_h" type="xs:integer"/>
+                                <xs:element name="note_text" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.notes.delete">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="note_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photos.notes.edit">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="note_id" type="xs:string"/>
+                                <xs:element name="note_x" type="xs:integer"/>
+                                <xs:element name="note_y" type="xs:integer"/>
+                                <xs:element name="note_w" type="xs:integer"/>
+                                <xs:element name="note_h" type="xs:integer"/>
+                                <xs:element name="note_text" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photos.transform.* -->
+            <xs:simpleType name="rotation">
+                <xs:restriction base="xs:positiveInteger">
+                    <xs:enumeration value="90"/>
+                    <xs:enumeration value="180"/>
+                    <xs:enumeration value="270"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="photos.transform.rotate">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="degrees" type="rotation"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photos.upload.* -->
+            <xs:element name="photos.upload.checkTickets">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="tickets" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photosets.* -->
+            <xs:element name="photosets.addPhoto">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.create">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="title" type="xs:string"/>
+                                <xs:element name="description" type="xs:string" minOccurs="0"/>
+                                <xs:element name="degrees" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.delete">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.editMeta">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                                <xs:element name="title" type="xs:string"/>
+                                <xs:element name="description" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.editPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                                <xs:element name="primary_photo_id" type="xs:string"/>
+                                <xs:element name="photo_ids" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.getContext">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.getInfo">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.getList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.getPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                                <xs:element name="extras" type="xs:string" minOccurs="0"/>
+                                <xs:element name="privacy_filter" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="per_page" type="xs:integer" minOccurs="0"/>
+                                <xs:element name="page" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.orderSets">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_ids" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.removePhoto">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.photosets.comments.* -->
+            <xs:element name="photosets.comments.addComment">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                                <xs:element name="comment_text" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.comments.deleteComment">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="comment_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.comments.editComment">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="authenticatedFlickrRequest">
+                            <xs:sequence>
+                                <xs:element name="comment_id" type="xs:string"/>
+                                <xs:element name="comment_text" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="photosets.comments.getList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photoset_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.reflection.* -->
+            <xs:element name="reflection.getMethodInfo">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="method_name" type="xs:NCName"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reflection.getMethods" type="flickrRequest"/>
+
+            <!-- flickr.tags.* -->
+            <xs:element name="tags.getHotList">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="period" type="xs:string" minOccurs="0"/>
+                                <xs:element name="count" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="tags.getListPhoto">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="photo_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="tags.getListUser">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="tags.getListUserPopular">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                                <xs:element name="count" type="xs:integer" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="tags.getListUserRaw">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="tag" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="tags.getRelated">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="tag" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- flickr.test.* -->
+            <xs:element name="test.echo">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:any maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="test.login" type="authenticatedFlickrRequest"/>
+            <xs:element name="test.null" type="authenticatedFlickrRequest"/>
+
+            <!-- flickr.urls.* -->
+            <xs:element name="urls.getGroup">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="group_id" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="urls.getUserPhotos">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="urls.getUserProfile">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="user_id" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="urls.lookupGroup">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="url" type="xs:anyURI" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="urls.lookupUser">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="flickrRequest">
+                            <xs:sequence>
+                                <xs:element name="url" type="xs:anyURI" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+
+
+            <!-- response -->
+            <xs:simpleType name="statType">
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="ok"/>
+                    <xs:enumeration value="fail"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="rsp">
+                <xs:complexType>
+                    <xs:choice>
+                        <!--<xs:sequence>-->
+                        <xs:element name="err" form="unqualified">
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:extension base="xs:anyType">
+                                        <xs:attribute name="code" type="xs:string"/>
+                                        <xs:attribute name="msg" type="xs:string"/>
+                                    </xs:extension>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                        <!--</xs:sequence>-->
+                        <!--<xs:sequence>-->
+                        <xs:any maxOccurs="unbounded"/>
+                        <!--</xs:sequence>-->
+                    </xs:choice>
+                    <xs:attribute name="stat" type="statType"/>
+                </xs:complexType>
+            </xs:element>
+
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:interface name="flickr.activity">
+        <wsdl:operation name="flickr.activity.userComments" wsdlx:safe="true">
+            <wsdl:input element="activity.userComments"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.activity.userPhotos" wsdlx:safe="true">
+            <wsdl:input element="activity.userPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.auth">
+        <wsdl:operation name="flickr.auth.checkToken" wsdlx:safe="true">
+            <wsdl:input element="auth.checkToken"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.auth.getFrob" wsdlx:safe="true">
+            <wsdl:input element="auth.getFrob"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.auth.getFullToken" wsdlx:safe="true">
+            <wsdl:input element="auth.getFullToken"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.auth.getToken" wsdlx:safe="true">
+            <wsdl:input element="auth.getToken"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.blogs">
+        <wsdl:operation name="flickr.blogs.getList" wsdlx:safe="true">
+            <wsdl:input element="blogs.getList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.blogs.postPhoto" wsdlx:safe="false">
+            <wsdl:input element="blogs.postPhoto"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.contacts">
+        <wsdl:operation name="flickr.contacts.getList" wsdlx:safe="true">
+            <wsdl:input element="contacts.getList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.contacts.getPublicList" wsdlx:safe="true">
+            <wsdl:input element="contacts.getPublicList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.favorites">
+        <wsdl:operation name="flickr.favorites.add" wsdlx:safe="false">
+            <wsdl:input element="favorites.add"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.favorites.getList" wsdlx:safe="true">
+            <wsdl:input element="favorites.getList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.favorites.getPublicList" wsdlx:safe="true">
+            <wsdl:input element="favorites.getPublicList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.favorites.remove" wsdlx:safe="false">
+            <wsdl:input element="favorites.remove"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.groups">
+        <wsdl:operation name="flickr.groups.browse" wsdlx:safe="true">
+            <wsdl:input element="groups.browse"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.groups.getInfo" wsdlx:safe="true">
+            <wsdl:input element="groups.getInfo"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.groups.search" wsdlx:safe="true">
+            <wsdl:input element="groups.search"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.groups.pools">
+        <wsdl:operation name="flickr.groups.pools.add" wsdlx:safe="false">
+            <wsdl:input element="groups.pools.add"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.groups.pools.getContext" wsdlx:safe="true">
+            <wsdl:input element="groups.pools.getContext"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.groups.pools.getGroups" wsdlx:safe="true">
+            <wsdl:input element="groups.pools.getGroups"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.groups.pools.getPhotos" wsdlx:safe="true">
+            <wsdl:input element="groups.pools.getPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.groups.pools.remove" wsdlx:safe="false">
+            <wsdl:input element="groups.pools.remove"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.interestingness">
+        <wsdl:operation name="flickr.interestingness.getList" wsdlx:safe="true">
+            <wsdl:input element="interestingness.getList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.people">
+        <wsdl:operation name="flickr.people.findByEmail" wsdlx:safe="true">
+            <wsdl:input element="people.findByEmail"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.people.findByUsername" wsdlx:safe="true">
+            <wsdl:input element="people.findByUsername"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.people.getInfo" wsdlx:safe="true">
+            <wsdl:input element="people.getInfo"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.people.getPublicGroups" wsdlx:safe="true">
+            <wsdl:input element="people.getPublicGroups"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.people.getPublicPhotos" wsdlx:safe="true">
+            <wsdl:input element="people.getPublicPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.people.getUploadStatus" wsdlx:safe="true">
+            <wsdl:input element="people.getUploadStatus"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photos">
+        <wsdl:operation name="flickr.photos.addTags" wsdlx:safe="true">
+            <wsdl:input element="photos.addTags"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.delete" wsdlx:safe="false">
+            <wsdl:input element="photos.delete"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getAllContexts" wsdlx:safe="true">
+            <wsdl:input element="photos.getAllContexts"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getContactsPhotos" wsdlx:safe="true">
+            <wsdl:input element="photos.getContactsPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getContactsPublicPhotos" wsdlx:safe="true">
+            <wsdl:input element="photos.getContactsPublicPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getContext" wsdlx:safe="true">
+            <wsdl:input element="photos.getContext"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getCounts" wsdlx:safe="true">
+            <wsdl:input element="photos.getCounts"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getExif" wsdlx:safe="true">
+            <wsdl:input element="photos.getExif"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getFavorites" wsdlx:safe="true">
+            <wsdl:input element="photos.getFavorites"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getInfo" wsdlx:safe="true">
+            <wsdl:input element="photos.getInfo"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getNotInSet" wsdlx:safe="true">
+            <wsdl:input element="photos.getNotInSet"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getPerms" wsdlx:safe="true">
+            <wsdl:input element="photos.getPerms"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getRecent" wsdlx:safe="true">
+            <wsdl:input element="photos.getRecent"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getSizes" wsdlx:safe="true">
+            <wsdl:input element="photos.getSizes"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getUntagged" wsdlx:safe="true">
+            <wsdl:input element="photos.getUntagged"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getWithGeoData" wsdlx:safe="true">
+            <wsdl:input element="photos.getWithGeoData"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.getWithoutGeoData" wsdlx:safe="true">
+            <wsdl:input element="photos.getWithoutGeoData"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.recentlyUpdated" wsdlx:safe="true">
+            <wsdl:input element="photos.recentlyUpdated"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.removeTag" wsdlx:safe="false">
+            <wsdl:input element="photos.removeTag"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.search" wsdlx:safe="true">
+            <wsdl:input element="photos.search"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.setDates" wsdlx:safe="true">
+            <wsdl:input element="photos.setDates"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.setMeta" wsdlx:safe="true">
+            <wsdl:input element="photos.setMeta"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.setPerms" wsdlx:safe="true">
+            <wsdl:input element="photos.setPerms"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.setTags" wsdlx:safe="true">
+            <wsdl:input element="photos.setTags"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photos.comments">
+        <wsdl:operation name="flickr.photos.comments.addComment" wsdlx:safe="false">
+            <wsdl:input element="photos.comments.addComment"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.comments.deleteComment" wsdlx:safe="false">
+            <wsdl:input element="photos.comments.deleteComment"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.comments.editComment" wsdlx:safe="false">
+            <wsdl:input element="photos.comments.editComment"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.comments.getList" wsdlx:safe="true">
+            <wsdl:input element="photos.comments.getList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photos.geo">
+        <wsdl:operation name="flickr.photos.geo.getLocation" wsdlx:safe="true">
+            <wsdl:input element="photos.geo.getLocation"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.geo.getPerms" wsdlx:safe="true">
+            <wsdl:input element="photos.geo.getPerms"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.geo.removeLocation" wsdlx:safe="false">
+            <wsdl:input element="photos.geo.removeLocation"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.geo.setLocation" wsdlx:safe="true">
+            <wsdl:input element="photos.geo.setLocation"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.geo.setPerms" wsdlx:safe="true">
+            <wsdl:input element="photos.geo.setPerms"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photos.licenses">
+        <wsdl:operation name="flickr.photos.licenses.getInfo" wsdlx:safe="true">
+            <wsdl:input element="photos.licenses.getInfo"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.licenses.setLicense" wsdlx:safe="false">
+            <wsdl:input element="photos.licenses.setLicense"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photos.notes">
+        <wsdl:operation name="flickr.photos.notes.add" wsdlx:safe="false">
+            <wsdl:input element="photos.notes.add"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.notes.delete" wsdlx:safe="false">
+            <wsdl:input element="photos.notes.delete"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photos.notes.edit" wsdlx:safe="true">
+            <wsdl:input element="photos.notes.edit"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photos.transform">
+        <wsdl:operation name="flickr.photos.transform.rotate" wsdlx:safe="false">
+            <wsdl:input element="photos.transform.rotate"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photos.upload">
+        <wsdl:operation name="flickr.photos.upload.checkTickets" wsdlx:safe="true">
+            <wsdl:input element="photos.upload.checkTickets"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photosets">
+        <wsdl:operation name="flickr.photosets.addPhoto" wsdlx:safe="false">
+            <wsdl:input element="photosets.addPhoto"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.create" wsdlx:safe="false">
+            <wsdl:input element="photosets.create"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.delete" wsdlx:safe="false">
+            <wsdl:input element="photosets.delete"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.editMeta" wsdlx:safe="false">
+            <wsdl:input element="photosets.editMeta"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.editPhotos" wsdlx:safe="false">
+            <wsdl:input element="photosets.editPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.getContext" wsdlx:safe="true">
+            <wsdl:input element="photosets.getContext"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.getInfo" wsdlx:safe="true">
+            <wsdl:input element="photosets.getInfo"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.getList" wsdlx:safe="true">
+            <wsdl:input element="photosets.getList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.getPhotos" wsdlx:safe="true">
+            <wsdl:input element="photosets.getPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.orderSets" wsdlx:safe="false">
+            <wsdl:input element="photosets.orderSets"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.removePhoto" wsdlx:safe="false">
+            <wsdl:input element="photosets.removePhoto"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.photosets.comments">
+        <wsdl:operation name="flickr.photosets.comments.addComment" wsdlx:safe="false">
+            <wsdl:input element="photosets.comments.addComment"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.comments.deleteComment" wsdlx:safe="false">
+            <wsdl:input element="photosets.comments.deleteComment"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.comments.editComment" wsdlx:safe="false">
+            <wsdl:input element="photosets.comments.editComment"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.photosets.comments.getList" wsdlx:safe="true">
+            <wsdl:input element="photosets.comments.getList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.reflection">
+        <wsdl:operation name="flickr.reflection.getMethodInfo" wsdlx:safe="true">
+            <wsdl:input element="reflection.getMethodInfo"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.reflection.getMethods" wsdlx:safe="true">
+            <wsdl:input element="reflection.getMethods"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.tags">
+        <wsdl:operation name="flickr.tags.getHotList" wsdlx:safe="true">
+            <wsdl:input element="tags.getHotList"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.tags.getListPhoto" wsdlx:safe="true">
+            <wsdl:input element="tags.getListPhoto"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.tags.getListUser" wsdlx:safe="true">
+            <wsdl:input element="tags.getListUser"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.tags.getListUserPopular" wsdlx:safe="true">
+            <wsdl:input element="tags.getListUserPopular"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.tags.getListUserRaw" wsdlx:safe="true">
+            <wsdl:input element="tags.getListUserRaw"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.tags.getRelated" wsdlx:safe="true">
+            <wsdl:input element="tags.getRelated"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.test">
+        <wsdl:operation name="flickr.test.echo" wsdlx:safe="true">
+            <wsdl:input element="test.echo"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.test.login" wsdlx:safe="true">
+            <wsdl:input element="test.login"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.test.null" wsdlx:safe="true">
+            <wsdl:input element="test.null"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr.urls">
+        <wsdl:operation name="flickr.urls.getGroup" wsdlx:safe="true">
+            <wsdl:input element="urls.getGroup"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.urls.getUserPhotos" wsdlx:safe="true">
+            <wsdl:input element="urls.getUserPhotos"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.urls.getUserProfile" wsdlx:safe="true">
+            <wsdl:input element="urls.getUserProfile"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.urls.lookupGroup" wsdlx:safe="true">
+            <wsdl:input element="urls.lookupGroup"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+        <wsdl:operation name="flickr.urls.lookupUser" wsdlx:safe="true">
+            <wsdl:input element="urls.lookupUser"/>
+            <wsdl:output element="rsp"/>
+        </wsdl:operation>
+    </wsdl:interface>
+
+    <wsdl:interface name="flickr"
+                    extends="tns:flickr.activity tns:flickr.auth tns:flickr.blogs tns:flickr.contacts tns:flickr.favorites tns:flickr.groups tns:flickr.groups.pools tns:flickr.interestingness tns:flickr.people tns:flickr.photos tns:flickr.photos.comments tns:flickr.photos.geo tns:flickr.photos.licenses tns:flickr.photos.notes tns:flickr.photos.transform tns:flickr.photos.upload tns:flickr.photosets tns:flickr.reflection tns:flickr.tags tns:flickr.test tns:flickr.urls tns:flickr.photosets.comments"/>
+
+
+    <wsdl:binding name="flickrHTTPBinding" interface="tns:flickr"
+                  type="http://www.w3.org/ns/wsdl/http">
+        <wsdl:operation ref="tns:flickr.activity.userComments"
+                        whttp:location="?method=flickr.activity.userComments&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.activity.userPhotos"
+                        whttp:location="?method=flickr.activity.userPhotos&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.auth.checkToken"
+                        whttp:location="?method=flickr.auth.checkToken&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.auth.getFrob"
+                        whttp:location="?method=flickr.auth.getFrob&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.auth.getFullToken"
+                        whttp:location="?method=flickr.auth.getFullToken&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.auth.getToken"
+                        whttp:location="?method=flickr.auth.getToken&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.blogs.getList"
+                        whttp:location="?method=flickr.blogs.getList&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.blogs.postPhoto"
+                        whttp:location="?method=flickr.blogs.postPhoto&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.contacts.getList"
+                        whttp:location="?method=flickr.contacts.getList&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.contacts.getPublicList"
+                        whttp:location="?method=flickr.contacts.getPublicList&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.favorites.add"
+                        whttp:location="?method=flickr.favorites.add&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.favorites.getList"
+                        whttp:location="?method=flickr.favorites.getList&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.favorites.getPublicList"
+                        whttp:location="?method=flickr.favorites.getPublicList&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.favorites.remove"
+                        whttp:location="?method=flickr.favorites.remove&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.groups.browse"
+                        whttp:location="?method=flickr.groups.browse&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.groups.getInfo"
+                        whttp:location="?method=flickr.groups.getInfo&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.groups.search"
+                        whttp:location="?method=flickr.groups.search&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.groups.pools.add"
+                        whttp:location="?method=flickr.groups.pools.add&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.groups.pools.getContext"
+                        whttp:location="?method=flickr.groups.pools.getContext&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.groups.pools.getGroups"
+                        whttp:location="?method=flickr.groups.pools.getGroups&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.groups.pools.getPhotos"
+                        whttp:location="?method=flickr.groups.pools.getPhotos&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.groups.pools.remove"
+                        whttp:location="?method=flickr.groups.pools.remove&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.interestingness.getList"
+                        whttp:location="?method=flickr.interestingness.getList&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.people.findByEmail"
+                        whttp:location="?method=flickr.people.findByEmail&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.people.findByUsername"
+                        whttp:location="?method=flickr.people.findByUsername&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.people.getInfo"
+                        whttp:location="?method=flickr.people.getInfo&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.people.getPublicGroups"
+                        whttp:location="?method=flickr.people.getPublicGroups&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.people.getPublicPhotos"
+                        whttp:location="?method=flickr.people.getPublicPhotos&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.people.getUploadStatus"
+                        whttp:location="?method=flickr.people.getUploadStatus&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.photos.addTags"
+                        whttp:location="?method=flickr.photos.addTags&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.delete"
+                        whttp:location="?method=flickr.photos.delete&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.getAllContexts"
+                        whttp:location="?method=flickr.photos.getAllContexts&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getContactsPhotos"
+                        whttp:location="?method=flickr.photos.getContactsPhotos&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getContactsPublicPhotos"
+                        whttp:location="?method=flickr.photos.getContactsPublicPhotos&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getContext"
+                        whttp:location="?method=flickr.photos.getContext&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getCounts"
+                        whttp:location="?method=flickr.photos.getCounts&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getExif"
+                        whttp:location="?method=flickr.photos.getExif&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getFavorites"
+                        whttp:location="?method=flickr.photos.getFavorites&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getInfo"
+                        whttp:location="?method=flickr.photos.getInfo&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getNotInSet"
+                        whttp:location="?method=flickr.photos.getNotInSet&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getPerms"
+                        whttp:location="?method=flickr.photos.getPerms&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getRecent"
+                        whttp:location="?method=flickr.photos.getRecent&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getSizes"
+                        whttp:location="?method=flickr.photos.getSizes&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getUntagged"
+                        whttp:location="?method=flickr.photos.getUntagged&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getWithGeoData"
+                        whttp:location="?method=flickr.photos.getWithGeoData&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.getWithoutGeoData"
+                        whttp:location="?method=flickr.photos.getWithoutGeoData&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.recentlyUpdated"
+                        whttp:location="?method=flickr.photos.recentlyUpdated&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.removeTag"
+                        whttp:location="?method=flickr.photos.removeTag&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.search"
+                        whttp:location="?method=flickr.photos.search&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.setDates"
+                        whttp:location="?method=flickr.photos.setDates&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.setMeta"
+                        whttp:location="?method=flickr.photos.setMeta&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.setPerms"
+                        whttp:location="?method=flickr.photos.setPerms&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.setTags"
+                        whttp:location="?method=flickr.photos.setTags&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.photos.comments.addComment"
+                        whttp:location="?method=flickr.photos.comments.addComment&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.comments.deleteComment"
+                        whttp:location="?method=flickr.photos.comments.deleteComment&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.comments.editComment"
+                        whttp:location="?method=flickr.photos.comments.editComment&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.comments.getList"
+                        whttp:location="?method=flickr.photos.comments.getList&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.photos.geo.getLocation"
+                        whttp:location="?method=flickr.photos.geo.getLocation&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.geo.getPerms"
+                        whttp:location="?method=flickr.photos.geo.getPerms&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.geo.removeLocation"
+                        whttp:location="?method=flickr.photos.geo.removeLocation&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.geo.setLocation"
+                        whttp:location="?method=flickr.photos.geo.setLocation&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.geo.setPerms"
+                        whttp:location="?method=flickr.photos.geo.setPerms&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.photos.licenses.getInfo"
+                        whttp:location="?method=flickr.photos.licenses.getInfo&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photos.licenses.setLicense"
+                        whttp:location="?method=flickr.photos.licenses.setLicense&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.photos.notes.add"
+                        whttp:location="?method=flickr.photos.notes.add&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.notes.delete"
+                        whttp:location="?method=flickr.photos.notes.delete&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photos.notes.edit"
+                        whttp:location="?method=flickr.photos.notes.eidt&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.photos.transform.rotate"
+                        whttp:location="?method=flickr.photos.transform.rotate&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.photos.upload.checkTickets"
+                        whttp:location="?method=flickr.photos.upload.checkTickets&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.photosets.addPhoto"
+                        whttp:location="?method=flickr.photosets.addPhoto&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.create"
+                        whttp:location="?method=flickr.photosets.create&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.delete"
+                        whttp:location="?method=flickr.photosets.delete&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.editMeta"
+                        whttp:location="?method=flickr.photosets.editMeta&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.editPhotos"
+                        whttp:location="?method=flickr.photosets.editPhotos&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.getContext"
+                        whttp:location="?method=flickr.photosets.getContext&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photosets.getInfo"
+                        whttp:location="?method=flickr.photosets.getInfo&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photosets.getList"
+                        whttp:location="?method=flickr.photosets.getList&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photosets.getPhotos"
+                        whttp:location="?method=flickr.photosets.getPhotos&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.photosets.orderSets"
+                        whttp:location="?method=flickr.photosets.orderSets&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.removePhoto"
+                        whttp:location="?method=flickr.photosets.removePhoto&amp;format=rest"
+                        whttp:method="POST"/>
+
+        <wsdl:operation ref="tns:flickr.photosets.comments.addComment"
+                        whttp:location="?method=flickr.photosets.commentes.addComment&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.comments.deleteComment"
+                        whttp:location="?method=flickr.photosets.comments.deleteComment&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.comments.editComment"
+                        whttp:location="?method=flickr.photosets.comments.editComment&amp;format=rest"
+                        whttp:method="POST"/>
+        <wsdl:operation ref="tns:flickr.photosets.comments.getList"
+                        whttp:location="?method=flickr.getList&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.reflection.getMethodInfo"
+                        whttp:location="?method=flickr.reflection.getMethodInfo&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.reflection.getMethods"
+                        whttp:location="?method=flickr.reflection.getMethods&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.tags.getHotList"
+                        whttp:location="?method=flickr.tags.getHotList&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.tags.getListPhoto"
+                        whttp:location="?method=flickr.tags.getListPhoto&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.tags.getListUser"
+                        whttp:location="?method=flickr.tags.getListUser&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.tags.getListUserPopular"
+                        whttp:location="?method=flickr.tagslgetListUserPopular&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.tags.getListUserRaw"
+                        whttp:location="?method=flickr.tags.getListUserRaw&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.tags.getRelated"
+                        whttp:location="?method=flickr.tags.getRelated&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.test.echo"
+                        whttp:location="?method=flickr.test.echo&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.test.login"
+                        whttp:location="?method=flickr.test.login&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.test.null"
+                        whttp:location="?method=flickr.test.null&amp;format=rest"/>
+
+        <wsdl:operation ref="tns:flickr.urls.getGroup"
+                        whttp:location="?method=flickr.urls.getGroup&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.urls.getUserPhotos"
+                        whttp:location="?method=flickr.urls.getUserPhotos&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.urls.getUserProfile"
+                        whttp:location="?method=flickr.urls.getUserProfile&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.urls.lookupGroup"
+                        whttp:location="?method=flickr.urls.goolupGroup&amp;format=rest"/>
+        <wsdl:operation ref="tns:flickr.urls.lookupUser"
+                        whttp:location="?method=flickr.urls.lookupUser&amp;format=rest"/>
+    </wsdl:binding>
+
+    <wsdl:service name="flickrService" interface="tns:flickr">
+        <wsdl:endpoint name="flickrREST" binding="tns:flickrHTTPBinding"
+                       address="http://api.flickr.com/services/rest/"/>
+    </wsdl:service>
+</wsdl:description>

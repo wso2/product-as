@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<!--
+      ~ Copyright 2005-2008 WSO2, Inc. http://www.wso2.org
+      ~
+      ~ Licensed under the Apache License, Version 2.0 (the "License");
+      ~ you may not use this file except in compliance with the License.
+      ~ You may obtain a copy of the License at
+      ~
+      ~ http://www.apache.org/licenses/LICENSE-2.0
+      ~
+      ~ Unless required by applicable law or agreed to in writing, software
+      ~ distributed under the License is distributed on an "AS IS" BASIS,
+      ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      ~ See the License for the specific language governing permissions and
+      ~ limitations under the License.
+    -->
+
+<ModulePrefs scrolling="true" height="240" width="320" title="upgradeChecker - powered by the WSO2 Mashup Server"/>
+<Content type="html"><![CDATA[
+<style type="text/css">
+    #checking, #footer, #recommendation, #norecommendation, #suggestion {
+        font: 75%/1.5 "Lucida Grande","Lucida Sans","Microsoft Sans Serif", "Lucida Sans Unicode",verdana,sans-serif,"trebuchet ms";
+        color: #111;
+        text-align:center;
+    }
+    a.imglink:link img {border:none}
+     a.imglink:visited img {border:none}
+     a.imglink:hover img {border:none}
+    .normal {padding:0em}
+    .small {font-size:85%}
+    h1 {font-size:130%; margin:0}
+    td {text-align:center}
+    .build_date {font-size:70%}
+    #footer {font-size:65%; border-top:1px solid black; padding:3px; margin-top: 3px;}
+    #error-console {color:red; font-weight:bold}
+</style>
+<script src="http://localhost:7762/js/wso2/WSRequest.js" type="text/javascript"> </script>
+<script src="http://localhost:7762/services/system/upgradeChecker?stub" type="text/javascript"> </script>
+<script language="javascript" type="text/javascript">
+    var browser = WSRequest.util._getBrowser();
+    _IG_RegisterOnloadHandler(init);
+
+    // Demonstrates calling an operation of the 'upgradeChecker' Mashup
+    function init() {
+        upgradeChecker.endpoint='HTTPEndpoint';
+        
+        // Fetch recommendation for upgrading
+        upgradeChecker.getRecommendation.callback = display;
+        upgradeChecker.getRecommendation.onError = handleError;
+        upgradeChecker.getRecommendation();
+
+    }
+
+    function display(build) {
+        stuff("rec_user_type", build.current.nightly ? "Nightly Build" : build.current.version + " Release");
+        stuff("norec_type", build.current.nightly ? "nightly build" : build.current.version + " release");
+        stuff("norec_type2", build.current.nightly ? "Nightly Build" : build.current.version + " Release");
+        stuff("rec_user_build_date", build.current.date.toLocaleDateString());
+        stuff("norec_user_build_date", build.current.date.toLocaleDateString());
+
+        if (build.release.action == 'recommended') {
+            stuff("rec_type", build.release.version + " release");
+            stuff("rec_type2", build.release.version + " Release");
+            stuff("rec_age", ageToString(build.release.age));
+            document.getElementById("rec_downloadPage").href = build.release.download;
+            stuff("rec_downloadPage2", "<a href='" + build.release.download + "' target='_top'>Upgrade</a>");
+            stuff("rec_build_date", build.release.date.toLocaleDateString());
+
+            document.getElementById("recommendation").style.display = "block";
+        } else if (build.nightly.action == 'recommended') {
+            stuff("rec_type", "latest nightly build");
+            stuff("rec_type2", "Nightly Build");
+            stuff("rec_age", ageToString(build.nightly.age));
+            document.getElementById("rec_downloadPage").href = build.nightly.download;
+            stuff("rec_downloadPage2", "<a href='" + build.nightly.download + "' target='_top'>Upgrade</a>");
+            stuff("rec_build_date", build.nightly.date.toLocaleDateString());
+
+            document.getElementById("recommendation").style.display = "block";
+        } else {
+            stuff("norec_type", build.current.nightly ? "nightly build" : "release");
+
+            document.getElementById("norecommendation").style.display = "block";
+        }
+        
+        if (build.release.action == 'suggested') {
+            stuff("sug_type", build.release.version + " release");
+            stuff("sug_age", ageToString(build.release.age));
+            stuff("sug_downloadPage", "<a href='" + build.release.download + "' target='_top'>upgrading</a>");
+
+            document.getElementById("suggestion").style.display = "block";
+        } else if (build.nightly.action == 'suggested') {
+            stuff("sug_type", "nightly build");
+            stuff("sug_age", ageToString(build.nightly.age));
+            stuff("sug_downloadPage", "<a href='" + build.nightly.download + "' target='_top'>upgrading</a>");
+
+            document.getElementById("suggestion").style.display = "block";
+        }
+        document.getElementById("checking").style.display = "none";
+    }
+
+    function stuff(id, value) {
+        document.getElementById(id).innerHTML = value;
+    }
+
+    function ageToString(age) {
+        var ageString;
+
+        if (age < 48) {
+            ageString = age + " hours";
+        } else if (age < 24*14) {
+            ageString = Math.floor(age/24) + " days";
+           } else {
+            ageString = Math.floor(age/(24*7)) + " weeks";
+           }
+           return ageString;
+    }
+
+    // Handles and error by displaying the reason in a dialog
+    function handleError(error) {
+        log ("error-console", "Fault: " + error.reason + "\n\n" + error.detail);
+    }
+
+    function log(consoleName, data) {
+        var console = document.getElementById(consoleName);
+        if (browser == "ie" || browser == "ie7") console.innerText = data;
+        else console.textContent = data;
+    }
+</script>
+<div id="body">
+
+<div id="checking">
+    <h1>Checking for available upgrades...</h1>
+    <p><img src="/images/wso2pulse.gif" alt="checking..."/></p>
+</div>
+<div id="norecommendation" style="display:none" class="body">
+    <h1>Your <span id="norec_type">---</span> is current.</h1>
+    <table style="margin-left:auto; margin-right:auto;">
+        <tr>
+            <td>
+                <div class="build_date" id="norec_type2">---</div>
+                <img src="/images/wso2_mashup_logo.gif" alt="WSO2 Mashup Server"/>
+                <div id="norec_user_build_date" class="build_date">---</div>
+            </td>
+        </tr>
+    </table>
+    <div class="normal">No new releases or nightly builds are available.</div>
+</div>
+<div id="recommendation" style="display:none">
+    <h1>UpgradeChecker Recommendation</h1>
+    <table style="margin-left:auto; margin-right:auto;">
+        <tr>
+            <td>
+                <div class="build_date" id="rec_user_type">---</div>
+                <img src="/images/wso2_mashup_logo.gif" width="120" alt="WSO2 Mashup Server"/>
+                <div id="rec_user_build_date" class="build_date">---</div>
+            </td>
+            <td><img src="/services/system/upgradeChecker/upgrade-arrow.jpg" style="padding:0.25em"/></td>
+            <td>
+                <div class="build_date" id="rec_type2">---</div>
+                <a id="rec_downloadPage" href="" class="imglink" target="_top"><img src="/images/rmashup_download.gif" width="120" alt="WSO2 Mashup Server Download"/></a>
+                <div id="rec_build_date" class="build_date">---</div>
+            </td>
+        </tr>
+    </table>
+    <div class="normal"><i><span id="rec_downloadPage2">---</span></i> to the <span id="rec_type">---</span>, released <span id="rec_age">---</span> ago.</div>
+</div>
+
+<div id="suggestion" style="display:none;">
+    <div class="small"><i>Consider <span id="sug_downloadPage">---</span></i> to the <span id="sug_type">---</span>, released <span id="sug_age">---</span> ago.</div>
+</div>
+
+<div id="error-console">
+<!-- This div will contain a description of any errors encountered. -->
+</div>
+<div id="footer">
+<div>Powered by <a href="http://wso2.org/projects/mashup" target="_top">WSO2 Mashup Server</a> <a href="http://localhost:7762/services/system/upgradeChecker" target="_top">upgradeChecker</a> service</a>.</div>
+</div>
+</div>]]></Content>
+</Module>

@@ -1,0 +1,95 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project default="build-all">
+
+    <property name="wso2appserver.home" value="../../"/>
+    <property name="carbon.home" value="../../"/>
+	<property name="mashupSamples" value="${wso2appserver.home}/samples/mashupSamples"/>
+    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="classes" value="${temp.dir}/classes"/>
+    <property name="src" value="src"/>
+    <property name="services" value="services"/>
+    <property name="setup" value="ROOT"/>
+    <property name="repo.services" value="jsservices/admin"/>
+	
+  <target name="build-all">
+        <echo message="Copying the mashup samples repository ${mashupSamples}"/>
+
+		<copy toDir="${repo.location}/${repo.services}" >
+			<fileset dir="${mashupSamples}/digit2image">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/exchangeRate">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/storexml">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/gmapsAPIKey">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/sudoku">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/tomatoTube">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/TwitterMap">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/upgradeChecker">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/version">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/feedCache">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/formulaFlicks">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		<copy toDir="${repo.location}/${repo.services}">
+			<fileset dir="${mashupSamples}/RESTSample">
+			<exclude name="README"/>
+			</fileset>
+		</copy>
+		
+    </target>
+</project>

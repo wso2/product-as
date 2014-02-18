@@ -1,0 +1,127 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+
+	<head>
+		<title>Chad Voting Service</title>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+		<meta name="description" content="WSO2 AppServer - Chad Voting Service" />
+
+		<meta name="distribution" content="global" />
+		<meta name="resource-type" content="document" />
+
+		<meta name="robots" content="nofollow" />
+		<meta name="copyright" content="Copyright 2007 WSO2" />
+
+		<meta name="mssmarttagspreventparsing" content="true" />
+		<meta http-equiv="imagetoolbar" content="no" />
+
+		<link rel="stylesheet" type="text/css" href="css/main.css" media="screen, projection"></link>
+        <link rel="stylesheet" type="text/css" href="extensions/core/css/wso2appserver.css" media="screen, projection"></link>
+        <link rel="stylesheet" type="text/css" href="extensions/core/css/chad.css" media="screen, projection"></link>
+
+		<script language="javascript" src="extensions/core/js/chad.js"></script>
+		<script language="javascript" src="extensions/core/js/progressbar.js"></script>
+        <script language="javascript" src="js/main.js"></script>
+        <script language="javascript" src="js/WSRequest.js"></script>
+		<script language="javascript" src="js/dhtmlHistory.js"></script>
+		<script language="javascript" src="global_params.js"></script>
+
+    </head>
+	<body onload="javascript:wso2.appserver.Chad.static.init();">
+
+		<div id="wrapper">
+			<div id="header">
+
+			<h1>WSO2 Application Server 1.1</h1>
+            <h2>Chad</h2>
+			<p id="meta"></p>
+
+			</div><!-- /header -->
+
+            <div id="container" class="clearfix">
+				<div id="navigation1" class="clearfix" style="display:inline;">
+					<div id="menuChad1">
+					<ul class="submenu">
+						<li></li>
+						<li><a  id="menu_active_polls1" href="#" onclick="javascript:chadInstance.showActivePolls(); return false;" title="Active Chad Polls">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Active Polls</a></li>
+					</ul>
+					</div>
+					<div id="menuChad">
+					<ul id="menuChadIdUl" class="submenu">
+						<li></li>
+						<li><a id="menu_active_polls2" href="#" onclick="javascript:chadInstance.showActivePolls(); return false;" title="Active Chad Polls">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Active Polls</a></li>
+						<li><a id="menu_create_poll" href="#" onclick="javascript:chadInstance.createPoll(); return false;"  title="Create Poll">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create Poll</a></li>
+						<li><a id="menu_list_poll" href="#" onclick="javascript:chadInstance.listAllPollsAdmin(); return false;"  title="List Polls">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All Polls</a></li>
+						<li><a id="menu_stopped_polls" href="#" onclick="javascript:chadInstance.listStoppedPolls(); return false;"  title="List stopped Poll">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stopped Polls</a></li>
+						<li><a id="menu_adminstrators" href="#" onclick="javascript:chadInstance.showAdminstrators(); return false;"  title="Administrators" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administrators</a></li>
+					</ul>
+					</div>
+				</div><!-- /navigation -->
+				<div id="content" style="display:inline;">
+					<div id="divChadListPolls" name="divChadListPolls" style="display:none;"></div>
+					<div id="divChadStartedPolls" name="divChadStartedPolls" style="display:none;"></div>
+					<div id="divChadStopedPolls" name="divChadStopedPolls" style="display:none;"></div>
+					<div id="divCreatPoll" name="divCreatPoll" style="display:none;">
+					</div>
+					<div id="divVoteForPoll" name="divVoteForPoll" style="display:none;"></div>
+					<div id="divPollDetails" name="divPollDetails" style="display:none;"></div>
+					<div id="divAdminstrators" name="divAdminstrators" style="display:none;"></div>
+					<div id="divEditAdminProps" name="divEditAdminProps" style="display:none;"></div>
+					<div id="divAllPolls" name="divAllPolls" style="display:none;"></div>
+
+                    <div id="divLogincontainer" class="clearfix" style="display:none;">
+                        <!--<div id="chadLoginform">
+                            <div id="loginformwrap">-->
+                            	<div id="formset">
+                                <form action="#" method="post" id="chadFormLogin" name="chadFormLogin">
+                                    <fieldset>
+                                        <legend>Sign-in to Chad Admin</legend>
+                                        <p>Default username/password is admin/admin</p>
+                                        <div><label for="txtUserName">Username:</label> <input type="text" id="txtUserName" name="txtUserName" size="10"/></div>
+                                        <div><label for="txtPassword">Password:</label> <input type="password" id="txtPassword" name="txtPassword" size="10"/></div>
+                                        <div><input id="signin" type="submit" value="Sign In" onclick="javascript:wso2.appserver.Chad.static.login(document.chadFormLogin.txtUserName.value, document.chadFormLogin.txtPassword.value);return false;"/></div>
+                                    </fieldset>
+                                </form>
+                               </div> 
+                           <!--  </div> --><!-- /loginformwrap -->
+                         <!--  </div>--><!-- /logincontainer -->
+                     </div>
+                </div><!-- /content -->
+			</div><!-- /container -->
+
+			<!-- This will give the wait animation-->
+			<div id="waitAnimationDiv" style="display: inline;"></div>
+			<!-- the div for the message box. This name is not supposed to be used for any other div in the admin application-->
+			<div id="alertMessageBox" style="display:none;position:absolute;">
+				<!--the message area-->
+				<p id="alertMessageBoxMessageArea"></p>
+				<!-- the button area-->
+				<p id="alertButton" align="right">
+					<input id="alertBoxButton" type="button"
+							value="  OK  "
+							onclick="javascript:document.getElementById('alertMessageBox').style.display='none';return false;"/></p>
+			</div><!--/ message box div -->
+
+			<div id="footer" style="position:absolute; top: 580px; left:0px;width: 98%;">&copy; 2007 WSO2</div>
+		</div><!-- /wrapper -->
+	</body>
+</html>

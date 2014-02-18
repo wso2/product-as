@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project name="VirtualDirectoryListing" default="build-all">
+
+    <property name="wso2carbon.home" value="../../"/>
+    <property name="repo.location" value="${wso2carbon.home}/repository/deployment/server"/>
+    <property name="warName" value="virtual.war"/>    
+    <property name="build.dir" value="build"/>
+
+    <path id="compile.classpath">
+        <fileset dir="${wso2carbon.home}/repository/components/plugins">
+            <include name="org.wso2.carbon.tomcat*.jar"/>
+            <include name="javax.servlet*.jar"/>
+        </fileset>
+    </path>
+
+    
+    <target name="init" depends="clean">
+        <mkdir dir="${build.dir}/classes"/>
+    </target>
+    <target name="compile" depends="init" >
+        <javac destdir="${build.dir}/classes" debug="true" srcdir="src">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+    
+    <target name="war" depends="compile">
+        <echo message="Creating webapp ${warName}."/>
+        <war destfile="${build.dir}/${warName}" webxml="src/main/resources/WebContent/WEB-INF/web.xml">
+            <fileset dir="src/main/resources/WebContent"/>
+            <classes dir="${build.dir}/classes"/>
+        </war>
+    </target>
+    
+    <target name="build-all" depends="war">
+        <echo message="Copying the created war file in to the deployment directory"/>
+        <copy file="${build.dir}/${warName}" todir="${repo.location}/webapps"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+    </target>
+</project>

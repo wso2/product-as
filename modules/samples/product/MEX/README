@@ -1,0 +1,14 @@
+WSO2 Application Server
+====================================
+
+Sample : MEX
+============
+
+1. Run "ant" on AS_HOME/samples/MEX directory. This will deploy the needed services in WSO2 AS.
+2. Start the server and access the Management Console at https://localhost:9443/carbon. Go to
+   the service listing page. You will see the deployed HelloWorldService1 service.
+3. Engage wso2mex module into HelloWorldService1 service. To do this, go to the Service Dashboard of the HelloWorldService1 service via service listing page. Then click on "Modules". Select wso2mex-<version> from the drop-down box, and click on Engage.
+4. Run "sh run-client.sh".
+
+Please download the Documentation Distribution and refer to the MEX sample document for detailed
+instructions on how to run the MEX sample.

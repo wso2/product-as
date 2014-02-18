@@ -1,0 +1,101 @@
+Sample : TomcatWebApps/JDBCDataSource
+===================
+
+Introduction
+============
+
+This is a webapp sample to demonstrate JDBC DataSource lookups for JDBC resources
+defined in contextXml descriptor.
+More info at http://tomcat.apache.org/tomcat-7.0-doc/jndi-datasource-examples-howto.html
+
+MySQL configuration
+===================
+
+Ensure that you follow these instructions as variations can cause problems.
+
+Create a new test user, a new database and a single test table. Your MySQL user must have a
+password assigned. The driver will fail if you try to connect with an empty password.
+
+
+
+mysql> GRANT ALL PRIVILEGES ON *.* TO javauser@localhost
+    ->   IDENTIFIED BY 'javadude' WITH GRANT OPTION;
+mysql> create database employee_db;
+mysql> use employee_db;
+mysql> create table employee (
+    ->   name char(100),
+    ->   age int);
+
+
+Note: the above user should be removed once testing is complete!
+Next insert some test data into the employee table.
+
+
+
+mysql> insert into employee values('kicha', 18);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++-------+------+
+| name  | age  |
++-------+------+
+| kicha |   18 |
++-------+------+
+1 row in set (0.00 sec)
+
+
+mysql>
+
+
+2. Context configuration
+
+Configure the JNDI DataSource in Tomcat by adding a declaration for your resource to your Context.
+The Context can be defined using META-INF/context.xml file which is included with this sample.
+For example:
+
+<Context>
+
+    <!-- maxActive: Maximum number of database connections in pool. Make sure you
+         configure your mysqld max_connections large enough to handle
+         all of your db connections. Set to -1 for no limit.
+         -->
+
+    <!-- maxIdle: Maximum number of idle database connections to retain in pool.
+         Set to -1 for no limit.  See also the DBCP documentation on this
+         and the minEvictableIdleTimeMillis configuration parameter.
+         -->
+
+    <!-- maxWait: Maximum time to wait for a database connection to become available
+         in ms, in this example 10 seconds. An Exception is thrown if
+         this timeout is exceeded.  Set to -1 to wait indefinitely.
+         -->
+
+    <!-- username and password: MySQL username and password for database connections  -->
+
+    <!-- driverClassName: Class name for the old mm.mysql JDBC driver is
+         org.gjt.mm.mysql.Driver - we recommend using Connector/J though.
+         Class name for the official MySQL Connector/J driver is com.mysql.jdbc.Driver.
+         -->
+
+    <!-- url: The JDBC connection url for connecting to your MySQL database.
+         -->
+
+  <Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
+               maxActive="100" maxIdle="30" maxWait="10000"
+               username="javauser" password="javadude" driverClassName="com.mysql.jdbc.Driver"
+               url="jdbc:mysql://localhost:3306/employee_db"/>
+
+</Context>
+
+Deploying the Webapp
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/TomcatWebApps/JDBCDataSource/ to build the webapp.
+2. This will deploy the JDBCDataSource webapp to the <CARBON_HOME>/repository/deployment/server/webapps directory.
+If you start AppServer, JDBCDataSource will be available as a deployed webapp.
+
+
+
+
+
+

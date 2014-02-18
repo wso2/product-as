@@ -1,0 +1,80 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project default="build-all">
+
+    <property name="wso2appserver.home" value="../../"/>
+    <property name="carbon.home" value="../../"/>
+    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="classes" value="${temp.dir}/classes"/>
+    <property name="dependencies" value="${temp.dir}/dependencies"/>
+    <property name="webapps" value="webapps"/>
+    <property name="warName" value="Entitlement_Sample_WebApp.war"/>    
+    <property name="src" value="src"/>
+    <property name="repo.webapps" value="webapps"/>
+
+    <path id="as.samples.EntitlementFilter">
+        <pathelement path="${java.class.path}"/>
+	<fileset dir="${dependencies}">
+            <include name="**"/>
+	</fileset>
+    </path>
+    
+    <target name="clean">
+        <delete dir="${temp.dir}"/>
+	<delete dir="${webapps}"/>
+    </target>	
+
+    <target name="init" depends="clean">
+        <mkdir dir="${temp.dir}"/>
+        <mkdir dir="${classes}"/>
+	<mkdir dir="${webapps}"/>
+
+	<copy toDir="${dependencies}">
+            <fileset dir="${wso2appserver.home}/repository/components/plugins/">
+                <include name="commons-codec_1.4.0.wso2v1.jar"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile-all" depends="init">
+        <javac debug="on" destdir="${classes}">
+            <src path="${src}"/>
+            <classpath refid="as.samples.EntitlementFilter"/>
+        </javac>
+    </target>
+    
+    <target name="war" depends="compile-all">
+        <echo message="Creating webapp ${warName}."/>
+        <war destfile="${webapps}/${warName}" webxml="${src}/main/webapp/WEB-INF/web.xml">
+             <fileset dir="${src}/main/jsp/">
+		<include name="*"/>
+             </fileset>
+	     <webinf dir="${src}/main/webapp/WEB-INF"/>
+        </war>
+    </target>
+	
+    <target name="build-all" depends="war">
+        <echo message="Copying the created Entitlement_Sample_WebApp.war in to the repository"/>
+        <copy toDir="${repo.location}/${repo.webapps}">
+            <fileset dir="${webapps}">
+                <include name="**/*.war"/>
+            </fileset>
+        </copy>
+    </target>
+
+</project>

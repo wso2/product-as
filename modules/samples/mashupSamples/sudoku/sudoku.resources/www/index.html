@@ -1,0 +1,463 @@
+<!--
+  ~ Copyright 2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>WSudOku2</title>
+<style type="text/css">
+    body {font: 75%/1.5 "Lucida Grande","Lucida Sans","Microsoft Sans Serif", "Lucida Sans Unicode",verdana,sans-serif,"trebuchet ms"; color: #111; }
+    h1 {font-size: x-large; font-weight: normal; margin-bottom:0px}
+    td {width:3em; height:3em; border-top:0px; border-right:0px; border-left:1px solid #bbb; border-top:1px solid #bbb; text-align:center}
+    td.right {border-right:2px solid #bbb}
+    td.bottom {border-bottom:2px solid #bbb}
+    td input {width:1.5em; font-size:x-large; text-align:center; border:0px}
+    td.hinter input {border:0px; font-size:small}
+    td.hinter {border:0px}
+    p {margin:0em 0em .25em 0em}
+</style>
+<script type="text/javascript" src="?wsdl2form&contentType=text/javascript&resource=js/WSRequest.js"></script>
+<script type="text/javascript" src="../sudoku?stub"></script>
+<script type="text/javascript">	
+	
+	var constraints = new Array(
+		new Array(
+			new Array(12,13,14,15,16,17,18,19, 21,31,41,51,61,71,81,91, 22,23,32,33), //11
+			new Array(11,13,14,15,16,17,18,19, 22,32,42,52,62,72,82,92, 21,23,31,33), //12
+			new Array(11,12,14,15,16,17,18,19, 23,33,43,53,63,73,83,93, 21,22,31,32), //13
+			new Array(11,12,13,15,16,17,18,19, 24,34,44,54,64,74,84,94, 25,26,35,36), //14
+			new Array(11,12,13,14,16,17,18,19, 25,35,45,55,65,75,85,95, 24,26,34,36), //15
+			new Array(11,12,13,14,15,17,18,19, 26,36,46,56,66,76,86,96, 24,25,34,35), //16
+			new Array(11,12,13,14,15,16,18,19, 27,37,47,57,67,77,87,97, 28,29,38,39), //17
+			new Array(11,12,13,14,15,16,17,19, 28,38,48,58,68,78,88,98, 27,29,37,39), //18
+			new Array(11,12,13,14,15,16,17,18, 29,39,49,59,69,79,89,99, 27,28,37,38)  //19
+		),
+		new Array(
+			new Array(22,23,24,25,26,27,28,29, 11,31,41,51,61,71,81,91, 12,13,32,33), //21
+			new Array(21,23,24,25,26,27,28,29, 12,32,42,52,62,72,82,92, 11,13,31,33), //22
+			new Array(21,22,24,25,26,27,28,29, 13,33,43,53,63,73,83,93, 11,12,31,32), //23
+			new Array(21,22,23,25,26,27,28,29, 14,34,44,54,64,74,84,94, 15,16,35,36), //24
+			new Array(21,22,23,24,26,27,28,29, 15,35,45,55,65,75,85,95, 14,16,34,36), //25
+			new Array(21,22,23,24,25,27,28,29, 16,36,46,56,66,76,86,96, 14,15,34,35), //26
+			new Array(21,22,23,24,25,26,28,29, 17,37,47,57,67,77,87,97, 18,19,38,39), //27
+			new Array(21,22,23,24,25,26,27,29, 18,38,48,58,68,78,88,98, 17,19,37,39), //28
+			new Array(21,22,23,24,25,26,27,28, 19,39,49,59,69,79,89,99, 17,18,37,38)  //29
+		),
+		new Array(
+			new Array(32,33,34,35,36,37,38,39, 11,21,41,51,61,71,81,91, 12,13,22,23), //31
+			new Array(31,33,34,35,36,37,38,39, 12,22,42,52,62,72,82,92, 11,13,21,23), //32
+			new Array(31,32,34,35,36,37,38,39, 13,23,43,53,63,73,83,93, 11,12,21,22), //33
+			new Array(31,32,33,35,36,37,38,39, 14,24,44,54,64,74,84,94, 15,16,25,26), //34
+			new Array(31,32,33,34,36,37,38,39, 15,25,45,55,65,75,85,95, 14,16,24,26), //35
+			new Array(31,32,33,34,35,37,38,39, 16,26,46,56,66,76,86,96, 14,15,24,25), //36
+			new Array(31,32,33,34,35,36,38,39, 17,27,47,57,67,77,87,97, 18,19,28,29), //37
+			new Array(31,32,33,34,35,36,37,39, 18,28,48,58,68,78,88,98, 17,19,27,29), //38
+			new Array(31,32,33,34,35,36,37,38, 19,29,49,59,69,79,89,99, 17,18,27,28)  //39
+		),
+		new Array(
+			new Array(42,43,44,45,46,47,48,49, 11,21,31,51,61,71,81,91, 52,53,62,63), //41
+			new Array(41,43,44,45,46,47,48,49, 12,22,32,52,62,72,82,92, 51,53,61,63), //42
+			new Array(41,42,44,45,46,47,48,49, 13,23,33,53,63,73,83,93, 51,52,61,62), //43
+			new Array(41,42,43,45,46,47,48,49, 14,24,34,54,64,74,84,94, 55,56,65,66), //44
+			new Array(41,42,43,44,46,47,48,49, 15,25,35,55,65,75,85,95, 54,56,64,66), //45
+			new Array(41,42,43,44,45,47,48,49, 16,26,36,56,66,76,86,96, 54,55,64,65), //46
+			new Array(41,42,43,44,45,46,48,49, 17,27,37,57,67,77,87,97, 58,59,68,69), //47
+			new Array(41,42,43,44,45,46,47,49, 18,28,38,58,68,78,88,98, 57,59,67,69), //48
+			new Array(41,42,43,44,45,46,47,48, 19,29,39,59,69,79,89,99, 57,58,67,68)  //49
+		),
+		new Array(
+			new Array(52,53,54,55,56,57,58,59, 11,21,31,41,61,71,81,91, 42,43,62,63), //51
+			new Array(51,53,54,55,56,57,58,59, 12,22,32,42,62,72,82,92, 41,43,61,63), //52
+			new Array(51,52,54,55,56,57,58,59, 13,23,33,43,63,73,83,93, 41,42,61,62), //53
+			new Array(51,52,53,55,56,57,58,59, 14,24,34,44,64,74,84,94, 45,46,65,66), //54
+			new Array(51,52,53,54,56,57,58,59, 15,25,35,45,65,75,85,95, 44,46,64,66), //55
+			new Array(51,52,53,54,55,57,58,59, 16,26,36,46,66,76,86,96, 44,45,64,65), //56
+			new Array(51,52,53,54,55,56,58,59, 17,27,37,47,67,77,87,97, 48,49,68,69), //57
+			new Array(51,52,53,54,55,56,57,59, 18,28,38,48,68,78,88,98, 47,49,67,69), //58
+			new Array(51,52,53,54,55,56,57,58, 19,29,39,49,69,79,89,99, 47,48,67,68)  //59
+		),
+		new Array(
+			new Array(62,63,64,65,66,67,68,69, 11,21,31,41,51,71,81,91, 42,43,52,53), //61
+			new Array(61,63,64,65,66,67,68,69, 12,22,32,42,52,72,82,92, 41,43,51,53), //62
+			new Array(61,62,64,65,66,67,68,69, 13,23,33,43,53,73,83,93, 41,42,51,52), //63
+			new Array(61,62,63,65,66,67,68,69, 14,24,34,44,54,74,84,94, 45,46,55,56), //64
+			new Array(61,62,63,64,66,67,68,69, 15,25,35,45,55,75,85,95, 44,46,54,56), //65
+			new Array(61,62,63,64,65,67,68,69, 16,26,36,46,56,76,86,96, 44,45,54,55), //66
+			new Array(61,62,63,64,65,66,68,69, 17,27,37,47,57,77,87,97, 48,49,58,59), //67
+			new Array(61,62,63,64,65,66,67,69, 18,28,38,48,58,78,88,98, 47,49,57,59), //68
+			new Array(61,62,63,64,65,66,67,68, 19,29,39,49,59,79,89,99, 47,48,57,58)  //69
+		),
+		new Array(
+			new Array(72,73,74,75,76,77,78,79, 11,21,31,41,51,61,81,91, 82,83,92,93), //71
+			new Array(71,73,74,75,76,77,78,79, 12,22,32,42,52,62,82,92, 81,83,91,93), //72
+			new Array(71,72,74,75,76,77,78,79, 13,23,33,43,53,63,83,93, 81,82,91,92), //73
+			new Array(71,72,73,75,76,77,78,79, 14,24,34,44,54,64,84,94, 85,86,95,96), //74
+			new Array(71,72,73,74,76,77,78,79, 15,25,35,45,55,65,85,95, 84,86,94,96), //75
+			new Array(71,72,73,74,75,77,78,79, 16,26,36,46,56,66,86,96, 84,85,94,95), //76
+			new Array(71,72,73,74,75,76,78,79, 17,27,37,47,57,67,87,97, 88,89,98,99), //77
+			new Array(71,72,73,74,75,76,77,79, 18,28,38,48,58,68,88,98, 87,89,97,99), //78
+			new Array(71,72,73,74,75,76,77,78, 19,29,39,49,59,69,89,99, 87,88,97,98)  //79
+		),
+		new Array(
+			new Array(82,83,84,85,86,87,88,89, 11,21,31,41,51,61,71,91, 72,73,92,93), //81
+			new Array(81,83,84,85,86,87,88,89, 12,22,32,42,52,62,72,92, 71,73,91,93), //82
+			new Array(81,82,84,85,86,87,88,89, 13,23,33,43,53,63,73,93, 71,72,91,92), //83
+			new Array(81,82,83,85,86,87,88,89, 14,24,34,44,54,64,74,94, 75,76,95,96), //84
+			new Array(81,82,83,84,86,87,88,89, 15,25,35,45,55,65,75,95, 74,76,94,96), //85
+			new Array(81,82,83,84,85,87,88,89, 16,26,36,46,56,66,76,96, 74,75,94,95), //86
+			new Array(81,82,83,84,85,86,88,89, 17,27,37,47,57,67,77,97, 78,79,98,99), //87
+			new Array(81,82,83,84,85,86,87,89, 18,28,38,48,58,68,78,98, 77,79,97,99), //88
+			new Array(81,82,83,84,85,86,87,88, 19,29,39,49,59,69,79,99, 77,78,97,98)  //89
+		),
+		new Array(
+			new Array(92,93,94,95,96,97,98,99, 11,21,31,41,51,61,71,81, 72,73,82,83), //91
+			new Array(91,93,94,95,96,97,98,99, 12,22,32,42,52,62,72,82, 71,73,81,83), //92
+			new Array(91,92,94,95,96,97,98,99, 13,23,33,43,53,63,73,83, 71,72,81,82), //93
+			new Array(91,92,93,95,96,97,98,99, 14,24,34,44,54,64,74,84, 75,76,85,86), //94
+			new Array(91,92,93,94,96,97,98,99, 15,25,35,45,55,65,75,85, 74,76,84,86), //95
+			new Array(91,92,93,94,95,97,98,99, 16,26,36,46,56,66,76,86, 74,75,84,85), //96
+			new Array(91,92,93,94,95,96,98,99, 17,27,37,47,57,67,77,87, 78,79,88,89), //97
+			new Array(91,92,93,94,95,96,97,99, 18,28,38,48,58,68,78,88, 77,79,87,89), //98
+			new Array(91,92,93,94,95,96,97,98, 19,29,39,49,59,69,79,89, 77,78,87,88)  //99
+		)
+	);
+	var boardXML;
+	function init()
+	{
+		var operation = services["admin/sudoku"].operations["options"];
+	        var payload=null;
+	        
+		operation.callback = function(payload) {
+                var responseXML = WSRequest.util._serializeToString(payload);
+                var responseJSON = WebService.utils.xml2bf(payload);	            	
+	
+	                var currentSymmetricalValue = responseJSON["ws:optionsResponse"]["return"]["options"]["symmetrical"]["@default"];
+			var currentDifficultValue = responseJSON["ws:optionsResponse"]["return"]["options"]["difficulty"]["@default"];
+	           
+  			var symmetricalValue=responseJSON["ws:optionsResponse"]["return"]["options"]["symmetrical"].$;
+			var diffValue=responseJSON["ws:optionsResponse"]["return"]["options"]["difficulty"].$;
+
+	                var symmetricValues=symmetricalValue.split(" ");
+	                var diffValues = diffValue.split(" ");
+	                var selectSymmetricOption = "<span>" + "symmetrical:"+ "<select id="+ "symmetrical"+ ">";
+	                
+			for (var i=0; i<symmetricValues.length; i++) {
+	                selectSymmetricOption += "<option value='" + symmetricValues[i] + "'" + (symmetricValues[i] == currentSymmetricalValue ? " selected" : "") 				+ ">" + symmetricValues[i] + "</option>";
+	                }
+
+			var selectDiffOption = "<span>" + "difficulty:"+ "<select id="+ "difficulty"+ ">";
+	                for (var j=0; j<diffValues.length; j++) {
+	                selectDiffOption += "<option value='" + diffValues[j] + "'" + (diffValues[j] == currentDifficultValue ? " selected" : "") + ">" + 				diffValues[j] + "</option>";
+	                }
+			
+	                document.getElementById("puzzleOptions").innerHTML = selectSymmetricOption 
+ 			document.getElementById("puzzleOptions").innerHTML+=selectDiffOption ;	            
+	        
+        
+		};
+		operation.onError = handleError;
+		operation(null);
+
+		var getNewPuzzle = services["admin/sudoku"].operations["newpuzzle"];
+	        var payloadPuzzle =null;	       
+
+		getNewPuzzle .callback = function(payloadPuzzle) {
+                var responseXML2 = WSRequest.util._serializeToString(payloadPuzzle);
+                var responseJSON2 = WebService.utils.xml2bf(payloadPuzzle);
+		boardXML=responseJSON2["ws:newpuzzleResponse"]["return"]["board"];
+		load();	     
+		
+		};
+		getNewPuzzle .onError = handleError;
+		getNewPuzzle (null);     
+		
+		
+
+
+        
+
+        // Enabling 'new' and 'reset' buttons after current puzzle has been loaded.
+        document.getElementById("newPuzzle").disabled = false;
+        document.getElementById("resetPuzzle").disabled = false;
+    
+}	
+	function currentColor(color) {
+		for (i=1; i<10; i++) {
+			for  (j=1; j<10; j++) {
+				var cell = document.getElementById("c" + i.toString() + j.toString());
+				if (cell.value == "")
+					cell.style.color = color;
+			}
+		}
+	}
+	
+	function handlechange(id) {
+		hints();
+	}
+ function handleError(error) {
+            alert("An Error occured: " + error.reason);
+        }
+	
+	
+	function newpuzzle() {
+		var options = "";
+		var puzzleOptionsSelects = document.getElementsByTagName("select");
+		for (var i = 0; i < puzzleOptionsSelects.length; i++) {
+			var name = puzzleOptionsSelects[i].getAttribute("id");
+			options += "<" + name + ">" + puzzleOptionsSelects[i].value + "</" + name + ">";
+		}
+		var getPuzzle = services["admin/sudoku"].operations["newpuzzle"];
+	        var payload1 =null;	       
+
+		getPuzzle.callback = function(payload1) {
+                var responseXML1 = WSRequest.util._serializeToString(payload1);
+                var responseJSON1 = WebService.utils.xml2bf(payload1);	
+	        boardXML=responseJSON1["ws:newpuzzleResponse"]["return"]["board"];
+		load();
+		};
+		getPuzzle.onError = handleError;
+		getPuzzle(null);
+		
+		
+	}
+
+	function load() {
+		currentColor('black');
+		for (i=1; i<10; i++) {
+			for  (j=1; j<10; j++) {
+				var digit=boardXML["cell"][(i-1)*9 + j-1]["@value"];
+				
+				var cell = document.getElementById("c" + i.toString() + j.toString());
+				cell.value = (digit == 0 ? "" : digit);
+			}
+		}
+		hints();
+	}
+
+	function hints()
+	{
+		var empties = 0;
+		for (i=1; i<10; i++) {
+			for  (j=1; j<10; j++) {
+				cell = document.getElementById("c" + i.toString() + j.toString());
+				p = findPossibilities(i,j);
+				hint = p[0];
+				for (k=1; k<10; k++) {
+					if (p[k]) hint += k.toString();
+				}
+				if (cell.value == "") {
+					empties++;
+					if (hint == "")
+						cell.style.backgroundColor= "yellow";
+					else
+						cell.title = hint;	
+				} else {
+					cell.title = "";
+				}
+			}
+		}
+		if (empties == 0)
+			if (validate()) {
+				for (i=1; i<10; i++) {
+					for  (j=1; j<10; j++) {
+						var cell = document.getElementById("c" + i.toString() + j.toString());
+						cell.style.backgroundColor = "gray";
+					}
+				}
+			}
+	}
+
+	function validate() {
+		correct = true;
+		for (i=1; i<10; i++) {
+			for  (j=1; j<10; j++) {
+				c = constraints[i-1][j-1];
+				testCell = document.getElementById("c" + i.toString() + j.toString());
+				if (testCell.value == "") {
+					testCell.style.backgroundColor = "orange";
+					correct = false;
+				} else {
+					for (k = 0; k<c.length; k++) {
+						constrainedcell = document.getElementById("c" + c[k]);
+						if (constrainedcell.value == testCell.value) {
+							testCell.style.backgroundColor = "orange";
+							correct = false;
+						}
+					}
+				}
+			}
+		}
+		return correct;
+	}
+	
+	function findPossibilities(i,j) {
+		possibilities = new Array("",true, true, true, true, true, true, true, true, true);
+		c = constraints[i-1][j-1];
+		cell = document.getElementById("c" + i.toString() + j.toString());
+		if (cell.value != "")
+			possibilities[parseInt(cell.value)] = false;
+		for (k = 0; k<c.length; k++) {
+			constrainedcell = document.getElementById("c" + c[k]);
+			if (constrainedcell.value != "")
+				possibilities[parseInt(constrainedcell.value)] = false;
+		}
+		return possibilities;
+	}
+	
+	function show(digit)
+	{
+		for (i=1; i<10; i++) {
+			for  (j=1; j<10; j++) {
+				cell = document.getElementById("c" + i.toString() + j.toString());
+				if (digit == 0) {
+					cell.style.backgroundColor="white";
+				} else if (cell.title != "" && cell.title.indexOf(digit) >= 0) {
+						cell.style.backgroundColor = "green";
+				}
+			}
+		}
+	}
+</script>
+</head>
+<body  onload="init()">
+<h1>WSudOku<sub>2</sub></h1>
+<p>This page is a custom UI for the sudoku service, presenting the generated puzzle data in an interactive gameboard.
+Also see <a href="fludoku.htm">Fludoku</a> for an alternate interface.</p>
+<div>
+<input type="button" id="newPuzzle" value="new puzzle" onclick="newpuzzle()" disabled="disabled"></input>
+<input type="button" id="resetPuzzle" value="reset puzzle" onclick="load()" disabled="disabled"></input></div>
+<div><span id="puzzleOptions"></span></div>
+<table cellspacing="0" cellpadding="0">
+	<tr>
+		<td><input type="text" id="c11" onchange="handlechange('c11')"></input></td>
+		<td><input type="text" id="c12" onchange="handlechange('c12')"></input></td>
+		<td class="right"><input type="text" id="c13" onchange="handlechange('c13')"></input></td>
+		<td><input type="text" id="c14" onchange="handlechange('c14')"></input></td>
+		<td><input type="text" id="c15" onchange="handlechange('c15')"></input></td>
+		<td class="right"><input type="text" id="c16" onchange="handlechange('c16')"></input></td>
+		<td><input type="text" id="c17" onchange="handlechange('c17')"></input></td>
+		<td><input type="text" id="c18" onchange="handlechange('c18')"></input></td>
+		<td class="right"><input type="text" id="c19" onchange="handlechange('c19')"></input></td>
+	</tr>
+	<tr>
+		<td><input type="text" id="c21" onchange="handlechange('c21')"></input></td>
+		<td><input type="text" id="c22" onchange="handlechange('c22')"></input></td>
+		<td class="right"><input type="text" id="c23" onchange="handlechange('c23')"></input></td>
+		<td><input type="text" id="c24" onchange="handlechange('c24')"></input></td>
+		<td><input type="text" id="c25" onchange="handlechange('c25')"></input></td>
+		<td class="right"><input type="text" id="c26" onchange="handlechange('c26')"></input></td>
+		<td><input type="text" id="c27" onchange="handlechange('c27')"></input></td>
+		<td><input type="text" id="c28" onchange="handlechange('c28')"></input></td>
+		<td class="right"><input type="text" id="c29" onchange="handlechange('c29')"></input></td>
+	</tr>
+	<tr>
+		<td class="bottom"><input type="text" id="c31" onchange="handlechange('c31')"></input></td>
+		<td class="bottom"><input type="text" id="c32" onchange="handlechange('c32')"></input></td>
+		<td class="right bottom"><input type="text" id="c33" onchange="handlechange('c33')"></input></td>
+		<td class="bottom"><input type="text" id="c34" onchange="handlechange('c34')"></input></td>
+		<td class="bottom"><input type="text" id="c35" onchange="handlechange('c35')"></input></td>
+		<td class="right bottom"><input type="text" id="c36" onchange="handlechange('c36')"></input></td>
+		<td class="bottom"><input type="text" id="c37" onchange="handlechange('c37')"></input></td>
+		<td class="bottom"><input type="text" id="c38" onchange="handlechange('c38')"></input></td>
+		<td class="right bottom"><input type="text" id="c39" onchange="handlechange('c39')"></input></td>
+	</tr>
+	<tr>
+		<td><input type="text" id="c41" onchange="handlechange('c41')"></input></td>
+		<td><input type="text" id="c42" onchange="handlechange('c42')"></input></td>
+		<td class="right"><input type="text" id="c43" onchange="handlechange('c43')"></input></td>
+		<td><input type="text" id="c44" onchange="handlechange('c44')"></input></td>
+		<td><input type="text" id="c45" onchange="handlechange('c45')"></input></td>
+		<td class="right"><input type="text" id="c46" onchange="handlechange('c46')"></input></td>
+		<td><input type="text" id="c47" onchange="handlechange('c47')"></input></td>
+		<td><input type="text" id="c48" onchange="handlechange('c48')"></input></td>
+		<td class="right"><input type="text" id="c49" onchange="handlechange('c49')"></input></td>
+	</tr>
+	<tr>
+		<td><input type="text" id="c51" onchange="handlechange('c51')"></input></td>
+		<td><input type="text" id="c52" onchange="handlechange('c52')"></input></td>
+		<td class="right"><input type="text" id="c53" onchange="handlechange('c53')"></input></td>
+		<td><input type="text" id="c54" onchange="handlechange('c54')"></input></td>
+		<td><input type="text" id="c55" onchange="handlechange('c55')"></input></td>
+		<td class="right"><input type="text" id="c56" onchange="handlechange('c56')"></input></td>
+		<td><input type="text" id="c57" onchange="handlechange('c57')"></input></td>
+		<td><input type="text" id="c58" onchange="handlechange('c58')"></input></td>
+		<td class="right"><input type="text" id="c59" onchange="handlechange('c59')"></input></td>
+	</tr>
+	<tr>
+		<td class="bottom"><input type="text" id="c61" onchange="handlechange('c61')"></input></td>
+		<td class="bottom"><input type="text" id="c62" onchange="handlechange('c62')"></input></td>
+		<td class="right bottom"><input type="text" id="c63" onchange="handlechange('c63')"></input></td>
+		<td class="bottom"><input type="text" id="c64" onchange="handlechange('c64')"></input></td>
+		<td class="bottom"><input type="text" id="c65" onchange="handlechange('c65')"></input></td>
+		<td class="right bottom"><input type="text" id="c66" onchange="handlechange('c66')"></input></td>
+		<td class="bottom"><input type="text" id="c67" onchange="handlechange('c67')"></input></td>
+		<td class="bottom"><input type="text" id="c68" onchange="handlechange('c68')"></input></td>
+		<td class="right bottom"><input type="text" id="c69" onchange="handlechange('c69')"></input></td>
+	</tr>
+	<tr>
+		<td><input type="text" id="c71" onchange="handlechange('c71')"></input></td>
+		<td><input type="text" id="c72" onchange="handlechange('c72')"></input></td>
+		<td class="right"><input type="text" id="c73" onchange="handlechange('c73')"></input></td>
+		<td><input type="text" id="c74" onchange="handlechange('c74')"></input></td>
+		<td><input type="text" id="c75" onchange="handlechange('c75')"></input></td>
+		<td class="right"><input type="text" id="c76" onchange="handlechange('c76')"></input></td>
+		<td><input type="text" id="c77" onchange="handlechange('c77')"></input></td>
+		<td><input type="text" id="c78" onchange="handlechange('c78')"></input></td>
+		<td class="right"><input type="text" id="c79" onchange="handlechange('c79')"></input></td>
+	</tr>
+	<tr>
+		<td><input type="text" id="c81" onchange="handlechange('c81')"></input></td>
+		<td><input type="text" id="c82" onchange="handlechange('c82')"></input></td>
+		<td class="right"><input type="text" id="c83" onchange="handlechange('c83')"></input></td>
+		<td><input type="text" id="c84" onchange="handlechange('c84')"></input></td>
+		<td><input type="text" id="c85" onchange="handlechange('c85')"></input></td>
+		<td class="right"><input type="text" id="c86" onchange="handlechange('c86')"></input></td>
+		<td><input type="text" id="c87" onchange="handlechange('c87')"></input></td>
+		<td><input type="text" id="c88" onchange="handlechange('c88')"></input></td>
+		<td class="right"><input type="text" id="c89" onchange="handlechange('c89')"></input></td>
+	</tr>
+	<tr>
+		<td class="bottom"><input type="text" id="c91" onchange="handlechange('c91')"></input></td>
+		<td class="bottom"><input type="text" id="c92" onchange="handlechange('c92')"></input></td>
+		<td class="right bottom"><input type="text" id="c93" onchange="handlechange('c93')"></input></td>
+		<td class="bottom"><input type="text" id="c94" onchange="handlechange('c94')"></input></td>
+		<td class="bottom"><input type="text" id="c95" onchange="handlechange('c95')"></input></td>
+		<td class="right bottom"><input type="text" id="c96" onchange="handlechange('c96')"></input></td>
+		<td class="bottom"><input type="text" id="c97" onchange="handlechange('c97')"></input></td>
+		<td class="bottom"><input type="text" id="c98" onchange="handlechange('c98')"></input></td>
+		<td class="right bottom"><input type="text" id="c99" onchange="handlechange('c99')"></input></td>
+	</tr>
+	<tr>
+		<td class="hinter"><input type="button" value="1" onmouseover="show(1)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="2" onmouseover="show(2)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="3" onmouseover="show(3)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="4" onmouseover="show(4)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="5" onmouseover="show(5)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="6" onmouseover="show(6)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="7" onmouseover="show(7)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="8" onmouseover="show(8)" onmouseout="show(0)"></input></td>
+		<td class="hinter"><input type="button" value="9" onmouseover="show(9)" onmouseout="show(0)"></input></td>
+	</tr>
+</table>
+<div>Fill in new cells with:
+<input type="button" value="red" onclick="currentColor('red')"></input>
+<input type="button" value="green" onclick="currentColor('green')"></input>
+<input type="button" value="blue" onclick="currentColor('blue')"></input>
+<input type="button" value="purple" onclick="currentColor('purple')"></input>
+<input type="button" value="orange" onclick="currentColor('orange')"></input>
+</div>
+</body>
+</html>

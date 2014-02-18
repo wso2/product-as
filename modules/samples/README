@@ -1,0 +1,264 @@
+================================================================================
+                          WSO2 Application Server Samples
+================================================================================
+
+Introduction
+============
+WSO2 Application Server ships with number of samples integrated to illustrate its
+functionality and capabilities. This README will provide prerequisites, abstract
+of each sample and instructions to run the samples. Following list will give you
+the samples which are integrated,
+
+1. HelloWorld -
+   This is a simple sample that demonstrates the functionality of the Axis2 services
+   deployed as web services in WSO2 Web Service Application Server .
+
+2. HelloWorldWebapp -
+   This sample will show how WSO2 Application server supports to deploy a webapp.
+
+3. Chad -
+   This sample will create simple web service for voting and a web based client to use
+   that web service.
+
+4. MTOM -
+   This sample demonstrates the usage of Message Transmission Optimization Mechanism.
+
+5. Mail -
+   This sample demonstrates how you can use the Mail transport in WSO2 AppServer to
+   invoke Web Services.
+
+6. STS -
+   In this sample we will demonstrate the usage of wso2carbon-sts service and its
+   applications.
+
+7. Trader -
+   This sample will illustrate the integration of QoS modules to web services.
+
+8. Commodity Quote -
+   This sample will illustrate the integration of QoS modules to web services.
+
+9. TinyURL -
+   In this sample the capabilities of WSO2 Application Server to handle both SOAP and
+   Representational State Transfer (REST) will be demonstrated.
+
+10. MEX -
+    This samples demonstrates how to enable a Metadata Exchange (MEX) request for an
+    arbitrary service.
+
+11. Xfer -
+    This samples demonstrates how to enable a WS-Transfer (xfer) support for an arbitrary
+    service.
+
+12. JSON -
+    This is a simple sample that demonstrates the functionality of the JSON Support in
+    WSO2 Application Server.
+
+13. ClientAPI -
+    This sample will show how WSO2 Application server supports different kinds of clients
+    to invoke Web Services.
+
+14. FlickrClient -
+    This sample will generate code for a WSDL 2.0 description and invoke a real world
+    application RESTfully.
+
+15. EJB -
+    This sample will illustrate the EJB Services feature in WSO2 Application Server.
+
+16. JibX -
+    This sample demonstrates the usage of Jibx data binding that comes with Axis2.
+
+17. VirtualDirectoryListing -
+    This sample is to demonstrate how to do virtual directory listing using a tomcat
+    webapp.
+
+18. Axis2Module -
+    This is a simple sample which demonstrates how to write an Axis2 Module.
+
+19. TomcatWebApps -
+    a. GenericJavaBeanResource
+       This is simple webapp sample to demonstrate JNDI DataSource look-ups in Embedded
+       Tomcat for resources defined in webapp contextXml descriptor.
+
+    b. JDBCDataSource
+       This is a webapp sample to demonstrate JDBC DataSource lookups for JDBC resources
+       defined in contextXml descriptor.
+
+    c. CarbonDataSourceAccessExample
+       This is simple webapp sample to demonstrate the JNDI look-ups of Carbon DataSources
+       which are exposed as JNDI resources from carbon in WSO2 Application Server
+
+20. Jaxws-Jaxrs
+    This contains series of samples to illustrate the use of Jaxws and Jaxrs in WSO2
+    Application Server.
+
+    a. jaxrs_basic -
+       The samples shows a basic REST based Web Services using JAX-RS.
+
+    c. jaxrs_sample_02 -
+       The sample shows some advanced functionality of REST based Web Services using
+       JAX-RS.
+
+    d. jaxrs_content_negotiation -
+       The sample shows how to do content negotiation so that the same resource can be
+       served using multiple representations.
+
+    e. async_jaxws -
+       This sample illustrates the use of the JAX-WS asynchronous invocation model.
+
+    f. java_first_jaxws -
+       This sample illustrates how to develop a service using the "code first" approach
+       using the JAX-WS APIs.
+
+    g. wsdl_first_jaxws -
+       This sample shows how to build and call a web service using a given WSDL (also
+       called Contract First).
+
+    h. handlers_jaxws -
+       This sample shows how JAX-WS handlers are used.
+
+    i. mtom_jaxws -
+       This sample illustrates the use of a SOAP message with an attachment and
+       XML-binary Optimized Packaging.
+
+    j. ut -
+       This sample shows how WS-Security support in JAX-WS services may be enabled.
+
+    k. sign_encrypt -
+       This sample shows how WS-Security support in JAX-WS may be enabled.
+	   
+21. jaggerySamples
+    In this there are two simple sample that demonstrates the some functionality of the jaggery 
+    deployed as jaggery applicatioins in WSO2 Web Service Application Server .
+	
+22. dataServiceSamples
+    This will illustrate the Data Services functiolity with WSO2 Application Server.
+	
+23. mashupSamples
+    Mashup samples demonstrate the functionality of the mashup server features.
+	
+    a. digit2image -
+       This mashup sample demonstrates the using of a flickr API.
+
+    c. exchangeRate -
+       This mashup sample demonstrate using web services for getting currency exchange rate. 
+
+    d. feedCache -
+       This mashup sample demonstrates feed cache setting feature of mashup server.
+
+    e. formulaFlicks -
+       This mashup sample retrieves information from the formula1.com RSS feed.
+
+    f. gmapsAPIKey -
+       This mashup sample service give Google Maps API key.
+
+    g. RESTsampele -
+       This sample demonstrates rest full verbs. such post, get, put and delete. 
+
+    h. storeXML -
+       This sample stores a blob of uniquely-named XML for later retrieval.
+
+    i. sudoku -
+       This mashup service generates sudoku puzzles, based on user options, and returns them in 
+       an XML format for user display.
+
+    j. tomatoTube -
+       This mashup sample services can be used to obtains the top rated movies in theaters and 
+       on DVD from rottentomatoes.com and embeds a YouTube trailer to the feed. 
+
+    k. TwitterMap -
+       This mashup services use twitter API. Requires Twitter authentication for 'Friends Only' 
+       mode.
+	
+    l. upgradeChecker -
+       This mashup service checks the running build of the mashup server against the current release 
+       and nightly build versions available.
+	
+    m. version -
+       This mashup sample demonstrates the reading XML file that contains about product details
+	
+    n. yahooGeoCode -
+       This mashup service wraps with the "http://developer.yahoo.com/maps/rest/V1/geocode.html" 
+       Yahoo! Maps Web Services - Geocoding API. 
+		
+Sample hierarchy under the 'samples' directory
+==============================================
+
+samples
+  ├── HelloWorld
+  ├── FlickrClient
+  ├── JibX
+  ├── MTOM
+  ├── Mail
+  ├── STS
+  ├── Trader
+  ├── Commodity Quot
+  ├── TinyURL
+  ├── MEX
+  ├── Xfer
+  ├── JSON
+  ├── ClientAPI
+  ├── HelloWorldWebapp
+  ├── EJB
+  ├── Chad
+  ├── TomcatWebApps
+  │   ├── GenericJavaBeanResource
+  │   └── JDBCDataSource
+  │   └── CarbonDataSourceAccessExample
+  ├── VirtualDirectoryListing
+  ├── Axis2Module
+  ├── jaggerySamples
+  ├── dataServiceSamples
+  ├── mashupSamples
+  │   ├── digit2image
+  │   ├── exchangeRate
+  │   ├── feedCache
+  │   ├── formulaFlicks
+  │   ├── gmapsAPIKey
+  │   ├── RESTsampele
+  │   ├── storeXML
+  │   ├── sudoku
+  │   ├── tomatoTube
+  │   ├── TwitterMap
+  │   ├── upgradeChecker
+  │   ├── version
+  │   └── yahooGeoCode    
+  └── Jaxws-Jaxrs
+      ├── jaxrs_basic
+      ├── jaxrs_sample_02
+      ├── jaxrs_content_negotiation
+      ├── async_jaxws
+      ├── java_first_jaxws
+      ├── wsdl_first_jaxws
+      ├── handlers_jaxws
+      ├── mtom_jaxws
+      └── ws_security
+          ├── sign_encrypt
+          └── ut
+
+Requirements
+=============
+
+1. JDK 1.6.0_23 or higher
+2. Apache ANT 1.7 or higher
+3. Apache Maven 3.0.4 or higher
+4. A JavaScript compatible web browser
+5. An active Internet connection
+
+
+Setting Up and Running the Samples
+==================================
+
+Each sample folder contain a pom.xml, build.xml or both to build the samples. You can run
+those using Apache Maven or Apache Ant to build the samples. After building those you can
+use run-client scripts to run the client side of the sample if it is provided.Else Refer the
+README files in each of the sample subdirectories for more detailed instructions on how to
+run the samples. Because some samples need specific instruction to run them.
+
+
+After Running the Samples
+=========================
+
+These samples only illustrate limited number of capabilities in WSO2 Application Server.
+Therefore it's highly recommended to go through our documentation
+at http://docs.wso2.org/wiki/application-server-documentation to learn
+more about the product and its features.

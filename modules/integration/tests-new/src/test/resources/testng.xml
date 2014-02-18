@@ -1,0 +1,41 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="APPServer-features-test-suite">
+    <parameter name="useDefaultListeners" value="false"/>
+
+     <test name="ms-integration-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="ms.integration.tests.emailhostobject.*"/>
+        </packages>
+    </test>
+
+    <test name="integration-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.carbon.integration.test.*"/>
+        </packages>
+    </test>
+
+    <test name="rest-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.carbon.integration.rest.test.poxsecurity.*"/>
+        </packages>
+    </test>    
+
+    <test name="jaggery-integration-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="jaggery.integration.tests.*"/>
+        </packages>
+    </test>
+
+
+    <!--<test name="debugging-tests" preserve-order="true" parallel="false">-->
+    <!--<packages>-->
+    <!--<package name="org.wso2.carbon.integration.test.*"/>-->
+    <!--</packages>-->
+    <!---->
+    <!--<classes>-->
+    <!--<class name="org.wso2.carbon.integration.test.aarservice.AARUploaderTest"/>-->
+    <!--</classes>-->
+    <!--</test>-->
+
+</suite>

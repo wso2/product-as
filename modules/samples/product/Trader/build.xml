@@ -1,0 +1,161 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project default="build-all">
+
+    <property name="wso2appserver.home" value="../../"/>
+    <property name="carbon.home" value="${wso2appserver.home}"/>
+    <property name="appserver.lib" value="${wso2appserver.home}/lib"/>
+    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="classes" value="${temp.dir}/classes"/>
+    <property name="src" value="src"/>
+    <property name="gen.src" value="target/generated/src"/>
+    <property name="services" value="services"/>
+    <property name="setup" value="ROOT"/>
+    <property name="repo.services" value="axis2services"/>
+    <property name="repo.modules" value="axis2modules"/>
+    
+    <ant antfile="${wso2appserver.home}/bin/build.xml"/>
+
+    <path id="axis2.class.path">
+        <pathelement path="${java.class.path}"/>
+        <fileset dir="${wso2appserver.home}">
+            <include name="repository/lib/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init" depends="clean">
+
+        <mkdir dir="${temp.dir}"/>
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${services}"/>
+        <mkdir dir="${gen.src}"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${temp.dir}"/>
+        <delete dir="${gen.src}"/>
+    </target>
+
+    <target name="generate-source" depends="init">
+        <java classname="org.wso2.carbon.utils.codegen.CodegenHelper" fork="true">
+            <arg value="./conf/codegen.xml"/>
+            <classpath refid="axis2.class.path"/>
+        </java>
+    </target>
+
+    <target name="compile-all" depends="generate-source">
+        <javac debug="on" destdir="${classes}">
+            <src path="${src}"/>
+            <src path="${gen.src}"/>
+            <classpath refid="axis2.class.path"/>
+        </javac>
+    </target>
+
+    <target name="build-trader-client" depends="compile-all">
+        <property name="TC.dir" value="${temp.dir}/TraderClient"/>
+        <mkdir dir="${TC.dir}"/>
+
+        <mkdir dir="${TC.dir}/META-INF"/>
+        <copy file="conf/Trader_Client_services.xml" tofile="${TC.dir}/META-INF/services.xml"/>
+        <copy file="wsdl/Trader_Client.wsdl" tofile="${TC.dir}/META-INF/service.wsdl"/>
+        <copy toDir="${TC.dir}">
+            <fileset dir="${classes}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${services}/TraderClient.aar">
+            <fileset dir="${TC.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-trader-exchange" depends="compile-all">
+        <property name="TE.dir" value="${temp.dir}/TraderExchange"/>
+        <mkdir dir="${TE.dir}"/>
+
+        <mkdir dir="${TE.dir}/META-INF"/>
+        <copy file="conf/Trader_Exchange_services.xml" tofile="${TE.dir}/META-INF/services.xml"/>
+        <copy file="wsdl/Trader_Exchange.wsdl" tofile="${TE.dir}/META-INF/service.wsdl"/>
+        <copy toDir="${TE.dir}">
+            <fileset dir="${classes}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${services}/TraderExchange.aar">
+            <fileset dir="${TE.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-exchange-client" depends="compile-all">
+        <property name="BE.dir" value="${temp.dir}/ExchangeClient"/>
+        <mkdir dir="${BE.dir}"/>
+
+        <mkdir dir="${BE.dir}/META-INF"/>
+        <copy file="conf/Exchange_Client_services.xml" tofile="${BE.dir}/META-INF/services.xml"/>
+        <copy file="wsdl/Exchange_Client.wsdl" tofile="${BE.dir}/META-INF/service.wsdl"/>
+        <copy toDir="${BE.dir}">
+            <fileset dir="${classes}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${services}/ExchangeClient.aar">
+            <fileset dir="${BE.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-exchange-trader" depends="compile-all">
+        <property name="ET.dir" value="${temp.dir}/ExchangeTrader"/>
+        <mkdir dir="${ET.dir}"/>
+
+        <mkdir dir="${ET.dir}/META-INF"/>
+        <copy file="conf/Exchange_Trader_services.xml" tofile="${ET.dir}/META-INF/services.xml"/>
+        <copy file="wsdl/Exchange_Trader.wsdl" tofile="${ET.dir}/META-INF/service.wsdl"/>
+        <copy toDir="${ET.dir}">
+            <fileset dir="${classes}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${services}/ExchangeTrader.aar">
+            <fileset dir="${ET.dir}"/>
+        </jar>
+    </target>
+
+    <target name="build-all"
+            depends="build-trader-client, build-trader-exchange, build-exchange-client, build-exchange-trader">
+        <echo message="Copying the created aar files in to the repository"/>
+        <copy toDir="${repo.location}/${repo.services}">
+            <fileset dir="${services}">
+                <include name="**/*.aar"/>
+            </fileset>
+        </copy>
+
+        <!-- Create a local repository containing only the necessary modules -->
+        <mkdir dir="repository/modules"/>
+        <copy todir="repository/modules">
+            <fileset dir="${repo.location}/${repo.modules}">
+                <include name="addressing*.mar"/>
+                <include name="*sandesha2*.mar"/>
+                <include name="rampart*.mar"/>
+                <include name="rahas*.mar"/>
+            </fileset>
+        </copy>
+    </target>
+</project>

@@ -1,0 +1,123 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:12pt;"><span style="color:#800000;background-color:#f0f0f0;">  1 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.context.CarbonContext" %&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">  2 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.context.RegistryType" %&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">  3 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.registry.api.Registry" %&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">  4 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.registry.api.Resource" %&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">  5
+  6 </span><span style="background-color:#edffed;font-weight:bold;">&lt;h2&gt;WSO2 Carbon Registry Usage Demo&lt;/h2&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">  7
+  8 </span><span style="background-color:#edffed;font-weight:bold;">&lt;hr/&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">  9 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 10
+ 11 </span><span style="background-color:#edffed;font-weight:bold;">&lt;h3&gt;Add New Resource&lt;/h3&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 12 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 13 </span><span style="background-color:#edffed;font-weight:bold;">&lt;form action="index.jsp" method="POST"&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 14 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;table border="0"&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 15 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 16 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Registry Type&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 17 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 18 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;select name="registryType"&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 19 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option selected="true"&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_CONFIGURATION.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 20 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_GOVERNANCE.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 21 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;/select&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 22 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 23 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 24 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 25 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Resource Path&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 26 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="text" name="resourcePath" value="foo/bar"/&gt;&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 27 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 28 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 29 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Value&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 30 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="text" name="value" value="WSO2 Carbon"/&gt;&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 31 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 32 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 33 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&nbsp;&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 34 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="submit" value="Add" name="add"&gt;&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 35 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 36 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;/table&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 37 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/form&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 38 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 39 </span><span style="background-color:#edffed;font-weight:bold;">&lt;hr/&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 40 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 41
+ 42 </span><span style="background-color:#edffed;font-weight:bold;">&lt;h3&gt;View Resource&lt;/h3&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 43 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 44 </span><span style="background-color:#edffed;font-weight:bold;">&lt;form action="index.jsp" method="POST"&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 45 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;table border="0"&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 46 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 47 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Registry Type&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 48 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 49 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;select name="registryType"&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 50 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option selected="true"&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_CONFIGURATION.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 51 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_GOVERNANCE.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 52 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;/select&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 53 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 54 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 55 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 56 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Resource Path&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 57 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="text" name="resourcePath" value="foo/bar"/&gt;&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 58 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 59 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 60 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&nbsp;&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 61 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="submit" value="View" name="view"&gt;&lt;/td&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 62 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 63 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;/table&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 64 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/form&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 65 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 66 </span><span style="background-color:#edffed;font-weight:bold;">&lt;hr/&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 67
+ 68 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
+</span><span style="color:#800000;background-color:#f0f0f0;"> 69 </span><span style="background-color:#edffed;">    // Obtain the reference to the registry from the CarbonContext
+</span><span style="color:#800000;background-color:#f0f0f0;"> 70 </span><span style="background-color:#edffed;">    CarbonContext cCtx = CarbonContext.getCurrentContext();
+</span><span style="color:#800000;background-color:#f0f0f0;"> 71
+ 72 </span><span style="background-color:#edffed;">    Registry registry = cCtx.getRegistry(RegistryType.SYSTEM_CONFIGURATION);
+</span><span style="color:#800000;background-color:#f0f0f0;"> 73 </span><span style="background-color:#edffed;">    String registryType = request.getParameter("registryType");
+</span><span style="color:#800000;background-color:#f0f0f0;"> 74 </span><span style="background-color:#edffed;">    if(registryType != null) {
+</span><span style="color:#800000;background-color:#f0f0f0;"> 75 </span><span style="background-color:#edffed;">       registry = cCtx.getRegistry(RegistryType.valueOf(registryType));
+</span><span style="color:#800000;background-color:#f0f0f0;"> 76 </span><span style="background-color:#edffed;">    }
+</span><span style="color:#800000;background-color:#f0f0f0;"> 77
+ 78 </span><span style="background-color:#edffed;">    if (request.getParameter("add") != null) {
+</span><span style="color:#800000;background-color:#f0f0f0;"> 79 </span><span style="background-color:#edffed;">        Resource resource = registry.newResource();
+</span><span style="color:#800000;background-color:#f0f0f0;"> 80 </span><span style="background-color:#edffed;">        resource.setContent(request.getParameter("value"));
+</span><span style="color:#800000;background-color:#f0f0f0;"> 81 </span><span style="background-color:#edffed;">        String resourcePath = request.getParameter("resourcePath");
+</span><span style="color:#800000;background-color:#f0f0f0;"> 82 </span><span style="background-color:#edffed;">        registry.put(resourcePath, resource);
+</span><span style="color:#800000;background-color:#f0f0f0;"> 83 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 84 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 85 </span><span style="background-color:#edffed;font-weight:bold;">    Added resource: </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> resourcePath </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 86 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 87 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
+</span><span style="color:#800000;background-color:#f0f0f0;"> 88 </span><span style="background-color:#edffed;">    } else if (request.getParameter("view") != null) {
+</span><span style="color:#800000;background-color:#f0f0f0;"> 89 </span><span style="background-color:#edffed;">        String resourcePath = request.getParameter("resourcePath");
+</span><span style="color:#800000;background-color:#f0f0f0;"> 90 </span><span style="background-color:#edffed;">        if (registry.resourceExists(resourcePath)) {
+</span><span style="color:#800000;background-color:#f0f0f0;"> 91 </span><span style="background-color:#edffed;">            Resource resource = registry.get(resourcePath);
+</span><span style="color:#800000;background-color:#f0f0f0;"> 92 </span><span style="background-color:#edffed;">            String content = new String((byte[]) resource.getContent());
+</span><span style="color:#800000;background-color:#f0f0f0;"> 93 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 94 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 95 </span><span style="background-color:#edffed;font-weight:bold;">                Resource at in Registry </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> registryType</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;"> path </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> resourcePath</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;"> : </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> content </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 96 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;"> 97 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
+</span><span style="color:#800000;background-color:#f0f0f0;"> 98 </span><span style="background-color:#edffed;">        } else {
+</span><span style="color:#800000;background-color:#f0f0f0;"> 99 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">100 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">101 </span><span style="background-color:#edffed;font-weight:bold;">                Resource at path </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> resourcePath</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;"> does not exist in Registry </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> registryType</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">!
+</span><span style="color:#800000;background-color:#f0f0f0;">102 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/p&gt;
+</span><span style="color:#800000;background-color:#f0f0f0;">103 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
+</span><span style="color:#800000;background-color:#f0f0f0;">104 </span><span style="background-color:#edffed;">        }
+</span><span style="color:#800000;background-color:#f0f0f0;">105 </span><span style="background-color:#edffed;">    }
+</span><span style="color:#800000;background-color:#f0f0f0;">106 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span></pre>

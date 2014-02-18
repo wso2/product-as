@@ -1,0 +1,14 @@
+WSO2 Application Server
+====================================
+
+Sample : Xfer
+=============
+
+1. Run "ant" on AS_HOME/samples/Xfer directory. This will deploy the needed services in WSO2 AS.
+2. Start the server and access the Management Console at https://localhost:9443/carbon. Go to
+   the service listing page. You will see the deployed CustomerService.
+3. Engage wso2xfer module into CustomerService.
+4. Run "sh run-client.sh".
+
+Please download the Documentation Distribution and refer to the Xfer sample document for detailed
+instructions on how to run the Xfer sample.

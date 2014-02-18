@@ -1,0 +1,86 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project>
+    <parent>
+        <groupId>org.wso2.appserver</groupId>
+        <artifactId>wso2appserver-samples-ejb</artifactId>
+        <version>5.3.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>wso2appserver-samples-libraryEAR</artifactId>
+    <packaging>ear</packaging>
+    <name>Library EAR Archive</name>
+    <description>Library EAR Archive</description>
+    <groupId>org.wso2.appserver</groupId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>wso2appserver-samples-libraryEJB</artifactId>
+            <type>ejb</type>
+            <version>5.3.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <version>6</version>
+                    <displayName>EJBLibrary</displayName>
+                    <earName>library</earName>
+                    <applicationName>library</applicationName>
+                    <modules>
+                        <ejbModule>
+                            <groupId>org.wso2.appserver</groupId>
+                            <artifactId>wso2appserver-samples-libraryEJB</artifactId>
+                            <bundleFileName>libraryEJB.jar</bundleFileName>
+                        </ejbModule>
+                    </modules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target</directory>
+                                    <includes>
+                                        <include>*.xml</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

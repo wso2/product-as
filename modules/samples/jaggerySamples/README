@@ -1,0 +1,19 @@
+Samples : jaggery samples
+===================
+
+Introduction
+============
+
+Here are two simple sample that demonstrates the some functionality of the jaggery 
+deployed as jaggery applicatioins in WSO2 Web Service Application Server . 
+
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/jaggerySamples/ to deploy them.
+2. This will copy directory in to the 
+<CARBON_HOME>/repository/deployment/server/jaggeryapps directory. If you start AppServer, those jaggery apps will be
+available as a jaggery applications. 
+
+

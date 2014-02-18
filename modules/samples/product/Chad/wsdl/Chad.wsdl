@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<wsdl:definitions xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:ns0="http://util.java/xsd"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:ns1="http://www.wso2.org/types"
+                  xmlns:ns2="http://data.chad.samples.appserver.wso2.org/xsd"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  targetNamespace="http://www.wso2.org/types">
+    <wsdl:types xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+        <xs:schema xmlns:stn_29="http://util.java/xsd"
+                   xmlns:ns2="http://data.chad.samples.appserver.wso2.org/xsd"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://util.java/xsd"
+                   xmlns:ns1="http://www.wso2.org/types" attributeFormDefault="qualified"
+                   elementFormDefault="unqualified" targetNamespace="http://util.java/xsd">
+            <xs:element name="Set" type="ns0:Set"/>
+            <xs:complexType name="Set">
+                <xs:sequence>
+                    <xs:element name="empty" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:stn_27="http://www.wso2.org/types"
+                   xmlns:ns2="http://data.chad.samples.appserver.wso2.org/xsd"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://util.java/xsd"
+                   xmlns:ns1="http://www.wso2.org/types" attributeFormDefault="qualified"
+                   elementFormDefault="unqualified" targetNamespace="http://www.wso2.org/types">
+            <xs:element name="login">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="username" type="xs:string"/>
+                        <xs:element name="password" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loginResponse">
+
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getResult">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="pollId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getResultResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="ns2:ChadPollResult"/>
+
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStartedPollsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="return" type="ns2:ChadPoll"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStoppedPollsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="return" type="ns2:ChadPoll"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="listPollsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="return" type="ns2:ChadPoll"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createPoll">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="description" type="xs:string"/>
+                        <xs:element name="isSingleVote" type="xs:boolean"/>
+                        <xs:element maxOccurs="unbounded" name="choices" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="createPollResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="voteMultiple">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="pollId" type="xs:string"/>
+                        <xs:element maxOccurs="unbounded" name="choices" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="voteMultipleResponse">
+                <xs:complexType>
+
+                    <xs:sequence>
+                        <xs:element name="return" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="voteSingle">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="pollId" type="xs:string"/>
+                        <xs:element name="choice" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="voteSingleResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="xs:string"/>
+
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="listAdminUsersResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="return" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addAdminUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="username" type="xs:string"/>
+                        <xs:element name="password" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+
+            </xs:element>
+            <xs:element name="changePassword">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="username" type="xs:string"/>
+                        <xs:element name="oldPassword" type="xs:string"/>
+                        <xs:element name="newPassword" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteAdminUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="username" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="startPoll">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="pollId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="stopPoll">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="pollId" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ns2="http://data.chad.samples.appserver.wso2.org/xsd"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://util.java/xsd"
+                   xmlns:ns1="http://www.wso2.org/types" xmlns:stn_30="http://util.java/xsd"
+                   xmlns:stn_28="http://data.chad.samples.appserver.wso2.org/xsd"
+                   attributeFormDefault="qualified" elementFormDefault="unqualified"
+                   targetNamespace="http://data.chad.samples.appserver.wso2.org/xsd">
+            <xs:import namespace="http://util.java/xsd"/>
+            <xs:element name="ChadPollResult" type="stn_28:ChadPollResult"/>
+
+            <xs:complexType name="ChadPollResult">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="orderedChoices"
+                                type="stn_28:ChadChoice"/>
+                    <xs:element name="pollDescription" type="xs:string"/>
+                    <xs:element name="pollId" type="xs:string"/>
+                    <xs:element name="pollStopped" type="xs:boolean"/>
+                    <xs:element name="pollTitle" type="xs:string"/>
+                    <xs:element name="singleVote" type="xs:boolean"/>
+                    <xs:element name="totalNumberOfVotes" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ChadChoice" type="stn_28:ChadChoice"/>
+            <xs:complexType name="ChadChoice">
+                <xs:sequence>
+                    <xs:element name="choiceName" type="xs:string"/>
+                    <xs:element name="numberOfVotes" type="xs:int"/>
+                    <xs:element name="poll" type="stn_28:ChadPoll"/>
+
+                    <xs:element name="votePercentage" type="xs:float"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ChadPoll" type="stn_28:ChadPoll"/>
+            <xs:complexType name="ChadPoll">
+                <xs:sequence>
+                    <xs:element name="choiceSet" type="ns0:Set"/>
+                    <xs:element maxOccurs="unbounded" name="choices" type="stn_28:ChadChoice"/>
+                    <xs:element name="description" type="xs:string"/>
+                    <xs:element name="isSingleVote" type="xs:boolean"/>
+                    <xs:element name="isStopped" type="xs:boolean"/>
+                    <xs:element name="pollId" type="xs:string"/>
+                    <xs:element name="title" type="xs:string"/>
+                    <xs:element name="votedIPs" type="ns0:Set"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteMultipleMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:voteMultiple"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteMultipleResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:voteMultipleResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="deleteAdminUserMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:deleteAdminUser"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="loginMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1" element="ns1:login"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="loginResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:loginResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStartedPollsMessage"/>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStartedPollsResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:getStartedPollsResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStoppedPollsMessage"/>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStoppedPollsResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:getStoppedPollsResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="createPollMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:createPoll"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="createPollResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:createPollResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteSingleMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:voteSingle"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteSingleResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:voteSingleResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listAdminUsersMessage"/>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listAdminUsersResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:listAdminUsersResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="changePasswordMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:changePassword"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="stopPollMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:stopPoll"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="startPollMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:startPoll"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getResultMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:getResult"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getResultResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:getResultResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listPollsMessage"/>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listPollsResponse">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:listPollsResponse"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="addAdminUserMessage">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="part1"
+                   element="ns1:addAdminUser"/>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="logoutMessage"/>
+    <wsdl:portType xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="ChadPortType">
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteMultiple">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:voteMultipleMessage" wsaw:Action="urn:voteMultiple"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:voteMultipleResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="deleteAdminUser">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:deleteAdminUserMessage" wsaw:Action="urn:deleteAdminUser"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="login">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="ns1:loginMessage"
+                        wsaw:Action="urn:login"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="ns1:loginResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStartedPolls">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:getStartedPollsMessage" wsaw:Action="urn:getStartedPolls"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:getStartedPollsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStoppedPolls">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:getStoppedPollsMessage" wsaw:Action="urn:getStoppedPolls"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:getStoppedPollsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="createPoll">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:createPollMessage" wsaw:Action="urn:createPoll"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:createPollResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteSingle">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:voteSingleMessage" wsaw:Action="urn:voteSingle"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:voteSingleResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listAdminUsers">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:listAdminUsersMessage" wsaw:Action="urn:listAdminUsers"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:listAdminUsersResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="changePassword">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:changePasswordMessage" wsaw:Action="urn:changePassword"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="stopPoll">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="ns1:stopPollMessage"
+                        wsaw:Action="urn:stopPoll"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="startPoll">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="ns1:startPollMessage"
+                        wsaw:Action="urn:startPoll"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getResult">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="ns1:getResultMessage"
+                        wsaw:Action="urn:getResult"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:getResultResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listPolls">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="ns1:listPollsMessage"
+                        wsaw:Action="urn:listPolls"/>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                         message="ns1:listPollsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="addAdminUser">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                        message="ns1:addAdminUserMessage" wsaw:Action="urn:addAdminUser"/>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="logout">
+            <wsdl:input xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="ns1:logoutMessage"
+                        wsaw:Action="urn:logout"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="ChadSOAP11Binding"
+                  type="ns1:ChadPortType">
+        <soap:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                      transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteMultiple">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:voteMultiple" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="deleteAdminUser">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:deleteAdminUser" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="login">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:login" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStartedPolls">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:getStartedPolls" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStoppedPolls">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:getStoppedPolls" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="createPoll">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:createPoll" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteSingle">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:voteSingle" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listAdminUsers">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:listAdminUsers" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="changePassword">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:changePassword" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="stopPoll">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:stopPoll" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="startPoll">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:startPoll" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getResult">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:getResult" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listPolls">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:listPolls" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="addAdminUser">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:addAdminUser" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="logout">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                            soapAction="urn:logout" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="ChadSOAP12Binding"
+                  type="ns1:ChadPortType">
+        <soap12:binding xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                        transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteMultiple">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:voteMultiple" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="deleteAdminUser">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:deleteAdminUser" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="login">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:login" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStartedPolls">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:getStartedPolls" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStoppedPolls">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:getStoppedPolls" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="createPoll">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:createPoll" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteSingle">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:voteSingle" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listAdminUsers">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:listAdminUsers" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="changePassword">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:changePassword" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="stopPoll">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:stopPoll" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="startPoll">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:startPoll" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getResult">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:getResult" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listPolls">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:listPolls" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="addAdminUser">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:addAdminUser" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="logout">
+            <soap12:operation xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                              soapAction="urn:logout" style="document"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <soap12:body xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="ChadHttpBinding"
+                  type="ns1:ChadPortType">
+        <http:binding xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" verb="POST"/>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteMultiple">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="voteMultiple"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="deleteAdminUser">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="deleteAdminUser"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="login">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" location="login"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStartedPolls">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="getStartedPolls"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getStoppedPolls">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="getStoppedPolls"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="createPoll">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="createPoll"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="voteSingle">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="voteSingle"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listAdminUsers">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="listAdminUsers"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="changePassword">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="changePassword"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="stopPoll">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" location="stopPoll"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="startPoll">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="startPoll"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="getResult">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="getResult"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="listPolls">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="listPolls"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="addAdminUser">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                            location="addAdminUser"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="logout">
+            <http:operation xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" location="logout"/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                <mime:content xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" type="text/xml"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+</wsdl:definitions>

@@ -1,0 +1,21 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'TwitterMap' mashup services use twitter API. Requires Twitter authentication for 'Friends Only' mode.
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It. It requires Twitter authentication for 'Friends Only' mode.
+

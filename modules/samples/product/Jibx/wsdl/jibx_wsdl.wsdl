@@ -1,0 +1,141 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<wsdl:definitions targetNamespace="http://jibx.appserver.wso2.org/library/"
+                  xmlns:wns="http://jibx.appserver.wso2.org/library/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:tns="http://jibx.appserver.wso2.org/library/types">
+
+    <wsdl:types>
+
+        <schema elementFormDefault="qualified"
+                targetNamespace="http://jibx.appserver.wso2.org/library/types"
+                xmlns="http://www.w3.org/2001/XMLSchema"
+                xmlns:tns="http://jibx.appserver.wso2.org/library/types">
+
+            <element name="getBook">
+                <complexType>
+                    <sequence>
+                        <element name="isbn" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <element name="getBookResponse">
+                <complexType>
+                    <sequence>
+                        <element name="book" minOccurs="0" type="tns:BookInformation"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <element name="addBook">
+                <complexType>
+                    <sequence>
+                        <element name="type" type="string"/>
+                        <element name="isbn" type="string"/>
+                        <element name="author" minOccurs="0" maxOccurs="unbounded" type="string"/>
+                        <element name="title" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <element name="addBookResponse">
+                <complexType>
+                    <sequence>
+                        <element name="success" type="boolean"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <complexType name="BookInformation">
+                <sequence>
+                    <element name="author" minOccurs="0" maxOccurs="unbounded" type="string"/>
+                    <element name="title" type="string"/>
+                </sequence>
+                <attribute name="type" use="required" type="string"/>
+                <attribute name="isbn" use="required" type="string"/>
+            </complexType>
+
+        </schema>
+
+    </wsdl:types>
+
+    <wsdl:message name="getBookRequest">
+        <wsdl:part element="tns:getBook" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:message name="getBookResponse">
+        <wsdl:part element="tns:getBookResponse" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:message name="addBookRequest">
+        <wsdl:part element="tns:addBook" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:message name="addBookResponse">
+        <wsdl:part element="tns:addBookResponse" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:portType name="Library">
+
+        <wsdl:operation name="getBook">
+            <wsdl:input message="wns:getBookRequest" name="getBookRequest"/>
+            <wsdl:output message="wns:getBookResponse" name="getBookResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="addBook">
+            <wsdl:input message="wns:addBookRequest" name="addBookRequest"/>
+            <wsdl:output message="wns:addBookResponse" name="addBookResponse"/>
+        </wsdl:operation>
+
+    </wsdl:portType>
+
+    <wsdl:binding name="LibraryBinding" type="wns:Library">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+
+        <wsdl:operation name="getBook">
+            <soap:operation soapAction="urn:getBook" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="addBook">
+            <soap:operation soapAction="urn:addBook" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="LibraryService">
+        <wsdl:port name="LibraryPort" binding="wns:LibraryBinding">
+            <soap:address location="http://127.0.0.1:9763/services/LibraryService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

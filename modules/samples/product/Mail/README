@@ -1,0 +1,42 @@
+Sample : Mail
+=============
+
+Introduction
+============
+
+This is a simple sample that demonstrates the functionality of the Mail Transport
+in WSO2 Application Server.
+
+
+Building the Service
+====================
+
+1. If the server is already running, shut down the server and open <CARBON_HOME>/repository/conf/axis2.xml
+and uncomment "mailto" transportReceiver and transportSender. This sample can be run with the default
+values set for the parameters.
+2. Use "ant" command in the CARBON_HOME/samples/Mail/ to build the service.
+3. This will create the Mail Test service (MailTestService.aar file) in the "services" directory and
+copy it to the <CARBON_HOME>/repository/deployment/server/axis2services directory.
+If you start AppServer, MailTestService will be available as a deployed service.
+
+If you go the the Service Dashboard of the MailTestService, you can see the following mail
+transport endpoint under the "Endpoints" section.
+
+mailto:synapse.demo.1@gmail.com
+
+The WSDL for the service should be viewable at:
+http://<host>:<port>/services/MailTestService?wsdl
+
+You can find the mail transport endpoints in the WSDL as well.
+
+
+Running the client
+==================
+
+Use the script run-client.sh or run-client.bat file to invoke the client.
+
+   ex: ./run-client.sh
+
+Check the server console and you'll see the message printed from the service on receipt of the message.
+
+

@@ -1,0 +1,34 @@
+<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:12pt;"><span style="color:#800000;"> 1 </span><span style="background-color:#edffed;font-weight:bold;">&lt;html&gt;
+</span><span style="color:#800000;"> 2 </span><span style="background-color:#edffed;font-weight:bold;">&lt;body&gt;
+</span><span style="color:#800000;"> 3 </span><span style="background-color:#edffed;">&lt;%@page import="org.wso2.carbon.user.api.UserRealm" %&gt;
+</span><span style="color:#800000;"> 4 </span><span style="background-color:#edffed;">&lt;%@page import="org.wso2.carbon.context.CarbonContext" %&gt;
+</span><span style="color:#800000;"> 5 </span><span style="background-color:#edffed;font-weight:bold;">&lt;h2&gt;WSO2 Carbon User Manage Usage Demo&lt;/h2&gt;
+</span><span style="color:#800000;"> 6 
+ 7 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
+</span><span style="color:#800000;"> 8 </span><span style="background-color:#edffed;">    String username = request.getParameter("username");
+</span><span style="color:#800000;"> 9 </span><span style="background-color:#edffed;">    String pass = request.getParameter("password");
+</span><span style="color:#800000;">10 </span><span style="background-color:#edffed;">    if (username != null && username.trim().length() &gt; 0) {
+</span><span style="color:#800000;">11 </span><span style="background-color:#edffed;">        CarbonContext context = CarbonContext.getCurrentContext();
+</span><span style="color:#800000;">12 </span><span style="background-color:#edffed;">        UserRealm realm = context.getUserRealm();
+</span><span style="color:#800000;">13 </span><span style="background-color:#edffed;">        realm.getUserStoreManager().addUser(username, pass, null, null, null);
+</span><span style="color:#800000;">14 </span><span style="background-color:#edffed;">    }
+</span><span style="color:#800000;">15 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
+</span><span style="color:#800000;">16 
+17 </span><span style="background-color:#edffed;font-weight:bold;">&lt;form action="index.jsp"&gt;
+</span><span style="color:#800000;">18 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;p&gt;User Name &lt;input type="text" name="username"/&gt;&lt;/p&gt;
+</span><span style="color:#800000;">19 
+20 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;p&gt;Password &lt;input type="text" name="password"/&gt;&lt;/p&gt;
+</span><span style="color:#800000;">21 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;input type="submit" value="submit"/&gt;
+</span><span style="color:#800000;">22 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/form&gt;
+</span><span style="color:#800000;">23 
+24 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;&lt;b&gt;The user list&lt;/b&gt;&lt;/p&gt;
+</span><span style="color:#800000;">25 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
+</span><span style="color:#800000;">26 </span><span style="background-color:#edffed;">    CarbonContext context = CarbonContext.getCurrentContext();
+</span><span style="color:#800000;">27 </span><span style="background-color:#edffed;">    UserRealm realm = context.getUserRealm();
+</span><span style="color:#800000;">28 </span><span style="background-color:#edffed;">    String[] names = realm.getUserStoreManager().listUsers("*", 100);
+</span><span style="color:#800000;">29 </span><span style="background-color:#edffed;">    for (String name : names) {
+</span><span style="color:#800000;">30 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;&lt;%=</span><span style="background-color:#edffed;">name</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;br/&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
+</span><span style="color:#800000;">31 </span><span style="background-color:#edffed;">    }
+</span><span style="color:#800000;">32 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
+</span><span style="color:#800000;">33 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/body&gt;
+</span><span style="color:#800000;">34 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/html&gt;</span></pre>

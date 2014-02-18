@@ -1,0 +1,29 @@
+Sample : HelloWorld
+===================
+
+Introduction
+============
+
+This is a simple sample that demonstrates the functionality of the Axis2 services 
+deployed as web services in WSO2 Web Service Application Server . 
+
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/HelloWorld/ to build the service.
+2. This will build the HelloWorld service in the target directory and copy it to the 
+<CARBON_HOME>/repository/deployment/server/axis2services directory. If you start AppServer, HelloWorld will be
+available as a deployed service. 
+
+The WSDL for the service should be viewable at:
+http://<host>:<port>/services/HelloService?wsdl
+
+
+Running the client
+==================
+
+You can use AppServer features to generate the client stub pointing to the wsdl and
+invoke the service with that, or invoke the service with Try-It. 
+
+

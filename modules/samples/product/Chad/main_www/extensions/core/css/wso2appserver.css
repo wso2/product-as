@@ -1,0 +1,635 @@
+/*
+ * Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+div#header h1 {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 94px;
+    width: 525px;
+    text-indent: -9999px;
+    background: url(../images/appserver-logo.gif ) transparent no-repeat left top;
+}
+
+    div#header h2 {
+        position: absolute;
+        top: 0px;
+        right:0px;
+        height: 44px;
+        width: 196px;
+        text-indent: -9999px;
+        background: url(../images/mgt-logo.gif) transparent no-repeat left top;
+    }
+
+div#navigation li#menu_config_sub span {
+        display: block;
+        padding: 5px 20px 5px 45px;
+        width: 135px;
+        color: #56709A;
+        border-bottom: #A3B2CC 1px solid;
+}
+
+div#navigation ul.submenu a.menu_transports_class:hover,
+div#navigation ul.submenu a.menu_keystore_class:hover,
+div#navigation ul.submenu a.menu_log_class:hover,
+div#navigation ul.submenu a.menu_security_class:hover,
+div#navigation ul.submenu a.menu_log_class:hover,
+div#navigation ul.submenu a.menu_axis_config_class:hover,
+div#navigation ul.submenu a.menu_log_monitor_class:hover,
+div#navigation ul.submenu a.menu_stat_class:hover,
+div#navigation ul.submenu a.menu_system_class:hover,
+div#navigation ul.submenu a.menu_services_class:hover,
+div#navigation ul.submenu a.menu_modules_class:hover,
+div#navigation ul.submenu a.menu_users_class:hover,
+div#navigation ul.submenu a.menu_config_class:hover,
+div#navigation ul.submenu a.menu_logs_class:hover,
+div#navigation ul.submenu a.menu_tracer_class:hover,
+div#navigation ul.submenu a.menu_restart_server_class:hover,
+div#navigation a.menu_home_link_class:hover {
+    background-color: #A3B2CC;
+}
+
+div#navigation ul.submenu a {
+/*        padding: 5px 20px 5px 60px; */
+        width: 200px;
+}
+
+div#navigation ul.submenu1 a {
+        padding: 5px 20px 5px 60px;
+        width: 120px;
+}
+
+/*TODO fill the image*/
+div#navigation ul.submenu a.menu_transports_class {
+    background: url( ../images/menu_transports.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_transports_class {
+    background: url( ../images/menu_transports.gif) transparent no-repeat 10px 5px;
+}
+
+
+div#navigation ul.submenu a.menu_keystore_class {
+    background: url( ../images/keystore.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_security_class {
+    background: url( ../images/shield.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation li#menu_config_sub {
+    background: url( ../images/server_edit.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_log_class {
+    background: url( ../images/log.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_log_monitor_class {
+    background: url( ../images/log_monitor.gif) transparent no-repeat 10px 0px;
+}
+
+div#navigation ul.submenu a.menu_axis_config_class {
+    background: url( ../images/handler_flow.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_services_class {
+	background: url(../images/cog.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_modules_class {
+	background: url(../images/bricks.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_users_class {
+	background: url(../images/group.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_config_class {
+	background: url(../images/server_edit.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_logs_class {
+	background: url(../images/script_gear.gif) transparent no-repeat 10px 5px;
+}
+div#navigation ul.submenu a.menu_tracer_class {
+	background: url(../images/page_white_find.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_stat_class {
+	background: url(../images/chart_bar.gif) transparent no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_system_class {
+	background: url(../images/computer.gif) no-repeat 10px 5px;
+}
+
+div#navigation ul.submenu a.menu_restart_server_class {
+	background: url(../images/restart.gif) no-repeat 10px 5px;
+}
+
+div#navigation a.menu_home_link_class {
+	background: url(../images/house.gif) no-repeat 2px 6px;
+}
+
+div#navigation li.menu_monitor_class {
+	background: url(../images/magnifier.gif) no-repeat 2px 12px;
+}
+
+div#navigation li.menu_manage_class {
+	background: url(../images/chart_organisation.gif) no-repeat 2px 12px;
+}
+
+a#transport_link {
+    background: url( ../images/menu_transports.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#module_view_link {
+    background: url( ../images/bricks.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#handler_view_link {
+    background: url( ../images/handler_flow.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#plugin__ui_link {
+    background: url( ../images/plugin_ui_link.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a#shield_link {
+    background: url( ../images/shield.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a#user_link {
+    background: url( ../images/user.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a#time_link {
+    background: url( ../images/time.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a#pencil_link {
+    background: url( ../images/pencil.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a#wand_link {
+    background: url( ../images/wand.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a#pill_link {
+    background: url( ../images/pill.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+a#create_svc_link{
+    background: url( ../images/create_svc.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#dataservice__ui_link{
+    background: url( ../images/config_dataservice.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#enable_mtom_link{
+    background: url( ../images/active.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#disable_mtom_link{
+    background: url( ../images/inactive.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#axis2_link {
+    background: url( ../images/axis2.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#axis2_link1 {
+    background: url( ../images/axis2_01.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#axis2_link2 {
+    background: url( ../images/axis2_02.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#data_service_link {
+    background: url( ../images/data_service.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#pojo_link {
+    background: url( ../images/pojo.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+a#spring_link {
+    background: url( ../images/spring.gif) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+
+
+span.treeSpan a{
+      text-decoration: none;
+}
+span.treeSpan a:hover{
+      text-decoration: underline;
+      cursor: pointer;
+}
+
+span.treeSpan img {
+    vertical-align:middle;
+}
+
+span.radioButtonRow {
+    margin-left: 11em;
+}
+
+.codegenButtonRaw {
+    margin-left: 0em;
+}
+
+
+/*Left aligining the text in tables. Minor deviation from styled*/
+
+table.styledLeft thead th {
+    color: #FFF;
+    background-color: #80A1D3;
+    border: #80A1D3 1px solid;
+    padding: 0 5px;
+    text-align: left;
+}
+
+table.styledLeft tbody td {
+    border: #80A1D3 1px solid;
+    padding: 0 5px;
+}
+
+table.styledLeft tbody td .toolsClass {
+    margin-left: 0px;
+    background-color: #e4ebf5;
+}
+
+strong {
+    color:#56709A;
+}
+
+a.clicked {
+    background: url( ../images/selected.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.clicked_home {
+    background: url( ../images/selected.gif) no-repeat 2px 6px;
+    background-color: #c4c4c4;
+}
+
+a#import_link {
+    background: url( ../images/shield.gif) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+/* security wizard button raw handling */
+div.buttonrowSec {
+    margin-left: 20em;
+}
+
+.emptyTable td {
+    font-size: 80%;
+    padding: 1px 5px;
+}
+
+/* State after clicked */
+/*///////////////////////*/
+a.menu_home_link_class_clicked {
+	background: url(../images/house.gif) no-repeat 2px 6px;
+    background-color: #c4c4c4;
+}
+
+a.menu_services_class_clicked  {
+	background: url(../images/cog.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_modules_class_clicked  {
+	background: url(../images/bricks.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_security_class_clicked  {
+    background: url( ../images/shield.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_transports_class_clicked  {
+    background: url( ../images/menu_transports.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_keystore_class_clicked  {
+    background: url( ../images/keystore.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_logs_class_clicked  {
+	background: url(../images/log.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_restart_server_class_clicked  {
+	background: url(../images/restart.gif) no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_system_class_clicked  {
+	background: url(../images/computer.gif) no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_stat_class_clicked  {
+	background: url(../images/chart_bar.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_log_class_clicked  {
+    background: url( ../images/script_gear.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_tracer_class_clicked  {
+	background: url(../images/page_white_find.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+a.menu_axis_config_class_clicked  {
+    background: url( ../images/handler_flow.gif) transparent no-repeat 10px 5px;
+    background-color: #c4c4c4;
+}
+
+/*///////////////////////*/
+/* End after clicked state */
+
+.remove_param  {
+        background: url(../images/cancel.gif) transparent no-repeat 0px 0px;
+        text-decoration: none;
+        font-size: 10pt;
+    }
+
+.cornerExpand {
+    position: relative;
+    top: 3px;
+    left: -12px;
+    cursor: pointer;
+}
+
+.cornerCollapse {
+    position: relative;
+    top: 3px;
+    left: -12px;
+    cursor: pointer;
+}
+
+/* The Log Toolbar Style */
+#logtoolbar {
+    border: 1px solid black;
+    background-color: gainsboro;
+    position: absolute;
+    width:  800px;
+    height: 41px;
+    margin-left: 0px;
+    margin-top: 0px;
+
+    _height: 55px; /*background-image: url(toolbarbackground.gif);*/
+    _margin-left: 230px;
+    _width:745px;
+}
+
+a#search_link {
+    background: url( ../images/magnifier.gif ) transparent no-repeat 0px 0px;
+    text-decoration: none;
+    font-size: 10pt;
+}
+
+.log-select {
+    color: black;
+    border: solid 1px #bbbbbb;
+    font-family: Tahoma;
+    font-size: 12px;
+}
+
+.log-panel {
+    border: gray;
+    border-style: solid;
+    border-width: thin;
+    height: 340px;
+    position: absolute;
+    width: 800px;
+    margin-top: 50px;
+    margin-left: 0px;
+
+    _height: 340px;
+    _position: absolute;
+    _margin-left: 230px;
+    _margin-top: 50px;
+    _width: 745px;
+}
+
+.clearLog {
+    float: left;
+    margin-top: 400px;
+    margin-left: 0px;
+    width: 800px;
+    height: 30px;
+    position: absolute;
+
+
+    _margin-top: 405px;
+    _margin-left: 115px;
+    _height: 30px;
+}
+
+table.log td {
+    width: 70%;
+    border-bottom: gray;
+    border-bottom-style: solid;
+    border-bottom-width: thin;
+    _width: 70%;
+}
+
+a.other_service_exlink {
+    background-image: url( ../images/axis2_01.gif  );
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    padding-left: 22px;
+}
+
+
+a.data_service_exlink{
+    background-image: url( ../images/data_service.gif  );
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    padding-left: 22px;
+}
+
+.left-tab {
+    padding: 5px;
+    border-left: solid 2px #ccc;
+    border-bottom: solid 3px #999;
+    border-top: solid 1px #ccc;
+    background-color: #e6e6e6;
+}
+
+.tab-content {
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: solid 3px #999;
+    border-right: solid 3px #999;
+    border-top: solid 1px #ccc;
+    border-left: solid 3px #999;
+    background-color: #f6f6f6;
+}
+
+.fx-block {
+    margin-left: 1em;
+    text-indent: 1em;
+    margin-right: 1em;
+    font-size: 12px;
+    color: #555;
+    line-height: 120%;
+    overflow:hidden;
+    width:100%;
+    font-family: "Lucida Grande", "Lucida Sans", "Microsoft Sans Serif", "Lucida Sans Unicode", verdana, sans-serif, "trebuchet ms"
+}
+
+.fx-elnm {
+    color: #005;
+}
+
+.fx-atnm {
+    color: #500;
+}
+
+.fx-att {
+    color: black
+}
+
+.fx-att a:link {
+    color: black;
+    text-decoration: none
+}
+
+.fx-att a:hover {
+    color: black;
+    text-decoration: underline
+}
+
+.fx-att a:active {
+    color: black;
+    text-decoration: underline
+}
+
+.fx-att a:visited {
+    color: black;
+    text-decoration: none
+}
+
+.fx-text {
+    color: black;
+}
+
+pre.fx-text {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 1em;
+    margin-left: 1em;
+    text-indent: 0em;
+    line-height: 15px;
+}
+
+.fx-cmk {
+    margin-left: 1em;
+    text-indent: 1em;
+    margin-right: 1em;
+    color: #050;
+}
+
+.fx-com {
+    color: #050;
+}
+
+.fx-ns {
+    color: #505
+}
+
+.fx-nsval {
+    color: #505
+}
+
+.fx-nsval a:link {
+    color: #505;
+    text-decoration: none
+}
+
+.fx-nsval a:hover {
+    color: #505;
+    text-decoration: underline
+}
+
+.fx-nsval a:active {
+    color: #505;
+    text-decoration: underline
+}
+
+.fx-nsval a:visited {
+    color: #505;
+    text-decoration: none
+}

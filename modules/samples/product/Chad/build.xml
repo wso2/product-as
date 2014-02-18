@@ -1,0 +1,121 @@
+<!--
+  ~ Copyright 2005-2007 WSO2, Inc. (http://wso2.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project default="build-all">
+
+    <property name="wso2appserver.home" value="../../"/>
+    <property name="carbon.home" value="${wso2appserver.home}"/>
+    <property name="appserver.lib" value="${wso2appserver.home}/lib"/>
+    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="classes" value="${temp.dir}/classes"/>
+    <property name="src" value="src"/>
+    <property name="services" value="services"/>
+    <property name="webapps" value="webapps"/>
+    <property name="setup" value="ROOT"/>
+    <property name="repo.services" value="axis2services"/>
+    <property name="repo.webapps" value="webapps"/>
+    
+    <ant antfile="${wso2appserver.home}/bin/build.xml"/>
+
+    <path id="axis2.class.path">
+        <pathelement path="${java.class.path}"/>
+        <fileset dir="${wso2appserver.home}">
+            <include name="repository/lib/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${temp.dir}"/>
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${services}"/>
+        <mkdir dir="${webapps}"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${temp.dir}"/>
+    </target>
+
+    <target name="compile-all" depends="init">
+        <javac debug="on" destdir="${classes}">
+            <src path="${src}"/>
+            <classpath refid="axis2.class.path"/>
+        </javac>
+    </target>
+
+    <target name="build-service" depends="compile-all">
+        <property name="aar.dir" value="${temp.dir}/Chad"/>
+        <property name="war.dir" value="${temp.dir}/ChadWAR"/>
+        <mkdir dir="${aar.dir}"/>
+
+        <mkdir dir="${aar.dir}/META-INF"/>
+        <mkdir dir="${aar.dir}/www/extensions/core"/>
+        <mkdir dir="${aar.dir}/www/images"/>
+        <copy file="conf/services.xml" tofile="${aar.dir}/META-INF/services.xml"/>
+        <copy toDir="${aar.dir}">
+            <fileset dir="${classes}">
+                <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="conf/hibernate">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${war.dir}/extensions/core">
+            <fileset dir="www">
+                <include name="**"/>
+                <exclude name="**/index.html"/>
+            </fileset>
+        </copy>
+        <copy toDir="${war.dir}">
+            <fileset dir="main_www">
+                <include name="**"/>
+            </fileset>
+            <fileset dir="www">
+                <include name="**/index.html"/>
+            </fileset>
+        </copy>
+
+        <copy toDir="${war.dir}">
+            <fileset dir="extensions_www">
+                <include name="**"/>
+            </fileset>
+        </copy>
+
+        <jar destfile="${webapps}/Chad.war">
+            <fileset dir="${war.dir}"/>
+        </jar>
+
+        <jar destfile="${services}/Chad.aar">
+            <fileset dir="${aar.dir}"/>
+        </jar>
+    </target>
+
+
+    <target name="build-all"
+            depends="build-service">
+        <echo message="Copying the created aar and war files in to the repository"/>
+        <copy toDir="${repo.location}/${repo.services}">
+            <fileset dir="${services}">
+                <include name="**/*.aar"/>
+            </fileset>
+        </copy>
+        <copy toDir="${repo.location}/${repo.webapps}">
+            <fileset dir="${webapps}">
+                <include name="**/*.war"/>
+            </fileset>
+        </copy>
+    </target>
+</project>

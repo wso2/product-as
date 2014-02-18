@@ -1,0 +1,41 @@
+<history for="mashup">
+    <!--  todo: MASHUP-436 comment outside body messes up scraping
+      ~ Copyright (c) 2006, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+      ~
+      ~ Licensed under the Apache License, Version 2.0 (the "License");
+      ~ you may not use this file except in compliance with the License.
+      ~ You may obtain a copy of the License at
+      ~
+      ~      http://www.apache.org/licenses/LICENSE-2.0
+      ~
+      ~ Unless required by applicable law or agreed to in writing, software
+      ~ distributed under the License is distributed on an "AS IS" BASIS,
+      ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      ~ See the License for the specific language governing permissions and
+      ~ limitations under the License.
+      -->
+
+    <!--
+        This file records the release history of the Mashup Server.
+        
+        While it's not used locally by the service, having it checked in with the sample enables 
+        us to get it from the svn url.  A mashup server can thus look at the latest version of 
+        this file to determine whether an upgrade is available.
+    -->
+
+    <!-- releases should be in descending order by date - newer releases first -->
+    <release version="2.1.0" date="May 13, 2010 03:30 PM GMT" downloadpage="http://dist.wso2.org/products/mashup"/>
+    <release version="2.0.2" date="January 28, 2010 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/2.0.2"/>
+    <release version="2.0.1" date="November 19th, 2009 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/2.0.1"/>
+    <release version="2.0.0" date="October 9th, 2009 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/2.0.0"/>
+    <release version="1.5.2" date="February 20th, 2009 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/1.5.2"/>
+    <release version="1.5.1" date="August 8th 2008 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/1.5.1"/>
+    <release version="1.5" date="February 15th 2008 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/1.5"/>
+    <release version="1.0.2" date="February 15, 2008 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/1.0.2"/>
+    <release version="1.0.1" date="February 12, 2008 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/1.0.1"/>
+    <release version="1.0" date="January 28, 2008 03:30 PM GMT" downloadpage="http://wso2.org/downloads/mashup/1.0"/>
+    <release version="1.0beta" date="December 19, 2007 06:51 PM GMT" downloadpage="http://wso2.org/downloads/mashup/1.0beta"/>
+    <release version="0.2" date="October 4, 2007 11:21 AM GMT" downloadpage="http://wso2.org/downloads/mashup/0.2"/>
+    <release version="0.2-rc" date="September 21, 2007 11:29 AM GMT" downloadpage="http://wso2.org/downloads/mashup/0.2-rc"/>
+    <release version="0.1" date="July 6, 2007 04:14 PM GMT" downloadpage="http://wso2.org/downloads/mashup/0.1"/>
+</history>

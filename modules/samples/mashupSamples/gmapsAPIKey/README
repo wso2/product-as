@@ -1,0 +1,31 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'gmapsAPIKey' mashup sample service give Google Maps API key. You need to provide credentials for a valid google account along with your sites url.
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It. You need to provide credentials for a valid google account along with your sites url.
+
+example Request
+
+<body>
+   <p:getAPIKey xmlns:p="http://services.mashup.wso2.org/gmapsAPIKey?xsd">
+      <username>foo@gmail.com</username>
+      <password>bar</password>
+      <url>http://example.com</url>
+   </p:getAPIKey>
+</body>
+

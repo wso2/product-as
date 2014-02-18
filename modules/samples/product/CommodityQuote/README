@@ -1,0 +1,15 @@
+WSO2 Application Server
+====================================
+
+Sample : CommodityQuote
+=======================
+
+1. Run "ant" on AS_HOME/samples/CommodityQuote directory. This will deploy the CommodityQuote
+   service in WSO2 AS.
+2. Start the server and access the Management Console at https://localhost:9443/carbon. Go to
+   the service listing page. You will see the deployed CommodityQuote service.
+3. Execute "sh run-client.sh" to run the client.
+4. Try the sample with different QoS options. Run "sh run-client.sh -help" for different options.
+
+Please download the Documentation Distribution and refer to the CommodityQuote sample document
+for detailed instructions on how to run the CommodityQuote sample.

@@ -1,0 +1,36 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'TomatoTube' mashup sample services can be used to obtains the top rated movies in theaters and on DVD from rottentomatoes.com and embeds a YouTube trailer to the feed. 
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It.
+
+operations
+
+- readTomatoTubeFeed
+Obtains the top rated movies in theaters and on dvd from rottentomatoes.com and embeds a YouTube trailer to the feed, creating a mashed up feed. The current expected inputs are 'theater' and 'dvd'. The mashed up feed is written to a file in the workspace directory.
+
+Request Example:
+
+<body>
+   <p:readTomatoTubeFeed xmlns:p="http://services.mashup.wso2.org/tomatoTube?xsd">
+      <mode>theater</mode>
+   </p:readTomatoTubeFeed>
+</body>
+
+- findTrailer
+Uses the YouTube GData API to search for the trailer of a given movie.

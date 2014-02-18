@@ -1,0 +1,20 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'version' mashup sample demonstrates the reading XML file that contains about product details
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It.

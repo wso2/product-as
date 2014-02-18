@@ -1,0 +1,32 @@
+Samples : mashup samples
+===================
+
+Introduction
+============
+
+'ExchangeRate' mashup sample demonstrate using web services for getting currency exchange rate. 
+
+Building the Service
+====================
+
+1. Use "ant" command in the CARBON_HOME/samples/mashupSamples/ to deploy them.
+2. This will copy directories in to the 
+<CARBON_HOME>/repository/deployment/server/jsservices/admin directory. If you start AppServer, those services will be
+available as a mashup services (jsservices).
+
+Running the client
+==================
+
+You can try this mashup service with Try-It.
+
+operation : convert
+The three-letter currency codes accepted as values for the srcCurrency and destCurrency parameters Note : The currency codes are case sensitive.
+
+Request Example:
+
+<body>
+   <p:convert xmlns:p="http://services.mashup.wso2.org/exchangeRate?xsd">
+      <fromCurrency>USD</fromCurrency>
+      <toCurrency>LKR</toCurrency>
+   </p:convert>
+</body>

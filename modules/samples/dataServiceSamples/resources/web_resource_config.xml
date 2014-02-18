@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+ <var-def name='weatherInfo'>
+  <xslt>
+   <xml>
+    <html-to-xml> 
+     <http method='get' url='http://weather.yahoo.com/'/>
+    </html-to-xml>
+   </xml>
+   <stylesheet>
+   <![CDATA[ <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+		<xsl:output method="xml" omit-xml-declaration="yes" indent="yes"/>
+		<xsl:template match="/">
+		 <WeatherInfo>
+		  <xsl:for-each select="//div[@id='MediaWeatherFeaturedLocations']/div[@class='bd']/ul/li">
+		    <Weather>
+		     <Region><xsl:value-of select="div[@class='forecast']/h4"/></Region>
+		     <Temp><xsl:value-of select="div[@class='forecast']/p[@class='temp-f']/span[@class='now']"/></Temp>
+		    </Weather>
+		  </xsl:for-each>
+		 </WeatherInfo>
+		</xsl:template>
+	     </xsl:stylesheet> 
+   ]]>
+   </stylesheet>
+  </xslt>
+ </var-def>
+</config>
