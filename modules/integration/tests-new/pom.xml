@@ -237,23 +237,23 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>SecVerifier</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
             <type>aar</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
             <artifactId>org.wso2.carbon.automation.api</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
             <artifactId>org.wso2.carbon.automation.core</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
             <artifactId>org.wso2.carbon.automation.utils</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.xfer</groupId>
@@ -268,7 +268,7 @@
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
             <artifactId>org.wso2.carbon.automation.tools.jmeter</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>

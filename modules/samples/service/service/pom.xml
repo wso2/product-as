@@ -45,7 +45,7 @@
             <plugin>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-aar-maven-plugin</artifactId>
-                <version>1.6.1-wso2v9</version>
+                <version>${axis2.wso2.version.aar.plugin}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <servicesXmlFile>${basedir}/src/main/resources/META-INF/services.xml</servicesXmlFile>

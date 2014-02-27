@@ -25,7 +25,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.dashboard.ui</artifactId>
-    <version>${stratos.version}</version>
+    <!--version>${stratos.version}</version-->
+	<version>4.2.0</version>
     <packaging>bundle</packaging>
     <name>WSO2 Stratos  AppServer - Dashboard UI</name>
 
@@ -89,6 +90,4 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
     </dependencies>
-    <properties>
-    </properties>
 </project>

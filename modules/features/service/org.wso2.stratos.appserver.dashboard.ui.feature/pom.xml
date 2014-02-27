@@ -35,12 +35,24 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>org.wso2.stratos.appserver.dashboard.ui</artifactId>
-            <version>${project.version}</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.wso2.carbon</groupId>
+				<artifactId>org.wso2.carbon.statistics.ui</artifactId>
+			</exclusion>
+		</exclusions>
+            <version>2.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.ui.menu.stratos</artifactId>
-            <version>${project.version}</version>
+		<exclusions>
+                        <exclusion>
+                                <groupId>org.wso2.carbon</groupId>
+                                <artifactId>org.wso2.carbon.statistics.ui</artifactId>
+                        </exclusion>
+                </exclusions>
+            <version>2.2.0</version>
         </dependency>
     </dependencies>
 

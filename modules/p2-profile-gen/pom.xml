@@ -77,10 +77,10 @@
                             <publishArtifactRepository>true</publishArtifactRepository>
                             <featureArtifacts>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.core.feature:${carbon.kernel.version}
+                                    org.wso2.carbon:org.wso2.carbon.core.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.kernel.version}
+                                    org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.ntask.feature:${carbon.platform.version}
@@ -140,9 +140,6 @@
                                     org.wso2.carbon:org.wso2.carbon.webapp.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.jaxws.webapp.mgt.feature:${carbon.platform.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.transport.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -151,15 +148,15 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.transport.mail.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.message.flows.feature:${carbon.platform.version}
+                                <!--featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.message.flows.feature:4.2.0
+                                </featureArtifactDef-->
+                                <!--featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.xfer.feature:4.2.0
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.xfer.feature:${carbon.platform.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.mex.feature:${carbon.platform.version}
-                                </featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.mex.feature:4.2.0
+                                </featureArtifactDef-->
 
                                 <!--<featureArtifactDef>org.wso2.carbon:org.wso2.carbon.eventing.feature:${carbon.platform.version}</featureArtifactDef>-->
 
@@ -229,7 +226,7 @@
                                 </featureArtifactDef>
 
                                 <!--Stratos featurs-->
-                                <featureArtifactDef>
+                                <!--featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.stratos.common.feature:${stratos.version.221}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -247,7 +244,7 @@
 
                                 <featureArtifactDef>
                                     org.wso2.appserver:org.wso2.stratos.appserver.sample.installer.ui.feature:${stratos.version}
-                                </featureArtifactDef>
+                                </featureArtifactDef-->
 
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.bam.service.agent.feature:${carbon.platform.version}
@@ -261,9 +258,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.application.deployer.webapp.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
+                                <!--featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.load.balance.agent.server.feature:${stratos.version}
-                                </featureArtifactDef>
+                                </featureArtifactDef-->
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.identity.xacml.filter.feature:${carbon.platform.version}
                                 </featureArtifactDef>
@@ -274,15 +271,15 @@
                                     org.wso2.carbon:org.wso2.carbon.idp.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <!-- jaggery features -->
-                                <featureArtifactDef>
-                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0.ALPHA4.wso2v1
-                                </featureArtifactDef>
+                                <!--featureArtifactDef>
+                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0.ALPHA4.wso2v3
+                                </featureArtifactDef-->
 
                                 <!--End of jaggery features-->
 
                                 <!--Mashup server features-->
 
-                                <featureArtifactDef>
+                                <!--featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.jsservices.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -302,9 +299,9 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.application.deployer.mashup.feature:${carbon.platform.version}
-                                </featureArtifactDef>
+                                </featureArtifactDef-->
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.apache.synapse.wso2.feature:2.1.2-wso2v1
+                                    org.wso2.carbon:org.apache.synapse.wso2.feature:2.1.2-wso2v4
                                 </featureArtifactDef>
                                 <!-- End of the Mashup server features -->
 
@@ -337,6 +334,7 @@
                             <artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>
                         </configuration>
                     </execution>
+<!--
                     <execution>
                         <id>creating-worker-profile</id>
                         <phase>package</phase>
@@ -433,6 +431,7 @@
                             <profile>mashup</profile>
                         </configuration>
                     </execution>
+-->
                     <execution>
                         <id>3-p2-profile-generation</id>
                         <phase>package</phase>
@@ -485,7 +484,7 @@
 
                                 <feature>
                                     <id>org.wso2.carbon.security.mgt.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+				    <version>${carbon.platform.version}</version>
                                 </feature>
 
                                 <feature>
@@ -518,10 +517,6 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
-                                    <id>org.wso2.carbon.jaxws.webapp.mgt.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.discovery.core.feature.group</id>
@@ -553,20 +548,20 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
+                                <!--feature>
                                     <id>org.wso2.carbon.message.flows.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
+                                    <version>4.2.0</version>
+                                </feature-->
 
-                                <feature>
+                                <!--feature>
                                     <id>org.wso2.carbon.xfer.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>4.2.0</version>
                                 </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.mex.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
+                                    <version>4.2.0</version>
+                                </feature-->
 
                                 <feature>
                                     <id>org.wso2.carbon.event.common.feature.group</id>
@@ -580,18 +575,18 @@
 
                                 <feature>
                                     <id>org.wso2.carbon.registry.core.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+				    <version>${carbon.platform.version}</version>
                                 </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.registry.ui.menu.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+				    <version>${carbon.platform.version}</version>
                                 </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.registry.resource.properties.feature.group
                                     </id>
-                                    <version>${carbon.platform.version}</version>
+				    <version>${carbon.platform.version}</version>
                                 </feature>
 
                                 <feature>
@@ -622,7 +617,7 @@
 
                                 <feature>
                                     <id>org.wso2.carbon.dataservices.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+				    <version>${carbon.platform.version}</version>
                                 </feature>
 
                                 <feature>
@@ -652,7 +647,7 @@
 
                                 <!--Stratos feature-->
 
-                                <feature>
+                                <!--feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
                                     <version>${stratos.version.221}</version>
                                 </feature>
@@ -677,7 +672,7 @@
                                         org.wso2.stratos.appserver.sample.installer.ui.feature.group
                                     </id>
                                     <version>${stratos.version}</version>
-                                </feature>
+                                </feature-->
                                 <feature>
                                     <id>org.wso2.carbon.bam.service.agent.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -695,19 +690,19 @@
                                     </id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-                                <feature>
+                                <!--feature>
                                     <id>org.wso2.carbon.load.balance.agent.server.feature.group</id>
                                     <version>${stratos.version}</version>
-                                </feature>
+                                </feature-->
                                 <feature>
                                     <id>org.wso2.carbon.identity.xacml.filter.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+				    <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
                                     <id>
                                         org.wso2.carbon.identity.authenticator.saml2.sso.feature.group
                                     </id>
-                                    <version>${carbon.platform.version}</version>
+				    <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
                                     <id>
@@ -717,13 +712,13 @@
                                 </feature>
 
                                 <!-- jaggery feature groups -->
-                                <feature>
+                                <!--feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0.ALPHA4.wso2v1</version>
-                                </feature>
+                                    <version>0.9.0.ALPHA4.wso2v3</version>
+                                </feature-->
                                 <!-- feature groups end-->
 
-                                <!-- mashup feature groups -->
+                                <!-- mashup feature groups
                                 <feature>
                                     <id>org.wso2.carbon.jsservices.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -763,6 +758,7 @@
                                     <id>org.apache.synapse.wso2.feature.group</id>
                                     <version>2.1.2-wso2v1</version>
                                 </feature>
+-->
                                 <!-- mashup feature groups end -->
 
                                 <feature>
@@ -787,6 +783,7 @@
                             </features>
                         </configuration>
                     </execution>
+<!--
                     <execution>
                         <id>p2-profile-generation-for-worker-profile</id>
                         <phase>package</phase>
@@ -883,10 +880,6 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
-                                    <id>org.wso2.carbon.jaxws.webapp.mgt.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.discovery.core.feature.group</id>
@@ -988,7 +981,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--Stratos feature-->
+                               Stratos feature
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.server.feature.group</id>
@@ -1057,14 +1050,14 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!-- jaggery feature groups -->
+                                jaggery feature groups 
                                 <feature>
                                     <id>org.jaggeryjs.server.feature.group</id>
                                     <version>0.9.0.ALPHA4.wso2v1</version>
                                 </feature>
-                                <!-- feature groups end-->
+                                 feature groups end
 
-                                <!-- mashup feature groups -->
+                                 mashup feature groups
                                 <feature>
                                     <id>org.wso2.carbon.jsservices.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1109,12 +1102,12 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!-- as -runtime features -->
+                                as -runtime features
                                 <feature>
                                     <id>org.wso2.carbon.as.runtimes.cxf.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-                                <!-- end of as -runtime features -->
+                                end of as -runtime features 
 
                             </features>
                         </configuration>
@@ -1174,10 +1167,6 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
-                                    <id>org.wso2.carbon.jaxws.webapp.mgt.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.discovery.core.feature.group</id>
@@ -1271,7 +1260,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--Stratos feature-->
+                                Stratos feature
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -1338,19 +1327,15 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!-- as-runtimes-->
+                                 as-runtimes
                                 <feature>
                                     <id>org.wso2.carbon.as.runtimes.cxf.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!-- end of as-runtimes-->
+                                 end of as-runtimes
 
 
-                                <!--<feature>
-                                    <id>org.wso2.carbon.cloud.gateway.agent.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>-->
 
                             </features>
                         </configuration>
@@ -1552,7 +1537,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--Stratos feature-->
+                                Stratos feature
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -1617,11 +1602,6 @@
                                     <id>org.wso2.carbon.user.mgt.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-
-                                <!--<feature>
-                                    <id>org.wso2.carbon.cloud.gateway.agent.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>-->
 
                             </features>
                         </configuration>
@@ -1824,7 +1804,6 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--Stratos feature-->
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -1889,11 +1868,6 @@
                                     <id>org.wso2.carbon.user.mgt.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-
-                                <!--<feature>
-                                    <id>org.wso2.carbon.cloud.gateway.agent.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>-->
 
                             </features>
                         </configuration>
@@ -2020,7 +1994,6 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--Stratos feature-->
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -2082,22 +2055,16 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!-- jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
                                     <version>0.9.0.ALPHA4.wso2v1</version>
                                 </feature>
-                                <!-- feature groups end-->
 
                                 <feature>
                                     <id>org.wso2.carbon.user.mgt.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--<feature>
-                                    <id>org.wso2.carbon.cloud.gateway.agent.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>-->
 
                             </features>
                         </configuration>
@@ -2284,7 +2251,6 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--Stratos feature-->
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -2345,14 +2311,11 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!-- jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.server.feature.group</id>
                                     <version>0.9.0.ALPHA4.wso2v1</version>
                                 </feature>
-                                <!-- jaggery feature groups end-->
 
-                                <!-- mashup feature groups -->
                                 <feature>
                                     <id>org.wso2.carbon.jsservices.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -2392,22 +2355,17 @@
                                     <id>org.apache.synapse.wso2.feature.group</id>
                                     <version>2.1.2-wso2v1</version>
                                 </feature>
-                                <!-- mashup feature groups end -->
 
                                 <feature>
                                     <id>org.wso2.carbon.user.mgt.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--<feature>
-                                    <id>org.wso2.carbon.cloud.gateway.agent.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>-->
 
                             </features>
                         </configuration>
                     </execution>
-
+-->
                 </executions>
             </plugin>
             <plugin>
