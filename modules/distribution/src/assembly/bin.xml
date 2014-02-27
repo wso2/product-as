@@ -47,7 +47,7 @@
                 <exclude>**/lib/org.wso2.carbon.server-4.2.0.jar</exclude>
                 <exclude>**/repository/conf/security/cipher-text.properties</exclude>
                 <exclude>**/repository/conf/security/cipher-tool.properties</exclude>
-		<exclude>**/axis2/*</exclude>
+		<!--exclude>**/axis2/*</exclude-->
                 <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
             </excludes>
         </fileSet>
@@ -680,6 +680,7 @@
 
         <!-- Changes related to Carbon kernel 4.2.0 patches -->
         <!-- Files WSO2-CARBON-PATCH-4.2.0-0001 - Start -->
+<!--
         <file>
             <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/lib/org.wso2.carbon.server-4.2.0.jar</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/lib/</outputDirectory>
@@ -699,7 +700,9 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
 	    <fileMode>644</fileMode>
         </file>
+-->
         <!-- Files WSO2-CARBON-PATCH-4.2.0-0002 - Start -->
+<!--
         <file>
             <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-text.properties</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
@@ -726,6 +729,7 @@
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
+-->
         <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
     </files>
 </assembly>
