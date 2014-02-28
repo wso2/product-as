@@ -301,7 +301,7 @@
                                     org.wso2.carbon:org.wso2.carbon.application.deployer.mashup.feature:${carbon.platform.version}
                                 </featureArtifactDef-->
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.apache.synapse.wso2.feature:2.1.2-wso2v4
+                                    org.wso2.carbon:org.apache.synapse.wso2.feature:${synapse.version}
                                 </featureArtifactDef>
                                 <!-- End of the Mashup server features -->
 
@@ -754,11 +754,11 @@
                                     </id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+-->
                                 <feature>
                                     <id>org.apache.synapse.wso2.feature.group</id>
-                                    <version>2.1.2-wso2v1</version>
+                                    <version>${synapse.version}</version>
                                 </feature>
--->
                                 <!-- mashup feature groups end -->
 
                                 <feature>
