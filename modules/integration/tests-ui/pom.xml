@@ -243,17 +243,17 @@
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
             <artifactId>org.wso2.carbon.automation.api</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
             <artifactId>org.wso2.carbon.automation.core</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
             <artifactId>org.wso2.carbon.automation.utils</artifactId>
-            <version>${carbon.platform.version}</version>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
