@@ -148,9 +148,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.transport.mail.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <!--featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.message.flows.feature:4.2.0
-                                </featureArtifactDef-->
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.message.flows.feature:${carbon.platform.version}
+                                </featureArtifactDef>
                                 <!--featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.xfer.feature:4.2.0
                                 </featureArtifactDef>
@@ -334,7 +334,6 @@
                             <artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>
                         </configuration>
                     </execution>
-<!--
                     <execution>
                         <id>creating-worker-profile</id>
                         <phase>package</phase>
@@ -399,6 +398,7 @@
                             <profile>dataservice</profile>
                         </configuration>
                     </execution>
+<!--
                     <execution>
                         <id>creating-jaggery-profile</id>
                         <phase>package</phase>
@@ -548,10 +548,10 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--feature>
+                                <feature>
                                     <id>org.wso2.carbon.message.flows.feature.group</id>
-                                    <version>4.2.0</version>
-                                </feature-->
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
 
                                 <!--feature>
                                     <id>org.wso2.carbon.xfer.feature.group</id>
@@ -783,7 +783,6 @@
                             </features>
                         </configuration>
                     </execution>
-<!--
                     <execution>
                         <id>p2-profile-generation-for-worker-profile</id>
                         <phase>package</phase>
@@ -906,6 +905,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
+<!--
                                 <feature>
                                     <id>org.wso2.carbon.xfer.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -915,6 +915,7 @@
                                     <id>org.wso2.carbon.mex.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+-->
 
                                 <feature>
                                     <id>org.wso2.carbon.event.common.feature.group</id>
@@ -981,6 +982,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
+<!--
                                Stratos feature
 
                                 <feature>
@@ -1013,6 +1015,7 @@
                                     <version>${stratos.version}</version>
                                 </feature>
                                 
+-->
                                 <feature>
                                     <id>org.wso2.carbon.bam.service.agent.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1027,11 +1030,13 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 
+<!--
                                 <feature>
                                     <id>org.wso2.carbon.load.balance.agent.server.feature.group</id>
                                     <version>${stratos.version}</version>
                                 </feature>
                                 
+-->
                                 <feature>
                                     <id>org.wso2.carbon.identity.xacml.filter.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1050,6 +1055,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
+<!--
                                 jaggery feature groups 
                                 <feature>
                                     <id>org.jaggeryjs.server.feature.group</id>
@@ -1093,21 +1099,22 @@
                                     </id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+-->
                                 <feature>
                                     <id>org.apache.synapse.wso2.feature.group</id>
-                                    <version>2.1.2-wso2v1</version>
+                                    <version>${synapse.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.user.mgt.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                as -runtime features
+                              <!--  as -runtime features -->
                                 <feature>
                                     <id>org.wso2.carbon.as.runtimes.cxf.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-                                end of as -runtime features 
+                               <!-- end of as -runtime features -->
 
                             </features>
                         </configuration>
@@ -1260,7 +1267,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                Stratos feature
+                    	<!--            Stratos feature
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -1288,6 +1295,7 @@
                                     </id>
                                     <version>${stratos.version}</version>
                                 </feature>
+-->
                                 <feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1301,10 +1309,12 @@
                                     </id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+<!--
                                 <feature>
                                     <id>org.wso2.carbon.load.balance.agent.server.feature.group</id>
                                     <version>${stratos.version}</version>
                                 </feature>
+-->
                                 <feature>
                                     <id>org.wso2.carbon.identity.xacml.filter.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1327,13 +1337,13 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                 as-runtimes
+                          <!--       as-runtimes -->
                                 <feature>
                                     <id>org.wso2.carbon.as.runtimes.cxf.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                 end of as-runtimes
+                           <!--      end of as-runtimes -->
 
 
 
@@ -1461,7 +1471,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
+                               <!-- <feature>
                                     <id>org.wso2.carbon.xfer.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
@@ -1470,7 +1480,7 @@
                                     <id>org.wso2.carbon.mex.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-
+				-->
                                 <feature>
                                     <id>org.wso2.carbon.event.common.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1537,7 +1547,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                Stratos feature
+                       <!--         Stratos feature
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -1565,6 +1575,7 @@
                                     </id>
                                     <version>${stratos.version}</version>
                                 </feature>
+			-->
                                 <feature>
                                     <id>org.wso2.carbon.bam.service.agent.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1577,10 +1588,12 @@
                                     <id>org.wso2.carbon.event.ui.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+			<!--
                                 <feature>
                                     <id>org.wso2.carbon.load.balance.agent.server.feature.group</id>
                                     <version>${stratos.version}</version>
                                 </feature>
+			-->
                                 <feature>
                                     <id>org.wso2.carbon.identity.xacml.filter.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1712,6 +1725,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
+		<!--
                                 <feature>
                                     <id>org.wso2.carbon.xfer.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1722,6 +1736,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
+		-->
                                 <feature>
                                     <id>org.wso2.carbon.event.common.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1804,6 +1819,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
+			<!--
 
                                 <feature>
                                     <id>org.wso2.carbon.stratos.common.feature.group</id>
@@ -1831,6 +1847,7 @@
                                     </id>
                                     <version>${stratos.version}</version>
                                 </feature>
+			-->
                                 <feature>
                                     <id>org.wso2.carbon.bam.service.agent.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1843,10 +1860,12 @@
                                     <id>org.wso2.carbon.event.ui.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+		         <!--
                                 <feature>
                                     <id>org.wso2.carbon.load.balance.agent.server.feature.group</id>
                                     <version>${stratos.version}</version>
                                 </feature>
+			  -->
                                 <feature>
                                     <id>org.wso2.carbon.identity.xacml.filter.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -1873,6 +1892,7 @@
                         </configuration>
                     </execution>
 
+<!--
                     <execution>
                         <id>3-p2-profile-generation-for-jaggery</id>
                         <phase>package</phase>
