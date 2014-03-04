@@ -35,6 +35,9 @@
     <font color="#0000FF">public void</font> doGet(HttpServletRequest request, HttpServletResponse response)
     <font color="#0000FF">throws</font> IOException, ServletException
     {
+        String firstName = request.getParameter("firstname");
+        String lastName = request.getParameter("lastname");
+
         response.setContentType(&quot;<font color="#009900">text/html</font>&quot;);
         PrintWriter out = response.getWriter();
         out.println(&quot;<font color="#009900">&lt;html&gt;</font>&quot;);
