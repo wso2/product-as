@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-	<groupId>org.wso2.appserver</groupId>
+        <groupId>org.wso2.appserver</groupId>
         <artifactId>wso2stratos-as-features</artifactId>
         <version>${stratos.version}</version>
     </parent>
@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.utils.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Stratos  AppServer - Utils Features</name>
+    <name>WSO2 Stratos AppServer - Utils Features</name>
     <url>http://wso2.org</url>
 
     <dependencies>
@@ -36,42 +36,42 @@
             <groupId>org.apache.derby.wso2</groupId>
             <artifactId>derby</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.hibernate.wso2</groupId>
             <artifactId>hibernate</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.apache.bcel.wso2</groupId>
             <artifactId>bcel</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>asm.wso2</groupId>
             <artifactId>asm</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>cglib.wso2</groupId>
             <artifactId>cglib</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2-jibx</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.jibx.wso2</groupId>
             <artifactId>jibx</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2-jaxbri</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>com.sun.xml.bind.wso2</groupId>
             <artifactId>jaxb</artifactId>
         </dependency>
     </dependencies>
 
     <build>
-       <plugins>
+        <plugins>
             <plugin>
                 <groupId>org.wso2.maven</groupId>
                 <artifactId>carbon-p2-plugin</artifactId>
@@ -104,7 +104,8 @@
                                 <bundleDef>com.sun.xml.bind.wso2:jaxb</bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.platform.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.platform.version}
+                                </importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>

@@ -35,7 +35,6 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>org.wso2.appserver.styles</artifactId>
-            <version>${project.version}</version>
         </dependency>   
     </dependencies>
 

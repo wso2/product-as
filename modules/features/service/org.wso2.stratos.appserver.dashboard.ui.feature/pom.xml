@@ -28,36 +28,36 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.dashboard.ui.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Stratos  AppServer - Dashboard UI Features</name>
+    <name>WSO2 Stratos AppServer - Dashboard UI Features</name>
     <url>http://wso2.org</url>
 
     <dependencies>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>org.wso2.stratos.appserver.dashboard.ui</artifactId>
-		<exclusions>
-			<exclusion>
-				<groupId>org.wso2.carbon</groupId>
-				<artifactId>org.wso2.carbon.statistics.ui</artifactId>
-			</exclusion>
-		</exclusions>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.wso2.carbon</groupId>
+                    <artifactId>org.wso2.carbon.statistics.ui</artifactId>
+                </exclusion>
+            </exclusions>
             <version>2.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.ui.menu.stratos</artifactId>
-		<exclusions>
-                        <exclusion>
-                                <groupId>org.wso2.carbon</groupId>
-                                <artifactId>org.wso2.carbon.statistics.ui</artifactId>
-                        </exclusion>
-                </exclusions>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.wso2.carbon</groupId>
+                    <artifactId>org.wso2.carbon.statistics.ui</artifactId>
+                </exclusion>
+            </exclusions>
             <version>2.2.0</version>
         </dependency>
     </dependencies>
 
     <build>
-       <plugins>
+        <plugins>
             <plugin>
                 <groupId>org.wso2.maven</groupId>
                 <artifactId>carbon-p2-plugin</artifactId>
@@ -76,7 +76,7 @@
                                 <properties>
                                     <propertyDef>org.wso2.carbon.p2.category.type:console</propertyDef>
                                 </properties>
-                            </adviceFile>                            
+                            </adviceFile>
                             <bundles>
                                 <bundleDef>org.wso2.appserver:org.wso2.stratos.appserver.dashboard.ui</bundleDef>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.ui.menu.stratos</bundleDef>

@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-	<groupId>org.wso2.appserver</groupId>
+        <groupId>org.wso2.appserver</groupId>
         <artifactId>wso2stratos-as-features</artifactId>
         <version>${stratos.version}</version>
     </parent>
@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.login.ui.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Stratos  AppServer - Deployment Features</name>
+    <name>WSO2 Stratos AppServer - Deployment Features</name>
     <url>http://wso2.org</url>
 
     <dependencies>
@@ -40,7 +40,7 @@
     </dependencies>
 
     <build>
-       <plugins>
+        <plugins>
             <plugin>
                 <groupId>org.wso2.maven</groupId>
                 <artifactId>carbon-p2-plugin</artifactId>
@@ -59,7 +59,7 @@
                                 <properties>
                                     <propertyDef>org.wso2.carbon.p2.category.type:console</propertyDef>
                                 </properties>
-                            </adviceFile>                            
+                            </adviceFile>
                             <bundles>
                                 <bundleDef>org.wso2.appserver:org.wso2.stratos.appserver.login.ui</bundleDef>
                             </bundles>

@@ -42,7 +42,7 @@
         <module>modules/p2-profile-gen</module>
         <module>modules/distribution</module>
         <module>modules/org.wso2.stratos.appserver.login.ui</module>
-	<module>modules/org.wso2.stratos.appserver.dashboard.ui</module>
+        <module>modules/org.wso2.stratos.appserver.dashboard.ui</module>
         <module>modules/integration</module>
     </modules>
 
@@ -53,16 +53,16 @@
                 <artifactId>org.wso2.carbon.ui</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-	    <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.utils</artifactId>
-	    <version>${carbon.platform.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.utils</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.eclipse.osgi</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
-		<version>${version.equinox.osgi}</version>
+                <version>${version.equinox.osgi}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.equinox</groupId>
@@ -125,6 +125,27 @@
                 <version>${axis2.jaxb.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>bouncycastle</groupId>
+                <artifactId>bcprov-jdk15</artifactId>
+                <version>${bcprov-jdk15.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rampart</groupId>
+                <artifactId>rampart</artifactId>
+                <version>${rampart.version}</version>
+                <type>mar</type>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>org.wso2.appserver.styles</artifactId>
+                <version>${product.as.version}</version>
+            </dependency>
+
+
             <!-- For stratos service -->
             <dependency>
                 <groupId>org.apache.felix</groupId>
@@ -151,7 +172,7 @@
                 <artifactId>javax.servlet.jsp</artifactId>
                 <version>${javax.servlet.jsp.version}</version>
             </dependency>
-	
+
             <!-- For stratos service samples -->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -189,34 +210,35 @@
                 <artifactId>org.wso2.carbon.registry.core</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-	   <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.statistics.ui</artifactId>
-		<version>${project.version}</version>
-        </dependency>
-	 <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.rm</artifactId>
-            <version>${previous.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.security.mgt</artifactId>
-            <version>${previous.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.wso2.xkms</groupId>
-                    <artifactId>xkms</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.statistics.ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.rm</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.security.mgt</artifactId>
+                <version>${project.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.wso2.xkms</groupId>
+                        <artifactId>xkms</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
     <scm>
         <connection>scm:svn:http://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver</connection>
-        <developerConnection>scm:svn:https://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver</developerConnection>
+        <developerConnection>scm:svn:https://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver
+        </developerConnection>
     </scm>
 
     <profiles>
@@ -261,9 +283,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <product.as.version>5.3.0-SNAPSHOT</product.as.version>
 
         <!--carbon.platform.version>${carbon.platform.version}</carbon.platform.version-->
-	<synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
+        <synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
         <carbon.kernel.version>4.3.0-SNAPSHOT</carbon.kernel.version>
         <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
         <javax.servlet.version>3.0.0.v201112011016</javax.servlet.version>
@@ -277,30 +300,34 @@
         <jibx.version>1.2.1.wso2v1</jibx.version>
         <axis2.jaxb.version>${version.axis2.jaxbri}</axis2.jaxb.version>
         <axis2.version>${orbit.version.axis2}</axis2.version>
-	<jaxb.version>2.2.5.wso2v1</jaxb.version>
+        <jaxb.version>2.2.5.wso2v1</jaxb.version>
         <!--stratos.version>${stratos.version}</stratos.version-->
         <appserver.version>5.2.1</appserver.version>
-	<stratos.version.221>2.2.1</stratos.version.221>
-	<stratos.version.222>2.2.2</stratos.version.222>
-	<version.equinox.osgi.services>3.3.100.v20120522-1822</version.equinox.osgi.services>
+        <stratos.version.221>2.2.1</stratos.version.221>
+        <stratos.version.222>2.2.2</stratos.version.222>
+        <version.equinox.osgi.services>3.3.100.v20120522-1822</version.equinox.osgi.services>
         <version.equinox.osgi>3.8.1.v20120830-144521</version.equinox.osgi>
-	<version.equinox.jsp.jasper>1.0.400.v20120522-2049</version.equinox.jsp.jasper>
-	<version.equinox.http.servlet>1.1.300.v20120522-1841</version.equinox.http.servlet>
+        <version.equinox.jsp.jasper>1.0.400.v20120522-2049</version.equinox.jsp.jasper>
+        <version.equinox.http.servlet>1.1.300.v20120522-1841</version.equinox.http.servlet>
         <version.equinox.http.helper>1.1.0.wso2v1</version.equinox.http.helper>
-	 <version.log4j>1.2.13</version.log4j>
-	<version.commons.logging>1.1.1</version.commons.logging>
-	<orbit.version.axis2>1.6.1.wso2v11-SNAPSHOT</orbit.version.axis2>
+        <version.log4j>1.2.13</version.log4j>
+        <version.commons.logging>1.1.1</version.commons.logging>
+        <orbit.version.axis2>1.6.1.wso2v11-SNAPSHOT</orbit.version.axis2>
         <version.axis2.json>${orbit.version.axis2}</version.axis2.json>
         <version.axis2.client>${orbit.version.axis2}</version.axis2.client>
         <version.axis2.jaxbri>${orbit.version.axis2}</version.axis2.jaxbri>
         <version.axis2.jibx>${orbit.version.axis2}</version.axis2.jibx>
-	<carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
-	<orbit.version.axiom>1.2.11.wso2v5-SNAPSHOT</orbit.version.axiom>
-	<stratos.version>2.2.0</stratos.version>
-	<emma.version>2.1.5320</emma.version>
-	<axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
-	<previous.version>4.2.0</previous.version>
+        <carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
+        <orbit.version.axiom>1.2.11.wso2v5-SNAPSHOT</orbit.version.axiom>
+        <stratos.version>2.2.0</stratos.version>
+        <emma.version>2.1.5320</emma.version>
+        <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
+        <previous.version>4.2.0</previous.version>
+        <imp.pkg.version.javax.servlet.jsp>[2.2.0, 2.3.0)</imp.pkg.version.javax.servlet.jsp>
+        <imp.pkg.version.javax.servlet>[2.6.0, 3.0.0)</imp.pkg.version.javax.servlet>
 
+        <bcprov-jdk15.version>132</bcprov-jdk15.version>
+        <rampart.version>1.6.1-wso2v12</rampart.version>
     </properties>
 
     <mailingLists>
@@ -443,7 +470,7 @@
         </pluginManagement>
     </build>
 
-	    <repositories>
+    <repositories>
         <!-- Before adding ANYTHING in here, please start a discussion on the dev list.
              Ideally the Axis2 build should only use Maven central (which is available
              by default) and nothing else. We had troubles with other repositories in
