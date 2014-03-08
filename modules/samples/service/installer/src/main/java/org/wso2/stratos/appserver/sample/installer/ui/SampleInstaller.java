@@ -39,7 +39,7 @@ public class SampleInstaller {
         // Copying the sample AAR
         File srcAAR =
                 new File(serverDir + File.separator + "axis2services" + File.separator +
-                         "SimpleStockQuoteService-1.0.aar");
+                         "SimpleStockQuoteService.aar");
         File targetAAR =
                 new File(tenantsDir + File.separator + tenantId + File.separator +
                          "axis2services" + File.separator + "SimpleStockQuoteService.aar");
