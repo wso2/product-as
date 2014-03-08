@@ -26,7 +26,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wso2appserver-samples-hello-webapp</artifactId>
-    <version>1.0</version>
     <packaging>war</packaging>
     <name>Sample/HelloWorldWebapp</name>
     <description>This is Hello World webapp sample</description>
