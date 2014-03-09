@@ -28,14 +28,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.sample.installer.ui.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Stratos AppServer - Dashboard UI Features</name>
+    <name>WSO2 Stratos AppServer - Sample installer UI Features</name>
     <url>http://wso2.org</url>
 
     <dependencies>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>org.wso2.stratos.appserver.sample.installer.ui</artifactId>
-            <version>${project.version}</version>
+            <version>${product.as.version}</version>
         </dependency>
     </dependencies>
 
