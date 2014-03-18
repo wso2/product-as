@@ -213,7 +213,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.statistics.ui</artifactId>
-                <version>${project.version}</version>
+                <version>${carbon.platform.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -319,7 +319,7 @@
         <version.axis2.jibx>${orbit.version.axis2}</version.axis2.jibx>
         <carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
         <orbit.version.axiom>1.2.11.wso2v5-SNAPSHOT</orbit.version.axiom>
-        <stratos.version>2.2.0</stratos.version>
+        <stratos.version>5.3.0-SNAPSHOT</stratos.version>
         <emma.version>2.1.5320</emma.version>
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
         <previous.version>4.2.0</previous.version>

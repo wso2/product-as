@@ -237,12 +237,12 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.stratos.deployment.feature:${stratos.version.221}
-                                </featureArtifactDef>
+                                </featureArtifactDef-->
                                 <featureArtifactDef>
-                                    org.wso2.appserver:org.wso2.stratos.appserver.dashboard.ui.feature:${stratos.version}
+                                    org.wso2.appserver:org.wso2.stratos.appserver.dashboard.ui.feature:${project.version}
                                 </featureArtifactDef>
-
-                                <featureArtifactDef>
+				
+                                <!--featureArtifactDef>
                                     org.wso2.appserver:org.wso2.stratos.appserver.sample.installer.ui.feature:${stratos.version}
                                 </featureArtifactDef-->
 
