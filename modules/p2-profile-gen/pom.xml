@@ -271,9 +271,9 @@
                                     org.wso2.carbon:org.wso2.carbon.idp.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <!-- jaggery features -->
-                                <!--featureArtifactDef>
-                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0.ALPHA4.wso2v3
-                                </featureArtifactDef-->
+                                <featureArtifactDef>
+                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0.ALPHA5.wso2v1-SNAPSHOT
+                                </featureArtifactDef>
 
                                 <!--End of jaggery features-->
 
@@ -398,7 +398,6 @@
                             <profile>dataservice</profile>
                         </configuration>
                     </execution>
-                    <!--
                                         <execution>
                                             <id>creating-jaggery-profile</id>
                                             <phase>package</phase>
@@ -415,6 +414,7 @@
                                                 <profile>jaggery</profile>
                                             </configuration>
                                         </execution>
+<!--
                                         <execution>
                                             <id>creating-mashup-profile</id>
                                             <phase>package</phase>
@@ -712,10 +712,10 @@
                                 </feature>
 
                                 <!-- jaggery feature groups -->
-                                <!--feature>
+                                <feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0.ALPHA4.wso2v3</version>
-                                </feature-->
+                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
+                                </feature>
                                 <!-- feature groups end-->
 
                                 <!-- mashup feature groups
@@ -1056,12 +1056,12 @@
                                 </feature>
 
                                 <!--
-                                                                jaggery feature groups
+                                                                jaggery feature groups -->
                                                                 <feature>
                                                                     <id>org.jaggeryjs.server.feature.group</id>
-                                                                    <version>0.9.0.ALPHA4.wso2v1</version>
+                                                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
                                                                 </feature>
-                                                                 feature groups end
+                                                              <!--   feature groups end
 
                                                                  mashup feature groups
                                                                 <feature>
@@ -1891,7 +1891,6 @@
                         </configuration>
                     </execution>
 
-                    <!--
                                         <execution>
                                             <id>3-p2-profile-generation-for-jaggery</id>
                                             <phase>package</phase>
@@ -2014,6 +2013,7 @@
                                                     </feature>
 
 
+			<!--
                                                     <feature>
                                                         <id>org.wso2.carbon.stratos.common.feature.group</id>
                                                         <version>${stratos.version.221}</version>
@@ -2040,6 +2040,7 @@
                                                         </id>
                                                         <version>${stratos.version}</version>
                                                     </feature>
+				-->
                                                     <feature>
                                                         <id>org.wso2.carbon.bam.webapp.agent.server.feature.group</id>
                                                         <version>${carbon.platform.version}</version>
@@ -2053,10 +2054,12 @@
                                                         </id>
                                                         <version>${carbon.platform.version}</version>
                                                     </feature>
+					<!--
                                                     <feature>
                                                         <id>org.wso2.carbon.load.balance.agent.server.feature.group</id>
                                                         <version>${stratos.version}</version>
                                                     </feature>
+					-->
                                                     <feature>
                                                         <id>org.wso2.carbon.identity.xacml.filter.feature.group</id>
                                                         <version>${carbon.platform.version}</version>
@@ -2076,7 +2079,7 @@
 
                                                     <feature>
                                                         <id>org.jaggeryjs.feature.group</id>
-                                                        <version>0.9.0.ALPHA4.wso2v1</version>
+                                                        <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
                                                     </feature>
 
                                                     <feature>
@@ -2089,6 +2092,7 @@
                                             </configuration>
                                         </execution>
 
+<!--
                                         <execution>
                                             <id>3-p2-profile-generation-for-mashup</id>
                                             <phase>package</phase>
