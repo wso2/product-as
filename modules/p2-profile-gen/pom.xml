@@ -235,10 +235,9 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.tenant.throttling.agent.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-				<!--
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.stratos.deployment.feature:${stratos.version.221}
-                                </featureArtifactDef-->
+                                    org.wso2.carbon:org.wso2.carbon.tenant.deployment.feature:${carbon.platform.version}
+                                </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.appserver:org.wso2.stratos.appserver.dashboard.ui.feature:${project.version}
                                 </featureArtifactDef>
@@ -660,11 +659,11 @@
                                     <id>org.wso2.carbon.tenant.throttling.agent.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-				<!--
                                 <feature>
-                                    <id>org.wso2.carbon.stratos.deployment.feature.group</id>
-                                    <version>${stratos.version.221}</version>
+                                    <id>org.wso2.carbon.tenant.deployment.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
                                 </feature>
+				<!--
                                 <feature>
                                     <id>org.wso2.stratos.appserver.dashboard.ui.feature.group</id>
                                     <version>${stratos.version}</version>
@@ -1001,13 +1000,13 @@
                                                                     <id>org.wso2.carbon.tenant.throttling.agent.feature.group</id>
                                                                     <version>${carbon.platform.version}</version>
                                                                 </feature>
-<!--
 
                                                                 <feature>
-                                                                    <id>org.wso2.carbon.stratos.deployment.feature.group</id>
-                                                                    <version>${stratos.version.221}</version>
+                                                                    <id>org.wso2.carbon.tenant.deployment.feature.group</id>
+                                                                    <version>${carbon.platform.version}</version>
                                                                 </feature>
 
+<!--
                                                                 <feature>
                                                                     <id>org.wso2.stratos.appserver.dashboard.ui.feature.group</id>
                                                                     <version>${stratos.version}</version>
