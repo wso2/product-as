@@ -25,7 +25,6 @@ import java.net.URLConnection;
  * This class open a connection to the given url and establishes an input stream to jaggery  web application
  */
 public class Utility {
-
     private static final int WAIT_TIME = 500;
 
     public static URLConnection openConnection(URL url) {
@@ -33,16 +32,13 @@ public class Utility {
         URLConnection jaggeryServerConnection = null;
         try {
             jaggeryServerConnection = url.openConnection();
-
         } catch (IOException ignored) {
         }
-
         while ((jaggeryServerConnection == null) && (System.currentTimeMillis() <= timeoutExpiredMs)) {
             try {
                 jaggeryServerConnection = url.openConnection();
             } catch (IOException ignored) {
             }
-
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ignored) {
@@ -57,10 +53,8 @@ public class Utility {
         try {
             in = new BufferedReader(new InputStreamReader(
                     jaggeryServerConnection.getInputStream()));
-
         } catch (IOException ignored) {
         }
-
         while ((in == null) && (System.currentTimeMillis() <= timeoutExpiredMs)) {
             try {
                 in = new BufferedReader(
