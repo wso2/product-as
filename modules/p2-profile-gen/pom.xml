@@ -663,11 +663,11 @@
                                     <id>org.wso2.carbon.tenant.deployment.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-				<!--
                                 <feature>
                                     <id>org.wso2.stratos.appserver.dashboard.ui.feature.group</id>
-                                    <version>${stratos.version}</version>
+                                    <version>${project.version}</version>
                                 </feature>
+				<!--
                                 <feature>
                                     <id>
                                         org.wso2.stratos.appserver.sample.installer.ui.feature.group
@@ -1006,12 +1006,12 @@
                                                                     <version>${carbon.platform.version}</version>
                                                                 </feature>
 
-<!--
                                                                 <feature>
                                                                     <id>org.wso2.stratos.appserver.dashboard.ui.feature.group</id>
-                                                                    <version>${stratos.version}</version>
+                                                                    <version>${project.version}</version>
                                                                 </feature>
 
+				<!--
                                                                 <feature>
                                                                     <id>org.wso2.stratos.appserver.sample.installer.ui.feature.group</id>
                                                                     <version>${stratos.version}</version>

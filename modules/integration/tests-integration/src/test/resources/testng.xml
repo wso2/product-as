@@ -1,0 +1,33 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="APPServer-features-test-suite">
+    <parameter name="useDefaultListeners" value="false"/>
+
+    <test name="as-integration-pox-security-tests" preserve-order="true" parallel="false">
+    <!--<packages>-->
+        <!--<package name="org.wso2.appserver.integration.tests.aarservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.carbonappservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.deployedmoduleservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.helloworldsampleservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.jarservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.jaxwssampleservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.jndi"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.jsonservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.loginlogoutservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.mtomservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.qualityofservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.rest"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.sampleservices.*"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.security"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.springservice"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.webapp.*"/>-->
+        <!--<package name="org.wso2.appserver.integration.tests.webappsampleservice"/>-->
+    <!--</packages>-->
+
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.aarservice.AARServiceTestCase"/>
+            <!--<class name="org.wso2.appserver.integration.tests.rest.test.poxsecurity.POXSecurityVerifyPostMethod"/>-->
+        </classes>
+</test>
+</suite>

@@ -34,7 +34,7 @@
                             <name>maven.test.haltafterfailure</name>
                             <value>false</value>
                         </property>
-			<property>
+                        <property>
                             <name>java.io.tmpdir</name>
                             <value>${basedir}/target/</value>
                         </property>

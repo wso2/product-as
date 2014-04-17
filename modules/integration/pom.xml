@@ -16,8 +16,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>tests-new</module>
-        <module>tests-ui</module>
+        <module>tests-common/admin-clients</module>
+        <module>tests-common/integration-test-utils</module>
+        <module>tests-integration</module>
+       <!-- <module>tests-new</module>
+        <module>tests-ui</module>-->
     </modules>
 
 </project>

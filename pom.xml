@@ -232,11 +232,108 @@
                 </exclusions>
             </dependency>
 
+
+            <!--Dependencies for integration tests  -->
+
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.aarservices.stub</artifactId>
+                <version>${stub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.webapp.mgt.stub</artifactId>
+                <version>${stub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.utils</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.jaggery.app.mgt.stub</artifactId>
+                <version>${jaggery.stub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.module.mgt.stub</artifactId>
+                <version>${stub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.service.mgt.stub</artifactId>
+                <version>${stub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.springservices.stub</artifactId>
+                <version>${stub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.jarservices.stub</artifactId>
+                <version>${stub.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>org.wso2.appserver.integration.common.clients</artifactId>
+                <version>${product.as.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.springservices.ui</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>SecVerifier</artifactId>
+                <version>${carbon.platform.version}</version>
+                <type>aar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>org.wso2.appserver.integration.common.utils</artifactId>
+                <version>${product.as.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.automation</groupId>
+                <artifactId>org.wso2.carbon.automation.test.utils</artifactId>
+                <version>${test.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.automation</groupId>
+                <artifactId>org.wso2.carbon.automation.engine</artifactId>
+                <version>${test.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.integration.common.extensions</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.integration.common.admin.client</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.integration.common.utils</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.xfer</groupId>
+                <artifactId>wso2xfer</artifactId>
+                <version>${xfer.version}</version>
+                <type>jar</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver</connection>
+        <connection>scm:svn:http://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver
+        </connection>
         <developerConnection>scm:svn:https://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver
         </developerConnection>
     </scm>
@@ -328,6 +425,12 @@
 
         <bcprov-jdk15.version>132</bcprov-jdk15.version>
         <rampart.version>1.6.1-wso2v12</rampart.version>
+
+        <stub.version>4.3.0-SNAPSHOT</stub.version>
+        <jaggery.stub.version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</jaggery.stub.version>
+        <test.framework.version>4.3.1-SNAPSHOT</test.framework.version>
+        <xfer.version>3.3.0</xfer.version>
+
     </properties>
 
     <mailingLists>

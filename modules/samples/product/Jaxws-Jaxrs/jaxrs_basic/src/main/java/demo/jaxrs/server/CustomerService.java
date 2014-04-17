@@ -50,6 +50,7 @@ public class CustomerService {
 
     @PUT
     @Path("/customers/")
+    @Consumes("text/xml")
     public Response updateCustomer(Customer customer) {
         System.out.println("----invoking updateCustomer, Customer name is: " + customer.getName());
         Customer c = customers.get(customer.getId());
@@ -66,6 +67,7 @@ public class CustomerService {
 
     @POST
     @Path("/customers/")
+    @Consumes("text/xml")
     public Response addCustomer(Customer customer) {
         System.out.println("----invoking addCustomer, Customer name is: " + customer.getName());
         customer.setId(++currentId);
