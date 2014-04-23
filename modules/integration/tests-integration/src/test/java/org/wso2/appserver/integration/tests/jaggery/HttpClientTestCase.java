@@ -15,6 +15,9 @@
  */
 package org.wso2.appserver.integration.tests.jaggery;
 
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Factory;
+import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.appserver.integration.tests.jaggery.utils.JaggeryTestUtil;
 
 import org.apache.commons.logging.Log;
@@ -22,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,17 +42,31 @@ import static org.testng.Assert.assertTrue;
 public class HttpClientTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(HttpClientTestCase.class);
+    private TestUserMode userMode;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init();
+        super.init(userMode);
+    }
+
+    @Factory(dataProvider = "userModeProvider")
+    public HttpClientTestCase(TestUserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    @DataProvider
+    private static TestUserMode[][] userModeProvider() {
+        return new TestUserMode[][]{
+                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
+                new TestUserMode[]{TestUserMode.TENANT_USER},
+        };
     }
 
     @Test(groups = {"wso2.as"}, description = "Test Http Client GET object")
     public void testHttpClientGet() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/get.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/get.jag");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 
@@ -71,7 +89,7 @@ public class HttpClientTestCase extends ASIntegrationTest {
     public void testHttpClientGetParameters() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/get.jag?action=parameters");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/get.jag?action=parameters");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -91,7 +109,7 @@ public class HttpClientTestCase extends ASIntegrationTest {
     public void testHttpClientPost() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/post.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/post.jag");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -112,7 +130,7 @@ public class HttpClientTestCase extends ASIntegrationTest {
     public void testHttpClientPostParameters() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/post.jag?action=parameters");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/post.jag?action=parameters");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -132,7 +150,7 @@ public class HttpClientTestCase extends ASIntegrationTest {
     public void testHttpClientPut() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/put.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/put.jag");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -153,7 +171,7 @@ public class HttpClientTestCase extends ASIntegrationTest {
     public void testHttpClientPutParameters() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/put.jag?action=parameters");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY)+ "/testapp/put.jag?action=parameters");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -173,7 +191,7 @@ public class HttpClientTestCase extends ASIntegrationTest {
     public void testHttpClientDel() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/delet.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/delet.jag");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -194,7 +212,7 @@ public class HttpClientTestCase extends ASIntegrationTest {
     public void testHttpClientDelParameters() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/delet.jag?action=parameters");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/delet.jag?action=parameters");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));

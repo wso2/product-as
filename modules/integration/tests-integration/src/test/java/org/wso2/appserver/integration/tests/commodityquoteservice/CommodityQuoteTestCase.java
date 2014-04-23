@@ -56,7 +56,7 @@ public class CommodityQuoteTestCase extends ASIntegrationTest {
     private static TestUserMode[][] userModeProvider() {
         return new TestUserMode[][]{
                 new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new TestUserMode[]{TestUserMode.SUPER_TENANT_USER},
+                new TestUserMode[]{TestUserMode.TENANT_USER},
         };
     }
 

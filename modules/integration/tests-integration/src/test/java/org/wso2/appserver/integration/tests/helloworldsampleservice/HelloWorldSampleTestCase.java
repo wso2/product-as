@@ -7,11 +7,18 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.automation.engine.FrameworkConstants;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
+import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.axis2client.AxisServiceClient;
 import org.wso2.carbon.automation.test.utils.axis2client.SecureAxisServiceClient;
+
+import java.io.File;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -23,13 +30,40 @@ import static org.testng.Assert.assertTrue;
 public class HelloWorldSampleTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(HelloWorldSampleTestCase.class);
+    private TestUserMode userMode;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init();
+        super.init(userMode);
     }
 
-    @Test(groups = "wso2.as", description = "invoke HelloWorld service without security")
+    @Factory(dataProvider = "userModeProvider")
+    public HelloWorldSampleTestCase(TestUserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    @DataProvider
+    private static TestUserMode[][] userModeProvider() {
+        return new TestUserMode[][]{
+                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
+        };
+    }
+
+    @Test(groups = "wso2.as", description = "Upload aar service and verify deployment")
+    public void testHelloServiceUpload() throws Exception {
+        AARServiceUploaderClient aarServiceUploaderClient
+                = new AARServiceUploaderClient(backendURL, sessionCookie);
+        aarServiceUploaderClient.uploadAARFile("HelloWorld.aar",
+                FrameworkPathUtil.getSystemResourceLocation() + "artifacts" +
+                        File.separator + "AS" + File.separator + "aar" + File.separator +
+                        "HelloWorld.aar", "");
+        String axis2Service = "HelloService";
+        isServiceDeployed(axis2Service);
+        log.info("HelloWorld.aar service uploaded successfully");
+    }
+
+    @Test(groups = "wso2.as", description = "invoke HelloWorld service without security",
+            dependsOnMethods = "testHelloServiceUpload")
     public void InvokeSerWithoutSec() throws Exception {
         AxisServiceClient axisServiceClient = new AxisServiceClient();
         String endpoint = asServer.getContextUrls().getServiceUrl() + "/HelloService";

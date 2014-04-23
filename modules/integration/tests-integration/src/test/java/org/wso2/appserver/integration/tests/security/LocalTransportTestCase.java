@@ -34,7 +34,7 @@ import org.wso2.carbon.automation.test.utils.common.HomePageGenerator;
 import org.wso2.carbon.automation.test.utils.http.client.HttpsResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpsURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.AuthenticatorClient;
-import org.wso2.carbon.integration.common.extensions.carbonserver.ClientConnectionUtil;
+import org.wso2.carbon.integration.common.utils.ClientConnectionUtil;
 import org.wso2.carbon.module.mgt.stub.ModuleAdminServiceModuleMgtExceptionException;
 import org.wso2.carbon.module.mgt.stub.types.ModuleMetaData;
 import org.wso2.carbon.service.mgt.stub.ServiceAdminException;
@@ -149,9 +149,7 @@ public class LocalTransportTestCase extends ASIntegrationTest {
         assertFalse(status, "Authorization skipped when gracefully restarting the server");
 
         //wait for server startup
-        ClientConnectionUtil.waitForLogin(backendURL, asServer.getSuperTenant().getDomain(),
-                asServer.getSuperTenant().getTenantAdmin().getUserName(),
-                asServer.getSuperTenant().getTenantAdmin().getPassword());
+        ClientConnectionUtil.waitForLogin(asServer);
     }
 
 }
