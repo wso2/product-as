@@ -16,7 +16,6 @@
         </packages>
     </test>
 
-
     <test name="services-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.springservice"/>
