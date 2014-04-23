@@ -18,19 +18,20 @@
 
 package org.wso2.appserver.integration.tests.security;
 
-import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
-import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
-import org.wso2.appserver.integration.common.clients.ServiceAdminClient;
 import org.apache.axis2.AxisFault;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
+import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
+import org.wso2.appserver.integration.common.clients.ServiceAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.common.HomePageGenerator;
+import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpsResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpsURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.AuthenticatorClient;
@@ -45,7 +46,8 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class LocalTransportTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(LocalTransportTestCase.class);
@@ -115,7 +117,7 @@ public class LocalTransportTestCase extends ASIntegrationTest {
         String url = webAppURL +
                 "/service-mgt/change_service_state_ajaxprocessor.jsp?serviceName=" + serviceName + "&isActive=false";
 
-        HttpsResponse response = HttpsURLConnectionClient.getRequest(url, null);
+        HttpResponse response = HttpRequestUtil.sendGetRequest(url, null);
         log.info("HTTPS client response code " + response.getResponseCode());
 
         ServiceMetaData serviceMetaDataAfter = serviceAdminClient.getServicesData(serviceName);
@@ -130,7 +132,7 @@ public class LocalTransportTestCase extends ASIntegrationTest {
         String url = webAppURL +
                 "/server-admin/proxy_ajaxprocessor.jsp?action=restartGracefully";
 
-        HttpsResponse response = HttpsURLConnectionClient.getRequest(url, null);
+        HttpResponse response = HttpRequestUtil.sendGetRequest(url, null);
         log.info("HTTPS client response code " + response.getResponseCode());
 
         Thread.sleep(5000); //force wait until server start gracefully shut down.
