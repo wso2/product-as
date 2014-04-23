@@ -17,11 +17,11 @@
  */
 package org.wso2.appserver.integration.tests.webapp.classloading;
 
-import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.apache.axiom.om.OMElement;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
@@ -42,7 +42,7 @@ public abstract class WebApplicationClassloadingTestCase extends
 
 	private String webAppFileName;
 	private String webAppName;
-	private String webAppURL;
+	//private String webAppURL;
 	protected WebAppAdminClient webAppAdminClient;
 	
 

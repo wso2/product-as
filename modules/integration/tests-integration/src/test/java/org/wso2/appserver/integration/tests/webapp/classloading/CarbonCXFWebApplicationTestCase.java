@@ -17,9 +17,8 @@
  */
 package org.wso2.appserver.integration.tests.webapp.classloading;
 
-import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.testng.annotations.BeforeClass;
-import org.wso2.appserver.integration.tests.webapp.classloading.WebApplicationClassloadingTestCase;
+import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 
 
 
@@ -27,7 +26,7 @@ public class CarbonCXFWebApplicationTestCase extends
         WebApplicationClassloadingTestCase {
 	private final String webAppFileName = "appServer-cxf-carbon-cl-app-1.0.0.war";
 	private final String webAppName = "appServer-cxf-carbon-cl-app-1.0.0";
-	private final String webAppURL ="/appServer-cxf-carbon-cl-app-1.0.0";
+	private final String webAppLocalURL ="/appServer-cxf-carbon-cl-app-1.0.0";
 	WebAppAdminClient webAppAdminClient;
 
 	@BeforeClass(alwaysRun = true)
@@ -35,7 +34,7 @@ public class CarbonCXFWebApplicationTestCase extends
 		super.init();
 		setWebAppFileName(webAppFileName);
 		setWebAppName(webAppName);
-		setWebAppURL(webAppURL + webAppURL);
+		setWebAppURL(getWebAppURL() + webAppLocalURL);
 
 	}
 

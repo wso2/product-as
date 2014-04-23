@@ -15,8 +15,6 @@
 */
 package org.wso2.appserver.integration.tests.sampleservices.xferservice;
 
-import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
-import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -33,6 +31,8 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
+import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.module.mgt.stub.types.ModuleMetaData;
@@ -66,7 +66,7 @@ public class CustomerServiceTestCase extends ASIntegrationTest {
         AARServiceUploaderClient aarServiceUploaderClient
                 = new AARServiceUploaderClient(backendURL,
                 sessionCookie);
-
+        log.info("path to file : " + FrameworkPathUtil.getSystemResourceLocation());
         aarServiceUploaderClient.uploadAARFile("CustomerService.aar",
                 FrameworkPathUtil.getSystemResourceLocation() + "artifacts" +
                         File.separator + "AS" + File.separator + "aar" + File.separator +

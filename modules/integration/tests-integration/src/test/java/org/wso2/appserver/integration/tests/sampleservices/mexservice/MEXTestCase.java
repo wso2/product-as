@@ -1,7 +1,5 @@
 package org.wso2.appserver.integration.tests.sampleservices.mexservice;
 
-import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
-import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.addressing.EndpointReference;
@@ -17,13 +15,14 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
+import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.module.mgt.stub.types.ModuleMetaData;
 
 import java.io.File;
 
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class MEXTestCase extends ASIntegrationTest {
@@ -84,7 +83,7 @@ public class MEXTestCase extends ASIntegrationTest {
                 new ModuleAdminServiceClient(backendURL, sessionCookie);
 
         ModuleMetaData[] moduleMetaData = moduleAdminServiceClient.listModulesForService(serviceName);
-        for (int x = 0; x <= moduleMetaData.length; x++) {
+        for (int x = 0; x < moduleMetaData.length; x++) {
             if (moduleMetaData[x].getModulename().equals("wso2mex")) {
                 moduleExists = true;
                 //engaging the module to the service
