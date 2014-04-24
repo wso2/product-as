@@ -3,12 +3,6 @@
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
 
-    <test name="jaggery-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.jaggery"/>
-        </packages>
-    </test>
-
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
@@ -56,9 +50,16 @@
         </packages>
     </test>
 
-    <!--<test name="carbon-app-tests" preserve-order="true" parallel="false">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="carbon-app-tests" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
+        </classes>
+    </test>
+
+    <test name="jaggery-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.jaggery"/>
+        </packages>
+    </test>
+
 </suite>

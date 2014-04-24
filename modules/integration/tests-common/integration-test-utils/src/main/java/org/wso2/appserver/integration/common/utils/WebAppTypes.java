@@ -18,5 +18,5 @@
 package org.wso2.appserver.integration.common.utils;
 
 public enum WebAppTypes {
-   JAGGERY, WEBAAP;
+   JAGGERY, WEBAPPS;
 }
