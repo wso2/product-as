@@ -25,10 +25,16 @@ import org.wso2.appserver.integration.tests.ASTestConstants;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.integration.common.admin.client.UserManagementClient;
+import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 import org.wso2.carbon.user.mgt.stub.UserAdminUserAdminException;
+import org.xml.sax.SAXException;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 
 public class ASServiceDeployment extends ASIntegrationTest {
@@ -59,9 +65,12 @@ public class ASServiceDeployment extends ASIntegrationTest {
         deleteUserAndRole();
     }
 
-    private void createUserAndRole() throws XPathExpressionException, RemoteException, LoginAuthenticationExceptionException, UserAdminUserAdminException {
+    private void createUserAndRole() throws XPathExpressionException, IOException,
+            LoginAuthenticationExceptionException, UserAdminUserAdminException, URISyntaxException,
+            SAXException, XMLStreamException {
+        LoginLogoutClient loginLogoutClient = new LoginLogoutClient(asServer);
         userManagementClient = new UserManagementClient(asServer.getContextUrls().getBackEndUrl(),
-                asServer.login());
+                loginLogoutClient.login());
 
         String[] permissions = {"/permission/admin/configure/",
                 "/permission/admin/login",

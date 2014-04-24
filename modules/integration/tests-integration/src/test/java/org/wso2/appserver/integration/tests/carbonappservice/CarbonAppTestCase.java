@@ -61,7 +61,6 @@ public class CarbonAppTestCase extends ASIntegrationTest {
     @DataProvider
     private static TestUserMode[][] userModeProvider() {
         return new TestUserMode[][]{
-                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
                 new TestUserMode[]{TestUserMode.SUPER_TENANT_USER},
         };
     }

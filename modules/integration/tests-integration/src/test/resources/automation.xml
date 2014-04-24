@@ -37,7 +37,7 @@
         <!--
          Change this to true if you want to generate coverage statistics
         -->
-        <coverage>true</coverage>
+        <coverage>false</coverage>
         <!--
          Change this to true if you want to enable framework dashboard
         -->
@@ -149,7 +149,7 @@
                 <admin>
                     <user key="admin">
                         <userName>admin</userName>
-                        <password>admin</password>
+                            <password>admin</password>
                     </user>
                 </admin>
                 <users>
@@ -211,44 +211,6 @@
         -->
         <productGroup name="AS" clusteringEnabled="false" default="true">
 
-            <instance name="lbw001" type="lb_worker_manager" nonBlockingTransportEnabled="false">
-                <hosts>
-                    <host type="worker">esb.wso2con.com</host>
-                    <host type="manager">mgt.esb.wso2con.com</host>
-                </hosts>
-                <ports>
-                    <port type="nhttps">8243</port>
-                    <port type="nhttp">8280</port>
-                </ports>
-                <properties>
-
-                </properties>
-            </instance>
-            <instance name="esbm001" type="manager" nonBlockingTransportEnabled="false">
-                <hosts>
-                    <host type="default">localhost</host>
-                </hosts>
-                <ports>
-                    <port type="http">9764</port>
-                    <port type="https">9444</port>
-                    <port type="nhttps">9446</port>
-                    <port type="nhttp">8280</port>
-                </ports>
-                <properties>
-                </properties>
-            </instance>
-
-            <instance name="esbw001" type="worker" nonBlockingTransportEnabled="false">
-                <hosts>
-                    <host type="default">localhost</host>
-                </hosts>
-                <ports>
-                    <port type="http">9765</port>
-                    <port type="https">9445</port>
-                </ports>
-                <properties>
-                </properties>
-            </instance>
             <instance name="appServerInstance0001" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
                     <host type="default">localhost</host>

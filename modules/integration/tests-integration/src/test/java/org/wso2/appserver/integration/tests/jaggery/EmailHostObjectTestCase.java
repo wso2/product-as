@@ -16,6 +16,9 @@
 
 package org.wso2.appserver.integration.tests.jaggery;
 
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Factory;
+import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.appserver.integration.tests.jaggery.utils.JaggeryTestUtil;
 
 import org.apache.commons.logging.Log;
@@ -23,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 
 import java.io.BufferedReader;
 import java.net.URL;
@@ -37,10 +41,24 @@ import static org.testng.Assert.assertNotNull;
 public class EmailHostObjectTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(EmailHostObjectTestCase.class);
+    private TestUserMode userMode;
 
-    @BeforeClass(alwaysRun = true, enabled = false)
+    @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init();
+        super.init(userMode);
+    }
+
+    @Factory(dataProvider = "userModeProvider")
+    public EmailHostObjectTestCase(TestUserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    @DataProvider
+    private static TestUserMode[][] userModeProvider() {
+        return new TestUserMode[][]{
+                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
+                new TestUserMode[]{TestUserMode.TENANT_USER},
+        };
     }
 
     @Test(groups = {"wso2.as"},
@@ -48,7 +66,7 @@ public class EmailHostObjectTestCase extends ASIntegrationTest {
     public void testEmailJaggery() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(webAppURL + "/testapp/email.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/email.jag");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 

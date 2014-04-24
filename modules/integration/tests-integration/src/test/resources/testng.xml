@@ -3,31 +3,58 @@
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
 
-    <test name="as-integration-pox-security-tests" preserve-order="true" parallel="false">
-    <!--<packages>-->
-        <!--<package name="org.wso2.appserver.integration.tests.aarservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.carbonappservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.deployedmoduleservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.helloworldsampleservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.jarservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.jaxwssampleservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.jndi"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.jsonservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.loginlogoutservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.mtomservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.qualityofservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.rest"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.sampleservices.*"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.security"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.springservice"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.webapp.*"/>-->
-        <!--<package name="org.wso2.appserver.integration.tests.webappsampleservice"/>-->
-    <!--</packages>-->
+    <test name="webapp-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
+            <package name="org.wso2.appserver.integration.tests.webapp.*"/>
+        </packages>
+    </test>
 
-        <classes>
-            <class name="org.wso2.appserver.integration.tests.aarservice.AARServiceTestCase"/>
-            <!--<class name="org.wso2.appserver.integration.tests.rest.test.poxsecurity.POXSecurityVerifyPostMethod"/>-->
-        </classes>
-</test>
+    <test name="module-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.deployedmoduleservice"/>
+        </packages>
+    </test>
+
+    <test name="sample-service-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.sampleservices.*"/>
+        </packages>
+    </test>
+
+    <test name="rest-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.rest.test.poxsecurity"/>
+        </packages>
+    </test>
+
+    <test name="carbon-app-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.carbonappservice"/>
+        </packages>
+    </test>
+
+    <test name="services-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.springservice"/>
+            <package name="org.wso2.appserver.integration.tests.jarservice"/>
+            <package name="org.wso2.appserver.integration.tests.aarservice"/>
+            <package name="org.wso2.appserver.integration.tests.commodityquoteservice"/>
+            <package name="org.wso2.appserver.integration.tests.helloworldsampleservice"/>
+            <package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>
+            <package name="org.wso2.appserver.integration.tests.jndi"/>
+            <package name="org.wso2.appserver.integration.tests.jsonservice"/>
+            <package name="org.wso2.appserver.integration.tests.mtomservice"/>
+            <package name="org.wso2.appserver.integration.tests.qualityofservice"/>
+            <package name="org.wso2.appserver.integration.tests.security"/>
+        </packages>
+    </test>
+
+
+    <test name="jaggery-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.jaggery"/>
+        </packages>
+    </test>
+
 </suite>

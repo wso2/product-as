@@ -21,11 +21,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
 import org.wso2.appserver.integration.common.clients.ServiceAdminClient;
+import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.integration.common.admin.client.SecurityAdminServiceClient;
 import org.wso2.carbon.integration.common.admin.client.ServerAdminClient;
+import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 import org.wso2.carbon.security.mgt.stub.config.SecurityAdminServiceSecurityConfigExceptionException;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -41,28 +43,47 @@ public class ASIntegrationTest {
     protected String backendURL;
     protected String webAppURL;
     protected SecurityAdminServiceClient securityAdminServiceClient;
+    protected LoginLogoutClient loginLogoutClient;
 
     protected void init() throws Exception {
         asServer = new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN);
-        asServer.getDefaultInstance().getHosts();
-        asServer.getUser();
-        sessionCookie = asServer.login();
+        loginLogoutClient = new LoginLogoutClient(asServer);
+        sessionCookie = loginLogoutClient.login();
         backendURL = asServer.getContextUrls().getBackEndUrl();
         webAppURL = asServer.getContextUrls().getWebAppURL();
     }
 
     protected void init(TestUserMode testUserMode) throws Exception {
         asServer = new AutomationContext("AS", testUserMode);
-        sessionCookie = asServer.login();
+        loginLogoutClient = new LoginLogoutClient(asServer);
+        sessionCookie = loginLogoutClient.login();
         backendURL = asServer.getContextUrls().getBackEndUrl();
         webAppURL = asServer.getContextUrls().getWebAppURL();
     }
 
     protected void init(String domainKey, String userKey) throws Exception {
         asServer = new AutomationContext("AS", "appServerInstance0001", domainKey, userKey);
-        sessionCookie = asServer.login();
+        loginLogoutClient = new LoginLogoutClient(asServer);
+        sessionCookie = loginLogoutClient.login();
         backendURL = asServer.getContextUrls().getBackEndUrl();
         webAppURL = asServer.getContextUrls().getWebAppURL();
+    }
+
+    protected String getWebAppURL(WebAppTypes webAppType) throws XPathExpressionException {
+
+        if (webAppType.toString().equalsIgnoreCase(ASIntegrationConstants.JAGGERY_APPLICATION) && !
+                asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
+            webAppURL = asServer.getContextUrls().getWebAppURL() + "/jaggeryapps";
+
+        } else if (webAppType.toString().equalsIgnoreCase(ASIntegrationConstants.WEB_APPLICATION) && !
+                asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
+            webAppURL = asServer.getContextUrls().getWebAppURL() + "/webapps";
+
+        } else if(asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)){
+            webAppURL = asServer.getContextUrls().getWebAppURL();
+        }
+
+        return webAppURL;
     }
 
     protected String getServiceUrl(String serviceName) throws XPathExpressionException {
@@ -124,18 +145,13 @@ public class ASIntegrationTest {
     protected void applySecurity(String scenarioNumber, String serviceName, String userGroup)
             throws RemoteException, InterruptedException, XPathExpressionException,
             SecurityAdminServiceSecurityConfigExceptionException {
-
         securityAdminServiceClient =
                 new SecurityAdminServiceClient(backendURL, sessionCookie);
-
         String keyStorePath = FrameworkPathUtil.getSystemResourceLocation()
                 + asServer.getConfigurationValue("//keystore/fileName/text()");
-
         String keyStoreName = new File(keyStorePath).getName();
-
         securityAdminServiceClient.applySecurity(serviceName, scenarioNumber, new String[]{userGroup},
                 new String[]{keyStoreName}, keyStoreName);
-
         Thread.sleep(2000);//wait for security application
     }
 

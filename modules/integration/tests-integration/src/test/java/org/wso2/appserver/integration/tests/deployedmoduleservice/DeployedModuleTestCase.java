@@ -17,13 +17,16 @@
 */
 package org.wso2.appserver.integration.tests.deployedmoduleservice;
 
-import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.ModuleAdminServiceClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.module.mgt.stub.types.ModuleMetaData;
 
 import java.util.HashSet;
@@ -32,35 +35,43 @@ import java.util.HashSet;
   This class can be used to test whether module has been correctly deployed
  */
 public class DeployedModuleTestCase extends ASIntegrationTest {
-
     private static final Log log = LogFactory.getLog(DeployedModuleTestCase.class);
+    private TestUserMode userMode;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init();
+        super.init(userMode);
+    }
+
+    @Factory(dataProvider = "userModeProvider")
+    public DeployedModuleTestCase(TestUserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    @DataProvider
+    private static TestUserMode[][] userModeProvider() {
+        return new TestUserMode[][]{
+                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
+                new TestUserMode[]{TestUserMode.TENANT_USER},
+        };
     }
 
     @Test(groups = "wso2.as", description = "Check modules")
     public void checkDeployedModules() throws Exception {
         ModuleAdminServiceClient moduleAdminServiceClient =
                 new ModuleAdminServiceClient(backendURL, sessionCookie);
-
         ModuleMetaData[] moduleMetaDataArr = moduleAdminServiceClient.getModuleList();
-
         HashSet<String> moduleDataSet = new HashSet<String>(moduleMetaDataArr.length);
-
-        for (int x = 0; x < moduleMetaDataArr.length; x++) {
-            moduleDataSet.add(moduleMetaDataArr[x].getModulename());
+        for (ModuleMetaData aModuleMetaDataArr : moduleMetaDataArr) {
+            moduleDataSet.add(aModuleMetaDataArr.getModulename());
         }
 
-        Assert.assertTrue(moduleDataSet.contains("wso2xfer"));
-        Assert.assertTrue(moduleDataSet.contains("rahas"));
-        Assert.assertTrue(moduleDataSet.contains("rampart"));
-        Assert.assertTrue(moduleDataSet.contains("sandesha2"));
-        Assert.assertTrue(moduleDataSet.contains("wso2caching"));
-        Assert.assertTrue(moduleDataSet.contains("addressing"));
-        Assert.assertTrue(moduleDataSet.contains("wso2mex"));
-        Assert.assertTrue(moduleDataSet.contains("wso2throttle"));
+        Assert.assertTrue(moduleDataSet.contains("rahas"), "rahas module not found");
+        Assert.assertTrue(moduleDataSet.contains("rampart"), "rampart module not found");
+        Assert.assertTrue(moduleDataSet.contains("sandesha2"), "sandesha module not found");
+        Assert.assertTrue(moduleDataSet.contains("wso2caching"), "wso2caching module not found");
+        Assert.assertTrue(moduleDataSet.contains("addressing"), "addressing module not found");
+        Assert.assertTrue(moduleDataSet.contains("wso2throttle"), "wso2throttle module not found");
 
         log.info("End of Deployed module test case");
     }

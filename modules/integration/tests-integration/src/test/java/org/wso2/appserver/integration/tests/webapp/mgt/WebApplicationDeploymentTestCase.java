@@ -63,7 +63,7 @@ public class WebApplicationDeploymentTestCase extends ASIntegrationTest {
     public void testInvokeWebApp() throws Exception {
         String webAppURLLocal = webAppURL + "/appServer-valied-deploymant-1.0.0";
         HttpClientUtil client = new HttpClientUtil();
-        OMElement omElement = client.get(webAppURL);
+        OMElement omElement = client.get(webAppURLLocal);
         assertEquals(omElement.toString(), "<status>success</status>", "Web app invocation fail");
     }
 

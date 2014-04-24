@@ -37,10 +37,13 @@ import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.axis2client.AxisServiceClient;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Factory;
 
 import static org.testng.Assert.assertTrue;
 
@@ -48,10 +51,17 @@ public class LB71TransportHeaderReaderTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(LB71TransportHeaderReaderTestCase.class);
     private static String serviceName = "TransportHeaderReaderService";
+    private TestUserMode userMode;
+
+
+    @Factory(dataProvider = "userModeProvider")
+    public LB71TransportHeaderReaderTestCase(TestUserMode userMode) {
+        this.userMode = userMode;
+    }
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init();
+        super.init(userMode);
     }
 
     @AfterClass(alwaysRun = true)
@@ -123,6 +133,14 @@ public class LB71TransportHeaderReaderTestCase extends ASIntegrationTest {
                 {"UPPERCASE"},
                 {"lowercase"},
                 {"CamelCase"},
+        };
+    }
+
+    @DataProvider
+    private static TestUserMode[][] userModeProvider() {
+        return new TestUserMode[][]{
+                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
+                new TestUserMode[]{TestUserMode.TENANT_USER},
         };
     }
 }

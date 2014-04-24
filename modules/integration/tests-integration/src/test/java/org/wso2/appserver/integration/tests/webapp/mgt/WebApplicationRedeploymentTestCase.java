@@ -71,8 +71,8 @@ public class WebApplicationRedeploymentTestCase extends ASIntegrationTest {
                 backendURL, sessionCookie, webAppName)
                 , "Web Application Redeployment failed. Application not deployed");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Started", "State mismatched after redeploying web application");
-        String webAppURLLoca =  webAppURL + "/" + webAppPath;
-        assertEquals(getPage(webAppURL).getData().trim(), "<response>Original Content changed</response>"
+        String webAppURLLocal =  webAppURL + "/" + webAppPath;
+        assertEquals(getPage(webAppURLLocal).getData().trim(), "<response>Original Content changed</response>"
                 , "Changes done to web app not reflected after redeployment");
     }
 
