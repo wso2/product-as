@@ -72,14 +72,14 @@ public class ASIntegrationTest {
     protected String getWebAppURL(WebAppTypes webAppType) throws XPathExpressionException {
 
         if (webAppType.toString().equalsIgnoreCase(ASIntegrationConstants.JAGGERY_APPLICATION) && !
-                asServer.getTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
+                asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
             webAppURL = asServer.getContextUrls().getWebAppURL() + "/jaggeryapps";
 
         } else if (webAppType.toString().equalsIgnoreCase(ASIntegrationConstants.WEB_APPLICATION) && !
-                asServer.getTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
+                asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
             webAppURL = asServer.getContextUrls().getWebAppURL() + "/webapps";
 
-        } else if(asServer.getTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)){
+        } else if(asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)){
             webAppURL = asServer.getContextUrls().getWebAppURL();
         }
 

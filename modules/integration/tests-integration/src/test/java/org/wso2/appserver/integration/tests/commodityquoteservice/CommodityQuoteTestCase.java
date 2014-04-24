@@ -69,7 +69,7 @@ public class CommodityQuoteTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "upload CommodityQuoteService.aar file and verify" +
             " deployment")
-    public void comQuoSerUpload() throws Exception {
+    public void testComQuoSerUpload() throws Exception {
         AARServiceUploaderClient aarServiceUploaderClient
                 = new AARServiceUploaderClient(backendURL, sessionCookie);
         aarServiceUploaderClient.uploadAARFile("CommodityQuoteService.aar",
@@ -81,7 +81,7 @@ public class CommodityQuoteTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = {"wso2.as"}, description = "invoke the service",
-            dependsOnMethods = "comQuoSerUpload")
+            dependsOnMethods = "testComQuoSerUpload")
     public void testGetQuoteRequest() throws Exception {
         AxisServiceClient axisServiceClient = new AxisServiceClient();
         String endpoint = asServer.getContextUrls().getServiceUrl() + "/CommodityQuote";
