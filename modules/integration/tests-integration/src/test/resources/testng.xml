@@ -50,11 +50,6 @@
         </packages>
     </test>
 
-    <test name="carbon-app-tests" preserve-order="true" parallel="false">
-        <classes>
-            <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
-        </classes>
-    </test>
 
     <test name="jaggery-tests" preserve-order="true" parallel="false">
         <packages>
