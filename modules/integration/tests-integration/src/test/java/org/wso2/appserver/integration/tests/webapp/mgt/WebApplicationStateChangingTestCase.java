@@ -55,7 +55,7 @@ public class WebApplicationStateChangingTestCase extends ASIntegrationTest {
                 backendURL, sessionCookie, webAppName)
                 , "Web Application Deployment failed");
         String webAppURLLocal = webAppURL + "/" + webAppName;
-        assertEquals(getPage(webAppURL).getData(), "<status>success</status>", "Web app invocation fail");
+        assertEquals(getPage(/*webAppURL*/webAppURLLocal).getData(), "<status>success</status>", "Web app invocation fail");
     }
 
     @Test(groups = "wso2.as", description = "Stop web application")

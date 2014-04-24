@@ -17,6 +17,7 @@
 */
 package org.wso2.appserver.integration.tests.jarservice;
 
+import org.testng.annotations.*;
 import org.wso2.appserver.integration.common.clients.JARServiceUploaderClient;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
@@ -24,10 +25,8 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.axis2client.AxisServiceClient;
 
@@ -45,10 +44,24 @@ import static org.testng.Assert.assertTrue;
 public class JARServiceTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(JARServiceTestCase.class);
     private static final String jarService = "JarService";
+    private TestUserMode userMode;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init();
+        super.init(userMode);
+    }
+
+    @Factory(dataProvider = "userModeProvider")
+    public JARServiceTestCase(TestUserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    @DataProvider
+    private static TestUserMode[][] userModeProvider() {
+        return new TestUserMode[][]{
+                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
+                new TestUserMode[]{TestUserMode.TENANT_USER},
+        };
     }
 
     @Test(groups = "wso2.as", description = "Upload jar service and verify deployment")

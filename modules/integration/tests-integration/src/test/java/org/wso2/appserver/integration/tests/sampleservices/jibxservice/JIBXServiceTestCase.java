@@ -17,7 +17,6 @@
 */
 package org.wso2.appserver.integration.tests.sampleservices.jibxservice;
 
-import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -27,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.axis2client.AxisServiceClient;
@@ -46,7 +46,7 @@ public class JIBXServiceTestCase extends ASIntegrationTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
-        endpoint = getServiceUrl("/LibraryService");
+        endpoint = getServiceUrl("LibraryService");
     }
 
     @AfterClass(alwaysRun = true)
