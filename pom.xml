@@ -438,7 +438,7 @@
         <imp.pkg.version.javax.servlet>[2.6.0, 3.0.0)</imp.pkg.version.javax.servlet>
 
         <bcprov-jdk15.version>132</bcprov-jdk15.version>
-        <rampart.version>1.6.1-wso2v12</rampart.version>
+        <rampart.version>1.6.1-wso2v13-SNAPSHOT</rampart.version>
 
         <stub.version>4.3.0-SNAPSHOT</stub.version>
         <jaggery.stub.version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</jaggery.stub.version>
