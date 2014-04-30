@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="as-server-setup-verifier">
+<suite name="as-server-startup">
     <parameter name="useDefaultListeners" value="false"/>
     <listeners>
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestExecutionListener"/>
@@ -10,15 +10,11 @@
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
     </listeners>
 
-    <test name="ms-integration-tests" preserve-order="true" parallel="false">
-        <!--<classes>-->
-            <!--&lt;!&ndash;<class name="org.wso2.appserver.integration.tests.AARServiceTestCase"/>&ndash;&gt;-->
-            <!--&lt;!&ndash;<class name="org.wso2.carbon.as.integration.tests.OSGIBundleStatusTestCase"/>&ndash;&gt;-->
-        <!--</classes>-->
-
-        <!--<packages>-->
-            <!--<package name="org.wso2.appserver.integration.tests.aarservice"/>-->
-        <!--</packages>-->
+    <test name="as-integration-tests-server-mgt" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.server.mgt.ASServerStartupTestCase"/>
+            <class name="org.wso2.appserver.integration.tests.server.mgt.OSGIServerBundleStatusTestCase"/>
+        </classes>
     </test>
 
 </suite>
