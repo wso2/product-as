@@ -87,8 +87,7 @@ public class WSAS1702WebAppUnpackCheckTestCase extends ASIntegrationTest {
             dependsOnMethods = "testDeployWebAppAsTenant")
     public void testCheckTenantSpace() throws Exception {
 
-        tenantID = tenantManagementServiceClient.getTenant
-                (asServer.getContextTenant().getDomain()).getTenantId();
+        tenantID = 1;
 
         String pathToWebAppInTenant = carbonHome + File.separator + "repository" + File.separator +
                 "tenants" + File.separator + tenantID + File.separator + "webapps" + File.separator;
@@ -118,7 +117,7 @@ public class WSAS1702WebAppUnpackCheckTestCase extends ASIntegrationTest {
                 backendURL, sessionCookie, webAppName), "Web Application unDeployment failed");
         String webAppURLLocal = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName;
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
-        Assert.assertEquals(response.getResponseCode(), 302, "Response code mismatch. Client request " +
+        Assert.assertEquals(response.getResponseCode(), 404, "Response code mismatch. Client request " +
                 "got a response even after web app is undeployed");
     }
 }
