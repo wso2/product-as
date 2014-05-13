@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.wso2.appserver.integration.tests.webapp.mgt.tmp;
+package org.wso2.appserver.integration.tests.webapp.mgt;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -72,7 +72,7 @@ public class WSAS1716FaultyWebAppUndeployTestCase extends ASIntegrationTest {
 
         //delete the war file via file system
         FileManager.deleteFile(pathToWebApp + webAppFileName);
-        assertTrue(WebAppDeploymentUtil.isFaultyWebApplicationUnDeployed`(
+        assertTrue(WebAppDeploymentUtil.isFaultyWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName), "Web Application unDeployment failed");
 
         assertFalse(new File(pathToWebApp + webAppName).exists(),
