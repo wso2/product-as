@@ -6,7 +6,9 @@
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
-            <package name="org.wso2.appserver.integration.tests.webapp.*"/>
+            <package name="org.wso2.appserver.integration.tests.webapp.*">
+                <exclude name="org.wso2.appserver.integration.tests.webapp.virtualhost"></exclude>
+            </package>
         </packages>
     </test>
 
