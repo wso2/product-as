@@ -13,7 +13,8 @@
     <test name="as-integration-tests-server-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.appserver.integration.tests.server.mgt.ASServerStartupTestCase"/>
-            <class name="org.wso2.appserver.integration.tests.server.mgt.OSGIServerBundleStatusTestCase"/>
+            <!--<class name="org.wso2.appserver.integration.tests.server.mgt.OSGIServerBundleStatusTestCase"/>-->
+            <class name="org.wso2.appserver.integration.tests.wsdl2java.HelloServiceCodeGenTestCase"/>
         </classes>
     </test>
 
