@@ -265,7 +265,7 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
-        <dependency>
+       <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
         </dependency>
