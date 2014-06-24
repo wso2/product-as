@@ -3,6 +3,12 @@
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
 
+    <test name="protobuf-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.protobufbinaryservice"/>
+
+        </packages>
+    </test>
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
@@ -56,5 +62,4 @@
             <package name="org.wso2.appserver.integration.tests.jaggery"/>
         </packages>
     </test>
-
 </suite>

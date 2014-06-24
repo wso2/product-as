@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<pbsconfig xmlns="http://wso2.org/projects/as/pbs.xml" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:schemaLocation="http://wso2.org/projects/as/pbs.xml pbsConfigSchema.xsd">
+
+	<!-- Enable RPC Binary Server -->
+	<enablePbsServer>true</enablePbsServer>
+	
+	<serverSettings>
+		 
+		 
+		 
+		<!--
+		 * Details of the RPC binary server
+		-->
+	 	<hostName>localhost</hostName>
+	   	<serverPort>9001</serverPort>
+
+		<!--
+			SSL configuration
+			If true keystore and truststore information will be retrieved from carbon
+		-->		
+	 	<enableSSL>false</enableSSL>
+
+		<!--
+		  Binary server thread pool configuration
+		  corePoolSize - the number of threads to keep in the pool, even if they are idle
+		  maxPoolSize - the maximum number of threads to allow in the pool
+		-->
+		<serverCallExecutorThreadPool>
+			<corePoolSize>2</corePoolSize>
+			<maxPoolSize>1000</maxPoolSize>
+		</serverCallExecutorThreadPool>
+
+		<!--
+			TimeoutExecutor uses a pool of threads to handle the timeout of client and server side RPC calls
+			corePoolSize - the number of threads to keep in the pool, even if they are idle
+		  	maxPoolSize - the maximum number of threads to allow in the pool
+		  	keepAliveTime -  when the number of threads is greater than	the corePoolSize, this is the maximum 
+		  						time that excess idle threads will wait for new tasks before terminating in SECONDS
+		-->
+		<timeoutExecutorThreadPool>
+			<corePoolSize>2</corePoolSize>
+			<maxPoolSize>100</maxPoolSize>
+			<keepAliveTime>30</keepAliveTime>
+		</timeoutExecutorThreadPool>
+		
+		<!--
+		 TimeoutChecker Monitors all RPC client and server calls for all RpcChannels
+		 timeoutCheckerThreadPool contains configuration of timeoutchecker
+		 corePoolSize - the number of threads to keep in the pool, even if they are idle
+		 periodMs - Time period in MILLISECONDS, to monitor (check timeouts) periodically (this timeout check process
+		 					 cancel request on timeout) 
+		-->
+		<timeoutCheckerThreadPool>
+			<corePoolSize>1</corePoolSize>
+			<period>1000</period>
+		</timeoutCheckerThreadPool>
+
+	</serverSettings>
+
+	<transportSettings>
+
+		<!--
+			Netty framework TCP transport configuration
+			acceptors - threadpool to accept incomming connections
+			channelHandlers - handles the traffic of the accepted connection once the 
+					acceptors accepts the connection and registers the accepted 
+					connection to a child handler 
+			SO_SNDBUF - Send buffer size (socket option) in bytes
+			SO_RCVBUF - receive buffer size (socket option) in bytes
+		-->
+		<acceptors>
+			<poolSize>10</poolSize>	
+			<SO_SNDBUF>1048576</SO_SNDBUF>
+			<SO_RCVBUF>1048576</SO_RCVBUF>	
+		</acceptors>
+		<channelHandlers>
+			<poolSize>30</poolSize>	
+			<SO_SNDBUF>1048576</SO_SNDBUF>
+			<SO_RCVBUF>1048576</SO_RCVBUF>	
+		</channelHandlers>
+
+		<!--
+			to disable the Nagle buffering algorithm
+		-->
+		<TCP_NODELAY>true</TCP_NODELAY>
+
+	</transportSettings>
+
+</pbsconfig>
+
+

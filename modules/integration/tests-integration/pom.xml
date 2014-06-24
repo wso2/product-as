@@ -15,6 +15,7 @@
     <artifactId>org.wso2.appserver.integration.tests</artifactId>
     <packaging>jar</packaging>
 
+
     <build>
         <plugins>
             <plugin>
@@ -22,6 +23,10 @@
                 <inherited>false</inherited>
                 <configuration>
                     <argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m</argLine>
+                   <!-- <argLine>-Xms512m -Xmx1024m -XX:MaxPermSize=128m -Xmx1024m -XX:PermSize=256m
+                        -XX:MaxPermSize=512m -Xdebug -Xnoagent -Djava.compiler=NONE
+                        -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
+                    </argLine>-->
 
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-server-mgt.xml</suiteXmlFile>
@@ -231,7 +236,22 @@
 
     </build>
 
+    <properties>
+        <netty.version>4.0.15.Final</netty.version>
+        <protobufprcpro.version>3.2.2</protobufprcpro.version>
+    </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.6.0</version>
+        </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>SecVerifier</artifactId>
@@ -264,6 +284,18 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.protobuf-rpc-pro</groupId>
+            <artifactId>protobuf-rpc-pro-duplex</artifactId>
+            <version>3.2.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.5.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
