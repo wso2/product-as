@@ -1,0 +1,78 @@
+option java_generic_services = true;
+option java_package = "org.wso2.appserver.integration.tests.protobufbinaryservice";
+option java_outer_classname = "StockQuoteService";
+
+message GetQuote{
+
+	required string symbol = 1;
+
+}
+
+message GetFullQuote{
+
+	required string symbol = 1;
+
+}
+
+message GetQuoteResponse{
+
+	required string symbol = 1;
+	required double last = 2;
+	required string lastTradeTimestamp = 3;
+	required double change = 4;
+	required double open = 5;
+	required double high = 6;
+	required double low = 7;
+	required int32 volume = 8;
+	required double marketCap = 9;
+	required double prevClose = 10;
+	required double percentageChange = 11;
+	required double earnings = 12;
+	required double peRatio = 13;
+	required string name = 14;
+
+}
+
+
+
+message GetFullQuoteResponse{
+message TradingDay{
+ required int32 day=1;
+ required GetQuoteResponse quote =2;
+}
+
+
+	repeated TradingDay tradeHistory=1;
+
+}
+
+message GetMarketActivity{
+
+repeated string symbol=1;
+}
+
+message GetMarketActivityResponse{
+
+repeated GetQuoteResponse  quotes=1;
+}
+
+message PlaceOrder{
+required string symbol = 1;
+required int32 quantity = 2;
+required double price = 3;
+}
+
+message Void{
+
+}
+
+
+service SimpleStockQuoteService{
+	rpc getQuote(GetQuote) returns (GetQuoteResponse);
+
+    rpc getFullQuote(GetFullQuote) returns (GetFullQuoteResponse);
+
+    rpc getMarketActivity(GetMarketActivity) returns (GetMarketActivityResponse);
+
+    rpc placeOrder(PlaceOrder) returns (Void);
+}
