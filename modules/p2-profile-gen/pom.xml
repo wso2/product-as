@@ -315,6 +315,21 @@
                                 </featureArtifactDef>
                                 <!-- end of as runtime features-->
 
+                                <!-- protobuf binary service features-->
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.protobuf.client.server.feature:1.0.0-SNAPSHOT
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.protobuf.listener.server.feature:1.0.0-SNAPSHOT
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.protobuf.registry.server.feature:1.0.0-SNAPSHOT
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.protobuf.annotation.server.feature:1.0.0-SNAPSHOT
+                                </featureArtifactDef>
+                                <!-- end of protobuf binary service features-->
+
                             </featureArtifacts>
                         </configuration>
                     </execution>
@@ -781,6 +796,27 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>-->
 
+                                <!-- protobuf binary service feature-->
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.client.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.listener.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.registry.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.annotation.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+                                <!-- end of protobuf binary service feature-->
+
+
                             </features>
                         </configuration>
                     </execution>
@@ -1118,6 +1154,27 @@
                                 </feature>
                                 <!-- end of as -runtime features -->
 
+                                <!-- protobuf binary service feature-->
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.client.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.listener.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.registry.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.protobuf.annotation.server.feature.group</id>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                </feature>
+                                <!-- end of protobuf binary service feature-->
+
+                                
                             </features>
                         </configuration>
                     </execution>
