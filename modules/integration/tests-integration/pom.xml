@@ -265,6 +265,15 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
+       <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.xfer</groupId>
+            <artifactId>wso2xfer</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
 </project>

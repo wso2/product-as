@@ -7,7 +7,6 @@
         <packages>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
             <package name="org.wso2.appserver.integration.tests.webapp.*">
-                <exclude name="org.wso2.appserver.integration.tests.webapp.virtualhost"></exclude>
             </package>
         </packages>
     </test>
@@ -49,6 +48,13 @@
             <package name="org.wso2.appserver.integration.tests.mtomservice"/>
             <package name="org.wso2.appserver.integration.tests.qualityofservice"/>
             <package name="org.wso2.appserver.integration.tests.security"/>
+        </packages>
+    </test>
+
+
+    <test name="wsdl2java-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
         </packages>
     </test>
 
