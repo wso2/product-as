@@ -677,6 +677,14 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers</outputDirectory>
             <fileMode>644</fileMode>
         </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/application-authentication.xml
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+            <fileMode>644</fileMode>
+        </file>
+
 
         <!-- Changes related to Carbon kernel 4.2.0 patches -->
         <!-- Files WSO2-CARBON-PATCH-4.2.0-0001 - Start -->
