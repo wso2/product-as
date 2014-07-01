@@ -51,18 +51,21 @@
         </packages>
     </test>
 
-
+<!--
+    FIXME: WSAS-1738
     <test name="wsdl2java-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
         </packages>
     </test>
+-->
 
-
+<!--
+   FIXME: WSAS-1746
     <test name="jaggery-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.jaggery"/>
         </packages>
     </test>
-
+-->
 </suite>
