@@ -1,20 +1,3 @@
-/*
-*Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-*WSO2 Inc. licenses this file to you under the Apache License,
-*Version 2.0 (the "License"); you may not use this file except
-*in compliance with the License.
-*You may obtain a copy of the License at
-*
-*http://www.apache.org/licenses/LICENSE-2.0
-*
-*Unless required by applicable law or agreed to in writing,
-*software distributed under the License is distributed on an
-*"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-*KIND, either express or implied.  See the License for the
-*specific language governing permissions and limitations
-*under the License.
-*/
 package org.wso2.appserver.integration.tests.webapp.virtualhost;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -33,19 +16,26 @@ import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 
 import static org.testng.Assert.assertTrue;
+
 
 /*
 *  catalina-server.xml should have a virtual host entry as follows to pass this test case
 *   <Host name="www.vhost.com" unpackWARs="true" deployOnStartup="false" autoDeploy="false" appBase="${carbon.home}/repository/deployment/server/dir/"/>
+*   <Host name="www.vhost1.com" unpackWARs="true" deployOnStartup="false" autoDeploy="false" appBase="${carbon.home}/repository/deployment/server/dir1/"/>
 */
 
-public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTest {
+public class DeployWebappsWithSameNameTestCase extends ASIntegrationTest {
+
+    private static int GET_RESPONSE_DELAY = 30 * 1000;
     private final String webAppFileName = "appServer-valied-deploymant-1.0.0.war";
     private final String webAppName = "appServer-valied-deploymant-1.0.0";
-    private final String appBaseDir = "dir";
-    private final String vhostName = "www.vhost.com";
+    private final String appBaseDir1 = "dir";
+    private final String appBaseDir2 = "dir1";
+    private final String vhostName1 = "www.vhost.com";
+    private final String vhostName2 = "www.vhost1.com";
     private ServerConfigurationManager serverManager;
     private WebAppAdminClient webAppAdminClient;
 
@@ -55,8 +45,9 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
         serverManager = new ServerConfigurationManager(asServer);
 
         //restart server with virtual hosts
+        //TODO replace server.xml inside afterclass (in both test classes)
         File sourceFile = new File(TestConfigurationProvider.getResourceLocation()+File.separator+
-                "artifacts"+File.separator+"AS"+File.separator+"tomcat"+File.separator+"catalina-server.xml");
+                "artifacts"+File.separator+"AS"+File.separator+"tomcat"+File.separator+"appbase2"+File.separator+"catalina-server.xml");
         File targetFile = new File(System.getProperty(ServerConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+
                 File.separator+"tomcat"+File.separator+"catalina-server.xml");
         serverManager.applyConfigurationWithoutRestart(sourceFile,targetFile, true);
@@ -64,65 +55,89 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
 
         super.init();
         webAppAdminClient = new WebAppAdminClient(backendURL,sessionCookie);
-        }
+    }
 
     @AfterTest(alwaysRun = true)
     public void revertVirtualhostConfiguration() throws Exception {
-            //reverting changes may fail due to  jira issue - WSAS-1736
-            //reverting the changes done to appsever
-            if (serverManager != null) {
-                serverManager.restoreToLastConfiguration();
-            }
-
+        //reverting changes may fail due to  jira issue - WSAS-1736
+        //reverting the changes done to appsever
+        if (serverManager != null) {
+            serverManager.restoreToLastConfiguration();
+        }
     }
 
     @Test
-    public void testWebApplicationDeployment() throws Exception {
-        uploadWarFileToAppBase();
+    public void testWebApplication1Deployment() throws Exception {
+        uploadWarFileToAppBase(appBaseDir1);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
                 backendURL, sessionCookie, webAppName)
                 , "Web Application Deployment failed");
     }
 
-    @Test(dependsOnMethods = "testWebApplicationDeployment")
-    public void testInvokeWebApplication() throws Exception {
+    @Test
+    public void testWebApplication2Deployment() throws Exception {
+        uploadWarFileToAppBase(appBaseDir2);
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
+                backendURL, sessionCookie, webAppName)
+                , "Web Application Deployment failed");
+    }
 
-        GetMethod getRequest = getHttpRequest();
-        String response = getRequest.getResponseBodyAsString();
+    @Test(dependsOnMethods = {"testWebApplication1Deployment","testWebApplication2Deployment"})
+    public void testInvokeWebApplications() throws Exception {
 
-        assertTrue(response.equals("<status>success</status>\n"), "Web app invocation fail");
+        GetMethod getRequest1 = getHttpRequest(vhostName1);
+        String response1 = getRequest1.getResponseBodyAsString();
+
+        GetMethod getRequest2 = getHttpRequest(vhostName2);
+        String response2 = getRequest2.getResponseBodyAsString();
+
+        assertTrue((response1.equals("<status>success</status>\n")) &&
+                (response2.equals("<status>success</status>\n")), "Web app invocation fail");
 
     }
 
-    @Test (dependsOnMethods = {"testWebApplicationDeployment","testInvokeWebApplication"})
-    public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(vhostName+":"+webAppFileName);
+    @Test (dependsOnMethods = {"testInvokeWebApplications"})
+    public void testDeleteWebApplications() throws Exception {
+        webAppAdminClient.deleteWebAppFile(vhostName1+":"+webAppFileName);
+        webAppAdminClient.deleteWebAppFile(vhostName2+":"+webAppFileName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                 "Web Application unDeployment failed");
 
-        GetMethod getRequest = getHttpRequest();
-        int statusCode = getRequest.getStatusCode();
-        Assert.assertEquals(statusCode, 404, "Response code mismatch. Client request " +
-                "got a response even after web app is undeployed");
+        GetMethod getRequest1 = getHttpRequest(vhostName1);
+        int statusCode1 = getRequest1.getStatusCode();
+
+        GetMethod getRequest2 = getHttpRequest(vhostName2);
+        int statusCode2 = getRequest2.getStatusCode();
+        Assert.assertEquals(statusCode1, 404, "Response code mismatch. Client request " +
+                "got a response even after web app 1 is undeployed");
+        Assert.assertEquals(statusCode2,404,"Response code mismatch. Client request" +
+                "got a response even after web app 2 is undeployed");
     }
 
-    private void uploadWarFileToAppBase() throws IOException {
+    private void uploadWarFileToAppBase(String appBaseDir) throws IOException {
         //add war file to a virtual host appBase
         String sourceLocation = TestConfigurationProvider.getResourceLocation()+File.separator+"artifacts"+
                 File.separator+"AS"+File.separator+"war"+File.separator+webAppFileName;
         String targetLocation = System.getProperty(ServerConstants.CARBON_HOME)+ File.separator + "repository" +
                 File.separator +"deployment"+File.separator+"server"+File.separator+appBaseDir;
-        FileManager.copyResourceToFileSystem(sourceLocation,targetLocation,webAppFileName);
+        FileManager.copyResourceToFileSystem(sourceLocation, targetLocation, webAppFileName);
     }
 
-    private GetMethod getHttpRequest() throws IOException {
+    private GetMethod getHttpRequest(String vhostName) throws IOException {
         String webappUrl = webAppURL + "/" +webAppName+"/";
         HttpClient client = new HttpClient();
         GetMethod getRequest = new GetMethod(webappUrl);
         //set Host tag value of request header to $vhostName
         getRequest.getParams().setVirtualHost(vhostName);
-        client.executeMethod(getRequest);
+        Calendar startTime = Calendar.getInstance();
+        long time;
+        while ((time = (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis())) < GET_RESPONSE_DELAY){
+            client.executeMethod(getRequest);
+            if(!getRequest.getResponseBodyAsString().isEmpty()){
+                return getRequest;
+            }
+        }
 
         return getRequest;
     }
