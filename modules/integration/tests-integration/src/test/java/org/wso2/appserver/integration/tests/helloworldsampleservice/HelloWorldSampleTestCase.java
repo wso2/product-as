@@ -62,9 +62,8 @@ public class HelloWorldSampleTestCase extends ASIntegrationTest {
         log.info("HelloWorld.aar service uploaded successfully");
     }
 
-    //FIXME: WSAS-1747
     @Test(groups = "wso2.as", description = "invoke HelloWorld service without security",
-            dependsOnMethods = "testHelloServiceUpload", enabled = false)
+            dependsOnMethods = "testHelloServiceUpload")
     public void InvokeSerWithoutSec() throws Exception {
         AxisServiceClient axisServiceClient = new AxisServiceClient();
         String endpoint = asServer.getContextUrls().getServiceUrl() + "/HelloService";
@@ -75,8 +74,9 @@ public class HelloWorldSampleTestCase extends ASIntegrationTest {
                 "</return></ns:greetResponse>"));
     }
 
+    //FIXME: WSAS-1747
     @Test(groups = "wso2.as", description = "invoke HelloWorld service with security",
-            dependsOnMethods = "InvokeSerWithoutSec")
+            dependsOnMethods = "InvokeSerWithoutSec", enabled = false)
     public void InvokeSerWithSec() throws Exception {
         SecureAxisServiceClient secAxisSerClient = new SecureAxisServiceClient();
         for (int x = 1; x <= 15; x++) {
