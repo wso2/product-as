@@ -17,8 +17,9 @@
 */
 package org.wso2.appserver.integration.tests.webapp.virtualhost;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.axiom.om.OMElement;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -26,13 +27,16 @@ import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
+import org.wso2.carbon.automation.test.utils.http.client.HttpClientUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.integration.common.utils.FileManager;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
 import org.wso2.carbon.utils.ServerConstants;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 /*
@@ -41,10 +45,11 @@ import static org.testng.Assert.assertTrue;
 * */
 
 public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTest {
+    private static final Log log = LogFactory.getLog(VitualHostWebApplicationDeploymentTestCase.class);
     private final String webAppFileName = "appServer-valied-deploymant-1.0.0.war";
     private final String webAppName = "appServer-valied-deploymant-1.0.0";
     private final String appBaseDir = "dir";
-    private final String vhostName = "www.vhost.com";
+    private final String vhostURL = "http://www.vhost.com:9763/";
     private ServerConfigurationManager serverManager;
     private WebAppAdminClient webAppAdminClient;
 
@@ -52,17 +57,15 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
     public void init() throws Exception {
         super.init();
         serverManager = new ServerConfigurationManager(asServer);
-
-        //restart server with virtual hosts
-        File sourceFile = new File(TestConfigurationProvider.getResourceLocation()+File.separator+
-                "artifacts"+File.separator+"AS"+File.separator+"tomcat"+File.separator+"catalina-server.xml");
-        File targetFile = new File(System.getProperty(ServerConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+
-                File.separator+"tomcat"+File.separator+"catalina-server.xml");
-        serverManager.applyConfigurationWithoutRestart(sourceFile,targetFile, true);
-        serverManager.restartForcefully();
-
-        super.init();
         webAppAdminClient = new WebAppAdminClient(backendURL,sessionCookie);
+        //restarting server does not successful due to jira-issue WSAS-1736
+        //restart server with virtual hosts
+//        File sourceFile = new File(TestConfigurationProvider.getResourceLocation()+File.separator+
+//                "artifacts"+File.separator+"AS"+File.separator+"tomcat"+File.separator+"catalina-server.xml");
+//        File targetFile = new File(System.getProperty(ServerConstants.CARBON_HOME)+File.separator+"repository"+File.separator+"conf"+
+//                File.separator+"tomcat"+File.separator+"catalina-server.xml");
+//        serverManager.applyConfigurationWithoutRestart(sourceFile,targetFile, true);
+//        serverManager.restartGracefully();
         }
 
     @Test
@@ -75,11 +78,10 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
 
     @Test(dependsOnMethods = "testWebApplicationDeployment")
     public void testInvokeWebApplication() throws Exception {
-
-        GetMethod getRequest = getHttpRequest();
-        String response = getRequest.getResponseBodyAsString();
-
-        assertTrue(response.equals("<status>success</status>\n"), "Web app invocation fail");
+        String webAppURLvhost = vhostURL + webAppName;
+        HttpClientUtil client = new HttpClientUtil();
+        OMElement omElement = client.get(webAppURLvhost);
+        assertEquals(omElement.toString(), "<status>success</status>", "Web app invocation fail");
 
     }
 
@@ -90,9 +92,9 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
                 backendURL, sessionCookie, webAppName),
                 "Web Application unDeployment failed");
 
-        GetMethod getRequest = getHttpRequest();
-        int statusCode = getRequest.getStatusCode();
-        Assert.assertEquals(statusCode, 404, "Response code mismatch. Client request " +
+        String webAppURLLocal =  vhostURL + webAppName;
+        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        Assert.assertEquals(response.getResponseCode(), 404, "Response code mismatch. Client request " +
                 "got a response even after web app is undeployed");
     }
 
@@ -103,16 +105,5 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
         String targetLocation = System.getProperty(ServerConstants.CARBON_HOME)+ File.separator + "repository" +
                 File.separator +"deployment"+File.separator+"server"+File.separator+appBaseDir;
         FileManager.copyResourceToFileSystem(sourceLocation,targetLocation,webAppFileName);
-    }
-
-    private GetMethod getHttpRequest() throws IOException {
-        String webappUrl = webAppURL + "/" +webAppName+"/";
-        HttpClient client = new HttpClient();
-        GetMethod getRequest = new GetMethod(webappUrl);
-        //set Host tag value of request header to $vhostName
-        getRequest.getParams().setVirtualHost(vhostName);
-        client.executeMethod(getRequest);
-
-        return getRequest;
     }
 }
