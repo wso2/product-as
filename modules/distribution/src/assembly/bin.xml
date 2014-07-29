@@ -375,7 +375,8 @@
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
             <includes>
-                <include>**/bam.xml</include>
+		    <include>**/bam.xml</include>
+		    <include>**/bam-publisher.xml</include>
             </includes>
         </fileSet>
 	
