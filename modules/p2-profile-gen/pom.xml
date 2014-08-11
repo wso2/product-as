@@ -106,7 +106,7 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.security.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
+                                <!--<featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.aarservices.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -114,7 +114,7 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.springservices.feature:${carbon.platform.version}
-                                </featureArtifactDef>
+                                </featureArtifactDef>-->
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.service.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
@@ -441,7 +441,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.aarservices.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
@@ -454,7 +454,7 @@
                                 <feature>
                                     <id>org.wso2.carbon.springservices.feature.group</id>
                                     <version>${carbon.platform.version}</version>
-                                </feature>
+                                </feature>-->
 
                                 <feature>
                                     <id>org.wso2.carbon.service.mgt.feature.group</id>
@@ -759,7 +759,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.aarservices.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
@@ -772,7 +772,7 @@
                                 <feature>
                                     <id>org.wso2.carbon.springservices.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
-                                </feature>
+                                </feature>-->
 
                                 <feature>
                                     <id>org.wso2.carbon.service.mgt.server.feature.group</id>
@@ -1254,7 +1254,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.aarservices.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
@@ -1267,7 +1267,7 @@
                                 <feature>
                                     <id>org.wso2.carbon.springservices.feature.group</id>
                                     <version>${carbon.platform.version}</version>
-                                </feature>
+                                </feature>-->
 
                                 <feature>
                                     <id>org.wso2.carbon.service.mgt.feature.group</id>
