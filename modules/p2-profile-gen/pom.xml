@@ -189,10 +189,10 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.application.mgt.webapp.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
+                                <!--<featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.dataservices.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-
+-->
 
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.ndatasource.feature:${carbon.platform.version}
@@ -353,7 +353,7 @@
                             <profile>axis2service</profile>
                         </configuration>
                     </execution>
-                    <execution>
+                   <!-- <execution>
                         <id>creating-dataservice-profile</id>
                         <phase>package</phase>
                         <goals>
@@ -368,7 +368,7 @@
                             </targetPath>
                             <profile>dataservice</profile>
                         </configuration>
-                    </execution>
+                    </execution>-->
                     <execution>
                         <id>creating-jaggery-profile</id>
                         <phase>package</phase>
@@ -560,10 +560,10 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
+                               <!-- <feature>
                                     <id>org.wso2.carbon.dataservices.feature.group</id>
                                     <version>${carbon.platform.version}</version>
-                                </feature>
+                                </feature>-->
 
                                 <feature>
                                     <id>org.wso2.carbon.ndatasource.feature.group</id>
@@ -857,10 +857,10 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <feature>
+                               <!-- <feature>
                                     <id>org.wso2.carbon.dataservices.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
-                                </feature>
+                                </feature>-->
 
                                 <feature>
                                     <id>org.wso2.carbon.deployment.synchronizer.server.feature.group</id>
@@ -1441,7 +1441,7 @@
                         </configuration>
                     </execution>
 
-                    <execution>
+                  <!--  <execution>
                         <id>3-p2-profile-generation-dataservices</id>
                         <phase>package</phase>
                         <goals>
@@ -1682,7 +1682,7 @@
 
                             </features>
                         </configuration>
-                    </execution>
+                    </execution>-->
 
                     <execution>
                         <id>3-p2-profile-generation-for-jaggery</id>
