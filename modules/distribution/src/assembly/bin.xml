@@ -665,7 +665,7 @@
 
 	<!-- Coping catalina-server.xml to add bam.web.app.statistic tomcat-valve and web.statistic tomcat-valve -->
 	<file>
-            <source>src/resources/tomcat/catalina-server.xml</source>
+            <source>src/resources/tomcatValve/catalina-server.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
 	    <filtered>true</filtered>
             <fileMode>644</fileMode>	
