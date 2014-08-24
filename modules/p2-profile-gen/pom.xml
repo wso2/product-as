@@ -83,9 +83,6 @@
                                     org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.javaee.server.feature:${carbon.platform.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.ntask.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -404,10 +401,6 @@
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
-                                <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
@@ -716,10 +709,6 @@
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
                                 <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
-                                <feature>
                                     <id>org.wso2.carbon.core.common.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
@@ -1012,11 +1001,6 @@
                             <features>
 
                                 <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
-
-                                <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
@@ -1230,11 +1214,6 @@
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
-
-                                <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
@@ -1720,11 +1699,6 @@
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
-
-                                <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
