@@ -83,7 +83,7 @@
                                     org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.javaee.server.feature:${carbon.platform.version}
+                                    org.wso2.carbon:org.wso2.carbon.javaee.tomee.server.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.ntask.feature:${carbon.platform.version}
@@ -405,7 +405,7 @@
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
                                 <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
@@ -716,7 +716,7 @@
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
                                 <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
@@ -1012,7 +1012,7 @@
                             <features>
 
                                 <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
@@ -1232,7 +1232,7 @@
                             <features>
 
                                 <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
@@ -1722,7 +1722,7 @@
                             <features>
 
                                 <feature>
-                                    <id>org.wso2.carbon.javaee.server.feature.group</id>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
