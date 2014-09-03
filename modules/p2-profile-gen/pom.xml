@@ -268,7 +268,7 @@
 
                                 <!-- jaggery features -->
                                 <featureArtifactDef>
-                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0.ALPHA5.wso2v1-SNAPSHOT
+                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0-SNAPSHOT
                                 </featureArtifactDef>
 
                                 <!--End of jaggery features-->
@@ -674,7 +674,7 @@
                                 <!-- jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
+                                    <version>0.9.0-SNAPSHOT</version>
                                 </feature>
                                 <!-- feature groups end-->
 
@@ -974,7 +974,7 @@
                                                                 jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.server.feature.group</id>
-                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
+                                    <version>0.9.0-SNAPSHOT</version>
                                 </feature>
                                 <feature>
                                     <id>org.apache.synapse.wso2.feature.group</id>
@@ -1880,7 +1880,7 @@
 
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
+                                    <version>0.9.0-SNAPSHOT</version>
                                 </feature>
 
                                 <feature>

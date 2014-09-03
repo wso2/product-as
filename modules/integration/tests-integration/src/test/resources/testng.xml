@@ -5,11 +5,11 @@
 
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
-            <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
+            <!--package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
             <package name="org.wso2.appserver.integration.tests.webapp.classloading"/>
             <package name="org.wso2.appserver.integration.tests.webapp.concurrency"/>
             <package name="org.wso2.appserver.integration.tests.webapp.faultywebapp"/>
-            <package name="org.wso2.appserver.integration.tests.webapp.mgt"/>
+            <package name="org.wso2.appserver.integration.tests.webapp.mgt"/-->
             <package name="org.wso2.appserver.integration.tests.webapp.spring"/>
         </packages>
     </test>
@@ -45,8 +45,8 @@
             <package name="org.wso2.appserver.integration.tests.aarservice"/>-->
             <!--<package name="org.wso2.appserver.integration.tests.commodityquoteservice"/>-->
             <!--<package name="org.wso2.appserver.integration.tests.helloworldsampleservice"/>-->
-            <package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>
-            <package name="org.wso2.appserver.integration.tests.jndi"/>
+            <!--package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>
+            <package name="org.wso2.appserver.integration.tests.jndi"/-->
             <!--<package name="org.wso2.appserver.integration.tests.jsonservice"/>-->
             <!--<package name="org.wso2.appserver.integration.tests.mtomservice"/>-->
             <!--<package name="org.wso2.appserver.integration.tests.qualityofservice"/>-->
