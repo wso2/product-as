@@ -83,6 +83,9 @@
                                     org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.javaee.tomee.server.feature:${carbon.platform.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.ntask.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
@@ -265,7 +268,7 @@
 
                                 <!-- jaggery features -->
                                 <featureArtifactDef>
-                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0.ALPHA5.wso2v1-SNAPSHOT
+                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0-SNAPSHOT
                                 </featureArtifactDef>
 
                                 <!--End of jaggery features-->
@@ -401,6 +404,10 @@
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
+                                <feature>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
@@ -667,7 +674,7 @@
                                 <!-- jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
+                                    <version>0.9.0-SNAPSHOT</version>
                                 </feature>
                                 <!-- feature groups end-->
 
@@ -708,6 +715,10 @@
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
+                                <feature>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
                                 <feature>
                                     <id>org.wso2.carbon.core.common.feature.group</id>
                                     <version>${carbon.platform.version}</version>
@@ -963,7 +974,7 @@
                                                                 jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.server.feature.group</id>
-                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
+                                    <version>0.9.0-SNAPSHOT</version>
                                 </feature>
                                 <feature>
                                     <id>org.apache.synapse.wso2.feature.group</id>
@@ -999,6 +1010,11 @@
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
+
+                                <feature>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
@@ -1214,6 +1230,11 @@
                             </destination>
                             <deleteOldProfileFiles>true</deleteOldProfileFiles>
                             <features>
+
+                                <feature>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
@@ -1701,6 +1722,11 @@
                             <features>
 
                                 <feature>
+                                    <id>org.wso2.carbon.javaee.tomee.server.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
+
+                                <feature>
                                     <id>org.wso2.carbon.ntask.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
@@ -1854,7 +1880,7 @@
 
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0.ALPHA5.wso2v1-SNAPSHOT</version>
+                                    <version>0.9.0-SNAPSHOT</version>
                                 </feature>
 
                                 <feature>
