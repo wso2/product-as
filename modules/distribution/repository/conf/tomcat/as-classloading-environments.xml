@@ -34,12 +34,21 @@
         <DelegatedEnvironment>
             <Name>Tomcat</Name>
             <DelegatedPackages>javax.annotation.*,javax.ejb,javax.el,javax.persistence,javax.servlet.*,javax.xml,javax.xml.ws,org.apache.catalina.*,org.apache.coyote.*,org.apache.el.*,org.apache.jasper.*,org.apache.naming.*,org.apache.tomcat.*,com.sun.el.*</DelegatedPackages>
+            <DelegatedResources>*,!META-INF/services/org.apache.webbeans.spi.plugins.OpenWebBeansPlugin,!META-INF/openwebbeans/openwebbeans.properties,!META-INF/standard-faces-config.xml,!META-INF/faces-config.xml</DelegatedResources>
         </DelegatedEnvironment>
 
         <DelegatedEnvironment>
             <Name>Carbon</Name>
             <DelegatedPackages>*</DelegatedPackages>
+            <DelegatedResources>*,!META-INF/services/org.apache.webbeans.spi.plugins.OpenWebBeansPlugin,!META-INF/openwebbeans/openwebbeans.properties,!META-INF/standard-faces-config.xml,!META-INF/faces-config.xml</DelegatedResources>
         </DelegatedEnvironment>
+
+        <DelegatedEnvironment>
+            <Name>Javaee</Name>
+            <DelegatedPackages>*,!org.springframework.*</DelegatedPackages>
+            <DelegatedResources>*</DelegatedResources>
+        </DelegatedEnvironment>
+
 
     </DelegatedEnvironments>
 
