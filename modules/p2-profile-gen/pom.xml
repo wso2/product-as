@@ -241,7 +241,7 @@
                                     org.wso2.carbon:org.wso2.carbon.bam.webapp.agent.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.monitoring.core.feature:${carbon.platform.version}
+                                    org.wso2.carbon:org.wso2.carbon.as.monitoring.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.event.ui.feature:${carbon.platform.version}
@@ -631,7 +631,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.monitoring.core.feature.group</id>
+                                    <id>org.wso2.carbon.as.monitoring.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
@@ -936,7 +936,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.monitoring.core.feature.group</id>
+                                    <id>org.wso2.carbon.as.monitoring.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
@@ -1164,7 +1164,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.monitoring.core.feature.group</id>
+                                    <id>org.wso2.carbon.as.monitoring.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
@@ -1430,7 +1430,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.monitoring.core.feature.group</id>
+                                    <id>org.wso2.carbon.as.monitoring.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
@@ -1677,7 +1677,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.monitoring.core.feature.group</id>
+                                    <id>org.wso2.carbon.as.monitoring.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                </feature>
                                <feature>
@@ -1858,7 +1858,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.monitoring.core.feature.group</id>
+                                    <id>org.wso2.carbon.as.monitoring.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
