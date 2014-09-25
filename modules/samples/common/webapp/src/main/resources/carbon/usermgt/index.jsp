@@ -26,7 +26,7 @@
     String username = request.getParameter("username");
     String pass = request.getParameter("password");
     if (username != null && username.trim().length() > 0) {
-        CarbonContext context = CarbonContext.getCurrentContext();
+        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
         UserRealm realm = context.getUserRealm();
         if (!realm.getUserStoreManager().isExistingUser(username)) {
             realm.getUserStoreManager().addUser(username, pass, null, null, null);
@@ -59,7 +59,7 @@
 
 <p><b>The user list</b></p>
 <%
-    CarbonContext context = CarbonContext.getCurrentContext();
+    CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
     UserRealm realm = context.getUserRealm();
     String[] names = realm.getUserStoreManager().listUsers("*", 100);
     for (String name : names) {
