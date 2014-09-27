@@ -8,7 +8,7 @@
 </span><span style="color:#800000;"> 8 </span><span style="background-color:#edffed;">    String username = request.getParameter("username");
 </span><span style="color:#800000;"> 9 </span><span style="background-color:#edffed;">    String pass = request.getParameter("password");
 </span><span style="color:#800000;">10 </span><span style="background-color:#edffed;">    if (username != null && username.trim().length() &gt; 0) {
-</span><span style="color:#800000;">11 </span><span style="background-color:#edffed;">        CarbonContext context = CarbonContext.getCurrentContext();
+</span><span style="color:#800000;">11 </span><span style="background-color:#edffed;">        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
 </span><span style="color:#800000;">12 </span><span style="background-color:#edffed;">        UserRealm realm = context.getUserRealm();
 </span><span style="color:#800000;">13 </span><span style="background-color:#edffed;">        realm.getUserStoreManager().addUser(username, pass, null, null, null);
 </span><span style="color:#800000;">14 </span><span style="background-color:#edffed;">    }
@@ -23,7 +23,7 @@
 </span><span style="color:#800000;">23 
 24 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;&lt;b&gt;The user list&lt;/b&gt;&lt;/p&gt;
 </span><span style="color:#800000;">25 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
-</span><span style="color:#800000;">26 </span><span style="background-color:#edffed;">    CarbonContext context = CarbonContext.getCurrentContext();
+</span><span style="color:#800000;">26 </span><span style="background-color:#edffed;">    CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
 </span><span style="color:#800000;">27 </span><span style="background-color:#edffed;">    UserRealm realm = context.getUserRealm();
 </span><span style="color:#800000;">28 </span><span style="background-color:#edffed;">    String[] names = realm.getUserStoreManager().listUsers("*", 100);
 </span><span style="color:#800000;">29 </span><span style="background-color:#edffed;">    for (String name : names) {

@@ -26,7 +26,7 @@
 
     if (username != null && username.trim().length() > 0) {
         try {
-            CarbonContext context = CarbonContext.getCurrentContext();
+            CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
             UserRealm realm = context.getUserRealm();
             status = realm.getUserStoreManager().authenticate(username, password);
         } catch (UserStoreException e) {
