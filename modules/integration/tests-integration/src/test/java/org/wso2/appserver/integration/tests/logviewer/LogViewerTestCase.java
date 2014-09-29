@@ -26,28 +26,30 @@ import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogFileInfo;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
- * This class test the log viewer user interface
+ * This class test the log viewer feature in the super tenant domain
  */
 public class LogViewerTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(LogViewerTestCase.class);
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
+        // start the server in super tenant mode
         super.init();
     }
 
     @Test(groups = "wso2.as", description = "Open the log viewer and get logs")
     public void testGetPaginatedLogEvents() throws Exception {
-        log.info("Starting test case...");
         LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
         PaginatedLogEvent logEvents = logViewerClient
                 .getPaginatedLogEvents(0, "ALL", "", "", "");
 
-        LogEvent receivedLogEvent = logEvents.getLogInfo()[1];
-        assertEquals(receivedLogEvent.getMessage(), "",
-                     "Unexpected log entry was returned.");
+        LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
+
+        assertTrue(receivedLogEvent.getMessage().contains("admin@carbon.super [-1234]"),
+                   "Unexpected log entry was returned.");
         assertEquals(receivedLogEvent.getServerName(), "AS",
                      "Unexpected server name was returned.");
         assertEquals(receivedLogEvent.getTenantId(), "-1234",
@@ -57,11 +59,16 @@ public class LogViewerTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Open the application log viewer and get logs")
     public void testGetApplicationLogs() throws Exception {
         LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
+        String appName = "echo";
         PaginatedLogEvent logEvents = logViewerClient.getPaginatedApplicationLogEvents(0, "", "",
-                                                                                       "echo", "",
+                                                                                       appName, "",
                                                                                        "");
-        assertEquals(logEvents.getLogInfo()[0].getAppName(), "echo",
+        LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
+        // should always return the correct app name as requested
+        assertEquals(receivedLogEvent.getAppName(), appName,
                      "Invalid app name was returened.");
+        assertEquals(receivedLogEvent.getTenantId(), "-1234",
+                     "Unexpected tenant Id was returned.");
     }
 
     @Test(groups = "wso2.as", description = "Get the local log file information")

@@ -2,6 +2,19 @@
 
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
+    <listeners>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestExecutionListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestManagerListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestReportListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
+    </listeners>
+
+    <test name="logviewer-tests" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.logviewer"></package>
+        </packages>
+    </test>
 
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>

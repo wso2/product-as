@@ -1,35 +1,32 @@
 /*
-*Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-*WSO2 Inc. licenses this file to you under the Apache License,
-*Version 2.0 (the "License"); you may not use this file except
-*in compliance with the License.
-*You may obtain a copy of the License at
-*
-*http://www.apache.org/licenses/LICENSE-2.0
-*
-*Unless required by applicable law or agreed to in writing,
-*software distributed under the License is distributed on an
-*"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-*KIND, either express or implied.  See the License for the
-*specific language governing permissions and limitations
-*under the License.
-*/
+ * Copyright 2005,2014 WSO2, Inc. http://www.wso2.org
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.wso2.appserver.integration.common.clients;
 
 import org.apache.axis2.AxisFault;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.logging.view.stub.LogViewerException;
 import org.wso2.carbon.logging.view.stub.LogViewerLogViewerException;
 import org.wso2.carbon.logging.view.stub.LogViewerStub;
-import org.wso2.carbon.logging.view.stub.types.carbon.LogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogFileInfo;
 
 import java.rmi.RemoteException;
 
 /**
- * This class can use to get system logs information
+ * This class can be used as the client to get logs information
  */
 public class LogViewerClient {
     private static final Log log = LogFactory.getLog(LogViewerClient.class);
@@ -53,98 +50,104 @@ public class LogViewerClient {
     }
 
     /**
-     * Getting system logs
+     * Return log events of the given page (paginated log events)
      *
-     * @param logType
-     *         Log type (INFO,WARN,ERROR,DEBUG)
-     * @param searchKey
-     *         searching keyword
-     * @param domain
+     * @param pageNumber
+     *         - page number
+     * @param type
+     *         - type of the log
+     * @param keyword
+     *         - keyword to search
+     * @param tenantDomain
      *         - tenant domain
      * @param serverKey
-     *         - server key defined at carbon.xml
-     * @return logMessage array
-     * @throws java.rmi.RemoteException
-     *         Exception
+     *         - server key
+     * @return - a paginated log event of the requested page
+     * @throws RemoteException
+     * @throws LogViewerLogViewerException
      */
-    public LogEvent[] getRemoteLogs(String logType, String searchKey, String domain,
-                                    String serverKey)
-            throws RemoteException, LogViewerLogViewerException {
-        return logViewerStub.getLogs(logType, searchKey, domain, serverKey);
-    }
-
-    public String[] getServiceNames() throws RemoteException, LogViewerLogViewerException {
-        try {
-            return logViewerStub.getServiceNames();
-        } catch (LogViewerLogViewerException e) {
-            log.error("Unable to get service name list");
-            throw new LogViewerLogViewerException("Unable to get service name list");
-        }
-    }
-
-    public LogEvent[] getAllRemoteSystemLogs() throws RemoteException, LogViewerLogViewerException {
-        try {
-            return logViewerStub.getAllSystemLogs();
-        } catch (RemoteException e) {
-            log.error("Fail to get all logs ", e);
-            throw new RemoteException("Fail to get all system logs ", e);
-        }
-    }
-
-    public PaginatedLogFileInfo getPaginatedLogFileInfo(int pageNumber, String tenantDomain,
-                                                        String serviceName)
-            throws RemoteException, LogViewerLogViewerException {
-        String msg = "Error occurred while getting logger data. Backend service may be unavailable";
-        try {
-            return logViewerStub.getPaginatedLogFileInfo(pageNumber, tenantDomain, serviceName);
-        } catch (RemoteException e) {
-            log.error(msg, e);
-            throw e;
-        } catch (LogViewerLogViewerException e) {
-            log.error(msg, e);
-            throw new RemoteException(msg, e);
-        }
-    }
-
     public PaginatedLogEvent getPaginatedLogEvents(int pageNumber, String type, String keyword,
                                                    String tenantDomain, String serverKey)
-            throws RemoteException {
+            throws RemoteException, LogViewerLogViewerException {
+        String errorMsg = "Error occurred while getting paginated log events. Backend service may" +
+                          " be " +
+                          "unavailable";
         try {
             return logViewerStub
                     .getPaginatedLogEvents(pageNumber, type, keyword, tenantDomain, serverKey);
         } catch (RemoteException e) {
-            String msg = "Error occurred while getting logger data. Backend service may be " +
-                         "unavailable";
-            log.error(msg, e);
-            throw new RemoteException(msg, e);
+            log.error(errorMsg, e);
+            throw e;
         } catch (LogViewerLogViewerException e) {
-            String msg = "Error occurred while getting logger data. Backend service may be " +
-                         "unavailable";
-            log.error(msg, e);
-            throw new RemoteException(msg, e);
+            log.error(errorMsg, e);
+            throw e;
         }
     }
 
-    public PaginatedLogFileInfo getLocalLogFiles(int pageNo, String tenantDomain, String serverKey) throws Exception {
+    /**
+     * Return a paginated collection of local log file information
+     *
+     * @param pageNumber
+     *         - page number
+     * @param tenantDomain
+     *         - tenant domain
+     * @param serverKey
+     *         - server key
+     * @return - a paginated log file information
+     * @throws RemoteException
+     * @throws LogViewerLogViewerException
+     */
+    public PaginatedLogFileInfo getLocalLogFiles(int pageNumber, String tenantDomain,
+                                                 String serverKey)
+            throws RemoteException, LogViewerLogViewerException {
 
+        String errorMsg = "Error occurred while getting local log files. Backend service may be " +
+                          "unavailable";
         try {
-            return logViewerStub.getLocalLogFiles(pageNo, tenantDomain, serverKey);
-        } catch (Exception e) {
-            String msg = "Error occurred while getting logger data. Backend service may be unavailable";
-            log.error(msg, e);
+            return logViewerStub.getLocalLogFiles(pageNumber, tenantDomain, serverKey);
+        } catch (RemoteException e) {
+            log.error(errorMsg, e);
+            throw e;
+        } catch (LogViewerLogViewerException e) {
+            log.error(errorMsg, e);
             throw e;
         }
 
     }
 
+    /**
+     * Get a paginated list of log events per application
+     *
+     * @param pageNumber
+     *         - page number
+     * @param type
+     *         - type of the log
+     * @param keyword
+     *         - keyword to search
+     * @param appName
+     *         - application name
+     * @param tenantDomain
+     *         - tenant domain
+     * @param serverKey
+     *         - server key
+     * @return - a paginated log info collection
+     * @throws RemoteException
+     * @throws LogViewerException
+     */
     public PaginatedLogEvent getPaginatedApplicationLogEvents(int pageNumber, String type,
-                                                              String keyword, String appName, String tenantDomain, String serverKey) throws Exception {
+                                                              String keyword, String appName,
+                                                              String tenantDomain, String serverKey)
+            throws RemoteException, LogViewerException {
+        String errorMsg = "Error occurred while getting paginated application log events. Backend" +
+                          "service may be unavailable";
         try {
             return logViewerStub.getPaginatedApplicationLogEvents(pageNumber, type, keyword,
                                                                   appName, tenantDomain, serverKey);
         } catch (RemoteException e) {
-            String msg = "Error occurred while getting logger data. Backend service may be unavailable";
-            log.error(msg, e);
+            log.error(errorMsg, e);
+            throw e;
+        } catch (LogViewerException e) {
+            log.error(errorMsg, e);
             throw e;
         }
     }
