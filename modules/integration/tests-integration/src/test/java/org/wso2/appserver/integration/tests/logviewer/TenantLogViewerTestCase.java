@@ -93,8 +93,6 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
 
         LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
 
-        assertTrue(receivedLogEvent.getMessage().contains("[/t/wso2.com/webapps/jaxrs_sample_02]"),
-                   "Unexpected log entry was returned.");
         assertEquals(receivedLogEvent.getServerName(), "AS",
                      "Unexpected server name was returned.");
         assertEquals(receivedLogEvent.getTenantId(), "1",

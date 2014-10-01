@@ -44,12 +44,10 @@ public class LogViewerTestCase extends ASIntegrationTest {
     public void testGetPaginatedLogEvents() throws Exception {
         LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
         PaginatedLogEvent logEvents = logViewerClient
-                .getPaginatedLogEvents(0, "ALL", "", "admin", "");
+                .getPaginatedLogEvents(0, "ALL", "", "", "");
 
         LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
 
-        assertTrue(receivedLogEvent.getMessage().contains("admin@carbon.super [-1234]"),
-                   "Unexpected log entry was returned.");
         assertEquals(receivedLogEvent.getServerName(), "AS",
                      "Unexpected server name was returned.");
         assertEquals(receivedLogEvent.getTenantId(), "-1234",
