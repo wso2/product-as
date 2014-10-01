@@ -26,7 +26,7 @@ import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogFileInfo;
 import java.rmi.RemoteException;
 
 /**
- * This class can be used as the client to get logs information
+ * This class can be used as the client to get log information from log viewer feature
  */
 public class LogViewerClient {
     private static final Log log = LogFactory.getLog(LogViewerClient.class);
@@ -50,7 +50,7 @@ public class LogViewerClient {
     }
 
     /**
-     * Return log events of the given page (paginated log events)
+     * Return log events of the given page (as a collection of loginfo)
      *
      * @param pageNumber
      *         - page number
@@ -70,8 +70,7 @@ public class LogViewerClient {
                                                    String tenantDomain, String serverKey)
             throws RemoteException, LogViewerLogViewerException {
         String errorMsg = "Error occurred while getting paginated log events. Backend service may" +
-                          " be " +
-                          "unavailable";
+                          " be unavailable";
         try {
             return logViewerStub
                     .getPaginatedLogEvents(pageNumber, type, keyword, tenantDomain, serverKey);
@@ -116,7 +115,7 @@ public class LogViewerClient {
     }
 
     /**
-     * Get a paginated list of log events per application
+     * Get a paginated log info collection per application
      *
      * @param pageNumber
      *         - page number

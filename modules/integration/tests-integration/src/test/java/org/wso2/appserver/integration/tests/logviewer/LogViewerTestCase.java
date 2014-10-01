@@ -44,7 +44,7 @@ public class LogViewerTestCase extends ASIntegrationTest {
     public void testGetPaginatedLogEvents() throws Exception {
         LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
         PaginatedLogEvent logEvents = logViewerClient
-                .getPaginatedLogEvents(0, "ALL", "", "", "");
+                .getPaginatedLogEvents(0, "ALL", "", "admin", "");
 
         LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
 
@@ -60,7 +60,7 @@ public class LogViewerTestCase extends ASIntegrationTest {
     public void testGetApplicationLogs() throws Exception {
         LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
         String appName = "echo";
-        PaginatedLogEvent logEvents = logViewerClient.getPaginatedApplicationLogEvents(0, "", "",
+        PaginatedLogEvent logEvents = logViewerClient.getPaginatedApplicationLogEvents(0, "ALL", "",
                                                                                        appName, "",
                                                                                        "");
         LogEvent receivedLogEvent = logEvents.getLogInfo()[0];

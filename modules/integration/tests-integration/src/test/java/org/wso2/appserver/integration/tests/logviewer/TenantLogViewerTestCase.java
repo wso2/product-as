@@ -56,7 +56,7 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
 
     @DataProvider
     private static TestUserMode[][] userModeProvider() {
-        return new TestUserMode[][]{
+        return new TestUserMode[][] {
                 new TestUserMode[]{TestUserMode.TENANT_USER}
         };
     }
@@ -72,10 +72,10 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
                                             "Open the application log viewer and get logs")
     public void testGetApplicationLogs() throws Exception {
         // deploy a web app in the current tenant domain before acquiring application logs
-        deployWebAppInTenantDomain();
+        deploySampleWebAppInTenantDomain();
         LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
         String appName = "jaxrs_sample_02";
-        PaginatedLogEvent logEvents = logViewerClient.getPaginatedApplicationLogEvents(0, "", "",
+        PaginatedLogEvent logEvents = logViewerClient.getPaginatedApplicationLogEvents(0, "ALL", "",
                                                                                        appName, "",
                                                                                        "");
         LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
@@ -116,7 +116,7 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
      *
      * @throws Exception
      */
-    private void deployWebAppInTenantDomain() throws Exception {
+    private void deploySampleWebAppInTenantDomain() throws Exception {
         WebAppAdminClient webAppAdminClient =
                 new WebAppAdminClient(backendURL, sessionCookie);
         String location = FrameworkPathUtil.getSystemResourceLocation() +
