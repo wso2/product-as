@@ -24,9 +24,9 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.logging.view.stub.types.carbon.LogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogFileInfo;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 /**
  * This class test the log viewer feature in the super tenant domain
@@ -50,7 +50,7 @@ public class LogViewerTestCase extends ASIntegrationTest {
 
         assertEquals(receivedLogEvent.getServerName(), "AS",
                      "Unexpected server name was returned.");
-        assertEquals(receivedLogEvent.getTenantId(), "-1234",
+        assertEquals(receivedLogEvent.getTenantId(), Integer.toString(MultitenantConstants.SUPER_TENANT_ID),
                      "Unexpected tenant Id was returned.");
     }
 
@@ -64,8 +64,8 @@ public class LogViewerTestCase extends ASIntegrationTest {
         LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
         // should always return the correct app name as requested
         assertEquals(receivedLogEvent.getAppName(), appName,
-                     "Invalid app name was returened.");
-        assertEquals(receivedLogEvent.getTenantId(), "-1234",
+                     "Invalid app name was returned.");
+        assertEquals(receivedLogEvent.getTenantId(), Integer.toString(MultitenantConstants.SUPER_TENANT_ID),
                      "Unexpected tenant Id was returned.");
     }
 
