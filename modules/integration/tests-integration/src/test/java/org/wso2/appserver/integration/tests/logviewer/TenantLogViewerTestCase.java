@@ -43,6 +43,10 @@ import static org.testng.Assert.assertTrue;
 public class TenantLogViewerTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(TenantLogViewerTestCase.class);
     private TestUserMode userMode;
+    // a jaxrs webapp with this name will be deployed in the tenant domain to check the
+    // application logs
+    private static final String SAMPLE_APP_NAME = "jaxrs_sample_02";
+    private static final String SAMPLE_APP_NAME_WAR = SAMPLE_APP_NAME + ".war";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -64,7 +68,7 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void webApplicationDelete() throws Exception {
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.deleteWebAppFile("jaxrs_sample_02.war");
+        webAppAdminClient.deleteWebAppFile(SAMPLE_APP_NAME_WAR);
         log.info("jaxrs_sample_02.war deleted successfully");
     }
 
@@ -74,12 +78,12 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
         // deploy a web app in the current tenant domain before acquiring application logs
         deploySampleWebAppInTenantDomain();
         LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
-        String appName = "jaxrs_sample_02";
         PaginatedLogEvent logEvents = logViewerClient.getPaginatedApplicationLogEvents(0, "ALL", "",
-                                                                                       appName, "",
+                                                                                       SAMPLE_APP_NAME,
+                                                                                       "",
                                                                                        "");
         LogEvent receivedLogEvent = logEvents.getLogInfo()[0];
-        assertEquals(receivedLogEvent.getAppName(), appName,
+        assertEquals(receivedLogEvent.getAppName(), SAMPLE_APP_NAME,
                      "Invalid app name was returened.");
         assertEquals(receivedLogEvent.getTenantId(), "1",
                      "Unexpected tenant Id was returned.");
@@ -110,7 +114,7 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
     }
 
     /**
-     * Deploys a sample jaxrs web app in the tenant domain.
+     * Deploys a sample jaxrs web app (declared as SAMPLE_APP_NAME) to the tenant domain.
      *
      * @throws Exception
      */
@@ -120,10 +124,10 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                           "artifacts" + File.separator + "AS" + File.separator + "jaxrs" + File
                 .separator;
-        webAppAdminClient.warFileUplaoder(location + File.separator + "jaxrs_sample_02.war");
+        webAppAdminClient.warFileUplaoder(location + File.separator + SAMPLE_APP_NAME_WAR);
         boolean isDeployed =
                 WebAppDeploymentUtil
-                        .isWebApplicationDeployed(backendURL, sessionCookie, "jaxrs_sample_02");
+                        .isWebApplicationDeployed(backendURL, sessionCookie, SAMPLE_APP_NAME);
         assertTrue(isDeployed, "WebApp not deployed");
     }
 
