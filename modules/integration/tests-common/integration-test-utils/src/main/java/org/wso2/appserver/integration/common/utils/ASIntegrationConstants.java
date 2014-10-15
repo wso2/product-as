@@ -20,4 +20,6 @@ package org.wso2.appserver.integration.common.utils;
 public class ASIntegrationConstants {
     public static final String JAGGERY_APPLICATION = "jaggery";
     public static final String WEB_APPLICATION = "webapps";
+
+    public static final String CONFIGS_PATH_KEY = "configs";
 }
