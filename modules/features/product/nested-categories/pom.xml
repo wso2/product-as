@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- ~ Copyright (c) WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~ Copyright (c) 2009-2011, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -14,29 +14,36 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
 -->
-        
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.appserver</groupId>
-    	<artifactId>wso2appserver-features-parent</artifactId>
+        <artifactId>appserver-features</artifactId>
         <version>6.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>appserver-features</artifactId>
+    <artifactId>org.wso2.appserver.nested.categories</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 AppServer - Features Aggregator Module</name>
+    <name>WSO2 AppServer - Nested Feature Categories</name>
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.appserver.styles.feature</module>
-        <module>org.wso2.appserver.utils.feature</module>
-        <module>nested-categories</module>
+        <module>application-mgt</module>
+        <module>application-hosting</module>
+        <module>javaee-runtime</module>
+        <module>miscellaneous</module>
+        <module>multi-tenancy</module>
+        <module>user-mgt</module>
+        <module>single-sign-on</module>
+        <module>registry-repository</module>
+        <module>monitoring</module>
+        <module>tooling</module>
+        <module>styling</module>
     </modules>
 
-</project>
 
+</project>
