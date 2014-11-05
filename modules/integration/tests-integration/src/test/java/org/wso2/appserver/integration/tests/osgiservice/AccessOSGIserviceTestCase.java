@@ -40,10 +40,9 @@ import java.io.File;
 
 import static org.testng.Assert.assertTrue;
 
-// Tests for patch WSO2-CARBON-PATCH-4.2.0-0857
 // This test will upload a OSGI bundle to dropins and add service name to carboncontext-osgi-services.properties file
 // Then it will upload a webapp via tenant user and will access uploaded webapp
-// This webapp will access above exposed OSGI service with the new method "CarbonContext.getOSGIService(Class clazz)"
+// This webapp will access above exposed OSGI service with the new method "CarbonContext.getOSGIService(clazz,props)"
 
 public class AccessOSGIserviceTestCase extends ASIntegrationTest {
     private ServerConfigurationManager serverManager;
