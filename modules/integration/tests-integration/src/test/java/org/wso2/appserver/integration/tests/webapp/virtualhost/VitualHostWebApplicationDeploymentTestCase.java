@@ -1,26 +1,26 @@
 /*
-*Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-*WSO2 Inc. licenses this file to you under the Apache License,
-*Version 2.0 (the "License"); you may not use this file except
-*in compliance with the License.
-*You may obtain a copy of the License at
-*
-*http://www.apache.org/licenses/LICENSE-2.0
-*
-*Unless required by applicable law or agreed to in writing,
-*software distributed under the License is distributed on an
-*"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-*KIND, either express or implied.  See the License for the
-*specific language governing permissions and limitations
-*under the License.
-*/
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.wso2.appserver.integration.tests.webapp.virtualhost;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
@@ -33,6 +33,7 @@ import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -43,6 +44,7 @@ import static org.testng.Assert.assertTrue;
 */
 
 public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTest {
+    private static int GET_RESPONSE_DELAY = 30 * 1000;
     private final String webAppFileName = "appServer-valied-deploymant-1.0.0.war";
     private final String webAppName = "appServer-valied-deploymant-1.0.0";
     private final String appBaseDir = "dir";
@@ -67,7 +69,7 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
     }
 
-    @AfterTest(alwaysRun = true)
+    @AfterClass(alwaysRun = true)
     public void revertVirtualhostConfiguration() throws Exception {
         //reverting the changes done to appsever
         if (serverManager != null) {
@@ -91,7 +93,7 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
         String response = getRequest.getResponseBodyAsString();
         int statusCode = getRequest.getStatusCode();
 
-        assertEquals(statusCode, HttpStatus.SC_ACCEPTED, "Request failed. Received response code " + statusCode);
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
         assertEquals("<status>success</status>\n", response, "Unexpected response: " + response);
 
     }
@@ -125,7 +127,13 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
         //set Host tag value of request header to $vhostName
         //(This avoids the requirement to add an entry to etc/hosts/ to pass this test case)
         getRequest.getParams().setVirtualHost(vhostName);
-        client.executeMethod(getRequest);
+        Calendar startTime = Calendar.getInstance();
+        while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < GET_RESPONSE_DELAY) {
+            client.executeMethod(getRequest);
+            if (!getRequest.getResponseBodyAsString().isEmpty()) {
+                return getRequest;
+            }
+        }
 
         return getRequest;
     }
