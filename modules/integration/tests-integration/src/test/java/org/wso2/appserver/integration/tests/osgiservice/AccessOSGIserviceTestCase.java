@@ -58,20 +58,24 @@ public class AccessOSGIserviceTestCase extends ASIntegrationTest {
         serverManager = new ServerConfigurationManager(asServer);
         //adding osgi bundle to dropins
         File tempjar = new File(TestConfigurationProvider.getResourceLocation() + File.separator +
-                "artifacts" + File.separator + "AS" + File.separator + "osgi" + File.separator + "org.wso2.carbon.client.configcontext.provider-1.0.0.jar");
+                "artifacts" + File.separator + "AS" + File.separator + "osgi" + File.separator +
+                "org.wso2.carbon.client.configcontext.provider-1.0.0.jar");
         serverManager.copyToComponentDropins(tempjar);
         //adding osgi service name to carboncontext-osgi-services.properties file
-        File propertiesFile = new File(TestConfigurationProvider.getResourceLocation() + File.separator +
-                "artifacts" + File.separator + "AS" + File.separator + "properties" + File.separator + "carboncontext-osgi-services.properties");
-        File targetFile = new File(System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" + File.separator + "conf" +
-                File.separator + "etc" + File.separator + "carboncontext-osgi-services.properties");
+        File propertiesFile = new File(TestConfigurationProvider.getResourceLocation() +
+                File.separator + "artifacts" + File.separator + "AS" + File.separator + "properties"
+                + File.separator + "carboncontext-osgi-services.properties");
+        File targetFile = new File(System.getProperty(ServerConstants.CARBON_HOME) +
+                File.separator + "repository" + File.separator + "conf" + File.separator + "etc" +
+                File.separator + "carboncontext-osgi-services.properties");
         serverManager.applyConfigurationWithoutRestart(propertiesFile, targetFile, true);
         serverManager.restartGracefully();
         super.init();
 
         loginAsTenant();
 
-        webAppAdminClient = new WebAppAdminClient(tenantContext.getContextUrls().getBackEndUrl(), tenantSession);
+        webAppAdminClient = new WebAppAdminClient(tenantContext.getContextUrls().getBackEndUrl(),
+                tenantSession);
     }
 
     private void loginAsTenant() throws Exception {
@@ -107,7 +111,7 @@ public class AccessOSGIserviceTestCase extends ASIntegrationTest {
         // will invoke CarbonContext.getThreadLocalCarbonContext().getOSGiService(Axis2ClientConfigContextProvider.class);
         // if the osgi service is invoked successfully, it will return value "axis2/services" else will return null
         HttpResponse response = HttpURLConnectionClient.sendGetRequest(webAppURLLocal, "", "text/html");
-        assertTrue(response.getData().contains("axis2/services"),"Unexpected response: "+response.getData());
+        assertTrue(response.getData().contains("axis2/services"), "Unexpected response: " + response.getData());
     }
 
     @Test(groups = "wso2.as", description = "UnDeploying web application",
@@ -121,7 +125,8 @@ public class AccessOSGIserviceTestCase extends ASIntegrationTest {
         String webAppURLLocal = webAppURL + "/t/" + tenantContext.getContextTenant().getDomain() +
                 "/webapps/org.wso2.carbon.tenant.config.test/";
         HttpResponse response = HttpURLConnectionClient.sendGetRequest(webAppURLLocal, "", "text/html");
-        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_NOT_FOUND, "Response code mismatch. Client request " +
-                "got a response even after web app is undeployed");
+        Assert.assertEquals(response.getResponseCode(), HttpStatus.SC_NOT_FOUND,
+                "Response code mismatch. Client request " +
+                        "got a response even after web app is undeployed");
     }
 }
