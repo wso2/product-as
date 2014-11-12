@@ -3,6 +3,12 @@
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
 
+    <test name="logviewer-tests" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.logviewer"></package>
+        </packages>
+    </test>
+
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
