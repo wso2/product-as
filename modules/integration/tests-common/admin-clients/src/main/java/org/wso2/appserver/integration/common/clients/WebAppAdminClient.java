@@ -92,23 +92,23 @@ public class WebAppAdminClient {
         }
     }
 
-    public void stopWebapps(String fileName) throws RemoteException {
+    public void stopWebapps(String fileName, String hostname) throws RemoteException {
         webappAdminStub.stopAllWebapps();
-        WebappMetadata webappMetadata = webappAdminStub.getStoppedWebapp(fileName);
+        WebappMetadata webappMetadata = webappAdminStub.getStoppedWebapp(fileName,hostname);
     }
 
-    public boolean stopWebApp(String fileName) throws RemoteException {
+    public boolean stopWebApp(String fileName, String hostname) throws RemoteException {
         webappAdminStub.stopWebapps(new String[]{fileName});
-        WebappMetadata webappMetadata = webappAdminStub.getStoppedWebapp(fileName);
+        WebappMetadata webappMetadata = webappAdminStub.getStoppedWebapp(fileName,hostname);
         if (webappMetadata.getWebappFile().equals(fileName)) {
             return true;
         }
         return false;
     }
 
-    public boolean startWebApp(String fileName) throws RemoteException {
+    public boolean startWebApp(String fileName, String hostname) throws RemoteException {
         webappAdminStub.startWebapps(new String[]{fileName});
-        WebappMetadata webappMetadata = webappAdminStub.getStartedWebapp(fileName);
+        WebappMetadata webappMetadata = webappAdminStub.getStartedWebapp(fileName,hostname);
         if (webappMetadata.getWebappFile().equals(fileName)) {
             return true;
         }
