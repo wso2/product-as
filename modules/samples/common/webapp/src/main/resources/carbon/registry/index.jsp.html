@@ -84,7 +84,7 @@
 </span><span style="color:#800000;background-color:#f0f0f0;"> 67
  68 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
 </span><span style="color:#800000;background-color:#f0f0f0;"> 69 </span><span style="background-color:#edffed;">    // Obtain the reference to the registry from the CarbonContext
-</span><span style="color:#800000;background-color:#f0f0f0;"> 70 </span><span style="background-color:#edffed;">    CarbonContext cCtx = CarbonContext.getCurrentContext();
+</span><span style="color:#800000;background-color:#f0f0f0;"> 70 </span><span style="background-color:#edffed;">    CarbonContext cCtx = CarbonContext.getThreadLocalCarbonContext();
 </span><span style="color:#800000;background-color:#f0f0f0;"> 71
  72 </span><span style="background-color:#edffed;">    Registry registry = cCtx.getRegistry(RegistryType.SYSTEM_CONFIGURATION);
 </span><span style="color:#800000;background-color:#f0f0f0;"> 73 </span><span style="background-color:#edffed;">    String registryType = request.getParameter("registryType");

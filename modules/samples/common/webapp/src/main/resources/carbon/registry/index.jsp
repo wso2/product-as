@@ -84,7 +84,7 @@
 
 <%
     // Obtain the reference to the registry from the CarbonContext
-    CarbonContext cCtx = CarbonContext.getCurrentContext();
+    CarbonContext cCtx = CarbonContext.getThreadLocalCarbonContext();
 
     Registry registry = cCtx.getRegistry(RegistryType.SYSTEM_CONFIGURATION);
     String registryType = request.getParameter("registryType");

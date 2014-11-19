@@ -41,6 +41,7 @@ import static org.testng.Assert.assertTrue;
 public class WebApplicationStateChangingTestCase extends ASIntegrationTest {
     private final String webAppFileName = "appServer-valied-deploymant-1.0.0.war";
     private final String webAppName = "appServer-valied-deploymant-1.0.0";
+    private final String hostName = "localhost";
     private WebAppAdminClient webAppAdminClient;
 
     @BeforeClass(alwaysRun = true)
@@ -60,7 +61,7 @@ public class WebApplicationStateChangingTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Stop web application")
     public void testWebApplicationStop() throws Exception {
-        assertTrue(webAppAdminClient.stopWebApp(webAppFileName), "failed to stop web application");
+        assertTrue(webAppAdminClient.stopWebApp(webAppFileName,hostName), "failed to stop web application");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Stopped", "Stop State mismatched");
         String webAppURLLocal = webAppURL + "/" + webAppName;
         Assert.assertEquals(getPage(webAppURLLocal).getResponseCode(), 302, "Response code mismatch. Client request " +
@@ -69,7 +70,7 @@ public class WebApplicationStateChangingTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Stop web application", dependsOnMethods = "testWebApplicationStop")
     public void testWebApplicationStart() throws Exception {
-        assertTrue(webAppAdminClient.startWebApp(webAppFileName), "failed to start wen application");
+        assertTrue(webAppAdminClient.startWebApp(webAppFileName,hostName), "failed to start wen application");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Started", "Start State mismatched");
         String webAppURLLocal = webAppURL + "/" + webAppName;
         assertEquals(getPage(webAppURLLocal).getData(), "<status>success</status>", "Web app invocation fail");
