@@ -76,6 +76,11 @@
             <artifactId>org.wso2.carbon.integration.common.utils</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>
