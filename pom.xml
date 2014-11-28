@@ -256,7 +256,7 @@
             <dependency>
                 <groupId>org.jaggeryjs</groupId>
                 <artifactId>org.jaggeryjs.jaggery.app.mgt.stub</artifactId>
-                <version>${jaggery.stub.version}</version>
+                <version>${jaggery.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -353,6 +353,12 @@
                 <artifactId>wso2xfer</artifactId>
                 <version>${xfer.version}</version>
                 <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
+                <version>${carbon.platform.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -453,7 +459,7 @@
         <rampart.version>1.6.1-wso2v13-SNAPSHOT</rampart.version>
 
         <stub.version>4.3.0-SNAPSHOT</stub.version>
-        <jaggery.stub.version>0.9.0-SNAPSHOT</jaggery.stub.version>
+        <jaggery.version>0.9.0-SNAPSHOT</jaggery.version>
         <test.framework.version>4.3.1-SNAPSHOT</test.framework.version>
         <xfer.version>3.3.0</xfer.version>
 
