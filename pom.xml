@@ -465,7 +465,7 @@
 
         <stub.version>4.3.0-SNAPSHOT</stub.version>
         <jaggery.version>0.9.0-SNAPSHOT</jaggery.version>
-        <test.framework.version>4.3.1-SNAPSHOT</test.framework.version>
+        <test.framework.version>4.3.1</test.framework.version>
         <xfer.version>3.3.0</xfer.version>
 
     </properties>
