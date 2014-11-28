@@ -16,7 +16,7 @@ import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.axis2client.AxisServiceClient;
-import org.wso2.carbon.integration.common.utils.clients.SecureAxisServiceClient;
+import org.wso2.carbon.automation.test.utils.axis2client.SecureAxisServiceClient;
 
 import java.io.File;
 

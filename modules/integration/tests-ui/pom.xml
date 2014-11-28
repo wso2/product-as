@@ -11,8 +11,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer - Integration Test Module</name>
-    <artifactId>org.wso2.appserver.integration.tests</artifactId>
+    <name>WSO2 AppServer - Integration Test UI Module</name>
+    <artifactId>org.wso2.appserver.integration.test.ui</artifactId>
     <packaging>jar</packaging>
 
     <build>
@@ -21,7 +21,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <inherited>false</inherited>
                 <configuration>
+                    <!--<argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5006</argLine>-->
                     <argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m</argLine>
+
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-server-mgt.xml</suiteXmlFile>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
@@ -32,7 +34,7 @@
                             <name>maven.test.haltafterfailure</name>
                             <value>false</value>
                         </property>
-                        <property>
+			<property>
                             <name>java.io.tmpdir</name>
                             <value>${basedir}/target/</value>
                         </property>
@@ -46,6 +48,12 @@
                             <name>framework.resource.location</name>
                             <value>
                                 ${basedir}/src/test/resources/
+                            </value>
+                        </property>
+                        <property>
+                            <name>server.list</name>
+                            <value>
+                                AS
                             </value>
                         </property>
                         <property>
@@ -74,7 +82,7 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/emma</outputDirectory>
                             <includeTypes>jar</includeTypes>
-                            <includeArtifactIds>emma
+                            <includeArtifactIds>emma,org.wso2.carbon.automation.core
                             </includeArtifactIds>
                         </configuration>
                     </execution>
@@ -218,61 +226,45 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/test/java</directory>
-                <includes>
-                    <include>*.properties</include>
-                </includes>
-            </resource>
-        </resources>
-
     </build>
 
     <dependencies>
         <dependency>
+            <groupId>emma</groupId>
+            <artifactId>emma</artifactId>
+            <version>${emma.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>SecVerifier</artifactId>
+            <version>${carbon.platform.version}</version>
             <type>aar</type>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>org.wso2.appserver.integration.common.utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>org.wso2.appserver.integration.common.clients</artifactId>
+            <groupId>org.wso2.carbon.automation</groupId>
+            <artifactId>org.wso2.carbon.automation.api</artifactId>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
-            <artifactId>org.wso2.carbon.automation.test.utils</artifactId>
+            <artifactId>org.wso2.carbon.automation.core</artifactId>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.automation</groupId>
-            <artifactId>org.wso2.carbon.automation.engine</artifactId>
+            <artifactId>org.wso2.carbon.automation.utils</artifactId>
+            <version>${previous.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.integration.common.extensions</artifactId>
+            <artifactId>org.wso2.carbon.tomcat</artifactId>
+            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.integration.common.utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
-        </dependency>
-       <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.xfer</groupId>
-            <artifactId>wso2xfer</artifactId>
-            <type>jar</type>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

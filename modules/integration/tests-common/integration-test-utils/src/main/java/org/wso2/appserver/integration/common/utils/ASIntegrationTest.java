@@ -24,7 +24,6 @@ import org.wso2.appserver.integration.common.clients.ServiceAdminClient;
 import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.engine.context.beans.User;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.integration.common.admin.client.SecurityAdminServiceClient;
 import org.wso2.carbon.integration.common.admin.client.ServerAdminClient;
@@ -45,10 +44,13 @@ public class ASIntegrationTest {
     protected String webAppURL;
     protected SecurityAdminServiceClient securityAdminServiceClient;
     protected LoginLogoutClient loginLogoutClient;
-    protected User userInfo;
 
     protected void init() throws Exception {
-        init(TestUserMode.SUPER_TENANT_ADMIN);
+        asServer = new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN);
+        loginLogoutClient = new LoginLogoutClient(asServer);
+        sessionCookie = loginLogoutClient.login();
+        backendURL = asServer.getContextUrls().getBackEndUrl();
+        webAppURL = asServer.getContextUrls().getWebAppURL();
     }
 
     protected void init(TestUserMode testUserMode) throws Exception {
@@ -57,7 +59,6 @@ public class ASIntegrationTest {
         sessionCookie = loginLogoutClient.login();
         backendURL = asServer.getContextUrls().getBackEndUrl();
         webAppURL = asServer.getContextUrls().getWebAppURL();
-        userInfo = asServer.getContextTenant().getContextUser();
     }
 
     protected void init(String domainKey, String userKey) throws Exception {

@@ -1,0 +1,18 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="as-server-setup-verifier">
+    <parameter name="useDefaultListeners" value="false"/>
+    <listeners>
+        <listener class-name="org.wso2.carbon.automation.core.PlatformTestManager"/>
+        <listener class-name="org.wso2.carbon.automation.core.PlatformReportManager"/>
+        <listener class-name="org.wso2.carbon.automation.core.PlatformExecutionManager"/>
+        <listener class-name="org.wso2.carbon.automation.core.PlatformSuiteManager"/>
+        <listener class-name="org.wso2.carbon.automation.core.PlatformAnnotationTransferManager"/>
+    </listeners>
+    <test name="InitializedAndSetupServer" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.carbon.integration.test.ui.LoginTestCase"/>
+            <class name="org.wso2.carbon.integration.test.ui.webapp.WebAppSeleniumTestCase"/>
+        </classes>
+    </test>
+</suite>

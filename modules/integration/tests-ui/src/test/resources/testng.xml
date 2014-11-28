@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="appserver-features-test-suite">
+    <parameter name="useDefaultListeners" value="false"/>
+    <test name="Web-Application-testing" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.carbon.integration.test.ui.webapp.*"/>
+        </packages>
+    </test>
+</suite>
