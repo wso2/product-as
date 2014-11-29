@@ -127,7 +127,7 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.module.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <!--<featureArtifactDef>-->
+                                <featureArtifactDef>-->
                                     <!--org.wso2.carbon:org.wso2.carbon.throttle.feature:${carbon.platform.version}-->
                                 <!--</featureArtifactDef>-->
                                 <!--<featureArtifactDef>-->
