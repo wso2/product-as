@@ -109,7 +109,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "UnDeploying web application",
           dependsOnMethods = "testWebApplicationRedeployment")
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostname);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                    "Web Application unDeployment failed");
@@ -124,7 +124,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void destroy() throws Exception {
         if (webAppAdminClient.getWebApplist(webAppName).contains(webAppName)) {
-            webAppAdminClient.deleteWebAppFile(webAppFileName);
+            webAppAdminClient.deleteWebAppFile(webAppFileName, hostname);
         }
     }
 

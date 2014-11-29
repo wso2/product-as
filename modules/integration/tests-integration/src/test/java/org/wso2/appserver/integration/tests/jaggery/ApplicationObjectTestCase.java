@@ -40,6 +40,7 @@ import static org.testng.Assert.assertNotNull;
 public class ApplicationObjectTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(ApplicationObjectTestCase.class);
     private TestUserMode userMode;
+    private final String hostName = "localhost";
 
     @BeforeTest(alwaysRun = true) //uploads testapp.zip file and verify  deployment
     public void jaggeryFileUpload() throws Exception {
@@ -72,7 +73,7 @@ public class ApplicationObjectTestCase extends ASIntegrationTest {
     @AfterTest(alwaysRun = true)
     public void jaggeryFileDelete() throws Exception {  // deletes the testapp.zip web app file
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.deleteWebAppFile("testapp");
+        webAppAdminClient.deleteWebAppFile("testapp", hostName);
         log.info("testapp deleted successfully");
     }
 

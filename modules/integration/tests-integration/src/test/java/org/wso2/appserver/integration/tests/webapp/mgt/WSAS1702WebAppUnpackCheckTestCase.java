@@ -50,6 +50,7 @@ import static org.testng.Assert.assertTrue;
 public class WSAS1702WebAppUnpackCheckTestCase extends ASIntegrationTest {
     private final String webAppFileName = "WSAS1702WebApp.war";
     private final String webAppName = "WSAS1702WebApp";
+    private final String hostName = "localhost";
     private WebAppAdminClient webAppAdminClient;
     private int tenantID;
     private String carbonHome;
@@ -112,7 +113,7 @@ public class WSAS1702WebAppUnpackCheckTestCase extends ASIntegrationTest {
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @AfterClass(alwaysRun = true)
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName), "Web Application unDeployment failed");
         String webAppURLLocal = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName;

@@ -44,6 +44,7 @@ public class WebApplicationRedeploymentTestCase extends ASIntegrationTest {
     private final String webAppFileName = "appServer-webapp-content-changing.war";
     private final String webAppName = "appServer-webapp-content-changing";
     private final String webAppPath = webAppName + "/SimpleServlet";
+    private final String hostName = "localhost";
     private WebAppAdminClient webAppAdminClient;
 
     @BeforeClass(alwaysRun = true)
@@ -78,7 +79,7 @@ public class WebApplicationRedeploymentTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                    "Web Application unDeployment failed");

@@ -121,8 +121,8 @@ public class DeployWebappsWithSameNameTestCase extends ASIntegrationTest {
 
     @Test(dependsOnMethods = {"testInvokeWebApplications"})
     public void testDeleteWebApplications() throws Exception {
-        webAppAdminClient.deleteWebAppFile(vhostName1 + ":" + webAppFileName);
-        webAppAdminClient.deleteWebAppFile(vhostName2 + ":" + webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, vhostName1);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, vhostName2);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                 "Web Application unDeployment failed");

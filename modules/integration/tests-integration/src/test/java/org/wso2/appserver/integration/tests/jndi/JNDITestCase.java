@@ -45,6 +45,7 @@ import static org.testng.Assert.assertTrue;
 public class JNDITestCase extends ASIntegrationTest {
     private WebAppAdminClient webAppAdminClient;
     private String webAppNameOne;
+    private final String hostName = "localhost";
     private String webAppNameTwo;
 
     @BeforeClass(alwaysRun = true)
@@ -58,8 +59,8 @@ public class JNDITestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void deteleteWebApp() throws Exception {
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.deleteWebAppFile(webAppNameOne + ".war");
-        webAppAdminClient.deleteWebAppFile(webAppNameTwo + ".war");
+        webAppAdminClient.deleteWebAppFile(webAppNameOne + ".war", hostName);
+        webAppAdminClient.deleteWebAppFile(webAppNameTwo + ".war", hostName);
     }
 
     @Test(groups = "wso2.as", description = "Deploying web application")
