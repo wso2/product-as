@@ -39,6 +39,7 @@ public class HelloWorldWebAppTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(HelloWorldWebAppTestCase.class);
     private WebAppAdminClient webAppAdminClient;
+    private final String hostName = "localhost";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -50,7 +51,7 @@ public class HelloWorldWebAppTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void webAppDelete() throws Exception {   // delete web app virtual.war
 
-        webAppAdminClient.deleteWebAppFile("HelloWorldWebapp.war");
+        webAppAdminClient.deleteWebAppFile("HelloWorldWebapp.war", hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie,
                 "HelloWorldWebapp.war"), "HelloWorldWebapp unDeployment failed");

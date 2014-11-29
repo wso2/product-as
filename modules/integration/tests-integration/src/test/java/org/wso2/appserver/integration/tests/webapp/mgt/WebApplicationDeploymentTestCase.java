@@ -37,6 +37,7 @@ import static org.testng.Assert.assertTrue;
 public class WebApplicationDeploymentTestCase extends ASIntegrationTest {
     private final String webAppFileName = "appServer-valied-deploymant-1.0.0.war";
     private final String webAppName = "appServer-valied-deploymant-1.0.0";
+    private final String hostName = "localhost";
     private WebAppAdminClient webAppAdminClient;
 
     @BeforeClass(alwaysRun = true)
@@ -70,13 +71,13 @@ public class WebApplicationDeploymentTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "UnDeploying web application",
           dependsOnMethods = "testInvokeWebApp")
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                    "Web Application unDeployment failed");
 
         String webAppURLLocal = webAppURL + "/appServer-valied-deploymant-1.0.0";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL, null);
+        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         Assert.assertEquals(response.getResponseCode(), 302, "Response code mismatch. Client request " +
                                                              "got a response even after web app is undeployed");
     }

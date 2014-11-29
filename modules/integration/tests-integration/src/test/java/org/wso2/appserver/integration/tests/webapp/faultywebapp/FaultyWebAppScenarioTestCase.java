@@ -25,6 +25,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(FaultyWebAppScenarioTestCase.class);
     private static final String INVALID_WAR_FILE_NAME = "appServer-invalied-deploymant-1.0.0.war";
     private WebAppAdminClient webAppAdminClient;
+    private final String hostName = "localhost";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -34,7 +35,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void webApplicationDelete() throws Exception {
-        webAppAdminClient.deleteWebAppFile("SimpleServlet.war");
+        webAppAdminClient.deleteWebAppFile("SimpleServlet.war", hostName);
         log.info("SimpleServlet.war deleted successfully");  // removing SimpleServlet.war uploaded
     }
 
@@ -66,7 +67,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         List<String> faultyList = webAppAdminClient.getFaultyWebAppList(".war");
         if (faultyList.contains(INVALID_WAR_FILE_NAME)) {
             // removing the faulty web app
-            webAppAdminClient.deleteFaultyWebApps(INVALID_WAR_FILE_NAME);
+            webAppAdminClient.deleteFaultyWebApps(INVALID_WAR_FILE_NAME, hostName);
             log.info("Faulty web appServer-invalied-deploymant-1.0.0.war deleted");
         }
         // ensuring the war does not contain in the fulty list anymore
@@ -103,7 +104,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         int newNumberOfFaultyWebApps = webAppAdminClient.getFaultyWebAppList("").size(); // latest faulty web apps
         assertTrue(((newNumberOfWebApps == numberOfWebApps) && (newNumberOfFaultyWebApps == numberOfFaultyWebApps)),
                 "appServer-valied-deploymant-1.0.0.war duplicated");
-        webAppAdminClient.deleteWebAppFile("appServer-valied-deploymant-1.0.0.war");
+        webAppAdminClient.deleteWebAppFile("appServer-valied-deploymant-1.0.0.war", hostName);
         log.info("appServer-valied-deploymant-1.0.0.war deleted successfully");  // removing the artifact
     }
 
@@ -118,7 +119,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(
                 backendURL, sessionCookie,
                 "appServer-invalied-deploymant-1.0.0"), "Web Application Deployment failed");
-        webAppAdminClient.deleteFaultyWebApps("SimpleServlet-faulty.war"); // delete faulty web app
+        webAppAdminClient.deleteFaultyWebApps("SimpleServlet-faulty.war", hostName); // delete faulty web app
         log.info("Faulty web app , SimpleServlet-faulty.war deleted");
 
         // uploading the corrected web app
