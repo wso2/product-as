@@ -26,6 +26,12 @@
     <name>Samples</name>
     <description>All the samples contained in WSO2 AppServer</description>
 
+    <parent>
+        <groupId>org.wso2</groupId>
+        <artifactId>wso2</artifactId>
+        <version>1</version>
+    </parent>
+
     <reporting>
         <plugins>
             <plugin>
