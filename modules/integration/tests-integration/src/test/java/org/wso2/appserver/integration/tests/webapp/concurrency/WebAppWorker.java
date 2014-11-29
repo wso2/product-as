@@ -35,6 +35,7 @@ public class WebAppWorker extends Thread {
     private String backendURL;
     private String filePath;
     private WebAppAdminClient webAppAdminClient;
+    private final String hostName = "localhost";
 
     public WebAppWorker(String session, String backendURL, String filePath) {
         this.session = session;
@@ -59,6 +60,6 @@ public class WebAppWorker extends Thread {
 
     public void deleteWebApp() throws RemoteException {
         webAppAdminClient.deleteWebAppFile(filePath.substring(filePath.lastIndexOf(File.separator) + 1,
-                                                              filePath.length()));
+                                                              filePath.length()), hostName);
     }
 }

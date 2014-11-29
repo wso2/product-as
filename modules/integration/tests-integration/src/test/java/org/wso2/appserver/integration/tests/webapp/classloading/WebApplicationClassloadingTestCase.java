@@ -39,6 +39,7 @@ public abstract class WebApplicationClassloadingTestCase extends
 
 	public static final String PASS = "Pass";
 	public static final String FAIL = "Fail";
+    private final String hostName = "localhost";
 
 	private String webAppFileName;
 	private String webAppName;
@@ -55,7 +56,7 @@ public abstract class WebApplicationClassloadingTestCase extends
 
     @AfterClass(alwaysRun = true)
     public void cleanupWebApps() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie,
                 webAppName), "Web Application unDeployment failed");

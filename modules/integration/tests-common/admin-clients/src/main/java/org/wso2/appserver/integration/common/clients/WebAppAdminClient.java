@@ -71,22 +71,22 @@ public class WebAppAdminClient {
         }
     }
 
-    public void deleteWebAppFile(String fileName) throws RemoteException {
-        webappAdminStub.deleteStartedWebapps(new String[]{fileName});
+    public void deleteWebAppFile(String fileName, String hostName) throws RemoteException {
+        webappAdminStub.deleteStartedWebapps(new String[]{hostName + ":" + fileName});
     }
 
-    public void deleteFaultyWebAppFile(String fileName) throws RemoteException {
-        webappAdminStub.deleteFaultyWebapps(new String[]{fileName});
+    public void deleteFaultyWebAppFile(String fileName, String hostName) throws RemoteException {
+        webappAdminStub.deleteFaultyWebapps(new String[]{hostName + ":" + fileName});
     }
 
-    public void deleteStoppedWebapps(String fileName) throws RemoteException {
+    public void deleteStoppedWebapps(String fileName, String hostName) throws RemoteException {
 
-        webappAdminStub.deleteStoppedWebapps(new String[]{fileName});
+        webappAdminStub.deleteStoppedWebapps(new String[]{hostName + ":" + fileName});
     }
 
-    public void deleteFaultyWebApps(String fileName) throws RemoteException {
+    public void deleteFaultyWebApps(String fileName, String hostName) throws RemoteException {
         try {
-            webappAdminStub.deleteFaultyWebapps(new String[]{fileName});
+            webappAdminStub.deleteFaultyWebapps(new String[]{hostName + ":" + fileName});
         } catch (RemoteException e) {
             throw new RemoteException("Faulty webApp deletion fail", e);
         }
