@@ -40,6 +40,7 @@ import static org.testng.Assert.assertTrue;
 public class WebApplicationReloadingTestCase extends ASIntegrationTest {
     private final String webAppFileName = "appServer-valied-deploymant-1.0.0.war";
     private final String webAppName = "appServer-valied-deploymant-1.0.0";
+    private final String hostName = "localhost";
     private WebAppAdminClient webAppAdminClient;
 
     @BeforeClass(alwaysRun = true)
@@ -68,7 +69,7 @@ public class WebApplicationReloadingTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                    "Web Application unDeployment failed");

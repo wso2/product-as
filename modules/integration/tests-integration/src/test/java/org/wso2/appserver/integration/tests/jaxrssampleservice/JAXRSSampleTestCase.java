@@ -43,6 +43,7 @@ import static org.testng.Assert.assertTrue;
 public class JAXRSSampleTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(JAXRSSampleTestCase.class);
+    private final String hostName = "localhost";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -52,7 +53,7 @@ public class JAXRSSampleTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void webApplicationDelete() throws Exception {
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.deleteWebAppFile("jaxrs_sample_02.war");
+        webAppAdminClient.deleteWebAppFile("jaxrs_sample_02.war", hostName);
         log.info("jaxrs_sample_02.war deleted successfully");
     }
 
