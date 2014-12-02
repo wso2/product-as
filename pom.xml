@@ -103,7 +103,7 @@
 	    <dependency>
             	<groupId>net.sf.ehcache.wso2</groupId>
             	<artifactId>ehcache</artifactId>
-            	<version>1.5.0.wso2v3</version>
+            	<version>${ehcache.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.bcel.wso2</groupId>
@@ -512,6 +512,7 @@
         <operadriver.version>0.8.1</operadriver.version>
         <selenium.version>2.40.0</selenium.version>
 
+        <ehcache.version>1.5.0.wso2v3</ehcache.version>
     </properties>
 
     <mailingLists>
