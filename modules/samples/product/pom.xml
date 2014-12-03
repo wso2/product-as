@@ -176,7 +176,7 @@
 
     <properties>
 	    <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
-        <carbon.kernel.version>4.3.0</carbon.kernel.version>
+        <carbon.kernel.version>4.3.0-SNAPSHOT</carbon.kernel.version>
         <appserver.axis2.version>1.6.1.wso2v10</appserver.axis2.version>
         <appserver.axiom.version>1.2.11.wso2v4</appserver.axiom.version>
         <appserver.wss4j.version>1.5.11.wso2v3</appserver.wss4j.version>
