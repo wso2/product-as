@@ -60,7 +60,7 @@
             </includes>
         </fileSet>
 		<!--copying runtimes-->
-	<fileSet>
+	    <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/runtimes</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/lib/runtimes/</outputDirectory>
 	    	<includes>
@@ -68,7 +68,7 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>target/wso2carbon-core-${carbon.platform.version}</directory>
+            <directory>target/wso2carbon-core-${carbon.kernel.version}</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
             <excludes>
                 <exclude>**/wso2server.bat</exclude>
@@ -85,7 +85,7 @@
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts</outputDirectory>
         </fileSet>
 	
-	<fileSet>
+	    <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/service-provider/
             </directory>
@@ -582,7 +582,7 @@
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>target/wso2carbon-core-${carbon.platform.version}/bin/wso2server.bat</source>
+            <source>target/wso2carbon-core-${carbon.kernel.version}/bin/wso2server.bat</source>
             <outputDirectory>wso2as-${pom.version}/bin/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
