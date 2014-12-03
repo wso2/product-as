@@ -61,7 +61,7 @@
                             *;resolution:=optional
                         </Import-Package>
                         <Carbon-Component>UIBundle</Carbon-Component>
-			<Fragment-Host>org.wso2.carbon.ui</Fragment-Host>
+			            <Fragment-Host>org.wso2.carbon.ui</Fragment-Host>
                     </instructions>
                 </configuration>
             </plugin>

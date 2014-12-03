@@ -77,7 +77,7 @@
                             <publishArtifactRepository>true</publishArtifactRepository>
                             <featureArtifacts>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.core.feature:${carbon.platform.version}
+                                    org.wso2.carbon:org.wso2.carbon.core.feature:${carbon.kernel.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.platform.version}
@@ -721,11 +721,11 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.core.common.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.core.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.core.runtime.feature.group</id>
