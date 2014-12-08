@@ -463,7 +463,7 @@
 
         <!--carbon.platform.version>${carbon.platform.version}</carbon.platform.version-->
         <synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
-        <carbon.kernel.version>4.3.0</carbon.kernel.version>
+        <carbon.kernel.version>4.3.0-SNAPSHOT</carbon.kernel.version>
         <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
         <javax.servlet.version>3.0.0.v201112011016</javax.servlet.version>
         <javax.servlet.jsp.version>2.2.0.v201112011158</javax.servlet.jsp.version>
