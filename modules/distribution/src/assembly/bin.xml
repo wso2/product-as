@@ -83,13 +83,6 @@
         <fileSet>
             <directory>target/wso2carbon-core-${carbon.kernel.version}/dbscripts</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts</outputDirectory>
-            <!-- Changes related to Carbon kernel 4.2.0 patches -->
-            <excludes>
-                <exclude>db2.sql</exclude>
-                <exclude>mysql.sql</exclude>
-		<exclude>mysql_cluster.sql</exclude>
-            </excludes>
-            <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
         </fileSet>
 	
 	<fileSet>

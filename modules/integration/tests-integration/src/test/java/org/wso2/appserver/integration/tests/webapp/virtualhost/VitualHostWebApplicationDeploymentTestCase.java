@@ -100,7 +100,7 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
 
     @Test(dependsOnMethods = {"testWebApplicationDeployment", "testInvokeWebApplication"})
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(vhostName + ":" + webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, vhostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                 "Web Application unDeployment failed");

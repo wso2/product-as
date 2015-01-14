@@ -48,6 +48,7 @@ Important : -  Refer JIRA issue WSAS-1196. Hence omitted test cases related to j
 public class JAXWSSampleTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(JAXWSSampleTestCase.class);
+    private final String hostName = "localhost";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -58,7 +59,7 @@ public class JAXWSSampleTestCase extends ASIntegrationTest {
     public void webApplicationDelete() throws Exception {
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL,sessionCookie);
         //  webAppAdminClient.deleteWebAppFile("java_first_jaxws.war");   // Known issue WSAS-1196
-        webAppAdminClient.deleteWebAppFile("handlers_jaxws.war");
+        webAppAdminClient.deleteWebAppFile("handlers_jaxws.war", hostName);
         log.info("handlers_jaxws.war deleted successfully");
     }
 

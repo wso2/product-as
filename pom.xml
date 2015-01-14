@@ -28,6 +28,12 @@
     <url>http://wso2.org/projects/appserver/java</url>
     <description>WSO2 AppServer</description>
 
+    <parent>
+        <groupId>org.wso2</groupId>
+        <artifactId>wso2</artifactId>
+        <version>1</version>
+    </parent>
+
     <licenses>
         <license>
             <name>Apache License Version 2.0</name>
@@ -93,6 +99,11 @@
                 <groupId>org.hibernate.wso2</groupId>
                 <artifactId>hibernate</artifactId>
                 <version>${hibernate.version}</version>
+            </dependency>
+	    <dependency>
+            	<groupId>net.sf.ehcache.wso2</groupId>
+            	<artifactId>ehcache</artifactId>
+            	<version>${ehcache.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.bcel.wso2</groupId>
@@ -247,12 +258,13 @@
                 <version>${stub.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
+            <!--removing duplicate-->
+            <!--<dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.utils</artifactId>
                 <version>${carbon.platform.version}</version>
                 <scope>test</scope>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>org.jaggeryjs</groupId>
                 <artifactId>org.jaggeryjs.jaggery.app.mgt.stub</artifactId>
@@ -325,6 +337,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.wso2.carbon.automation</groupId>
+                <artifactId>org.wso2.carbon.automation.extensions</artifactId>
+                <version>${test.framework.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.integration.common.extensions</artifactId>
                 <version>${carbon.platform.version}</version>
@@ -355,6 +373,36 @@
                 <type>jar</type>
             </dependency>
             <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-android-driver</artifactId>
+                    </exclusion>
+                </exclusions>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.opera</groupId>
+                <artifactId>operadriver</artifactId>
+                <version>${operadriver.version}</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-remote-driver</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.1.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
                 <version>${carbon.platform.version}</version>
@@ -383,7 +431,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.0-alpha-3</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -441,13 +488,13 @@
         <version.equinox.http.helper>1.1.0.wso2v1</version.equinox.http.helper>
         <version.log4j>1.2.13</version.log4j>
         <version.commons.logging>1.1.1</version.commons.logging>
-        <orbit.version.axis2>1.6.1.wso2v11-SNAPSHOT</orbit.version.axis2>
+        <orbit.version.axis2>1.6.1.wso2v11</orbit.version.axis2>
         <version.axis2.json>${orbit.version.axis2}</version.axis2.json>
         <version.axis2.client>${orbit.version.axis2}</version.axis2.client>
         <version.axis2.jaxbri>${orbit.version.axis2}</version.axis2.jaxbri>
         <version.axis2.jibx>${orbit.version.axis2}</version.axis2.jibx>
-        <carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
-        <orbit.version.axiom>1.2.11.wso2v5-SNAPSHOT</orbit.version.axiom>
+        <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
+        <orbit.version.axiom>1.2.11.wso2v5</orbit.version.axiom>
         <stratos.version>6.0.0-SNAPSHOT</stratos.version>
         <emma.version>2.1.5320</emma.version>
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
@@ -460,9 +507,12 @@
 
         <stub.version>4.3.0-SNAPSHOT</stub.version>
         <jaggery.version>0.9.0-SNAPSHOT</jaggery.version>
-        <test.framework.version>4.3.1-SNAPSHOT</test.framework.version>
+        <test.framework.version>4.3.1</test.framework.version>
         <xfer.version>3.3.0</xfer.version>
+        <operadriver.version>0.8.1</operadriver.version>
+        <selenium.version>2.40.0</selenium.version>
 
+        <ehcache.version>1.5.0.wso2v3</ehcache.version>
     </properties>
 
     <mailingLists>
@@ -481,42 +531,6 @@
             <unsubscribe>mailto:dev-request@wso2.org?subject=unsubscribe</unsubscribe>
         </mailingList>
     </mailingLists>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>wso2.releases</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </pluginRepository>
-
-        <pluginRepository>
-            <id>wso2.snapshots</id>
-            <name>Apache Snapshot Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-        <pluginRepository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
 
     <build>
         <extensions>
@@ -543,7 +557,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <source>1.6</source>
@@ -581,7 +594,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.2.1</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -604,61 +616,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <repositories>
-        <!-- Before adding ANYTHING in here, please start a discussion on the dev list.
-             Ideally the Axis2 build should only use Maven central (which is available
-             by default) and nothing else. We had troubles with other repositories in
-             the past. Therefore configuring additional repositories here should be
-             considered very carefully. -->
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>wso2.snapshots</id>
-            <name>WSO2 Snapshot Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-
-    <distributionManagement>
-        <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>wso2.snapshots</id>
-            <name>WSO2 Snapshot Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>

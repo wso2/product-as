@@ -47,6 +47,7 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
     // application logs
     private static final String SAMPLE_APP_NAME = "jaxrs_sample_02";
     private static final String SAMPLE_APP_NAME_WAR = SAMPLE_APP_NAME + ".war";
+    private final String hostName = "localhost";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -68,7 +69,7 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void webApplicationDelete() throws Exception {
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.deleteWebAppFile(SAMPLE_APP_NAME_WAR);
+        webAppAdminClient.deleteWebAppFile(SAMPLE_APP_NAME_WAR, hostName);
         log.info("jaxrs_sample_02.war deleted successfully");
     }
 

@@ -38,6 +38,7 @@ import static org.testng.Assert.assertTrue;
 public class VirtualDirectoryListingTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(VirtualDirectoryListingTestCase.class);
     private WebAppAdminClient webAppAdminClient;
+    private final String hostName = "localhost";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -48,7 +49,7 @@ public class VirtualDirectoryListingTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void webAppDelete() throws Exception {   // delete web app virtual.war
 
-        webAppAdminClient.deleteWebAppFile("virtual.war");
+        webAppAdminClient.deleteWebAppFile("virtual.war", hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie,
                 "virtual.war"), "Web App virtual unDeployment failed");
