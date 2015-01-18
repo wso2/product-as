@@ -26,6 +26,12 @@
     <name>Samples</name>
     <description>All the samples contained in WSO2 AppServer</description>
 
+    <parent>
+        <groupId>org.wso2</groupId>
+        <artifactId>wso2</artifactId>
+        <version>1</version>
+    </parent>
+
     <reporting>
         <plugins>
             <plugin>
@@ -87,7 +93,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.utils</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.ws.security.wso2</groupId>
@@ -169,7 +175,8 @@
     </dependencyManagement>
 
     <properties>
-	<carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
+	    <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
+        <carbon.kernel.version>4.3.0</carbon.kernel.version>
         <appserver.axis2.version>1.6.1.wso2v10</appserver.axis2.version>
         <appserver.axiom.version>1.2.11.wso2v4</appserver.axiom.version>
         <appserver.wss4j.version>1.5.11.wso2v3</appserver.wss4j.version>

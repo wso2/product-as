@@ -77,7 +77,7 @@
                             <publishArtifactRepository>true</publishArtifactRepository>
                             <featureArtifacts>
                                 <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.core.feature:${carbon.platform.version}
+                                    org.wso2.carbon:org.wso2.carbon.core.feature:${carbon.kernel.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.platform.version}
@@ -127,12 +127,12 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.module.mgt.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.throttle.feature:${carbon.platform.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.caching.feature:${carbon.platform.version}
-                                </featureArtifactDef>
+                                <featureArtifactDef>-->
+                                    <!--org.wso2.carbon:org.wso2.carbon.throttle.feature:${carbon.platform.version}-->
+                                <!--</featureArtifactDef>-->
+                                <!--<featureArtifactDef>-->
+                                    <!--org.wso2.carbon:org.wso2.carbon.caching.feature:${carbon.platform.version}-->
+                                <!--</featureArtifactDef>-->
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.rm.feature:${carbon.platform.version}
                                 </featureArtifactDef>
@@ -161,6 +161,9 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.event.server.feature:${carbon.platform.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon:org.wso2.carbon.event.ui.feature:${carbon.platform.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.tryit.feature:${carbon.platform.version}
@@ -240,9 +243,7 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.bam.webapp.agent.feature:${carbon.platform.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon:org.wso2.carbon.event.ui.feature:${carbon.platform.version}
-                                </featureArtifactDef>
+
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.application.deployer.webapp.feature:${carbon.platform.version}
                                 </featureArtifactDef>
@@ -268,7 +269,7 @@
 
                                 <!-- jaggery features -->
                                 <featureArtifactDef>
-                                    org.jaggeryjs:org.jaggeryjs.feature:0.9.0-SNAPSHOT
+                                    org.jaggeryjs:org.jaggeryjs.feature:${jaggery.version}
                                 </featureArtifactDef>
 
                                 <!--End of jaggery features-->
@@ -519,9 +520,12 @@
                                     <id>org.wso2.carbon.event.common.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-
                                 <feature>
                                     <id>org.wso2.carbon.event.server.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.event.ui.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
@@ -628,10 +632,6 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
-                                    <id>org.wso2.carbon.event.ui.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
-                                <feature>
                                     <id>org.wso2.carbon.application.deployer.webapp.feature.group
                                     </id>
                                     <version>${carbon.platform.version}</version>
@@ -674,7 +674,7 @@
                                 <!-- jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0-SNAPSHOT</version>
+                                    <version>${jaggery.version}</version>
                                 </feature>
                                 <!-- feature groups end-->
 
@@ -721,11 +721,11 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.core.common.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.core.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
+                                    <version>${carbon.kernel.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.core.runtime.feature.group</id>
@@ -891,8 +891,7 @@
                                     <version>${carbon.platform.version}</version>
                                 </feature>
 
-                                <!--
-                                                               Stratos feature -->
+                                <!-- Stratos feature -->
 
                                 <feature>
                                     <id>org.wso2.carbon.tenant.common.feature.group</id>
@@ -970,11 +969,10 @@
                                 </feature>
 
 
-                                <!--
-                                                                jaggery feature groups -->
+                                <!-- jaggery feature groups -->
                                 <feature>
                                     <id>org.jaggeryjs.server.feature.group</id>
-                                    <version>0.9.0-SNAPSHOT</version>
+                                    <version>${jaggery.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.apache.synapse.wso2.feature.group</id>
@@ -1080,6 +1078,10 @@
                                     <id>org.wso2.carbon.event.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.event.ui.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.registry.core.feature.group</id>
@@ -1150,10 +1152,6 @@
 
                                 <feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.event.ui.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
@@ -1349,6 +1347,10 @@
                                     <id>org.wso2.carbon.event.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.event.ui.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.registry.core.feature.group</id>
@@ -1412,10 +1414,6 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.server.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.event.ui.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
                                 <feature>
@@ -1769,6 +1767,10 @@
                                     <id>org.wso2.carbon.event.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
+                                <feature>
+                                    <id>org.wso2.carbon.event.ui.feature.group</id>
+                                    <version>${carbon.platform.version}</version>
+                                </feature>
 
                                 <feature>
                                     <id>org.wso2.carbon.registry.core.feature.group</id>
@@ -1834,10 +1836,7 @@
                                     <id>org.wso2.carbon.bam.webapp.agent.server.feature.group</id>
                                     <version>${carbon.platform.version}</version>
                                 </feature>
-                                <feature>
-                                    <id>org.wso2.carbon.event.ui.feature.group</id>
-                                    <version>${carbon.platform.version}</version>
-                                </feature>
+
                                 <feature>
                                     <id>org.wso2.carbon.application.deployer.webapp.feature.group
                                     </id>
@@ -1880,7 +1879,7 @@
 
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
-                                    <version>0.9.0-SNAPSHOT</version>
+                                    <version>${jaggery.version}</version>
                                 </feature>
 
                                 <feature>

@@ -23,10 +23,10 @@ format. The JSON document returned:
 {"Customer":{"id":"123","name":"John"}}
 
 A HTTP GET request to URL http://localhost:9000/customerservice/customers/123
-without setting Accept header explicitly returns a customer instance in JSON 
+without setting Accept header explicitly returns a customer instance in XML
 format. This is because the Accept header will be absent from the request when using 
 HTTP Client, in which case the CXF will treat the Accept content type as "*/*". 
-The JSON document returned:
+The XML document returned:
 
 {"Customer":{"id":"123","name":"John"}}
 

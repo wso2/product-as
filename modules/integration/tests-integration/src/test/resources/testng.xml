@@ -3,6 +3,12 @@
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
 
+    <test name="logviewer-tests" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.logviewer"></package>
+        </packages>
+    </test>
+
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
@@ -11,7 +17,8 @@
             <package name="org.wso2.appserver.integration.tests.webapp.faultywebapp"/>
             <package name="org.wso2.appserver.integration.tests.webapp.mgt"/>
             <package name="org.wso2.appserver.integration.tests.webapp.spring"/>
-            <package name="org.wso2.appserver.integration.tests.osgiservice"></package>
+            <package name="org.wso2.appserver.integration.tests.osgiservice"/>
+            <package name="org.wso2.appserver.integration.tests.webapp.virtualhost"/>
         </packages>
     </test>
 

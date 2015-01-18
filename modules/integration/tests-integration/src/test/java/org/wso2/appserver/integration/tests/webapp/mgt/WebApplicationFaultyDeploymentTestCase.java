@@ -35,6 +35,7 @@ import static org.testng.Assert.assertTrue;
 public class WebApplicationFaultyDeploymentTestCase extends ASIntegrationTest {
     private final String webAppFileName = "appServer-invalied-deploymant-1.0.0.war";
     private final String webAppName = "appServer-invalied-deploymant-1.0.0";
+    private final String hostName = "localhost";
     WebAppAdminClient webAppAdminClient;
 
     @BeforeClass(alwaysRun = true)
@@ -56,7 +57,7 @@ public class WebApplicationFaultyDeploymentTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "UnDeploying faulty web application",
           dependsOnMethods = "testFaultyWebApplicationDeployment")
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteFaultyWebAppFile(webAppFileName);
+        webAppAdminClient.deleteFaultyWebAppFile(webAppFileName, hostName);
         assertTrue(WebAppDeploymentUtil.isFaultyWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                    "Web Application unDeployment failed");

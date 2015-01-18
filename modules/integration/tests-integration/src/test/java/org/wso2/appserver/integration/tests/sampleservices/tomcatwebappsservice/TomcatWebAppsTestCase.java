@@ -42,6 +42,7 @@ public class TomcatWebAppsTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(TomcatWebAppsTestCase.class);
     private WebAppAdminClient webAppAdminClient;
+    private final String hostName = "localhost";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -53,13 +54,13 @@ public class TomcatWebAppsTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void webAppDelete() throws Exception {   // delete web apps
 
-        webAppAdminClient.deleteWebAppFile("GenericJavaBeanResource.war");
+        webAppAdminClient.deleteWebAppFile("GenericJavaBeanResource.war", hostName);
 
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie,
                 "GenericJavaBeanResource.war"), "Web App GenericJavaBeanResource unDeployment failed");
 
-        webAppAdminClient.deleteWebAppFile("JDBCDataSource.war");
+        webAppAdminClient.deleteWebAppFile("JDBCDataSource.war", hostName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie,
                 "JDBCDataSource.war"), "Web App JDBCDataSource unDeployment failed");

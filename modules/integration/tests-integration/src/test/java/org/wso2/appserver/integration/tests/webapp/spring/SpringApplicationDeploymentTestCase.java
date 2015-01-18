@@ -39,6 +39,7 @@ import static org.testng.Assert.assertTrue;
 public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
     private final String webAppFileName = "booking-faces.war";
     private final String webAppName = "booking-faces";
+    private final String hostname = "localhost";
     private WebAppAdminClient webAppAdminClient;
 
     @BeforeClass(alwaysRun = true)
@@ -75,7 +76,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Stop web application", dependsOnMethods = "testWebApplicationReloading")
     public void testWebApplicationStop() throws Exception {
-        assertTrue(webAppAdminClient.stopWebApp(webAppFileName), "failed to stop web application");
+        assertTrue(webAppAdminClient.stopWebApp(webAppFileName,hostname), "failed to stop web application");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Stopped", "Stop State mismatched");
         String webAppURLLocal = webAppURL + "/" + webAppName;
         Assert.assertEquals(HttpRequestUtil.sendGetRequest(webAppURLLocal, null).getResponseCode(), 302, "Response code mismatch. Client request " +
@@ -84,7 +85,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Stop web application", dependsOnMethods = "testWebApplicationStop")
     public void testWebApplicationStart() throws Exception {
-        assertTrue(webAppAdminClient.startWebApp(webAppFileName), "failed to start wen application");
+        assertTrue(webAppAdminClient.startWebApp(webAppFileName,hostname), "failed to start wen application");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Started", "Start State mismatched");
         getAndVerifyApplicationPage();
     }
@@ -108,7 +109,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "UnDeploying web application",
           dependsOnMethods = "testWebApplicationRedeployment")
     public void testDeleteWebApplication() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostname);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                    "Web Application unDeployment failed");
@@ -123,7 +124,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void destroy() throws Exception {
         if (webAppAdminClient.getWebApplist(webAppName).contains(webAppName)) {
-            webAppAdminClient.deleteWebAppFile(webAppFileName);
+            webAppAdminClient.deleteWebAppFile(webAppFileName, hostname);
         }
     }
 
