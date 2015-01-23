@@ -222,6 +222,28 @@
                 <properties>
                 </properties>
             </instance>
+            <instance name="appServerInstance0002" type="standalone" nonBlockingTransportEnabled="false">
+                <hosts>
+                    <host type="default">localhost</host>
+                </hosts>
+                <ports>
+                    <port type="http">9764</port>
+                    <port type="https">9444</port>
+                </ports>
+                <properties>
+                </properties>
+            </instance>
+            <instance name="appServerInstance0003" type="standalone" nonBlockingTransportEnabled="false">
+                <hosts>
+                    <host type="default">localhost</host>
+                </hosts>
+                <ports>
+                    <port type="http">9765</port>
+                    <port type="https">9445</port>
+                </ports>
+                <properties>
+                </properties>
+            </instance>
         </productGroup>
     </platform>
 
