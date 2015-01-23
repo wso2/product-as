@@ -19,6 +19,7 @@ package org.wso2.appserver.integration.tests.ciphertool;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -102,13 +103,15 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
     @Test(groups = {"wso2.as"}, description = "Test script run successfully",
           dependsOnMethods = {"testCheckBeforeEncrypt"})
     public void testCheckScriptRunSuccessfully() throws Exception {
-
+        String[] cmdArray ;
         File sourceRunFile = new File(TestConfigurationProvider.getResourceLocation() + File.separator +
                                       "artifacts" + File.separator + "AS" + File.separator + "ciphertool" +
                                       File.separator + "run.sh");
-
-        String[] cmdArray = new String[]{"sh", "ciphertool.sh", "-Dconfigure", "-Dpassword=wso2carbon"};
-
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            throw new SkipException("Skipping tests because of windows.");
+        }else {
+            cmdArray = new String[]{"sh", "ciphertool.sh", "-Dconfigure", "-Dpassword=wso2carbon"};
+        }
         File targetRunFile = new File(CARBON_HOME + File.separator + "bin" + File.separator + "run.sh");
         serverManager.applyConfigurationWithoutRestart(sourceRunFile, targetRunFile, false);
         boolean isScriptSuccess = PasswordEncryptionUtil.runCiphertoolScript(CARBON_HOME, cmdArray);
