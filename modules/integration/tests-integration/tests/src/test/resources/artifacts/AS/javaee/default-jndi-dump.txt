@@ -4,7 +4,7 @@ env/comp/TransactionSynchronizationRegistry=org.apache.geronimo.transaction.mana
 env/context.xml/environment=ContextString
 env/context.xml/resource=[ResourceBean ContextResource]
 env/jpa-example=org.apache.openejb.assembler.classic.ReloadableEntityManagerFactory
-env/module/ModuleName=ejb-examples-1.1.0
+env/module/ModuleName=tomee-ejb-examples-1.1.0
 env/org.superbiz.servlet.AnnotatedEJB/ds=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
 env/org.superbiz.servlet.AnnotatedServlet/ds=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
 env/org.superbiz.servlet.AnnotatedServlet/localbeanEJB=AnnotatedEJB[name=foo]

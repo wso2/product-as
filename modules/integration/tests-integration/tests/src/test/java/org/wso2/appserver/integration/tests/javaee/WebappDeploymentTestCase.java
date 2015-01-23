@@ -18,6 +18,8 @@
 
 package org.wso2.appserver.integration.tests.javaee;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
@@ -29,6 +31,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 
+import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -121,6 +124,45 @@ public abstract class WebappDeploymentTestCase extends
         return text;
     }
 
+    protected OMElement runAndGetResultAsOM(String webAppURL) throws Exception {
+        log.info("Endpoint : " + webAppURL);
+        HttpURLConnection httpCon = null;
+        String xmlContent = null;
+        boolean responseCode = true;
+
+        int responseCode1;
+        try {
+            URL e = new URL(webAppURL);
+            httpCon = (HttpURLConnection)e.openConnection();
+            httpCon.setConnectTimeout(30000);
+            httpCon.setRequestProperty("Accept", "application/xml");
+            InputStream in = httpCon.getInputStream();
+            xmlContent = getStringFromInputStream(in);
+            responseCode1 = httpCon.getResponseCode();
+            in.close();
+        } catch (Exception var12) {
+            log.error("Failed to get the response " + var12);
+            throw new Exception("Failed to get the response :" + var12);
+        } finally {
+            if(httpCon != null) {
+                httpCon.disconnect();
+            }
+
+        }
+
+        Assert.assertEquals(responseCode1, 200, "Response code not 200");
+        if(xmlContent != null) {
+            try {
+                return AXIOMUtil.stringToOM(xmlContent);
+            } catch (XMLStreamException var11) {
+                log.error("Error while processing response to OMElement" + var11);
+                throw new XMLStreamException("Error while processing response to OMElement" + var11);
+            }
+        } else {
+            return null;
+        }
+    }
+
     protected Map<String, String> toResultMap(String resultString)
             throws Exception {
         if (resultString == null) {
@@ -130,13 +172,13 @@ public abstract class WebappDeploymentTestCase extends
         Map<String, String> resultMap = new HashMap<String, String>();
         String[] resultArray = resultString.split("\n");
         for (String s : resultArray) {
-            String[] temp = s.split("=");
+            int i = s.indexOf('=');
             String key = "", value = "";
-            if (temp.length == 2) {
-                key = temp[0].trim();
-                value = temp[1].trim();
-            } else if (temp.length == 1) {
-                key = temp[0].trim();
+            if (i > 0) {
+                key = s.substring(0, i);
+            }
+            if (s.length() > i+1) {
+                value = s.substring(i+1);
             }
             resultMap.put(key, value);
         }

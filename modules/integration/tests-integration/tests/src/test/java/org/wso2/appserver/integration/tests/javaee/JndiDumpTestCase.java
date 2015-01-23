@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 /**
  * JavaEE heavily leverages JNDi to expose the resources. So,
@@ -50,6 +52,40 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
     }
 
     @Test(groups = "wso2.as", description = "test jndi dump", dependsOnMethods = "webApplicationDeploymentTest")
+    public void annotatedServletTest() throws Exception {
+        String annotatedServletUrl = getWebAppURL() + "/annotated";
+        String result = runAndGetResultAsString(annotatedServletUrl);
+
+        log.info("Response for " + annotatedServletUrl + " - " + result);
+
+        //local bean ejb
+        assertTrue(result.contains("@EJB=AnnotatedEJB[name=foo]"),
+                   "Response doesn't contain @EJB=AnnotatedEJB[name=foo]");
+        assertTrue(result.contains("@EJB.getName()=foo"),
+                   "Response doesn't contain @EJB.getName()=foo");
+        assertTrue(result.contains("@EJB.getDs()=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource"),
+                   "Response doesn't contain @EJB.getDs()=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource");
+        assertTrue(result.contains("JNDI=AnnotatedEJB[name=foo]"),
+                   "Response doesn't contain JNDI=AnnotatedEJB[name=foo]");
+
+        // local ejb
+        assertTrue(result.contains("@EJB=proxy=org.superbiz.servlet.AnnotatedEJBLocal;deployment=AnnotatedEJB;pk=null"));
+        assertTrue(result.contains("JNDI=proxy=org.superbiz.servlet.AnnotatedEJBLocal;deployment=AnnotatedEJB;pk=null"));
+
+        //remote ejb
+        assertTrue(result.contains("@EJB=proxy=org.superbiz.servlet.AnnotatedEJBRemote;deployment=AnnotatedEJB;pk=null"));
+        assertTrue(result.contains("JNDI=proxy=org.superbiz.servlet.AnnotatedEJBRemote;deployment=AnnotatedEJB;pk=null"));
+
+        //datasource
+        assertTrue(result.contains("@Resource=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource"));
+        assertTrue(result.contains("JNDI=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource"));
+
+    }
+
+
+
+    @Test(groups = "wso2.as", description = "test jndi dump",
+            dependsOnMethods = {"webApplicationDeploymentTest", "annotatedServletTest"})
     public void testJndiDump() throws Exception {
         BufferedReader in = null;
 
@@ -71,7 +107,13 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
                 String jndiKey = jndiKvArray[0];
                 String expectedJndiValue = jndiKvArray[1];
 
+                if (jndiKey.startsWith("#")) { //commented out
+                    continue;
+                }
+
                 String actualJndiValue = resultMap.get(jndiKey);
+                assertNotNull(actualJndiValue, "No jndi entry for the key - " + jndiKey);
+
                 actualJndiValue = sanitize(actualJndiValue);
 
                 assertEquals(actualJndiValue, expectedJndiValue, msg + jndiKey);
