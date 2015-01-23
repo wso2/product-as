@@ -96,7 +96,7 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
 
     @Test(groups = {"wso2.as"}, description = "Test the password before encryption")
     public void testCheckBeforeEncrypt() throws Exception {
-        boolean passwordBeforeEncryption = PasswordEncryptionUtil.checkIsPasswordEncrypted(CARBON_HOME);
+        boolean passwordBeforeEncryption = PasswordEncryptionUtil.isPasswordEncrypted(CARBON_HOME);
         assertFalse(passwordBeforeEncryption, "Password has already encrypted");
     }
 
@@ -114,14 +114,14 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
         }
         File targetRunFile = new File(CARBON_HOME + File.separator + "bin" + File.separator + "run.sh");
         serverManager.applyConfigurationWithoutRestart(sourceRunFile, targetRunFile, false);
-        boolean isScriptSuccess = PasswordEncryptionUtil.runCiphertoolScript(CARBON_HOME, cmdArray);
+        boolean isScriptSuccess = PasswordEncryptionUtil.runCipherToolScriptAndCheckStatus(CARBON_HOME, cmdArray);
         assertTrue(isScriptSuccess, "H2DB Password Encryption failed");
     }
 
     @Test(groups = {"wso2.as"}, description = "H2DB Password Encryption Test",
           dependsOnMethods = {"testCheckScriptRunSuccessfully"})
     public void testCheckEncryptedPassword() throws Exception {
-        boolean passwordAfterEncryption = PasswordEncryptionUtil.checkIsPasswordEncrypted(CARBON_HOME);
+        boolean passwordAfterEncryption = PasswordEncryptionUtil.isPasswordEncrypted(CARBON_HOME);
         assertTrue(passwordAfterEncryption, "H2DB Password Encryption failed");
     }
 

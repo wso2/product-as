@@ -50,7 +50,7 @@ public class PasswordEncryptionUtil {
      * @return boolean - true : if password has encrypted ,false : if not
      * @throws Exception - Error when getting and reading master-datasources.xml
      */
-    public static boolean checkIsPasswordEncrypted(String carbonHome) throws Exception {
+    public static boolean isPasswordEncrypted(String carbonHome) throws Exception {
         boolean foundEncryption = false;
         try {
             FileInputStream file =
@@ -90,7 +90,7 @@ public class PasswordEncryptionUtil {
      * @return - boolean shell script ran successfully or not
      * @throws IOException - Error when reading the InputStream when running shell script
      */
-    public static boolean runCiphertoolScript(String carbonHome, String[] cmdArray)
+    public static boolean runCipherToolScriptAndCheckStatus(String carbonHome, String[] cmdArray)
             throws IOException {
         boolean foundTheMessage = false;
         InputStream is = null;
