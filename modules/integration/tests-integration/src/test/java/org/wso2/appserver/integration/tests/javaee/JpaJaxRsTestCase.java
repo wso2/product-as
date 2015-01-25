@@ -53,6 +53,7 @@ public class JpaJaxRsTestCase extends WebappDeploymentTestCase {
         String jndiUrl = getWebAppURL() + getAll;
         OMElement result = runAndGetResultAsOM(jndiUrl);
 
+        log.info("Response - " + result.toString());
         OMElement students = result.getFirstElement();
         assertEquals(students.getLocalName(), "students", "response is invalid for " + jndiUrl);
         assertEquals(students.getFirstChildWithName(new QName("index")).toString(), "<index>100</index>",

@@ -11,7 +11,7 @@
 
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
-<!--            <package name="org.wso2.appserver.integration.tests.javaee"/> -->
+            <package name="org.wso2.appserver.integration.tests.javaee"/>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
             <package name="org.wso2.appserver.integration.tests.webapp.classloading"/>
             <package name="org.wso2.appserver.integration.tests.webapp.concurrency"/>

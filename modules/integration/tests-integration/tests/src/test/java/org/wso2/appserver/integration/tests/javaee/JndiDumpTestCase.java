@@ -103,7 +103,7 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
             String msg = "ejb-examples-1.1.0.war failed to validate the JNDi dump for: ";
             while ((inputLine = in.readLine()) != null) {
 
-                String[] jndiKvArray = inputLine.split("=");
+                String[] jndiKvArray = splitKeyValuePair(inputLine);
                 String jndiKey = jndiKvArray[0];
                 String expectedJndiValue = jndiKvArray[1];
 

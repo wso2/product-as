@@ -43,6 +43,8 @@ public class CdiServletTestCase extends WebappDeploymentTestCase {
         String servletUrl = getWebAppURL();
         String result = runAndGetResultAsString(servletUrl);
 
+        log.info("Response - " + result);
+
         assertTrue(result.startsWith("Hi, greetings from implementation one"),
                    "Response doesn't contain the greeting, hi, of the url " + servletUrl);
         assertTrue(result.contains("Bye !"),

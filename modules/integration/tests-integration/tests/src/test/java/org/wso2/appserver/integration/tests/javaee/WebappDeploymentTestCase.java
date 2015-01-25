@@ -172,18 +172,28 @@ public abstract class WebappDeploymentTestCase extends
         Map<String, String> resultMap = new HashMap<String, String>();
         String[] resultArray = resultString.split("\n");
         for (String s : resultArray) {
-            int i = s.indexOf('=');
-            String key = "", value = "";
-            if (i > 0) {
-                key = s.substring(0, i);
-            }
-            if (s.length() > i+1) {
-                value = s.substring(i+1);
-            }
-            resultMap.put(key, value);
+            String[] keyValue = splitKeyValuePair(s);
+            resultMap.put(keyValue[0], keyValue[1]);
         }
         log.debug(resultMap);
         return resultMap;
+    }
+
+    protected String[] splitKeyValuePair(String input) {
+        String[] keyValue = new String[2];
+        int i = input.indexOf('=');
+        String key = "", value = "";
+        if (i > 0) {
+            key = input.substring(0, i).trim();
+        }
+        if (input.length() > i+1) {
+            value = input.substring(i+1).trim();
+        }
+
+        keyValue[0] = key;
+        keyValue[1] = value;
+
+        return keyValue;
     }
 
     private String getStringFromInputStream(InputStream in) throws Exception {
