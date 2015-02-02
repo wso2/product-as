@@ -56,16 +56,16 @@
                                 </properties>
                             </adviceFile>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.user.mgt:${carbon.platform.version}
+                                <importFeatureDef>org.wso2.carbon.user.mgt:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.identity.xacml.filter:${carbon.platform.version}
+                                <importFeatureDef>org.wso2.carbon.identity.xacml.filter:${carbon.identity.version}
                                 </importFeatureDef>
                                 <importFeatureDef>org.apache.synapse.wso2:${synapse.version}</importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity.user.profile:${carbon.platform.version}
+                                    org.wso2.carbon.identity.user.profile:${carbon.identity.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity.core:${carbon.platform.version}
+                                    org.wso2.carbon.identity.core:${carbon.identity.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

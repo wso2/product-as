@@ -61,7 +61,7 @@
     <modules>
 	<module>ASVersionSamples</module>
         <module>Chad</module>
-        <module>CommodityQuote</module>
+        <!--<module>CommodityQuote</module>-->
         <module>TinyURL</module>
         <!--module>Trader</module-->
         <module>FlickrClient</module>
@@ -94,6 +94,11 @@
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.utils</artifactId>
                 <version>${carbon.kernel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity</groupId>
+                <artifactId>org.wso2.carbon.security.mgt</artifactId>
+                <version>${carbon.identity.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.ws.security.wso2</groupId>
@@ -175,8 +180,8 @@
     </dependencyManagement>
 
     <properties>
-	    <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
         <carbon.kernel.version>4.3.0</carbon.kernel.version>
+        <carbon.identity.version>4.3.0</carbon.identity.version>
         <appserver.axis2.version>1.6.1.wso2v10</appserver.axis2.version>
         <appserver.axiom.version>1.2.11.wso2v4</appserver.axiom.version>
         <appserver.wss4j.version>1.5.11.wso2v3</appserver.wss4j.version>

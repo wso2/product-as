@@ -96,10 +96,5 @@
         </dependencies>
     </dependencyManagement>
 
-    <properties>
-        <wso2carbon.platform.version.caching>${wso2carbon.platform.version}</wso2carbon.platform.version.caching>
-        <!--asm.version>3.1.wso2v1</asm.version-->
-    </properties>
-
 </project>
 
