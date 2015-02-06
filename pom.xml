@@ -405,10 +405,10 @@
     </dependencyManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver
-        </connection>
-        <developerConnection>scm:svn:https://svn.wso2.org/repos/wso2/trunk/carbon/products/appserver
-        </developerConnection>
+        <url>https://github.com/wso2/product-as.git</url>
+        <developerConnection>scm:https://github.com/wso2/product-as.git</developerConnection>
+        <connection>scm:git:https://github.com/wso2/product-as.git</connection>
+        <tag>HEAD</tag>
     </scm>
 
     <profiles>
@@ -433,6 +433,18 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <configuration>
+                            <preparationGoals>clean install</preparationGoals>
+                            <autoVersionSubmodules>false</autoVersionSubmodules>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
@@ -515,6 +527,8 @@
         <selenium.version>2.40.0</selenium.version>
 
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
+
+        <project.scm.id>my-scm-server</project.scm.id>
     </properties>
 
     <mailingLists>
