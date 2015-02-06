@@ -14,14 +14,12 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>wso2appserver-samples</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>6.0.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -60,20 +58,19 @@
                         <configuration>
                             <tasks>
                                 <!-- Adding the helloworld sample -->
-                                <mkdir dir="target/helloworld/META-INF"/>
+                                <mkdir dir="target/helloworld/META-INF" />
                                 <copy todir="target/helloworld">
                                     <fileset dir="target/classes">
-                                        <include name="org/wso2/appserver/sample/helloworld/**"/>
+                                        <include name="org/wso2/appserver/sample/helloworld/**" />
                                     </fileset>
                                 </copy>
                                 <copy todir="target/helloworld/META-INF">
                                     <fileset dir="conf">
-                                        <include name="*.*"/>
+                                        <include name="*.*" />
                                     </fileset>
                                 </copy>
-                                <jar destfile="target/HelloWorld.aar" basedir="target/helloworld"/>
-                                <copy file="target/HelloWorld.aar"
-                                      tofile="target/repository/services/HelloWorld.aar"/>
+                                <jar destfile="target/HelloWorld.aar" basedir="target/helloworld" />
+                                <copy file="target/HelloWorld.aar" tofile="target/repository/services/HelloWorld.aar" />
                             </tasks>
                         </configuration>
                         <goals>

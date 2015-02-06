@@ -14,14 +14,12 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
  
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver-samples</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <version>6.0.0</version>
     <packaging>pom</packaging>
     <name>Samples</name>
     <description>All the samples contained in WSO2 AppServer</description>
@@ -245,4 +243,8 @@
         </repository>
     </repositories>
 
+
+  <scm>
+    <tag>wso2appserver-parent-6.0.0</tag>
+  </scm>
 </project>
