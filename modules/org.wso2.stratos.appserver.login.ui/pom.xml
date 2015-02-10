@@ -26,7 +26,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.login.ui</artifactId>
-    <version>${stratos.version}</version>
     <packaging>bundle</packaging>
     <name>WSO2 AS - Login User Interface</name>
 

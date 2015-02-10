@@ -22,12 +22,12 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>wso2stratos-as-features</artifactId>
-        <version>${stratos.version}</version>
+        <version>6.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.dashboard.ui.feature</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>WSO2 Stratos AppServer - Dashboard UI Features</name>
     <url>http://wso2.org</url>
