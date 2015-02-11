@@ -67,6 +67,7 @@
         <module>FlickrClient</module>
         <module>MTOM</module>
         <module>Jaxws-Jaxrs</module>
+        <module>JavaEE-TomEE</module>
         <module>JSON</module>
         <module>Jibx</module>
         <module>HelloWorld</module>
