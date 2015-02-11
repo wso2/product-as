@@ -136,11 +136,13 @@
     <res-auth>Container</res-auth>
   </resource-ref>
 
+<!--
+Need activemq as a dependency?
   <resource-env-ref>
     <resource-env-ref-name>web.xml/Queue</resource-env-ref-name>
     <resource-env-ref-type>javax.jms.Queue</resource-env-ref-type>
   </resource-env-ref>
-
+-->
   <ejb-ref>
     <ejb-ref-name>web.xml/EjbRemote</ejb-ref-name>
     <ejb-ref-type>Session</ejb-ref-type>
@@ -161,6 +163,7 @@
   <persistence-context-ref>
     <persistence-context-ref-name>web.xml/PersistenceContext</persistence-context-ref-name>
     <persistence-unit-name>jpa-example</persistence-unit-name>
-    <persistence-context-type>Transactional</persistence-context-type>
+    <!-- Supported types - Transaction, Extended -->
+    <persistence-context-type>Transaction</persistence-context-type>
   </persistence-context-ref>
 </web-app>
