@@ -43,7 +43,7 @@ public class RunAsServlet extends HttpServlet {
         } else {
             out.println("Servlet.getUserPrincipal()=<null>");
         }
-        out.println("Servlet.isCallerInRole(\"user\")=" + request.isUserInRole("user"));
+        out.println("Servlet.isCallerInRole(\"admin\")=" + request.isUserInRole("admin"));
         out.println("Servlet.isCallerInRole(\"manager\")=" + request.isUserInRole("manager"));
         out.println("Servlet.isCallerInRole(\"fake\")=" + request.isUserInRole("fake"));
         out.println();
@@ -56,7 +56,7 @@ public class RunAsServlet extends HttpServlet {
             } else {
                 out.println("@EJB.getCallerPrincipal()=<null>");
             }
-            out.println("@EJB.isCallerInRole(\"user\")=" + secureEJBLocal.isCallerInRole("user"));
+            out.println("@EJB.isCallerInRole(\"admin\")=" + secureEJBLocal.isCallerInRole("admin"));
             out.println("@EJB.isCallerInRole(\"manager\")=" + secureEJBLocal.isCallerInRole("manager"));
             out.println("@EJB.isCallerInRole(\"fake\")=" + secureEJBLocal.isCallerInRole("fake"));
 

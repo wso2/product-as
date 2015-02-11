@@ -26,7 +26,7 @@ import javax.ejb.Stateless;
 import java.security.Principal;
 
 @Stateless
-@DeclareRoles({"user", "manager", "fake"})
+@DeclareRoles({"admin", "manager", "fake"})
 public class SecureEJB implements SecureEJBLocal {
 
     @Resource
@@ -40,7 +40,7 @@ public class SecureEJB implements SecureEJBLocal {
         return context.isCallerInRole(role);
     }
 
-    @RolesAllowed("user")
+    @RolesAllowed("admin")
     public void allowUserMethod() {
     }
 
