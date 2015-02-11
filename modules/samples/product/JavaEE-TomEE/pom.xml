@@ -31,7 +31,7 @@
     <name>Samples/JavaEE-TomEE</name>
 
     <modules>
-<!--        <module>javaee-examples</module> -->
+        <module>javaee-examples</module>
     </modules>
 
     <dependencyManagement>
