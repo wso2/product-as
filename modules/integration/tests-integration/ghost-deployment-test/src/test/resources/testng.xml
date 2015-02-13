@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="as-integration-artifacts.AS.ghost-deployment">
+    <parameter name="useDefaultListeners" value="false"/>
+    <listeners>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestExecutionListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestManagerListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestReportListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
+    </listeners>
+
+    <test name="as-integration-artifacts.AS.ghost-deployment-tests" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.ghostdeployment.tenant.TenantLoadUnloadTestCase"/>
+            <class name="org.wso2.appserver.integration.tests.ghostdeployment.webapp.WebApplicationGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.tests.ghostdeployment.jaggery.JaggeryApplicationGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.tests.ghostdeployment.carbonapp.CarbonAppGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.tests.ghostdeployment.suppertenant.TestSupperTenantGhostDeploymentTestCase"/>
+        </classes>
+    </test>
+
+</suite>

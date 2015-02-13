@@ -28,12 +28,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 
 /**
@@ -55,15 +50,15 @@ public class PasswordEncryptionUtil {
         try {
             FileInputStream file =
                     new FileInputStream(new File(carbonHome + File.separator + "repository" +
-                                                 File.separator + "conf" + File.separator + "datasources" +
-                                                 File.separator + "master-datasources.xml"));
+                            File.separator + "conf" + File.separator + "datasources" +
+                            File.separator + "master-datasources.xml"));
 
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document xmlDocument = builder.parse(file);
             XPath xPath = XPathFactory.newInstance().newXPath();
             String expression = "datasources-configuration/datasources/datasource/definition" +
-                                "[@type='RDBMS']/configuration/password";
+                    "[@type='RDBMS']/configuration/password";
 
             NodeList nodeList = (
                     NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
@@ -71,7 +66,7 @@ public class PasswordEncryptionUtil {
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Element eElement = (Element) nodeList.item(i);
                 if (eElement.getAttribute("svns:secretAlias").equals("Datasources.WSO2_CARBON_DB.Configuration.Password")
-                    && nodeList.item(i).getFirstChild().getNodeValue().equals("password")) {
+                        && nodeList.item(i).getFirstChild().getNodeValue().equals("password")) {
                     foundEncryption = true;
                     break;
                 }

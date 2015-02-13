@@ -17,11 +17,11 @@
 */
 package org.wso2.appserver.integration.common.utils;
 
-import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
-import org.wso2.appserver.integration.common.clients.ServiceAdminClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
+import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
+import org.wso2.appserver.integration.common.clients.ServiceAdminClient;
 import org.wso2.carbon.aarservices.stub.ExceptionException;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 

@@ -78,7 +78,7 @@ public class ASIntegrationTest {
                 asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
             webAppURL = asServer.getContextUrls().getWebAppURL() + "/webapps";
 
-        } else if(asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)){
+        } else if (asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
             webAppURL = asServer.getContextUrls().getWebAppURL();
         }
 
@@ -101,7 +101,7 @@ public class ASIntegrationTest {
         aarServiceUploaderClient.uploadAARFile(fileNameWithExtension, filePath, serviceHierarchy);
         ServiceDeploymentUtil.isServiceDeployed(backendURL, sessionCookie, serviceName);
         assertTrue(ServiceDeploymentUtil.
-                isServiceDeployed(backendURL, sessionCookie, serviceName),
+                        isServiceDeployed(backendURL, sessionCookie, serviceName),
                 "Service file uploading failed withing given deployment time");
     }
 

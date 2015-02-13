@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -11,13 +10,14 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>test-integration-appSever</artifactId>
-    <name>WSO2 AppServer - Integration Tests</name>
+    <name>WSO2 AppServer - Integration Common module</name>
+    <artifactId>test-common</artifactId>
     <packaging>pom</packaging>
-
     <modules>
-        <module>tests</module>
-        <module>ghost-deployment-test</module>
+        <module>admin-clients</module>
+        <module>integration-test-utils</module>
+        <module>ui-pages</module>
+        <module>common-artifacts</module>
     </modules>
 
 </project>
