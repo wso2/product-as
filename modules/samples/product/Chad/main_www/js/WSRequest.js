@@ -351,7 +351,6 @@ WSRequest.util = {
                     return xmlSerializer.writeToString(payload);
                     break;
                 case "webkit":
-                	console.log("sdffds");
                 	return (new XMLSerializer()).serializeToString(payload);
                 	break;
                 case "undefined":
