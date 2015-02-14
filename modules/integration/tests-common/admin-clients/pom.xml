@@ -66,6 +66,16 @@
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.registry.resource.stub</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>
