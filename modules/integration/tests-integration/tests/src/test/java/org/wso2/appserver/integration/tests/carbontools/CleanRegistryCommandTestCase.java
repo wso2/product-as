@@ -57,7 +57,6 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
     private MultipleServersManager manager = new MultipleServersManager();
     private String carbonHome;
-    private AutomationContext autoCtx;
     private AutomationContext context;
     String sessionCookieForInstance002;
     String backendURLForInstance002;
@@ -68,7 +67,7 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         serverPropertyMap.put("-DportOffset",Integer.toString(portOffset));
-        autoCtx = new AutomationContext();
+        AutomationContext autoCtx = new AutomationContext();
         CarbonTestServerManager server =
                 new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
         manager.startServers(server);
@@ -134,7 +133,7 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
     }
 
     @AfterClass(alwaysRun = true)
-    public void cleanResources() throws Exception {
+    public void serverShutDown() throws Exception {
         CarbonCommandToolsUtil.serverShutdown(portOffset, context);
     }
 

@@ -57,7 +57,7 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
     }
 
 
-    @Test(groups = "wso2.as", description = "H2DB Password changing script run test")
+    @Test(groups = "wso2.as", description = "H2DB Password changing script run test", enabled = false)
     public void testScriptRun() throws Exception {
 
         testServerManager = new TestServerManager(context, 1) {
@@ -78,7 +78,7 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
                 } else {
                     cmdArray = new String[]
                             {"sh", "chpasswd.sh", "--db-url", "jdbc:h2:" + testServerManager.getCarbonHome() +
-                             H2DB_DB_URL, "--db-driver", "org.h2.Driver",
+                                                              H2DB_DB_URL, "--db-driver", "org.h2.Driver",
                              "--db-username", "wso2carbon", "--db-password", "wso2carbon", "--username",
                              "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + "/bin";
@@ -96,8 +96,9 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
 
     }
 
-    @Test(groups = "wso2.as", description = "H2DB password change test", dependsOnMethods = {"testScriptRun"})
-    public void testUserPasswordWithSpecialCharacterOnH2DBChanged() throws Exception {
+    @Test(groups = "wso2.as", description = "H2DB password change test", dependsOnMethods = {"testScriptRun"}
+            , enabled = false)
+    public void testUserPasswordWithSpecialCharacterChangeOnH2DB() throws Exception {
         String loginStatusString = authenticatorClient.login
                 ("testu1", "testu123", context.getInstance().getHosts().get("default"));
         assertTrue(loginStatusString.contains("JSESSIONID"), "Unsuccessful login");
@@ -105,7 +106,7 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
     }
 
     @AfterClass(alwaysRun = true)
-    public void cleanResources() throws Exception {
+    public void serverShutDown() throws Exception {
         testServerManager.stopServer();
     }
 

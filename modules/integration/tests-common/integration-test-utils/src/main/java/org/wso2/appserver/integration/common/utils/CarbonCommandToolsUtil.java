@@ -14,12 +14,10 @@ import org.wso2.carbon.integration.common.admin.client.ServerAdminClient;
 import org.wso2.carbon.logging.view.stub.LogViewerLogViewerException;
 import org.wso2.carbon.logging.view.stub.types.carbon.LogEvent;
 
-
 import javax.xml.xpath.XPathExpressionException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 
@@ -91,8 +89,8 @@ public class CarbonCommandToolsUtil {
      *
      * @param portOffset        - port offset
      * @param automationContext - AutomationContext
-     * @throws javax.xml.xpath.XPathExpressionException - Error when getting data from automation.xml
-     * @throws java.rmi.RemoteException          - Error when shutdown the server
+     * @throws XPathExpressionException - Error when getting data from automation.xml
+     * @throws RemoteException          - Error when shutdown the server
      */
     public static void serverShutdown(int portOffset,
                                       AutomationContext automationContext)
@@ -108,8 +106,8 @@ public class CarbonCommandToolsUtil {
             String backendURL = url.replaceAll("(:\\d+)", ":" + httpsPort);
 
             ServerAdminClient serverAdminServiceClient = new ServerAdminClient(backendURL,
-                                                                               automationContext.getContextTenant().getTenantAdmin().getUserName(),
-                                                                               automationContext.getContextTenant().getTenantAdmin().getPassword());
+                              automationContext.getContextTenant().getTenantAdmin().getUserName(),
+                              automationContext.getContextTenant().getTenantAdmin().getPassword());
 
             serverAdminServiceClient.shutdown();
 
@@ -183,13 +181,11 @@ public class CarbonCommandToolsUtil {
      * @param cmdArray       - Command array to be executed.
      * @param expectedString - Expected string in  the log.
      * @return boolean - true : Found the expected string , false : not found the expected string.
-     * @throws java.io.IOException - Error while getting the command directory
+     * @throws IOException - Error while getting the command directory
      */
     public static boolean isScriptRunSuccessfully(String directory, String[] cmdArray,
                                                   String expectedString) throws IOException {
         boolean isFoundTheMessage = false;
-        InputStream is = null;
-        InputStreamReader isr = null;
         BufferedReader br = null;
         Process process = null;
         try {
@@ -198,15 +194,12 @@ public class CarbonCommandToolsUtil {
             String line;
             long startTime = System.currentTimeMillis();
             while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
-                is = process.getInputStream();
-                isr = new InputStreamReader(is);
-                br = new BufferedReader(isr);
-                if (br != null) {
-                    line = br.readLine();
+                br = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
+                while ((line = br.readLine()) != null) {
+                    log.info(line);
                     if (line.contains(expectedString)) {
                         log.info("found the string " + expectedString + " in line " + line);
                         isFoundTheMessage = true;
-                        break;
                     }
                 }
             }
@@ -217,12 +210,6 @@ public class CarbonCommandToolsUtil {
             throw new IOException("Error when reading the InputStream when running shell script "
                                   + ex.getMessage(), ex);
         } finally {
-            if (is != null) {
-                is.close();
-            }
-            if (isr != null) {
-                isr.close();
-            }
             if (br != null) {
                 br.close();
             }
@@ -236,11 +223,11 @@ public class CarbonCommandToolsUtil {
      * This method to find multiple strings in same line in log
      *
      * @param backEndUrl        - server back end url
-     * @param stringArrayToFind
+     * @param stringArrayToFind - String array to be find in the log
      * @param cookie            - cookie
      * @return -  if found all the  string in one line: true else false
      * @throws RemoteException             - Error when initializing the log
-     * @throws org.wso2.carbon.logging.view.stub.LogViewerLogViewerException - Error while reading the log
+     * @throws LogViewerLogViewerException - Error while reading the log
      * @throws InterruptedException        - Error occurred when thread sleep
      */
     public static boolean findMultipleStringsInLog(String backEndUrl, String[] stringArrayToFind,
@@ -281,7 +268,7 @@ public class CarbonCommandToolsUtil {
      *
      * @param automationContext - AutomationContext
      * @return true: If server is up else false
-     * @throws Exception                           - Error while waiting for login
+     * @throws Exception - Error while waiting for login
      */
     public static boolean isServerStartedUp(AutomationContext automationContext, int portOffset)
             throws Exception {

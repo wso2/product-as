@@ -38,14 +38,14 @@ import java.util.HashMap;
  */
 public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
-    private static int idleTime = 1;
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
     private MultipleServersManager manager = new MultipleServersManager();
-    private int portOffset = 1;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         // to start the server from a different port offset
+        int portOffset = 1;
+        int idleTime = 1;
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         serverPropertyMap.put("-Dtenant.idle.time", Integer.toString(idleTime));
         AutomationContext autoCtx = new AutomationContext();
@@ -85,7 +85,7 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
     }
 
     @AfterClass(alwaysRun = true)
-    public void stopServers() throws Exception {
+    public void serverShutDown() throws Exception {
         manager.stopAllServers();
     }
 }

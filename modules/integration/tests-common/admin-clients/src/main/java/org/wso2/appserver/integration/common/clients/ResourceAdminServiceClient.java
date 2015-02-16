@@ -54,7 +54,7 @@ public class ResourceAdminServiceClient {
      * @param dh - DataHandler
      * @return boolean - true : if resource added successfully else : false
      * @throws ResourceAdminServiceExceptionException - Error while adding resource
-     * @throws java.rmi.RemoteException - Error while adding resource
+     * @throws RemoteException - Error while adding resource
      */
     public boolean addResource(String destinationPath, String mediaType,
                                String description, DataHandler dh)
@@ -72,7 +72,7 @@ public class ResourceAdminServiceClient {
      * @param destinationPath - Destination path of the resource
      * @return ResourceData[] - resource data array
      * @throws ResourceAdminServiceExceptionException - Error while getting resource
-     * @throws java.rmi.RemoteException - Error while getting resource
+     * @throws RemoteException - Error while getting resource
      */
     public ResourceData[] getResource(String destinationPath)
             throws ResourceAdminServiceExceptionException, RemoteException {

@@ -343,7 +343,6 @@
                 <groupId>org.wso2.carbon.automation</groupId>
                 <artifactId>org.wso2.carbon.automation.extensions</artifactId>
                 <version>${carbon.automation.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.automationutils</groupId>
@@ -385,7 +384,6 @@
                         <artifactId>selenium-android-driver</artifactId>
                     </exclusion>
                 </exclusions>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.opera</groupId>
@@ -409,7 +407,6 @@
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
                 <version>${carbon.commons.version}</version>
-                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

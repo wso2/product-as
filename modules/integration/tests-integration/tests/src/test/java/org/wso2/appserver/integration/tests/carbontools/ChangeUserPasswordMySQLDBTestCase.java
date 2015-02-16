@@ -93,7 +93,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "MySQL password change test", dependsOnMethods = {"testScriptRun"},
           enabled = false)
-    public void testUserPasswordOnMySQLDBChanged() throws Exception {
+    public void testUserPasswordChangeOnMySQLDB() throws Exception {
         String loginStatusString = authenticatorClient.login(
                 "testu1", "testu123", context.getInstance().getHosts().get("default"));
 
@@ -102,7 +102,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
 
     @AfterClass(alwaysRun = true)
-    public void cleanResources() throws Exception {
+    public void serverShutDown() throws Exception {
         testServerManager.stopServer();
     }
 
