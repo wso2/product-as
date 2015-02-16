@@ -39,7 +39,7 @@ public class TenantLoadUnloadTestCase extends GhostDeploymentBaseTest {
         super.init();
     }
 
-    @Test(groups = "wso2.as.artifacts.AS.ghost.deployment", description = "Login using  one tenant user. Before loginTenantUser  contexts" +
+    @Test(groups = "wso2.as.ghost.deployment", description = "Login using  one tenant user. Before loginTenantUser  contexts" +
             "of both users should not be loaded. After loginTenantUser  only" +
             " the logged user context should get load.")
     public void testTenantContextLoadInLogin() throws Exception {
@@ -57,7 +57,7 @@ public class TenantLoadUnloadTestCase extends GhostDeploymentBaseTest {
         assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, "Tenant context is loaded without loginTenantUser");
     }
 
-    @Test(groups = "wso2.as.artifacts.AS.ghost.deployment", description = "Wait until the tenant idle time passing and  check for the tenant context"
+    @Test(groups = "wso2.as.ghost.deployment", description = "Wait until the tenant idle time passing and  check for the tenant context"
             + "unloading.", dependsOnMethods = "testTenantContextLoadInLogin")
     public void testTenantContextUnLoadInTenantIdle()
             throws Exception {
