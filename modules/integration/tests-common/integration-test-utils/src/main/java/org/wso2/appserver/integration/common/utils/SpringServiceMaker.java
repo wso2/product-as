@@ -18,23 +18,24 @@
 
 package org.wso2.appserver.integration.common.utils;
 
-import org.apache.axiom.om.OMAbstractFactory;
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.OMNamespace;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver;
 import org.apache.axis2.rpc.receivers.RPCMessageReceiver;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.OMAbstractFactory;
+import org.apache.axiom.om.OMNamespace;
 import org.springframework.context.ApplicationContext;
 import org.wso2.appserver.integration.common.clients.SpringServiceUploaderClient;
 import org.wso2.carbon.springservices.ui.GenericApplicationContextUtil;
 import org.wso2.carbon.springservices.ui.SpringBeansData;
 import org.wso2.carbon.utils.ArchiveManipulator;
 
-import javax.activation.DataHandler;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.activation.FileDataSource;
+import javax.activation.DataHandler;
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
