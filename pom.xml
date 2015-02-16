@@ -484,7 +484,7 @@
         <carbon.deployment.version>4.3.1</carbon.deployment.version>
         <carbon.multitenancy.version>4.3.4</carbon.multitenancy.version>
         <carbon.automationutils.version>4.3.0</carbon.automationutils.version>
-        <carbon.automation.version>4.3.2-SNAPSHOT</carbon.automation.version>
+        <carbon.automation.version>4.3.1</carbon.automation.version>
 
         <javax.servlet.version>3.0.0.v201112011016</javax.servlet.version>
         <javax.servlet.jsp.version>2.2.0.v201112011158</javax.servlet.jsp.version>
