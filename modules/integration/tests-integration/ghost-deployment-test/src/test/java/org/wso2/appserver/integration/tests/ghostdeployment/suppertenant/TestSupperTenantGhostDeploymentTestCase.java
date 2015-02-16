@@ -53,8 +53,8 @@ public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBase
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Deploying web application in Ghost Deployment enable environment. "
-            + "Each Web application should fully loaded (non Ghost format) soon after the deployment")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Deploying web application in Ghost Deployment enable" +
+            " environment. Each Web application should fully loaded (non Ghost format) soon after the deployment")
     public void testDeployWebApplicationGhostDeploymentOnSupperTenant() throws Exception {
         log.info("deployment of  web application started");
 
@@ -77,10 +77,11 @@ public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBase
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke web application in Ghost Deployment enable environment.First test "
-            + "will restart the server gracefully.After the restart  all web apps should be in ghost format.Then,  it "
-            + "invokes the first web app on first tenant. After the invoke, only that web app should loaded fully and" +
-            "all other web apps should be in Ghost format.", dependsOnMethods = "testDeployWebApplicationGhostDeploymentOnSupperTenant")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke web application in Ghost Deployment enable" +
+            " environment.First test will restart the server gracefully.After the restart  all web apps should be in" +
+            " ghost format.Then,  it invokes the first web app on first tenant. After the invoke, only that web app " +
+            "should loaded fully and all other web apps should be in Ghost format.",
+            dependsOnMethods = "testDeployWebApplicationGhostDeploymentOnSupperTenant")
     public void testInvokeWebAppGhostDeploymentOnSupperTenant() throws Exception {
 
         serverManager.restartGracefully();
@@ -104,9 +105,10 @@ public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBase
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost format. After access"
-            + "web app, it should be in fully load form  but after configured web app idle time pass it should get auto"
-            + "unload ne reload in Ghost form.", dependsOnMethods = "testInvokeWebAppGhostDeploymentOnSupperTenant")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost" +
+            " format. After access web app, it should be in fully load form  but after configured web app idle time pass" +
+            " it should get auto unload ne reload in Ghost form.",
+            dependsOnMethods = "testInvokeWebAppGhostDeploymentOnSupperTenant")
     public void testWebAppAutoUnLoadAndReloadInGhostFormOnSupperTenant() throws Exception {
         serverManager.restartGracefully();
 

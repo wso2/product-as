@@ -54,8 +54,8 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
         tenant1WebApp1URL = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/webapps/" + WEB_APP_NAME1 + "/";
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Deploying web application in Ghost Deployment enable environment. "
-            + "Each Web application should fully loaded (non Ghost format) soon after the deployment")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Deploying web application in Ghost Deployment enable" +
+            " environment. Each Web application should fully loaded (non Ghost format) soon after the deployment")
     public void testDeployWebApplicationGhostDeployment() throws Exception {
         log.info("deployment of  web application started");
 
@@ -96,8 +96,8 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
     }
 
     @Test(groups = "wso2.as.ghost.deployment", description = "Invoke web application in Ghost Deployment " +
-            "enable environment.First test will restart the server gracefully.After the restart   both tenant context " +
-            "should not loaded.Then, it invokes the first web app on first tenant. After the invoke, only that web app " +
+            "enable environment.First test will restart the server gracefully.After the restart all tenant context " +
+            "should not be loaded.Then, it invokes the first web app on first tenant. After the invoke, only that web app " +
             "should loaded fully.",
             dependsOnMethods = "testDeployWebApplicationGhostDeployment")
     public void testInvokeWebAppGhostDeployment() throws Exception {
@@ -121,12 +121,14 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
         assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2), false,
                 "Web-app loaded before access and after access other web app in same Tenant. Tenant Name:"
                         + TENANT_DOMAIN_1 + " Web_app Name: " + WEB_APP_FILE_NAME2);
+
         assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, "Tenant Name:" + TENANT_DOMAIN_2 + " loaded before access.");
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost format. After access"
-            + "web app, it should be in fully load form  but after configured web app idle time pass it should get auto"
-            + "unload ne reload in Ghost form.", dependsOnMethods = "testInvokeWebAppGhostDeployment")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost" +
+            " format. After access web app, it should be in fully load form  but after configured web app idle time" +
+            " pass it should get auto unload ne reload in Ghost form.",
+            dependsOnMethods = "testInvokeWebAppGhostDeployment")
     public void testWebAppAutoUnLoadAndReloadInGhostForm() throws Exception {
         serverManager.restartGracefully();
 

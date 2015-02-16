@@ -111,31 +111,19 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke Jaggery application in Ghost Deployment enable environment." +
-            " First test will restart the server gracefully." +
-            "After the restart  all Jaggery apps should be in ghost format. " +
-            "Then the it invokes the first Jaggery app on first tenant." +
-            "After the invoke, only that Jaggery app should loaded fully and" +
-            " all other Jaggery apps should be in Ghost format.",
-            dependsOnMethods = "testJaggeryApplicationGhostDeployment")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke Jaggery application in Ghost Deployment enable " +
+            "environment. First test will restart the server gracefully. After the restart  all tenant context should" +
+            " not be loaded. Then the it invokes the first Jaggery app on first tenant. After the invoke, only that " +
+            "Jaggery app should loaded.", dependsOnMethods = "testJaggeryApplicationGhostDeployment")
     public void testInvokeJaggeryAppGhostDeployment()
             throws Exception {
 
         serverManager.restartGracefully();
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, JAGGERY_APP_NAME1), false,
-                "Jaggery-app loaded before access. Tenant Name:" + TENANT_DOMAIN_1 + " Jaggery_app Name: "
-                        + JAGGERY_APP_NAME1);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, JAGGERY_APP_NAME2), false,
-                "Jaggery-app loaded before access. Tenant Name:" + TENANT_DOMAIN_1 + " Jaggery_app Name: "
-                        + JAGGERY_APP_NAME2);
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_1), false, " Tenant Name:" + TENANT_DOMAIN_1 + "loaded before access.");
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, JAGGERY_APP_NAME1), false,
-                "Jaggery-app loaded before access. Tenant Name:" + TENANT_DOMAIN_2 + " Jaggery_app Name: "
-                        + JAGGERY_APP_NAME1);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, JAGGERY_APP_NAME2), false,
-                "Jaggery-app loaded before access. Tenant Name:" + TENANT_DOMAIN_2 + " Jaggery_app Name: "
-                        + JAGGERY_APP_NAME2);
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, " Tenant Name:" + TENANT_DOMAIN_2 + "loaded before access.");
+
 
         org.wso2.carbon.automation.test.utils.http.client.HttpResponse httpResponse = HttpURLConnectionClient
                 .sendGetRequest(tenant1JaggApp1Url, null);
@@ -150,19 +138,13 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
                 "Jaggery-app loaded before access and after access other web app in same Tenant. Tenant Name:"
                         + TENANT_DOMAIN_1 + " Jaggery_app Name: " + JAGGERY_APP_NAME2);
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, JAGGERY_APP_NAME1), false,
-                "Jaggery-app loaded before access and after access other web app in another Tenant. . Tenant Name:"
-                        + TENANT_DOMAIN_2 + " Jaggery_app Name: " + JAGGERY_APP_NAME1);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, JAGGERY_APP_NAME2), false,
-                "Jaggery-app loaded before access and after access other web app in another Tenant. Tenant Name:"
-                        + TENANT_DOMAIN_2 + " Jaggery_app Name: " + JAGGERY_APP_NAME2);
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, " Tenant Name:" + TENANT_DOMAIN_2 + "loaded before access.");
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test Jaggery application auto unload  and reload in Ghost format." +
-            " After access Jaggery app, it should be in fully load form  but " +
-            "after configured Jaggery app idle time pass it should get auto " +
-            "unload ne reload in Ghost form.",
+    @Test(groups = "wso2.as.ghost.deployment", description = "Test Jaggery application auto unload  and reload in Ghost" +
+            " format. After access Jaggery app, it should be in fully load form  but after configured Jaggery app idle " +
+            "time pass it should get auto unload ne reload in Ghost form.",
             dependsOnMethods = "testInvokeJaggeryAppGhostDeployment")
     public void testJaggeryAppAutoUnLoadAndReloadInGhostForm()
             throws Exception {

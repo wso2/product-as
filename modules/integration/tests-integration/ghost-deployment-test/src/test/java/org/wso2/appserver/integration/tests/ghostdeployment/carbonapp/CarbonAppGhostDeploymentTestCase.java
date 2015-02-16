@@ -38,7 +38,7 @@ import static org.testng.Assert.assertTrue;
 
 /**
  * Test carbon application deployment. For this test two tenants will be used and
- * in each tenant two  Carbon applications will be deployed. TODo lookinto factry anotation
+ * in each tenant two  Carbon applications will be deployed.
  */
 public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
 
@@ -70,10 +70,9 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
         carbonApp2URLDataHandler = new DataHandler(carbonApp2FileURL);
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Upload car file and verify in ghost deployment  enable environment." +
-            " After the the deployment all the web applications of  the carbon" +
-            " application should be  deployed correctly and  they should be loaded " +
-            "fully(Not in ghost form) ")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Upload car file and verify in ghost deployment enable " +
+            "environment. After the the deployment all the web applications of  the carbon application should be " +
+            "deployed correctly and  they should be loaded fully(Not in ghost form) ")
     public void carApplicationUploadGhostDeployment() throws Exception {
         log.info("Carbon application deployment start");
         CarbonAppUploaderClient carbonAppClient;
@@ -87,7 +86,7 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, CARBON_APP1_WEB_APP_NAME),
                 "Web Application deployment failed: " + CARBON_APP1_WEB_APP_NAME + "on " + TENANT_DOMAIN_1);
         assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, CARBON_APP1_WEB_APP_FILE), true,
-                "Web app " + CARBON_APP1_WEB_APP_FILE+ "is  not loaded after deployment:"
+                "Web app " + CARBON_APP1_WEB_APP_FILE + "is  not loaded after deployment:"
                         + TENANT_DOMAIN_1);
         assertTrue(isCarbonAppListed(CARBON_APP_NAME1), "Carbon Application is not listed :" + CARBON_APP_NAME1);
 
@@ -107,7 +106,7 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, CARBON_APP1_WEB_APP_NAME),
                 "Web Application deployment failed: " + CARBON_APP1_WEB_APP_NAME + "on " + TENANT_DOMAIN_2);
         assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, CARBON_APP1_WEB_APP_FILE), true,
-                "Web app " + CARBON_APP1_WEB_APP_FILE+ "is  not loaded after deployment:"
+                "Web app " + CARBON_APP1_WEB_APP_FILE + "is  not loaded after deployment:"
                         + TENANT_DOMAIN_2);
         assertTrue(isCarbonAppListed(CARBON_APP_NAME1), "Carbon Application is not listed :" + CARBON_APP_NAME1);
 
@@ -120,29 +119,17 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
         log.info("Carbon application deployment end");
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "  Invoke web application that is deployed as Carbon application in Ghost Deployment enable environment.First test "
-            + "will restart the server gracefully.After the restart  all web apps should be in ghost format.Then,  it "
-            + "invokes the first web app on first tenant. After the invoke, only that web app should loaded fully and" +
-            "all other web apps should be in Ghost format.", dependsOnMethods = "carApplicationUploadGhostDeployment")
-    //TODO
+    @Test(groups = "wso2.as.ghost.deployment", description = "  Invoke web application that is deployed as Carbon " +
+            "application in Ghost Deployment enable environment.First test will restart the server gracefully.After the " +
+            "restart  all   tenant context not be loaded.Then,  it invokes the first web app on first tenant. After the" +
+            " invoke, only that web app should loaded fully.", dependsOnMethods = "carApplicationUploadGhostDeployment")
     public void testInvokeWebAppInCarbonAppGhostDeployment() throws Exception {
 
         serverManager.restartGracefully();
 
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, CARBON_APP1_WEB_APP_FILE), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_1 + " Web_app Name: "
-                        + CARBON_APP1_WEB_APP_FILE);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, CARBON_APP2_WEB_APP_FILE), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_1 + " Web_app Name: "
-                        + CARBON_APP2_WEB_APP_FILE);
-
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, CARBON_APP1_WEB_APP_FILE), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_2 + " Web_app Name: "
-                        + CARBON_APP1_WEB_APP_FILE);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, CARBON_APP2_WEB_APP_FILE), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_2 + " Web_app Name: "
-                        + CARBON_APP2_WEB_APP_FILE);
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_1), false, " Tenant Name:" + TENANT_DOMAIN_1 + "loaded before access.");
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, " Tenant Name:" + TENANT_DOMAIN_2 + "loaded before access.");
 
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_TENANT1_RESPONSE,
@@ -155,19 +142,14 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
                 "Web-app loaded before access and after access other web app in same Tenant. Tenant Name:"
                         + TENANT_DOMAIN_1 + " Web_app Name: " + CARBON_APP2_WEB_APP_FILE);
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, CARBON_APP1_WEB_APP_FILE), false,
-                "Web-app loaded before access and after access other web app in another Tenant. . Tenant Name:"
-                        + TENANT_DOMAIN_2 + " Web_app Name: " + CARBON_APP1_WEB_APP_FILE);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, CARBON_APP2_WEB_APP_FILE), false,
-                "Web-app loaded before access and after access other web app in another Tenant. Tenant Name:"
-                        + TENANT_DOMAIN_2 + " Web_app Name: " + CARBON_APP2_WEB_APP_FILE);
-
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, " Tenant Name:" + TENANT_DOMAIN_2 + "loaded before access.");
     }
 
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application that is deployed as Carbon application, auto unload  and reload in Ghost format. After access"
-            + "web app, it should be in fully load form  but after configured web app idle time pass it should get auto"
-            + "unload ne reload in Ghost form.", dependsOnMethods = "testInvokeWebAppInCarbonAppGhostDeployment")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application that is deployed as Carbon " +
+            "application, auto unload  and reload in Ghost format. After access web app, it should be in fully load " +
+            "form  but after configured web app idle time pass it should get auto unload ne reload in Ghost form.",
+            dependsOnMethods = "testInvokeWebAppInCarbonAppGhostDeployment")
     public void testWebAppInCarbonAppAutoUnLoadAndReloadInGhostForm() throws Exception {
         serverManager.restartGracefully();
 
