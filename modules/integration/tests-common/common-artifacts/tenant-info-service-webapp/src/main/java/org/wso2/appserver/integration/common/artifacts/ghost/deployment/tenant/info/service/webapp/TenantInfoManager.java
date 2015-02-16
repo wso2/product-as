@@ -35,32 +35,26 @@ public class TenantInfoManager {
     private static final Log log = LogFactory.getLog(TenantInfoManager.class);
 
 
-
-
-    private static ConfigurationContext getServerConfigurationContext(){
+    /**
+     * to get the server configuration context.
+     *
+     * @return configuration context of the server.
+     */
+    private static ConfigurationContext getServerConfigurationContext() {
         ConfigurationContextService configurationContext = (ConfigurationContextService)
                 PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(ConfigurationContextService.class,
                         null);
-        return  configurationContext.getServerConfigContext();
+        return configurationContext.getServerConfigContext();
     }
-
-
-
-
-
-
 
 
     /**
      * Get the configuration contexts of all loaded tenants
      *
-     * @return Map<String, ConfigurationContext>  the contains the  configuration contexts
+     * @return Map that contains the  configuration contexts
      */
     private static Map<String, ConfigurationContext> getTenantsConfigContext() {
-        Map<String, ConfigurationContext> tenantConfigContextsServer =
-                TenantAxisUtils.getTenantConfigurationContexts(getServerConfigurationContext());
-        return tenantConfigContextsServer;
-
+        return TenantAxisUtils.getTenantConfigurationContexts(getServerConfigurationContext());
     }
 
 
@@ -71,14 +65,13 @@ public class TenantInfoManager {
      * @return ConfigurationContext of given tenant
      */
     private static ConfigurationContext getTenantConfigurationContext(String tenantName) {
-        ConfigurationContext tenantConfigurationContext = getTenantsConfigContext().get(tenantName);
-        return tenantConfigurationContext;
+        return getTenantsConfigContext().get(tenantName);
     }
 
     /**
      * Check  the given tenant is loaded.
      *
-     * @param tenantName
+     * @param tenantName Domain name of the tenant
      * @return true if tenants configuration context can be found, if not false.
      */
     protected static boolean isTenantLoaded(String tenantName) {
@@ -136,17 +129,16 @@ public class TenantInfoManager {
 
 
     /**
-     *
-     *  Check  the given web-app of supper tenant is loaded.
+     * Check  the given web-app of supper tenant is loaded.
      *
      * @param webAppName Web-app Name
      * @return true if  given web-apps deployment status is not Ghost. false if given web-apps
      * deployment status is not Ghost or given web app is not available in configuration context
      */
-    protected static boolean isSuperTenantWebAppLoaded( String webAppName) {
+    protected static boolean isSuperTenantWebAppLoaded(String webAppName) {
         boolean isWebAppLoaded = false;
 
-        ConfigurationContext    serverConfigurationContext=   getServerConfigurationContext();
+        ConfigurationContext serverConfigurationContext = getServerConfigurationContext();
 
         WebApplicationsHolder webApplicationsHolder = (WebApplicationsHolder) ((HashMap)
                 serverConfigurationContext.getLocalProperty("carbon.webapps.holderlist")).get("webapps");
@@ -167,9 +159,8 @@ public class TenantInfoManager {
         } else {
             log.info("Super Tenant has no started web-apps.");
         }
-        return  isWebAppLoaded;
+        return isWebAppLoaded;
     }
-
 
 
 }
