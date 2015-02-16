@@ -411,7 +411,7 @@ public class FlickrServiceFrame extends JFrame {
     private FlickrServiceClient client = new FlickrServiceClient();
     private String key;
     private String host = "api.flickr.com";
-    private String port = "443";
+    private String port = "80";
     private String token;
     private String sharedSecret;
     private String perms;

@@ -29,7 +29,6 @@ public class Client {
         frame.setEnabled(false);
         frame.show();
         frame.getAPIKEY();
-        frame.getSharedSecret()
         frame.setEnabled(true);
     }
 }

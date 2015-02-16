@@ -3004,7 +3004,7 @@ public class FlickrServiceClient {
     private FlickrServiceStub getStub(String host, String port) {
         FlickrServiceStub flickrServiceStub = null;
         try {
-            String address = "https://" + host + ":" + port + "/services/rest/";
+            String address = "http://" + host + ":" + port + "/services/rest/";
             flickrServiceStub = new FlickrServiceStub(address);
         } catch (AxisFault axisFault) {
             axisFault
