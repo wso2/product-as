@@ -308,4 +308,5 @@
     <properties>
         <skipUiTests>true</skipUiTests>
     </properties>
+
 </project>
