@@ -95,28 +95,21 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke web application in Ghost Deployment enable environment.First test "
-            + "will restart the server gracefully.After the restart  all web apps should be in ghost format.Then,  it "
-            + "invokes the first web app on first tenant. After the invoke, only that web app should loaded fully and" +
-            "all other web apps should be in Ghost format.", dependsOnMethods = "testDeployWebApplicationGhostDeployment")
+    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke web application in Ghost Deployment " +
+            "enable environment.First test will restart the server gracefully.After the restart   both tenant context " +
+            "should not loaded.Then, it invokes the first web app on first tenant. After the invoke, only that web app " +
+            "should loaded fully.",
+            dependsOnMethods = "testDeployWebApplicationGhostDeployment")
     public void testInvokeWebAppGhostDeployment() throws Exception {
 
         serverManager.restartGracefully();
 
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_1 + " Web_app Name: "
-                        + WEB_APP_FILE_NAME1);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_1 + " Web_app Name: "
-                        + WEB_APP_FILE_NAME2);
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_1), false, "Tenant Name:" + TENANT_DOMAIN_1 + " loaded before access.");
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, WEB_APP_FILE_NAME1), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_2 + " Web_app Name: "
-                        + WEB_APP_FILE_NAME1);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, WEB_APP_FILE_NAME2), false,
-                "Web-app loaded before access. Tenant Name:" + TENANT_DOMAIN_2 + " Web_app Name: "
-                        + WEB_APP_FILE_NAME2);
+
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, "Tenant Name:" + TENANT_DOMAIN_2 + " loaded before access.");
+
 
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_TENANT1_RESPONSE,
@@ -128,14 +121,7 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
         assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2), false,
                 "Web-app loaded before access and after access other web app in same Tenant. Tenant Name:"
                         + TENANT_DOMAIN_1 + " Web_app Name: " + WEB_APP_FILE_NAME2);
-
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, WEB_APP_FILE_NAME1), false,
-                "Web-app loaded before access and after access other web app in another Tenant. . Tenant Name:"
-                        + TENANT_DOMAIN_2 + " Web_app Name: " + WEB_APP_FILE_NAME1);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_2, WEB_APP_FILE_NAME2), false,
-                "Web-app loaded before access and after access other web app in another Tenant. Tenant Name:"
-                        + TENANT_DOMAIN_2 + " Web_app Name: " + WEB_APP_FILE_NAME2);
-
+        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, "Tenant Name:" + TENANT_DOMAIN_2 + " loaded before access.");
     }
 
     @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost format. After access"
