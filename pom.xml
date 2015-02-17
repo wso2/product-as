@@ -100,10 +100,10 @@
                 <artifactId>hibernate</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
-	    <dependency>
-            	<groupId>net.sf.ehcache.wso2</groupId>
-            	<artifactId>ehcache</artifactId>
-            	<version>${ehcache.version}</version>
+            <dependency>
+                <groupId>net.sf.ehcache.wso2</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>${ehcache.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.bcel.wso2</groupId>
@@ -384,6 +384,7 @@
                         <artifactId>selenium-android-driver</artifactId>
                     </exclusion>
                 </exclusions>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.opera</groupId>
@@ -407,6 +408,11 @@
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
                 <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.commons.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -534,6 +540,7 @@
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
+        <apache.commons.version>3.3.2</apache.commons.version>
     </properties>
 
     <mailingLists>
