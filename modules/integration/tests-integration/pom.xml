@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!--<module>tests</module>-->
+        <module>tests</module>
         <module>ghost-deployment-test</module>
     </modules>
 
