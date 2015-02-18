@@ -12,11 +12,11 @@
 
     <test name="as-integration-artifacts.AS.ghost-deployment-tests" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.appserver.integration.tests.ghostdeployment.tenant.TenantLoadUnloadTestCase"/>
-            <class name="org.wso2.appserver.integration.tests.ghostdeployment.webapp.WebApplicationGhostDeploymentTestCase"/>
-            <class name="org.wso2.appserver.integration.tests.ghostdeployment.jaggery.JaggeryApplicationGhostDeploymentTestCase"/>
-            <class name="org.wso2.appserver.integration.tests.ghostdeployment.carbonapp.CarbonAppGhostDeploymentTestCase"/>
-            <class name="org.wso2.appserver.integration.tests.ghostdeployment.suppertenant.TestSupperTenantGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazyloading.tenants.TenantLoadUnloadTestCase"/>
+            <class name="org.wso2.appserver.integration.lazyloading.artifacts.WebApplicationGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazyloading.artifacts.JaggeryApplicationGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazyloading.artifacts.CarbonAppGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazyloading.artifacts.SuperTenantGhostDeploymentTestCase"/>
         </classes>
     </test>
 

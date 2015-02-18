@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.tests.ghostdeployment.suppertenant;
+package org.wso2.appserver.integration.lazyloading.artifacts;
 
 
 import org.apache.commons.logging.Log;
@@ -26,16 +26,16 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.tests.ghostdeployment.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBaseTest {
+public class SuperTenantGhostDeploymentTestCase extends GhostDeploymentBaseTest {
 
-    private static final Log log = LogFactory.getLog(TestSupperTenantGhostDeploymentTestCase.class);
+    private static final Log log = LogFactory.getLog(SuperTenantGhostDeploymentTestCase.class);
 
     private static final String WEB_APP_FILE_NAME1 = "appServer-valied-deploymant-1.0.0.war";
     private static final String WEB_APP_NAME1 = "appServer-valied-deploymant-1.0.0";
@@ -55,22 +55,22 @@ public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBase
 
     @Test(groups = "wso2.as.ghost.deployment", description = "Deploying web application in Ghost Deployment enable" +
             " environment. Each Web application should fully loaded (non Ghost format) soon after the deployment")
-    public void testDeployWebApplicationGhostDeploymentOnSupperTenant() throws Exception {
+    public void testDeployWebApplicationGhostDeploymentOnSuperTenant() throws Exception {
         log.info("deployment of  web application started");
 
-        loginAsTenantAdmin(SUPPER_TENANT_DOMAIN);
+        loginAsTenantAdmin(SUPER_TENANT_DOMAIN_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
         webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
                 "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + TENANT_DOMAIN_1);
-        assertEquals(isSupperTenantWebAppLoaded(WEB_APP_FILE_NAME1), true,
+        assertEquals(isWebAppLoaded(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1), true,
                 "Web app " + WEB_APP_FILE_NAME1 + "is  not loaded after deployment in super tenant");
 
         webAppAdminClient.warFileUplaoder(WEB_APP2_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
                 "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + TENANT_DOMAIN_1);
-        assertEquals(isSupperTenantWebAppLoaded(WEB_APP_FILE_NAME2), true,
+        assertEquals(isWebAppLoaded(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME2), true,
                 "Web app " + WEB_APP_FILE_NAME2 + "is  not loaded after deployment in super tenant");
 
         log.info("deployment of web application finished");
@@ -81,24 +81,24 @@ public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBase
             " environment.First test will restart the server gracefully.After the restart  all web apps should be in" +
             " ghost format.Then,  it invokes the first web app on first tenant. After the invoke, only that web app " +
             "should loaded fully and all other web apps should be in Ghost format.",
-            dependsOnMethods = "testDeployWebApplicationGhostDeploymentOnSupperTenant")
-    public void testInvokeWebAppGhostDeploymentOnSupperTenant() throws Exception {
+            dependsOnMethods = "testDeployWebApplicationGhostDeploymentOnSuperTenant")
+    public void testInvokeWebAppGhostDeploymentOnSuperTenant() throws Exception {
 
         serverManager.restartGracefully();
 
 
-        assertEquals(isSupperTenantWebAppLoaded(WEB_APP_FILE_NAME1), false,
+        assertEquals(isWebAppLoaded(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1), false,
                 "Web-app loaded before access in super tenant. Web_app Name: " + WEB_APP_FILE_NAME1);
-        assertEquals(isSupperTenantWebAppLoaded(WEB_APP_FILE_NAME2), false,
+        assertEquals(isWebAppLoaded(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME2), false,
                 "Web-app loaded before access in super tenant.  Web_app Name: " + WEB_APP_FILE_NAME2);
 
 
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail. web app URL:" + webApp1URL);
 
-        assertEquals(isSupperTenantWebAppLoaded(WEB_APP_FILE_NAME1), true,
+        assertEquals(isWebAppLoaded(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1), true,
                 "Web-app is not loaded  after access in super tenant. Web_app Name: " + WEB_APP_FILE_NAME1);
-        assertEquals(isSupperTenantWebAppLoaded(WEB_APP_FILE_NAME2), false,
+        assertEquals(isWebAppLoaded(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME2), false,
                 "Web-app loaded before access and after access other web app in super tenant. Web_app Name: "
                         + WEB_APP_FILE_NAME2);
 
@@ -108,18 +108,18 @@ public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBase
     @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost" +
             " format. After access web app, it should be in fully load form  but after configured web app idle time pass" +
             " it should get auto unload ne reload in Ghost form.",
-            dependsOnMethods = "testInvokeWebAppGhostDeploymentOnSupperTenant")
-    public void testWebAppAutoUnLoadAndReloadInGhostFormOnSupperTenant() throws Exception {
+            dependsOnMethods = "testInvokeWebAppGhostDeploymentOnSuperTenant")
+    public void testWebAppAutoUnLoadAndReloadInGhostFormOnSuperTenant() throws Exception {
         serverManager.restartGracefully();
 
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail");
 
-        assertEquals(isSupperTenantWebAppLoaded(WEB_APP_FILE_NAME1), true,
+        assertEquals(isWebAppLoaded(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1), true,
                 "Web-app is not loaded  after access in Super Tenant. Web_app Name: " + WEB_APP_FILE_NAME1);
 
 
-        assertEquals(checkWebAppAutoUnloadingToGhostStateInSupperTenant(WEB_APP_FILE_NAME1), true,
+        assertEquals(checkWebAppAutoUnloadingToGhostState(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1), true,
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass in super tenant " +
                         "Web_app Name: " + WEB_APP_FILE_NAME1);
 
@@ -129,7 +129,7 @@ public class TestSupperTenantGhostDeploymentTestCase extends GhostDeploymentBase
     @AfterClass
     public void cleanWebApplications() throws Exception {
 
-        loginAsTenantAdmin(SUPPER_TENANT_DOMAIN);
+        loginAsTenantAdmin(SUPER_TENANT_DOMAIN_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
         webAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME1, hostURL);

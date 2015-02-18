@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.tests.ghostdeployment.carbonapp;
+package org.wso2.appserver.integration.lazyloading.artifacts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.tests.ghostdeployment.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.ApplicationAdminClient;
@@ -77,7 +77,7 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
         log.info("Carbon application deployment start");
         CarbonAppUploaderClient carbonAppClient;
 
-        loginAsTenantAdmin(TENANT_DOMAIN_1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
 
         carbonAppClient = new CarbonAppUploaderClient(backendURL, sessionCookie);
 
@@ -97,7 +97,7 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
                 "Web app " + CARBON_APP2_WEB_APP_FILE + "is  not loaded after deployment:" + TENANT_DOMAIN_1);
         assertTrue(isCarbonAppListed(CARBON_APP_NAME2), "Carbon Application is not listed :" + CARBON_APP_NAME2);
 
-        loginAsTenantAdmin(TENANT_DOMAIN_2);
+        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
 
         carbonAppClient = new CarbonAppUploaderClient(backendURL, sessionCookie);
 
@@ -188,16 +188,16 @@ public class CarbonAppGhostDeploymentTestCase extends GhostDeploymentBaseTest {
 
 
     @AfterClass(alwaysRun = true)
-    public void carAppDelete() throws Exception {
+    public void cleanCarbonApplications() throws Exception {
         ApplicationAdminClient appAdminClient;
-        loginAsTenantAdmin(TENANT_DOMAIN_1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
         appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
         appAdminClient.deleteApplication(CARBON_APP_NAME1);
         log.info("Carbon application deleted : " + CARBON_APP_NAME1 + "on " + TENANT_DOMAIN_1);
         appAdminClient.deleteApplication(CARBON_APP_NAME2);
         log.info("Carbon application deleted : " + CARBON_APP_NAME2 + "on " + TENANT_DOMAIN_1);
 
-        loginAsTenantAdmin(TENANT_DOMAIN_2);
+        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
         appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
         appAdminClient.deleteApplication(CARBON_APP_NAME1);
         log.info("Carbon application deleted : " + CARBON_APP_NAME1 + "on " + TENANT_DOMAIN_2);

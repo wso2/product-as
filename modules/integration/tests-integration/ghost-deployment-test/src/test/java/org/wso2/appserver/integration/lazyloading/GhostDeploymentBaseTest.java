@@ -16,10 +16,12 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.tests.ghostdeployment;
+package org.wso2.appserver.integration.lazyloading;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.application.mgt.stub.ApplicationAdminExceptionException;
@@ -47,9 +49,14 @@ import java.util.List;
  */
 public class GhostDeploymentBaseTest extends ASIntegrationTest {
 
-    protected static final String TENANT_DOMAIN_1 = "tenant1.com";
-    protected static final String TENANT_DOMAIN_2 = "tenant2.com";
-    protected static final String SUPPER_TENANT_DOMAIN = "superTenant";
+
+    protected static final String TENANT_DOMAIN_1_kEY = "tenant1";
+    protected static final String TENANT_DOMAIN_2_KEY = "tenant2";
+    protected static final String SUPER_TENANT_DOMAIN_KEY = "superTenant";
+
+    protected static String SUPER_TENANT_DOMAIN;
+    protected static String TENANT_DOMAIN_1;
+    protected static String TENANT_DOMAIN_2;
 
     protected WebAppAdminClient webAppAdminClient;
     protected ServerConfigurationManager serverManager;
@@ -61,14 +68,17 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(GhostDeploymentBaseTest.class);
     private static long TENANT_IDLE_TIME;
     private static long WEB_APP_IDLE_TIME;
-    private static final long MAX_LOOP_TIME = 60 * 1000;
+    private static final long MAX_THRESHOLD_TIME = 2 * 60 * 1000;
 
-    private static final String TENANT_INFO_SERVICE = "tenant-info-service-webapp";
+
+    private static final String PRODUCT_GROUP_NAME = "AS";
+    private static final String INSTANCE_NAME = "appServerInstance0001";
+    private static final String USER_KEY = "admin";
+
+    private static final String TENANT_INFO_SERVICE = "lazy-loading-info";
     private static final String TENANT_INFO_SERVICE_FILE_NAME = TENANT_INFO_SERVICE + ".war";
-    private static final String IS_TENANT_LOADED_METHOD_URL = TENANT_INFO_SERVICE + "/isTenantLoaded?";
-    private static final String IS_WEB_APP_LOADED_METHOD_URL = TENANT_INFO_SERVICE + "/isWebAppGhostStatus?";
-    private static final String IS_SUPPER_TENANT_WEB_APP_LOADED_METHOD_URL = TENANT_INFO_SERVICE +
-            "/isSuperTenantWebAppLoaded?";
+    private static final String IS_TENANT_LOADED_METHOD_URL = TENANT_INFO_SERVICE + "/tenant-status";
+    private static final String IS_WEB_APP_LOADED_METHOD_URL = TENANT_INFO_SERVICE + "/webapp-status";
 
     private static final String TENANT_INFO_SERVICE_ARTIFACT_LOCATION = ARTIFACTS_LOCATION + TENANT_INFO_SERVICE_FILE_NAME;
 
@@ -78,8 +88,6 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
     private static final String WEB_APP_IDLE_XPATH = "//listenerExtensions/platformExecutionManager/extentionClasses/" +
             "*[name()='class']/*[name()='parameter'][@name='-Dwebapp.idle.time']/@value";
 
-    private static final String TENANT_NAME = "tenantName";
-    private static final String WEB_APP_NAME = "webAppName";
     private static final String CARBON_XML = "carbon.xml";
 
     private static final String CARBON_ARTIFACT_LOCATION = ARTIFACTS_LOCATION + CARBON_XML;
@@ -106,12 +114,19 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
         File sourceFile = new File(CARBON_ARTIFACT_LOCATION);
         File targetFile = new File(CARBON_REPOSITORY_LOCATION);
 
+
+        SUPER_TENANT_DOMAIN = new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, SUPER_TENANT_DOMAIN_KEY, USER_KEY).getSuperTenant().getDomain();
+        TENANT_DOMAIN_1 = new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, TENANT_DOMAIN_1_kEY, USER_KEY).getContextTenant().getDomain();
+        TENANT_DOMAIN_2 = new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, TENANT_DOMAIN_2_KEY, USER_KEY).getContextTenant().getDomain();
+
+
         serverManager.applyConfigurationWithoutRestart(sourceFile, targetFile, true);
         log.info("carbon.xml replaced with :" + CARBON_ARTIFACT_LOCATION);
 
         webAppAdminClient.warFileUplaoder(TENANT_INFO_SERVICE_ARTIFACT_LOCATION);
         serverManager.restartGracefully();
         log.info("Server Restarted after applying carbon.xml and tenant information utility web application");
+
 
     }
 
@@ -122,12 +137,13 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
      * @param tenantDomain Domain Name of the tenant.
      * @return true if Tenant configuration context if given tenant is loaded to the system
      * @throws IOException
+     * @throws JSONException
      */
-    protected boolean isTenantLoaded(String tenantDomain) throws IOException {
+    protected boolean isTenantLoaded(String tenantDomain) throws IOException, JSONException {
         HttpResponse response = HttpURLConnectionClient.sendGetRequest(
-                webAppURL + "/" + IS_TENANT_LOADED_METHOD_URL + TENANT_NAME + "="
-                        + tenantDomain, null);
-        return Boolean.valueOf(response.getData());
+                webAppURL + "/" + IS_TENANT_LOADED_METHOD_URL + "/" + tenantDomain, null);
+        JSONObject tenantStatusJSON = new JSONObject(response.getData());
+        return tenantStatusJSON.getBoolean("tenantContextLoaded");
     }
 
     /**
@@ -138,18 +154,27 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
      * @param webAppName   Name of the Web Application
      * @return true if  web app is fully loaded (not in ghost form)
      * @throws IOException
+     * @throws JSONException
      */
-    protected boolean isWebAppLoaded(String tenantDomain, String webAppName) throws IOException {
+    protected boolean isWebAppLoaded(String tenantDomain, String webAppName) throws IOException, JSONException {
         HttpResponse response = HttpURLConnectionClient.sendGetRequest(
-                webAppURL + "/" + IS_WEB_APP_LOADED_METHOD_URL + TENANT_NAME + "="
-                        + tenantDomain + "&" + WEB_APP_NAME + "=" + webAppName, null);
-        return Boolean.valueOf(response.getData());
-    }
+                webAppURL + "/" + IS_WEB_APP_LOADED_METHOD_URL + "/" + tenantDomain + "/" + webAppName, null);
+        JSONObject webAppStatusJSON = new JSONObject(response.getData());
+        boolean isTenantLoaded = webAppStatusJSON.getJSONObject("tenantStatus").getBoolean("tenantContextLoaded");
+        boolean isWebAppStarted = webAppStatusJSON.getBoolean("webAppStarted");
+        boolean isWebAppFullyLoaded = webAppStatusJSON.getBoolean("webAppFullyLoaded");
 
-    protected boolean isSupperTenantWebAppLoaded(String webAppName) throws IOException {
-        HttpResponse response = HttpURLConnectionClient.sendGetRequest(
-                webAppURL + "/" + IS_SUPPER_TENANT_WEB_APP_LOADED_METHOD_URL + WEB_APP_NAME + "=" + webAppName, null);
-        return Boolean.valueOf(response.getData());
+        if (isTenantLoaded) {
+            if (!isWebAppStarted) {
+                throw new RuntimeException("Given WebAPP cannot found in started app list");//webapp not started TODO
+            }
+
+        } else {
+            throw new RuntimeException("Given Tenant Context is Not Loaded");
+        }
+
+
+        return isWebAppFullyLoaded;
     }
 
 
@@ -157,6 +182,8 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
      * Check the given Jaggary application is deployed correctly. This method is wait for 90 seconds
      * for deployment of jaggery application and each 500 milliseconds  of wait it will check the
      * deployment status.
+     *
+     *
      *
      * @param appName Name of the application.
      * @return true if the application is get deployed before the maximum wait time of 90 seconds.
@@ -251,22 +278,23 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
 
     /**
      * check the tenant is unloading functionality when tenant is idle more than configured tenant idle time.
-     * This method will wait additional MAX_LOOP_TIME milliseconds to  system to unload the tenant. it will log total
+     * This method will wait additional MAX_THRESHOLD_TIME milliseconds to  system to unload the tenant. it will log total
      * idle time taken to unload.
      *
      * @param tenantDomain Tenant domain that need to check for unloading.
-     * @return true if tenant is unload after tenant idle time + additional MAX_LOOP_TIME milliseconds if not return
+     * @return true if tenant is unload after tenant idle time + additional MAX_THRESHOLD_TIME milliseconds if not return
      * false
-     * @throws IOException
      * @throws InterruptedException
+     * @throws IOException
+     * @throws JSONException
      */
-    protected boolean checkTenantAutoUnloading(String tenantDomain) throws IOException, InterruptedException {
+    protected boolean checkTenantAutoUnloading(String tenantDomain) throws InterruptedException, IOException, JSONException {
         boolean isTenantUnloaded = false;
         log.info("Sleeping  for " + TENANT_IDLE_TIME + " milliseconds (Tenant idle tome).");
         Thread.sleep(TENANT_IDLE_TIME);
         long totalSleepTime = 0;
         long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < MAX_LOOP_TIME) {
+        while (System.currentTimeMillis() - startTime < MAX_THRESHOLD_TIME) {
 
             isTenantUnloaded = !isTenantLoaded(tenantDomain);
             totalSleepTime = System.currentTimeMillis() - startTime + TENANT_IDLE_TIME;
@@ -287,25 +315,25 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
 
     /**
      * check the web app is unloading reload in to ghost form  when web app is idle more than configured web app idle
-     * time. This method will wait additional MAX_LOOP_TIME milliseconds to  system to unload the web app and reload in
+     * time. This method will wait additional MAX_THRESHOLD_TIME milliseconds to  system to unload the web app and reload in
      * ghost form. It will log total idle time taken to unload.
      *
      * @param tenantDomain Name of the tenant
      * @param webAppName   Nem of the web App
-     * @return true if web app is unload after web app idle time + additional MAX_LOOP_TIME milliseconds if not return
+     * @return true if web app is unload after web app idle time + additional MAX_THRESHOLD_TIME milliseconds if not return
      * false
      * @throws IOException
+     * @throws JSONException
      * @throws InterruptedException
      */
-    protected boolean checkWebAppAutoUnloadingToGhostState(String tenantDomain, String webAppName) throws IOException,
-            InterruptedException {
+    protected boolean checkWebAppAutoUnloadingToGhostState(String tenantDomain, String webAppName) throws IOException, JSONException, InterruptedException {
         boolean isTenantInGhostState = false;
 
         log.info("Sleeping  for " + WEB_APP_IDLE_TIME + " milliseconds (WebApp idle tome).");
         Thread.sleep(WEB_APP_IDLE_TIME);
         long totalSleepTime = 0;
         long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < MAX_LOOP_TIME) {
+        while (System.currentTimeMillis() - startTime < MAX_THRESHOLD_TIME) {
 
             isTenantInGhostState = !isWebAppLoaded(tenantDomain, webAppName);
             totalSleepTime = System.currentTimeMillis() - startTime + WEB_APP_IDLE_TIME;
@@ -321,45 +349,6 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
         }
         if (!isTenantInGhostState) {
             log.info("Web App : " + webAppName + "in Tenant " + tenantDomain + " is not unloaded in " + totalSleepTime +
-                    "milliseconds. Web App idle time is :" + WEB_APP_IDLE_TIME + "milliseconds.");
-        }
-        return isTenantInGhostState;
-    }
-
-
-    /**
-     * check the web app is unloading reload in to ghost form  when web app is idle more than configured web app idle
-     * time in supper tenant. This method will wait additional MAX_LOOP_TIME milliseconds to  system to unload the web
-     * app and reload in ghost form. It will log total idle time taken to unload.
-     *
-     * @param webAppName Name of the Web App
-     * @return true if web app is unload after web app idle time + additional MAX_LOOP_TIME milliseconds  if not return
-     * false
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    protected boolean checkWebAppAutoUnloadingToGhostStateInSupperTenant(String webAppName) throws IOException,
-            InterruptedException {
-        boolean isTenantInGhostState = false;
-        log.info("Sleeping  for " + WEB_APP_IDLE_TIME + " milliseconds (WebApp idle tome).");
-        Thread.sleep(WEB_APP_IDLE_TIME);
-        long totalSleepTime = 0;
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < MAX_LOOP_TIME) {
-
-            isTenantInGhostState = !isSupperTenantWebAppLoaded(webAppName);
-            totalSleepTime = System.currentTimeMillis() - startTime + WEB_APP_IDLE_TIME;
-            if (isTenantInGhostState) {
-                log.info("Web App : " + webAppName + "in supper tenant is unloaded in " + totalSleepTime +
-                        "milliseconds. Web App idle time is :" + WEB_APP_IDLE_TIME + "milliseconds.");
-                break;
-            } else {
-                Thread.sleep(1000);
-            }
-
-        }
-        if (!isTenantInGhostState) {
-            log.info("Web App : " + webAppName + "in supper tenant is not unloaded in " + totalSleepTime +
                     "milliseconds. Web App idle time is :" + WEB_APP_IDLE_TIME + "milliseconds.");
         }
         return isTenantInGhostState;

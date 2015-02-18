@@ -164,7 +164,7 @@
                 </users>
             </tenant>
 
-            <tenant domain="tenant1.com" key="tenant1.com">
+            <tenant domain="tenant1.com" key="tenant1">
                 <admin>
                     <user key="admin">
                         <userName>tenant1</userName>
@@ -179,7 +179,7 @@
 
                 </users>
             </tenant>
-            <tenant domain="tenant2.com" key="tenant2.com">
+            <tenant domain="tenant2.com" key="tenant2">
                 <admin>
                     <user key="admin">
                         <userName>tenant2</userName>

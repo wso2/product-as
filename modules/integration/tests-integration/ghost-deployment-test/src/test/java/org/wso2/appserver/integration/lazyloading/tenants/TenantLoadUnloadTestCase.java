@@ -16,14 +16,14 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.tests.ghostdeployment.tenant;
+package org.wso2.appserver.integration.lazyloading.tenants;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-import org.wso2.appserver.integration.tests.ghostdeployment.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
 
 import static org.testng.Assert.assertEquals;
 
@@ -48,7 +48,7 @@ public class TenantLoadUnloadTestCase extends GhostDeploymentBaseTest {
         assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false,
                 "Tenant context is loaded before any action related to that tenant");
         log.info("Testing Tenant context loading  for :" + TENANT_DOMAIN_1);
-        loginAsTenantAdmin(TENANT_DOMAIN_1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
 
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.tests.ghostdeployment.jaggery;
+package org.wso2.appserver.integration.lazyloading.artifacts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.JaggeryApplicationUploaderClient;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.tests.ghostdeployment.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
 import static org.testng.Assert.assertEquals;
@@ -68,7 +68,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
         JaggeryApplicationUploaderClient jaggeryApplicationUploaderClient;
 
         //Tenant1
-        loginAsTenantAdmin(TENANT_DOMAIN_1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
 
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         jaggeryApplicationUploaderClient = new JaggeryApplicationUploaderClient(backendURL, sessionCookie);
@@ -91,7 +91,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
         //Tenant2
 
-        loginAsTenantAdmin(TENANT_DOMAIN_2);
+        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
 
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         jaggeryApplicationUploaderClient = new JaggeryApplicationUploaderClient(backendURL, sessionCookie);
@@ -192,7 +192,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
     @AfterClass
     public void cleanJaggeryApplication() throws Exception {
 
-        loginAsTenantAdmin(TENANT_DOMAIN_1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
 
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
@@ -203,7 +203,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, JAGGERY_APP_NAME1),
                 "Web Application un-deployment failed: Web app :" + JAGGERY_APP_FILE_NAME1 + " on " + TENANT_DOMAIN_1);
 
-        loginAsTenantAdmin(TENANT_DOMAIN_2);
+        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
 
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 

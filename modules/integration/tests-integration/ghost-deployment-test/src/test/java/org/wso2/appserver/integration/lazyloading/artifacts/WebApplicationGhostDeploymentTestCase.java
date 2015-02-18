@@ -15,7 +15,7 @@
 *specific language governing permissions and limitations
 *under the License.
 */
-package org.wso2.appserver.integration.tests.ghostdeployment.webapp;
+package org.wso2.appserver.integration.lazyloading.artifacts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.tests.ghostdeployment.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
@@ -60,7 +60,7 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
         log.info("deployment of  web application started");
 
         //Tenant 1
-        loginAsTenantAdmin(TENANT_DOMAIN_1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
         webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
@@ -76,7 +76,7 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
                 "Web app " + WEB_APP_FILE_NAME2 + "is  not loaded after deployment:" + TENANT_DOMAIN_1);
 
         //Tenant2
-        loginAsTenantAdmin(TENANT_DOMAIN_2);
+        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
         webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
@@ -167,7 +167,7 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
     @AfterClass
     public void cleanWebApplications() throws Exception {
         //Tenant1
-        loginAsTenantAdmin(TENANT_DOMAIN_1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
         webAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME1, hostURL);
@@ -178,7 +178,7 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
                 "Web Application un-deployment failed: Web app :" + WEB_APP_NAME2 + " on " + TENANT_DOMAIN_1);
 
         //Tenant2
-        loginAsTenantAdmin(TENANT_DOMAIN_2);
+        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
         webAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME1, hostURL);
