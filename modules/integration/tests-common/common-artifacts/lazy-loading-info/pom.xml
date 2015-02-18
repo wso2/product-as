@@ -10,9 +10,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer - Integration Common Artifacts- Tenant Info Service WebApp</name>
-    <groupId>org.wso2.qaa.test.tenant</groupId>
-    <artifactId>tenant-info-service-webapp</artifactId>
+    <name>WSO2 AppServer - Integration Common Artifacts- Lazy Loading Info Service</name>
+    <artifactId>lazy-loading-info</artifactId>
     <packaging>war</packaging>
 
     <build>

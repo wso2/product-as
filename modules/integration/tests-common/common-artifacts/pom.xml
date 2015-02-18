@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>tenant-info-service-webapp</module>
+        <module>lazy-loading-info</module>
     </modules>
 
 </project>

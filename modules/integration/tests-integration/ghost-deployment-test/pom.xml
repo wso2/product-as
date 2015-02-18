@@ -226,7 +226,7 @@
                             </outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>../../tests-common/common-artifacts/tenant-info-service-webapp/target
+                                    <directory>../../tests-common/common-artifacts/lazy-loading-info/target
                                     </directory>
                                     <includes>
                                         <include>*.war</include>
