@@ -1,21 +1,19 @@
 /*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- *  *
- *  * WSO2 Inc. licenses this file to you under the Apache License,
- *  * Version 2.0 (the "License"); you may not use this file except
- *  * in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  * http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing,
- *  * software distributed under the License is distributed on an
- *  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  * KIND, either express or implied.  See the License for the
- *  * specific language governing permissions and limitations
- *  * under the License.
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.wso2.appserver.integration.tests.carbontools;
@@ -26,6 +24,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
@@ -42,7 +41,7 @@ import java.io.File;
 public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
-    public static String mySQL_DB_URL ;
+    public static String mySQLDBURL;
 
     private TestServerManager testServerManager;
     private AutomationContext context;
@@ -55,13 +54,15 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
                                         ContextXpathConstants.ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
-        String mySQLPath  = "//databasePath/MySQL";
+
         AutomationContext context = new AutomationContext();
-        mySQL_DB_URL = context.getConfigurationValue(mySQLPath);
+
+        mySQLDBURL = context.getConfigurationValue(String.format(ASIntegrationConstants.DB_URL, "MySQL"));
+
     }
 
     // Enable it when testing with mysql
-    @Test(groups = "wso2.as", description = "MySQL Password changing script run test",enabled = false)
+    @Test(groups = "wso2.as", description = "MySQL Password changing script run test", enabled = false)
     public void testScriptRun() throws Exception {
 
         testServerManager = new TestServerManager(context, 1) {
@@ -75,13 +76,13 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
                 if (CarbonCommandToolsUtil.isCurrentOSWindows()) {
                     cmdArray = new String[]{
-                            "cmd.exe", "/c", "chpasswd.sh", "--db-url", mySQL_DB_URL,
+                            "cmd.exe", "/c", "chpasswd.sh", "--db-url", mySQLDBURL,
                             "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
                             "root123", "--username", "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + "/bin";
                 } else {
                     cmdArray = new String[]{
-                            "sh", "chpasswd.sh", "--db-url", mySQL_DB_URL,
+                            "sh", "chpasswd.sh", "--db-url", mySQLDBURL,
                             "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
                             "root123", "--username", "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + File.separator + "bin";
@@ -95,7 +96,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
         testServerManager.startServer();
     }
 
-    @Test(groups = "wso2.as", description = "MySQL password change test", dependsOnMethods = {"testScriptRun"},enabled = false)
+    @Test(groups = "wso2.as", description = "MySQL password change test", dependsOnMethods = {"testScriptRun"}, enabled = false)
     public void testUserPasswordChangeOnMySQLDB() throws Exception {
         String loginStatusString = authenticatorClient.login(
                 "testu1", "testu123", context.getInstance().getHosts().get("default"));

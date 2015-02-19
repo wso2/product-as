@@ -79,10 +79,14 @@
         </datasource>
     </datasources>
 
-    <databasePath>
-        <H2DB>/repository/database/WSO2CARBON_DB</H2DB>
-        <MySQL>jdbc:mysql://localhost:3306/userstore?autoReconnect=true</MySQL>
-    </databasePath>
+    <databases>
+        <database name="H2DB">
+            <url>/repository/database/WSO2CARBON_DB</url>
+        </database>
+        <database name="MySQL">
+            <url>jdbc:mysql://localhost:3306/userstore?autoReconnect=true</url>
+        </database>
+    </databases>
 
     <security>
         <!--

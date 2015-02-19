@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
@@ -42,22 +43,20 @@ import static org.testng.Assert.assertTrue;
 public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
-    public static String h2DB_DB_URL ;
     private TestServerManager testServerManager;
     private AuthenticatorClient authenticatorClient;
     private boolean scriptRunStatus;
     private AutomationContext context;
+    private static String h2DBURL ;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         context = new AutomationContext("AS", "appServerInstance0002", ContextXpathConstants.SUPER_TENANT,
                                         ContextXpathConstants.ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
-        String H2DBPath  = "//databasePath/H2DB";
         AutomationContext context = new AutomationContext();
-        h2DB_DB_URL = context.getConfigurationValue(H2DBPath);
+        h2DBURL = context.getConfigurationValue(String.format(ASIntegrationConstants.DB_URL, "H2DB"));
     }
-
 
     @Test(groups = "wso2.as", description = "H2DB Password changing script run test")
     public void testScriptRun() throws Exception {
@@ -70,17 +69,18 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
                 testServerManager.stopServer();
                 String[] cmdArray;
                 String commandDirectory;
+
                 if (CarbonCommandToolsUtil.isCurrentOSWindows()) {
                     cmdArray = new String[]
                             {"cmd.exe", "/c", "chpasswd.bat", "--db-url", "jdbc:h2:" +
-                             testServerManager.getCarbonHome() + h2DB_DB_URL,
+                             testServerManager.getCarbonHome() + h2DBURL,
                              "--db-driver", "org.h2.Driver", "--db-username", "wso2carbon", "--db-password",
                              "wso2carbon", "--username", "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + File.separator + "bin";
                 } else {
                     cmdArray = new String[]
                             {"sh", "chpasswd.sh", "--db-url", "jdbc:h2:" + testServerManager.getCarbonHome() +
-                                                              h2DB_DB_URL, "--db-driver", "org.h2.Driver",
+                                                              h2DBURL, "--db-driver", "org.h2.Driver",
                              "--db-username", "wso2carbon", "--db-password", "wso2carbon", "--username",
                              "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + "/bin";

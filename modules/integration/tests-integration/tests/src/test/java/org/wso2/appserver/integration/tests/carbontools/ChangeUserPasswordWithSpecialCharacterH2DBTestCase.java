@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
@@ -43,7 +44,7 @@ import static org.testng.Assert.assertTrue;
 public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(ChangeUserPasswordWithSpecialCharacterH2DBTestCase.class);
-    public static final String H2DB_DB_URL = "/repository/database/WSO2CARBON_DB";
+    public static String h2DBURL;
     private TestServerManager testServerManager;
     private AuthenticatorClient authenticatorClient;
     private boolean scriptRunStatus;
@@ -54,6 +55,7 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
         context = new AutomationContext("AS", "appServerInstance0002", ContextXpathConstants.SUPER_TENANT,
                                         ContextXpathConstants.ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
+        h2DBURL = context.getConfigurationValue(String.format(ASIntegrationConstants.DB_URL, "H2DB"));
     }
 
 
@@ -71,16 +73,15 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
                 if (CarbonCommandToolsUtil.isCurrentOSWindows()) {
                     cmdArray = new String[]
                             {"cmd.exe", "/c", "chpasswd.bat", "--db-url", "jdbc:h2:" +
-                             testServerManager.getCarbonHome() + H2DB_DB_URL,
+                              testServerManager.getCarbonHome() + h2DBURL,
                              "--db-driver", "org.h2.Driver", "--db-username", "wso2carbon", "--db-password",
                              "wso2carbon", "--username", "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + File.separator + "bin";
                 } else {
                     cmdArray = new String[]
                             {"sh", "chpasswd.sh", "--db-url", "jdbc:h2:" + testServerManager.getCarbonHome() +
-                                                              H2DB_DB_URL, "--db-driver", "org.h2.Driver",
-                             "--db-username", "wso2carbon", "--db-password", "wso2carbon", "--username",
-                             "testu1", "--new-password", "testu123"};
+                              h2DBURL, "--db-driver", "org.h2.Driver", "--db-username", "wso2carbon",
+                             "--db-password", "wso2carbon", "--username", "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + "/bin";
                 }
 

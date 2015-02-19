@@ -200,7 +200,11 @@ public class CarbonCommandToolsUtil {
                     if (line.contains(expectedString)) {
                         log.info("found the string " + expectedString + " in line " + line);
                         isFoundTheMessage = true;
+                        break;
                     }
+                }
+                if(isFoundTheMessage){
+                    break;
                 }
             }
             return isFoundTheMessage;

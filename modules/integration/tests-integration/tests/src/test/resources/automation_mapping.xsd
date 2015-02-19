@@ -119,13 +119,18 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="databasePath">
+                <xs:element name="databases">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element type="xs:string" name="H2DB"/>
-                            <xs:element type="xs:string" name="MySQL"/>
+                            <xs:element name="database" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="url"/>
+                                    </xs:sequence>
+                                    <xs:attribute type="xs:string" name="name"/>
+                                </xs:complexType>
+                            </xs:element>
                         </xs:sequence>
-                        <xs:attribute type="xs:string" name="name"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="security">
