@@ -52,7 +52,7 @@ public class LazyLoadingInfoService {
             webAppStatus = LazyLoadingInfoUtil.isSuperTenantWebAppLoaded(webAppName);
 
         } else {
-            webAppStatus= LazyLoadingInfoUtil.isWebAppLoaded(tenantDomain, webAppName);
+            webAppStatus = LazyLoadingInfoUtil.isWebAppLoaded(tenantDomain, webAppName);
         }
 
         return webAppStatus;

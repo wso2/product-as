@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer - Integration Common Artifacts- Lazy Loading Info Service</name>
+    <name>WSO2 AppServer - Integration Common Artifacts- Lazy Loading Info</name>
     <artifactId>lazy-loading-info</artifactId>
     <packaging>war</packaging>
 

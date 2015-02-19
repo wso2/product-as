@@ -15,7 +15,7 @@
 *specific language governing permissions and limitations
 *under the License.
 */
-package org.wso2.appserver.integration.lazyloading.artifacts;
+package org.wso2.appserver.integration.lazy.loading.artifacts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazy.loading.GhostDeploymentBaseTest;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
@@ -54,8 +54,8 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
         tenant1WebApp1URL = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/webapps/" + WEB_APP_NAME1 + "/";
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Deploying web application in Ghost Deployment enable" +
-            " environment. Each Web application should fully loaded (non Ghost format) soon after the deployment")
+    @Test(groups = "wso2.as.lazy.loading", description = "Deploying web application in Ghost Deployment enable" +
+            " environment. Each Web application should fully loaded (non Ghost format) soon after the deployment", alwaysRun = true)
     public void testDeployWebApplicationGhostDeployment() throws Exception {
         log.info("deployment of  web application started");
 
@@ -95,11 +95,11 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke web application in Ghost Deployment " +
+    @Test(groups = "wso2.as.lazy.loading", description = "Invoke web application in Ghost Deployment " +
             "enable environment.First test will restart the server gracefully.After the restart all tenant context " +
             "should not be loaded.Then, it invokes the first web app on first tenant. After the invoke, only that web app " +
             "should loaded fully.",
-            dependsOnMethods = "testDeployWebApplicationGhostDeployment")
+            dependsOnMethods = "testDeployWebApplicationGhostDeployment", alwaysRun = true)
     public void testInvokeWebAppGhostDeployment() throws Exception {
 
         serverManager.restartGracefully();
@@ -125,10 +125,10 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
         assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, "Tenant Name:" + TENANT_DOMAIN_2 + " loaded before access.");
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost" +
+    @Test(groups = "wso2.as.lazy.loading", description = "Test web application auto unload  and reload in Ghost" +
             " format. After access web app, it should be in fully load form  but after configured web app idle time" +
             " pass it should get auto unload ne reload in Ghost form.",
-            dependsOnMethods = "testInvokeWebAppGhostDeployment")
+            dependsOnMethods = "testInvokeWebAppGhostDeployment", alwaysRun = true)
     public void testWebAppAutoUnLoadAndReloadInGhostForm() throws Exception {
         serverManager.restartGracefully();
 
@@ -146,9 +146,9 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test Unload of tenant configuration context  after tenant "
+    @Test(groups = "wso2.as.lazy.loading", description = "Test Unload of tenant configuration context  after tenant "
             + "idle time pass without any action with that tenant",
-            dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostForm")
+            dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostForm", alwaysRun = true)
     public void testTenantUnloadInIdleTimeAfterWebAPPUsage() throws Exception {
         serverManager.restartGracefully();
 
@@ -164,7 +164,7 @@ public class WebApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTe
 
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void cleanWebApplications() throws Exception {
         //Tenant1
         loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);

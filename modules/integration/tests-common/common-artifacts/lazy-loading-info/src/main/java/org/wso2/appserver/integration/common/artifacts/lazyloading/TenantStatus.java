@@ -52,7 +52,8 @@ public class TenantStatus {
     }
 
     /**
-     *  Set the information of tenant context is loaded or not.
+     * Set the information of tenant context is loaded or not.
+     *
      * @param isTenantContextLoaded true if tenant context is loaded or else false.
      */
     public void setTenantContextLoaded(boolean isTenantContextLoaded) {

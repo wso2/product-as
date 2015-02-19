@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="as-integration-artifacts.AS.ghost-deployment">
+<suite name="as-integration-lazy-loading">
     <parameter name="useDefaultListeners" value="false"/>
     <listeners>
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestExecutionListener"/>
@@ -12,11 +12,11 @@
 
     <test name="as-integration-artifacts.AS.ghost-deployment-tests" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.appserver.integration.lazyloading.tenants.TenantLoadUnloadTestCase"/>
-            <class name="org.wso2.appserver.integration.lazyloading.artifacts.WebApplicationGhostDeploymentTestCase"/>
-            <class name="org.wso2.appserver.integration.lazyloading.artifacts.JaggeryApplicationGhostDeploymentTestCase"/>
-            <class name="org.wso2.appserver.integration.lazyloading.artifacts.CarbonAppGhostDeploymentTestCase"/>
-            <class name="org.wso2.appserver.integration.lazyloading.artifacts.SuperTenantGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazy.loading.tenants.TenantLoadUnloadTestCase"/>
+            <class name="org.wso2.appserver.integration.lazy.loading.artifacts.WebApplicationGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazy.loading.artifacts.JaggeryApplicationGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazy.loading.artifacts.CarbonAppGhostDeploymentTestCase"/>
+            <class name="org.wso2.appserver.integration.lazy.loading.artifacts.SuperTenantGhostDeploymentTestCase"/>
         </classes>
     </test>
 

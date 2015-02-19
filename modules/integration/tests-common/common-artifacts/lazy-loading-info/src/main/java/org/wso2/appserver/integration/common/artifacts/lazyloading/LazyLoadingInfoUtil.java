@@ -90,7 +90,7 @@ public class LazyLoadingInfoUtil {
      * Check  the given web-app of given tenant is loaded.
      *
      * @param tenantDomain Tenant name
-     * @param webAppName Web-app Name
+     * @param webAppName   Web-app Name
      * @return WebAppStatus  with current status  information about the Web app.
      */
     protected static WebAppStatus isWebAppLoaded(String tenantDomain, String webAppName) {
@@ -134,15 +134,15 @@ public class LazyLoadingInfoUtil {
 
 
     /**
-     * Check  the given web-app of supper tenant is loaded.
+     * Check  the given web-app of super tenant is loaded.
      *
      * @param webAppName Web-app Name
-     * @return WebAppStatus  with current status  information about the Web app. 
+     * @return WebAppStatus  with current status  information about the Web app.
      */
 
     protected static WebAppStatus isSuperTenantWebAppLoaded(String webAppName) {
 
-        WebAppStatus webAppStatus= new WebAppStatus();
+        WebAppStatus webAppStatus = new WebAppStatus();
         webAppStatus.setTenantStatus(new TenantStatus(true)); // Super tenant always loaded;
         ConfigurationContext serverConfigurationContext = getServerConfigurationContext();
 
@@ -158,7 +158,7 @@ public class LazyLoadingInfoUtil {
                 boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
                 log.info("Super Tenant Web-app: " + webAppName + " is in Ghost deployment status :" +
                         isWebAppGhost);
-                webAppStatus.setWebAppFullyLoaded( !isWebAppGhost);
+                webAppStatus.setWebAppFullyLoaded(!isWebAppGhost);
             } else {
                 log.info("Given web-app:" + webAppName + " for super tenant  not found in started state");
             }

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.lazyloading.artifacts;
+package org.wso2.appserver.integration.lazy.loading.artifacts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.JaggeryApplicationUploaderClient;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazy.loading.GhostDeploymentBaseTest;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
 import static org.testng.Assert.assertEquals;
@@ -59,9 +59,9 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Deploying Jaggery application in Ghost Deployment enable" +
+    @Test(groups = "wso2.as.lazy.loading", description = "Deploying Jaggery application in Ghost Deployment enable" +
             "environment. Each Jaggery application should fully loaded" +
-            "(non Ghost format) soon after the deployment") //TODO add alwas run true
+            "(non Ghost format) soon after the deployment", alwaysRun = true)
     public void testJaggeryApplicationGhostDeployment()
             throws Exception {
         log.info("deployment of  Jaggery Application started");
@@ -111,7 +111,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke Jaggery application in Ghost Deployment enable " +
+    @Test(groups = "wso2.as.lazy.loading", description = "Invoke Jaggery application in Ghost Deployment enable " +
             "environment. First test will restart the server gracefully. After the restart  all tenant context should" +
             " not be loaded. Then the it invokes the first Jaggery app on first tenant. After the invoke, only that " +
             "Jaggery app should loaded.", dependsOnMethods = "testJaggeryApplicationGhostDeployment")
@@ -142,7 +142,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test Jaggery application auto unload  and reload in Ghost" +
+    @Test(groups = "wso2.as.lazy.loading", description = "Test Jaggery application auto unload  and reload in Ghost" +
             " format. After access Jaggery app, it should be in fully load form  but after configured Jaggery app idle " +
             "time pass it should get auto unload ne reload in Ghost form.",
             dependsOnMethods = "testInvokeJaggeryAppGhostDeployment")
@@ -164,7 +164,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test Unload of tenant configuration context  after tenant "
+    @Test(groups = "wso2.as.lazy.loading", description = "Test Unload of tenant configuration context  after tenant "
             + "idle time pass without any action with that tenant",
             dependsOnMethods = "testJaggeryAppAutoUnLoadAndReloadInGhostForm")
     public void testTenantUnloadInIdleTimeAfterJaggeryAPPUsage()

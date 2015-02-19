@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.lazyloading.artifacts;
+package org.wso2.appserver.integration.lazy.loading.artifacts;
 
 
 import org.apache.commons.logging.Log;
@@ -26,13 +26,17 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.lazyloading.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazy.loading.GhostDeploymentBaseTest;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+/**
+ * Test the ghost deployment of web application in Super  tenant (carbon.super). For this  two  web applications
+ * will be deployed.
+ */
 public class SuperTenantGhostDeploymentTestCase extends GhostDeploymentBaseTest {
 
     private static final Log log = LogFactory.getLog(SuperTenantGhostDeploymentTestCase.class);
@@ -53,8 +57,8 @@ public class SuperTenantGhostDeploymentTestCase extends GhostDeploymentBaseTest 
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Deploying web application in Ghost Deployment enable" +
-            " environment. Each Web application should fully loaded (non Ghost format) soon after the deployment")
+    @Test(groups = "wso2.as.lazy.loading", description = "Deploying web application in Ghost Deployment enable" +
+            " environment. Each Web application should fully loaded (non Ghost format) soon after the deployment", alwaysRun = true)
     public void testDeployWebApplicationGhostDeploymentOnSuperTenant() throws Exception {
         log.info("deployment of  web application started");
 
@@ -77,7 +81,7 @@ public class SuperTenantGhostDeploymentTestCase extends GhostDeploymentBaseTest 
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Invoke web application in Ghost Deployment enable" +
+    @Test(groups = "wso2.as.lazy.loading", description = "Invoke web application in Ghost Deployment enable" +
             " environment.First test will restart the server gracefully.After the restart  all web apps should be in" +
             " ghost format.Then,  it invokes the first web app on first tenant. After the invoke, only that web app " +
             "should loaded fully and all other web apps should be in Ghost format.",
@@ -105,7 +109,7 @@ public class SuperTenantGhostDeploymentTestCase extends GhostDeploymentBaseTest 
 
     }
 
-    @Test(groups = "wso2.as.ghost.deployment", description = "Test web application auto unload  and reload in Ghost" +
+    @Test(groups = "wso2.as.lazy.loading", description = "Test web application auto unload  and reload in Ghost" +
             " format. After access web app, it should be in fully load form  but after configured web app idle time pass" +
             " it should get auto unload ne reload in Ghost form.",
             dependsOnMethods = "testInvokeWebAppGhostDeploymentOnSuperTenant")

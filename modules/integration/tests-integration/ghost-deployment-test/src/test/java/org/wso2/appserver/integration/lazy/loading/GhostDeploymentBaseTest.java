@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.lazyloading;
+package org.wso2.appserver.integration.lazy.loading;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -97,7 +97,7 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
 
     @Override
     /**
-     * Login as supper admin and do the replacement of carbon.xml with Ghost deployment
+     * Login as super admin and do the replacement of carbon.xml with Ghost deployment
      * configuration and deployment of the tenant-info-service web application.
      * At the end it will restart the server gracefully.
      * @throws Exception
@@ -164,13 +164,14 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
         boolean isWebAppStarted = webAppStatusJSON.getBoolean("webAppStarted");
         boolean isWebAppFullyLoaded = webAppStatusJSON.getBoolean("webAppFullyLoaded");
 
+
         if (isTenantLoaded) {
             if (!isWebAppStarted) {
-                throw new RuntimeException("Given WebAPP cannot found in started app list");//webapp not started TODO
+                throw new RuntimeException("Given web-app: " + webAppName + " on tenant : " + tenantDomain + " cannot found in started app list");//webapp not started TODO
             }
 
         } else {
-            throw new RuntimeException("Given Tenant Context is Not Loaded");
+            throw new RuntimeException("Tenant Context is Not Loaded for tenant: " + tenantDomain);
         }
 
 
@@ -182,8 +183,6 @@ public class GhostDeploymentBaseTest extends ASIntegrationTest {
      * Check the given Jaggary application is deployed correctly. This method is wait for 90 seconds
      * for deployment of jaggery application and each 500 milliseconds  of wait it will check the
      * deployment status.
-     *
-     *
      *
      * @param appName Name of the application.
      * @return true if the application is get deployed before the maximum wait time of 90 seconds.
