@@ -107,6 +107,7 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
 
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             throw new SkipException("Skipping tests because of windows.");
+            // To run this script i am using expect that is not available on windows 
         } else {
             File sourceRunFile = new File(TestConfigurationProvider.getResourceLocation() + File.separator +
                                           "artifacts" + File.separator + "AS" + File.separator + "ciphertool" +
