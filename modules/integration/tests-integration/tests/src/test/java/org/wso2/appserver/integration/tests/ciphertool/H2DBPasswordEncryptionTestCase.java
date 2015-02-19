@@ -68,7 +68,7 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         File createdFile = new File("/usr/bin/expect");
-        if(!createdFile.isFile()){
+        if (!createdFile.isFile()) {
             throw new SkipException("Skipping tests because /usr/bin/expect was not available.");
         }
         super.init();
@@ -102,30 +102,35 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = {"wso2.as"}, description = "Test script run successfully",
-          dependsOnMethods = {"testCheckBeforeEncrypt"})
+            dependsOnMethods = {"testCheckBeforeEncrypt"})
     public void testCheckScriptRunSuccessfully() throws Exception {
 
-        File sourceRunFile = new File(TestConfigurationProvider.getResourceLocation() + File.separator +
-                                      "artifacts" + File.separator + "AS" + File.separator + "ciphertool" +
-                                      File.separator + "run.sh");
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            throw new SkipException("Skipping tests because of windows.");
+        } else {
+            File sourceRunFile = new File(TestConfigurationProvider.getResourceLocation() + File.separator +
+                                          "artifacts" + File.separator + "AS" + File.separator + "ciphertool" +
+                                          File.separator + "run.sh");
 
-        String[] cmdArray = new String[]{"/usr/bin/expect", "run.sh"};
+            String[] cmdArray = new String[]{"/usr/bin/expect", "run.sh"};
 
-        File targetRunFile = new File(CARBON_HOME + File.separator + "bin" + File.separator + "run.sh");
-        serverManager.applyConfigurationWithoutRestart(sourceRunFile, targetRunFile, false);
-        boolean isScriptSuccess = PasswordEncryptionUtil.runCipherToolScriptAndCheckStatus(CARBON_HOME, cmdArray);
-        assertTrue(isScriptSuccess, "H2DB Password Encryption failed");
+            File targetRunFile = new File(CARBON_HOME + File.separator + "bin" + File.separator + "run.sh");
+            serverManager.applyConfigurationWithoutRestart(sourceRunFile, targetRunFile, false);
+            boolean isScriptSuccess = PasswordEncryptionUtil.runCipherToolScriptAndCheckStatus(CARBON_HOME, cmdArray);
+            assertTrue(isScriptSuccess, "H2DB Password Encryption failed");
+        }
+
     }
 
     @Test(groups = {"wso2.as"}, description = "H2DB Password Encryption Test",
-          dependsOnMethods = {"testCheckScriptRunSuccessfully"})
+            dependsOnMethods = {"testCheckScriptRunSuccessfully"})
     public void testCheckEncryptedPassword() throws Exception {
         boolean passwordAfterEncryption = PasswordEncryptionUtil.isPasswordEncrypted(CARBON_HOME);
         assertTrue(passwordAfterEncryption, "H2DB Password Encryption failed");
     }
 
     @Test(groups = {"wso2.as"}, description = "Restart encrypted server test",
-          dependsOnMethods = {"testCheckEncryptedPassword"})
+            dependsOnMethods = {"testCheckEncryptedPassword"})
     public void testRestartEncryptedServer() throws Exception {
 
         AutomationContext automationContext =
@@ -161,7 +166,7 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "verify server startup errors",
-          dependsOnMethods = {"testRestartEncryptedServer"})
+            dependsOnMethods = {"testRestartEncryptedServer"})
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     public void testVerifyLogs() throws RemoteException, LogViewerLogViewerException {
         boolean status = false;
