@@ -59,10 +59,8 @@ public class ResourceAdminServiceClient {
     public boolean addResource(String destinationPath, String mediaType,
                                String description, DataHandler dh)
             throws ResourceAdminServiceExceptionException, RemoteException {
-        if (log.isDebugEnabled()) {
-            log.debug("Destination Path :" + destinationPath);
-            log.debug("Media Type :" + mediaType);
-        }
+            log.info("Destination Path :" + destinationPath);
+            log.info("Media Type :" + mediaType);
         return resourceAdminServiceStub.addResource(destinationPath, mediaType, description, dh, null, null);
     }
 

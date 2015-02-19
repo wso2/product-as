@@ -78,6 +78,12 @@
             <driverClassName>org.h2.Driver</driverClassName>
         </datasource>
     </datasources>
+
+    <databasePath>
+        <H2DB>/repository/database/WSO2CARBON_DB</H2DB>
+        <MySQL>jdbc:mysql://localhost:3306/userstore?autoReconnect=true</MySQL>
+    </databasePath>
+
     <security>
         <!--
                     KeyStore which will be used for encrypting/decrypting passwords

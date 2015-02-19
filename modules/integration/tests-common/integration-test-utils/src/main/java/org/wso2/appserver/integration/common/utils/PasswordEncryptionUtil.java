@@ -62,7 +62,7 @@ public class PasswordEncryptionUtil {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document xmlDocument = builder.parse(file);
             XPath xPath = XPathFactory.newInstance().newXPath();
-            String expression = "datasources-configuration/datasources/datasource/definition" +
+            String expression = "//datasources-configuration/datasources/datasource/definition" +
                                 "[@type='RDBMS']/configuration/password";
 
             NodeList nodeList = (
@@ -93,8 +93,6 @@ public class PasswordEncryptionUtil {
     public static boolean runCipherToolScriptAndCheckStatus(String carbonHome, String[] cmdArray)
             throws IOException {
         boolean foundTheMessage = false;
-        InputStream is = null;
-        InputStreamReader isr = null;
         BufferedReader br = null;
         Process process = null;
         try {
@@ -104,9 +102,7 @@ public class PasswordEncryptionUtil {
             ProcessBuilder processBuilder = new ProcessBuilder(cmdArray);
             processBuilder.directory(commandDir);
             process = processBuilder.start();
-            is = process.getInputStream();
-            isr = new InputStreamReader(is);
-            br = new BufferedReader(isr);
+            br = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
             String line;
             while ((line = br.readLine()) != null) {
                 log.info(line);
@@ -119,12 +115,6 @@ public class PasswordEncryptionUtil {
             log.error("Error when reading the InputStream when running shell script ", ex);
             throw new IOException("Error when reading the InputStream when running shell script ", ex);
         } finally {
-            if (is != null) {
-                is.close();
-            }
-            if (isr != null) {
-                isr.close();
-            }
             if (br != null) {
                 br.close();
             }

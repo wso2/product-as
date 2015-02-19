@@ -42,7 +42,7 @@ import java.io.File;
 public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
-    public static final String MYSQL_DB_URL = "jdbc:mysql://localhost:3306/userstore?autoReconnect=true";
+    public static String mySQL_DB_URL ;
 
     private TestServerManager testServerManager;
     private AutomationContext context;
@@ -54,10 +54,14 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
         context = new AutomationContext("AS", "appServerInstance0002", ContextXpathConstants.SUPER_TENANT,
                                         ContextXpathConstants.ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
+        authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
+        String mySQLPath  = "//databasePath/MySQL";
+        AutomationContext context = new AutomationContext();
+        mySQL_DB_URL = context.getConfigurationValue(mySQLPath);
     }
 
     // Enable it when testing with mysql
-    @Test(groups = "wso2.as", description = "MySQL Password changing script run test", enabled = false)
+    @Test(groups = "wso2.as", description = "MySQL Password changing script run test",enabled = false)
     public void testScriptRun() throws Exception {
 
         testServerManager = new TestServerManager(context, 1) {
@@ -71,13 +75,13 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
                 if (CarbonCommandToolsUtil.isCurrentOSWindows()) {
                     cmdArray = new String[]{
-                            "cmd.exe", "/c", "chpasswd.sh", "--db-url", MYSQL_DB_URL,
+                            "cmd.exe", "/c", "chpasswd.sh", "--db-url", mySQL_DB_URL,
                             "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
                             "root123", "--username", "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + "/bin";
                 } else {
                     cmdArray = new String[]{
-                            "sh", "chpasswd.sh", "--db-url", MYSQL_DB_URL,
+                            "sh", "chpasswd.sh", "--db-url", mySQL_DB_URL,
                             "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
                             "root123", "--username", "testu1", "--new-password", "testu123"};
                     commandDirectory = testServerManager.getCarbonHome() + File.separator + "bin";
@@ -91,8 +95,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
         testServerManager.startServer();
     }
 
-    @Test(groups = "wso2.as", description = "MySQL password change test", dependsOnMethods = {"testScriptRun"},
-          enabled = false)
+    @Test(groups = "wso2.as", description = "MySQL password change test", dependsOnMethods = {"testScriptRun"},enabled = false)
     public void testUserPasswordChangeOnMySQLDB() throws Exception {
         String loginStatusString = authenticatorClient.login(
                 "testu1", "testu123", context.getInstance().getHosts().get("default"));
