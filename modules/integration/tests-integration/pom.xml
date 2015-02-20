@@ -17,7 +17,7 @@
 
     <modules>
         <!--<module>tests</module>-->
-        <module>ghost-deployment-test</module>
+        <module>lazy-loading-test</module>
     </modules>
 
 </project>

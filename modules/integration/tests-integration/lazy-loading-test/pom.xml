@@ -11,8 +11,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer - Integration Ghost Deployment Test Module</name>
-    <artifactId>ghost-deployment-test</artifactId>
+    <name>WSO2 AppServer - Integration Lazy Loading Test Module</name>
+    <artifactId>lazy-loading-test</artifactId>
     <packaging>jar</packaging>
 
     <build>
