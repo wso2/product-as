@@ -21,12 +21,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 
+/**
+ * This class has the method which using by carbon tools test cases
+ */
 
 public class CarbonCommandToolsUtil {
-
-    /**
-     * This class has the method which using by carbon tools test cases
-     */
 
     private static final Log log = LogFactory.getLog(CarbonCommandToolsUtil.class);
     private static int TIMEOUT = 180 * 1000; // Max time to wait
@@ -53,7 +52,7 @@ public class CarbonCommandToolsUtil {
         File commandDir = new File(carbonHome);
         String[] cmdArray;
         log.info("Starting server............. ");
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+        if (isCurrentOSWindows()) {
             commandDir = new File(carbonHome + File.separator + "bin");
             cmdArray = new String[]{"cmd.exe", "/c", scriptName + ".bat", "-DportOffset=" + portOffset};
             cmdArray = mergePropertiesToCommandArray(parameters, cmdArray);
