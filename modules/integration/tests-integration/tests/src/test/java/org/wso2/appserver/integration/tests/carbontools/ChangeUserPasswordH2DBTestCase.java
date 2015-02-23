@@ -42,6 +42,8 @@ import static org.testng.Assert.assertTrue;
 
 /**
  * This class is to test change H2DB user password using chpasswd.sh/chpasswd.bat
+ * All test methods in this class has disabled because need same features from unreleased automation
+ * framework after the automation framework 4.3.2 released have to enable test methods
  */
 
 public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
@@ -55,11 +57,13 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
     private String carbonHome = null;
     private static String H2DB_URL;
     private AuthenticatorClient authenticatorClient;
+    private static String PRODUCT_NAME = "AS";
+    private static String INSTANCE = "appServerInstance0002";
     private char[] userNewPassword = {'t', 'e', 's', 't', 'u', '1', '2', '3'};
 
     @BeforeClass(alwaysRun = true)
     public void init() throws XPathExpressionException, AxisFault {
-        context = new AutomationContext("AS", "appServerInstance0002",
+        context = new AutomationContext(PRODUCT_NAME, INSTANCE,
                                         ContextXpathConstants.SUPER_TENANT,
                                         ContextXpathConstants.SUPER_ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
@@ -67,7 +71,7 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
     }
 
 
-    @Test(groups = "wso2.as", description = "H2DB Password changing script run test")
+    @Test(groups = "wso2.as", description = "H2DB Password changing script run test", enabled = false)
     public void testScriptRun() throws Exception {
 
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
@@ -88,12 +92,14 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
             cmdArray = new String[]
                     {"cmd.exe", "/c", "chpasswd.bat", "--db-url", "jdbc:h2:" + carbonHome + H2DB_URL,
                      "--db-driver", "org.h2.Driver", "--db-username", "wso2carbon", "--db-password",
-                     String.valueOf(dbPassword), "--username", "testu1", "--new-password", String.valueOf(userNewPassword)};
+                     String.valueOf(dbPassword), "--username", "testu1", "--new-password",
+                     String.valueOf(userNewPassword)};
         } else {
             cmdArray = new String[]
                     {"sh", "chpasswd.sh", "--db-url", "jdbc:h2:" + carbonHome + H2DB_URL, "--db-driver",
-                     "org.h2.Driver", "--db-username", "wso2carbon", "--db-password", String.valueOf(dbPassword),
-                     "--username", "testu1", "--new-password", String.valueOf(userNewPassword)};
+                     "org.h2.Driver", "--db-username", "wso2carbon", "--db-password",
+                     String.valueOf(dbPassword), "--username", "testu1", "--new-password",
+                     String.valueOf(userNewPassword)};
         }
 
         scriptRunStatus =
@@ -107,7 +113,8 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
 
     }
 
-    @Test(groups = "wso2.as", description = "H2DB password change test", dependsOnMethods = {"testScriptRun"})
+    @Test(groups = "wso2.as", description = "H2DB password change test",
+            dependsOnMethods = {"testScriptRun"}, enabled = false)
     public void testChangeUserPasswordH2DB() throws Exception {
         String loginStatusString = authenticatorClient.login
                 ("testu1", String.valueOf(userNewPassword), context.getInstance().getHosts().get("default"));

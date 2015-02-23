@@ -44,6 +44,8 @@ import static org.testng.Assert.assertTrue;
 
 /**
  * This class is to test change MySQL user password using chpasswd.sh/chpasswd.bat
+ * All test methods in this class has disabled because need same features from unreleased automation
+ * framework after the automation framework 4.3.2 released have to enable test methods
  * All the test cases in this class are disabled because need to test this with mysql
  */
 public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
@@ -57,11 +59,13 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
     private String carbonHome = null;
     private static String MYSQL_DB_URL ;
     private AuthenticatorClient authenticatorClient;
+    private static String PRODUCT_NAME = "AS";
+    private static String INSTANCE = "appServerInstance0002";
     private char[] userNewPassword = {'t', 'e', 's', 't', 'u', '1', '2', '3'};
 
     @BeforeClass(alwaysRun = true)
     public void init() throws XPathExpressionException, AxisFault {
-        context = new AutomationContext("AS", "appServerInstance0002",
+        context = new AutomationContext(PRODUCT_NAME, INSTANCE,
                                         ContextXpathConstants.SUPER_TENANT,
                                         ContextXpathConstants.SUPER_ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
@@ -90,12 +94,14 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
             cmdArray = new String[]{
                     "cmd.exe", "/c", "chpasswd.sh", "--db-url", MYSQL_DB_URL,
                     "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
-                    String.valueOf(dbPassword), "--username", "testu1", "--new-password", String.valueOf(userNewPassword)};
+                    String.valueOf(dbPassword), "--username", "testu1", "--new-password",
+                    String.valueOf(userNewPassword)};
         } else {
             cmdArray = new String[]{
                     "sh", "chpasswd.sh", "--db-url", MYSQL_DB_URL,
                     "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
-                    String.valueOf(dbPassword), "--username", "testu1", "--new-password", String.valueOf(userNewPassword)};
+                    String.valueOf(dbPassword), "--username", "testu1", "--new-password",
+                    String.valueOf(userNewPassword)};
         }
 
         scriptRunStatus =
