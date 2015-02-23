@@ -126,7 +126,7 @@ public class CarbonCommandToolsUtil {
      * @return - merged array
      */
     private static String[] mergePropertiesToCommandArray(String[] parameters, String[] cmdArray) {
-        if (parameters != null) {
+        if (parameters != null && cmdArray != null) {
             cmdArray = ArrayUtils.addAll(cmdArray, parameters);
         }
         return cmdArray;
@@ -140,16 +140,15 @@ public class CarbonCommandToolsUtil {
      * @return boolean - if server is down true : else false
      * @throws javax.xml.xpath.XPathExpressionException
      */
-    public static boolean isServerDown(AutomationContext automationContext,
-                                       int portOffset)
+    public static boolean isServerDown(AutomationContext automationContext, int portOffset)
             throws XPathExpressionException {
         boolean isPortOpen = true;
-            long startTime = System.currentTimeMillis();
-            // Looping the waitForPort method for a time to check the server is down or not
-            while (isPortOpen && (System.currentTimeMillis() - startTime) < TIMEOUT) {
-                isPortOpen = ClientConnectionUtil.isPortOpen(
-                        Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset);
-            }
+        long startTime = System.currentTimeMillis();
+        // Looping the isPortOpen method, waiting for a while  to check the server is down or not
+        while (isPortOpen && (System.currentTimeMillis() - startTime) < TIMEOUT) {
+            isPortOpen = ClientConnectionUtil.isPortOpen(
+                    Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset);
+        }
 
         return !isPortOpen;
     }
@@ -196,7 +195,7 @@ public class CarbonCommandToolsUtil {
                         break;
                     }
                 }
-                if(isFoundTheMessage){
+                if (isFoundTheMessage) {
                     break;
                 }
             }
