@@ -42,12 +42,11 @@ public class CarbonCommandToolsUtil {
      * @param automationContext - AutomationContext
      * @param parameters        - server startup arguments as an string array
      * @return Process of the startup execution
-     * @throws Exception
+     * @throws Exception - Error occurred when starting the the server
      */
     public static Process startServerUsingCarbonHome(String carbonHome, int portOffset,
                                                      AutomationContext automationContext,
-                                                     String[] parameters)
-            throws Exception {
+                                                     String[] parameters) throws Exception {
 
         Process tempProcess;
         String scriptName = "wso2server";

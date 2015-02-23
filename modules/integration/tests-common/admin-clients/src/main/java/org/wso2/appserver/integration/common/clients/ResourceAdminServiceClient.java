@@ -74,9 +74,7 @@ public class ResourceAdminServiceClient {
      */
     public ResourceData[] getResource(String destinationPath)
             throws ResourceAdminServiceExceptionException, RemoteException {
-        ResourceData[] rs;
-        rs = resourceAdminServiceStub.getResourceData(new String[]{destinationPath});
-        return rs;
+        return resourceAdminServiceStub.getResourceData(new String[]{destinationPath});
     }
 
 }
