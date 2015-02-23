@@ -62,11 +62,11 @@ public class PasswordEncryptionUtil {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document xmlDocument = builder.parse(file);
             XPath xPath = XPathFactory.newInstance().newXPath();
-            String expression = "//datasources-configuration/datasources/datasource/definition" +
-                                "[@type='RDBMS']/configuration/password";
 
-            NodeList nodeList = (
-                    NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
+
+            NodeList nodeList = (NodeList) xPath.compile
+                    (ASIntegrationConstants.ENCRYPTED_PASSWD_URL).evaluate(xmlDocument,
+                                                                           XPathConstants.NODESET);
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Element eElement = (Element) nodeList.item(i);
