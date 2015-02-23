@@ -18,7 +18,6 @@
 
 package org.wso2.appserver.integration.tests.carbontools;
 
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -32,6 +31,8 @@ import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 
 import java.util.HashMap;
+
+import static org.testng.Assert.assertTrue;
 
 /**
  * This class to test tenant ide after given minutes using -Dtenant.idle.time command
@@ -57,7 +58,7 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
         userPopulator.populateUsers();
     }
 
-    @Test(groups = "wso2.all", description = "Clean tenants after idle time")
+    @Test(groups = "wso2.as", description = "Clean tenants after idle time")
     public void testTenantIdleTime() throws Exception {
 
         AutomationContext context =
@@ -81,7 +82,7 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
                 context.getContextUrls().getBackEndUrl(), new String[]{"Starting to clean tenant"},
                 sessionCookie);
 
-        Assert.assertTrue(isStatingToCleanTenant, "Not cleaned the tenant successfully");
+        assertTrue(isStatingToCleanTenant, "Not cleaned the tenant successfully");
     }
 
     @AfterClass(alwaysRun = true)

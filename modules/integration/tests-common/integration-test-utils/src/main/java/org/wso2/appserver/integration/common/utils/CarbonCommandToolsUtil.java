@@ -145,20 +145,15 @@ public class CarbonCommandToolsUtil {
     public static boolean isServerDown(AutomationContext automationContext,
                                        int portOffset)
             throws XPathExpressionException {
-        boolean isServerShutDown = false;
-        try {
+        boolean isPortOpen = true;
             long startTime = System.currentTimeMillis();
             // Looping the waitForPort method for a time to check the server is down or not
-            while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
-                ClientConnectionUtil.waitForPort(
-                        Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset,
-                        10, false, automationContext.getInstance().getHosts().get("default"));
+            while (isPortOpen && (System.currentTimeMillis() - startTime) < TIMEOUT) {
+                isPortOpen = ClientConnectionUtil.isPortOpen(
+                        Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset);
             }
-        } catch (RuntimeException ex) {
-            log.info("Server has shutdown successfully");//Getting this when sever shutdown
-            isServerShutDown = true;
-        }
-        return isServerShutDown;
+
+        return !isPortOpen;
     }
 
     /**

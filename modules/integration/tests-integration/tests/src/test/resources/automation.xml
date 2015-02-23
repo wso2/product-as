@@ -79,6 +79,7 @@
         </datasource>
     </datasources>
 
+    <!-- Database urls for change password testing by carbon tool chpasswd.sh-->
     <databases>
         <database name="H2DB">
             <url>/repository/database/WSO2CARBON_DB</url>

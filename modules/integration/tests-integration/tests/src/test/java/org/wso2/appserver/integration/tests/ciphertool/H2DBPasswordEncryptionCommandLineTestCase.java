@@ -19,7 +19,6 @@ package org.wso2.appserver.integration.tests.ciphertool;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -59,8 +58,8 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
     private ServerConfigurationManager serverManager;
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
     private MultipleServersManager manager = new MultipleServersManager();
-    private String CARBON_HOME = null;
-    private AutomationContext autoCtx = null;
+    private String carbonHome ;
+    private AutomationContext autoCtx;
     private static final long DEFAULT_START_STOP_WAIT_MS = 1000 * 60 * 5;
     private LogViewerClient logViewerClient;
     private static final String SERVER_START_LINE = "Starting WSO2 Carbon";
@@ -74,7 +73,7 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
         CarbonTestServerManager server =
                 new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
         manager.startServers(server);
-        CARBON_HOME = server.getCarbonHome();
+        carbonHome = server.getCarbonHome();
         serverManager = new ServerConfigurationManager(asServer);
 
         File sourceFile =
@@ -83,7 +82,7 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
                          File.separator + "cipher-text.properties");
 
         File targetFile =
-                new File(CARBON_HOME + File.separator + "repository" + File.separator + "conf" +
+                new File(carbonHome + File.separator + "repository" + File.separator + "conf" +
                          File.separator + "security" + File.separator + "cipher-text.properties");
 
         serverManager.applyConfigurationWithoutRestart(sourceFile, targetFile, true);
@@ -96,7 +95,7 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
 
     @Test(groups = {"wso2.as"}, description = "Test the password before encryption")
     public void testCheckBeforeEncrypt() throws Exception {
-        boolean passwordBeforeEncryption = PasswordEncryptionUtil.isPasswordEncrypted(CARBON_HOME);
+        boolean passwordBeforeEncryption = PasswordEncryptionUtil.isPasswordEncrypted(carbonHome);
         assertFalse(passwordBeforeEncryption, "Password has already encrypted");
     }
 
@@ -111,14 +110,14 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
             cmdArray = new String[]{"sh", "ciphertool.sh", "-Dconfigure", "-Dpassword=wso2carbon"};
         }
 
-        boolean isScriptSuccess = PasswordEncryptionUtil.runCipherToolScriptAndCheckStatus(CARBON_HOME, cmdArray);
+        boolean isScriptSuccess = PasswordEncryptionUtil.runCipherToolScriptAndCheckStatus(carbonHome, cmdArray);
         assertTrue(isScriptSuccess, "H2DB Password Encryption failed");
     }
 
     @Test(groups = {"wso2.as"}, description = "H2DB Password Encryption Test",
             dependsOnMethods = {"testCheckScriptRunSuccessfully"})
     public void testCheckEncryptedPassword() throws Exception {
-        boolean passwordAfterEncryption = PasswordEncryptionUtil.isPasswordEncrypted(CARBON_HOME);
+        boolean passwordAfterEncryption = PasswordEncryptionUtil.isPasswordEncrypted(carbonHome);
         assertTrue(passwordAfterEncryption, "H2DB Password Encryption failed");
     }
 
@@ -141,7 +140,7 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
                          "artifacts" + File.separator + "AS" + File.separator + "ciphertool" +
                          File.separator + "password-tmp");
 
-        File targetTempPasswordFile = new File(CARBON_HOME + File.separator + "password-tmp");
+        File targetTempPasswordFile = new File(carbonHome + File.separator + "password-tmp");
         serverManager.applyConfigurationWithoutRestart(sourceTempPasswordFile, targetTempPasswordFile, false);
         serverAdmin.restartGracefully();
 

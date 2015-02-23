@@ -18,96 +18,110 @@
 
 package org.wso2.appserver.integration.tests.carbontools;
 
+import org.apache.axis2.AxisFault;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
+import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
+import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
 import org.wso2.carbon.automation.extensions.servers.carbonserver.TestServerManager;
 import org.wso2.carbon.integration.common.admin.client.AuthenticatorClient;
 import org.wso2.carbon.integration.common.extensions.usermgt.UserPopulator;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
+import java.util.HashMap;
+
+import static org.testng.Assert.assertTrue;
 
 /**
  * This class is to test change MySQL user password using chpasswd.sh/chpasswd.bat
+ * All the test cases in this class are disabled because need to test this with mysql
  */
 public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
-    private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
-    public static String mySQLDBURL;
-
-    private TestServerManager testServerManager;
-    private AutomationContext context;
-    private AuthenticatorClient authenticatorClient;
+    private static final Log log = LogFactory.getLog(ChangeUserPasswordMySQLDBTestCase.class);
     private boolean scriptRunStatus;
+    private AutomationContext context;
+    private int portOffset = 1;
+    private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
+    private MultipleServersManager manager = new MultipleServersManager();
+    private String carbonHome = null;
+    private static String MYSQL_DB_URL ;
+    private AuthenticatorClient authenticatorClient;
+    private char[] userNewPassword = {'t', 'e', 's', 't', 'u', '1', '2', '3'};
 
     @BeforeClass(alwaysRun = true)
-    public void init() throws Exception {
-        context = new AutomationContext("AS", "appServerInstance0002", ContextXpathConstants.SUPER_TENANT,
-                                        ContextXpathConstants.ADMIN);
+    public void init() throws XPathExpressionException, AxisFault {
+        context = new AutomationContext("AS", "appServerInstance0002",
+                                        ContextXpathConstants.SUPER_TENANT,
+                                        ContextXpathConstants.SUPER_ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
-        authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
-
-        AutomationContext context = new AutomationContext();
-
-        mySQLDBURL = context.getConfigurationValue(String.format(ASIntegrationConstants.DB_URL, "MySQL"));
-
+        MYSQL_DB_URL = context.getConfigurationValue(String.format(ASIntegrationConstants.DB_URL, "MySQL"));
     }
 
-    // Enable it when testing with mysql
-    @Test(groups = "wso2.as", description = "MySQL Password changing script run test", enabled = false)
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
+    @Test(groups = "wso2.as", description = "H2DB Password changing script run test", enabled = false)
     public void testScriptRun() throws Exception {
 
-        testServerManager = new TestServerManager(context, 1) {
-            public void configureServer() throws Exception {
-                testServerManager.startServer();
-                UserPopulator userPopulator = new UserPopulator("AS", "appServerInstance0002");
-                userPopulator.populateUsers();
-                testServerManager.stopServer();
-                String[] cmdArray;
-                String commandDirectory;
+        serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
+        AutomationContext autoCtx = new AutomationContext();
+        TestServerManager server =
+                new TestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+        manager.startServers(server);
+        carbonHome = server.getCarbonHome();
+        UserPopulator userPopulator = new UserPopulator("AS", "appServerInstance0002");
+        userPopulator.populateUsers();
+        manager.stopAllServers();
 
-                if (CarbonCommandToolsUtil.isCurrentOSWindows()) {
-                    cmdArray = new String[]{
-                            "cmd.exe", "/c", "chpasswd.sh", "--db-url", mySQLDBURL,
-                            "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
-                            "root123", "--username", "testu1", "--new-password", "testu123"};
-                    commandDirectory = testServerManager.getCarbonHome() + "/bin";
-                } else {
-                    cmdArray = new String[]{
-                            "sh", "chpasswd.sh", "--db-url", mySQLDBURL,
-                            "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
-                            "root123", "--username", "testu1", "--new-password", "testu123"};
-                    commandDirectory = testServerManager.getCarbonHome() + File.separator + "bin";
-                }
-                scriptRunStatus = CarbonCommandToolsUtil.isScriptRunSuccessfully(
-                        commandDirectory, cmdArray, "Password updated successfully");
-                log.info("Script running status : " + scriptRunStatus);
-            }
-        };
+        String[] cmdArray;
+        String commandDirectory = carbonHome + File.separator + "bin";
+        char[] dbPassword = {'r', 'o', 'o', 't'};
 
-        testServerManager.startServer();
+        if (CarbonCommandToolsUtil.isCurrentOSWindows()) {
+            cmdArray = new String[]{
+                    "cmd.exe", "/c", "chpasswd.sh", "--db-url", MYSQL_DB_URL,
+                    "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
+                    String.valueOf(dbPassword), "--username", "testu1", "--new-password", String.valueOf(userNewPassword)};
+        } else {
+            cmdArray = new String[]{
+                    "sh", "chpasswd.sh", "--db-url", MYSQL_DB_URL,
+                    "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
+                    String.valueOf(dbPassword), "--username", "testu1", "--new-password", String.valueOf(userNewPassword)};
+        }
+
+        scriptRunStatus =
+                CarbonCommandToolsUtil.isScriptRunSuccessfully(commandDirectory, cmdArray,
+                                                               "Password updated successfully");
+        log.info("Script running status : " + scriptRunStatus);
+        assertTrue(scriptRunStatus, "Script executed successfully");
+
+
+        manager.startServers(server);
+
     }
 
-    @Test(groups = "wso2.as", description = "MySQL password change test", dependsOnMethods = {"testScriptRun"}, enabled = false)
-    public void testUserPasswordChangeOnMySQLDB() throws Exception {
-        String loginStatusString = authenticatorClient.login(
-                "testu1", "testu123", context.getInstance().getHosts().get("default"));
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
+    @Test(groups = "wso2.as", description = "H2DB password change test", dependsOnMethods = {"testScriptRun"},
+    enabled = false)
+    public void testChangeUserPasswordMySQL() throws Exception {
+        String loginStatusString = authenticatorClient.login
+                ("testu1", String.valueOf(userNewPassword), context.getInstance().getHosts().get("default"));
+        assertTrue(loginStatusString.contains("JSESSIONID"), "Unsuccessful login");
 
-        Assert.assertTrue(loginStatusString.contains("JSESSIONID"), "Unsuccessful login");
     }
-
 
     @AfterClass(alwaysRun = true)
     public void serverShutDown() throws Exception {
-        testServerManager.stopServer();
+        manager.stopAllServers();
     }
 
 

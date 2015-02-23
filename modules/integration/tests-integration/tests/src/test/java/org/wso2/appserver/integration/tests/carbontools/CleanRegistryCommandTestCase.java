@@ -20,7 +20,6 @@ package org.wso2.appserver.integration.tests.carbontools;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -45,6 +44,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 
+import static org.testng.Assert.assertFalse;
+
 /**
  * This class to test --cleanRegistry by adding a resource and clean it by this command
  */
@@ -58,9 +59,9 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
     private MultipleServersManager manager = new MultipleServersManager();
     private String carbonHome;
     private AutomationContext context;
-    String sessionCookieForInstance002;
-    String backendURLForInstance002;
-    LoginLogoutClient loginLogoutClientForInstance002;
+    private String sessionCookieForInstance002;
+    private String backendURLForInstance002;
+    private LoginLogoutClient loginLogoutClientForInstance002;
     private int portOffset = 1;
     private Process process;
 
@@ -75,14 +76,14 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
 
         context = new AutomationContext("AS", "appServerInstance0002", ContextXpathConstants.SUPER_TENANT,
                                         ContextXpathConstants.ADMIN);
-        create();
+        initializeNecessaryVariables();
 
         resourceAdminServiceClient =
                 new ResourceAdminServiceClient(backendURLForInstance002, sessionCookieForInstance002);
 
     }
 
-    @Test(groups = "wso2.greg", description = "Add resource")
+    @Test(groups = "wso2.as", description = "Add resource and test --cleanRegistry startup argument")
     public void testCleanResource() throws Exception {
         boolean isResourceFound;
         String resourcePath = FrameworkPathUtil.getSystemResourceLocation() + "artifacts" +
@@ -108,7 +109,7 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
 
             boolean startupStatus = CarbonCommandToolsUtil.isServerStartedUp(context, portOffset);
             log.info("Server startup status : " + startupStatus);
-            create();
+            initializeNecessaryVariables();
             resourceAdminServiceClient =
                     new ResourceAdminServiceClient(backendURLForInstance002, sessionCookieForInstance002);
             resourceAdminServiceClient.getResource(RESOURCE_PATH_NAME + "resource.txt");
@@ -121,10 +122,10 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
                 process.destroy();
             }
         }
-        Assert.assertFalse(isResourceFound, "Resource not deleted successfully");
+        assertFalse(isResourceFound, "Resource not deleted successfully");
     }
 
-    private void create()
+    private void initializeNecessaryVariables()
             throws IOException, XPathExpressionException, URISyntaxException, SAXException,
                    XMLStreamException, LoginAuthenticationExceptionException {
         loginLogoutClientForInstance002 = new LoginLogoutClient(context);
