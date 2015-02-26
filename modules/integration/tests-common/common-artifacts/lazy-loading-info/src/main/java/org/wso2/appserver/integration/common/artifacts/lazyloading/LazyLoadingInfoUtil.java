@@ -31,6 +31,9 @@ import org.wso2.carbon.webapp.mgt.WebApplicationsHolder;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Util class that contains the service implementation of LazyLoadingInfoService and supportive methods.
+ */
 public class LazyLoadingInfoUtil {
     private static final Log log = LogFactory.getLog(LazyLoadingInfoUtil.class);
 
@@ -74,7 +77,7 @@ public class LazyLoadingInfoUtil {
      * @param tenantDomain Domain name of the tenant
      * @return TenantStatus with current status  information about the tenant.
      */
-    protected static TenantStatus isTenantLoaded(String tenantDomain) {
+    protected static TenantStatus getTenantStatus(String tenantDomain) {
         boolean isTenantContextLoaded = false;
 
         Map<String, ConfigurationContext> tenantConfigContextsServer = getTenantConfigContexts();
@@ -93,7 +96,7 @@ public class LazyLoadingInfoUtil {
      * @param webAppName   Web-app Name
      * @return WebAppStatus  with current status  information about the Web app.
      */
-    protected static WebAppStatus isWebAppLoaded(String tenantDomain, String webAppName) {
+    protected static WebAppStatus getWebAppStatus(String tenantDomain, String webAppName) {
         WebAppStatus webAppStatus = new WebAppStatus();
         ConfigurationContext tenantConfigurationContext = getTenantConfigurationContext(tenantDomain);
         if (tenantConfigurationContext != null) {
@@ -112,7 +115,7 @@ public class LazyLoadingInfoUtil {
                     boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
                     log.info("Tenant " + tenantDomain + " Web-app: " + webAppName + " is in Ghost deployment status :" +
                             isWebAppGhost);
-                    webAppStatus.setWebAppFullyLoaded(!isWebAppGhost);
+                    webAppStatus.setWebAppGhost(isWebAppGhost);
                 } else {
                     log.info("Given web-app:" + webAppName + " for tenant:" + tenantDomain + " not found in started state");
                     webAppStatus.setWebAppStarted(false);
@@ -140,7 +143,7 @@ public class LazyLoadingInfoUtil {
      * @return WebAppStatus  with current status  information about the Web app.
      */
 
-    protected static WebAppStatus isSuperTenantWebAppLoaded(String webAppName) {
+    protected static WebAppStatus getSuperTenantWebAppStatus(String webAppName) {
 
         WebAppStatus webAppStatus = new WebAppStatus();
         webAppStatus.setTenantStatus(new TenantStatus(true)); // Super tenant always loaded;
@@ -158,7 +161,7 @@ public class LazyLoadingInfoUtil {
                 boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
                 log.info("Super Tenant Web-app: " + webAppName + " is in Ghost deployment status :" +
                         isWebAppGhost);
-                webAppStatus.setWebAppFullyLoaded(!isWebAppGhost);
+                webAppStatus.setWebAppGhost(isWebAppGhost);
             } else {
                 log.info("Given web-app:" + webAppName + " for super tenant  not found in started state");
             }

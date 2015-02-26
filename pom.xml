@@ -246,15 +246,28 @@
 
             <!--Dependencies for integration tests  -->
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-json</artifactId>
-                <version>${com.sun.jersey.version}</version>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>${cxf.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-server</artifactId>
-                <version>${com.sun.jersey.version}</version>
-                <scope>compile</scope>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${cxf.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons.httpclient.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>${javax.ws.rs.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.deployment</groupId>
@@ -543,7 +556,10 @@
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
-        <com.sun.jersey.version>1.8</com.sun.jersey.version>
+        <cxf.version>2.6.1</cxf.version>
+        <commons.httpclient.version>3.1</commons.httpclient.version>
+        <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
+
     </properties>
 
     <mailingLists>

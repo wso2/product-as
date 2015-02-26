@@ -18,6 +18,8 @@
 
 package org.wso2.appserver.integration.common.artifacts.lazyloading;
 
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -25,8 +27,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/")
+/**
+ * REST web service that provide the tenant status (TenantStatus and the web-app status(WebAppStatus).
+ * TenantStatus is include whether the Tenant context is loaded or not.
+ * WebAppStatus id include whether the Tenant context is loaded or not, web-app is started or not and the web-app is in
+ * ghost status or not.
+ */
 public class LazyLoadingInfoService {
-
+    public LazyLoadingInfoService() {
+    }
 
     @Path("tenant-status/{tenantDomain}")
     @GET
@@ -35,7 +44,7 @@ public class LazyLoadingInfoService {
      * Provide the  status of tenant.
      */
     public TenantStatus isTenantLoaded(@PathParam("tenantDomain") String tenantDomain) {
-        return LazyLoadingInfoUtil.isTenantLoaded(tenantDomain);
+        return LazyLoadingInfoUtil.getTenantStatus(tenantDomain);
     }
 
 
@@ -48,11 +57,11 @@ public class LazyLoadingInfoService {
     public WebAppStatus isWebAppLoaded(@PathParam("tenantDomain") String tenantDomain,
                                        @PathParam("webAppName") String webAppName) {
         WebAppStatus webAppStatus;
-        if ("carbon.super".equals(tenantDomain)) {
-            webAppStatus = LazyLoadingInfoUtil.isSuperTenantWebAppLoaded(webAppName);
+        if (MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(tenantDomain)) {
+            webAppStatus = LazyLoadingInfoUtil.getSuperTenantWebAppStatus(webAppName);
 
         } else {
-            webAppStatus = LazyLoadingInfoUtil.isWebAppLoaded(tenantDomain, webAppName);
+            webAppStatus = LazyLoadingInfoUtil.getWebAppStatus(tenantDomain, webAppName);
         }
 
         return webAppStatus;

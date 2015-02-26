@@ -26,8 +26,18 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.JaggeryApplicationUploaderClient;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.lazy.loading.GhostDeploymentBaseTest;
+import org.wso2.appserver.integration.lazy.loading.LazyLoadingBaseTest;
+import org.wso2.appserver.integration.lazy.loading.util.LazyLoadingTestException;
+import org.wso2.appserver.integration.lazy.loading.util.WebAppStatus;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -36,7 +46,7 @@ import static org.testng.Assert.assertTrue;
  * Test the ghost deployment of Jaggery application. For this test two tenants will be used and in each tenant two
  * Jaggery applications will be deployed.
  */
-public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBaseTest {
+public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     private static final Log log = LogFactory.getLog(JaggeryApplicationGhostDeploymentTestCase.class);
 
@@ -47,22 +57,26 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
     private static final String JAG_APP_FILE_PATH1 = ARTIFACTS_LOCATION + JAGGERY_APP_FILE_NAME1;
     private static final String JAG_APP_FILE_PATH2 = ARTIFACTS_LOCATION + JAGGERY_APP_FILE_NAME2;
-    private static final String TENANT1_JAGG_APP1_RESPONSE = "Hello";
+    private static final String JAGG_APP1_RESPONSE = "Hello";
+    private static final String JAGG_APP2_RESPONSE = "Bye";
     private String tenant1JaggApp1Url;
+    private String tenant1JaggApp2Url;
+    private static volatile List<String> responseDataList = new ArrayList<String>();
+    private static volatile List<String> responseDetailedInfoList = new ArrayList<String>();
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
-        tenant1JaggApp1Url =
-                webAppURL + "/t/" + TENANT_DOMAIN_1 + "/jaggeryapps/" + JAGGERY_APP_NAME1 + "/" + JAGGERY_APP_NAME1
-                        + ".jag";
-
+        tenant1JaggApp1Url = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/jaggeryapps/" + JAGGERY_APP_NAME1 + "/" +
+                JAGGERY_APP_NAME1 + ".jag";
+        tenant1JaggApp2Url = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/jaggeryapps/" + JAGGERY_APP_NAME2 + "/" +
+                JAGGERY_APP_NAME2 + ".jag";
     }
 
     @Test(groups = "wso2.as.lazy.loading", description = "Deploying Jaggery application in Ghost Deployment enable" +
             "environment. Each Jaggery application should fully loaded" +
             "(non Ghost format) soon after the deployment", alwaysRun = true)
-    public void testJaggeryApplicationGhostDeployment()
+    public void testJaggeryApplicationInGhostDeployment()
             throws Exception {
         log.info("deployment of  Jaggery Application started");
         JaggeryApplicationUploaderClient jaggeryApplicationUploaderClient;
@@ -77,17 +91,28 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME1),
                 "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME1 + " Tenant :"
                         + TENANT_DOMAIN_1);
-        assertTrue(isWebAppLoaded(TENANT_DOMAIN_1, JAGGERY_APP_NAME1),
-                "Jaggery application is  not filly loaded. It is in Ghost form. App name: " + JAGGERY_APP_NAME1
-                        + " Tenant :" + TENANT_DOMAIN_1);
+
+
+        WebAppStatus jaggeryAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME1);
+        assertEquals(jaggeryAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(jaggeryAppStatusTenant1WebApp1.isWebAppStarted(), true, "Jaggery application: " +
+                JAGGERY_APP_NAME1 + " is not started after deployment in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(jaggeryAppStatusTenant1WebApp1.isWebAppGhost(), false, "Jaggery application: " +
+                JAGGERY_APP_NAME1 + " is in ghost mode after deployment in Tenant:" + TENANT_DOMAIN_1);
+
 
         jaggeryApplicationUploaderClient.uploadJaggeryFile(JAGGERY_APP_FILE_NAME2, JAG_APP_FILE_PATH2);
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME2),
                 "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME2 + " Tenant :"
                         + TENANT_DOMAIN_1);
-        assertTrue(isWebAppLoaded(TENANT_DOMAIN_1, JAGGERY_APP_NAME2),
-                "Jaggery application is  not filly loaded. It is in Ghost form. App name: " + JAGGERY_APP_NAME2
-                        + " Tenant :" + TENANT_DOMAIN_1);
+        WebAppStatus jaggeryAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME2);
+        assertEquals(jaggeryAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(jaggeryAppStatusTenant1WebApp2.isWebAppStarted(), true, "Jaggery application: " +
+                JAGGERY_APP_NAME2 + " is not started after deployment in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(jaggeryAppStatusTenant1WebApp2.isWebAppGhost(), false, "Jaggery application: " +
+                JAGGERY_APP_NAME2 + " is in ghost mode after deployment in Tenant:" + TENANT_DOMAIN_1);
 
         //Tenant2
 
@@ -100,64 +125,136 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME1),
                 "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME1 + " Tenant :"
                         + TENANT_DOMAIN_2);
-        assertTrue(isWebAppLoaded(TENANT_DOMAIN_2, JAGGERY_APP_NAME1),
-                "Jaggery application is  not filly loaded. It is in Ghost form. App name: " + JAGGERY_APP_NAME1
-                        + " Tenant :" + TENANT_DOMAIN_2);
+        WebAppStatus jaggeryAppStatusTenant2WebApp1 = getWebAppStatus(TENANT_DOMAIN_2, JAGGERY_APP_NAME1);
+        assertEquals(jaggeryAppStatusTenant2WebApp1.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_2);
+        assertEquals(jaggeryAppStatusTenant2WebApp1.isWebAppStarted(), true, "Jaggery application: " +
+                JAGGERY_APP_NAME1 + " is not started after deployment in Tenant:" + TENANT_DOMAIN_2);
+        assertEquals(jaggeryAppStatusTenant2WebApp1.isWebAppGhost(), false, "Jaggery application: " +
+                JAGGERY_APP_NAME1 + " is in ghost mode after deployment in Tenant:" + TENANT_DOMAIN_2);
+
 
         jaggeryApplicationUploaderClient.uploadJaggeryFile(JAGGERY_APP_FILE_NAME2, JAG_APP_FILE_PATH2);
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME2),
                 "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME2 + " Tenant :"
                         + TENANT_DOMAIN_2);
 
+
+        WebAppStatus jaggeryAppStatusTenant2WebApp2 = getWebAppStatus(TENANT_DOMAIN_2, JAGGERY_APP_NAME2);
+        assertEquals(jaggeryAppStatusTenant2WebApp2.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_2);
+        assertEquals(jaggeryAppStatusTenant2WebApp2.isWebAppStarted(), true, "Jaggery application: " +
+                JAGGERY_APP_NAME2 + " is not started after deployment in Tenant:" + TENANT_DOMAIN_2);
+        assertEquals(jaggeryAppStatusTenant2WebApp2.isWebAppGhost(), false, "Jaggery application: " +
+                JAGGERY_APP_NAME2 + " is in ghost mode after deployment in Tenant:" + TENANT_DOMAIN_2);
+
+
     }
 
     @Test(groups = "wso2.as.lazy.loading", description = "Invoke Jaggery application in Ghost Deployment enable " +
             "environment. First test will restart the server gracefully. After the restart  all tenant context should" +
             " not be loaded. Then the it invokes the first Jaggery app on first tenant. After the invoke, only that " +
-            "Jaggery app should loaded.", dependsOnMethods = "testJaggeryApplicationGhostDeployment")
-    public void testInvokeJaggeryAppGhostDeployment()
+            "Jaggery app should loaded.", dependsOnMethods = "testJaggeryApplicationInGhostDeployment")
+    public void testInvokeJaggeryAppInGhostDeployment()
             throws Exception {
 
         serverManager.restartGracefully();
 
-        assertEquals(isTenantLoaded(TENANT_DOMAIN_1), false, " Tenant Name:" + TENANT_DOMAIN_1 + "loaded before access.");
+        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false, " Tenant Name:" +
+                TENANT_DOMAIN_1 + "loaded before access.");
 
-        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, " Tenant Name:" + TENANT_DOMAIN_2 + "loaded before access.");
+        assertEquals(getTenantStatus(TENANT_DOMAIN_2).isTenantContextLoaded(), false, " Tenant Name:" +
+                TENANT_DOMAIN_2 + "loaded before access.");
 
 
         org.wso2.carbon.automation.test.utils.http.client.HttpResponse httpResponse = HttpURLConnectionClient
                 .sendGetRequest(tenant1JaggApp1Url, null);
 
-        assertEquals(httpResponse.getData(), TENANT1_JAGG_APP1_RESPONSE,
+        assertEquals(httpResponse.getData(), JAGG_APP1_RESPONSE,
                 "Jaggery application invocation fail: " + tenant1JaggApp1Url);
 
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, JAGGERY_APP_NAME1), true,
-                "Jaggery-app is not loaded  after access. Tenant Name:" + TENANT_DOMAIN_1 + " Jaggery_app Name: "
-                        + JAGGERY_APP_NAME1);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, JAGGERY_APP_NAME2), false,
-                "Jaggery-app loaded before access and after access other web app in same Tenant. Tenant Name:"
-                        + TENANT_DOMAIN_1 + " Jaggery_app Name: " + JAGGERY_APP_NAME2);
 
-        assertEquals(isTenantLoaded(TENANT_DOMAIN_2), false, " Tenant Name:" + TENANT_DOMAIN_2 + "loaded before access.");
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME1);
+        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Jaggery-app " + JAGGERY_APP_NAME1 +
+                " is not started in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Jaggery-app: " + JAGGERY_APP_NAME1 +
+                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
+
+
+        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME2);
+        assertEquals(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Jaggery-app : " + JAGGERY_APP_NAME2 +
+                " is not started  in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp2.isWebAppGhost(), true, "Jaggery-app : " + JAGGERY_APP_NAME2 +
+                " is loaded before access and after access other web app in same Tenant:" + TENANT_DOMAIN_1);
+
+
+        assertEquals(getTenantStatus(TENANT_DOMAIN_2).isTenantContextLoaded(), false, " Tenant Name:" +
+                TENANT_DOMAIN_2 + "loaded before access.");
 
     }
 
+
+    @Test(groups = "wso2.as.lazy.loading", description = "Send a Get request after a Jaggery application is auto " +
+            "unload  and reload in to Ghost form. After access Jaggery application, it should be in fully load form" +
+            " the Ghost form", dependsOnMethods = "testInvokeJaggeryAppInGhostDeployment")
+    public void testJaggeryAppAutoUnLoadAndInvokeInGhostDeployment()
+            throws LazyLoadingTestException {
+        assertEquals(checkWebAppAutoUnloadingToGhostState(TENANT_DOMAIN_1, JAGGERY_APP_NAME1), true,
+                "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass. Tenant Name:"
+                        + TENANT_DOMAIN_1 + " Web_app Name: " + JAGGERY_APP_NAME1);
+
+        HttpResponse httpResponse;
+        try {
+            httpResponse = HttpURLConnectionClient
+                    .sendGetRequest(tenant1JaggApp1Url, null);
+        } catch (IOException ioException) {
+            String customErrorMessage = "IOException Exception when  send a GET request to" + tenant1JaggApp1Url +
+                    "\n" + ioException.getMessage();
+            log.error(customErrorMessage);
+            throw new LazyLoadingTestException(customErrorMessage, ioException);
+        }
+
+        assertEquals(httpResponse.getData(), JAGG_APP1_RESPONSE,
+                "Jaggery application invocation fail: " + tenant1JaggApp1Url);
+
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME1);
+        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Jaggery-app " + JAGGERY_APP_NAME1 +
+                " is not started in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Jaggery-app: " + JAGGERY_APP_NAME1 +
+                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
+
+
+    }
+
+
     @Test(groups = "wso2.as.lazy.loading", description = "Test Jaggery application auto unload  and reload in Ghost" +
-            " format. After access Jaggery app, it should be in fully load form  but after configured Jaggery app idle " +
-            "time pass it should get auto unload ne reload in Ghost form.",
-            dependsOnMethods = "testInvokeJaggeryAppGhostDeployment")
-    public void testJaggeryAppAutoUnLoadAndReloadInGhostForm()
+            " format. After access Jaggery app, it should be in fully load form  but after configured Jaggery app" +
+            " idle time pass it should get auto unload ne reload in Ghost form.",
+            dependsOnMethods = "testJaggeryAppAutoUnLoadAndInvokeInGhostDeployment")
+    public void testJaggeryAppAutoUnLoadAndReloadInGhostFormInGhostDeployment()
             throws Exception {
         serverManager.restartGracefully();
 
         org.wso2.carbon.automation.test.utils.http.client.HttpResponse httpResponse = HttpURLConnectionClient
                 .sendGetRequest(tenant1JaggApp1Url, null);
 
-        assertEquals(httpResponse.getData(), TENANT1_JAGG_APP1_RESPONSE,
+        assertEquals(httpResponse.getData(), JAGG_APP1_RESPONSE,
                 "Jaggery application invocation fail: " + tenant1JaggApp1Url);
-        assertEquals(isWebAppLoaded(TENANT_DOMAIN_1, JAGGERY_APP_NAME1), true,
-                "Web-app is not loaded  after access. Tenant Name:" + TENANT_DOMAIN_1 + " Web_app Name: "
-                        + JAGGERY_APP_NAME1);
+
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME1);
+        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Jaggery-app " + JAGGERY_APP_NAME1 +
+                " is not started in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Jaggery-app: " + JAGGERY_APP_NAME1 +
+                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
+
         assertEquals(checkWebAppAutoUnloadingToGhostState(TENANT_DOMAIN_1, JAGGERY_APP_NAME1), true,
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass. Tenant Name:"
                         + TENANT_DOMAIN_1 + " Web_app Name: " + JAGGERY_APP_NAME1);
@@ -166,21 +263,21 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
 
     @Test(groups = "wso2.as.lazy.loading", description = "Test Unload of tenant configuration context  after tenant "
             + "idle time pass without any action with that tenant",
-            dependsOnMethods = "testJaggeryAppAutoUnLoadAndReloadInGhostForm")
-    public void testTenantUnloadInIdleTimeAfterJaggeryAPPUsage()
+            dependsOnMethods = "testJaggeryAppAutoUnLoadAndReloadInGhostFormInGhostDeployment")
+    public void testTenantUnloadInIdleTimeAfterJaggeryAPPUsageInGhostDeployment()
             throws Exception {
         serverManager.restartGracefully();
 
-        assertEquals(isTenantLoaded(TENANT_DOMAIN_1), false,
+        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
                 "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
 
         org.wso2.carbon.automation.test.utils.http.client.HttpResponse httpResponse = HttpURLConnectionClient
                 .sendGetRequest(tenant1JaggApp1Url, null);
 
-        assertEquals(httpResponse.getData(), TENANT1_JAGG_APP1_RESPONSE,
+        assertEquals(httpResponse.getData(), JAGG_APP1_RESPONSE,
                 "Jaggery application invocation fail: " + tenant1JaggApp1Url);
 
-        assertEquals(isTenantLoaded(TENANT_DOMAIN_1), true,
+        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
                 "Tenant context is  not loaded after access. Tenant name: " + TENANT_DOMAIN_1);
 
 
@@ -188,6 +285,165 @@ public class JaggeryApplicationGhostDeploymentTestCase extends GhostDeploymentBa
                 "Tenant context is  not unloaded after idle time. Tenant name: " + TENANT_DOMAIN_1);
 
     }
+
+
+    @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
+            "All request should  get expected output",
+            dependsOnMethods = "testJaggeryAppAutoUnLoadAndInvokeInGhostDeployment")
+    public void testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
+        serverManager.restartGracefully();
+
+        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
+                "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(CONCURRENT_THREAD_COUNT);
+        log.info("Concurrent invocation Start");
+        log.info("Expected Response Data:" + JAGG_APP1_RESPONSE);
+        for (int i = 0; i < CONCURRENT_THREAD_COUNT; i++) {
+            executorService.execute(new Runnable() {
+
+                public void run() {
+                    HttpResponse httpResponse = null;
+                    try {
+                        httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1JaggApp1Url, null);
+                    } catch (IOException e) {
+                        log.error("Error  when sending a  get request  for :" + tenant1JaggApp1Url, e);
+                    }
+                    synchronized (this) {
+                        String responseDetailedInfo = "Response Data :" + httpResponse.getData() + "\tResponse Code:" +
+                                httpResponse.getResponseCode();
+                        responseDataList.add(httpResponse.getData());
+                        log.info(responseDetailedInfo);
+                        responseDetailedInfoList.add(responseDetailedInfo);
+                    }
+                }
+
+            });
+
+        }
+
+        executorService.shutdown();
+        executorService.awaitTermination(5, TimeUnit.MINUTES);
+        log.info("Concurrent invocation End");
+
+        int correctResponseCount = 0;
+        for (String responseData : responseDataList) {
+            if (JAGG_APP1_RESPONSE.equals(responseData)) {
+                correctResponseCount += 1;
+            }
+
+        }
+
+        String allDetailResponse = "\n";
+        for (String responseInfo : responseDetailedInfoList) {
+            allDetailResponse += responseInfo + "\n";
+        }
+
+
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME1);
+        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + JAGGERY_APP_NAME1 +
+                " is not started in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + JAGGERY_APP_NAME1 +
+                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
+
+        assertEquals(correctResponseCount, CONCURRENT_THREAD_COUNT, allDetailResponse + "All the concurrent requests " +
+                "not get correct response.");
+
+
+    }
+
+
+    @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is loaded." +
+            " But Jaggery application is in Ghost form. All request should  get expected output",
+            dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment")
+    public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
+        serverManager.restartGracefully();
+
+        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
+                "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
+
+        HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(tenant1JaggApp2Url, null);
+
+        assertTrue(httpResponseApp2.getData().contains(JAGG_APP2_RESPONSE), "Invocation of Web-App fail :" +
+                tenant1JaggApp2Url);
+        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
+                "Tenant context is  not loaded after access. Tenant name: " + TENANT_DOMAIN_1);
+
+
+        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME2);
+        assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Web-App: " + JAGGERY_APP_NAME2 +
+                " is not started in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp2.isWebAppGhost(), false, "Web-App: " + JAGGERY_APP_NAME2 +
+                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
+
+
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + JAGGERY_APP_NAME1 +
+                " is not started in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), true, "Web-App: " + JAGGERY_APP_NAME1 +
+                " is in not ghost mode before invoking in Tenant:" + TENANT_DOMAIN_1);
+
+
+        ExecutorService executorService = Executors.newFixedThreadPool(CONCURRENT_THREAD_COUNT);
+        log.info("Concurrent invocation Start");
+        log.info("Expected Response Data:" + JAGG_APP1_RESPONSE);
+        for (int i = 0; i < CONCURRENT_THREAD_COUNT; i++) {
+            executorService.execute(new Runnable() {
+
+                public void run() {
+                    HttpResponse httpResponseApp1 = null;
+                    try {
+                        httpResponseApp1 = HttpURLConnectionClient.sendGetRequest(tenant1JaggApp1Url, null);
+                    } catch (IOException e) {
+                        log.error("Error  when sending a  get request  for :" + tenant1JaggApp1Url, e);
+                    }
+                    synchronized (this) {
+                        String responseDetailedInfo = "Response Data :" + httpResponseApp1.getData() +
+                                "\tResponse Code:" + httpResponseApp1.getResponseCode();
+                        responseDataList.add(httpResponseApp1.getData());
+                        log.info(responseDetailedInfo);
+                        responseDetailedInfoList.add(responseDetailedInfo);
+                    }
+                }
+
+            });
+
+        }
+
+        executorService.shutdown();
+        executorService.awaitTermination(5, TimeUnit.MINUTES);
+        log.info("Concurrent invocation End");
+
+        int correctResponseCount = 0;
+        for (String responseData : responseDataList) {
+            if (JAGG_APP1_RESPONSE.equals(responseData)) {
+                correctResponseCount += 1;
+            }
+
+        }
+
+        String allDetailResponse = "\n";
+        for (String responseInfo : responseDetailedInfoList) {
+            allDetailResponse += responseInfo + "\n";
+        }
+
+
+        webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, JAGGERY_APP_NAME1);
+        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true,
+                " Tenant Context is not loaded. Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + JAGGERY_APP_NAME1 +
+                " is not started in Tenant:" + TENANT_DOMAIN_1);
+        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + JAGGERY_APP_NAME1 +
+                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
+
+        assertEquals(correctResponseCount, CONCURRENT_THREAD_COUNT, allDetailResponse + "All the concurrent requests" +
+                " not get correct response.");
+
+
+    }
+
 
     @AfterClass
     public void cleanJaggeryApplication() throws Exception {

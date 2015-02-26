@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.wso2.appserver.integration.common.artifacts.lazyloading;
+package org.wso2.appserver.integration.lazy.loading.util;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
