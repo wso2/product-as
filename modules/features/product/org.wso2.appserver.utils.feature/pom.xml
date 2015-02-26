@@ -56,6 +56,7 @@
             <groupId>cglib.wso2</groupId>
             <artifactId>cglib</artifactId>
         </dependency>
+<!--
         <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2-jibx</artifactId>
@@ -64,6 +65,7 @@
             <groupId>org.jibx.wso2</groupId>
             <artifactId>jibx</artifactId>
         </dependency>
+-->
         <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2-jaxbri</artifactId>
@@ -98,8 +100,10 @@
                                 <bundleDef>org.apache.bcel.wso2:bcel</bundleDef>
                                 <bundleDef>asm.wso2:asm</bundleDef>
                                 <bundleDef>cglib.wso2:cglib</bundleDef>
+<!--
                                 <bundleDef>org.apache.axis2.wso2:axis2-jibx</bundleDef>
                                 <bundleDef>org.jibx.wso2:jibx</bundleDef>
+-->
                                 <bundleDef>org.apache.axis2.wso2:axis2-jaxbri</bundleDef>
                             </bundles>
                             <importFeatures>
