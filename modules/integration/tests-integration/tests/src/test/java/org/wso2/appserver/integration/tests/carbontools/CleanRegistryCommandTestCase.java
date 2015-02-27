@@ -30,6 +30,7 @@ import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
+import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.integration.common.extensions.carbonserver.MultipleServersManager;
 import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
@@ -52,11 +53,11 @@ import static org.testng.Assert.assertFalse;
 public class CleanRegistryCommandTestCase extends ASIntegrationTest {
 
     private ResourceAdminServiceClient resourceAdminServiceClient;
-    private static final String RESOURCE_PATH_NAME = "/_system/config/repository/";
+    private static final String configRegistryRepoPath = "/_system/config/repository/";
 
     private static final Log log = LogFactory.getLog(CleanRegistryCommandTestCase.class);
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private MultipleServersManager manager = new MultipleServersManager();
+    private MultipleServersManager asServerManager = new MultipleServersManager();
     private String carbonHome;
     private AutomationContext context;
     private String sessionCookieForInstance002;
@@ -71,7 +72,7 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
         AutomationContext autoCtx = new AutomationContext();
         CarbonTestServerManager server =
                 new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
-        manager.startServers(server);
+        asServerManager.startServers(server);
         carbonHome = server.getCarbonHome();
 
         context = new AutomationContext("AS", "appServerInstance0002", ContextXpathConstants.SUPER_TENANT,
@@ -91,12 +92,13 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
                               File.separator + "resource.txt";
 
         DataHandler dh = new DataHandler(new URL("file:///" + resourcePath));
-        resourceAdminServiceClient.addResource(RESOURCE_PATH_NAME + "resource.txt", "txt", "testDesc", dh);
+        resourceAdminServiceClient.addResource(configRegistryRepoPath + "resource.txt", "txt", "testDesc", dh);
         isResourceFound = true;
-        manager.stopAllServers();
+        asServerManager.stopAllServers();
         String[] cmdArrayToCleanRegistry;
         try {
-            if (CarbonCommandToolsUtil.isCurrentOSWindows()) {
+            if ((CarbonCommandToolsUtil.getCurrentOperatingSystem().
+                    contains(OperatingSystems.WINDOWS.name().toLowerCase())) ) {
                 cmdArrayToCleanRegistry = new String[]{"--cleanRegistry"};
                 process = CarbonCommandToolsUtil.startServerUsingCarbonHome(carbonHome, portOffset, context,
                                                                             cmdArrayToCleanRegistry);
@@ -112,7 +114,7 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
             initializeNecessaryVariables();
             resourceAdminServiceClient =
                     new ResourceAdminServiceClient(backendURLForInstance002, sessionCookieForInstance002);
-            resourceAdminServiceClient.getResource(RESOURCE_PATH_NAME + "resource.txt");
+            resourceAdminServiceClient.getResource(configRegistryRepoPath + "resource.txt");
         } catch (Exception ex) {
             if (ex.getMessage().contains("Resource does not exist")) {
                 isResourceFound = false;

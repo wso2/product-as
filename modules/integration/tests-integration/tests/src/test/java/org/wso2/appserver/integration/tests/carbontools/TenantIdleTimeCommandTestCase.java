@@ -40,7 +40,7 @@ import static org.testng.Assert.assertTrue;
 public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private MultipleServersManager manager = new MultipleServersManager();
+    private MultipleServersManager asServerManager = new MultipleServersManager();
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -52,7 +52,7 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
         AutomationContext autoCtx = new AutomationContext();
         CarbonTestServerManager server =
                 new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
-        manager.startServers(server);
+        asServerManager.startServers(server);
 
         UserPopulator userPopulator = new UserPopulator("AS", "appServerInstance0002");
         userPopulator.populateUsers();
@@ -78,7 +78,7 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
         loginLogoutClientUser.login();
         loginLogoutClient.logout();
 
-        boolean isStatingToCleanTenant = CarbonCommandToolsUtil.findMultipleStringsInLog(
+        boolean isStatingToCleanTenant = CarbonCommandToolsUtil.searchOnLogs(
                 context.getContextUrls().getBackEndUrl(), new String[]{"Starting to clean tenant"},
                 sessionCookie);
 
@@ -87,6 +87,6 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void serverShutDown() throws Exception {
-        manager.stopAllServers();
+        asServerManager.stopAllServers();
     }
 }

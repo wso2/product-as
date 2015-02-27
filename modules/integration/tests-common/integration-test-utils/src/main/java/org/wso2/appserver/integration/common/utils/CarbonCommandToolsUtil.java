@@ -9,6 +9,7 @@ import org.wso2.carbon.automation.extensions.ExtensionConstants;
 import org.wso2.carbon.automation.extensions.servers.utils.ClientConnectionUtil;
 import org.wso2.carbon.automation.extensions.servers.utils.InputStreamHandler;
 import org.wso2.carbon.automation.extensions.servers.utils.ServerLogReader;
+import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.integration.common.admin.client.LogViewerClient;
 import org.wso2.carbon.integration.common.admin.client.ServerAdminClient;
 import org.wso2.carbon.logging.view.stub.LogViewerLogViewerException;
@@ -19,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.Thread;
 import java.rmi.RemoteException;
 
 /**
@@ -52,7 +54,8 @@ public class CarbonCommandToolsUtil {
         File commandDir = new File(carbonHome);
         String[] cmdArray;
         log.info("Starting server............. ");
-        if (isCurrentOSWindows()) {
+        if (CarbonCommandToolsUtil.getCurrentOperatingSystem().
+                contains(OperatingSystems.WINDOWS.name().toLowerCase())) {
             commandDir = new File(carbonHome + File.separator + "bin");
             cmdArray = new String[]{"cmd.exe", "/c", scriptName + ".bat", "-DportOffset=" + portOffset};
             cmdArray = mergePropertiesToCommandArray(parameters, cmdArray);
@@ -72,7 +75,7 @@ public class CarbonCommandToolsUtil {
                                          portOffset, DEFAULT_START_STOP_WAIT_MS, false,
                                          automationContext.getInstance().getHosts().get("default"));
         //wait until Mgt console url printed.
-        long time = System.currentTimeMillis() + 60 * 1000;
+        long time = System.currentTimeMillis() + DEFAULT_START_STOP_WAIT_MS;
         while (!inputStreamHandler.getOutput().contains(SERVER_STARTUP_MESSAGE) &&
                System.currentTimeMillis() < time) {
             // wait until server startup is completed
@@ -92,7 +95,7 @@ public class CarbonCommandToolsUtil {
      */
     public static void serverShutdown(int portOffset,
                                       AutomationContext automationContext)
-            throws XPathExpressionException, RemoteException {
+            throws XPathExpressionException, RemoteException, InterruptedException {
         long time = System.currentTimeMillis() + DEFAULT_START_STOP_WAIT_MS;
         log.info("Shutting down server..");
         boolean logOutSuccess = false;
@@ -138,32 +141,30 @@ public class CarbonCommandToolsUtil {
      * @param automationContext - AutomationContext
      * @param portOffset        - port offset
      * @return boolean - if server is down true : else false
-     * @throws javax.xml.xpath.XPathExpressionException
+     * @throws XPathExpressionException
      */
     public static boolean isServerDown(AutomationContext automationContext, int portOffset)
-            throws XPathExpressionException {
+            throws XPathExpressionException, InterruptedException {
         boolean isPortOpen = true;
         long startTime = System.currentTimeMillis();
         // Looping the isPortOpen method, waiting for a while  to check the server is down or not
         while (isPortOpen && (System.currentTimeMillis() - startTime) < TIMEOUT) {
             isPortOpen = ClientConnectionUtil.isPortOpen(
                     Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset);
+            if(isPortOpen){
+                Thread.sleep(1000); // waiting 1 sec to check isPortOpen again
+            }
         }
-
         return !isPortOpen;
     }
 
     /**
-     * This method is to check running os is windows or not
+     * This method is to return operating system
      *
      * @return if current os is windows return true : else false
      */
-    public static boolean isCurrentOSWindows() {
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            return true;
-        }
-        return false;
-
+    public static String getCurrentOperatingSystem() {
+        return System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase();
     }
 
     /**
@@ -219,26 +220,26 @@ public class CarbonCommandToolsUtil {
      * This method to find multiple strings in same line in log
      *
      * @param backEndUrl        - server back end url
-     * @param stringArrayToFind - String array to be find in the log
+     * @param serachStringArray - String array to be find in the log
      * @param cookie            - cookie
      * @return -  if found all the  string in one line: true else false
      * @throws RemoteException             - Error when initializing the log
      * @throws LogViewerLogViewerException - Error while reading the log
      * @throws InterruptedException        - Error occurred when thread sleep
      */
-    public static boolean findMultipleStringsInLog(String backEndUrl, String[] stringArrayToFind,
+    public static boolean searchOnLogs(String backEndUrl, String[] searchStringArray,
                                                    String cookie)
             throws RemoteException, InterruptedException, LogViewerLogViewerException {
         boolean expectedStringFound = false;
         LogViewerClient logViewerClient = new LogViewerClient(backEndUrl, cookie);
 
         long startTime = System.currentTimeMillis();
-        while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
+        while (!expectedStringFound && (System.currentTimeMillis() - startTime) < TIMEOUT) {
             LogEvent[] logs = logViewerClient.getAllRemoteSystemLogs();
             for (LogEvent item : logs) {
                 String message = item.getMessage();
-                for (String stringToFind : stringArrayToFind) {
-                    if (message.contains(stringToFind)) {
+                for (String searchString : searchStringArray) {
+                    if (message.contains(searchString)) {
                         expectedStringFound = true;
                     } else {
                         expectedStringFound = false;
@@ -248,9 +249,6 @@ public class CarbonCommandToolsUtil {
                 if (expectedStringFound) {
                     break;
                 }
-            }
-            if (expectedStringFound) {
-                break;
             }
             Thread.sleep(500); // wait for 0.5 second to check the log again.
         }

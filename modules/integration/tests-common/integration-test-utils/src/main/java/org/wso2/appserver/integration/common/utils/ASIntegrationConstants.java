@@ -20,7 +20,7 @@ package org.wso2.appserver.integration.common.utils;
 public class ASIntegrationConstants {
     public static final String JAGGERY_APPLICATION = "jaggery";
     public static final String WEB_APPLICATION = "webapps";
-    public static final String DB_URL  = "//databases/database[@name='%s']/url";
+    public static final String CONTEXT_XPATH_DB_CONNECTION_URL = "//databases/database[@name='%s']/url";
     public static final String ENCRYPTED_PASSWD_URL =
             "//datasources-configuration/datasources/datasource/definition[@type='RDBMS']" +
             "/configuration/password";
