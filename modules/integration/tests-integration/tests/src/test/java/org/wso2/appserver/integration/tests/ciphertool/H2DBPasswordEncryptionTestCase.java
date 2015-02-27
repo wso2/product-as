@@ -69,7 +69,7 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
     public void init() throws Exception {
         File createdFile = new File("/usr/bin/expect");
         if (!createdFile.isFile()) {
-            throw new SkipException("Skipping tests because /usr/bin/expect was not available.");
+            throw new SkipException("Skipping tests because need /usr/bin/expect to run this test.");
         }
         super.init();
         serverPropertyMap.put("-DportOffset", "1");

@@ -57,7 +57,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
     private static String MYSQL_DB_URL;
     private AuthenticatorClient authenticatorClient;
     private static final char[] userNewPassword = {'t', 'e', 's', 't', 'u', '1', '2', '3'};
-    private static final  String userName = "testu1";
+    private static final String userName = "testu1";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws XPathExpressionException, AxisFault {
@@ -71,7 +71,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
     }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
-    @Test(groups = "wso2.as", description = "H2DB Password changing script run test")
+    @Test(groups = "wso2.as", description = "H2DB Password changing script run test", enabled = false)
     public void testScriptRunChangeUserPasswordH2DB() throws Exception {
         final char[] dbPassword = {'w', 's', 'o', '2', 'c', 'a', 'r', 'b', 'o', 'n'};
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
@@ -86,7 +86,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
 
         if ((CarbonCommandToolsUtil.getCurrentOperatingSystem().
-                contains(OperatingSystems.WINDOWS.name().toLowerCase())) ) {
+                contains(OperatingSystems.WINDOWS.name().toLowerCase()))) {
             cmdArray = new String[]{
                     "cmd.exe", "/c", "chpasswd.sh", "--db-url", MYSQL_DB_URL,
                     "--db-driver", "com.mysql.jdbc.Driver", "--db-username", "root", "--db-password",
@@ -107,13 +107,13 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
         assertTrue(scriptRunStatus, "Script executed unsuccessfully");
 
 
-        CarbonCommandToolsUtil.startServerUsingCarbonHome(carbonHome,1,context,null);
+        CarbonCommandToolsUtil.startServerUsingCarbonHome(carbonHome, 1, context, null);
 
 
     }
 
     @Test(groups = "wso2.as", description = "H2DB password change test",
-            dependsOnMethods = {"testScriptRun"})
+            dependsOnMethods = {"testScriptRunChangeUserPasswordH2DB"}, enabled = false)
     public void testChangeUserPasswordH2DB() throws Exception {
         String loginStatusString = authenticatorClient.login
                 (userName, String.valueOf(userNewPassword), context.getInstance().getHosts().get("default"));
@@ -123,9 +123,8 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void serverShutDown() throws Exception {
-        CarbonCommandToolsUtil.serverShutdown(1,context);
+        CarbonCommandToolsUtil.serverShutdown(1, context);
     }
-
 
 
 }

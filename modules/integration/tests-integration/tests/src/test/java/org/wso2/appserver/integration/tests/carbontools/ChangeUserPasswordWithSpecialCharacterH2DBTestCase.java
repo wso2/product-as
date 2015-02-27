@@ -104,7 +104,7 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
     }
 
     @Test(groups = "wso2.as", description = "H2DB password change test",
-            dependsOnMethods = {"testScriptRun"})
+            dependsOnMethods = {"testScriptRunChangeUserPasswordWithCharacterH2DBTestCase"})
     public void testChangeUserPasswordWithCharacterH2DB() throws Exception {
         String loginStatusString = authenticatorClient.login
                 (userName, String.valueOf(userNewPassword), context.getInstance().getHosts().get("default"));
