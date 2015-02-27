@@ -99,8 +99,8 @@ public class CarbonCommandToolsUtil {
         long time = System.currentTimeMillis() + DEFAULT_START_STOP_WAIT_MS;
         log.info("Shutting down server..");
         boolean logOutSuccess = false;
-        if (ClientConnectionUtil.isPortOpen(Integer.parseInt(ExtensionConstants.
-                                                                     SERVER_DEFAULT_HTTPS_PORT))) {
+        if (ClientConnectionUtil.isPortOpen(
+                Integer.parseInt(ExtensionConstants.SERVER_DEFAULT_HTTPS_PORT))) {
 
             int httpsPort = Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset;
             String url = automationContext.getContextUrls().getBackEndUrl();
@@ -113,7 +113,7 @@ public class CarbonCommandToolsUtil {
             serverAdminServiceClient.shutdown();
 
             while (System.currentTimeMillis() < time && !logOutSuccess) {
-                logOutSuccess = isServerDown(automationContext, portOffset);
+                logOutSuccess = isServerDown(portOffset);
                 // wait until server shutdown is completed
             }
             log.info("Server stopped successfully...");
@@ -138,12 +138,11 @@ public class CarbonCommandToolsUtil {
     /**
      * This method is to check whether server is down or not
      *
-     * @param automationContext - AutomationContext
      * @param portOffset        - port offset
      * @return boolean - if server is down true : else false
      * @throws XPathExpressionException
      */
-    public static boolean isServerDown(AutomationContext automationContext, int portOffset)
+    public static boolean isServerDown(int portOffset)
             throws XPathExpressionException, InterruptedException {
         boolean isPortOpen = true;
         long startTime = System.currentTimeMillis();
@@ -220,7 +219,7 @@ public class CarbonCommandToolsUtil {
      * This method to find multiple strings in same line in log
      *
      * @param backEndUrl        - server back end url
-     * @param serachStringArray - String array to be find in the log
+     * @param searchStringArray - String array to be find in the log
      * @param cookie            - cookie
      * @return -  if found all the  string in one line: true else false
      * @throws RemoteException             - Error when initializing the log
@@ -268,9 +267,9 @@ public class CarbonCommandToolsUtil {
             throws Exception {
 
         //Waiting util a port is open, If couldn't open within given time this will throw an Exception
-        ClientConnectionUtil.waitForPort(
-                Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset,
-                DEFAULT_START_STOP_WAIT_MS, false, automationContext.getInstance().getHosts().get("default"));
+        ClientConnectionUtil.waitForPort(Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) +
+                                         portOffset, DEFAULT_START_STOP_WAIT_MS, false,
+                                         automationContext.getInstance().getHosts().get("default"));
 
         //Waiting util login to the the server this will throw LoginAuthenticationExceptionException if fails
         ClientConnectionUtil.waitForLogin(automationContext);
