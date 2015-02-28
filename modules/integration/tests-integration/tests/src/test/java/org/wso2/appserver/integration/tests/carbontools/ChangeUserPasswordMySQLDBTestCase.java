@@ -24,9 +24,11 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.exception.CarbonToolsIntegrationTestException;
 import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
+import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
@@ -38,6 +40,7 @@ import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 import static org.testng.Assert.assertTrue;
@@ -61,24 +64,29 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
     @BeforeClass(alwaysRun = true)
     public void init() throws XPathExpressionException, AxisFault {
-        String PRODUCT_NAME = "AS";
-        String INSTANCE = "appServerInstance0002";
-        context = new AutomationContext(PRODUCT_NAME, INSTANCE,
+        context = new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                        ASIntegrationConstants.AS_INSTANCE_0002,
                                         ContextXpathConstants.SUPER_TENANT,
                                         ContextXpathConstants.SUPER_ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
-        MYSQL_DB_URL = context.getConfigurationValue(String.format(ASIntegrationConstants.CONTEXT_XPATH_DB_CONNECTION_URL, "MySQL"));
+
+        MYSQL_DB_URL = context.getConfigurationValue(
+                String.format(ASIntegrationConstants.CONTEXT_XPATH_DB_CONNECTION_URL, "MySQL"));
     }
 
-    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
-    @Test(groups = "wso2.as", description = "H2DB Password changing script run test", enabled = false)
-    public void testScriptRunChangeUserPasswordH2DB() throws Exception {
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.PLATFORM})
+    @Test(groups = "wso2.as", description = "MySQL Password changing script run test", enabled = false)
+    public void testScriptRunChangeUserPasswordMySqlDB() throws Exception {
         final char[] dbPassword = {'w', 's', 'o', '2', 'c', 'a', 'r', 'b', 'o', 'n'};
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         AutomationContext autoCtx = new AutomationContext();
-        CarbonTestServerManager server = new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+
+        CarbonTestServerManager server =
+                new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+
         carbonHome = server.startServer();
-        UserPopulator userPopulator = new UserPopulator("AS", "appServerInstance0002");
+        UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                                        ASIntegrationConstants.AS_INSTANCE_0002);
         userPopulator.populateUsers();
         server.stopServer();
         String[] cmdArray;
@@ -112,9 +120,10 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
     }
 
-    @Test(groups = "wso2.as", description = "H2DB password change test",
-            dependsOnMethods = {"testScriptRunChangeUserPasswordH2DB"}, enabled = false)
-    public void testChangeUserPasswordH2DB() throws Exception {
+    @Test(groups = "wso2.as", description = "MySQL password change test",
+            dependsOnMethods = {"testScriptRunChangeUserPasswordMySqlDB"}, enabled = false)
+    public void testChangeUserPasswordMySql()
+            throws XPathExpressionException, RemoteException,LoginAuthenticationExceptionException {
         String loginStatusString = authenticatorClient.login
                 (userName, String.valueOf(userNewPassword), context.getInstance().getHosts().get("default"));
         assertTrue(loginStatusString.contains("JSESSIONID"), "Unsuccessful login");
@@ -122,8 +131,8 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
     }
 
     @AfterClass(alwaysRun = true)
-    public void serverShutDown() throws Exception {
-        CarbonCommandToolsUtil.serverShutdown(1, context);
+    public void serverShutDown() throws CarbonToolsIntegrationTestException {
+        CarbonCommandToolsUtil.serverShutdown(portOffset, context);
     }
 
 

@@ -1,15 +1,34 @@
+/*
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package org.wso2.appserver.integration.common.utils;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.appserver.integration.common.exception.CarbonToolsIntegrationTestException;
 import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
+import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.automation.extensions.ExtensionConstants;
 import org.wso2.carbon.automation.extensions.servers.utils.ClientConnectionUtil;
 import org.wso2.carbon.automation.extensions.servers.utils.InputStreamHandler;
 import org.wso2.carbon.automation.extensions.servers.utils.ServerLogReader;
-import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.integration.common.admin.client.LogViewerClient;
 import org.wso2.carbon.integration.common.admin.client.ServerAdminClient;
 import org.wso2.carbon.logging.view.stub.LogViewerLogViewerException;
@@ -20,7 +39,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.Thread;
 import java.rmi.RemoteException;
 
 /**
@@ -30,10 +48,9 @@ import java.rmi.RemoteException;
 public class CarbonCommandToolsUtil {
 
     private static final Log log = LogFactory.getLog(CarbonCommandToolsUtil.class);
-    private static int TIMEOUT = 180 * 1000; // Max time to wait
+    private static int TIMEOUT_MS = 180 * 1000; // Max time to wait
     private static final long DEFAULT_START_STOP_WAIT_MS = 1000 * 60 * 2;
     private static final String SERVER_STARTUP_MESSAGE = "Mgt Console URL";
-    private static ServerLogReader inputStreamHandler;
 
     /**
      * This method is for start a as server
@@ -67,7 +84,7 @@ public class CarbonCommandToolsUtil {
         }
         InputStreamHandler errorStreamHandler =
                 new InputStreamHandler("errorStream", tempProcess.getErrorStream());
-        inputStreamHandler = new ServerLogReader("inputStream", tempProcess.getInputStream());
+        ServerLogReader inputStreamHandler = new ServerLogReader("inputStream", tempProcess.getInputStream());
         // start the stream readers
         inputStreamHandler.start();
         errorStreamHandler.start();
@@ -90,75 +107,71 @@ public class CarbonCommandToolsUtil {
      *
      * @param portOffset        - port offset
      * @param automationContext - AutomationContext
-     * @throws XPathExpressionException - Error when getting data from automation.xml
-     * @throws RemoteException          - Error when shutdown the server
+     * @throws CarbonToolsIntegrationTestException - Error when trying to shutdown the server
      */
-    public static void serverShutdown(int portOffset,
-                                      AutomationContext automationContext)
-            throws XPathExpressionException, RemoteException, InterruptedException {
+    public static void serverShutdown(int portOffset, AutomationContext automationContext)
+            throws CarbonToolsIntegrationTestException {
         long time = System.currentTimeMillis() + DEFAULT_START_STOP_WAIT_MS;
         log.info("Shutting down server..");
-        boolean logOutSuccess = false;
-        if (ClientConnectionUtil.isPortOpen(
-                Integer.parseInt(ExtensionConstants.SERVER_DEFAULT_HTTPS_PORT))) {
+        try {
+            boolean logOutSuccess = false;
+            if (ClientConnectionUtil.isPortOpen(
+                    Integer.parseInt(ExtensionConstants.SERVER_DEFAULT_HTTPS_PORT))) {
 
-            int httpsPort = Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset;
-            String url = automationContext.getContextUrls().getBackEndUrl();
-            String backendURL = url.replaceAll("(:\\d+)", ":" + httpsPort);
+                int httpsPort = Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset;
+                String url = automationContext.getContextUrls().getBackEndUrl();
+                String backendURL = url.replaceAll("(:\\d+)", ":" + httpsPort);
 
-            ServerAdminClient serverAdminServiceClient = new ServerAdminClient(backendURL,
-                              automationContext.getContextTenant().getTenantAdmin().getUserName(),
-                              automationContext.getContextTenant().getTenantAdmin().getPassword());
+                ServerAdminClient serverAdminServiceClient;
+                serverAdminServiceClient =
+                        new ServerAdminClient(backendURL,
+                                              automationContext.getContextTenant().getTenantAdmin().getUserName(),
+                                              automationContext.getContextTenant().getTenantAdmin().getPassword());
 
-            serverAdminServiceClient.shutdown();
+                serverAdminServiceClient.shutdown();
 
-            while (System.currentTimeMillis() < time && !logOutSuccess) {
-                logOutSuccess = isServerDown(portOffset);
-                // wait until server shutdown is completed
+                while (System.currentTimeMillis() < time && !logOutSuccess) {
+                    // wait until server shutdown is completed
+                    logOutSuccess = isServerDown(portOffset);
+                }
+                log.info("Server stopped successfully...");
             }
-            log.info("Server stopped successfully...");
+        } catch (XPathExpressionException ex) {
+            log.error("Error when reading automation.xml ", ex);
+            throw new CarbonToolsIntegrationTestException("Error when reading automation.xml ", ex);
+        } catch (RemoteException ex) {
+            log.error("Error while shutdown the server ", ex);
+            throw new CarbonToolsIntegrationTestException("Error while shutdown the server ", ex);
         }
 
-    }
-
-    /**
-     * This method is to merge two arrays together
-     *
-     * @param parameters - Server startup arguments
-     * @param cmdArray   - Server startup command
-     * @return - merged array
-     */
-    private static String[] mergePropertiesToCommandArray(String[] parameters, String[] cmdArray) {
-        if (parameters != null && cmdArray != null) {
-            cmdArray = ArrayUtils.addAll(cmdArray, parameters);
-        }
-        return cmdArray;
     }
 
     /**
      * This method is to check whether server is down or not
      *
-     * @param portOffset        - port offset
+     * @param portOffset - port offset
      * @return boolean - if server is down true : else false
-     * @throws XPathExpressionException
      */
-    public static boolean isServerDown(int portOffset)
-            throws XPathExpressionException, InterruptedException {
+    public static boolean isServerDown(int portOffset) {
         boolean isPortOpen = true;
         long startTime = System.currentTimeMillis();
         // Looping the isPortOpen method, waiting for a while  to check the server is down or not
-        while (isPortOpen && (System.currentTimeMillis() - startTime) < TIMEOUT) {
+        while (isPortOpen && (System.currentTimeMillis() - startTime) < TIMEOUT_MS) {
             isPortOpen = ClientConnectionUtil.isPortOpen(
                     Integer.parseInt(FrameworkConstants.SERVER_DEFAULT_HTTPS_PORT) + portOffset);
-            if(isPortOpen){
-                Thread.sleep(1000); // waiting 1 sec to check isPortOpen again
+            if (isPortOpen) {
+                try {
+                    Thread.sleep(500); // waiting 0.5 sec to check isPortOpen again
+                } catch (InterruptedException e) {
+                    log.warn("Thread interruption occurred");
+                }
             }
         }
         return !isPortOpen;
     }
 
     /**
-     * This method is to return operating system
+     * This method is to get operating system
      *
      * @return if current os is windows return true : else false
      */
@@ -173,10 +186,11 @@ public class CarbonCommandToolsUtil {
      * @param cmdArray       - Command array to be executed.
      * @param expectedString - Expected string in  the log.
      * @return boolean - true : Found the expected string , false : not found the expected string.
-     * @throws IOException - Error while getting the command directory
+     * @throws CarbonToolsIntegrationTestException - Error while running the command.
      */
     public static boolean isScriptRunSuccessfully(String directory, String[] cmdArray,
-                                                  String expectedString) throws IOException {
+                                                  String expectedString)
+            throws CarbonToolsIntegrationTestException {
         boolean isFoundTheMessage = false;
         BufferedReader br = null;
         Process process = null;
@@ -185,7 +199,7 @@ public class CarbonCommandToolsUtil {
             process = Runtime.getRuntime().exec(cmdArray, null, commandDir);
             String line;
             long startTime = System.currentTimeMillis();
-            while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
+            while (!isFoundTheMessage && (System.currentTimeMillis() - startTime) < TIMEOUT_MS) {
                 br = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
                 while ((line = br.readLine()) != null) {
                     log.info(line);
@@ -195,19 +209,19 @@ public class CarbonCommandToolsUtil {
                         break;
                     }
                 }
-                if (isFoundTheMessage) {
-                    break;
-                }
             }
             return isFoundTheMessage;
         } catch (IOException ex) {
-            log.error("Error when reading the InputStream when running shell script  " +
-                      ex.getMessage(), ex);
-            throw new IOException("Error when reading the InputStream when running shell script "
-                                  + ex.getMessage(), ex);
+            log.error("Error when reading the InputStream when running shell script  ", ex);
+            throw new CarbonToolsIntegrationTestException("Error when reading the InputStream when " +
+                                                          "running shell script ", ex);
         } finally {
             if (br != null) {
-                br.close();
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    log.warn("Error when closing the buffer reader ", e);
+                }
             }
             if (process != null) {
                 process.destroy();
@@ -222,36 +236,45 @@ public class CarbonCommandToolsUtil {
      * @param searchStringArray - String array to be find in the log
      * @param cookie            - cookie
      * @return -  if found all the  string in one line: true else false
-     * @throws RemoteException             - Error when initializing the log
-     * @throws LogViewerLogViewerException - Error while reading the log
-     * @throws InterruptedException        - Error occurred when thread sleep
+     * @throws CarbonToolsIntegrationTestException - Error when getting the logs and search the string
      */
-    public static boolean searchOnLogs(String backEndUrl, String[] searchStringArray,
-                                                   String cookie)
-            throws RemoteException, InterruptedException, LogViewerLogViewerException {
+    public static boolean searchOnLogs(String backEndUrl, String[] searchStringArray, String cookie)
+            throws CarbonToolsIntegrationTestException {
         boolean expectedStringFound = false;
-        LogViewerClient logViewerClient = new LogViewerClient(backEndUrl, cookie);
-
-        long startTime = System.currentTimeMillis();
-        while (!expectedStringFound && (System.currentTimeMillis() - startTime) < TIMEOUT) {
-            LogEvent[] logs = logViewerClient.getAllRemoteSystemLogs();
-            for (LogEvent item : logs) {
-                String message = item.getMessage();
-                for (String searchString : searchStringArray) {
-                    if (message.contains(searchString)) {
-                        expectedStringFound = true;
-                    } else {
-                        expectedStringFound = false;
+        LogViewerClient logViewerClient = null;
+        try {
+            logViewerClient = new LogViewerClient(backEndUrl, cookie);
+            long startTime = System.currentTimeMillis();
+            while (!expectedStringFound && (System.currentTimeMillis() - startTime) < TIMEOUT_MS) {
+                LogEvent[] logs = logViewerClient.getAllRemoteSystemLogs();
+                for (LogEvent item : logs) {
+                    String message = item.getMessage();
+                    for (String searchString : searchStringArray) {
+                        if (message.contains(searchString)) {
+                            expectedStringFound = true;
+                        } else {
+                            expectedStringFound = false;
+                            break;
+                        }
+                    }
+                    if (expectedStringFound) {
                         break;
                     }
                 }
-                if (expectedStringFound) {
-                    break;
+                try {
+                    Thread.sleep(500); // wait for 0.5 second to check the log again.
+                } catch (InterruptedException e) {
+                    log.warn("Thread interruption occurred");
                 }
             }
-            Thread.sleep(500); // wait for 0.5 second to check the log again.
+            return expectedStringFound;
+        } catch (RemoteException ex) {
+            log.error("Error when getting the log ", ex);
+            throw new CarbonToolsIntegrationTestException("Error when getting the log ", ex);
+        } catch (LogViewerLogViewerException ex) {
+            log.error("Error when reading the log  ", ex);
+            throw new CarbonToolsIntegrationTestException("Error when reading the log ", ex);
         }
-        return expectedStringFound;
     }
 
     /**
@@ -275,5 +298,19 @@ public class CarbonCommandToolsUtil {
         ClientConnectionUtil.waitForLogin(automationContext);
         log.info("Server started successfully.");
         return true;
+    }
+
+    /**
+     * This method is to merge two arrays together
+     *
+     * @param parameters - Server startup arguments
+     * @param cmdArray   - Server startup command
+     * @return - merged array
+     */
+    private static String[] mergePropertiesToCommandArray(String[] parameters, String[] cmdArray) {
+        if (parameters != null && cmdArray != null) {
+            cmdArray = ArrayUtils.addAll(cmdArray, parameters);
+        }
+        return cmdArray;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,7 @@ package org.wso2.appserver.integration.tests.carbontools;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
@@ -35,7 +36,7 @@ import java.util.HashMap;
 import static org.testng.Assert.assertTrue;
 
 /**
- * This class to test tenant ide after given minutes using -Dtenant.idle.time command
+ * This class to test tenant ide time startup property (-Dtenant.idle.time)
  */
 public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
@@ -50,11 +51,14 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         serverPropertyMap.put("-Dtenant.idle.time", Integer.toString(idleTime));
         AutomationContext autoCtx = new AutomationContext();
+
         CarbonTestServerManager server =
                 new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+
         asServerManager.startServers(server);
 
-        UserPopulator userPopulator = new UserPopulator("AS", "appServerInstance0002");
+        UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                                        ASIntegrationConstants.AS_INSTANCE_0002);
         userPopulator.populateUsers();
     }
 
@@ -62,7 +66,8 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
     public void testTenantIdleTime() throws Exception {
 
         AutomationContext context =
-                new AutomationContext("AS", "appServerInstance0002",
+                new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                      ASIntegrationConstants.AS_INSTANCE_0002,
                                       ContextXpathConstants.SUPER_TENANT,
                                       ContextXpathConstants.ADMIN);
 
@@ -70,7 +75,8 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
         String sessionCookie = loginLogoutClient.login();
 
         AutomationContext contextUser =
-                new AutomationContext("AS", "appServerInstance0002",
+                new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                      ASIntegrationConstants.AS_INSTANCE_0002,
                                       ContextXpathConstants.SUPER_TENANT,
                                       "userKey1");
 

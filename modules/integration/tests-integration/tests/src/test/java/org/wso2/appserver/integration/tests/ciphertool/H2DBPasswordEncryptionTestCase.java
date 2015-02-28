@@ -1,5 +1,5 @@
 /*
-*Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 *
 *WSO2 Inc. licenses this file to you under the Apache License,
 *Version 2.0 (the "License"); you may not use this file except
@@ -23,6 +23,8 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.exception.PasswordEncryptionIntegrationTestException;
+import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.PasswordEncryptionUtil;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
@@ -36,11 +38,8 @@ import org.wso2.carbon.integration.common.admin.client.ServerAdminClient;
 import org.wso2.carbon.integration.common.extensions.carbonserver.MultipleServersManager;
 import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
-import org.wso2.carbon.logging.view.stub.LogViewerLogViewerException;
-import org.wso2.carbon.logging.view.stub.types.carbon.LogEvent;
 
 import java.io.File;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 
 import static org.testng.Assert.assertFalse;
@@ -90,11 +89,6 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
         serverManager.applyConfigurationWithoutRestart(sourceFile, targetFile, true);
     }
 
-    @AfterClass(alwaysRun = true)
-    public void stopServers() throws Exception {
-        manager.stopAllServers();
-    }
-
     @Test(groups = {"wso2.as"}, description = "Test the password before encryption")
     public void testCheckBeforeEncrypt() throws Exception {
         boolean passwordBeforeEncryption = PasswordEncryptionUtil.isPasswordEncrypted(carbonHome);
@@ -135,7 +129,8 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
     public void testRestartEncryptedServer() throws Exception {
 
         AutomationContext automationContext =
-                new AutomationContext("AS", "appServerInstance0002",
+                new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                      ASIntegrationConstants.AS_INSTANCE_0002,
                                       ContextXpathConstants.SUPER_TENANT,
                                       ContextXpathConstants.ADMIN);
 
@@ -169,29 +164,13 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "verify server startup errors",
             dependsOnMethods = {"testRestartEncryptedServer"})
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
-    public void testVerifyLogs() throws RemoteException, LogViewerLogViewerException {
-        boolean status = false;
-        int startLine = 0;
-        int stopLine = 0;
-        LogEvent[] logEvents = logViewerClient.getAllRemoteSystemLogs();
-        if (logEvents.length > 0) {
-            for (int i = 0; i < logEvents.length; i++) {
-                if (logEvents[i] != null) {
-                    if (logEvents[i].getMessage().contains(SERVER_START_LINE)) {
-                        stopLine = i;
-                        log.info("Server started message found - " + logEvents[i].getMessage());
-                    }
-                    if (logEvents[i].getMessage().contains(MANAGEMENT_CONSOLE_URL)) {
-                        startLine = i;
-                        log.info("Server stopped message found - " + logEvents[i].getMessage());
-                    }
-                }
-                if (startLine != 0 && stopLine != 0) {
-                    status = true;
-                    break;
-                }
-            }
-        }
-        assertTrue(status, "Couldn't start the server");
+    public void testVerifyLogs() throws PasswordEncryptionIntegrationTestException {
+        boolean status = PasswordEncryptionUtil.verifyInLogs(logViewerClient);
+        assertTrue(status, "Unable to start the server");
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void stopServers() throws Exception {
+        manager.stopAllServers();
     }
 }
