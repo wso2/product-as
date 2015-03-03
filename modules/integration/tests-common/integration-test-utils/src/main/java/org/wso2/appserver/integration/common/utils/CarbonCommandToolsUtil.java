@@ -21,9 +21,11 @@ package org.wso2.appserver.integration.common.utils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.appserver.integration.common.bean.DataSourceBean;
 import org.wso2.appserver.integration.common.exception.CarbonToolsIntegrationTestException;
 import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
+import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
 import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.automation.extensions.ExtensionConstants;
 import org.wso2.carbon.automation.extensions.servers.utils.ClientConnectionUtil;
@@ -312,5 +314,36 @@ public class CarbonCommandToolsUtil {
             cmdArray = ArrayUtils.addAll(cmdArray, parameters);
         }
         return cmdArray;
+    }
+
+    /**
+     * Get the data source information from the automation configuration file
+     *
+     * @param dataSourceName - Data source name given in the configuration file
+     * @return DataSourceInformation - Information about the data source.
+     * @throws XPathExpressionException - Throws if an exception occurred when getting data for configuration file
+     */
+    public static DataSourceBean getDataSourceInformation(String dataSourceName)
+            throws XPathExpressionException {
+
+        AutomationContext automationContext =
+                new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                      ASIntegrationConstants.AS_INSTANCE_0002,
+                                      ContextXpathConstants.SUPER_TENANT,
+                                      ContextXpathConstants.SUPER_ADMIN);
+
+        String URL = automationContext.getConfigurationValue(String.format(
+                ASIntegrationConstants.CONTEXT_XPATH_DATA_SOURCE + "/url", dataSourceName));
+
+        String userName = automationContext.getConfigurationValue(String.format(
+                ASIntegrationConstants.CONTEXT_XPATH_DATA_SOURCE + "/username", dataSourceName));
+
+        char[] passWord = automationContext.getConfigurationValue(String.format(
+                ASIntegrationConstants.CONTEXT_XPATH_DATA_SOURCE + "/password", dataSourceName)).toCharArray();
+
+        String driverClassName = automationContext.getConfigurationValue(String.format(
+                ASIntegrationConstants.CONTEXT_XPATH_DATA_SOURCE + "/driverClassName", dataSourceName));
+
+        return new DataSourceBean(URL, userName, passWord, driverClassName);
     }
 }
