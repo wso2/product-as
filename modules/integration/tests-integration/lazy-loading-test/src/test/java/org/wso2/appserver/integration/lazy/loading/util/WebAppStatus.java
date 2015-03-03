@@ -40,9 +40,9 @@ public class WebAppStatus {
     /**
      * Constructor  with the parameter tenantStatus, webAppStarted, webAppGhost.
      *
-     * @param tenantStatus      status of the tenant.
-     * @param webAppStarted     true if web-app is started or else false.
-     * @param webAppGhost true if web-app is fully loaded or else false.
+     * @param tenantStatus  status of the tenant.
+     * @param webAppStarted true if web-app is started or else false.
+     * @param webAppGhost   true if web-app is fully loaded or else false.
      */
     public WebAppStatus(TenantStatus tenantStatus, boolean webAppStarted, boolean webAppGhost) {
         this.tenantStatus = tenantStatus;

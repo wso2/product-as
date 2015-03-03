@@ -274,9 +274,18 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         log.error("Error  when sending a  get request  for :" + tenant1WebApp1URL, e);
                     }
                     synchronized (this) {
-                        String responseDetailedInfo = "Response Data :" + httpResponse.getData() + "\tResponse Code:"
-                                + httpResponse.getResponseCode();
-                        responseDataList.add(httpResponse.getData());
+                        String responseDetailedInfo;
+                        String responseData;
+                        if (httpResponse != null) {
+                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                                    "\tResponse Code:" + httpResponse.getResponseCode();
+                            responseData = httpResponse.getData();
+                        } else {
+                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseData = "NULL Object return";
+                        }
+
+                        responseDataList.add(responseData);
                         log.info(responseDetailedInfo);
                         responseDetailedInfoList.add(responseDetailedInfo);
                     }
@@ -298,10 +307,15 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
         }
 
-        String allDetailResponse = "\n";
+
+        StringBuilder allDetailResponseStringBuffer = new StringBuilder();
+        allDetailResponseStringBuffer.append("\n");
+
         for (String responseInfo : responseDetailedInfoList) {
-            allDetailResponse += responseInfo + "\n";
+            allDetailResponseStringBuffer.append(responseInfo);
+            allDetailResponseStringBuffer.append("\n");
         }
+        String allDetailResponse = allDetailResponseStringBuffer.toString();
 
 
         WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
@@ -364,9 +378,18 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         log.error("Error  when sending a  get request  for :" + tenant1WebApp1URL, e);
                     }
                     synchronized (this) {
-                        String responseDetailedInfo = "Response Data :" + httpResponseApp1.getData() +
-                                "\tResponse Code:" + httpResponseApp1.getResponseCode();
-                        responseDataList.add(httpResponseApp1.getData());
+                        String responseDetailedInfo;
+                        String responseData;
+                        if (httpResponseApp1 != null) {
+                            responseDetailedInfo = "Response Data :" + httpResponseApp1.getData() +
+                                    "\tResponse Code:" + httpResponseApp1.getResponseCode();
+                            responseData = httpResponseApp1.getData();
+                        } else {
+                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseData = "NULL Object return";
+                        }
+
+                        responseDataList.add(responseData);
                         log.info(responseDetailedInfo);
                         responseDetailedInfoList.add(responseDetailedInfo);
                     }
@@ -388,11 +411,14 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
         }
 
-        String allDetailResponse = "\n";
-        for (String responseInfo : responseDetailedInfoList) {
-            allDetailResponse += responseInfo + "\n";
-        }
+        StringBuilder allDetailResponseStringBuffer = new StringBuilder();
+        allDetailResponseStringBuffer.append("\n");
 
+        for (String responseInfo : responseDetailedInfoList) {
+            allDetailResponseStringBuffer.append(responseInfo);
+            allDetailResponseStringBuffer.append("\n");
+        }
+        String allDetailResponse = allDetailResponseStringBuffer.toString();
 
         webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
         assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context " +

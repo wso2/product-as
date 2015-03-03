@@ -63,9 +63,9 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected static final String TENANT_DOMAIN_2_KEY = "tenant2";
     protected static final String SUPER_TENANT_DOMAIN_KEY = "superTenant";
 
-    protected static String SUPER_TENANT_DOMAIN;
-    protected static String TENANT_DOMAIN_1;
-    protected static String TENANT_DOMAIN_2;
+    protected String SUPER_TENANT_DOMAIN;
+    protected String TENANT_DOMAIN_1;
+    protected String TENANT_DOMAIN_2;
 
     protected WebAppAdminClient webAppAdminClient;
     protected ServerConfigurationManager serverManager;
@@ -75,8 +75,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             "artifacts" + File.separator + "AS" + File.separator + "ghost" + File.separator;
 
     private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
-    private static long TENANT_IDLE_TIME;
-    private static long WEB_APP_IDLE_TIME;
+    private long TENANT_IDLE_TIME;
+    private long WEB_APP_IDLE_TIME;
     private static final long MAX_THRESHOLD_TIME = 2 * 60 * 1000;
 
 
@@ -103,7 +103,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     private static final String CARBON_ARTIFACT_LOCATION = ARTIFACTS_LOCATION + CARBON_XML;
     private static final String CARBON_REPOSITORY_LOCATION = CARBON_HOME + File.separator + "repository" +
             File.separator + "conf" + File.separator + CARBON_XML;
-    protected static int CONCURRENT_THREAD_COUNT = 40;
+    protected static final int CONCURRENT_THREAD_COUNT = 40;
 
     @Override
     /**
@@ -113,8 +113,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @throws Exception
      */
     public void init() throws Exception {
-
-
         super.init();
 
         serverManager = new ServerConfigurationManager(asServer);

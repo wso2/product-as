@@ -158,7 +158,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass in super tenant " +
                         "Web_app Name: " + WEB_APP_FILE_NAME1);
 
-        HttpResponse httpResponse ;
+        HttpResponse httpResponse;
         try {
             httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
         } catch (IOException ioException) {
@@ -203,7 +203,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
     }
 
 
-    @Test(groups = "wso2.as.lazy.loading", description =  "Send concurrent requests  when Web-App is in Ghost form. " +
+    @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when Web-App is in Ghost form. " +
             "All request should  get expected output",
             dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant")
     public void testConcurrentWebAPPInvocationsWhenWebAppIsInGhostFormInGhostDeploymentOnSuperTenant() throws Exception {
@@ -236,16 +236,24 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
             executorService.execute(new Runnable() {
 
                 public void run() {
-                    HttpResponse httpResponseApp1 = null;
+                    HttpResponse httpResponse = null;
                     try {
-                        httpResponseApp1 = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
+                        httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
                     } catch (IOException e) {
                         log.error("Error  when sending a  get request  for :" + webApp1URL, e);
                     }
                     synchronized (this) {
-                        String responseDetailedInfo = "Response Data :" + httpResponseApp1.getData() +
-                                "\tResponse Code:" + httpResponseApp1.getResponseCode();
-                        responseDataList.add(httpResponseApp1.getData());
+                        String responseDetailedInfo;
+                        String responseData;
+                        if (httpResponse != null) {
+                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                                    "\tResponse Code:" + httpResponse.getResponseCode();
+                            responseData = httpResponse.getData();
+                        } else {
+                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseData = "NULL Object return";
+                        }
+                        responseDataList.add(responseData);
                         log.info(responseDetailedInfo);
                         responseDetailedInfoList.add(responseDetailedInfo);
                     }
@@ -267,10 +275,14 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
         }
 
-        String allDetailResponse = "\n";
+        StringBuilder allDetailResponseStringBuffer = new StringBuilder();
+        allDetailResponseStringBuffer.append("\n");
+
         for (String responseInfo : responseDetailedInfoList) {
-            allDetailResponse += responseInfo + "\n";
+            allDetailResponseStringBuffer.append(responseInfo);
+            allDetailResponseStringBuffer.append("\n");
         }
+        String allDetailResponse = allDetailResponseStringBuffer.toString();
 
 
         webAppStatusTenant1WebApp1 = getWebAppStatus(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1);

@@ -27,6 +27,6 @@ public class LazyLoadingTestException extends Exception {
      * @param message custom message to insert with Exception.
      */
     public LazyLoadingTestException(String message, Throwable cause) {
-        super(message,cause);
+        super(message, cause);
     }
 }
