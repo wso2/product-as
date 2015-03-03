@@ -52,12 +52,10 @@ import static org.testng.Assert.assertTrue;
 public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(ChangeUserPasswordMySQLDBTestCase.class);
-    private boolean scriptRunStatus;
     private AutomationContext context;
     private int portOffset = 1;
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private String carbonHome = null;
-    private static String MYSQL_DB_URL;
+    private String MYSQL_DB_URL;
     private AuthenticatorClient authenticatorClient;
     private static final char[] userNewPassword = {'t', 'e', 's', 't', 'u', '1', '2', '3'};
     private static final String userName = "testu1";
@@ -84,7 +82,7 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
         CarbonTestServerManager server =
                 new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
 
-        carbonHome = server.startServer();
+        String carbonHome = server.startServer();
         UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
                                                         ASIntegrationConstants.AS_INSTANCE_0002);
         userPopulator.populateUsers();
@@ -108,9 +106,8 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
                     String.valueOf(userNewPassword)};
         }
 
-        scriptRunStatus =
-                CarbonCommandToolsUtil.isScriptRunSuccessfully(commandDirectory, cmdArray,
-                                                               "Password updated successfully");
+        boolean scriptRunStatus = CarbonCommandToolsUtil.isScriptRunSuccessfully(commandDirectory, cmdArray,
+                                                                                 "Password updated successfully");
         log.info("Script running status : " + scriptRunStatus);
         assertTrue(scriptRunStatus, "Script executed unsuccessfully");
 

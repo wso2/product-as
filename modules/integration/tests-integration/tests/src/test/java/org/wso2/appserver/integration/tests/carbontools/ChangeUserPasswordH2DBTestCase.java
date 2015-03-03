@@ -49,7 +49,7 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
     private AutomationContext automationContext;
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private static String H2DB_URL;
+    private String H2DB_URL;
     private AuthenticatorClient authenticatorClient;
     private static final char[] userNewPassword = {'t', 'e', 's', 't', 'u', '1', '2', '3', 'U', 'D', '9'};
     private static final String userName = "testu1";
@@ -86,7 +86,6 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
         String[] cmdArray;
         final String commandDirectory = carbonHome + File.separator + "bin";
 
-
         if ((CarbonCommandToolsUtil.getCurrentOperatingSystem().
                 contains(OperatingSystems.WINDOWS.name().toLowerCase()))) {
             cmdArray = new String[]
@@ -107,7 +106,6 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
                                                                "Password updated successfully");
         log.info("Script running status : " + scriptRunStatus);
         assertTrue(scriptRunStatus, "Script executed unsuccessfully");
-
 
         CarbonCommandToolsUtil.startServerUsingCarbonHome(carbonHome, 1, automationContext, null);
     }

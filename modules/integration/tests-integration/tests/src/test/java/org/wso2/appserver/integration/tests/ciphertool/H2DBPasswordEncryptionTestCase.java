@@ -57,17 +57,14 @@ public class H2DBPasswordEncryptionTestCase extends ASIntegrationTest {
     private ServerConfigurationManager serverManager;
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
     private MultipleServersManager manager = new MultipleServersManager();
-    private String carbonHome ;
+    private String carbonHome;
     private AutomationContext autoCtx;
     private static final long DEFAULT_START_STOP_WAIT_MS = 1000 * 60 * 5;
     private LogViewerClient logViewerClient;
-    private static final String SERVER_START_LINE = "Starting WSO2 Carbon";
-    private static final String MANAGEMENT_CONSOLE_URL = "Mgt Console URL";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        File createdFile = new File("/usr/bin/expect");
-        if (!createdFile.isFile()) {
+        if (!new File(File.separator + "usr" + File.separator + "bin" + File.separator + "expect").isFile()) {
             throw new SkipException("Skipping tests because need /usr/bin/expect to run this test.");
         }
         super.init();

@@ -53,7 +53,7 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
     private AutomationContext context;
     private int portOffset = 1;
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private static String H2DB_URL;
+    private String H2DB_URL;
     private AuthenticatorClient authenticatorClient;
     private final char[] userNewPassword = {'m', '7', 'c', 't', '6', 'b', ']', ']', ':', '}', 'a', '3', '#', 'F', 'B', 'n'};
     private String userName = "testu1";
@@ -73,7 +73,10 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
         final char[] dbPassword = {'w', 's', 'o', '2', 'c', 'a', 'r', 'b', 'o', 'n'};
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         AutomationContext autoCtx = new AutomationContext();
-        CarbonTestServerManager asServer = new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+
+        CarbonTestServerManager asServer =
+                new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+
         String carbonHome = asServer.startServer();
         UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
                                                         ASIntegrationConstants.AS_INSTANCE_0002);
