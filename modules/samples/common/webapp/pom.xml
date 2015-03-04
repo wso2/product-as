@@ -37,6 +37,11 @@
             <version>${carbon.kernel.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.wso2.tomcat</groupId>
+            <artifactId>tomcat-jsp-api</artifactId>
+            <version>${orbit.version.tomcat.jsp.api}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2-client</artifactId>
             <version>${version.axis2.client}</version>
