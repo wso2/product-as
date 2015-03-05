@@ -23,6 +23,8 @@ public class ASIntegrationConstants {
     public static final String AS_PRODUCT_GROUP = "AS";
     public static final String AS_INSTANCE_0002 = "appServerInstance0002";
     public static final String CONTEXT_XPATH_DATA_SOURCE = "//datasources/datasource[@name='%s']";
+    public static final String PASSWORD_PROPERTY_SECRET_ALIAS_KEY = "svns:secretAlias";
+    public static final String PASSWORD_PROPERTY_SECRET_ALIAS_VALUE = "svns:secretAlias";
     public static final String ENCRYPTED_PASSWD_URL =
             "//datasources-configuration/datasources/datasource/definition[@type='RDBMS']" +
             "/configuration/password";

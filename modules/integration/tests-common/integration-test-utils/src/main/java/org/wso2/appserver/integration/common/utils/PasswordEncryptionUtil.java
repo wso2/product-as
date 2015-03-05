@@ -76,7 +76,8 @@ public class PasswordEncryptionUtil {
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Element eElement = (Element) nodeList.item(i);
-                if (eElement.getAttribute("svns:secretAlias").equals("Datasources.WSO2_CARBON_DB.Configuration.Password")
+                if (eElement.getAttribute(ASIntegrationConstants.PASSWORD_PROPERTY_SECRET_ALIAS_KEY).
+                        equals(ASIntegrationConstants.PASSWORD_PROPERTY_SECRET_ALIAS_VALUE)
                     && nodeList.item(i).getFirstChild().getNodeValue().equals("password")) {
                     foundEncryption = true;
                     break;
@@ -133,12 +134,6 @@ public class PasswordEncryptionUtil {
                 process.destroy();
             }
         }
-    }
-
-
-    private static void handleException(String msg, Exception e) throws Exception {
-        log.error(msg, e);
-        throw new Exception(msg, e);
     }
 
     /**
