@@ -806,14 +806,43 @@
                                 <!-- jaggery feature groups -->
 
                                 <feature>
-
                                     <id>org.jaggeryjs.feature.group</id>
-
                                     <version>${jaggery.version}</version>
-
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.carbon.feature.group</id>
+                                    <version>${carbon.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.email.feature.group</id>
+                                    <version>${email.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.gadget.feature.group</id>
+                                    <version>${gadget.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.i18n.feature.group</id>
+                                    <version>${i18n.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.oauth.feature.group</id>
+                                    <version>${oauth.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.process.feature.group</id>
+                                    <version>${process.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.uuid.feature.group</id>
+                                    <version>${uuid.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.ws.feature.group</id>
+                                    <version>${ws.module.version}</version>
                                 </feature>
 
-                                <!-- feature groups end-->
+                                <!--End of jaggery feature groups -->
 
 
 
@@ -1079,10 +1108,46 @@
 
 
                                 <!-- jaggery feature groups -->
+
                                 <feature>
                                     <id>org.jaggeryjs.server.feature.group</id>
                                     <version>${jaggery.version}</version>
                                 </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.carbon.feature.group</id>
+                                    <version>${carbon.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.email.feature.group</id>
+                                    <version>${email.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.gadget.feature.group</id>
+                                    <version>${gadget.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.i18n.feature.group</id>
+                                    <version>${i18n.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.oauth.feature.group</id>
+                                    <version>${oauth.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.process.feature.group</id>
+                                    <version>${process.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.uuid.feature.group</id>
+                                    <version>${uuid.module.version}</version>
+                                </feature>
+                                <feature>
+                                    <id>org.jaggeryjs.modules.ws.feature.group</id>
+                                    <version>${ws.module.version}</version>
+                                </feature>
+
+                                <!-- End of jaggery feature groups -->
+
                                 <!--<feature>-->
                                     <!--<id>org.apache.synapse.wso2.feature.group</id>-->
                                     <!--<version>${synapse.version}</version>-->
@@ -1703,6 +1768,8 @@
                                     <version>${carbon.identity.version}</version>
                                 </feature>
 
+                                <!-- jaggery feature groups -->
+
                                 <feature>
                                     <id>org.jaggeryjs.feature.group</id>
                                     <version>${jaggery.version}</version>
@@ -1739,6 +1806,8 @@
                                     <id>org.jaggeryjs.modules.ws.feature.group</id>
                                     <version>${ws.module.version}</version>
                                 </feature>
+
+                                <!-- End of jaggery feature groups -->
 
                                 <feature>
                                     <id>org.wso2.carbon.user.mgt.feature.group</id>
