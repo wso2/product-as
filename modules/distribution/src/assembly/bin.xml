@@ -402,11 +402,11 @@
         </fileSet>  
 
         <!-- copying WS RM DB Scripts -->
-        <fileSet>
+        <!--fileSet>
             <directory>wsrm-dbscripts</directory>
             <outputDirectory>wso2as-${pom.version}/dbscripts/wsrm-dbscripts</outputDirectory>
             <fileMode>755</fileMode>
-        </fileSet>          
+        </fileSet-->          
 
         <!-- copy documentation
         <fileSet>
