@@ -554,7 +554,7 @@
         <selenium.version>2.40.0</selenium.version>
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
         <project.scm.id>my-scm-server</project.scm.id>
-        <cxf.version>2.6.1</cxf.version>
+        <cxf.version>2.7.6</cxf.version>
         <commons.httpclient.version>3.1</commons.httpclient.version>
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
         <carbon.module.version>1.2.0</carbon.module.version>

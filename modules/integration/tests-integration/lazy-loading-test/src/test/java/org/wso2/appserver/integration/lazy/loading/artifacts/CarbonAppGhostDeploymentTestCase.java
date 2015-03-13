@@ -281,13 +281,12 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
             "All request should  get expected output",
-            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPInCarbonAppUsageInGhostDeployment")
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPInCarbonAppUsageInGhostDeployment", enabled = false)
     public void testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
+        //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
-
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
                 "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
-
         ExecutorService executorService = Executors.newFixedThreadPool(CONCURRENT_THREAD_COUNT);
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
@@ -298,8 +297,9 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                     HttpResponse httpResponse = null;
                     try {
                         httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
-                    } catch (IOException e) {
-                        log.error("Error  when sending a  get request  for :" + tenant1WebApp1URL, e);
+                    } catch (IOException ioException) {
+                        log.error("Error  when sending a  get request  for :" + tenant1WebApp1URL, ioException);
+
                     }
                     synchronized (this) {
                         String responseDetailedInfo;
@@ -331,7 +331,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
             if (WEB_APP1_RESPONSE.equals(responseData)) {
                 correctResponseCount += 1;
             }
-
         }
 
         StringBuilder allDetailResponseStringBuffer = new StringBuilder();
@@ -361,10 +360,10 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is loaded." +
             " But Web-App is in Ghost form. All request should  get expected output",
-            dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment")
+            dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment", enabled = false)
     public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
+        //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
-
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
                 "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
 
@@ -374,7 +373,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 tenant1WebApp2URL);
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
                 "Tenant context is  not loaded after access. Tenant name: " + TENANT_DOMAIN_1);
-
 
         WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, CARBON_APP2_WEB_APP_FILE);
         assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Web-App: " + CARBON_APP2_WEB_APP_FILE +
@@ -388,8 +386,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 " is not started in Tenant:" + TENANT_DOMAIN_1);
         assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), true, "Web-App: " + CARBON_APP1_WEB_APP_FILE +
                 " is in not ghost mode before invoking in Tenant:" + TENANT_DOMAIN_1);
-
-
         ExecutorService executorService = Executors.newFixedThreadPool(CONCURRENT_THREAD_COUNT);
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
@@ -436,7 +432,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
             }
 
         }
-
         StringBuilder allDetailResponseStringBuffer = new StringBuilder();
         allDetailResponseStringBuffer.append("\n");
 
@@ -457,8 +452,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
         assertEquals(correctResponseCount, CONCURRENT_THREAD_COUNT, allDetailResponse + "All the concurrent requests" +
                 " not get correct response.");
-
-
     }
 
 

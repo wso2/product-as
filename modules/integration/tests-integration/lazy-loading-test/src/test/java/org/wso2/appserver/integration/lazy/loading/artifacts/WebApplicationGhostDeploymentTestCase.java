@@ -52,8 +52,8 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
     private static final String WEB_APP_NAME1 = "appServer-valied-deploymant-1.0.0";
     private static final String WEB_APP_FILE_NAME2 = "helloworld.war";
     private static final String WEB_APP_NAME2 = "helloworld";
-    private static final String WEB_APP1_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME1;
-    private static final String WEB_APP2_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME2;
+    private static String WEB_APP1_LOCATION;
+    private static String WEB_APP2_LOCATION;
     private static final String WEB_APP1_RESPONSE = "<status>success</status>";
     private static final String WEB_APP2_RESPONSE = "<h2>Hello, World.</h2>";
     private String tenant1WebApp1URL;
@@ -64,6 +64,9 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
+        WEB_APP1_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME1;
+        WEB_APP2_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME2;
+
         tenant1WebApp1URL = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/webapps/" + WEB_APP_NAME1 + "/";
         tenant1WebApp2URL = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/webapps/" + WEB_APP_NAME2 + "/hi.jsp";
     }
@@ -253,13 +256,12 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
-            "All request should  get expected output", dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment")
+            "All request should  get expected output", dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment",enabled = false)
     public void testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
+        //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
-
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
                 "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
-
         ExecutorService executorService = Executors.newFixedThreadPool(CONCURRENT_THREAD_COUNT);
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
@@ -335,27 +337,23 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is loaded." +
             " But Web-App is in Ghost form. All request should  get expected output",
-            dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment")
+            dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment",enabled = false)
     public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeploment() throws Exception {
+        //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
-
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
                 "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
-
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(tenant1WebApp2URL, null);
-
         assertTrue(httpResponseApp2.getData().contains(WEB_APP2_RESPONSE), "Invocation of Web-App fail :"
                 + tenant1WebApp2URL);
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
                 "Tenant context is  not loaded after access. Tenant name: " + TENANT_DOMAIN_1);
-
 
         WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2);
         assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME2 +
                 " is not started in Tenant:" + TENANT_DOMAIN_1);
         assertEquals(webAppStatusTenant1WebApp2.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME2 +
                 " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
-
 
         WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
         assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 +
@@ -371,14 +369,27 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             executorService.execute(new Runnable() {
 
                 public void run() {
-                    HttpResponse httpResponseApp1 = null;
+                    HttpResponse httpResponse = null;
                     try {
-                        httpResponseApp1 = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
+                        httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
                     } catch (IOException e) {
                         log.error("Error  when sending a  get request  for :" + tenant1WebApp1URL, e);
                     }
                     synchronized (this) {
+                        String responseDetailedInfo;
+                        String responseData;
+                        if (httpResponse != null) {
+                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                                    "\tResponse Code:" + httpResponse.getResponseCode();
+                            responseData = httpResponse.getData();
+                        } else {
+                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseData = "NULL Object return";
+                        }
 
+                        responseDataList.add(responseData);
+                        log.info(responseDetailedInfo);
+                        responseDetailedInfoList.add(responseDetailedInfo);
                     }
                 }
 

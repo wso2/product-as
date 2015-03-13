@@ -54,18 +54,22 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
     private static final String WEB_APP_NAME1 = "appServer-valied-deploymant-1.0.0";
     private static final String WEB_APP_FILE_NAME2 = "helloworld.war";
     private static final String WEB_APP_NAME2 = "helloworld";
-    private static final String WEB_APP1_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME1;
-    private static final String WEB_APP2_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME2;
     private static final String WEB_APP1_RESPONSE = "<status>success</status>";
     private static final String WEB_APP2_RESPONSE = "<h2>Hello, World.</h2>";
     private String webApp1URL;
     private String webApp2URL;
     private static volatile List<String> responseDataList = new ArrayList<String>();
     private static volatile List<String> responseDetailedInfoList = new ArrayList<String>();
+    private static String WEB_APP1_LOCATION;
+    private static String WEB_APP2_LOCATION;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
+
+        WEB_APP1_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME1;
+        WEB_APP2_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME2;
+
         webApp1URL = webAppURL + "/" + WEB_APP_NAME1 + "/";
         webApp2URL = webAppURL + "/" + WEB_APP_NAME2 + "/hi.jsp";
 
@@ -157,7 +161,6 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
         assertEquals(checkWebAppAutoUnloadingToGhostState(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1), true,
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass in super tenant " +
                         "Web_app Name: " + WEB_APP_FILE_NAME1);
-
         HttpResponse httpResponse;
         try {
             httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
@@ -203,18 +206,14 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
     }
 
 
-    @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when Web-App is in Ghost form. " +
-            "All request should  get expected output",
-            dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant")
+    @Test(groups = "wso2.as.lazy.loading",
+            description = "Send concurrent requests  when Web-App is in Ghost form. " + "All request should  get expected output",
+            dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant", enabled = false)
     public void testConcurrentWebAPPInvocationsWhenWebAppIsInGhostFormInGhostDeploymentOnSuperTenant() throws Exception {
+        //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
-
-
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(webApp2URL, null);
-
         assertTrue(httpResponseApp2.getData().contains(WEB_APP2_RESPONSE), "Invocation of Web-App fail :" + webApp2URL);
-
-
         WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME2);
         assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME2 +
                 " is not started in Tenant:" + SUPER_TENANT_DOMAIN);
@@ -272,7 +271,6 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
             if (WEB_APP1_RESPONSE.equals(responseData)) {
                 correctResponseCount += 1;
             }
-
         }
 
         StringBuilder allDetailResponseStringBuffer = new StringBuilder();
@@ -283,8 +281,6 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
             allDetailResponseStringBuffer.append("\n");
         }
         String allDetailResponse = allDetailResponseStringBuffer.toString();
-
-
         webAppStatusTenant1WebApp1 = getWebAppStatus(SUPER_TENANT_DOMAIN, WEB_APP_FILE_NAME1);
         assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 +
                 " is not started in Tenant:" + SUPER_TENANT_DOMAIN);
