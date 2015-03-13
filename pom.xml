@@ -552,13 +552,19 @@
         <xfer.version>3.3.0</xfer.version>
         <operadriver.version>0.8.1</operadriver.version>
         <selenium.version>2.40.0</selenium.version>
-
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
-
         <project.scm.id>my-scm-server</project.scm.id>
         <cxf.version>2.6.1</cxf.version>
         <commons.httpclient.version>3.1</commons.httpclient.version>
         <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
+        <carbon.module.version>1.2.0</carbon.module.version>
+        <email.module.version>1.2.0</email.module.version>
+        <gadget.module.version>1.2.0</gadget.module.version>
+        <i18n.module.version>1.2.0</i18n.module.version>
+        <oauth.module.version>1.2.0</oauth.module.version>
+        <process.module.version>1.2.0</process.module.version>
+        <uuid.module.version>1.2.0</uuid.module.version>
+        <ws.module.version>1.2.0</ws.module.version>
 
     </properties>
 

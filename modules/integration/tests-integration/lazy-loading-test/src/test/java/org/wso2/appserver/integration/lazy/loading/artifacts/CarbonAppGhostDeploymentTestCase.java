@@ -402,6 +402,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
                     } catch (IOException e) {
                         log.error("Error  when sending a  get request  for :" + tenant1WebApp1URL, e);
+                        //TODO ex
                     }
                     synchronized (this) {
                         String responseDetailedInfo;

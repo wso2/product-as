@@ -378,20 +378,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         log.error("Error  when sending a  get request  for :" + tenant1WebApp1URL, e);
                     }
                     synchronized (this) {
-                        String responseDetailedInfo;
-                        String responseData;
-                        if (httpResponseApp1 != null) {
-                            responseDetailedInfo = "Response Data :" + httpResponseApp1.getData() +
-                                    "\tResponse Code:" + httpResponseApp1.getResponseCode();
-                            responseData = httpResponseApp1.getData();
-                        } else {
-                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
-                            responseData = "NULL Object return";
-                        }
 
-                        responseDataList.add(responseData);
-                        log.info(responseDetailedInfo);
-                        responseDetailedInfoList.add(responseDetailedInfo);
                     }
                 }
 
