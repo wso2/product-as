@@ -500,9 +500,9 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         }
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException interruptedException) { //TODO
+        } catch (InterruptedException interruptedException) {
             String customErrorMessage =
-                    "InterruptedException occurs when sleeping 1000 milliseconds and while waiting for Web-app to auto unload";
+                    "InterruptedException occurs when sleeping 1000 milliseconds.";
             log.warn(customErrorMessage, interruptedException);
         }
         if (!isTenantInGhostState) {
