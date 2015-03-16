@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
@@ -23,19 +22,18 @@
 
     <parent>
         <groupId>org.wso2.appserver</groupId>
-        <artifactId>integration-appSever</artifactId>
+        <artifactId>test-common</artifactId>
         <version>6.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>test-integration-appSever</artifactId>
-    <name>WSO2 AppServer - Integration Tests</name>
+    <name>WSO2 AppServer - Integration Common Artifacts</name>
+    <artifactId>common-artifacts</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <!--<module>tests</module>-->
-        <module>lazy-loading-test</module>
+        <module>lazy-loading-info</module>
     </modules>
 
 </project>

@@ -49,7 +49,7 @@
         <module>modules/distribution</module>
         <module>modules/org.wso2.stratos.appserver.login.ui</module>
         <module>modules/org.wso2.stratos.appserver.dashboard.ui</module>
-        <!--module>modules/integration</module-->
+        <module>modules/integration</module>
     </modules>
 
     <dependencyManagement>
@@ -100,10 +100,10 @@
                 <artifactId>hibernate</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
-	    <dependency>
-            	<groupId>net.sf.ehcache.wso2</groupId>
-            	<artifactId>ehcache</artifactId>
-            	<version>${ehcache.version}</version>
+            <dependency>
+                <groupId>net.sf.ehcache.wso2</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>${ehcache.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.bcel.wso2</groupId>
@@ -227,9 +227,9 @@
                 <version>${carbon.commons.version}</version>
             </dependency>
             <!--<dependency>-->
-                <!--<groupId>org.wso2.carbon</groupId>-->
-                <!--<artifactId>org.wso2.carbon.rm</artifactId>-->
-                <!--<version>${project.version}</version>-->
+            <!--<groupId>org.wso2.carbon</groupId>-->
+            <!--<artifactId>org.wso2.carbon.rm</artifactId>-->
+            <!--<version>${project.version}</version>-->
             <!--</dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon.identity</groupId>
@@ -245,7 +245,36 @@
 
 
             <!--Dependencies for integration tests  -->
-
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>${cxf.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${cxf.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons.httpclient.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>${javax.ws.rs.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.deployment</groupId>
+                <artifactId>org.wso2.carbon.webapp.mgt</artifactId>
+                <version>${carbon.deployment.version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.deployment</groupId>
                 <artifactId>org.wso2.carbon.aarservices.stub</artifactId>
@@ -466,9 +495,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <product.as.version>6.0.0-SNAPSHOT</product.as.version>
 
-<!--
-        <synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
--->
+        <!--
+                <synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
+        -->
 
         <carbon.kernel.version>4.3.0</carbon.kernel.version>
         <carbon.commons.version>4.3.4</carbon.commons.version>
@@ -523,11 +552,11 @@
         <xfer.version>3.3.0</xfer.version>
         <operadriver.version>0.8.1</operadriver.version>
         <selenium.version>2.40.0</selenium.version>
-
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
-
         <project.scm.id>my-scm-server</project.scm.id>
-
+        <cxf.version>2.7.6</cxf.version>
+        <commons.httpclient.version>3.1</commons.httpclient.version>
+        <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
         <carbon.module.version>1.2.0</carbon.module.version>
         <email.module.version>1.2.0</email.module.version>
         <gadget.module.version>1.2.0</gadget.module.version>
@@ -536,6 +565,7 @@
         <process.module.version>1.2.0</process.module.version>
         <uuid.module.version>1.2.0</uuid.module.version>
         <ws.module.version>1.2.0</ws.module.version>
+
     </properties>
 
     <mailingLists>
