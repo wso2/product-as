@@ -43,7 +43,7 @@ public class TenantEagerLoadingTestCase extends LazyLoadingBaseTest {
     @Test(groups = "wso2.as.eager.loading", description = "Test for loading all tenants with server startup",
             alwaysRun = true)
     public void testLoadAllTenant() throws Exception {
-        carbonArtifactLocation = ARTIFACTS_LOCATION + "carbon-01.xml";
+        String carbonArtifactLocation = ARTIFACTS_LOCATION + "carbon-01.xml";
         applyCarbonXMLConfigChange(carbonArtifactLocation);
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
                 "Tenant " + TENANT_DOMAIN_1 + " is not loaded");
@@ -55,7 +55,7 @@ public class TenantEagerLoadingTestCase extends LazyLoadingBaseTest {
             "server startup",
             alwaysRun = true, dependsOnMethods = "testLoadAllTenant")
     public void testNotLoadSpecificTenant() throws Exception {
-        carbonArtifactLocation = ARTIFACTS_LOCATION + "carbon-02.xml";
+        String carbonArtifactLocation = ARTIFACTS_LOCATION + "carbon-02.xml";
         applyCarbonXMLConfigChange(carbonArtifactLocation);
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
                 "Tenant " + TENANT_DOMAIN_1 + " is loaded, but expected not to be loaded");
@@ -66,7 +66,7 @@ public class TenantEagerLoadingTestCase extends LazyLoadingBaseTest {
     @Test(groups = "wso2.as.eager.loading", description = "Test for load tenant1.com only at server startup",
             alwaysRun = true, dependsOnMethods = "testNotLoadSpecificTenant")
     public void testLoadSpecificTenant() throws Exception {
-        carbonArtifactLocation = ARTIFACTS_LOCATION + "carbon-03.xml";
+        String carbonArtifactLocation = ARTIFACTS_LOCATION + "carbon-03.xml";
         applyCarbonXMLConfigChange(carbonArtifactLocation);
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
                 "Tenant " + TENANT_DOMAIN_1 + " is not loaded");
