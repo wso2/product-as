@@ -234,13 +234,33 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-resources-artifacts</id>
+                        <id>copy-resources-artifacts-01</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/src/test/resources/artifacts/AS/ghost
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../../tests-common/common-artifacts/lazy-loading-info/target
+                                    </directory>
+                                    <includes>
+                                        <include>*.war</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-resources-artifacts-02</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/test/resources/artifacts/AS/eager
                             </outputDirectory>
                             <resources>
                                 <resource>

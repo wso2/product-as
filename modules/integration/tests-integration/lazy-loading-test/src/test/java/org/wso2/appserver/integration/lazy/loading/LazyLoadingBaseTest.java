@@ -70,7 +70,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected ServerConfigurationManager serverManager;
     protected String hostURL;
     protected static final String CARBON_HOME = System.getProperty(ServerConstants.CARBON_HOME);
-    protected static String ARTIFACTS_LOCATION;
+    protected String ARTIFACTS_LOCATION = TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
+            "AS" + File.separator + "ghost" + File.separator;
 
     private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
     private long TENANT_IDLE_TIME;
@@ -96,9 +97,11 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     private static final String CARBON_XML = "carbon.xml";
 
 
-    private static final String CARBON_REPOSITORY_LOCATION =
+    protected static final String CARBON_REPOSITORY_LOCATION =
             CARBON_HOME + File.separator + "repository" + File.separator + "conf" + File.separator + CARBON_XML;
     protected static final int CONCURRENT_THREAD_COUNT = 40;
+
+    protected String carbonArtifactLocation;
 
     @Override
     /**
@@ -117,16 +120,10 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         WEB_APP_IDLE_TIME =
                 Long.parseLong(asServer.getConfigurationNode(WEB_APP_IDLE_XPATH).getNodeValue()) * 60 * 1000;
 
-        ARTIFACTS_LOCATION =
-                TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
-                        "AS" + File.separator + "ghost" + File.separator;
-
-
         String tenantInfoServiceArtifactLocation =
                 ARTIFACTS_LOCATION + TENANT_INFO_SERVICE_FILE_NAME;
 
-
-        String carbonArtifactLocation = ARTIFACTS_LOCATION + CARBON_XML;
+        carbonArtifactLocation = ARTIFACTS_LOCATION + CARBON_XML;
 
         File sourceFile = new File(carbonArtifactLocation);
         File targetFile = new File(CARBON_REPOSITORY_LOCATION);

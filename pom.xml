@@ -49,7 +49,7 @@
         <module>modules/distribution</module>
         <module>modules/org.wso2.stratos.appserver.login.ui</module>
         <module>modules/org.wso2.stratos.appserver.dashboard.ui</module>
-        <module>modules/integration</module>
+        <!--<module>modules/integration</module>-->
     </modules>
 
     <dependencyManagement>
