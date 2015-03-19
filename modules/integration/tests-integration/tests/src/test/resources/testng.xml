@@ -91,4 +91,10 @@
         </packages>
     </test>
 -->
+
+    <test name="jaggery-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.jaggery"/>
+        </packages>
+    </test>
 </suite>
