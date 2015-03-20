@@ -93,8 +93,12 @@
 -->
 
     <test name="jaggery-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.jaggery"/>
-        </packages>
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886RegistryTest"/>
+            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886ServerServerTest"/>
+            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886ServerTest"/>
+            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886UserManagerTest"/>
+            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886UserTest"/>
+        </classes>
     </test>
 </suite>
