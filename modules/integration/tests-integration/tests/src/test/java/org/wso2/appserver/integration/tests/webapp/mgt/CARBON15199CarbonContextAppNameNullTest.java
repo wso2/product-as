@@ -58,21 +58,21 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(CARBON15199CarbonContextAppNameNullTest.class);
 
-    private static final String WEB_APP_FILE_NAME = "AppNameReceiverRestExample-1.0.0.war";
-    private static final String WEB_APP_NAME = "AppNameReceiverRestExample-1.0.0";
-    private static final String GHOST_INFO_WEB_APP_FILE_NAME = "lazy-loading-info.war";
-    private static final String GHOST_INFO_WEB_APP_NAME = "lazy-loading-info";
-    private static final long IDLE_TIME = 120000;
-    private static final long MAX_IDLE_TIME = 60000;
-    private static final String PRODUCT_GROUP_NAME = "AS";
-    private static final String INSTANCE_NAME = "appServerDummy";
-    private static final String SUPER_TENANT_DOMAIN_KEY = "superTenant";
-    private static final String USER_KEY = "admin";
-    private static final String TENANT_DOMAIN_KEY = "wso2.com";
-    private static final String TENANT_USER_KEY = "user1";
+    private final String webAppFileName = "AppNameReceiverRestExample-1.0.0.war";
+    private final String webAppName = "AppNameReceiverRestExample-1.0.0";
+    private final String ghostInfoWebAppFileName = "lazy-loading-info.war";
+    private final String ghostInfoWebAppName = "lazy-loading-info";
+    private final long idleTime = 120000;
+    private final long maxIdleTime = 60000;
+    private final String productGroupName = "AS";
+    private final String instanceName = "appServerDummy";
+    private final String superTenantDomainKey = "superTenant";
+    private final String userKey = "admin";
+    private final String tenantDomainKey = "wso2.com";
+    private final String tenantUserKey = "user1";
 
-    public HashMap<String, String> startupParameterMap = new HashMap<String, String>();
-    public MultipleServersManager manager = new MultipleServersManager();
+    private HashMap<String, String> startupParameterMap = new HashMap<String, String>();
+    private MultipleServersManager manager = new MultipleServersManager();
     private WebAppAdminClient superTenantWebAppAdminClient;
     private WebAppAdminClient tenantWebAppAdminClient;
     private String superTenantSession;
@@ -92,8 +92,8 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
 
         // There is a port setting issue in automation framework which it doesn't
         // correctly set the port offset, as a workaround need to create with a dummy context.
-        AutomationContext newServerContext = new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME,
-                SUPER_TENANT_DOMAIN_KEY, USER_KEY);
+        AutomationContext newServerContext = new AutomationContext(productGroupName, instanceName,
+                superTenantDomainKey, userKey);
         CarbonTestServerManager server = new CarbonTestServerManager(newServerContext, System.getProperty("carbon.zip"),
                 startupParameterMap);
 
@@ -101,11 +101,11 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
         manager.startServers(server);
 
         // This context will be used when restarting the server with new configuration
-        AutomationContext context = new AutomationContext(PRODUCT_GROUP_NAME, "appServerInstance0002",
-                SUPER_TENANT_DOMAIN_KEY, USER_KEY);
+        AutomationContext context = new AutomationContext(productGroupName, "appServerInstance0002",
+                superTenantDomainKey, userKey);
         // This Context will be used when doing tenant related activities.
-        AutomationContext tenantContext = new AutomationContext(PRODUCT_GROUP_NAME, "appServerInstance0002",
-                TENANT_DOMAIN_KEY, TENANT_USER_KEY);
+        AutomationContext tenantContext = new AutomationContext(productGroupName, "appServerInstance0002",
+                tenantDomainKey, tenantUserKey);
 
         ServerConfigurationManager serverManager = new ServerConfigurationManager(context);
 
@@ -144,22 +144,22 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     public void testWebApplicationDeployment() throws Exception {
 
         String applicationNameReceiverWebAppUrl = FrameworkPathUtil.getSystemResourceLocation() +
-                "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + WEB_APP_FILE_NAME;
+                "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName;
         superTenantWebAppAdminClient.warFileUplaoder(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil
-                        .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, WEB_APP_NAME),
+                        .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, webAppName),
                 "Web Application Deployment failed");
 
         tenantWebAppAdminClient.warFileUplaoder(applicationNameReceiverWebAppUrl);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(tenantServerBackEndUrl, tenantSession, WEB_APP_NAME),
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(tenantServerBackEndUrl, tenantSession, webAppName),
                 "Web Application Deployment failed");
 
         // Uploading the ghost status receiver web app, this web will give the status of the web app
         superTenantWebAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator
-                + GHOST_INFO_WEB_APP_FILE_NAME);
+                + ghostInfoWebAppFileName);
         assertTrue(WebAppDeploymentUtil
-                .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, GHOST_INFO_WEB_APP_NAME),
+                .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, ghostInfoWebAppName),
                 "Web Application Deployment failed");
 
     }
@@ -170,23 +170,23 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     public void testApplicationNameInResponse() throws Exception {
         checkWebAppAutoUnloadingToGhostState();
         // Testing the application name when web app is unloaded.
-        String webAppURLLocal = superTenantServerWebAppUrl + "/" + WEB_APP_NAME + "/app/name";
+        String webAppURLLocal = superTenantServerWebAppUrl + "/" + webAppName + "/app/name";
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
-        assertEquals(response.getData(), WEB_APP_NAME, "Application name not set in the first request");
+        assertEquals(response.getData(), webAppName, "Application name not set in the first request");
 
         // Testing the application name when tenant is unloaded.
-        String tenantWebAppURLLocal = tenantServerWebAppUrl + "/webapps/" + WEB_APP_NAME + "/app/name";
+        String tenantWebAppURLLocal = tenantServerWebAppUrl + "/webapps/" + webAppName + "/app/name";
         HttpResponse tenantResponse = HttpRequestUtil.sendGetRequest(tenantWebAppURLLocal, null);
-        assertEquals(tenantResponse.getData(), WEB_APP_NAME, "Application name not set in the first request");
+        assertEquals(tenantResponse.getData(), webAppName, "Application name not set in the first request");
     }
 
     @SetEnvironment(executionEnvironments = {
             ExecutionEnvironment.STANDALONE }) @Test(groups = "wso2.as", description = "UnDeploying web application",
             dependsOnMethods = "testWebApplicationDeployment")
     public void testDeleteWebApplication() throws Exception {
-        superTenantWebAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME, "localhost");
-        superTenantWebAppAdminClient.deleteWebAppFile(GHOST_INFO_WEB_APP_FILE_NAME, "localhost");
-        tenantWebAppAdminClient.deleteWebAppFile(GHOST_INFO_WEB_APP_FILE_NAME, "localhost");
+        superTenantWebAppAdminClient.deleteWebAppFile(webAppFileName, "localhost");
+        superTenantWebAppAdminClient.deleteWebAppFile(ghostInfoWebAppFileName, "localhost");
+        tenantWebAppAdminClient.deleteWebAppFile(ghostInfoWebAppFileName, "localhost");
     }
 
     @SetEnvironment(executionEnvironments = {
@@ -203,23 +203,23 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     private void checkWebAppAutoUnloadingToGhostState() throws Exception {
         boolean isWebAppInGhostState = false;
         boolean isTenantLoaded;
-        log.info("Sleeping  for " + IDLE_TIME + " milliseconds to unload both tenant and the web app.");
+        log.info("Sleeping  for " + idleTime + " milliseconds to unload both tenant and the web app.");
         try {
-            Thread.sleep(IDLE_TIME);
+            Thread.sleep(idleTime);
         } catch (InterruptedException interruptedException) {
             String customErrorMessage = "InterruptedException occurs when sleeping for web app idle time";
             log.warn(customErrorMessage);
         }
 
         long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < MAX_IDLE_TIME) {
+        while (System.currentTimeMillis() - startTime < maxIdleTime) {
             // Since tenant idle time is greater than web app idle time after receiving the web app status,
             // its no need to get the ghost status of web app again and again
             if (!isWebAppInGhostState) {
                 // get the web app ghost status
                 isWebAppInGhostState = getWebAppStatus("carbon.super");
             }
-            isTenantLoaded = getTenantStatus(TENANT_DOMAIN_KEY);
+            isTenantLoaded = getTenantStatus(tenantDomainKey);
             // if web app is in ghost status and tenant is unloaded exit the loop or else sleep and continue the loop.
             if (isWebAppInGhostState && !isTenantLoaded) {
                 break;
@@ -246,8 +246,8 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     private boolean getWebAppStatus(String tenantDomain) throws Exception {
 
         String requestUrl =
-                superTenantServerWebAppUrl + "/" + GHOST_INFO_WEB_APP_NAME + "/webapp-status/" + tenantDomain + "/"
-                        + WEB_APP_NAME;
+                superTenantServerWebAppUrl + "/" + ghostInfoWebAppName + "/webapp-status/" + tenantDomain + "/"
+                        + webAppName;
         boolean isWebAppGhost = false;
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
@@ -276,7 +276,7 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     private boolean getTenantStatus(String tenantDomain) throws Exception {
 
         String requestUrl =
-                superTenantServerWebAppUrl + "/" + GHOST_INFO_WEB_APP_NAME + "/tenant-status/" + tenantDomain;
+                superTenantServerWebAppUrl + "/" + ghostInfoWebAppName + "/tenant-status/" + tenantDomain;
         boolean isTenantLoaded = true;
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
