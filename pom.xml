@@ -45,10 +45,10 @@
         <module>modules/styles</module>
         <module>modules/samples</module>
         <module>modules/features</module>
-        <module>modules/p2-profile-gen</module>
-        <module>modules/distribution</module>
         <module>modules/org.wso2.stratos.appserver.login.ui</module>
         <module>modules/org.wso2.stratos.appserver.dashboard.ui</module>
+        <module>modules/p2-profile-gen</module>
+        <module>modules/distribution</module>
         <!--<module>modules/integration</module>-->
     </modules>
 
