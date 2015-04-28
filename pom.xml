@@ -565,7 +565,7 @@
         <rampart.version>1.6.1-wso2v14</rampart.version>
 
         <stub.version>4.3.0-SNAPSHOT</stub.version>
-        <jaggery.version>0.9.0-SNAPSHOT</jaggery.version>
+        <jaggery.version>0.10.1</jaggery.version>
         <test.framework.version>4.3.1</test.framework.version>
         <xfer.version>3.3.0</xfer.version>
         <operadriver.version>0.8.1</operadriver.version>
