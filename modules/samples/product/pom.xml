@@ -67,6 +67,7 @@
         <module>FlickrClient</module>
         <module>MTOM</module>
         <module>Jaxws-Jaxrs</module>
+        <module>JavaEE-TomEE</module>
         <module>JSON</module>
         <module>Jibx</module>
         <module>HelloWorld</module>
@@ -75,7 +76,6 @@
         <module>HelloWorldWebapp</module>
         <module>WebappVersioning</module>
         <module>VirtualDirectoryListing</module>
-        <module>EJBLibrary</module>
         <module>TomcatWebApps/GenericJavaBeanResource</module>
         <module>TomcatWebApps/JDBCDataSource</module>
         <module>TomcatWebApps/CarbonDataSourceAccessExample</module>

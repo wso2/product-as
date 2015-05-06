@@ -94,7 +94,7 @@ public class WebAppAdminClient {
 
     public void stopWebapps(String fileName, String hostname) throws RemoteException {
         webappAdminStub.stopAllWebapps();
-        WebappMetadata webappMetadata = webappAdminStub.getStoppedWebapp(fileName,hostname);
+        WebappMetadata webappMetadata = webappAdminStub.getStoppedWebapp(fileName, hostname);
     }
 
     public boolean stopWebApp(String fileName, String hostname) throws RemoteException {
