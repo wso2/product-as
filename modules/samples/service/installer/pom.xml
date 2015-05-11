@@ -29,9 +29,7 @@
     <artifactId>org.wso2.stratos.appserver.sample.installer.ui</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Stratos AppServer - Sample Installer</name>
-    <description>
-        Sample installer for Stratos App Server
-    </description>
+    <description>Sample installer for Stratos App Server</description>
     <url>http://wso2.org</url>
 
     <dependencies>
@@ -74,6 +72,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${version.build-helper-maven-plugin}</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -92,16 +91,17 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
+                <version>${version.maven-scr-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <version>${version.maven-bundle-plugin}</version>
                 
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
                             org.wso2.stratos.appserver.sample.installer.ui.*,

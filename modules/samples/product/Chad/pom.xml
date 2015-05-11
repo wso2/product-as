@@ -48,6 +48,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${version.maven-checkstyle-plugin}</version>
                 <configuration>
                     <enableRulesSummary>false</enableRulesSummary>
                 </configuration>
@@ -63,17 +64,14 @@
         <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2</artifactId>
-            <version>${appserver.axis2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom.wso2</groupId>
             <artifactId>axiom</artifactId>
-            <version>${appserver.axiom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.wso2</groupId>
             <artifactId>hibernate</artifactId>
-            <version>${appserver.hibernate.version}</version>
         </dependency>
     </dependencies>
 
@@ -92,6 +90,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                <version>${version.maven-jxr-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -104,10 +103,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${version.maven-checkstyle-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>${version.maven-pmd-plugin}</version>
             </plugin>
         </plugins>
     </reporting>

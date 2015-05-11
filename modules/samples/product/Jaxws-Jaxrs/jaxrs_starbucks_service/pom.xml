@@ -41,25 +41,24 @@
                 <version>2.3.2</version>
             </plugin>
 
-		<plugin>
-        		<artifactId>maven-eclipse-plugin</artifactId>
-        		<version>2.9</version>
-        		<configuration>
-          			<buildcommands>
-            				<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-          			</buildcommands>
-          			<projectnatures>
-            				<projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
-            				<projectnature>org.eclipse.jdt.core.javanature</projectnature>
-          			</projectnatures>
-        		</configuration>
-		</plugin>
+            <plugin>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <buildcommands>
+                        <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+                    </buildcommands>
+                    <projectnatures>
+                        <projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
+                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                    </projectnatures>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
+                <version>${version.maven-war-plugin}</version>
                 <configuration>
-                     
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <warName>${project.artifactId}</warName>
                 </configuration>
@@ -76,11 +75,11 @@
                         <configuration>
                             <tasks>
                                 <copy file="${basedir}/src/main/java/demo/jaxrs/client/add_order.xml"
-                                      todir="${basedir}/target/classes/demo/jaxrs/client" />
+                                      todir="${basedir}/target/classes/demo/jaxrs/client"/>
                                 <copy file="${basedir}/src/main/java/demo/jaxrs/client/update_order.json"
-                                      todir="${basedir}/target/classes/demo/jaxrs/client" />
+                                      todir="${basedir}/target/classes/demo/jaxrs/client"/>
                                 <copy file="${basedir}/src/main/java/demo/jaxrs/client/payment.json"
-                                      todir="${basedir}/target/classes/demo/jaxrs/client" />
+                                      todir="${basedir}/target/classes/demo/jaxrs/client"/>
                             </tasks>
                         </configuration>
                     </execution>

@@ -42,7 +42,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
+                <version>${version.maven-war-plugin}</version>
                 <configuration>
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <warName>${project.artifactId}</warName>
@@ -69,7 +69,8 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <copy todir="${basedir}/../../../repository/deployment/server/webapps" overwrite="true">
+                                        <copy todir="${basedir}/../../../repository/deployment/server/webapps"
+                                              overwrite="true">
                                             <fileset dir="${basedir}/target">
                                                 <include name="${project.artifactId}.war"/>
                                             </fileset>
@@ -79,20 +80,19 @@
                             </execution>
                         </executions>
                     </plugin>
-		<plugin>
-        		<artifactId>maven-eclipse-plugin</artifactId>
-        		<version>2.9</version>
-        		<configuration>
-          			<buildcommands>
-            				<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-          			</buildcommands>
-          			<projectnatures>
-            				<projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
-            				<projectnature>org.eclipse.jdt.core.javanature</projectnature>
-          			</projectnatures>
-        		</configuration>
-		</plugin>
-
+                    <plugin>
+                        <artifactId>maven-eclipse-plugin</artifactId>
+                        <version>2.9</version>
+                        <configuration>
+                            <buildcommands>
+                                <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+                            </buildcommands>
+                            <projectnatures>
+                                <projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
+                                <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                            </projectnatures>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

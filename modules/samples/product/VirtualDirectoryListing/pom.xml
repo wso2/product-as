@@ -45,6 +45,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${version.build-helper-maven-plugin}</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -73,7 +74,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.1-beta-1</version>
+                <version>${version.maven-war-plugin}</version>
                 <configuration>
                     <warName>virtual</warName>
                     <packagingIncludes>
@@ -109,6 +110,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                <version>${version.maven-jxr-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -121,10 +123,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${$version.maven-checkstyle-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>${version.maven-pmd-plugin}</version>
             </plugin>
         </plugins>
     </reporting>

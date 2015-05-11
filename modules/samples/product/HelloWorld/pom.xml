@@ -85,6 +85,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${version.maven-checkstyle-plugin}</version>
                 <configuration>
                     <enableRulesSummary>false</enableRulesSummary>
                 </configuration>
@@ -119,10 +120,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${version.maven-checkstyle-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>${version.maven-pmd-plugin}</version>
             </plugin>
         </plugins>
     </reporting>
