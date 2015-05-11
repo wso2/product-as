@@ -344,9 +344,9 @@
 
     <properties>
         <carbon.kernel.version>4.4.0</carbon.kernel.version>
-        <carbon.identity.version>4.3.0</carbon.identity.version>
-        <appserver.axis2.version>1.6.1.wso2v10</appserver.axis2.version>
-        <appserver.axiom.version>1.2.11.wso2v4</appserver.axiom.version>
+        <carbon.identity.version>4.4.0</carbon.identity.version>
+        <appserver.axis2.version>1.6.1.wso2v12</appserver.axis2.version>
+        <appserver.axiom.version>1.2.11.wso2v6</appserver.axiom.version>
         <appserver.wss4j.version>1.5.11.wso2v3</appserver.wss4j.version>
         <appserver.rampart.version>1.6.1.wso2v10</appserver.rampart.version>
         <appserver.hibernate.version>3.2.5.ga-wso2v1</appserver.hibernate.version>
