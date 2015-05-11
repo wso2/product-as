@@ -527,6 +527,9 @@
 
 	<orbit.version.tomcat.jsp.api>7.0.59.wso2v1</orbit.version.tomcat.jsp.api>
 
+        <carbon.apimgt.version>1.3.3</carbon.apimgt.version>
+        <carbon.apimgt.imp.pkg.version>[1.3.0, 2.0.0)</carbon.apimgt.imp.pkg.version>
+
         <javax.servlet.version>3.0.0.v201112011016</javax.servlet.version>
         <javax.servlet.jsp.version>2.2.0.v201112011158</javax.servlet.jsp.version>
         <apache.derby.version>10.3.2.1wso2v1</apache.derby.version>
@@ -571,18 +574,37 @@
         <operadriver.version>0.8.1</operadriver.version>
         <selenium.version>2.40.0</selenium.version>
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
-        <project.scm.id>my-scm-server</project.scm.id>
-        <cxf.version>2.7.6</cxf.version>
-        <commons.httpclient.version>3.1</commons.httpclient.version>
-        <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
+
+        <!-- jaggery extensions -->
+        <caramel.feature.version>1.0.1</caramel.feature.version>
+        <handlebars.feature.version>1.0.0</handlebars.feature.version>
+        <markdown.feature.version>1.0.0</markdown.feature.version>
+        <process.feature.version>1.2.0</process.feature.version>
+        <carbon.feature.version>1.2.0</carbon.feature.version>
+        <uuid.feature.version>1.2.0</uuid.feature.version>
+        <sso.feature.version>1.2.0</sso.feature.version>
+
         <carbon.module.version>1.2.0</carbon.module.version>
         <email.module.version>1.2.0</email.module.version>
         <gadget.module.version>1.2.0</gadget.module.version>
-        <i18n.module.version>1.2.0</i18n.module.version>
+        <i18n.module.version>1.0.0</i18n.module.version>
         <oauth.module.version>1.2.0</oauth.module.version>
         <process.module.version>1.2.0</process.module.version>
         <uuid.module.version>1.2.0</uuid.module.version>
         <ws.module.version>1.2.0</ws.module.version>
+        <sso.module.version>1.2.0</sso.module.version>
+        <caramel.module.version>1.0.1</caramel.module.version>
+        <handlebars.module.version>1.0.0</handlebars.module.version>
+        <!--<markdown.module.version>1.2.0</markdown.module.version>-->
+
+
+        <es.feature.version>2.0.0</es.feature.version>
+        <carbon.social.version>1.2.0</carbon.social.version>
+        <i18n.feature.version>1.0.0</i18n.feature.version>
+        <project.scm.id>my-scm-server</project.scm.id>
+        <cxf.version>2.7.6</cxf.version>
+        <commons.httpclient.version>3.1</commons.httpclient.version>
+        <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
 
     </properties>
 
