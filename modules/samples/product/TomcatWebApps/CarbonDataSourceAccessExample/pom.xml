@@ -37,12 +37,10 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>${version.tomcat}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
-            <version>${version.tomcat}</version>
         </dependency>
     </dependencies>
 
@@ -90,7 +88,6 @@
                     </packagingIncludes>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

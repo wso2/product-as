@@ -8,7 +8,6 @@
     	<version>6.0.0-SNAPSHOT</version>
     </parent>
 
-
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wso2appserver-samples-module</artifactId>
     <packaging>jar</packaging>
@@ -49,47 +48,18 @@
         <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2</artifactId>
-            <version>${appserver.axis2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.neethi.wso2</groupId>
             <artifactId>neethi</artifactId>
-            <version>${appserver.neethi.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>${appserver.logging.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom.wso2</groupId>
             <artifactId>axiom</artifactId>
-            <version>${appserver.axiom.version}</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <properties>
-        <appserver.axis2.version>1.6.1.wso2v10</appserver.axis2.version>
-        <appserver.axis2.mar.version>1.6.1-wso2v10</appserver.axis2.mar.version>
-        <appserver.axiom.version>1.2.11.wso2v2</appserver.axiom.version>
-        <appserver.logging.version>1.1.1</appserver.logging.version>
-        <appserver.neethi.version>2.0.4.wso2v3</appserver.neethi.version>
-    </properties>
-
 </project>

@@ -94,6 +94,14 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>wso2-nexus</id>
+            <name>WSO2 internal Repository</name>
+            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <reporting>
         <plugins>
             <plugin>
@@ -309,6 +317,29 @@
                 <version>${cxf.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${version.tomcat}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jdbc</artifactId>
+                <version>${version.tomcat}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${version.mysql-connector-java}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>javax.servlet.jsp</artifactId>
+                <version>${javax.servlet.jsp.version}</version>
+            </dependency>
+
             <!--<dependency>-->
                 <!--<groupId>org.apache.maven.plugins</groupId>-->
                 <!--<artifactId>maven-jxr-plugin</artifactId>-->
@@ -352,6 +383,7 @@
         <version.build-helper-maven-plugin>1.9.1</version.build-helper-maven-plugin>
         <version.maven-scr-plugin>1.21.0</version.maven-scr-plugin>
         <version.maven-bundle-plugin>2.5.4</version.maven-bundle-plugin>
+        <appserver.axis2.mar.version>1.6.1-wso2v10</appserver.axis2.mar.version>
 
         <imp.pkg.version.javax.servlet>[2.6.0, 3.0.0)</imp.pkg.version.javax.servlet>
         <version.log4j>1.2.13</version.log4j>
@@ -361,6 +393,7 @@
         <junit.version>4.8.2</junit.version>
         <version.commons.httpclient>3.1</version.commons.httpclient>
         <version.jsr311.api>1.1.1</version.jsr311.api>
+        <version.mysql-connector-java>5.1.18</version.mysql-connector-java>
     </properties>
 
 </project>
