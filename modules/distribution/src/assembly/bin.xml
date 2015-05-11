@@ -403,8 +403,8 @@
             <includes>
                 <include>**/stratos.xml</include>
                 <include>**/multitenancy-packages.xml</include>
-		<include>**/usage-throttling-agent-config.xml</include>
-		<include>**/cloud-services-desc.xml</include>
+		        <include>**/usage-throttling-agent-config.xml</include>
+		        <include>**/cloud-services-desc.xml</include>
             </includes>
         </fileSet>
 
@@ -460,7 +460,7 @@
             <directory>wsrm-dbscripts</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/wsrm-dbscripts</outputDirectory>
             <fileMode>755</fileMode>
-        </fileSet-->
+        </fileSet-->          
 
         <!-- copy documentation
         <fileSet>
@@ -593,7 +593,6 @@
                 <include>**/*.*</include>
             </includes>
         </fileSet>
-
 
     </fileSets>
 

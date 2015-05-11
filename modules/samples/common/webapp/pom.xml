@@ -37,6 +37,17 @@
             <version>${carbon.kernel.version}</version>
         </dependency>
         <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.tomcat</groupId>
+            <artifactId>tomcat-jsp-api</artifactId>
+            <version>${orbit.version.tomcat.jsp.api}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2-client</artifactId>
             <version>${version.axis2.client}</version>
@@ -92,8 +103,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
 
@@ -105,7 +116,7 @@
                     <warName>example</warName>
                     <packagingIncludes>
                         WEB-INF/classes/**/*.class,
-			WEB-INF/classes/*.properties,
+			            WEB-INF/classes/*.properties,
                         WEB-INF/lib/jstl.jar,
                         WEB-INF/lib/standard.jar,
                         **/axis2-client*.jar,
@@ -117,11 +128,12 @@
                         **/tags/**,
                         **/servlets/**,
                         **/carbon/**,
+                        **/websocket/**,
                         **/*.class,
                         **/*.html
                     </packagingIncludes>
                     <packagingExcludes>
-			WEB-INF/classes/**/*.j*,
+			            WEB-INF/classes/**/*.j*,
                         WEB-INF/classes/**/*.html,
                         WEB-INF/classes/**/*.t*,
                         WEB-INF/classes/**/*.gif,
