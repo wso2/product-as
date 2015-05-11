@@ -339,22 +339,11 @@
                 <artifactId>javax.servlet.jsp</artifactId>
                 <version>${javax.servlet.jsp.version}</version>
             </dependency>
-
-            <!--<dependency>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-jxr-plugin</artifactId>-->
-                <!--<version>${version.maven-jxr-plugin}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-site-plugin</artifactId>-->
-                <!--<version>${version.maven-site-plugin}</version>-->
-            <!--</dependency>-->
         </dependencies>
     </dependencyManagement>
 
     <properties>
-        <carbon.kernel.version>4.3.0</carbon.kernel.version>
+        <carbon.kernel.version>4.4.0</carbon.kernel.version>
         <carbon.identity.version>4.3.0</carbon.identity.version>
         <appserver.axis2.version>1.6.1.wso2v10</appserver.axis2.version>
         <appserver.axiom.version>1.2.11.wso2v4</appserver.axiom.version>
