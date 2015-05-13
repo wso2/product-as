@@ -57,48 +57,38 @@ import java.util.List;
  */
 public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
 
-
-    protected static final String TENANT_DOMAIN_1_kEY = "tenant1";
+    protected static final String TENANT_DOMAIN_1_KEY = "tenant1";
     protected static final String TENANT_DOMAIN_2_KEY = "tenant2";
     protected static final String SUPER_TENANT_DOMAIN_KEY = "superTenant";
-
-    protected String SUPER_TENANT_DOMAIN;
-    protected String TENANT_DOMAIN_1;
-    protected String TENANT_DOMAIN_2;
-
-    protected WebAppAdminClient webAppAdminClient;
-    protected ServerConfigurationManager serverManager;
-    protected String hostURL;
     protected static final String CARBON_HOME = System.getProperty(ServerConstants.CARBON_HOME);
-    protected static String ARTIFACTS_LOCATION;
-
-    private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
-    private long TENANT_IDLE_TIME;
-    private long WEB_APP_IDLE_TIME;
-    private static final long MAX_THRESHOLD_TIME = 2 * 60 * 1000;
-
-
+    protected static final int CONCURRENT_THREAD_COUNT = 40;
     private static final String PRODUCT_GROUP_NAME = "AS";
     private static final String INSTANCE_NAME = "appServerInstance0001";
-    private static final String USER_KEY = "admin";
-
+    private static final String ADMIN_USER_KEY = "admin";
     private static final String TENANT_INFO_SERVICE = "lazy-loading-info";
     private static final String TENANT_INFO_SERVICE_FILE_NAME = TENANT_INFO_SERVICE + ".war";
     private static final String IS_TENANT_LOADED_METHOD_URL = TENANT_INFO_SERVICE + "/tenant-status";
     private static final String IS_WEB_APP_LOADED_METHOD_URL = TENANT_INFO_SERVICE + "/webapp-status";
-
-
-    private static final String TENANT_IDLE_XPATH = "//listenerExtensions/platformExecutionManager/extentionClasses/" +
-            "*[name()='class']/*[name()='parameter'][@name='-Dtenant.idle.time']/@value";
-    private static final String WEB_APP_IDLE_XPATH = "//listenerExtensions/platformExecutionManager/extentionClasses/" +
-            "*[name()='class']/*[name()='parameter'][@name='-Dwebapp.idle.time']/@value";
-
+    private static final String TENANT_IDLE_XPATH =
+            "//listenerExtensions/platformExecutionManager/extentionClasses/*[name()='class']/*[name()='parameter']" +
+                    "[@name='-Dtenant.idle.time']/@value";
+    private static final String WEB_APP_IDLE_XPATH =
+            "//listenerExtensions/platformExecutionManager/extentionClasses/*[name()='class']/*[name()='parameter']" +
+                    "[@name='-Dwebapp.idle.time']/@value";
+    private static final long MAX_THRESHOLD_TIME = 2 * 60 * 1000;
     private static final String CARBON_XML = "carbon.xml";
-
-
     private static final String CARBON_REPOSITORY_LOCATION =
             CARBON_HOME + File.separator + "repository" + File.separator + "conf" + File.separator + CARBON_XML;
-    protected static final int CONCURRENT_THREAD_COUNT = 40;
+    private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
+    protected String superTenantDomain;
+    protected String tenantDomain1;
+    protected String tenantDomain2;
+    protected WebAppAdminClient webAppAdminClient;
+    protected ServerConfigurationManager serverManager;
+    protected String hostURL;
+    protected String artifactsLocation;
+    private long tenantIdleTime;
+    private long webAppIdleTime;
 
     @Override
     /**
@@ -109,45 +99,35 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      */
     public void init() throws Exception {
         super.init();
-
         serverManager = new ServerConfigurationManager(asServer);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        TENANT_IDLE_TIME =
+        tenantIdleTime =
                 Long.parseLong(asServer.getConfigurationNode(TENANT_IDLE_XPATH).getNodeValue()) * 60 * 1000;
-        WEB_APP_IDLE_TIME =
+        webAppIdleTime =
                 Long.parseLong(asServer.getConfigurationNode(WEB_APP_IDLE_XPATH).getNodeValue()) * 60 * 1000;
 
-        ARTIFACTS_LOCATION =
+        artifactsLocation =
                 TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
                         "AS" + File.separator + "ghost" + File.separator;
-
-
         String tenantInfoServiceArtifactLocation =
-                ARTIFACTS_LOCATION + TENANT_INFO_SERVICE_FILE_NAME;
-
-
-        String carbonArtifactLocation = ARTIFACTS_LOCATION + CARBON_XML;
-
+                artifactsLocation + TENANT_INFO_SERVICE_FILE_NAME;
+        String carbonArtifactLocation = artifactsLocation + CARBON_XML;
         File sourceFile = new File(carbonArtifactLocation);
         File targetFile = new File(CARBON_REPOSITORY_LOCATION);
-
-        SUPER_TENANT_DOMAIN =
-                new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, SUPER_TENANT_DOMAIN_KEY, USER_KEY).getSuperTenant().getDomain();
-
-        TENANT_DOMAIN_1 =
-                new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, TENANT_DOMAIN_1_kEY, USER_KEY).getContextTenant().getDomain();
-
-        TENANT_DOMAIN_2 =
-                new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, TENANT_DOMAIN_2_KEY, USER_KEY).getContextTenant().getDomain();
-
-
+        superTenantDomain =
+                new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, SUPER_TENANT_DOMAIN_KEY, ADMIN_USER_KEY).
+                        getSuperTenant().getDomain();
+        tenantDomain1 =
+                new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, TENANT_DOMAIN_1_KEY, ADMIN_USER_KEY).
+                        getContextTenant().getDomain();
+        tenantDomain2 =
+                new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, TENANT_DOMAIN_2_KEY, ADMIN_USER_KEY).
+                        getContextTenant().getDomain();
         serverManager.applyConfigurationWithoutRestart(sourceFile, targetFile, true);
         log.info("carbon.xml replaced with :" + carbonArtifactLocation);
-
         webAppAdminClient.warFileUplaoder(tenantInfoServiceArtifactLocation);
         serverManager.restartGracefully();
         log.info("Server Restarted after applying carbon.xml and tenant information utility web application");
-
     }
 
 
@@ -160,7 +140,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @throws LazyLoadingTestException - Exception throws when send the Get request and retrieve the JSON data from response.
      */
     protected TenantStatus getTenantStatus(String tenantDomain) throws LazyLoadingTestException {
-
         TenantStatus tenantStatus;
         String requestUrl = webAppURL + "/" + IS_TENANT_LOADED_METHOD_URL + "/" + tenantDomain;
         try {
@@ -173,11 +152,11 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             log.error(customErrorMessage, ioException);
             throw new LazyLoadingTestException(customErrorMessage, ioException);
         } catch (JSONException jsonException) {
-            String customErrorMessage = "JSONException when retrieving the values from json object TenantStatus" + requestUrl;
+            String customErrorMessage = "JSONException when retrieving the values from json object TenantStatus" +
+                    requestUrl;
             log.error(customErrorMessage, jsonException);
             throw new LazyLoadingTestException(customErrorMessage, jsonException);
         }
-
         return tenantStatus;
     }
 
@@ -188,15 +167,15 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      *
      * @param tenantDomain -  Domain Name of the tenant.
      * @param webAppName   -  Name of the Web Application
-     * @return WebAppStatus -  which include Tenant status, whether the web-app is started or not, whether the web-app is in
-     * ghost mode or not.
-     * @throws LazyLoadingTestException - Exception throws when send the Get request and retrieve the JSON data from response.
+     * @return WebAppStatus -  which include Tenant status, whether the web-app is started or not, whether the web-app
+     * is in ghost mode or not.
+     * @throws LazyLoadingTestException - Exception throws when send the Get request and retrieve the JSON data from
+     *                                  response.
      */
     protected WebAppStatus getWebAppStatus(String tenantDomain, String webAppName) throws LazyLoadingTestException {
         String requestUrl = webAppURL + "/" + IS_WEB_APP_LOADED_METHOD_URL + "/" + tenantDomain + "/" + webAppName;
         WebAppStatus webAppStatus;
         try {
-
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
             JSONObject webAppStatusJSON = new JSONObject(response.getData()).getJSONObject("WebAppStatus");
             boolean isTenantLoaded = webAppStatusJSON.getJSONObject("tenantStatus").getBoolean("tenantContextLoaded");
@@ -209,13 +188,12 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             log.error(customErrorMessage, ioException);
             throw new LazyLoadingTestException(customErrorMessage, ioException);
         } catch (JSONException jsonException) {
-            String customErrorMessage = "JSONException when retrieving the values from json object WebAppStatus" + requestUrl;
+            String customErrorMessage = "JSONException when retrieving the values from json object WebAppStatus" +
+                    requestUrl;
             log.error(customErrorMessage, jsonException);
             throw new LazyLoadingTestException(customErrorMessage, jsonException);
         }
-
         return webAppStatus;
-
     }
 
 
@@ -230,7 +208,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      */
     protected boolean isJaggeryAppDeployed(String appName) throws LazyLoadingTestException {
         int deploymentDelayInMilliseconds = 90 * 1000;
-        log.info("waiting " + deploymentDelayInMilliseconds + " millis for Service deployment " + appName);
         WebAppAdminClient webAppAdminClient;
         List<String> webAppList;
         List<String> faultyWebAppList;
@@ -238,7 +215,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         long time;
         boolean isWebAppDeployed = false;
         boolean doLoop = true;
-
+        log.info("waiting for " + appName + " deployment. Max wait time :" + deploymentDelayInMilliseconds + " milliseconds");
         try {
             webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         } catch (AxisFault axisFault) {
@@ -248,9 +225,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             log.error(customErrorMessage, axisFault);
             throw new LazyLoadingTestException(customErrorMessage, axisFault);
         }
-
         startTime = System.currentTimeMillis();
-
         while (((time = (System.currentTimeMillis() - startTime)) < deploymentDelayInMilliseconds) && doLoop) {
             //Get the web app list
             try {
@@ -267,22 +242,29 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
                     isWebAppDeployed = false;
                     log.info(appName + "- Jaggery Application is faulty");
                     doLoop = false;
+                    break;
                 }
             }
-            // Find the given app in web app list. If found return the loop with isWebAppDeployed=true
-            for (String webAppName : webAppList) {
-                if (webAppName.equalsIgnoreCase(appName)) {
-                    isWebAppDeployed = true;
-                    log.info(appName + " Jaggery Application deployed in " + time + " millis");
-                    doLoop = false;
+            if (doLoop) {
+                // Find the given app in web app list. If found return the loop with isWebAppDeployed=true
+                for (String webAppName : webAppList) {
+                    if (webAppName.equalsIgnoreCase(appName)) {
+                        isWebAppDeployed = true;
+                        log.info(appName + " Jaggery Application deployed in " + time + " millis");
+                        doLoop = false;
+                        break;
+                    }
                 }
-            }
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException interruptedException) {
-                String customErrorMessage = "InterruptedException occurs when sleeping 1000 milliseconds and while" +
-                        " waiting for Jaggery Application to get deployed ";
-                log.warn(customErrorMessage, interruptedException);
+                if (doLoop) {
+                    try {
+                        //Sleep 500 milliseconds until the next verification of Jaggery application deployment.
+                        Thread.sleep(500);
+                    } catch (InterruptedException interruptedException) {
+                        String customErrorMessage = "InterruptedException occurs when sleeping 500 milliseconds and while" +
+                                " waiting for Jaggery Application to get deployed ";
+                        log.warn(customErrorMessage, interruptedException);
+                    }
+                }
             }
         }
         return isWebAppDeployed;
@@ -299,14 +281,12 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      */
     protected boolean isCarbonAppListed(String appName) throws LazyLoadingTestException {
         int deploymentDelayInMilliseconds = 90 * 1000;
-        log.info("waiting " + deploymentDelayInMilliseconds + " millis for Carbon Application to list" + appName);
         ApplicationAdminClient appAdminClient;
         String[] appList;
-        boolean doLoop = true;
         boolean isAppListed = false;
         long time;
         long startTime;
-
+        log.info("waiting for " + appName + " Carbon application to list. Max wait time :" + deploymentDelayInMilliseconds + " milliseconds");
         try {
             appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
         } catch (AxisFault axisFault) {
@@ -315,9 +295,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             log.error(customErrorMessage, axisFault);
             throw new LazyLoadingTestException(customErrorMessage, axisFault);
         }
-
         startTime = System.currentTimeMillis();
-        while (((time = (System.currentTimeMillis() - startTime)) < deploymentDelayInMilliseconds) && doLoop) {
+        while (((time = (System.currentTimeMillis() - startTime)) < deploymentDelayInMilliseconds)) {
             //List all applications
             try {
                 appList = appAdminClient.listAllApplications();
@@ -336,15 +315,16 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             if (Arrays.asList(appList).contains(appName)) {
                 isAppListed = true;
                 log.info(appName + " Carbon Application is listed in" + time + " millis");
-                doLoop = false;
-            }
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException interruptedException) {
-                String customErrorMessage = "InterruptedException occurs when sleeping 500 milliseconds and while" +
-                        " waiting for Carbon Application to  listed in ApplicationAdminClient.";
-                log.warn(customErrorMessage, interruptedException);
+                break;
+            } else {
+                try {
+                    //Sleep 500 milliseconds until the next verification of Carbon application listing.
+                    Thread.sleep(500);
+                } catch (InterruptedException interruptedException) {
+                    String customErrorMessage = "InterruptedException occurs when sleeping 500 milliseconds and while" +
+                            " waiting for Carbon Application to  listed in ApplicationAdminClient.";
+                    log.warn(customErrorMessage, interruptedException);
+                }
             }
         }
         return isAppListed;
@@ -368,32 +348,26 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             String customErrorMessage = "XPathExpressionException exception  when login as tenant admin.";
             log.error(customErrorMessage, xPathExpressionException);
             throw new LazyLoadingTestException(customErrorMessage, xPathExpressionException);
-
         } catch (IOException ioException) {
             String customErrorMessage = "IOException exception  when login as tenant admin.";
             log.error(customErrorMessage, ioException);
             throw new LazyLoadingTestException(customErrorMessage, ioException);
-
         } catch (SAXException saxException) {
             String customErrorMessage = "SAXException exception  when login as tenant admin.";
             log.error(customErrorMessage, saxException);
             throw new LazyLoadingTestException(customErrorMessage, saxException);
-
         } catch (XMLStreamException xmlStreamException) {
             String customErrorMessage = "XMLStreamException exception  when login as tenant admin.";
             log.error(customErrorMessage, xmlStreamException);
             throw new LazyLoadingTestException(customErrorMessage, xmlStreamException);
-
         } catch (LoginAuthenticationExceptionException loginAuthenticationExceptionException) {
             String customErrorMessage = "LoginAuthenticationExceptionException exception  when login as tenant admin.";
             log.error(customErrorMessage, loginAuthenticationExceptionException);
             throw new LazyLoadingTestException(customErrorMessage, loginAuthenticationExceptionException);
-
         } catch (URISyntaxException uriSyntaxException) {
             String customErrorMessage = "URISyntaxException exception  when login as tenant admin.";
             log.error(customErrorMessage, uriSyntaxException);
             throw new LazyLoadingTestException(customErrorMessage, uriSyntaxException);
-
         }
 
 
@@ -412,43 +386,39 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected boolean checkTenantAutoUnloading(String tenantDomain) throws LazyLoadingTestException {
         boolean isTenantUnloaded = false;
         long totalSleepTime = 0;
-        log.info("Sleeping  for " + TENANT_IDLE_TIME + " milliseconds (Tenant idle tome).");
-
+        log.info("Sleeping  for " + tenantIdleTime + " milliseconds (Tenant idle time).");
         try {
-            Thread.sleep(TENANT_IDLE_TIME);
+            Thread.sleep(tenantIdleTime);
         } catch (InterruptedException interruptedException) {
-            String customErrorMessage = "InterruptedException occurs when sleeping for TENANT_IDLE_TIME" +
+            String customErrorMessage = "InterruptedException occurs when sleeping for tenantIdleTime" +
                     interruptedException.getMessage();
             log.warn(customErrorMessage, interruptedException);
         }
-
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < MAX_THRESHOLD_TIME) {
             // check for tenant status
             isTenantUnloaded = !getTenantStatus(tenantDomain).isTenantContextLoaded();
-            totalSleepTime = System.currentTimeMillis() - startTime + TENANT_IDLE_TIME;
+            totalSleepTime = System.currentTimeMillis() - startTime + tenantIdleTime;
             // If Tenant is unloaded exit the loop, else sleep and continue the loop
             if (isTenantUnloaded) {
                 log.info("Tenant " + tenantDomain + " is unloaded in " + totalSleepTime + "milliseconds. Tenant idle " +
-                        "time is :" + TENANT_IDLE_TIME + "milliseconds.");
+                        "time is :" + tenantIdleTime + "milliseconds.");
                 break;
             } else {
                 try {
+                    //Sleep 1000 ms before the next verification of tenet unloading.
                     Thread.sleep(1000);
                 } catch (InterruptedException interruptedException) {
                     String customErrorMessage = "InterruptedException occurs when sleeping 1000 milliseconds and while" +
                             " waiting for tenant to auto unload" + interruptedException.getMessage();
                     log.warn(customErrorMessage, interruptedException);
-
                 }
             }
         }
         if (!isTenantUnloaded) {
             log.info("Tenant " + tenantDomain + " is not unloaded in " + totalSleepTime + "milliseconds. Tenant idle " +
-                    "time is :" + TENANT_IDLE_TIME + "milliseconds.");
+                    "time is :" + tenantIdleTime + "milliseconds.");
         }
-
-
         return isTenantUnloaded;
     }
 
@@ -468,37 +438,36 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         boolean isTenantInGhostState = false;
         long totalSleepTime = 0;
 
-        log.info("Sleeping  for " + WEB_APP_IDLE_TIME + " milliseconds (WebApp idle tome).");
+        log.info("Sleeping  for " + webAppIdleTime + " milliseconds (WebApp idle time).");
         try {
-            Thread.sleep(WEB_APP_IDLE_TIME);
+            Thread.sleep(webAppIdleTime);
         } catch (InterruptedException interruptedException) {
-            String customErrorMessage = "InterruptedException occurs when sleeping for WEB_APP_IDLE_TIME";
+            String customErrorMessage = "InterruptedException occurs when sleeping for webAppIdleTime";
             log.warn(customErrorMessage);
         }
-
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < MAX_THRESHOLD_TIME) {
             // get the web app ghost status
             isTenantInGhostState = getWebAppStatus(tenantDomain, webAppName).isWebAppGhost();
-            totalSleepTime = System.currentTimeMillis() - startTime + WEB_APP_IDLE_TIME;
+            totalSleepTime = System.currentTimeMillis() - startTime + webAppIdleTime;
             // if web app is in ghost status  exit the loop or else sleep and continue the loop.
             if (isTenantInGhostState) {
-
                 log.info("Web App : " + webAppName + "in Tenant " + tenantDomain + " is unloaded in " + totalSleepTime +
-                        "milliseconds. Web App idle time is :" + WEB_APP_IDLE_TIME + "milliseconds.");
+                        "milliseconds. Web App idle time is :" + webAppIdleTime + "milliseconds.");
                 break;
             } else {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException interruptedException) {
                     String customErrorMessage =
-                            "InterruptedException occurs when sleeping 1000 milliseconds and while waiting for Web-app to auto unload";
+                            "InterruptedException occurs when sleeping 1000 milliseconds and while waiting for Web-app" +
+                                    " to auto unload";
                     log.warn(customErrorMessage, interruptedException);
                 }
             }
-
         }
         try {
+            //Sleep 1000 ms before the next verification of Web application unloading.
             Thread.sleep(1000);
         } catch (InterruptedException interruptedException) {
             String customErrorMessage =
@@ -507,7 +476,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         }
         if (!isTenantInGhostState) {
             log.info("Web App : " + webAppName + "in Tenant " + tenantDomain + " is not unloaded in " + totalSleepTime +
-                    "milliseconds. Web App idle time is :" + WEB_APP_IDLE_TIME + "milliseconds.");
+                    "milliseconds. Web App idle time is :" + webAppIdleTime + "milliseconds.");
         }
         return isTenantInGhostState;
     }

@@ -37,8 +37,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Test the ghost deployment of web application. For this test two tenants will be used and
@@ -52,23 +51,24 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
     private static final String WEB_APP_NAME1 = "appServer-valied-deploymant-1.0.0";
     private static final String WEB_APP_FILE_NAME2 = "helloworld.war";
     private static final String WEB_APP_NAME2 = "helloworld";
-    private static String WEB_APP1_LOCATION;
-    private static String WEB_APP2_LOCATION;
     private static final String WEB_APP1_RESPONSE = "<status>success</status>";
     private static final String WEB_APP2_RESPONSE = "<h2>Hello, World.</h2>";
+    private String webApp1Location;
+    private String webApp2Location;
     private String tenant1WebApp1URL;
     private String tenant1WebApp2URL;
-    private static volatile List<String> responseDataList = new ArrayList<String>();
-    private static volatile List<String> responseDetailedInfoList = new ArrayList<String>();
+    private volatile List<String> responseDataList = new ArrayList<String>();
+    private volatile List<String> responseDetailedInfoList = new ArrayList<String>();
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
-        WEB_APP1_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME1;
-        WEB_APP2_LOCATION = ARTIFACTS_LOCATION + WEB_APP_FILE_NAME2;
-
-        tenant1WebApp1URL = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/webapps/" + WEB_APP_NAME1 + "/";
-        tenant1WebApp2URL = webAppURL + "/t/" + TENANT_DOMAIN_1 + "/webapps/" + WEB_APP_NAME2 + "/hi.jsp";
+        webApp1Location = artifactsLocation + WEB_APP_FILE_NAME1;
+        webApp2Location = artifactsLocation + WEB_APP_FILE_NAME2;
+        tenant1WebApp1URL =
+                webAppURL + "/t/" + tenantDomain1 + "/webapps/" + WEB_APP_NAME1 + "/";
+        tenant1WebApp2URL =
+                webAppURL + "/t/" + tenantDomain1 + "/webapps/" + WEB_APP_NAME2 + "/hi.jsp";
     }
 
     @Test(groups = "wso2.as.lazy.loading", description = "Deploying web application in Ghost Deployment enable" +
@@ -76,65 +76,57 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             alwaysRun = true)
     public void testDeployWebApplicationInGhostDeployment() throws Exception {
         log.info("deployment of  web application started");
-
         //Tenant 1
-        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-
-        webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
+        webAppAdminClient.warFileUplaoder(webApp1Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
-                "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + TENANT_DOMAIN_1);
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 + " is not " +
-                "started after deployment in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
-                "ghost mode after deployment in Tenant:" + TENANT_DOMAIN_1);
+                "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + tenantDomain1);
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 + " is not " +
+                "started after deployment in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
+                "ghost mode after deployment in Tenant:" + tenantDomain1);
 
-
-        webAppAdminClient.warFileUplaoder(WEB_APP2_LOCATION);
+        webAppAdminClient.warFileUplaoder(webApp2Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
-                "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + TENANT_DOMAIN_1);
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2);
-        assertEquals(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME2 + " is not " +
-                "started after deployment in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp2.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME2 + " is in" +
-                " ghost mode after deployment in Tenant:" + TENANT_DOMAIN_1);
-
+                "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + tenantDomain1);
+        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME2);
+        assertTrue(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME2 + " is not " +
+                "started after deployment in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp2.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME2 + " is in" +
+                " ghost mode after deployment in Tenant:" + tenantDomain1);
 
         //Tenant2
         loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
-        webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
+        webAppAdminClient.warFileUplaoder(webApp1Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
-                "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + TENANT_DOMAIN_2);
-        WebAppStatus webAppStatusTenant2WebApp1 = getWebAppStatus(TENANT_DOMAIN_2, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant2WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_2);
-        assertEquals(webAppStatusTenant2WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
-                " started after deployment in Tenant:" + TENANT_DOMAIN_2);
-        assertEquals(webAppStatusTenant2WebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 + " is in" +
-                " ghost mode after deployment in Tenant:" + TENANT_DOMAIN_2);
+                "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + tenantDomain2);
+        WebAppStatus webAppStatusTenant2WebApp1 = getWebAppStatus(tenantDomain2, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant2WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain2);
+        assertTrue(webAppStatusTenant2WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
+                " started after deployment in Tenant:" + tenantDomain2);
+        assertFalse(webAppStatusTenant2WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in" +
+                " ghost mode after deployment in Tenant:" + tenantDomain2);
 
-
-        webAppAdminClient.warFileUplaoder(WEB_APP2_LOCATION);
+        webAppAdminClient.warFileUplaoder(webApp2Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
-                "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + TENANT_DOMAIN_2);
-        WebAppStatus webAppStatusTenant2WebApp2 = getWebAppStatus(TENANT_DOMAIN_2, WEB_APP_FILE_NAME2);
-        assertEquals(webAppStatusTenant2WebApp2.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_2);
-        assertEquals(webAppStatusTenant2WebApp2.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME2 + " is not" +
-                " started after deployment in Tenant:" + TENANT_DOMAIN_2);
-        assertEquals(webAppStatusTenant2WebApp2.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME2 + " is in " +
-                "ghost mode after deployment in Tenant:" + TENANT_DOMAIN_2);
-
+                "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + tenantDomain2);
+        WebAppStatus webAppStatusTenant2WebApp2 = getWebAppStatus(tenantDomain2, WEB_APP_FILE_NAME2);
+        assertTrue(webAppStatusTenant2WebApp2.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain2);
+        assertTrue(webAppStatusTenant2WebApp2.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME2 + " is not" +
+                " started after deployment in Tenant:" + tenantDomain2);
+        assertFalse(webAppStatusTenant2WebApp2.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME2 + " is in " +
+                "ghost mode after deployment in Tenant:" + tenantDomain2);
         log.info("deployment of web application finished");
-
-
     }
 
     @Test(groups = "wso2.as.lazy.loading", description = "Invoke web application in Ghost Deployment " +
@@ -143,37 +135,29 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             " web app should loaded fully.",
             dependsOnMethods = "testDeployWebApplicationInGhostDeployment")
     public void testInvokeWebAppInGhostDeployment() throws Exception {
-
         serverManager.restartGracefully();
-
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false, "Tenant Name:" +
-                TENANT_DOMAIN_1 + " loaded before access.");
-        assertEquals(getTenantStatus(TENANT_DOMAIN_2).isTenantContextLoaded(), false, "Tenant Name:" +
-                TENANT_DOMAIN_2 + " loaded before access.");
-
-
+        assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(), "Tenant Name:" +
+                tenantDomain1 + " loaded before access.");
+        assertFalse(getTenantStatus(tenantDomain2).isTenantContextLoaded(), "Tenant Name:" +
+                tenantDomain2 + " loaded before access.");
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE,
                 "Web app invocation fail. web app URL:" + tenant1WebApp1URL);
-
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
-                " started in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
-                "ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
-
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2);
-        assertEquals(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME2 + " is not " +
-                "started  in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp2.isWebAppGhost(), true, "Web-App: " + WEB_APP_FILE_NAME2 + " is loaded " +
-                "before access and after access other web app in same Tenant:" + TENANT_DOMAIN_1);
-
-
-        assertEquals(getTenantStatus(TENANT_DOMAIN_2).isTenantContextLoaded(), false, "Tenant Name:" + TENANT_DOMAIN_2
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
+                " started in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
+                "ghost mode after invoking in Tenant:" + tenantDomain1);
+        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME2);
+        assertTrue(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME2 + " is not " +
+                "started  in Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp2.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME2 + " is loaded " +
+                "before access and after access other web app in same Tenant:" + tenantDomain1);
+        assertFalse(getTenantStatus(tenantDomain2).isTenantContextLoaded(), "Tenant Name:" + tenantDomain2
                 + " loaded before access.");
     }
 
@@ -183,9 +167,9 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             dependsOnMethods = "testInvokeWebAppInGhostDeployment")
     public void testWebAppAutoUnLoadAndInvokeInGhostDeployment() throws LazyLoadingTestException {
 
-        assertEquals(checkWebAppAutoUnloadingToGhostState(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1), true,
+        assertTrue(checkWebAppAutoUnloadingToGhostState(tenantDomain1, WEB_APP_FILE_NAME1),
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass. Tenant Name:"
-                        + TENANT_DOMAIN_1 + " Web_app Name: " + WEB_APP_FILE_NAME1);
+                        + tenantDomain1 + " Web_app Name: " + WEB_APP_FILE_NAME1);
         HttpResponse httpResponse;
         try {
             httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
@@ -196,15 +180,13 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             throw new LazyLoadingTestException(customErrorMessage, ioException);
         }
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail");
-
-
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 + " is not " +
-                "started in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 + " is in" +
-                " ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 + " is not " +
+                "started in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in" +
+                " ghost mode after invoking in Tenant:" + tenantDomain1);
 
 
     }
@@ -216,23 +198,18 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             dependsOnMethods = "testWebAppAutoUnLoadAndInvokeInGhostDeployment")
     public void testWebAppAutoUnLoadAndReloadToGhostFormInGhostDeployment() throws Exception {
         serverManager.restartGracefully();
-
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail");
-
-
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
-                " started in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
-                "ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
-
-        assertEquals(checkWebAppAutoUnloadingToGhostState(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1), true,
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
+                " started in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
+                "ghost mode after invoking in Tenant:" + tenantDomain1);
+        assertTrue(checkWebAppAutoUnloadingToGhostState(tenantDomain1, WEB_APP_FILE_NAME1),
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass. Tenant Name:"
-                        + TENANT_DOMAIN_1 + " Web_app Name: " + WEB_APP_FILE_NAME1);
-
+                        + tenantDomain1 + " Web_app Name: " + WEB_APP_FILE_NAME1);
     }
 
 
@@ -241,27 +218,25 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             dependsOnMethods = "testWebAppAutoUnLoadAndReloadToGhostFormInGhostDeployment")
     public void testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment() throws Exception {
         serverManager.restartGracefully();
-
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
-                "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
+        assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
+                "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail");
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
-                "Tenant context is  not loaded after access. Tenant name: " + TENANT_DOMAIN_1);
-
-        assertEquals(checkTenantAutoUnloading(TENANT_DOMAIN_1), true,
-                "Tenant context is  not unloaded after idle time. Tenant name: " + TENANT_DOMAIN_1);
-
+        assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
+                "Tenant context is  not loaded after access. Tenant name: " + tenantDomain1);
+        assertTrue(checkTenantAutoUnloading(tenantDomain1),
+                "Tenant context is  not unloaded after idle time. Tenant name: " + tenantDomain1);
     }
 
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
-            "All request should  get expected output", dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment",enabled = false)
+            "All request should  get expected output",
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment", enabled = false)
     public void testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
         //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
-                "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
+        assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
+                "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
         ExecutorService executorService = Executors.newFixedThreadPool(CONCURRENT_THREAD_COUNT);
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
@@ -286,7 +261,6 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                             responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
-
                         responseDataList.add(responseData);
                         log.info(responseDetailedInfo);
                         responseDetailedInfoList.add(responseDetailedInfo);
@@ -294,9 +268,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 }
 
             });
-
         }
-
         executorService.shutdown();
         executorService.awaitTermination(5, TimeUnit.MINUTES);
         log.info("Concurrent invocation End");
@@ -306,10 +278,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             if (WEB_APP1_RESPONSE.equals(responseData)) {
                 correctResponseCount += 1;
             }
-
         }
-
-
         StringBuilder allDetailResponseStringBuffer = new StringBuilder();
         allDetailResponseStringBuffer.append("\n");
 
@@ -318,49 +287,41 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             allDetailResponseStringBuffer.append("\n");
         }
         String allDetailResponse = allDetailResponseStringBuffer.toString();
-
-
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context is" +
-                " not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
-                " started in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
-                "ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
-
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
+                " not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 + " is not" +
+                " started in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
+                "ghost mode after invoking in Tenant:" + tenantDomain1);
         assertEquals(correctResponseCount, CONCURRENT_THREAD_COUNT, allDetailResponse + "All the concurrent requests " +
                 "not get correct response.");
-
-
     }
 
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is loaded." +
             " But Web-App is in Ghost form. All request should  get expected output",
-            dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment",enabled = false)
-    public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeploment() throws Exception {
+            dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment", enabled = false)
+    public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
         //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
-                "Tenant context is  loaded before access. Tenant name: " + TENANT_DOMAIN_1);
+        assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
+                "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(tenant1WebApp2URL, null);
         assertTrue(httpResponseApp2.getData().contains(WEB_APP2_RESPONSE), "Invocation of Web-App fail :"
                 + tenant1WebApp2URL);
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
-                "Tenant context is  not loaded after access. Tenant name: " + TENANT_DOMAIN_1);
-
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2);
-        assertEquals(webAppStatusTenant1WebApp2.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME2 +
-                " is not started in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp2.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME2 +
-                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
-
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is not started in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), true, "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is in not ghost mode before invoking in Tenant:" + TENANT_DOMAIN_1);
-
+        assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
+                "Tenant context is  not loaded after access. Tenant name: " + tenantDomain1);
+        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME2);
+        assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME2 +
+                " is not started in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp2.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME2 +
+                " is in ghost mode after invoking in Tenant:" + tenantDomain1);
+        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 +
+                " is not started in Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 +
+                " is in not ghost mode before invoking in Tenant:" + tenantDomain1);
 
         ExecutorService executorService = Executors.newFixedThreadPool(CONCURRENT_THREAD_COUNT);
         log.info("Concurrent invocation Start");
@@ -386,7 +347,6 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                             responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
-
                         responseDataList.add(responseData);
                         log.info(responseDetailedInfo);
                         responseDetailedInfoList.add(responseDetailedInfo);
@@ -394,38 +354,30 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 }
 
             });
-
         }
-
         executorService.shutdown();
         executorService.awaitTermination(5, TimeUnit.MINUTES);
         log.info("Concurrent invocation End");
-
         int correctResponseCount = 0;
         for (String responseData : responseDataList) {
             if (WEB_APP1_RESPONSE.equals(responseData)) {
                 correctResponseCount += 1;
             }
-
         }
-
         StringBuilder allDetailResponseStringBuffer = new StringBuilder();
         allDetailResponseStringBuffer.append("\n");
-
         for (String responseInfo : responseDetailedInfoList) {
             allDetailResponseStringBuffer.append(responseInfo);
             allDetailResponseStringBuffer.append("\n");
         }
         String allDetailResponse = allDetailResponseStringBuffer.toString();
-
-        webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
-        assertEquals(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), true, " Tenant Context " +
-                "is not loaded. Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppStarted(), true, "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is not started in Tenant:" + TENANT_DOMAIN_1);
-        assertEquals(webAppStatusTenant1WebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is in ghost mode after invoking in Tenant:" + TENANT_DOMAIN_1);
-
+        webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
+        assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context " +
+                "is not loaded. Tenant:" + tenantDomain1);
+        assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 +
+                " is not started in Tenant:" + tenantDomain1);
+        assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 +
+                " is in ghost mode after invoking in Tenant:" + tenantDomain1);
         assertEquals(correctResponseCount, CONCURRENT_THREAD_COUNT, allDetailResponse + "All the concurrent" +
                 " requests not get correct response.");
 
@@ -436,26 +388,23 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
     @AfterClass(alwaysRun = true)
     public void cleanWebApplications() throws Exception {
         //Tenant1
-        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-
         webAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME1, hostURL);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
-                "Web Application un-deployment failed : Web app :" + WEB_APP_NAME1 + " on " + TENANT_DOMAIN_1);
+                "Web Application un-deployment failed : Web app :" + WEB_APP_NAME1 + " on " + tenantDomain1);
         webAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME2, hostURL);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
-                "Web Application un-deployment failed: Web app :" + WEB_APP_NAME2 + " on " + TENANT_DOMAIN_1);
-
+                "Web Application un-deployment failed: Web app :" + WEB_APP_NAME2 + " on " + tenantDomain1);
         //Tenant2
         loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-
         webAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME1, hostURL);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
-                "Web Application un-deployment failed : Web app :" + WEB_APP_NAME1 + " on " + TENANT_DOMAIN_2);
+                "Web Application un-deployment failed : Web app :" + WEB_APP_NAME1 + " on " + tenantDomain2);
         webAppAdminClient.deleteWebAppFile(WEB_APP_FILE_NAME2, hostURL);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
-                "Web Application un-deployment failed: Web app :" + WEB_APP_NAME2 + " on " + TENANT_DOMAIN_2);
+                "Web Application un-deployment failed: Web app :" + WEB_APP_NAME2 + " on " + tenantDomain2);
 
     }
 

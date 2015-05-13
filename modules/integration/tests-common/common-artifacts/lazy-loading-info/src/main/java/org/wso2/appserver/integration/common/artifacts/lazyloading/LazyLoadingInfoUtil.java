@@ -56,7 +56,7 @@ public class LazyLoadingInfoUtil {
      *
      * @return Map that contains the  configuration contexts
      */
-    private static Map<String, ConfigurationContext> getTenantConfigContexts() {
+    private static Map<String, ConfigurationContext> getTenantConfigServerContexts() {
         return TenantAxisUtils.getTenantConfigurationContexts(getServerConfigurationContext());
     }
 
@@ -67,8 +67,8 @@ public class LazyLoadingInfoUtil {
      * @param tenantDomain tenant domain name.
      * @return ConfigurationContext of given tenant
      */
-    private static ConfigurationContext getTenantConfigurationContext(String tenantDomain) {
-        return getTenantConfigContexts().get(tenantDomain);
+    private static ConfigurationContext getTenantConfigurationServerContext(String tenantDomain) {
+        return getTenantConfigServerContexts().get(tenantDomain);
     }
 
     /**
@@ -80,9 +80,9 @@ public class LazyLoadingInfoUtil {
     protected static TenantStatus getTenantStatus(String tenantDomain) {
         boolean isTenantContextLoaded = false;
 
-        Map<String, ConfigurationContext> tenantConfigContextsServer = getTenantConfigContexts();
-        if (tenantConfigContextsServer != null) {
-            isTenantContextLoaded = tenantConfigContextsServer.containsKey(tenantDomain);
+        Map<String, ConfigurationContext> tenantConfigServerContexts = getTenantConfigServerContexts();
+        if (tenantConfigServerContexts != null) {
+            isTenantContextLoaded = tenantConfigServerContexts.containsKey(tenantDomain);
             log.info("Tenant " + tenantDomain + " loaded :" + isTenantContextLoaded);
         }
 
@@ -98,12 +98,12 @@ public class LazyLoadingInfoUtil {
      */
     protected static WebAppStatus getWebAppStatus(String tenantDomain, String webAppName) {
         WebAppStatus webAppStatus = new WebAppStatus();
-        ConfigurationContext tenantConfigurationContext = getTenantConfigurationContext(tenantDomain);
-        if (tenantConfigurationContext != null) {
+        ConfigurationContext tenantConfigurationServerContext = getTenantConfigurationServerContext(tenantDomain);
+        if (tenantConfigurationServerContext != null) {
             webAppStatus.setTenantStatus(new TenantStatus(true));
             log.info("Tenant " + tenantDomain + " configuration context is loaded.");
             WebApplicationsHolder webApplicationsHolder = (WebApplicationsHolder) ((HashMap)
-                    tenantConfigurationContext.getLocalProperty("carbon.webapps.holderlist")).get("webapps");
+                    tenantConfigurationServerContext.getLocalProperty("carbon.webapps.holderlist")).get("webapps");
             Map<String, WebApplication> startedWebAppMap = webApplicationsHolder.getStartedWebapps();
             if (startedWebAppMap != null) {
 

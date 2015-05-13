@@ -27,7 +27,8 @@ import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.lazy.loading.LazyLoadingBaseTest;
 import org.wso2.appserver.integration.lazy.loading.util.LazyLoadingTestException;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Test tenant configuration context Load and Unload in Ghost deployment enable environment.
@@ -42,30 +43,27 @@ public class TenantLoadUnloadTestCase extends LazyLoadingBaseTest {
     }
 
     @Test(groups = "wso2.as.lazy.loading", description = "Login using  one tenant user. Before loginTenantUser " +
-            " contexts of both users should not be loaded. After loginTenantUser  only the logged user context should" +
-            " get load.", alwaysRun = true)
+            " contexts of both users should not be loaded. After loginTenantUser  only the logged user context " +
+            "should get load.", alwaysRun = true)
     public void testTenantContextLoadInLogin() throws LazyLoadingTestException {
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
+        assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is loaded before any action related to that tenant");
-        assertEquals(getTenantStatus(TENANT_DOMAIN_2).isTenantContextLoaded(), false,
+        assertFalse(getTenantStatus(tenantDomain2).isTenantContextLoaded(),
                 "Tenant context is loaded before any action related to that tenant");
-        log.info("Testing Tenant context loading  for :" + TENANT_DOMAIN_1);
-        loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
-
-
+        log.info("Testing Tenant context loading  for :" + tenantDomain1);
+        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
         try {
             webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         } catch (AxisFault axisFault) {
-            String customErrorMessage = "AxisFault Exception when  creating  WebAppAdminClient object, Backend URL:"
-                    + backendURL + " Session Cookie: " + sessionCookie + "\n" + axisFault.getMessage();
-            log.error(customErrorMessage);
+            String customErrorMessage =
+                    "AxisFault Exception when  creating  WebAppAdminClient object, Backend URL:" + backendURL +
+                            " Session Cookie: " + sessionCookie + "\n" + axisFault.getMessage();
+            log.error(customErrorMessage, axisFault);
             throw new LazyLoadingTestException(customErrorMessage, axisFault);
         }
-
-
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
+        assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  not loaded after tenant loginTenantUser");
-        assertEquals(getTenantStatus(TENANT_DOMAIN_2).isTenantContextLoaded(), false, "Tenant context is loaded without" +
+        assertFalse(getTenantStatus(tenantDomain2).isTenantContextLoaded(), "Tenant context is loaded without" +
                 " loginTenantUser");
     }
 
@@ -73,11 +71,10 @@ public class TenantLoadUnloadTestCase extends LazyLoadingBaseTest {
             "the tenant context unloading.", dependsOnMethods = "testTenantContextLoadInLogin")
     public void testTenantContextUnLoadInTenantIdle()
             throws LazyLoadingTestException {
-        assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), true,
+        assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  not loaded after tenant loginTenantUser");
-        log.info("Waiting for Tenant context to un-load :" + TENANT_DOMAIN_1);
-        assertEquals(checkTenantAutoUnloading(TENANT_DOMAIN_1), true, "Tenant context is  not unloaded after idle time");
+        log.info("Waiting for Tenant context to un-load :" + tenantDomain1);
+        assertTrue(checkTenantAutoUnloading(tenantDomain1), "Tenant context is  not unloaded after idle time");
 
     }
-
 }
