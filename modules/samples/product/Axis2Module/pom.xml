@@ -19,7 +19,6 @@
             <plugin>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-mar-maven-plugin</artifactId>
-                <version>${appserver.axis2.mar.version}</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>

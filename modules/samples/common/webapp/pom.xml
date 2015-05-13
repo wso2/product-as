@@ -77,7 +77,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${version.build-helper-maven-plugin}</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -106,7 +105,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>${version.maven-war-plugin}</version>
                 <configuration>
                     <warName>example</warName>
                     <packagingIncludes>

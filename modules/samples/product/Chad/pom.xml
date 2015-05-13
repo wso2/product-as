@@ -25,13 +25,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver-samples-chad</artifactId>
     <version>6.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Sample/Chad</name>
     <description>This is the Chad sample</description>
-
 
     <build>
         <sourceDirectory>src</sourceDirectory>
@@ -48,7 +46,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${version.maven-checkstyle-plugin}</version>
                 <configuration>
                     <enableRulesSummary>false</enableRulesSummary>
                 </configuration>
@@ -90,7 +87,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-                <version>${version.maven-jxr-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -103,12 +99,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${version.maven-checkstyle-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>${version.maven-pmd-plugin}</version>
             </plugin>
         </plugins>
     </reporting>
