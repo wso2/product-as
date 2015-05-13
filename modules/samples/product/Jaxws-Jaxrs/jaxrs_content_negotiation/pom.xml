@@ -38,11 +38,9 @@
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
-                <version>2.3.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <warName>${project.artifactId}</warName>
@@ -60,7 +58,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.7</version>
                         <executions>
                             <execution>
                                 <phase>compile</phase>
@@ -69,7 +66,8 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <copy todir="${basedir}/../../../repository/deployment/server/webapps" overwrite="true">
+                                        <copy todir="${basedir}/../../../repository/deployment/server/webapps"
+                                              overwrite="true">
                                             <fileset dir="${basedir}/target">
                                                 <include name="${project.artifactId}.war"/>
                                             </fileset>
@@ -79,20 +77,18 @@
                             </execution>
                         </executions>
                     </plugin>
-		<plugin>
-        		<artifactId>maven-eclipse-plugin</artifactId>
-        		<version>2.9</version>
-        		<configuration>
-          			<buildcommands>
-            				<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-          			</buildcommands>
-          			<projectnatures>
-            				<projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
-            				<projectnature>org.eclipse.jdt.core.javanature</projectnature>
-          			</projectnatures>
-        		</configuration>
-		</plugin>
-
+                    <plugin>
+                        <artifactId>maven-eclipse-plugin</artifactId>
+                        <configuration>
+                            <buildcommands>
+                                <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+                            </buildcommands>
+                            <projectnatures>
+                                <projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
+                                <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                            </projectnatures>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -105,7 +101,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.2.1</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>

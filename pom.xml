@@ -583,7 +583,6 @@
         <process.module.version>1.2.0</process.module.version>
         <uuid.module.version>1.2.0</uuid.module.version>
         <ws.module.version>1.2.0</ws.module.version>
-
     </properties>
 
     <mailingLists>
