@@ -101,11 +101,6 @@
             <name>WSO2 internal Repository</name>
             <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
         </pluginRepository>
-        <pluginRepository>
-            <id>Apache Repo</id>
-            <name>Apache Repository</name>
-            <url>http://central.maven.org/maven2/org/apache/maven/plugins/</url>
-        </pluginRepository>
     </pluginRepositories>
 
     <build>
@@ -212,11 +207,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>${version.maven.surefire.report.plugin}</version>
-            </dependency>
             <dependency>
                 <groupId>org.apache.axis2.wso2</groupId>
                 <artifactId>axis2</artifactId>
