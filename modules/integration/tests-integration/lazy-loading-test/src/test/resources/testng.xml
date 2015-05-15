@@ -30,9 +30,9 @@
 
     <test name="as-integration-lazy-loading-tests" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.appserver.integration.lazy.loading.tenants.TenantLoadUnloadTestCase"/>
-            <class name="org.wso2.appserver.integration.lazy.loading.artifacts.WebApplicationGhostDeploymentTestCase"/>
-            <class name="org.wso2.appserver.integration.lazy.loading.artifacts.JaggeryApplicationGhostDeploymentTestCase"/>
+            <!--<class name="org.wso2.appserver.integration.lazy.loading.tenants.TenantLoadUnloadTestCase"/>-->
+            <!--<class name="org.wso2.appserver.integration.lazy.loading.artifacts.WebApplicationGhostDeploymentTestCase"/>-->
+            <!--<class name="org.wso2.appserver.integration.lazy.loading.artifacts.JaggeryApplicationGhostDeploymentTestCase"/>-->
             <class name="org.wso2.appserver.integration.lazy.loading.artifacts.CarbonAppGhostDeploymentTestCase"/>
             <class name="org.wso2.appserver.integration.lazy.loading.artifacts.SuperTenantGhostDeploymentTestCase"/>
         </classes>
