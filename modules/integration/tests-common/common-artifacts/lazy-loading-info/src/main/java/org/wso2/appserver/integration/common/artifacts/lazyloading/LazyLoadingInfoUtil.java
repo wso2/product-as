@@ -84,7 +84,6 @@ public class LazyLoadingInfoUtil {
             isTenantContextLoaded = tenantConfigServerContexts.containsKey(tenantDomain);
             log.info("Tenant " + tenantDomain + " loaded :" + isTenantContextLoaded);
         }
-
         return new TenantStatus(isTenantContextLoaded);
     }
 

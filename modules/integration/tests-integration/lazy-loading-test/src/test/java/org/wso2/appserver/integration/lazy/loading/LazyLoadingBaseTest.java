@@ -61,7 +61,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected static final String TENANT_DOMAIN_2_KEY = "tenant2";
     protected static final String SUPER_TENANT_DOMAIN_KEY = "superTenant";
     protected static final String CARBON_HOME = System.getProperty(ServerConstants.CARBON_HOME);
-    protected static final int CONCURRENT_THREAD_COUNT = 40;
     private static final String PRODUCT_GROUP_NAME = "AS";
     private static final String INSTANCE_NAME = "appServerInstance0001";
     private static final String ADMIN_USER_KEY = "admin";
@@ -76,6 +75,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             "//listenerExtensions/platformExecutionManager/extentionClasses/*[name()='class']/*[name()='parameter']" +
                     "[@name='-Dwebapp.idle.time']/@value";
     private static final long MAX_THRESHOLD_TIME = 2 * 60 * 1000;
+    private static final long DEPLOYMENT_DELAY_IN_MILLISECONDS =  90 * 1000;
+    protected static final int CONCURRENT_THREAD_COUNT = 40;
     private static final String CARBON_XML = "carbon.xml";
     private static final String CARBON_REPOSITORY_LOCATION =
             CARBON_HOME + File.separator + "repository" + File.separator + "conf" + File.separator + CARBON_XML;
@@ -206,7 +207,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @throws LazyLoadingTestException - Exception throws when creating WebAppAdminClient.
      */
     protected boolean isJaggeryAppDeployed(String appName) throws LazyLoadingTestException {
-        int deploymentDelayInMilliseconds = 90 * 1000;
         WebAppAdminClient webAppAdminClient;
         List<String> webAppList;
         List<String> faultyWebAppList;
@@ -214,7 +214,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         long time;
         boolean isWebAppDeployed = false;
         boolean doLoop = true;
-        log.info("waiting for " + appName + " deployment. Max wait time :" + deploymentDelayInMilliseconds + " milliseconds");
+        log.info("waiting for " + appName + " deployment. Max wait time :" + DEPLOYMENT_DELAY_IN_MILLISECONDS + " milliseconds");
         try {
             webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         } catch (AxisFault axisFault) {
@@ -225,7 +225,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             throw new LazyLoadingTestException(customErrorMessage, axisFault);
         }
         startTime = System.currentTimeMillis();
-        while (((time = (System.currentTimeMillis() - startTime)) < deploymentDelayInMilliseconds) && doLoop) {
+        while (((time = (System.currentTimeMillis() - startTime)) < DEPLOYMENT_DELAY_IN_MILLISECONDS) && doLoop) {
             //Get the web app list
             try {
                 webAppList = webAppAdminClient.getWebApplist(appName);
@@ -279,13 +279,12 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @throws LazyLoadingTestException - Exception throws when creating WebAppAdminClient.
      */
     protected boolean isCarbonAppListed(String appName) throws LazyLoadingTestException {
-        int deploymentDelayInMilliseconds = 90 * 1000;
         ApplicationAdminClient appAdminClient;
         String[] appList;
         boolean isAppListed = false;
         long time;
         long startTime;
-        log.info("waiting for " + appName + " Carbon application to list. Max wait time :" + deploymentDelayInMilliseconds + " milliseconds");
+        log.info("waiting for " + appName + " Carbon application to list. Max wait time :" + DEPLOYMENT_DELAY_IN_MILLISECONDS + " milliseconds");
         try {
             appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
         } catch (AxisFault axisFault) {
@@ -295,7 +294,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             throw new LazyLoadingTestException(customErrorMessage, axisFault);
         }
         startTime = System.currentTimeMillis();
-        while (((time = (System.currentTimeMillis() - startTime)) < deploymentDelayInMilliseconds)) {
+        while (((time = (System.currentTimeMillis() - startTime)) < DEPLOYMENT_DELAY_IN_MILLISECONDS)) {
             //List all applications
             try {
                 appList = appAdminClient.listAllApplications();
@@ -334,7 +333,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * Tenant admin user login functionality.
      *
      * @param domainKey -  Domain key of the tenant.
-     * @throws LazyLoadingTestException - Exception throws when  creating the AutomationContext and login() method of LoginLogoutClient.java
+     * @throws LazyLoadingTestException - Exception throws when  creating the AutomationContext and login() method of
+     * LoginLogoutClient.java
      */
     protected void loginAsTenantAdmin(String domainKey) throws LazyLoadingTestException {
         try {
@@ -408,6 +408,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
                     //Sleep 1000 ms before the next verification of tenet unloading.
                     Thread.sleep(1000);
                 } catch (InterruptedException interruptedException) {
+                    //Ignoring the InterruptedException because it will not impact to the main logic,
+                    //If InterruptedException occurs only impact it it will do the next loop before the expected sleep time.
                     String customErrorMessage = "InterruptedException occurs when sleeping 1000 milliseconds and while" +
                             " waiting for tenant to auto unload" + interruptedException.getMessage();
                     log.warn(customErrorMessage, interruptedException);
@@ -458,6 +460,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException interruptedException) {
+                    //Ignoring the InterruptedException because it will not impact to the main logic,
+                    //If InterruptedException occurs only impact it it will do the next loop before the expected sleep time.
                     String customErrorMessage =
                             "InterruptedException occurs when sleeping 1000 milliseconds and while waiting for Web-app" +
                                     " to auto unload";
