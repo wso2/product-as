@@ -44,9 +44,9 @@ public class LazyLoadingInfoUtil {
      * @return configuration context of the server.
      */
     private static ConfigurationContext getServerConfigurationContext() {
-        ConfigurationContextService configurationContext = (ConfigurationContextService)
-                PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(ConfigurationContextService.class,
-                        null);
+        ConfigurationContextService configurationContext =
+                (ConfigurationContextService) PrivilegedCarbonContext.getThreadLocalCarbonContext().
+                        getOSGiService(ConfigurationContextService.class, null);
         return configurationContext.getServerConfigContext();
     }
 
@@ -79,7 +79,6 @@ public class LazyLoadingInfoUtil {
      */
     protected static TenantStatus getTenantStatus(String tenantDomain) {
         boolean isTenantContextLoaded = false;
-
         Map<String, ConfigurationContext> tenantConfigServerContexts = getTenantConfigServerContexts();
         if (tenantConfigServerContexts != null) {
             isTenantContextLoaded = tenantConfigServerContexts.containsKey(tenantDomain);
@@ -110,8 +109,7 @@ public class LazyLoadingInfoUtil {
                 WebApplication webApplication = startedWebAppMap.get(webAppName);
                 if (webApplication != null) {
                     webAppStatus.setWebAppStarted(true);
-                    log.info("Tenant " + tenantDomain + " Web-app: " + webAppName +
-                            " is available in configuration context.");
+                    log.info("Tenant " + tenantDomain + " Web-app: " + webAppName + " is available in configuration context.");
                     boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
                     log.info("Tenant " + tenantDomain + " Web-app: " + webAppName + " is in Ghost deployment status :" +
                             isWebAppGhost);
@@ -156,11 +154,9 @@ public class LazyLoadingInfoUtil {
             WebApplication webApplication = startedWebAppMap.get(webAppName);
             if (webApplication != null) {
                 webAppStatus.setWebAppStarted(true);
-                log.info("Super Tenant  Web-app: " + webAppName +
-                        " is available in configuration context.");
+                log.info("Super Tenant  Web-app: " + webAppName + " is available in configuration context.");
                 boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
-                log.info("Super Tenant Web-app: " + webAppName + " is in Ghost deployment status :" +
-                        isWebAppGhost);
+                log.info("Super Tenant Web-app: " + webAppName + " is in Ghost deployment status :" + isWebAppGhost);
                 webAppStatus.setWebAppGhost(isWebAppGhost);
             } else {
                 log.info("Given web-app:" + webAppName + " for super tenant  not found in started state");

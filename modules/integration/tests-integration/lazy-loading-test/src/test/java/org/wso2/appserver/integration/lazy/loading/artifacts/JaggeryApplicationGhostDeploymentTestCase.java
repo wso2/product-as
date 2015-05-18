@@ -86,9 +86,8 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         jaggeryApplicationUploaderClient = new JaggeryApplicationUploaderClient(backendURL, sessionCookie);
 
         jaggeryApplicationUploaderClient.uploadJaggeryFile(JAGGERY_APP_FILE_NAME1, jagAppFilePath1);
-        assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME1),
-                "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME1 + " Tenant :"
-                        + tenantDomain1);
+        assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME1), "Jaggery application  is not deployed correctly." +
+                " App name: " + JAGGERY_APP_NAME1 + " Tenant :" + tenantDomain1);
         WebAppStatus jaggeryAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
         assertTrue(jaggeryAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);

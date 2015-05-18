@@ -135,7 +135,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send a Get request after a web app is auto unload  and reload" +
             " in to Ghost form. After access web app, it should be in fully load form  the Ghost form",
-            dependsOnMethods = "testInvokeWebAppInGhostDeploymentOnSuperTenant",enabled = false)
+            dependsOnMethods = "testInvokeWebAppInGhostDeploymentOnSuperTenant", enabled = false)
     public void testWebAppAutoUnLoadAndInvokeInGhostDeploymentOnSupperTenant() throws LazyLoadingTestException {
         assertTrue(checkWebAppAutoUnloadingToGhostState(superTenantDomain, WEB_APP_FILE_NAME1),
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass in super tenant " +

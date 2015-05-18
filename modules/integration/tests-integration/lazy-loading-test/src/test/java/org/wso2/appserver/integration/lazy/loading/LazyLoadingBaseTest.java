@@ -105,7 +105,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
                 Long.parseLong(asServer.getConfigurationNode(TENANT_IDLE_XPATH).getNodeValue()) * 60 * 1000;
         webAppIdleTime =
                 Long.parseLong(asServer.getConfigurationNode(WEB_APP_IDLE_XPATH).getNodeValue()) * 60 * 1000;
-
         artifactsLocation =
                 TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
                         "AS" + File.separator + "ghost" + File.separator;

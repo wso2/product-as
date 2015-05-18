@@ -73,12 +73,10 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
-        tenant1WebApp1URL =
-                webAppURL + "/t/" + tenantDomain1 + "/webapps/" + CARBON_APP1_WEB_APP_NAME + "/";
+        tenant1WebApp1URL = webAppURL + "/t/" + tenantDomain1 + "/webapps/" + CARBON_APP1_WEB_APP_NAME + "/";
         carbonApp1FileURL = new URL("file://" + artifactsLocation + CARBON_APP_FILE1);
         carbonApp1URLDataHandler = new DataHandler(carbonApp1FileURL);
-        tenant1WebApp2URL =
-                webAppURL + "/t/" + tenantDomain1 + "/webapps/" + CARBON_APP2_WEB_APP_NAME + "/";
+        tenant1WebApp2URL = webAppURL + "/t/" + tenantDomain1 + "/webapps/" + CARBON_APP2_WEB_APP_NAME + "/";
         carbonApp2FileURL = new URL("file://" + artifactsLocation + CARBON_APP_FILE2);
         carbonApp2URLDataHandler = new DataHandler(carbonApp2FileURL);
 
@@ -229,7 +227,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
             dependsOnMethods = "testWebAppInCarbonAppAutoUnLoadAndReloadInGhostFormInGhostDeployment")
     public void testTenantUnloadInIdleTimeAfterWebAPPInCarbonAppUsageInGhostDeployment() throws Exception {
         serverManager.restartGracefully();
-
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
@@ -282,7 +279,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
             });
         }
-
         executorService.shutdown();
         executorService.awaitTermination(5, TimeUnit.MINUTES);
         log.info("Concurrent invocation End");
@@ -292,7 +288,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 correctResponseCount += 1;
             }
         }
-
         StringBuilder allDetailResponseStringBuffer = new StringBuilder();
         allDetailResponseStringBuffer.append("\n");
         for (String responseInfo : responseDetailedInfoList) {
@@ -328,7 +323,6 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 tenant1WebApp2URL);
         assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  not loaded after access. Tenant name: " + tenantDomain1);
-
         WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, CARBON_APP2_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + CARBON_APP2_WEB_APP_FILE +
                 " is not started in Tenant:" + tenantDomain1);
