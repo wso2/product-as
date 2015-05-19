@@ -31,13 +31,13 @@ import org.wso2.appserver.integration.lazy.loading.util.WebAppStatus;
 import org.wso2.carbon.application.mgt.stub.ApplicationAdminExceptionException;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
+import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.ApplicationAdminClient;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
-import org.wso2.carbon.utils.ServerConstants;
 import org.xml.sax.SAXException;
 
 import javax.xml.stream.XMLStreamException;
@@ -60,7 +60,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected static final String TENANT_DOMAIN_1_KEY = "tenant1";
     protected static final String TENANT_DOMAIN_2_KEY = "tenant2";
     protected static final String SUPER_TENANT_DOMAIN_KEY = "superTenant";
-    protected static final String CARBON_HOME = System.getProperty(ServerConstants.CARBON_HOME);
+    protected static final String CARBON_HOME = FrameworkPathUtil.getCarbonHome();
     private static final String PRODUCT_GROUP_NAME = "AS";
     private static final String INSTANCE_NAME = "appServerInstance0001";
     private static final String ADMIN_USER_KEY = "admin";
@@ -78,8 +78,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     private static final long DEPLOYMENT_DELAY_IN_MILLISECONDS = 90 * 1000;
     protected static final int CONCURRENT_THREAD_COUNT = 40;
     private static final String CARBON_XML = "carbon.xml";
-    private static final String CARBON_REPOSITORY_LOCATION =
-            CARBON_HOME + File.separator + "repository" + File.separator + "conf" + File.separator + CARBON_XML;
+    private static final String CARBON_REPOSITORY_LOCATION = FrameworkPathUtil.getCarbonServerConfLocation() +
+            File.separator + CARBON_XML;
     private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
     private static final String ADMIN = "admin";
     private static final String DEFAULT = "default";
