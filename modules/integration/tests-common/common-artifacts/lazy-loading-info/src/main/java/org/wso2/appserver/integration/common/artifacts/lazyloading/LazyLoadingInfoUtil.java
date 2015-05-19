@@ -36,6 +36,9 @@ import java.util.Map;
  */
 public class LazyLoadingInfoUtil {
     private static final Log log = LogFactory.getLog(LazyLoadingInfoUtil.class);
+    private static final String CARBON_WEBAPPS_HOLDER_LIST = "carbon.webapps.holderlist";
+    private static final String WEBAPPS = "webapps";
+    private static final String GHOST_WEB_APP = "GhostWebApp";
 
 
     /**
@@ -101,15 +104,14 @@ public class LazyLoadingInfoUtil {
             webAppStatus.setTenantStatus(new TenantStatus(true));
             log.info("Tenant " + tenantDomain + " configuration context is loaded.");
             WebApplicationsHolder webApplicationsHolder = (WebApplicationsHolder) ((HashMap)
-                    tenantConfigurationServerContext.getLocalProperty("carbon.webapps.holderlist")).get("webapps");
+                    tenantConfigurationServerContext.getLocalProperty(CARBON_WEBAPPS_HOLDER_LIST)).get(WEBAPPS);
             Map<String, WebApplication> startedWebAppMap = webApplicationsHolder.getStartedWebapps();
             if (startedWebAppMap != null) {
-
                 WebApplication webApplication = startedWebAppMap.get(webAppName);
                 if (webApplication != null) {
                     webAppStatus.setWebAppStarted(true);
                     log.info("Tenant " + tenantDomain + " Web-app: " + webAppName + " is available in configuration context.");
-                    boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
+                    boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty(GHOST_WEB_APP));
                     log.info("Tenant " + tenantDomain + " Web-app: " + webAppName + " is in Ghost deployment status :" +
                             isWebAppGhost);
                     webAppStatus.setWebAppGhost(isWebAppGhost);
@@ -117,19 +119,15 @@ public class LazyLoadingInfoUtil {
                     log.info("Given web-app:" + webAppName + " for tenant:" + tenantDomain + " not found in started state");
                     webAppStatus.setWebAppStarted(false);
                 }
-
             } else {
                 log.info("Tenant " + tenantDomain + " has no started web-apps.");
                 webAppStatus.setWebAppStarted(false);
             }
-
         } else {
             log.info("Tenant " + tenantDomain + " configuration context is not loaded.");
             webAppStatus.setTenantStatus(new TenantStatus(false));
         }
-
         return webAppStatus;
-
     }
 
 
@@ -141,31 +139,26 @@ public class LazyLoadingInfoUtil {
      */
 
     protected static WebAppStatus getSuperTenantWebAppStatus(String webAppName) {
-
         WebAppStatus webAppStatus = new WebAppStatus();
         webAppStatus.setTenantStatus(new TenantStatus(true)); // Super tenant always loaded;
         ConfigurationContext serverConfigurationContext = getServerConfigurationContext();
-
         WebApplicationsHolder webApplicationsHolder = (WebApplicationsHolder) ((HashMap)
-                serverConfigurationContext.getLocalProperty("carbon.webapps.holderlist")).get("webapps");
+                serverConfigurationContext.getLocalProperty(CARBON_WEBAPPS_HOLDER_LIST)).get(WEBAPPS);
         Map<String, WebApplication> startedWebAppMap = webApplicationsHolder.getStartedWebapps();
         if (startedWebAppMap != null) {
             WebApplication webApplication = startedWebAppMap.get(webAppName);
             if (webApplication != null) {
                 webAppStatus.setWebAppStarted(true);
                 log.info("Super Tenant  Web-app: " + webAppName + " is available in configuration context.");
-                boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
+                boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty(GHOST_WEB_APP));
                 log.info("Super Tenant Web-app: " + webAppName + " is in Ghost deployment status :" + isWebAppGhost);
                 webAppStatus.setWebAppGhost(isWebAppGhost);
             } else {
                 log.info("Given web-app:" + webAppName + " for super tenant  not found in started state");
             }
-
         } else {
             log.info("Super Tenant has no started web-apps.");
         }
         return webAppStatus;
     }
-
-
 }

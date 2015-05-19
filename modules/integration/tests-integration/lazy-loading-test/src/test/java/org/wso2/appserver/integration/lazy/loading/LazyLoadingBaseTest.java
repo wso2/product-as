@@ -75,12 +75,14 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             "//listenerExtensions/platformExecutionManager/extentionClasses/*[name()='class']/*[name()='parameter']" +
                     "[@name='-Dwebapp.idle.time']/@value";
     private static final long MAX_THRESHOLD_TIME = 2 * 60 * 1000;
-    private static final long DEPLOYMENT_DELAY_IN_MILLISECONDS =  90 * 1000;
+    private static final long DEPLOYMENT_DELAY_IN_MILLISECONDS = 90 * 1000;
     protected static final int CONCURRENT_THREAD_COUNT = 40;
     private static final String CARBON_XML = "carbon.xml";
     private static final String CARBON_REPOSITORY_LOCATION =
             CARBON_HOME + File.separator + "repository" + File.separator + "conf" + File.separator + CARBON_XML;
     private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
+    private long webAppIdleTime;
+    private long tenantIdleTime;
     protected String superTenantDomain;
     protected String tenantDomain1;
     protected String tenantDomain2;
@@ -88,15 +90,14 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected ServerConfigurationManager serverManager;
     protected String hostURL;
     protected String artifactsLocation;
-    private long tenantIdleTime;
-    private long webAppIdleTime;
+
 
     @Override
     /**
      * Login as super admin and do the replacement of carbon.xml with Ghost deployment
      * configuration and deployment of the tenant-info-service web application.
      * At the end it will restart the server gracefully.
-     * @throws Exception
+     * @throws Exception - Throws if initialisation fails.
      */
     public void init() throws Exception {
         super.init();
@@ -244,27 +245,24 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
                     break;
                 }
             }
-            if (doLoop) {
-                // Find the given app in web app list. If found return the loop with isWebAppDeployed=true
-                for (String webAppName : webAppList) {
-                    if (webAppName.equalsIgnoreCase(appName)) {
-                        isWebAppDeployed = true;
-                        log.info(appName + " Jaggery Application deployed in " + time + " millis");
-                        doLoop = false;
-                        break;
-                    }
-                }
-                if (doLoop) {
-                    try {
-                        //Sleep 500 milliseconds until the next verification of Jaggery application deployment.
-                        Thread.sleep(500);
-                    } catch (InterruptedException interruptedException) {
-                        String customErrorMessage = "InterruptedException occurs when sleeping 500 milliseconds and while" +
-                                " waiting for Jaggery Application to get deployed ";
-                        log.warn(customErrorMessage, interruptedException);
-                    }
+            // Find the given app in web app list. If found return the loop with isWebAppDeployed=true
+            for (String webAppName : webAppList) {
+                if (webAppName.equalsIgnoreCase(appName)) {
+                    isWebAppDeployed = true;
+                    log.info(appName + " Jaggery Application deployed in " + time + " millis");
+                    doLoop = false;
+                    break;
                 }
             }
+            try {
+                //Sleep 500 milliseconds until the next verification of Jaggery application deployment.
+                Thread.sleep(500);
+            } catch (InterruptedException interruptedException) {
+                String customErrorMessage = "InterruptedException occurs when sleeping 500 milliseconds and while" +
+                        " waiting for Jaggery Application to get deployed ";
+                log.warn(customErrorMessage, interruptedException);
+            }
+
         }
         return isWebAppDeployed;
     }
@@ -334,41 +332,40 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      *
      * @param domainKey -  Domain key of the tenant.
      * @throws LazyLoadingTestException - Exception throws when  creating the AutomationContext and login() method of
-     * LoginLogoutClient.java
+     *                                  LoginLogoutClient.java
      */
     protected void loginAsTenantAdmin(String domainKey) throws LazyLoadingTestException {
         try {
-            AutomationContext automationContext = new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, domainKey,
-                    "admin");
+            AutomationContext automationContext =
+                    new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, domainKey, "admin");
             hostURL = automationContext.getInstance().getHosts().get("default");
             LoginLogoutClient loginLogoutClient1 = new LoginLogoutClient(automationContext);
             sessionCookie = loginLogoutClient1.login();
         } catch (XPathExpressionException xPathExpressionException) {
-            String customErrorMessage = "XPathExpressionException exception  when login as tenant admin.";
+            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
             log.error(customErrorMessage, xPathExpressionException);
             throw new LazyLoadingTestException(customErrorMessage, xPathExpressionException);
         } catch (IOException ioException) {
-            String customErrorMessage = "IOException exception  when login as tenant admin.";
+            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
             log.error(customErrorMessage, ioException);
             throw new LazyLoadingTestException(customErrorMessage, ioException);
         } catch (SAXException saxException) {
-            String customErrorMessage = "SAXException exception  when login as tenant admin.";
+            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
             log.error(customErrorMessage, saxException);
             throw new LazyLoadingTestException(customErrorMessage, saxException);
         } catch (XMLStreamException xmlStreamException) {
-            String customErrorMessage = "XMLStreamException exception  when login as tenant admin.";
+            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
             log.error(customErrorMessage, xmlStreamException);
             throw new LazyLoadingTestException(customErrorMessage, xmlStreamException);
         } catch (LoginAuthenticationExceptionException loginAuthenticationExceptionException) {
-            String customErrorMessage = "LoginAuthenticationExceptionException exception  when login as tenant admin.";
+            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
             log.error(customErrorMessage, loginAuthenticationExceptionException);
             throw new LazyLoadingTestException(customErrorMessage, loginAuthenticationExceptionException);
         } catch (URISyntaxException uriSyntaxException) {
-            String customErrorMessage = "URISyntaxException exception  when login as tenant admin.";
+            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
             log.error(customErrorMessage, uriSyntaxException);
             throw new LazyLoadingTestException(customErrorMessage, uriSyntaxException);
         }
-
 
     }
 
@@ -410,8 +407,9 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
                 } catch (InterruptedException interruptedException) {
                     //Ignoring the InterruptedException because it will not impact to the main logic,
                     //If InterruptedException occurs only impact it it will do the next loop before the expected sleep time.
-                    String customErrorMessage = "InterruptedException occurs when sleeping 1000 milliseconds and while" +
-                            " waiting for tenant to auto unload" + interruptedException.getMessage();
+                    String customErrorMessage =
+                            "InterruptedException occurs when sleeping 1000 milliseconds and while waiting for tenant" +
+                                    " to auto unload" + interruptedException.getMessage();
                     log.warn(customErrorMessage, interruptedException);
                 }
             }

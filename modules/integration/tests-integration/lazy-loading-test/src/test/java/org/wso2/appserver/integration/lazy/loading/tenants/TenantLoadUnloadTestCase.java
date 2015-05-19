@@ -69,8 +69,7 @@ public class TenantLoadUnloadTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Wait until the tenant idle time passing and  check for " +
             "the tenant context unloading.", dependsOnMethods = "testTenantContextLoadInLogin")
-    public void testTenantContextUnLoadInTenantIdle()
-            throws LazyLoadingTestException {
+    public void testTenantContextUnLoadInTenantIdle() throws LazyLoadingTestException {
         assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  not loaded after tenant loginTenantUser");
         log.info("Waiting for Tenant context to un-load :" + tenantDomain1);

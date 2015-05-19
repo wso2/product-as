@@ -65,19 +65,17 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
     private String tenant1WebApp2URL;
     private static volatile List<String> responseDataList = new ArrayList<String>();
     private static volatile List<String> responseDetailedInfoList = new ArrayList<String>();
-    private URL carbonApp1FileURL;
     private DataHandler carbonApp1URLDataHandler;
-    private URL carbonApp2FileURL;
     private DataHandler carbonApp2URLDataHandler;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
         tenant1WebApp1URL = webAppURL + "/t/" + tenantDomain1 + "/webapps/" + CARBON_APP1_WEB_APP_NAME + "/";
-        carbonApp1FileURL = new URL("file://" + artifactsLocation + CARBON_APP_FILE1);
+        URL carbonApp1FileURL = new URL("file://" + artifactsLocation + CARBON_APP_FILE1);
         carbonApp1URLDataHandler = new DataHandler(carbonApp1FileURL);
         tenant1WebApp2URL = webAppURL + "/t/" + tenantDomain1 + "/webapps/" + CARBON_APP2_WEB_APP_NAME + "/";
-        carbonApp2FileURL = new URL("file://" + artifactsLocation + CARBON_APP_FILE2);
+        URL carbonApp2FileURL = new URL("file://" + artifactsLocation + CARBON_APP_FILE2);
         carbonApp2URLDataHandler = new DataHandler(carbonApp2FileURL);
 
     }
@@ -180,7 +178,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
         assertTrue(checkWebAppAutoUnloadingToGhostState(tenantDomain1, CARBON_APP1_WEB_APP_FILE),
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass. Tenant Name:"
                         + tenantDomain1 + " Web_app Name: " + CARBON_APP1_WEB_APP_FILE);
-        HttpResponse httpResponse = null;
+        HttpResponse httpResponse;
         try {
             httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         } catch (IOException ioException) {
