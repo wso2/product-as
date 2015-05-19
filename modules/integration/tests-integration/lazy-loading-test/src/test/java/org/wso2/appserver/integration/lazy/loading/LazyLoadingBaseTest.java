@@ -81,6 +81,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     private static final String CARBON_REPOSITORY_LOCATION =
             CARBON_HOME + File.separator + "repository" + File.separator + "conf" + File.separator + CARBON_XML;
     private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
+    private static final String ADMIN = "admin";
+    private static final String DEFAULT = "default";
     private long webAppIdleTime;
     private long tenantIdleTime;
     protected String superTenantDomain;
@@ -337,8 +339,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected void loginAsTenantAdmin(String domainKey) throws LazyLoadingTestException {
         try {
             AutomationContext automationContext =
-                    new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, domainKey, "admin");
-            hostURL = automationContext.getInstance().getHosts().get("default");
+                    new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, domainKey, ADMIN);
+            hostURL = automationContext.getInstance().getHosts().get(DEFAULT);
             LoginLogoutClient loginLogoutClient1 = new LoginLogoutClient(automationContext);
             sessionCookie = loginLogoutClient1.login();
         } catch (XPathExpressionException xPathExpressionException) {
