@@ -81,7 +81,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         loginAsTenantAdmin(TENANT_DOMAIN_1_kEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
-        webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
+        webAppAdminClient.uploadWarFile(WEB_APP1_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
                 "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + TENANT_DOMAIN_1);
         WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME1);
@@ -93,7 +93,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 "ghost mode after deployment in Tenant:" + TENANT_DOMAIN_1);
 
 
-        webAppAdminClient.warFileUplaoder(WEB_APP2_LOCATION);
+        webAppAdminClient.uploadWarFile(WEB_APP2_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
                 "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + TENANT_DOMAIN_1);
         WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(TENANT_DOMAIN_1, WEB_APP_FILE_NAME2);
@@ -109,7 +109,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
-        webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
+        webAppAdminClient.uploadWarFile(WEB_APP1_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
                 "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + TENANT_DOMAIN_2);
         WebAppStatus webAppStatusTenant2WebApp1 = getWebAppStatus(TENANT_DOMAIN_2, WEB_APP_FILE_NAME1);
@@ -121,7 +121,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 " ghost mode after deployment in Tenant:" + TENANT_DOMAIN_2);
 
 
-        webAppAdminClient.warFileUplaoder(WEB_APP2_LOCATION);
+        webAppAdminClient.uploadWarFile(WEB_APP2_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
                 "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + TENANT_DOMAIN_2);
         WebAppStatus webAppStatusTenant2WebApp2 = getWebAppStatus(TENANT_DOMAIN_2, WEB_APP_FILE_NAME2);

@@ -84,7 +84,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
         loginAsTenantAdmin(SUPER_TENANT_DOMAIN_KEY);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
-        webAppAdminClient.warFileUplaoder(WEB_APP1_LOCATION);
+        webAppAdminClient.uploadWarFile(WEB_APP1_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
                 "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + TENANT_DOMAIN_1);
 
@@ -94,7 +94,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
         assertEquals(webAppStatusWebApp1.isWebAppGhost(), false, "Web-App: " + WEB_APP_FILE_NAME1 +
                 " is in ghost mode after deployment in Supper Tenant");
 
-        webAppAdminClient.warFileUplaoder(WEB_APP2_LOCATION);
+        webAppAdminClient.uploadWarFile(WEB_APP2_LOCATION);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
                 "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + TENANT_DOMAIN_1);
 

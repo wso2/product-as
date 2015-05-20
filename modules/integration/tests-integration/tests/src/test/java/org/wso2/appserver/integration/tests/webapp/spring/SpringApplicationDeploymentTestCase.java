@@ -51,7 +51,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying web application used spring")
     public void testSpringWebApplicationDeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                                           "artifacts" + File.separator + "AS" + File.separator + "war"
                                           + File.separator + "spring" + File.separator + webAppFileName);
 
@@ -93,7 +93,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Redeployment of web application used spring"
             , dependsOnMethods = "testWebApplicationStart")
     public void testWebApplicationRedeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                                           "artifacts" + File.separator + "AS" + File.separator + "war"
                                           + File.separator + "spring" + File.separator + webAppFileName);
         //wait for application to be redeployed
