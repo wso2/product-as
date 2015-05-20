@@ -40,18 +40,19 @@ public class TenantLoadUnloadTestCase extends LazyLoadingBaseTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
+
     }
 
     @Test(groups = "wso2.as.lazy.loading", description = "Login using  one tenant user. Before loginTenantUser " +
             " contexts of both users should not be loaded. After loginTenantUser  only the logged user context " +
             "should get load.", alwaysRun = true)
-    public void testTenantContextLoadInLogin() throws LazyLoadingTestException {
+    public void testTenantContextLoadInLogin() throws Exception {
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is loaded before any action related to that tenant");
         assertFalse(getTenantStatus(tenantDomain2).isTenantContextLoaded(),
                 "Tenant context is loaded before any action related to that tenant");
         log.info("Testing Tenant context loading  for :" + tenantDomain1);
-        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
+        init(TENANT_DOMAIN_1_KEY, ADMIN);
         try {
             webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         } catch (AxisFault axisFault) {

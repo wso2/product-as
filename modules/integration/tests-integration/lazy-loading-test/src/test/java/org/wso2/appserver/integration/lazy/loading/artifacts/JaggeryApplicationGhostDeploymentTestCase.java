@@ -28,7 +28,7 @@ import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.lazy.loading.LazyLoadingBaseTest;
 import org.wso2.appserver.integration.lazy.loading.util.LazyLoadingTestException;
-import org.wso2.appserver.integration.lazy.loading.util.WebAppStatus;
+import org.wso2.appserver.integration.lazy.loading.util.WebAppStatusBean;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
@@ -81,14 +81,14 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         log.info("deployment of  Jaggery Application started");
         JaggeryApplicationUploaderClient jaggeryApplicationUploaderClient;
         //Tenant1
-        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
+        init(TENANT_DOMAIN_1_KEY, ADMIN);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         jaggeryApplicationUploaderClient = new JaggeryApplicationUploaderClient(backendURL, sessionCookie);
 
         jaggeryApplicationUploaderClient.uploadJaggeryFile(JAGGERY_APP_FILE_NAME1, jagAppFilePath1);
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME1), "Jaggery application  is not deployed correctly." +
                 " App name: " + JAGGERY_APP_NAME1 + " Tenant :" + tenantDomain1);
-        WebAppStatus jaggeryAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
+        WebAppStatusBean jaggeryAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
         assertTrue(jaggeryAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);
         assertTrue(jaggeryAppStatusTenant1WebApp1.isWebAppStarted(), "Jaggery application: " +
@@ -99,7 +99,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME2),
                 "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME2 + " Tenant :"
                         + tenantDomain1);
-        WebAppStatus jaggeryAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME2);
+        WebAppStatusBean jaggeryAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME2);
         assertTrue(jaggeryAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);
         assertTrue(jaggeryAppStatusTenant1WebApp2.isWebAppStarted(), "Jaggery application: " +
@@ -107,7 +107,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         assertFalse(jaggeryAppStatusTenant1WebApp2.isWebAppGhost(), "Jaggery application: " +
                 JAGGERY_APP_NAME2 + " is in ghost mode after deployment in Tenant:" + tenantDomain1);
         //Tenant2
-        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
+        init(TENANT_DOMAIN_2_KEY, ADMIN);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         jaggeryApplicationUploaderClient = new JaggeryApplicationUploaderClient(backendURL, sessionCookie);
 
@@ -115,7 +115,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME1),
                 "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME1 + " Tenant :"
                         + tenantDomain2);
-        WebAppStatus jaggeryAppStatusTenant2WebApp1 = getWebAppStatus(tenantDomain2, JAGGERY_APP_NAME1);
+        WebAppStatusBean jaggeryAppStatusTenant2WebApp1 = getWebAppStatus(tenantDomain2, JAGGERY_APP_NAME1);
         assertTrue(jaggeryAppStatusTenant2WebApp1.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain2);
         assertTrue(jaggeryAppStatusTenant2WebApp1.isWebAppStarted(), "Jaggery application: " +
@@ -126,7 +126,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         assertTrue(isJaggeryAppDeployed(JAGGERY_APP_NAME2),
                 "Jaggery application  is not deployed correctly. App name: " + JAGGERY_APP_NAME2 + " Tenant :"
                         + tenantDomain2);
-        WebAppStatus jaggeryAppStatusTenant2WebApp2 = getWebAppStatus(tenantDomain2, JAGGERY_APP_NAME2);
+        WebAppStatusBean jaggeryAppStatusTenant2WebApp2 = getWebAppStatus(tenantDomain2, JAGGERY_APP_NAME2);
         assertTrue(jaggeryAppStatusTenant2WebApp2.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain2);
         assertTrue(jaggeryAppStatusTenant2WebApp2.isWebAppStarted(), "Jaggery application: " +
@@ -152,7 +152,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         assertEquals(httpResponse.getData(), JAGG_APP1_RESPONSE,
                 "Jaggery application invocation fail: " + tenant1JaggApp1Url);
 
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Jaggery-app " + JAGGERY_APP_NAME1 +
@@ -160,7 +160,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Jaggery-app: " + JAGGERY_APP_NAME1 +
                 " is in ghost mode after invoking in Tenant:" + tenantDomain1);
 
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME2);
+        WebAppStatusBean webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME2);
         assertTrue(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Jaggery-app : " + JAGGERY_APP_NAME2 +
@@ -195,7 +195,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         }
         assertEquals(httpResponse.getData(), JAGG_APP1_RESPONSE,
                 "Jaggery application invocation fail: " + tenant1JaggApp1Url);
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Jaggery-app " + JAGGERY_APP_NAME1 +
@@ -216,7 +216,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1JaggApp1Url, null);
         assertEquals(httpResponse.getData(), JAGG_APP1_RESPONSE,
                 "Jaggery application invocation fail: " + tenant1JaggApp1Url);
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Jaggery-app " + JAGGERY_APP_NAME1 +
@@ -305,7 +305,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
             allDetailResponseStringBuffer.append("\n");
         }
         String allDetailResponse = allDetailResponseStringBuffer.toString();
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(),
                 " Tenant Context is not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + JAGGERY_APP_NAME1 +
@@ -332,12 +332,12 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
                 tenant1JaggApp2Url);
         assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  not loaded after access. Tenant name: " + tenantDomain1);
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME2);
+        WebAppStatusBean webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME2);
         assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + JAGGERY_APP_NAME2 +
                 " is not started in Tenant:" + tenantDomain1);
         assertFalse(webAppStatusTenant1WebApp2.isWebAppGhost(), "Web-App: " + JAGGERY_APP_NAME2 +
                 " is in ghost mode after invoking in Tenant:" + tenantDomain1);
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, JAGGERY_APP_NAME1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + JAGGERY_APP_NAME1 +
                 " is not started in Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + JAGGERY_APP_NAME1 +
@@ -408,7 +408,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
     @AfterClass(alwaysRun = true)
     public void cleanJaggeryApplication() throws Exception {
 
-        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
+        init(TENANT_DOMAIN_1_KEY, ADMIN);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.deleteWebAppFile(JAGGERY_APP_NAME1, "localhost");
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, JAGGERY_APP_NAME1),
@@ -417,7 +417,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, JAGGERY_APP_NAME1),
                 "Web Application un-deployment failed: Web app :" + JAGGERY_APP_FILE_NAME1 + " on " + tenantDomain1);
 
-        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
+        init(TENANT_DOMAIN_2_KEY, ADMIN);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.deleteWebAppFile(JAGGERY_APP_NAME1, "localhost");
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, JAGGERY_APP_NAME1),

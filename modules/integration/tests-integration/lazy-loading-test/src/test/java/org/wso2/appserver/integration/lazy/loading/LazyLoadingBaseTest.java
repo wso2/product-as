@@ -26,25 +26,19 @@ import org.json.JSONObject;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.lazy.loading.util.LazyLoadingTestException;
-import org.wso2.appserver.integration.lazy.loading.util.TenantStatus;
-import org.wso2.appserver.integration.lazy.loading.util.WebAppStatus;
+import org.wso2.appserver.integration.lazy.loading.util.TenantStatusBean;
+import org.wso2.appserver.integration.lazy.loading.util.WebAppStatusBean;
 import org.wso2.carbon.application.mgt.stub.ApplicationAdminExceptionException;
-import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.ApplicationAdminClient;
-import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
-import org.xml.sax.SAXException;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
@@ -81,7 +75,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     private static final String CARBON_REPOSITORY_LOCATION = FrameworkPathUtil.getCarbonServerConfLocation() +
             File.separator + CARBON_XML;
     private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
-    private static final String ADMIN = "admin";
+    protected static final String ADMIN = "admin";
     private static final String DEFAULT = "default";
     private long webAppIdleTime;
     private long tenantIdleTime;
@@ -92,7 +86,8 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected ServerConfigurationManager serverManager;
     protected String hostURL;
     protected String artifactsLocation;
-
+    protected ApplicationAdminClient appAdminClient;
+    protected String supperTenantWebAppURL;
 
     @Override
     /**
@@ -103,8 +98,10 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      */
     public void init() throws Exception {
         super.init();
+        hostURL = asServer.getInstance().getHosts().get(DEFAULT);
         serverManager = new ServerConfigurationManager(asServer);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+        appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
         tenantIdleTime =
                 Long.parseLong(asServer.getConfigurationNode(TENANT_IDLE_XPATH).getNodeValue()) * 60 * 1000;
         webAppIdleTime =
@@ -129,8 +126,32 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         serverManager.applyConfigurationWithoutRestart(sourceFile, targetFile, true);
         log.info("carbon.xml replaced with :" + carbonArtifactLocation);
         webAppAdminClient.warFileUplaoder(tenantInfoServiceArtifactLocation);
+        supperTenantWebAppURL = webAppURL;
         serverManager.restartGracefully();
         log.info("Server Restarted after applying carbon.xml and tenant information utility web application");
+    }
+
+
+    @Override
+    /**
+     * Login as any tenant user.
+     *
+     * @throws Exception - Throws if initialisation fails.
+     */
+    public void init(String domainKey, String userKey) throws Exception {
+        //This method throws generic exception, Hence LazyLoadingTestException is not included in method signature.
+        super.init(domainKey, userKey);
+        hostURL = asServer.getInstance().getHosts().get(DEFAULT);
+        try {
+            appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
+            webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+        } catch (AxisFault axisFault) {
+            String customErrorMessage =
+                    "AxisFault Exception has thrown. backend URL:" + backendURL + " Session Cookie: " + sessionCookie;
+            log.error(customErrorMessage, axisFault);
+            throw new LazyLoadingTestException(customErrorMessage, axisFault);
+        }
+
     }
 
 
@@ -142,14 +163,14 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @return TenantStatus - a JSON object that contains whether the configuration context is loaded or not.
      * @throws LazyLoadingTestException - Exception throws when send the Get request and retrieve the JSON data from response.
      */
-    protected TenantStatus getTenantStatus(String tenantDomain) throws LazyLoadingTestException {
-        TenantStatus tenantStatus;
-        String requestUrl = webAppURL + "/" + IS_TENANT_LOADED_METHOD_URL + "/" + tenantDomain;
+    protected TenantStatusBean getTenantStatus(String tenantDomain) throws LazyLoadingTestException {
+        TenantStatusBean tenantStatus;
+        String requestUrl = supperTenantWebAppURL + "/" + IS_TENANT_LOADED_METHOD_URL + "/" + tenantDomain;
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
             JSONObject tenantStatusJSON = new JSONObject(response.getData());
             tenantStatus =
-                    new TenantStatus(tenantStatusJSON.getJSONObject("TenantStatus").getBoolean("tenantContextLoaded"));
+                    new TenantStatusBean(tenantStatusJSON.getJSONObject("TenantStatus").getBoolean("tenantContextLoaded"));
         } catch (IOException ioException) {
             String customErrorMessage = "IOException when sending the Get request to:" + requestUrl;
             log.error(customErrorMessage, ioException);
@@ -175,16 +196,16 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @throws LazyLoadingTestException - Exception throws when send the Get request and retrieve the JSON data from
      *                                  response.
      */
-    protected WebAppStatus getWebAppStatus(String tenantDomain, String webAppName) throws LazyLoadingTestException {
-        String requestUrl = webAppURL + "/" + IS_WEB_APP_LOADED_METHOD_URL + "/" + tenantDomain + "/" + webAppName;
-        WebAppStatus webAppStatus;
+    protected WebAppStatusBean getWebAppStatus(String tenantDomain, String webAppName) throws LazyLoadingTestException {
+        String requestUrl = supperTenantWebAppURL + "/" + IS_WEB_APP_LOADED_METHOD_URL + "/" + tenantDomain + "/" + webAppName;
+        WebAppStatusBean webAppStatus;
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
             JSONObject webAppStatusJSON = new JSONObject(response.getData()).getJSONObject("WebAppStatus");
             boolean isTenantLoaded = webAppStatusJSON.getJSONObject("tenantStatus").getBoolean("tenantContextLoaded");
             boolean isWebAppStarted = webAppStatusJSON.getBoolean("webAppStarted");
             boolean isWebAppGhost = webAppStatusJSON.getBoolean("webAppGhost");
-            webAppStatus = new WebAppStatus(new TenantStatus(isTenantLoaded), isWebAppStarted, isWebAppGhost);
+            webAppStatus = new WebAppStatusBean(new TenantStatusBean(isTenantLoaded), isWebAppStarted, isWebAppGhost);
         } catch (IOException ioException) {
             String customErrorMessage =
                     "IOException when sending the Get request to:" + requestUrl;
@@ -210,7 +231,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @throws LazyLoadingTestException - Exception throws when creating WebAppAdminClient.
      */
     protected boolean isJaggeryAppDeployed(String appName) throws LazyLoadingTestException {
-        WebAppAdminClient webAppAdminClient;
         List<String> webAppList;
         List<String> faultyWebAppList;
         long startTime;
@@ -218,15 +238,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         boolean isWebAppDeployed = false;
         boolean doLoop = true;
         log.info("waiting for " + appName + " deployment. Max wait time :" + DEPLOYMENT_DELAY_IN_MILLISECONDS + " milliseconds");
-        try {
-            webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        } catch (AxisFault axisFault) {
-            String customErrorMessage =
-                    "AxisFault Exception  when creating WebAppAdminClient object. backend URL:" + backendURL +
-                            " Session Cookie: " + sessionCookie;
-            log.error(customErrorMessage, axisFault);
-            throw new LazyLoadingTestException(customErrorMessage, axisFault);
-        }
         startTime = System.currentTimeMillis();
         while (((time = (System.currentTimeMillis() - startTime)) < DEPLOYMENT_DELAY_IN_MILLISECONDS) && doLoop) {
             //Get the web app list
@@ -279,20 +290,11 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @throws LazyLoadingTestException - Exception throws when creating WebAppAdminClient.
      */
     protected boolean isCarbonAppListed(String appName) throws LazyLoadingTestException {
-        ApplicationAdminClient appAdminClient;
         String[] appList;
         boolean isAppListed = false;
         long time;
         long startTime;
         log.info("waiting for " + appName + " Carbon application to list. Max wait time :" + DEPLOYMENT_DELAY_IN_MILLISECONDS + " milliseconds");
-        try {
-            appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
-        } catch (AxisFault axisFault) {
-            String customErrorMessage = "AxisFault Exception  when creating WebAppAdminClient object. backend URL:" +
-                    backendURL + " Session Cookie: " + sessionCookie;
-            log.error(customErrorMessage, axisFault);
-            throw new LazyLoadingTestException(customErrorMessage, axisFault);
-        }
         startTime = System.currentTimeMillis();
         while (((time = (System.currentTimeMillis() - startTime)) < DEPLOYMENT_DELAY_IN_MILLISECONDS)) {
             //List all applications
@@ -326,49 +328,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             }
         }
         return isAppListed;
-    }
-
-
-    /**
-     * Tenant admin user login functionality.
-     *
-     * @param domainKey -  Domain key of the tenant.
-     * @throws LazyLoadingTestException - Exception throws when  creating the AutomationContext and login() method of
-     *                                  LoginLogoutClient.java
-     */
-    protected void loginAsTenantAdmin(String domainKey) throws LazyLoadingTestException {
-        try {
-            AutomationContext automationContext =
-                    new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, domainKey, ADMIN);
-            hostURL = automationContext.getInstance().getHosts().get(DEFAULT);
-            LoginLogoutClient loginLogoutClient1 = new LoginLogoutClient(automationContext);
-            sessionCookie = loginLogoutClient1.login();
-        } catch (XPathExpressionException xPathExpressionException) {
-            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
-            log.error(customErrorMessage, xPathExpressionException);
-            throw new LazyLoadingTestException(customErrorMessage, xPathExpressionException);
-        } catch (IOException ioException) {
-            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
-            log.error(customErrorMessage, ioException);
-            throw new LazyLoadingTestException(customErrorMessage, ioException);
-        } catch (SAXException saxException) {
-            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
-            log.error(customErrorMessage, saxException);
-            throw new LazyLoadingTestException(customErrorMessage, saxException);
-        } catch (XMLStreamException xmlStreamException) {
-            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
-            log.error(customErrorMessage, xmlStreamException);
-            throw new LazyLoadingTestException(customErrorMessage, xmlStreamException);
-        } catch (LoginAuthenticationExceptionException loginAuthenticationExceptionException) {
-            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
-            log.error(customErrorMessage, loginAuthenticationExceptionException);
-            throw new LazyLoadingTestException(customErrorMessage, loginAuthenticationExceptionException);
-        } catch (URISyntaxException uriSyntaxException) {
-            String customErrorMessage = "Exception when login as tenant admin of the domain key: " + domainKey;
-            log.error(customErrorMessage, uriSyntaxException);
-            throw new LazyLoadingTestException(customErrorMessage, uriSyntaxException);
-        }
-
     }
 
     /**

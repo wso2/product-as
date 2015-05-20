@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.lazy.loading.LazyLoadingBaseTest;
 import org.wso2.appserver.integration.lazy.loading.util.LazyLoadingTestException;
-import org.wso2.appserver.integration.lazy.loading.util.WebAppStatus;
+import org.wso2.appserver.integration.lazy.loading.util.WebAppStatusBean;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.ApplicationAdminClient;
@@ -85,12 +85,12 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
             "deployed correctly and  they should be loaded fully(Not in ghost form) ", alwaysRun = true)
     public void carApplicationUploadInGhostDeployment() throws Exception {
         log.info("Carbon application deployment start");
-        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
+        init(TENANT_DOMAIN_1_KEY, ADMIN);
         CarbonAppUploaderClient carbonAppUploaderClient = new CarbonAppUploaderClient(backendURL, sessionCookie);
         carbonAppUploaderClient.uploadCarbonAppArtifact(CARBON_APP_FILE1, carbonApp1URLDataHandler);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, CARBON_APP1_WEB_APP_NAME),
                 "Web Application deployment failed: " + CARBON_APP1_WEB_APP_NAME + "on " + tenantDomain1);
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
                 " not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
@@ -102,7 +102,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, CARBON_APP2_WEB_APP_NAME),
                 "Web Application deployment failed: " + CARBON_APP2_WEB_APP_NAME + "on " + tenantDomain1);
 
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, CARBON_APP2_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, CARBON_APP2_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), " Tenant Context " +
                 "is not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + CARBON_APP2_WEB_APP_FILE +
@@ -111,12 +111,12 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 " is in ghost mode after deployment in Tenant:" + tenantDomain1);
 
         assertTrue(isCarbonAppListed(CARBON_APP_NAME2), "Carbon Application is not listed :" + CARBON_APP_NAME2);
-        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
+        init(TENANT_DOMAIN_2_KEY, ADMIN);
         carbonAppUploaderClient = new CarbonAppUploaderClient(backendURL, sessionCookie);
         carbonAppUploaderClient.uploadCarbonAppArtifact(CARBON_APP_FILE1, carbonApp1URLDataHandler);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, CARBON_APP1_WEB_APP_NAME),
                 "Web Application deployment failed: " + CARBON_APP1_WEB_APP_NAME + "on " + tenantDomain2);
-        WebAppStatus webAppStatusTenant2WebApp1 = getWebAppStatus(tenantDomain2, CARBON_APP1_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant2WebApp1 = getWebAppStatus(tenantDomain2, CARBON_APP1_WEB_APP_FILE);
         assertTrue(webAppStatusTenant2WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context " +
                 "is not loaded. Tenant:" + tenantDomain2);
         assertTrue(webAppStatusTenant2WebApp1.isWebAppStarted(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
@@ -128,7 +128,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
         carbonAppUploaderClient.uploadCarbonAppArtifact(CARBON_APP_FILE2, carbonApp2URLDataHandler);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, CARBON_APP2_WEB_APP_NAME),
                 "Web Application deployment failed: " + CARBON_APP2_WEB_APP_NAME + "on " + tenantDomain2);
-        WebAppStatus webAppStatusTenant2WebApp2 = getWebAppStatus(tenantDomain2, CARBON_APP2_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant2WebApp2 = getWebAppStatus(tenantDomain2, CARBON_APP2_WEB_APP_FILE);
         assertTrue(webAppStatusTenant2WebApp2.getTenantStatus().isTenantContextLoaded(), " Tenant Context" +
                 " is not loaded. Tenant:" + tenantDomain2);
         assertTrue(webAppStatusTenant2WebApp2.isWebAppStarted(), "Web-App: " + CARBON_APP2_WEB_APP_FILE +
@@ -153,14 +153,14 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE,
                 "Web app invocation fail. web app URL:" + tenant1WebApp1URL);
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is " +
                 "not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
                 " is not started in Tenant:" + tenantDomain1);
         assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
                 " is in ghost mode after invoking in Tenant:" + tenantDomain1);
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, CARBON_APP2_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, CARBON_APP2_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp2.getTenantStatus().isTenantContextLoaded(), " Tenant Context " +
                 "is not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + CARBON_APP2_WEB_APP_FILE +
@@ -188,7 +188,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
             throw new LazyLoadingTestException(customErrorMessage, ioException);
         }
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail");
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
                 " not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
@@ -206,7 +206,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
         serverManager.restartGracefully();
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(tenant1WebApp1URL, null);
         assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail");
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
                 " not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
@@ -293,7 +293,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
             allDetailResponseStringBuffer.append("\n");
         }
         String allDetailResponse = allDetailResponseStringBuffer.toString();
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp1.getTenantStatus().isTenantContextLoaded(), " Tenant Context is" +
                 " not loaded. Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
@@ -321,12 +321,12 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 tenant1WebApp2URL);
         assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  not loaded after access. Tenant name: " + tenantDomain1);
-        WebAppStatus webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, CARBON_APP2_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, CARBON_APP2_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + CARBON_APP2_WEB_APP_FILE +
                 " is not started in Tenant:" + tenantDomain1);
         assertFalse(webAppStatusTenant1WebApp2.isWebAppGhost(), "Web-App: " + CARBON_APP2_WEB_APP_FILE +
                 " is in ghost mode after invoking in Tenant:" + tenantDomain1);
-        WebAppStatus webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
+        WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, CARBON_APP1_WEB_APP_FILE);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
                 " is not started in Tenant:" + tenantDomain1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + CARBON_APP1_WEB_APP_FILE +
@@ -394,14 +394,14 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
     @AfterClass(alwaysRun = true)
     public void cleanCarbonApplications() throws Exception {
         ApplicationAdminClient appAdminClient;
-        loginAsTenantAdmin(TENANT_DOMAIN_1_KEY);
+        init(TENANT_DOMAIN_1_KEY, ADMIN);
         appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
         appAdminClient.deleteApplication(CARBON_APP_NAME1);
         log.info("Carbon application deleted : " + CARBON_APP_NAME1 + "on " + tenantDomain1);
         appAdminClient.deleteApplication(CARBON_APP_NAME2);
         log.info("Carbon application deleted : " + CARBON_APP_NAME2 + "on " + tenantDomain1);
 
-        loginAsTenantAdmin(TENANT_DOMAIN_2_KEY);
+        init(TENANT_DOMAIN_2_KEY, ADMIN);
         appAdminClient = new ApplicationAdminClient(backendURL, sessionCookie);
         appAdminClient.deleteApplication(CARBON_APP_NAME1);
         log.info("Carbon application deleted : " + CARBON_APP_NAME1 + "on " + tenantDomain2);
