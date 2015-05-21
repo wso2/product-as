@@ -17,7 +17,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- 
+
+    <parent>
+        <groupId>org.wso2.appserver</groupId>
+        <artifactId>wso2appserver-samples-parent</artifactId>
+        <version>6.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver-samples</artifactId>
@@ -26,40 +33,8 @@
     <name>Samples</name>
     <description>All the samples contained in WSO2 AppServer</description>
 
-    <parent>
-        <groupId>org.wso2</groupId>
-        <artifactId>wso2</artifactId>
-        <version>1</version>
-    </parent>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.7.1</version>
-                <configuration>
-                    <outputDirectory>../../../target/site/${project.artifactId}</outputDirectory>
-                    <reportsDirectory>target/surefire-reports</reportsDirectory>
-                    <outputName>${project.artifactId}-test-report</outputName>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <outputDirectory>../../target/site/${project.artifactId}</outputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
-
     <modules>
-	<module>ASVersionSamples</module>
+        <module>ASVersionSamples</module>
         <module>Chad</module>
         <!--<module>CommodityQuote</module>-->
         <module>TinyURL</module>
@@ -82,167 +57,5 @@
         <module>Axis2Module</module>
         <module>EntitlementFilter</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.axis2.wso2</groupId>
-                <artifactId>axis2</artifactId>
-                <version>${appserver.axis2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.utils</artifactId>
-                <version>${carbon.kernel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.identity</groupId>
-                <artifactId>org.wso2.carbon.security.mgt</artifactId>
-                <version>${carbon.identity.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.ws.security.wso2</groupId>
-                <artifactId>wss4j</artifactId>
-                <version>${appserver.wss4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rampart.wso2</groupId>
-                <artifactId>rampart-core</artifactId>
-                <version>${appserver.rampart.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rampart.wso2</groupId>
-                <artifactId>rampart-trust</artifactId>
-                <version>${appserver.rampart.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rampart.wso2</groupId>
-                <artifactId>rampart-policy</artifactId>
-                <version>${appserver.rampart.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.ws.commons.axiom.wso2</groupId>
-                <artifactId>axiom</artifactId>
-                <version>${appserver.axiom.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.wso2</groupId>
-                <artifactId>hibernate</artifactId>
-                <version>${appserver.hibernate.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>wsdl4j.wso2</groupId>
-                <artifactId>wsdl4j</artifactId>
-                <version>${orbit.version.wsdl4j}</version>
-            </dependency>
-            <dependency>
-                <groupId>opensaml.wso2</groupId>
-                <artifactId>opensaml2</artifactId>
-                <version>${orbit.version.opensaml}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.neethi.wso2</groupId>
-                <artifactId>neethi</artifactId>
-                <version>${orbit.version.neethi}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.neethi</groupId>
-                        <artifactId>neethi</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.ws.commons.schema.wso2</groupId>
-                <artifactId>XmlSchema</artifactId>
-                <version>${orbit.version.xmlschema}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>${version.commons.logging}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.woden.wso2</groupId>
-                <artifactId>woden</artifactId>
-                <version>${orbit.version.woden}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.woden</groupId>
-                        <artifactId>woden-impl-dom</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.woden</groupId>
-                        <artifactId>woden-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <properties>
-        <carbon.kernel.version>4.3.0</carbon.kernel.version>
-        <carbon.identity.version>4.3.0</carbon.identity.version>
-        <appserver.axis2.version>1.6.1.wso2v10</appserver.axis2.version>
-        <appserver.axiom.version>1.2.11.wso2v4</appserver.axiom.version>
-        <appserver.wss4j.version>1.5.11.wso2v3</appserver.wss4j.version>
-        <appserver.rampart.version>1.6.1.wso2v10</appserver.rampart.version>
-        <appserver.hibernate.version>3.2.5.ga-wso2v1</appserver.hibernate.version>
-        <appserver.axis2.jibx.version>1.6.1.wso2v10</appserver.axis2.jibx.version>
-        <orbit.version.wsdl4j>1.6.2.wso2v2</orbit.version.wsdl4j>
-        <orbit.version.xmlschema>1.4.7.wso2v1</orbit.version.xmlschema>
-        <orbit.version.woden>1.0.0.M8-wso2v1</orbit.version.woden>
-        <orbit.version.opensaml>2.0.0.alpha1-wso2v1</orbit.version.opensaml>
-        <orbit.version.neethi>2.0.4.wso2v4</orbit.version.neethi>
-        <version.commons.logging>1.1.1</version.commons.logging>
-        <rampart.osgi.version>1.6.1.wso2v9</rampart.osgi.version>
-        <neethi.version>2.0.4-wso2v2</neethi.version>
-        <version.tomcat>7.0.34</version.tomcat>
-        <javax.servlet.jsp.version>2.2.0.v201112011158</javax.servlet.jsp.version>
-	<axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
-	<previous.version>4.2.0</previous.version>
-    </properties>
-
-	
-    <repositories>
-        <!-- Before adding ANYTHING in here, please start a discussion on the dev list.
-             Ideally the Axis2 build should only use Maven central (which is available
-             by default) and nothing else. We had troubles with other repositories in
-             the past. Therefore configuring additional repositories here should be
-             considered very carefully. -->
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>wso2.snapshots</id>
-            <name>WSO2 Snapshot Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
 
 </project>

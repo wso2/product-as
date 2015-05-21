@@ -55,7 +55,7 @@ public class Http200ZeroContentLengthTestCase extends ASIntegrationTest {
     @Test(groups = {"wso2.as"}, description = "Upload webapp file")
     public void testUploadWebAPP() throws Exception {
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war"
                 + File.separator + webAppFileName);
         WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, "servlet-zero-content-length.war");
