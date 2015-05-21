@@ -141,7 +141,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         serverManager.applyConfigurationWithoutRestart(sourceFile, targetFile, true);
         log.info("carbon.xml replaced with :" + carbonArtifactLocation);
 
-        webAppAdminClient.warFileUplaoder(tenantInfoServiceArtifactLocation);
+        webAppAdminClient.uploadWarFile(tenantInfoServiceArtifactLocation);
         serverManager.restartGracefully();
         log.info("Server Restarted after applying carbon.xml and tenant information utility web application");
 

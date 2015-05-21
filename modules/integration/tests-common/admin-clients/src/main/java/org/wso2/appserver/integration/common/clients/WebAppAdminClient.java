@@ -48,7 +48,7 @@ public class WebAppAdminClient {
         AuthenticateStubUtil.authenticateStub(sessionCookie, webappAdminStub);
     }
 
-    public void warFileUplaoder(String filePath) throws RemoteException {
+    public void uploadWarFile(String filePath) throws RemoteException {
         File file = new File(filePath);
         String fileName = file.getName();
         URL url = null;

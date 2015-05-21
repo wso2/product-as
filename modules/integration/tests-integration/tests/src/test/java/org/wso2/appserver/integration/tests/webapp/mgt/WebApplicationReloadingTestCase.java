@@ -47,7 +47,7 @@ public class WebApplicationReloadingTestCase extends ASIntegrationTest {
     public void testWebApplicationDeploymentAndAccessibility() throws Exception {
         super.init();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                                           "artifacts" + File.separator + "AS" + File.separator + "war"
                                           + File.separator + webAppFileName);
 

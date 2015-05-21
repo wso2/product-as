@@ -71,7 +71,7 @@ public class JAXWSSampleTestCase extends ASIntegrationTest {
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "jaxws" + File.separator;
 
-        jaxwsWebappAdminClient.warFileUplaoder(location + File.separator + "handlers_jaxws.war");
+        jaxwsWebappAdminClient.uploadWarFile(location + File.separator + "handlers_jaxws.war");
         AxisServiceClientUtils.waitForServiceDeployment(webAppURL +
                 "/handlers_jaxws/services/HandlerServicePort");   // verify deployment
         log.info("handlers_jaxws.war file uploaded successfully");
