@@ -36,6 +36,7 @@
     <modules>
         <module>tests</module>
         <module>lazy-loading-test</module>
+        <module>tests-security-manager</module>
     </modules>
 
 </project>
