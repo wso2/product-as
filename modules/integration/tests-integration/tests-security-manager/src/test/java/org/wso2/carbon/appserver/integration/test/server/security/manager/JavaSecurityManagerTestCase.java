@@ -76,8 +76,8 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/directFile"
                 , "fileName=repository/conf/user-mgt.xml");
         //verifying the error message
-        Assert.assertTrue(response.getData().contains("Error occurred while reading file. Reason: " +
-                                                      "java.security.AccessControlException")
+        Assert.assertTrue(response.getData().contains("Error occurred while reading file. Reason:" +
+                                                      " access denied (\\\"java.io.FilePermission")
                 , "Error Message mismatched. File can be accessed > " + response.getData());
     }
 
@@ -85,9 +85,8 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
     public void testGetRegistryDBConfigSecurity() throws Exception {
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/registryDBConfig", null);
         //verifying the error message
-        Assert.assertTrue(response.getData().contains("Error occurred when reading registry DB config. Reason" +
-                                                      ": java.security.AccessControlException: " +
-                                                      "access denied (\\\"java.io.FilePermission")
+        Assert.assertTrue(response.getData().contains("Error occurred when reading registry DB config. " +
+                                                      "Reason: access denied (\\\"java.io.FilePermission\\")
                 , "Error Message mismatched. Registry Database config be accessed > " + response.getData());
     }
 
@@ -95,9 +94,8 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
     public void testGetUserManagerDBConfigSecurity() throws Exception {
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/userManagerDBConfig", null);
         //verifying the error message
-        Assert.assertTrue(response.getData().contains("Error occurred when reading user manager DB config. Reason" +
-                                                      ": java.security.AccessControlException: access " +
-                                                      "denied (\\\"java.io.FilePermission")
+        Assert.assertTrue(response.getData().contains("Error occurred when reading user manager DB config. " +
+                                                      "Reason: access denied (\\\"java.io.FilePermission\\")
                 , "Error Message mismatched. User Management database config can be accessed > " + response.getData());
     }
 

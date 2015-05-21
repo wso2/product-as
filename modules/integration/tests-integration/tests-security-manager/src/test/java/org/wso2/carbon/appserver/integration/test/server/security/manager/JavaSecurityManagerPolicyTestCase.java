@@ -90,29 +90,10 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/directFile"
                 , "fileName=repository/conf/user-mgt.xml");
         //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred while reading file. Reason: " +
-                                                       "java.security.AccessControlException")
+        Assert.assertFalse(response.getData().contains("Error occurred while reading file.")
                 , "File can not be accessed > " + response.getData());
-    }
-
-    @Test(groups = {"wso2.as"}, description = "Accessing registry database configurations test")
-    public void testGetRegistryDBConfigSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/registryDBConfig", null);
-        //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred when reading registry DB config. Reason" +
-                                                       ": java.security.AccessControlException: " +
-                                                       "access denied (java.io.FilePermission")
-                , "Registry Database config can not be accessed > " + response.getData());
-    }
-
-    @Test(groups = {"wso2.as"}, description = "Accessing user management database configurations")
-    public void testGetUserManagerDBConfigSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/userManagerDBConfig", null);
-        //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred when reading user manager DB config. Reason" +
-                                                       ": java.security.AccessControlException: access " +
-                                                       "denied (java.io.FilePermission")
-                , "User Management database config can not be accessed > " + response.getData());
+        Assert.assertTrue(response.getData().contains("UserManager")
+                , "user-mgt.xml File can not be accessed > " + response.getData());
     }
 
     @Test(groups = {"wso2.as"}, description = "calling ServerConfiguration.getInstance()")
@@ -120,9 +101,7 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/serverConfiguration"
                 , null);
         //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred while calling ServerConfiguration" +
-                                                       ".getInstance(). Reason: java.security.AccessControlException:" +
-                                                       " access denied (java.lang.management.ManagementPermission control)")
+        Assert.assertTrue(response.getData().contains("ServerConfiguration.getInstance() can be called")
                 , "ServerConfiguration.getInstance() can not be called > " + response.getData());
     }
 
@@ -130,10 +109,10 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
     public void testAccessingFilePathFromCarbonUtilsSecurity() throws Exception {
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/axis2FilePath", null);
         //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred while reading axis2 file path." +
-                                                       " Reason: access denied " +
-                                                       "(java.lang.management.ManagementPermission control)")
-                , "File path can not be retrieved > " + response.getData());
+        Assert.assertFalse(response.getData().contains("Error occurred while reading axis2 file path.")
+                , "Axis2 File path can not be retrieved > " + response.getData());
+        Assert.assertTrue(response.getData().contains("axis2.xml")
+                , "Axis2 File path can not be retrieved > " + response.getData());
     }
 
     @Test(groups = {"wso2.as"}, description = "Copping file to carbon home")
@@ -143,8 +122,7 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
                                                                "/axis2/axis2.xml-dummy"),
                                                        "");
         //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred while copying file. Reason: " +
-                                                       "access denied (java.io.FilePermission")
+        Assert.assertFalse(response.getData().contains("Error occurred while copying file")
                 , "File copping failed > " + response.getData());
     }
 
@@ -153,8 +131,7 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
         HttpResponse response = HttpRequestUtil.doPost(new URL(webAppUrl + "/directFile?fileName=repository/" +
                                                                "conf/user-mgt-dummy.xml"), "");
         //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred while creating file. Reason: " +
-                                                       "access denied (java.io.FilePermission")
+        Assert.assertFalse(response.getData().contains("Error occurred while creating file")
                 , "File can not be accessed > " + response.getData());
     }
 
@@ -172,8 +149,7 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
         HttpResponse response = HttpURLConnectionClient.sendDeleteRequest(new URL(webAppUrl
                                 + "/directFile?fileName=repository/conf/user-mgt-dummy.xml"), null);
         //verifying the error message
-        Assert.assertFalse(response.getData().contains("Error occurred while deleting file" +
-                                                       ". Reason: access denied (java.io.FilePermission")
+        Assert.assertFalse(response.getData().contains("Error occurred while deleting file")
                 , "File can not be deleted > " + response.getData());
     }
 
