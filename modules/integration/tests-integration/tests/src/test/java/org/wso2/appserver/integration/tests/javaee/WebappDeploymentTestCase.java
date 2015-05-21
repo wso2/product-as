@@ -76,7 +76,7 @@ public abstract class WebappDeploymentTestCase extends
     @Test(groups = "wso2.as", description = "Deploying web application")
     public void webApplicationDeploymentTest() throws Exception {
         webAppAdminClient
-                .warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation()
+                .uploadWarFile(FrameworkPathUtil.getSystemResourceLocation()
                                  + "artifacts" + File.separator + "AS" + File.separator
                                  + "javaee" + File.separator + webAppFileName);
 

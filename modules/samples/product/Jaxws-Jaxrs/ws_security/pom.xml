@@ -35,15 +35,4 @@
         <module>ut</module>
         <module>sign_encrypt</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-bundle</artifactId>
-                <version>${cxf.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 </project>
