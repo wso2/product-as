@@ -73,7 +73,7 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
         super.init();
         //deploying web application
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(TestConfigurationProvider.getResourceLocation("AS")
+        webAppAdminClient.uploadWarFile(TestConfigurationProvider.getResourceLocation("AS")
                                           + File.separator + "security"
                                           + File.separator + "manager" + File.separator + "webapp"
                                           + File.separator + webAppFileName);

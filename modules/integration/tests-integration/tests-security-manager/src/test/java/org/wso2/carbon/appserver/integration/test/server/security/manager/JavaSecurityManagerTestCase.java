@@ -59,7 +59,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
     public void init() throws Exception {
         super.init(userMode);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(TestConfigurationProvider.getResourceLocation("AS")
+        webAppAdminClient.uploadWarFile(TestConfigurationProvider.getResourceLocation("AS")
                                           + File.separator + "security"
                                           + File.separator + "manager" + File.separator + "webapp"
                                           + File.separator + webAppFileName);

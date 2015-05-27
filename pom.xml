@@ -519,8 +519,8 @@
         <carbon.identity.version>4.5.0</carbon.identity.version>
         <carbon.deployment.version>4.4.1</carbon.deployment.version>
         <carbon.multitenancy.version>4.4.1</carbon.multitenancy.version>
-        <carbon.automationutils.version>4.4.0</carbon.automationutils.version>
-        <carbon.automation.version>4.3.1</carbon.automation.version>
+        <carbon.automationutils.version>4.3.0</carbon.automationutils.version>
+        <carbon.automation.version>4.4.0</carbon.automation.version>
         <jacoco.agent.version>0.7.4.201502262128</jacoco.agent.version>
 
         <orbit.version.axis2>1.6.1.wso2v12</orbit.version.axis2>
