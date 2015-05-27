@@ -45,8 +45,6 @@
 		<exclude>**/catalina-server.xml</exclude>
                 <!-- Changes related to Carbon kernel 4.2.0 patches -->
                 <exclude>**/lib/org.wso2.carbon.server-4.2.0.jar</exclude>
-                <exclude>**/repository/conf/security/cipher-text.properties</exclude>
-                <exclude>**/repository/conf/security/cipher-tool.properties</exclude>
 		<!--exclude>**/axis2/*</exclude-->
                 <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
             </excludes>
@@ -393,12 +391,6 @@
                 <include>**/krb5.conf</include>
                 <include>**/jaas.conf</include>
             </includes>
-            <!-- Changes related to Carbon kernel 4.2.0 patches -->
-            <excludes>
-                <exclude>**/cipher-text.properties</exclude>
-                <exclude>**/cipher-tool.properties</exclude>
-            </excludes>
-            <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
         </fileSet>  
 
         <!-- copying WS RM DB Scripts -->
@@ -690,14 +682,6 @@
 -->
         <!-- Files WSO2-CARBON-PATCH-4.2.0-0002 - Start -->
 <!--
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-text.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-tool.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
 	<file>
             <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
@@ -718,5 +702,34 @@
         </file>
 -->
         <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
+
+        <!-- Cipher-Tool Files -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.sh</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/cipher-text.properties
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/cipher-tool.properties
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/org.wso2.ciphertool-${cipher.tool.version}.jar
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/lib</outputDirectory>
+        </file>
+
     </files>
 </assembly>
