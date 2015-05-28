@@ -49,6 +49,12 @@
         </classes>
     </test>
 
+    <test name="carbon-app-tests" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.carbon.integration.test.patches.security.CARBON15255SecuringCookieParamsTest"/>
+        </classes>
+    </test>
+
     <test name="services-tests" preserve-order="true" parallel="false">
         <packages>
             <!--<package name="org.wso2.appserver.integration.tests.springservice"/>
