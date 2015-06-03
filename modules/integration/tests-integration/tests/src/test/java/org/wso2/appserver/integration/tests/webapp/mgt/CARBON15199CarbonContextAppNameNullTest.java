@@ -145,17 +145,17 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
 
         String applicationNameReceiverWebAppUrl = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName;
-        superTenantWebAppAdminClient.warFileUplaoder(applicationNameReceiverWebAppUrl);
+        superTenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil
                         .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, webAppName),
                 "Web Application Deployment failed");
 
-        tenantWebAppAdminClient.warFileUplaoder(applicationNameReceiverWebAppUrl);
+        tenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(tenantServerBackEndUrl, tenantSession, webAppName),
                 "Web Application Deployment failed");
 
         // Uploading the ghost status receiver web app, this web will give the status of the web app
-        superTenantWebAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        superTenantWebAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator
                 + ghostInfoWebAppFileName);
         assertTrue(WebAppDeploymentUtil
