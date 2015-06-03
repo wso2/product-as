@@ -58,18 +58,25 @@
                             </adviceFile>
                             <importFeatures>
                                 <importFeatureDef>
-                                    org.wso2.carbon.tenant.common:${carbon.multitenancy.version}
+                                    org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.common:${carbon.multitenancy.version}
+                                </importFeatureDef>
+                                <!--<importFeatureDef>-->
+                                    <!--org.wso2.carbon.identity:org.wso2.carbon.claim.mgt:${carbon.identity.version}-->
+                                <!--</importFeatureDef>-->
+                                <importFeatureDef>
+                                    org.wso2.carbon.commons:org.wso2.carbon.tenant.mgt.common:${carbon.commons.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.tenant.usage.agent:${carbon.multitenancy.version}
+                                    org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.usage.agent:${carbon.multitenancy.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.tenant.throttling.agent:${carbon.multitenancy.version}
+                                    org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.throttling.agent:${carbon.multitenancy.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.tenant.deployment:${carbon.multitenancy.version}
+                                    org.wso2.carbon.multitenancy:org.wso2.carbon.tenant.deployment:${carbon.multitenancy.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.stratos.appserver.dashboard.ui:${product.as.version}
+                                <importFeatureDef>
+                                    org.wso2.appserver:org.wso2.stratos.appserver.dashboard.ui:${product.as.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>
