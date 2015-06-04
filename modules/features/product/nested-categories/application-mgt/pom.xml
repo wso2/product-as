@@ -57,19 +57,19 @@
                             </adviceFile>
                             <importFeatures>
                                 <importFeatureDef>
-                                    org.wso2.carbon.deployment:org.wso2.carbon.repomanager.axis2:${carbon.deployment.version}
+                                    org.wso2.carbon.repomanager.axis2:${carbon.deployment.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
                                     org.wso2.carbon.application.mgt:${carbon.commons.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.deployment:org.wso2.carbon.application.mgt.webapp:${carbon.deployment.version}
+                                    org.wso2.carbon.application.mgt.webapp:${carbon.deployment.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.deployment:org.wso2.carbon.application.deployer.webapp:${carbon.deployment.version}
+                                    org.wso2.carbon.application.deployer.webapp:${carbon.deployment.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.appserver:org.wso2.appserver.utils
+                                    org.wso2.appserver.utils
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

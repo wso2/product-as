@@ -57,16 +57,16 @@
                             </adviceFile>
                             <importFeatures>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.authenticator.saml2.sso:${carbon.identity.version}
+                                    org.wso2.carbon.identity.authenticator.saml2.sso:${carbon.identity.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.idp.mgt:${carbon.identity.version}
+                                    org.wso2.carbon.idp.mgt:${carbon.identity.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.application.authentication.framework.server:${carbon.identity.version}
+                                    org.wso2.carbon.identity.application.authentication.framework.server:${carbon.identity.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.claim.mgt:${carbon.identity.version}
+                                    org.wso2.carbon.claim.mgt:${carbon.identity.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

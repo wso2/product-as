@@ -57,43 +57,43 @@
                             </adviceFile>
                             <importFeatures>
                                 <importFeatureDef>
-                                    org.wso2.carbon.deployment:org.wso2.carbon.webapp.mgt:${carbon.deployment.version}
+                                    org.wso2.carbon.webapp.mgt:${carbon.deployment.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.security.mgt:${carbon.identity.version}
+                                    org.wso2.carbon.security.mgt:${carbon.identity.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.ndatasource:${carbon.commons.version}
+                                    org.wso2.carbon.ndatasource:${carbon.commons.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.deployment:org.wso2.carbon.as.runtimes.cxf:${carbon.deployment.version}
+                                    org.wso2.carbon.as.runtimes.cxf:${carbon.deployment.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs:org.jaggeryjs:${jaggery.version}
+                                    org.jaggeryjs:${jaggery.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:carbon.feature:${carbon.module.version}
+                                    carbon.feature:${carbon.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:email.feature:${email.module.version}
+                                    email.feature:${email.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:gadget.feature:${gadget.module.version}
+                                    gadget.feature:${gadget.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:i18n.feature:${i18n.module.version}
+                                    i18n.feature:${i18n.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:uuid.feature:${uuid.module.version}
+                                    uuid.feature:${uuid.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:oauth.feature:${oauth.module.version}
+                                    oauth.feature:${oauth.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:process.feature:${process.module.version}
+                                    process.feature:${process.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.jaggeryjs.modules:ws.feature:${ws.module.version}
+                                    ws.feature:${ws.module.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>
