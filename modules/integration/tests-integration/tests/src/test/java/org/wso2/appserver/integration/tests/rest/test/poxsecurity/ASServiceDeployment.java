@@ -26,6 +26,7 @@ import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.integration.common.admin.client.UserManagementClient;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
+import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 import org.wso2.carbon.user.mgt.stub.UserAdminUserAdminException;
 import org.xml.sax.SAXException;
 
@@ -67,7 +68,7 @@ public class ASServiceDeployment extends ASIntegrationTest {
 
     private void createUserAndRole() throws XPathExpressionException, IOException,
             LoginAuthenticationExceptionException, UserAdminUserAdminException, URISyntaxException,
-            SAXException, XMLStreamException {
+            SAXException, XMLStreamException, AutomationUtilException {
         LoginLogoutClient loginLogoutClient = new LoginLogoutClient(asServer);
         userManagementClient = new UserManagementClient(asServer.getContextUrls().getBackEndUrl(),
                 loginLogoutClient.login());
