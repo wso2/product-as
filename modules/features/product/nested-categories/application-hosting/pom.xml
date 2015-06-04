@@ -72,28 +72,28 @@
                                     org.jaggeryjs:${jaggery.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    carbon.feature:${carbon.module.version}
+                                    org.jaggeryjs.modules.carbon:${carbon.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    email.feature:${email.module.version}
+                                    org.jaggeryjs.modules.email:${email.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    gadget.feature:${gadget.module.version}
+                                    org.jaggeryjs.modules.gadget:${gadget.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    i18n.feature:${i18n.module.version}
+                                    org.jaggeryjs.modules.i18n:${i18n.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    uuid.feature:${uuid.module.version}
+                                    org.jaggeryjs.modules.uuid:${uuid.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    oauth.feature:${oauth.module.version}
+                                    org.jaggeryjs.modules.oauth:${oauth.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    process.feature:${process.module.version}
+                                    org.jaggeryjs.modules.process:${process.module.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    ws.feature:${ws.module.version}
+                                    org.jaggeryjs.modules.ws:${ws.module.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>
