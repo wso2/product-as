@@ -11,6 +11,7 @@
 
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
+            <!--Todo - Need to enabled when JavaEE feature is completed -->
             <!--<package name="org.wso2.appserver.integration.tests.javaee"/>-->
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
             <package name="org.wso2.appserver.integration.tests.webapp.classloading"/>
@@ -45,6 +46,7 @@
             <!--FIXME: WSAS-1888
             <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
             -->
+            <!--Todo - Need to enabled once Carbon-Deployment 4.4.2 released -->
             <!--<class name="org.wso2.appserver.integration.tests.carbonappservice.WSAS1798CAppWarUndeployTest"/>-->
         </classes>
     </test>
