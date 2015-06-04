@@ -573,7 +573,7 @@
 
         <stub.version>4.3.0-SNAPSHOT</stub.version>
         <jaggery.version>0.10.1</jaggery.version>
-        <test.framework.version>4.3.1</test.framework.version>
+        <test.framework.version>4.4.0</test.framework.version>
         <xfer.version>3.3.0</xfer.version>
         <operadriver.version>0.8.1</operadriver.version>
         <selenium.version>2.40.0</selenium.version>
