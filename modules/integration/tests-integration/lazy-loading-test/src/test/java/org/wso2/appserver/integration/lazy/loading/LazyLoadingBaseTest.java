@@ -36,6 +36,7 @@ import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.ApplicationAdminClient;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
+import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
 import org.wso2.carbon.utils.ServerConstants;
 import org.xml.sax.SAXException;
@@ -354,7 +355,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      * @param domainKey -  Domain key of the tenant.
      * @throws LazyLoadingTestException - Exception throws when  creating the AutomationContext and login() method of LoginLogoutClient.java
      */
-    protected void loginAsTenantAdmin(String domainKey) throws LazyLoadingTestException {
+    protected void loginAsTenantAdmin(String domainKey) throws LazyLoadingTestException, AutomationUtilException {
         try {
             AutomationContext automationContext = new AutomationContext(PRODUCT_GROUP_NAME, INSTANCE_NAME, domainKey,
                     "admin");
@@ -365,32 +366,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             String customErrorMessage = "XPathExpressionException exception  when login as tenant admin.";
             log.error(customErrorMessage, xPathExpressionException);
             throw new LazyLoadingTestException(customErrorMessage, xPathExpressionException);
-
-        } catch (IOException ioException) {
-            String customErrorMessage = "IOException exception  when login as tenant admin.";
-            log.error(customErrorMessage, ioException);
-            throw new LazyLoadingTestException(customErrorMessage, ioException);
-
-        } catch (SAXException saxException) {
-            String customErrorMessage = "SAXException exception  when login as tenant admin.";
-            log.error(customErrorMessage, saxException);
-            throw new LazyLoadingTestException(customErrorMessage, saxException);
-
-        } catch (XMLStreamException xmlStreamException) {
-            String customErrorMessage = "XMLStreamException exception  when login as tenant admin.";
-            log.error(customErrorMessage, xmlStreamException);
-            throw new LazyLoadingTestException(customErrorMessage, xmlStreamException);
-
-        } catch (LoginAuthenticationExceptionException loginAuthenticationExceptionException) {
-            String customErrorMessage = "LoginAuthenticationExceptionException exception  when login as tenant admin.";
-            log.error(customErrorMessage, loginAuthenticationExceptionException);
-            throw new LazyLoadingTestException(customErrorMessage, loginAuthenticationExceptionException);
-
-        } catch (URISyntaxException uriSyntaxException) {
-            String customErrorMessage = "URISyntaxException exception  when login as tenant admin.";
-            log.error(customErrorMessage, uriSyntaxException);
-            throw new LazyLoadingTestException(customErrorMessage, uriSyntaxException);
-
         }
 
 
