@@ -60,7 +60,7 @@
                                     org.wso2.carbon.user.mgt:${carbon.commons.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity.xacml.filter:${carbon.identity.version}
+                                    org.wso2.carbon.identity.xacml.filter:${carbon.deployment.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
                                     org.wso2.carbon.identity.user.profile:${carbon.identity.version}
