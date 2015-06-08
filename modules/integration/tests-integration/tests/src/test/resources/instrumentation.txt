@@ -15,7 +15,6 @@ org.wso2.carbon.throttle_
 org.wso2.carbon.tomcat_
 org.wso2.carbon.tools.wsdlvalidator_
 org.wso2.carbon.tracer_
-org.wso2.carbon.tryit_
 org.wso2.carbon.webapp.deployer_
 org.wso2.carbon.webapp.mgt_
 org.wso2.carbon.wsdl2code_

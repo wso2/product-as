@@ -13,7 +13,7 @@
     <test name="Test-Java-Security-Manager" preserve-order="true" verbose="2">
         <classes>
             <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerTestCase"/>
-            <!--<class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerPolicyTestCase"/>-->
+            <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerPolicyTestCase"/>
         </classes>
     </test>
 
