@@ -11,7 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>wso2as</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>WSO2 AppServer - Distribution</name>
     <description>WSO2 Application Server Distribution</description>
 
@@ -345,6 +345,10 @@
 
     <properties>
     </properties>
+    
+    <modules>
+        <module>src/monitoring</module>
+    </modules>
 
     <!--<reporting>-->
     <!--<plugins>-->

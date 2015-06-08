@@ -56,9 +56,12 @@
                                 </properties>
                             </adviceFile>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.wsdl.tools:${carbon.commons.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.wsdl.tools:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.tryit:${carbon.commons.version}</importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.tryit:${carbon.commons.version}
+                                </importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>

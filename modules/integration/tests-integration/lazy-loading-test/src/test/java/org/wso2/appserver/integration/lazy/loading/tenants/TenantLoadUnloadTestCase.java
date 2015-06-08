@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.lazy.loading.LazyLoadingBaseTest;
 import org.wso2.appserver.integration.lazy.loading.util.LazyLoadingTestException;
+import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 
 import static org.testng.Assert.assertEquals;
 
@@ -44,7 +45,7 @@ public class TenantLoadUnloadTestCase extends LazyLoadingBaseTest {
     @Test(groups = "wso2.as.lazy.loading", description = "Login using  one tenant user. Before loginTenantUser " +
             " contexts of both users should not be loaded. After loginTenantUser  only the logged user context should" +
             " get load.", alwaysRun = true)
-    public void testTenantContextLoadInLogin() throws LazyLoadingTestException {
+    public void testTenantContextLoadInLogin() throws LazyLoadingTestException, AutomationUtilException {
         assertEquals(getTenantStatus(TENANT_DOMAIN_1).isTenantContextLoaded(), false,
                 "Tenant context is loaded before any action related to that tenant");
         assertEquals(getTenantStatus(TENANT_DOMAIN_2).isTenantContextLoaded(), false,

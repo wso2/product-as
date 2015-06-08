@@ -36,7 +36,7 @@ import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.TenantManagementServiceClient;
-import org.wso2.carbon.integration.common.extensions.carbonserver.MultipleServersManager;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
 import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
@@ -145,17 +145,17 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
 
         String applicationNameReceiverWebAppUrl = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName;
-        superTenantWebAppAdminClient.warFileUplaoder(applicationNameReceiverWebAppUrl);
+        superTenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil
                         .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, webAppName),
                 "Web Application Deployment failed");
 
-        tenantWebAppAdminClient.warFileUplaoder(applicationNameReceiverWebAppUrl);
+        tenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(tenantServerBackEndUrl, tenantSession, webAppName),
                 "Web Application Deployment failed");
 
         // Uploading the ghost status receiver web app, this web will give the status of the web app
-        superTenantWebAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        superTenantWebAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator
                 + ghostInfoWebAppFileName);
         assertTrue(WebAppDeploymentUtil
