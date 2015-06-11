@@ -28,6 +28,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
@@ -68,6 +69,13 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName)
                 , webAppName + " Web Application Deployment failed");
         webAppUrl = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName;
+
+        if(userMode == TestUserMode.TENANT_ADMIN || userMode == TestUserMode.TENANT_USER) {
+            if(!webAppUrl.contains("/t/")) {
+                throw new AutomationFrameworkException("Web App Url is not correct for tenants when running test " +
+                                                       "for tenants " + userInfo.getUserName() + " > " + webAppUrl);
+            }
+        }
 
     }
 

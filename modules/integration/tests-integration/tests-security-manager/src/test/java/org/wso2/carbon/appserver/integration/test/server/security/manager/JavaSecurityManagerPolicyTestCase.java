@@ -30,6 +30,7 @@ import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.appserver.integration.test.server.security.manager.extension.CarbonServerWithSecurityManagerExtension;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
@@ -52,6 +53,7 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
     private WebAppAdminClient webAppAdminClient;
     private String webAppUrl;
     private TestUserMode userMode;
+    private static boolean isPolicyApplied = false;
 
     @Factory(dataProvider = "userModeDataProvider")
     public JavaSecurityManagerPolicyTestCase(TestUserMode userMode) {
@@ -60,17 +62,20 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init(userMode);
         //replacing sec.policy file
-        ServerConfigurationManager serverConfigurationManager = new ServerConfigurationManager(
-                new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN));
-        File sourceFile = new File(TestConfigurationProvider.getResourceLocation("AS") + File.separator
-                                   + "security" + File.separator + "manager" + File.separator + "sec.policy");
-        File targetFile = new File(CarbonServerWithSecurityManagerExtension.getTestServer().getCarbonHome()
-                                   + File.separator + "repository" + File.separator + "conf"
-                                   + File.separator + "sec.policy");
-        serverConfigurationManager.applyConfiguration(sourceFile, targetFile, true, true);
-        super.init();
+        if(!isPolicyApplied) {
+            ServerConfigurationManager serverConfigurationManager = new ServerConfigurationManager(
+                    new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN));
+            File sourceFile = new File(TestConfigurationProvider.getResourceLocation("AS") + File.separator
+                                       + "security" + File.separator + "manager" + File.separator + "sec.policy");
+            File targetFile = new File(CarbonServerWithSecurityManagerExtension.getTestServer().getCarbonHome()
+                                       + File.separator + "repository" + File.separator + "conf"
+                                       + File.separator + "sec.policy");
+            serverConfigurationManager.applyConfiguration(sourceFile, targetFile, true, true);
+            isPolicyApplied = true;
+        }
+
+        super.init(userMode);
         //deploying web application
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.uploadWarFile(TestConfigurationProvider.getResourceLocation("AS")
@@ -82,6 +87,13 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName)
                 , webAppName + " Web Application Deployment failed");
         webAppUrl = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName;
+
+        if(userMode == TestUserMode.TENANT_ADMIN || userMode == TestUserMode.TENANT_USER) {
+          if(!webAppUrl.contains("/t/")) {
+             throw new AutomationFrameworkException("Web App Url is not correct for tenants when running test " +
+                                                    "for tenants " + userInfo.getUserName() + " > " + webAppUrl);
+          }
+        }
 
     }
 
@@ -167,7 +179,7 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
     public static Object[][] userModeDataProvider() {
         return new Object[][]{
                 new Object[]{TestUserMode.SUPER_TENANT_ADMIN},
-                //new Object[]{TestUserMode.TENANT_ADMIN},
+                new Object[]{TestUserMode.TENANT_ADMIN},
         };
     }
 }
