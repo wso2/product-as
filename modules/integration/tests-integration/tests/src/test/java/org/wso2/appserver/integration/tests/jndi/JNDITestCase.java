@@ -65,7 +65,7 @@ public class JNDITestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying web application")
     public void testWebAppContextLookupWebApplicationDeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war"
                 + File.separator + webAppNameOne + ".war");
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
@@ -84,7 +84,7 @@ public class JNDITestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying carbon datasource lookup web application")
     public void testCarbonDataSourceLookupWebApplicationDeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war"
                 + File.separator + webAppNameTwo + ".war");
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(

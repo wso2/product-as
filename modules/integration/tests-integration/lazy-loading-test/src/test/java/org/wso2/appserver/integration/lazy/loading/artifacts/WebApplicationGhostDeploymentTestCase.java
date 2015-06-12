@@ -79,7 +79,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         //Tenant 1
         init(TENANT_DOMAIN_1_KEY, ADMIN);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(webApp1Location);
+        webAppAdminClient.uploadWarFile(webApp1Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
                 "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + tenantDomain1);
         WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
@@ -90,7 +90,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in " +
                 "ghost mode after deployment in Tenant:" + tenantDomain1);
 
-        webAppAdminClient.warFileUplaoder(webApp2Location);
+        webAppAdminClient.uploadWarFile(webApp2Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
                 "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + tenantDomain1);
         WebAppStatusBean webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME2);
@@ -105,7 +105,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         init(TENANT_DOMAIN_2_KEY, ADMIN);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
 
-        webAppAdminClient.warFileUplaoder(webApp1Location);
+        webAppAdminClient.uploadWarFile(webApp1Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME1),
                 "Web Application deployment failed: " + WEB_APP_NAME1 + "on " + tenantDomain2);
         WebAppStatusBean webAppStatusTenant2WebApp1 = getWebAppStatus(tenantDomain2, WEB_APP_FILE_NAME1);
@@ -116,7 +116,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         assertFalse(webAppStatusTenant2WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 + " is in" +
                 " ghost mode after deployment in Tenant:" + tenantDomain2);
 
-        webAppAdminClient.warFileUplaoder(webApp2Location);
+        webAppAdminClient.uploadWarFile(webApp2Location);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, WEB_APP_NAME2),
                 "Web Application deployment failed: " + WEB_APP_NAME2 + "on " + tenantDomain2);
         WebAppStatusBean webAppStatusTenant2WebApp2 = getWebAppStatus(tenantDomain2, WEB_APP_FILE_NAME2);

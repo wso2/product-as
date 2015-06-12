@@ -57,7 +57,7 @@ public class WSAS1716FaultyWebAppUndeployTestCase extends ASIntegrationTest {
     public void testDeployFaultyWebApp() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_USER);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war"
                 + File.separator + webAppFileName);
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName)

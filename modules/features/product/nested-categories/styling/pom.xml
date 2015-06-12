@@ -56,7 +56,9 @@
                                 </properties>
                             </adviceFile>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.appserver.styles</importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.appserver.styles
+                                </importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>

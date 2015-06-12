@@ -55,6 +55,11 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected static final String TENANT_DOMAIN_2_KEY = "tenant2";
     protected static final String SUPER_TENANT_DOMAIN_KEY = "superTenant";
     protected static final String CARBON_HOME = FrameworkPathUtil.getCarbonHome();
+    protected String ARTIFACTS_LOCATION = TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
+            "AS" + File.separator + "ghost" + File.separator;
+    protected static final String CARBON_XML = "carbon.xml";
+    protected static final String CARBON_REPOSITORY_LOCATION = FrameworkPathUtil.getCarbonServerConfLocation() +
+            File.separator + CARBON_XML;
     private static final String PRODUCT_GROUP_NAME = "AS";
     private static final String INSTANCE_NAME = "appServerInstance0001";
     private static final String ADMIN_USER_KEY = "admin";
@@ -71,9 +76,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     private static final long MAX_THRESHOLD_TIME = 2 * 60 * 1000;
     private static final long DEPLOYMENT_DELAY_IN_MILLISECONDS = 90 * 1000;
     protected static final int CONCURRENT_THREAD_COUNT = 40;
-    private static final String CARBON_XML = "carbon.xml";
-    private static final String CARBON_REPOSITORY_LOCATION = FrameworkPathUtil.getCarbonServerConfLocation() +
-            File.separator + CARBON_XML;
     private static final Log log = LogFactory.getLog(LazyLoadingBaseTest.class);
     protected static final String ADMIN = "admin";
     private static final String DEFAULT = "default";
@@ -88,6 +90,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected String artifactsLocation;
     protected ApplicationAdminClient appAdminClient;
     protected String supperTenantWebAppURL;
+    protected String carbonArtifactLocation;
 
     @Override
     /**
@@ -125,8 +128,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
                         getContextTenant().getDomain();
         serverManager.applyConfigurationWithoutRestart(sourceFile, targetFile, true);
         log.info("carbon.xml replaced with :" + carbonArtifactLocation);
-        webAppAdminClient.warFileUplaoder(tenantInfoServiceArtifactLocation);
-        supperTenantWebAppURL = webAppURL;
+        webAppAdminClient.uploadWarFile(tenantInfoServiceArtifactLocation);
         serverManager.restartGracefully();
         log.info("Server Restarted after applying carbon.xml and tenant information utility web application");
     }
@@ -397,7 +399,6 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
             LazyLoadingTestException {
         boolean isTenantInGhostState = false;
         long totalSleepTime = 0;
-
         log.info("Sleeping  for " + webAppIdleTime + " milliseconds (WebApp idle time).");
         try {
             Thread.sleep(webAppIdleTime);

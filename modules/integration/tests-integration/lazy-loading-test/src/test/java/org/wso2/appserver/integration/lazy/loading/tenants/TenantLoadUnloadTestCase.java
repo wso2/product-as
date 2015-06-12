@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.lazy.loading.LazyLoadingBaseTest;
 import org.wso2.appserver.integration.lazy.loading.util.LazyLoadingTestException;
+import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
