@@ -44,7 +44,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator
                 + INVALID_WAR_FILE_NAME;
-        webAppAdminClient.warFileUplaoder(location);   // uploading the faulty web app
+        webAppAdminClient.uploadWarFile(location);   // uploading the faulty web app
         // checking the deployment status - success or fail
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(
                 backendURL, sessionCookie,
@@ -81,7 +81,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "car" +
                 File.separator + "AxisCApp-1.0.0.car";
-        webAppAdminClient.warFileUplaoder(location);   // uploading the web app
+        webAppAdminClient.uploadWarFile(location);   // uploading the web app
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL,
                 sessionCookie, "AxisCApp-1.0.0"));
     }
@@ -92,14 +92,14 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" +
                 File.separator + "appServer-valied-deploymant-1.0.0.war";
-        webAppAdminClient.warFileUplaoder(location);   // uploading the web app
+        webAppAdminClient.uploadWarFile(location);   // uploading the web app
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL,
                 sessionCookie, "appServer-valied-deploymant-1.0.0"),
                 "appServer-valied-deploymant-1.0.0.war deployment failure");
 
         int numberOfWebApps = webAppAdminClient.getWebApplist("").size();  // number of webapps
         int numberOfFaultyWebApps = webAppAdminClient.getFaultyWebAppList("").size(); // faulty web apps
-        webAppAdminClient.warFileUplaoder(location);   // re-uploading the web app
+        webAppAdminClient.uploadWarFile(location);   // re-uploading the web app
         int newNumberOfWebApps = webAppAdminClient.getWebApplist("").size(); // latest number of webapps
         int newNumberOfFaultyWebApps = webAppAdminClient.getFaultyWebAppList("").size(); // latest faulty web apps
         assertTrue(((newNumberOfWebApps == numberOfWebApps) && (newNumberOfFaultyWebApps == numberOfFaultyWebApps)),
@@ -114,7 +114,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator
                 + "SimpleServlet-faulty.war";
-        webAppAdminClient.warFileUplaoder(location);   // uploading the web app
+        webAppAdminClient.uploadWarFile(location);   // uploading the web app
         // checking the deployment status - success or fail
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(
                 backendURL, sessionCookie,
@@ -126,7 +126,7 @@ public class FaultyWebAppScenarioTestCase extends ASIntegrationTest {
         String rectifiedWebAppLocation = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" +
                 File.separator + "SimpleServlet.war";
-        webAppAdminClient.warFileUplaoder(rectifiedWebAppLocation);   // uploading the web app
+        webAppAdminClient.uploadWarFile(rectifiedWebAppLocation);   // uploading the web app
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL,
                 sessionCookie, "SimpleServlet"),
                 "SimpleServlet.war deployment failure");

@@ -72,6 +72,7 @@
                 <artifactId>cglib</artifactId>
                 <version>${cglib.version}</version>
             </dependency>
+<!--
             <dependency>
                 <groupId>org.apache.axis2.wso2</groupId>
                 <artifactId>axis2-jibx</artifactId>
@@ -82,6 +83,7 @@
                 <artifactId>jibx</artifactId>
                 <version>${jibx.version}</version>
             </dependency>
+-->
             <dependency>
                 <groupId>org.apache.axis2.wso2</groupId>
                 <artifactId>axis2-jaxbri</artifactId>

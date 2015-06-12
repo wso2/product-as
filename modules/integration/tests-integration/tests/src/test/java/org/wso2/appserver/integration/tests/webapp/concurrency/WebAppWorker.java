@@ -47,7 +47,7 @@ public class WebAppWorker extends Thread {
         Boolean status = true;
         try {
             webAppAdminClient = new WebAppAdminClient(backendURL, session);
-            webAppAdminClient.warFileUplaoder(filePath);
+            webAppAdminClient.uploadWarFile(filePath);
             log.info("Deploying webapp - " + filePath.substring(filePath.lastIndexOf(File.separator) + 1,
                                                                 filePath.length()));
         } catch (AxisFault axisFault) {

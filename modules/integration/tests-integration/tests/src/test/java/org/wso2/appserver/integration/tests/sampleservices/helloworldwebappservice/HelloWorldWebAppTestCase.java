@@ -60,7 +60,7 @@ public class HelloWorldWebAppTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Deploying web application")
     public void webAppsDeploymentTest() throws Exception {
 
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation()
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation()
                 + "artifacts" + File.separator + "AS" + File.separator
                 + "war" + File.separator + "HelloWorldWebapp.war");
 

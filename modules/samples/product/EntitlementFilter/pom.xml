@@ -37,13 +37,11 @@
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
-                <version>2.3.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
-		    <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+                    <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <webXml>./src/main/webapp/WEB-INF/web.xml</webXml>
                     <warName>${project.artifactId}</warName>
                     <webResources>
@@ -65,7 +63,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.7</version>
                     <executions>
                         <execution>
                             <phase>compile</phase>
@@ -96,7 +93,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.2.1</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -121,8 +117,6 @@
         <dependency>
             <groupId>commons-codec.wso2</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.4.0.wso2v1</version>
         </dependency>
     </dependencies>
-
 </project>
