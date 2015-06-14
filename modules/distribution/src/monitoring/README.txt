@@ -11,7 +11,7 @@ in a database from which the HTTP Statistics Monitoring Dashboard can retrieve t
 	Requirements
 ---------------------------------------------------------------------------------
 
-1. WSO2 AS 6.0.0 or above
+1. WSO2 AS 5.3.0 or above
 2. WSO2 BAM 2.4.1 or above
 
 NOTE:
