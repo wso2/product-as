@@ -251,7 +251,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
             "All request should  get expected output",
-            dependsOnMethods = "testTenantUnloadInIdleTimeAfterJaggeryAPPUsageInGhostDeployment", enabled = true)
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterJaggeryAPPUsageInGhostDeployment", enabled = false)
     public void testConcurrentJaggeryAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
