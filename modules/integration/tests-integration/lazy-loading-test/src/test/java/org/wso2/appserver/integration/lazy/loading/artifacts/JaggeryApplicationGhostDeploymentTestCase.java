@@ -324,6 +324,8 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
     public void testConcurrentJaggeryAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
         //This test method case disable because of CARBON-15270
         serverManager.restartGracefully();
+        responseDataList.clear();
+        responseDetailedInfoList.clear();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(tenant1JaggApp2Url, null);
