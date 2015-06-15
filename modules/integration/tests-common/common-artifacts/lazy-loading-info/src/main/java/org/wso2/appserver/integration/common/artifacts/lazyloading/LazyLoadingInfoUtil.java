@@ -36,6 +36,9 @@ import java.util.Map;
  */
 public class LazyLoadingInfoUtil {
     private static final Log log = LogFactory.getLog(LazyLoadingInfoUtil.class);
+    private static final String CARBON_WEBAPPS_HOLDER_LIST = "carbon.webapps.holderlist";
+    private static final String WEBAPPS = "webapps";
+    private static final String GHOST_WEB_APP = "GhostWebApp";
 
 
     /**
@@ -44,9 +47,9 @@ public class LazyLoadingInfoUtil {
      * @return configuration context of the server.
      */
     private static ConfigurationContext getServerConfigurationContext() {
-        ConfigurationContextService configurationContext = (ConfigurationContextService)
-                PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(ConfigurationContextService.class,
-                        null);
+        ConfigurationContextService configurationContext =
+                (ConfigurationContextService) PrivilegedCarbonContext.getThreadLocalCarbonContext().
+                        getOSGiService(ConfigurationContextService.class, null);
         return configurationContext.getServerConfigContext();
     }
 
@@ -56,7 +59,7 @@ public class LazyLoadingInfoUtil {
      *
      * @return Map that contains the  configuration contexts
      */
-    private static Map<String, ConfigurationContext> getTenantConfigContexts() {
+    private static Map<String, ConfigurationContext> getTenantConfigServerContexts() {
         return TenantAxisUtils.getTenantConfigurationContexts(getServerConfigurationContext());
     }
 
@@ -67,8 +70,8 @@ public class LazyLoadingInfoUtil {
      * @param tenantDomain tenant domain name.
      * @return ConfigurationContext of given tenant
      */
-    private static ConfigurationContext getTenantConfigurationContext(String tenantDomain) {
-        return getTenantConfigContexts().get(tenantDomain);
+    private static ConfigurationContext getTenantConfigurationServerContext(String tenantDomain) {
+        return getTenantConfigServerContexts().get(tenantDomain);
     }
 
     /**
@@ -79,13 +82,11 @@ public class LazyLoadingInfoUtil {
      */
     protected static TenantStatus getTenantStatus(String tenantDomain) {
         boolean isTenantContextLoaded = false;
-
-        Map<String, ConfigurationContext> tenantConfigContextsServer = getTenantConfigContexts();
-        if (tenantConfigContextsServer != null) {
-            isTenantContextLoaded = tenantConfigContextsServer.containsKey(tenantDomain);
+        Map<String, ConfigurationContext> tenantConfigServerContexts = getTenantConfigServerContexts();
+        if (tenantConfigServerContexts != null) {
+            isTenantContextLoaded = tenantConfigServerContexts.containsKey(tenantDomain);
             log.info("Tenant " + tenantDomain + " loaded :" + isTenantContextLoaded);
         }
-
         return new TenantStatus(isTenantContextLoaded);
     }
 
@@ -98,21 +99,19 @@ public class LazyLoadingInfoUtil {
      */
     protected static WebAppStatus getWebAppStatus(String tenantDomain, String webAppName) {
         WebAppStatus webAppStatus = new WebAppStatus();
-        ConfigurationContext tenantConfigurationContext = getTenantConfigurationContext(tenantDomain);
-        if (tenantConfigurationContext != null) {
+        ConfigurationContext tenantConfigurationServerContext = getTenantConfigurationServerContext(tenantDomain);
+        if (tenantConfigurationServerContext != null) {
             webAppStatus.setTenantStatus(new TenantStatus(true));
             log.info("Tenant " + tenantDomain + " configuration context is loaded.");
             WebApplicationsHolder webApplicationsHolder = (WebApplicationsHolder) ((HashMap)
-                    tenantConfigurationContext.getLocalProperty("carbon.webapps.holderlist")).get("webapps");
+                    tenantConfigurationServerContext.getLocalProperty(CARBON_WEBAPPS_HOLDER_LIST)).get(WEBAPPS);
             Map<String, WebApplication> startedWebAppMap = webApplicationsHolder.getStartedWebapps();
             if (startedWebAppMap != null) {
-
                 WebApplication webApplication = startedWebAppMap.get(webAppName);
                 if (webApplication != null) {
                     webAppStatus.setWebAppStarted(true);
-                    log.info("Tenant " + tenantDomain + " Web-app: " + webAppName +
-                            " is available in configuration context.");
-                    boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
+                    log.info("Tenant " + tenantDomain + " Web-app: " + webAppName + " is available in configuration context.");
+                    boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty(GHOST_WEB_APP));
                     log.info("Tenant " + tenantDomain + " Web-app: " + webAppName + " is in Ghost deployment status :" +
                             isWebAppGhost);
                     webAppStatus.setWebAppGhost(isWebAppGhost);
@@ -120,19 +119,15 @@ public class LazyLoadingInfoUtil {
                     log.info("Given web-app:" + webAppName + " for tenant:" + tenantDomain + " not found in started state");
                     webAppStatus.setWebAppStarted(false);
                 }
-
             } else {
                 log.info("Tenant " + tenantDomain + " has no started web-apps.");
                 webAppStatus.setWebAppStarted(false);
             }
-
         } else {
             log.info("Tenant " + tenantDomain + " configuration context is not loaded.");
             webAppStatus.setTenantStatus(new TenantStatus(false));
         }
-
         return webAppStatus;
-
     }
 
 
@@ -144,33 +139,26 @@ public class LazyLoadingInfoUtil {
      */
 
     protected static WebAppStatus getSuperTenantWebAppStatus(String webAppName) {
-
         WebAppStatus webAppStatus = new WebAppStatus();
         webAppStatus.setTenantStatus(new TenantStatus(true)); // Super tenant always loaded;
         ConfigurationContext serverConfigurationContext = getServerConfigurationContext();
-
         WebApplicationsHolder webApplicationsHolder = (WebApplicationsHolder) ((HashMap)
-                serverConfigurationContext.getLocalProperty("carbon.webapps.holderlist")).get("webapps");
+                serverConfigurationContext.getLocalProperty(CARBON_WEBAPPS_HOLDER_LIST)).get(WEBAPPS);
         Map<String, WebApplication> startedWebAppMap = webApplicationsHolder.getStartedWebapps();
         if (startedWebAppMap != null) {
             WebApplication webApplication = startedWebAppMap.get(webAppName);
             if (webApplication != null) {
                 webAppStatus.setWebAppStarted(true);
-                log.info("Super Tenant  Web-app: " + webAppName +
-                        " is available in configuration context.");
-                boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty("GhostWebApp"));
-                log.info("Super Tenant Web-app: " + webAppName + " is in Ghost deployment status :" +
-                        isWebAppGhost);
+                log.info("Super Tenant  Web-app: " + webAppName + " is available in configuration context.");
+                boolean isWebAppGhost = Boolean.parseBoolean((String) webApplication.getProperty(GHOST_WEB_APP));
+                log.info("Super Tenant Web-app: " + webAppName + " is in Ghost deployment status :" + isWebAppGhost);
                 webAppStatus.setWebAppGhost(isWebAppGhost);
             } else {
                 log.info("Given web-app:" + webAppName + " for super tenant  not found in started state");
             }
-
         } else {
             log.info("Super Tenant has no started web-apps.");
         }
         return webAppStatus;
     }
-
-
 }
