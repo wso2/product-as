@@ -182,7 +182,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
             description = "Send concurrent requests  when Web-App is in Ghost form. " + "All request should  get expected output",
             dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant", enabled = false)
     public void testConcurrentWebAPPInvocationsWhenWebAppIsInGhostFormInGhostDeploymentOnSuperTenant() throws Exception {
-        //This test method case disable because of CARBON-15036
+        //This test method case disable because of CARBON-15271
         serverManager.restartGracefully();
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(webApp2URL, null);
         assertTrue(httpResponseApp2.getData().contains(WEB_APP2_RESPONSE), "Invocation of Web-App fail :" + webApp2URL);

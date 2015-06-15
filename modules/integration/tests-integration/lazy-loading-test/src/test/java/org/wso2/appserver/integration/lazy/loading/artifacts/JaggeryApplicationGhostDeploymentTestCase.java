@@ -251,9 +251,8 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
             "All request should  get expected output",
-            dependsOnMethods = "testTenantUnloadInIdleTimeAfterJaggeryAPPUsageInGhostDeployment", enabled = false)
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterJaggeryAPPUsageInGhostDeployment", enabled = true)
     public void testConcurrentJaggeryAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
-        //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
@@ -323,7 +322,7 @@ public class JaggeryApplicationGhostDeploymentTestCase extends LazyLoadingBaseTe
             " But Jaggery application is in Ghost form. All request should  get expected output",
             dependsOnMethods = "testConcurrentJaggeryAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment", enabled = false)
     public void testConcurrentJaggeryAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
-        //This test method case disable because of CARBON-15036
+        //This test method case disable because of CARBON-15270
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);

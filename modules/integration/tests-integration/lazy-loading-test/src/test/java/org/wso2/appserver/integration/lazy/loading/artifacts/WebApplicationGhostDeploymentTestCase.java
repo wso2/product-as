@@ -231,9 +231,8 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
             "All request should  get expected output",
-            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment", enabled = false)
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment", enabled = true)
     public void testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
-        //This test method case disable because of CARBON-15036
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
@@ -303,7 +302,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
             " But Web-App is in Ghost form. All request should  get expected output",
             dependsOnMethods = "testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment", enabled = false)
     public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
-        //This test method case disable because of CARBON-15036
+        //This test method case disable because of CARBON-15270
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
