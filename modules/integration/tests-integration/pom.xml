@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>integration-appSever</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -35,7 +35,7 @@
 
     <modules>
         <module>tests</module>
-        <!--<module>lazy-loading-test</module>-->
+        <module>lazy-loading-test</module>
         <module>tests-security-manager</module>
     </modules>
 
