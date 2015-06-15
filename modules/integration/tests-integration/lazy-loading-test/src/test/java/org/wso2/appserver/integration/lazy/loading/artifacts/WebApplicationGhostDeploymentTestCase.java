@@ -240,6 +240,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
         for (int i = 0; i < CONCURRENT_THREAD_COUNT; i++) {
+            final int requestId = i;
             executorService.execute(new Runnable() {
 
                 public void run() {
@@ -253,11 +254,12 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         String responseDetailedInfo;
                         String responseData;
                         if (httpResponse != null) {
-                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data :" + httpResponse.getData() +
                                     "\tResponse Code:" + httpResponse.getResponseCode();
                             responseData = httpResponse.getData();
                         } else {
-                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data : NULL Object return from " +
+                                    "HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
                         responseDataList.add(responseData);
@@ -304,7 +306,8 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
     public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
         //This test method case disable because of CARBON-15270
         serverManager.restartGracefully();
-
+        responseDataList.clear();
+        responseDetailedInfoList.clear();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
 
@@ -330,6 +333,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
         for (int i = 0; i < CONCURRENT_THREAD_COUNT; i++) {
+            final int requestId = i;
             executorService.execute(new Runnable() {
 
                 public void run() {
@@ -343,11 +347,12 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         String responseDetailedInfo;
                         String responseData;
                         if (httpResponse != null) {
-                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data :" + httpResponse.getData() +
                                     "\tResponse Code:" + httpResponse.getResponseCode();
                             responseData = httpResponse.getData();
                         } else {
-                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data : NULL Object return from " +
+                                    "HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
                         responseDataList.add(responseData);
