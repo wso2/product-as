@@ -101,6 +101,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      */
     public void init() throws Exception {
         super.init();
+        supperTenantWebAppURL = webAppURL;
         hostURL = asServer.getInstance().getHosts().get(DEFAULT);
         serverManager = new ServerConfigurationManager(asServer);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
