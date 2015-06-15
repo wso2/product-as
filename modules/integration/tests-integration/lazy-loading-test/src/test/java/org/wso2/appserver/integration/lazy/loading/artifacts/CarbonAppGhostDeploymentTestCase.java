@@ -239,7 +239,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
             "All request should  get expected output",
-            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPInCarbonAppUsageInGhostDeployment", enabled = true)
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPInCarbonAppUsageInGhostDeployment", enabled = false)
     public void testConcurrentWebAPPInCarbonAppInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
