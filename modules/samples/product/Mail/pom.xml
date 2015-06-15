@@ -48,7 +48,6 @@
             <plugin>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-aar-maven-plugin</artifactId>
-                <version>${axis2.wso2.version.aar.plugin}</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>

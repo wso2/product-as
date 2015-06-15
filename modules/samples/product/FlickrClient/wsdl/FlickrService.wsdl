@@ -2109,6 +2109,6 @@
 
     <wsdl:service name="flickrService" interface="tns:flickr">
         <wsdl:endpoint name="flickrREST" binding="tns:flickrHTTPBinding"
-                       address="http://api.flickr.com/services/rest/"/>
+                       address="https://api.flickr.com/services/rest/"/>
     </wsdl:service>
 </wsdl:description>

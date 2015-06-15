@@ -49,7 +49,7 @@ public class WebApplicationDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying web application")
     public void testWebApplicationDeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                                           "artifacts" + File.separator + "AS" + File.separator + "war"
                                           + File.separator + webAppFileName);
 

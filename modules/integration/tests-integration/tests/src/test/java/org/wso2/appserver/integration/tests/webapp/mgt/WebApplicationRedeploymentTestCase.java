@@ -51,7 +51,7 @@ public class WebApplicationRedeploymentTestCase extends ASIntegrationTest {
     public void testWebApplicationDeploymentAndAccessibility() throws Exception {
         super.init();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() + File.separator
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() + File.separator
                 + "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName);
 
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
@@ -63,7 +63,7 @@ public class WebApplicationRedeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Redeployment of web application")
     public void testWebApplicationRedeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder( FrameworkPathUtil.getSystemResourceLocation() + File.separator
+        webAppAdminClient.uploadWarFile( FrameworkPathUtil.getSystemResourceLocation() + File.separator
                 + "artifacts" + File.separator + "AS"   + File.separator + "war" + File.separator + "duplicateWar"
                                           + File.separator + webAppFileName);
         //wait for application to be redeployed

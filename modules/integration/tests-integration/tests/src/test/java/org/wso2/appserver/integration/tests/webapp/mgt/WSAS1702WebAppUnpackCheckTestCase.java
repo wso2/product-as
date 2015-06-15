@@ -73,7 +73,7 @@ public class WSAS1702WebAppUnpackCheckTestCase extends ASIntegrationTest {
     public void testDeployWebAppAsTenant() throws Exception {
         super.init(TestUserMode.TENANT_USER);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war"
                 + File.separator + webAppFileName);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName)
