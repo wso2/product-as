@@ -51,7 +51,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying web application used spring")
     public void testSpringWebApplicationDeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                                           "artifacts" + File.separator + "AS" + File.separator + "war"
                                           + File.separator + "spring" + File.separator + webAppFileName);
 
@@ -76,7 +76,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Stop web application", dependsOnMethods = "testWebApplicationReloading")
     public void testWebApplicationStop() throws Exception {
-        assertTrue(webAppAdminClient.stopWebApp(webAppFileName,hostname), "failed to stop web application");
+        assertTrue(webAppAdminClient.stopWebApp(webAppFileName, hostname), "failed to stop web application");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Stopped", "Stop State mismatched");
         String webAppURLLocal = webAppURL + "/" + webAppName;
         Assert.assertEquals(HttpRequestUtil.sendGetRequest(webAppURLLocal, null).getResponseCode(), 302, "Response code mismatch. Client request " +
@@ -85,7 +85,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Stop web application", dependsOnMethods = "testWebApplicationStop")
     public void testWebApplicationStart() throws Exception {
-        assertTrue(webAppAdminClient.startWebApp(webAppFileName,hostname), "failed to start wen application");
+        assertTrue(webAppAdminClient.startWebApp(webAppFileName, hostname), "failed to start wen application");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Started", "Start State mismatched");
         getAndVerifyApplicationPage();
     }
@@ -93,7 +93,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Redeployment of web application used spring"
             , dependsOnMethods = "testWebApplicationStart")
     public void testWebApplicationRedeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                                           "artifacts" + File.separator + "AS" + File.separator + "war"
                                           + File.separator + "spring" + File.separator + webAppFileName);
         //wait for application to be redeployed

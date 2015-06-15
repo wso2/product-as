@@ -125,7 +125,7 @@ public class TenantLogViewerTestCase extends ASIntegrationTest {
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                           "artifacts" + File.separator + "AS" + File.separator + "jaxrs" + File
                 .separator;
-        webAppAdminClient.warFileUplaoder(location + File.separator + SAMPLE_APP_NAME_WAR);
+        webAppAdminClient.uploadWarFile(location + File.separator + SAMPLE_APP_NAME_WAR);
         boolean isDeployed =
                 WebAppDeploymentUtil
                         .isWebApplicationDeployed(backendURL, sessionCookie, SAMPLE_APP_NAME);

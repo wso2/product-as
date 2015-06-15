@@ -70,7 +70,7 @@ public class TomcatWebAppsTestCase extends ASIntegrationTest {
     public void webAppsDeploymentTest() throws Exception {
 
         // GenericJavaBeanResource.war
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation()
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation()
                 + "artifacts" + File.separator + "AS" + File.separator
                 + "war" + File.separator + "GenericJavaBeanResource.war");
 
@@ -80,7 +80,7 @@ public class TomcatWebAppsTestCase extends ASIntegrationTest {
         log.info("GenericJavaBeanResource uploaded and deployed successfully");
 
         // JDBCDataSource.war
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation()
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation()
                 + "artifacts" + File.separator + "AS" + File.separator
                 + "war" + File.separator + "JDBCDataSource.war");
 

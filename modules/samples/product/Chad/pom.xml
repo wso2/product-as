@@ -25,13 +25,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver-samples-chad</artifactId>
     <version>6.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Sample/Chad</name>
     <description>This is the Chad sample</description>
-
 
     <build>
         <sourceDirectory>src</sourceDirectory>
@@ -63,17 +61,14 @@
         <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2</artifactId>
-            <version>${appserver.axis2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom.wso2</groupId>
             <artifactId>axiom</artifactId>
-            <version>${appserver.axiom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.wso2</groupId>
             <artifactId>hibernate</artifactId>
-            <version>${appserver.hibernate.version}</version>
         </dependency>
     </dependencies>
 

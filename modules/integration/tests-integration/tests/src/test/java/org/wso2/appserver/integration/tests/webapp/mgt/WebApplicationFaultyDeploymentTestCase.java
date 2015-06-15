@@ -46,7 +46,7 @@ public class WebApplicationFaultyDeploymentTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying faulty web application")
     public void testFaultyWebApplicationDeployment() throws Exception {
-        webAppAdminClient.warFileUplaoder(FrameworkPathUtil.getSystemResourceLocation() + "artifacts" +
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() + "artifacts" +
                                           File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName);
 
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(

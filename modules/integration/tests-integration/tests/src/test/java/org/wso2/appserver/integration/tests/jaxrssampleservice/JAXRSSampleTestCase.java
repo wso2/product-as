@@ -64,7 +64,7 @@ public class JAXRSSampleTestCase extends ASIntegrationTest {
                 new WebAppAdminClient(backendURL, sessionCookie);
         String location = FrameworkPathUtil.getSystemResourceLocation() +
                           "artifacts" + File.separator + "AS" + File.separator + "jaxrs" + File.separator;
-        jaxwsWebappAdminClient.warFileUplaoder(location + File.separator + "jaxrs_sample_02.war");
+        jaxwsWebappAdminClient.uploadWarFile(location + File.separator + "jaxrs_sample_02.war");
         boolean isDeployed =
                 WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, "jaxrs_sample_02");
         assertTrue(isDeployed, "WebApp not deployed");

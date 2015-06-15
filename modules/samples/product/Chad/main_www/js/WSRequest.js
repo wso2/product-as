@@ -350,10 +350,9 @@ WSRequest.util = {
                     var xmlSerializer = document.implementation.createLSSerializer();
                     return xmlSerializer.writeToString(payload);
                     break;
-                case "safari":
-                // use the safari method
-                    window.alert("This browser is not supported in this sample. Please use a compatible browser like Firefox, Opera, Internet Explorer");
-                    throw new WebServiceError("Not implemented", "WSRequest.util._serializeToString doesn't support Safari browser.");
+                case "webkit":
+                	return (new XMLSerializer()).serializeToString(payload);
+                	break;
                 case "undefined":
                     window.alert("This browser is not supported in this sample. Please use a compatible browser like Firefox, Opera, Internet Explorer");
                     throw new WebServiceError("Unknown browser", "WSRequest.util._serializeToString doesn't recognize the browser, to invoke browser-specific serialization code.");
@@ -381,7 +380,7 @@ WSRequest.util = {
                 break;
             case "gecko":
             case "opera":
-            case "safari":
+            case "webkit":
             case "undefined":
                 value = "";
                 if (node.nodeType == 3) value = node.nodeValue;
@@ -460,9 +459,9 @@ WSRequest.util = {
             return 'ie7';
         } else if (ua.indexOf('msie') != -1) { // IE
             return 'ie';
-        } else if (ua.indexOf('safari') != -1) { // Safari (check before Gecko because it includes "like Gecko")
-            return 'safari';
-        } else if (ua.indexOf('gecko') != -1) { // Gecko
+        } else if (ua.indexOf('webkit') != -1) { // Webkit supported agent
+            return 'webkit';
+        } else if (ua.indexOf('gecko') != -1) { // Gecko supported agent
             return 'gecko';
         } else {
             return false;
@@ -919,6 +918,5 @@ WSRequest.util = {
     }
 }
         ;
-
 
 
