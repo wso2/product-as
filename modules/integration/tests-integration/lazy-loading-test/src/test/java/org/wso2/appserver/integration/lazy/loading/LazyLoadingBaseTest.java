@@ -440,7 +440,7 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         boolean isTenantInGhostState = false;
         long totalSleepTime = 0;
 
-        log.info("Sleeping  for " + WEB_APP_IDLE_TIME + " milliseconds (WebApp idle tome).");
+        log.info("Sleeping  for " + WEB_APP_IDLE_TIME + " milliseconds (WebApp idle time).");
         try {
             Thread.sleep(WEB_APP_IDLE_TIME);
         } catch (InterruptedException interruptedException) {
