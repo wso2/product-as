@@ -18,22 +18,20 @@
 
 package org.wso2.appserver.integration.lazy.loading.util;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Bean class to store web-app information
  */
-@XmlRootElement(name = "WebAppStatus")
-public class WebAppStatus {
+public class WebAppStatusBean {
 
-    private TenantStatus tenantStatus;
+    private TenantStatusBean tenantStatus;
     private boolean webAppStarted;
     private boolean webAppGhost;
 
     /**
      * No argument constructor.
      */
-    public WebAppStatus() {
+    public WebAppStatusBean() {
     }
 
 
@@ -44,7 +42,7 @@ public class WebAppStatus {
      * @param webAppStarted true if web-app is started or else false.
      * @param webAppGhost   true if web-app is fully loaded or else false.
      */
-    public WebAppStatus(TenantStatus tenantStatus, boolean webAppStarted, boolean webAppGhost) {
+    public WebAppStatusBean(TenantStatusBean tenantStatus, boolean webAppStarted, boolean webAppGhost) {
         this.tenantStatus = tenantStatus;
         this.webAppStarted = webAppStarted;
         this.webAppGhost = webAppGhost;
@@ -55,7 +53,7 @@ public class WebAppStatus {
      *
      * @param tenantStatus current status of the tenant.
      */
-    public void setTenantStatus(TenantStatus tenantStatus) {
+    public void setTenantStatus(TenantStatusBean tenantStatus) {
         this.tenantStatus = tenantStatus;
     }
 
@@ -83,7 +81,7 @@ public class WebAppStatus {
      *
      * @return TenantStatus information of tenant context
      */
-    public TenantStatus getTenantStatus() {
+    public TenantStatusBean getTenantStatus() {
         return tenantStatus;
     }
 
