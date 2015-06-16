@@ -100,10 +100,10 @@
                 <artifactId>hibernate</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
-	    <dependency>
-            	<groupId>net.sf.ehcache.wso2</groupId>
-            	<artifactId>ehcache</artifactId>
-            	<version>${ehcache.version}</version>
+            <dependency>
+                <groupId>net.sf.ehcache.wso2</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>${ehcache.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.bcel.wso2</groupId>
@@ -157,8 +157,8 @@
                 <artifactId>org.wso2.appserver.styles</artifactId>
                 <version>${product.as.version}</version>
             </dependency>
-	
-	    <dependency>
+
+            <dependency>
                 <groupId>org.wso2.tomcat</groupId>
                 <artifactId>tomcat-jsp-api</artifactId>
                 <version>${orbit.version.tomcat.jsp.api}</version>
@@ -332,6 +332,18 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.wso2.carbon.registry</groupId>
+                <artifactId>org.wso2.carbon.registry.resource.stub</artifactId>
+                <version>${carbon.registry.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.registry</groupId>
+                <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
+                <version>${carbon.registry.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>org.wso2.appserver.integration.common.clients</artifactId>
                 <version>${product.as.version}</version>
@@ -370,7 +382,6 @@
                 <groupId>org.wso2.carbon.automation</groupId>
                 <artifactId>org.wso2.carbon.automation.extensions</artifactId>
                 <version>${carbon.automation.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.automationutils</groupId>
@@ -436,7 +447,6 @@
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
                 <version>${carbon.commons.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.jacoco</groupId>
@@ -532,7 +542,7 @@
         <axis2.jaxb.version>${orbit.version.axis2}</axis2.jaxb.version>
         <axis2.version>${orbit.version.axis2}</axis2.version>
 
-	<orbit.version.tomcat.jsp.api>7.0.59.wso2v1</orbit.version.tomcat.jsp.api>
+        <orbit.version.tomcat.jsp.api>7.0.59.wso2v1</orbit.version.tomcat.jsp.api>
 
         <javax.servlet.version>3.0.0.v201112011016</javax.servlet.version>
         <javax.servlet.jsp.version>2.2.0.v201112011158</javax.servlet.jsp.version>

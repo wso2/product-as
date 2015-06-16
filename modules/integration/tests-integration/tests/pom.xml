@@ -269,6 +269,18 @@
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.carbon.registry</groupId>
+            <artifactId>org.wso2.carbon.registry.resource.stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.registry</groupId>
+            <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.automationutils</groupId>
+            <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.xfer</groupId>
             <artifactId>wso2xfer</artifactId>
             <type>jar</type>

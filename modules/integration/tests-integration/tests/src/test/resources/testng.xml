@@ -6,7 +6,7 @@
     <test name="logviewer-tests" parallel="false">
         <!--todo-->
         <packages>
-        <package name="org.wso2.appserver.integration.tests.logviewer"></package>
+            <package name="org.wso2.appserver.integration.tests.logviewer"></package>
         </packages>
     </test>
 
@@ -55,6 +55,11 @@
         </classes>
     </test>
 
+    <test name="carbontool-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.carbontools"/>
+        </packages>
+    </test>
 
     <!-- Commented since ModuleAdminService are removed from AS -->
     <!--<test name="module-tests" preserve-order="true" parallel="false">
