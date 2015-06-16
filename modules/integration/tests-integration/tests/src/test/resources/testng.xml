@@ -13,7 +13,7 @@
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
             <!--Todo - Need to enabled when JavaEE feature is completed -->
-            <package name="org.wso2.appserver.integration.tests.javaee"/>
+            <!--<package name="org.wso2.appserver.integration.tests.javaee"/>-->
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
             <package name="org.wso2.appserver.integration.tests.webapp.classloading"/>
             <package name="org.wso2.appserver.integration.tests.webapp.concurrency"/>
@@ -27,7 +27,6 @@
     <test name="carbon-app-tests" preserve-order="true" parallel="false">
         <classes>
             <!--Todo-->
-            <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
             <class name="org.wso2.appserver.integration.tests.carbonappservice.WSAS1798CAppWarUndeployTest"/>
         </classes>
     </test>
@@ -81,6 +80,11 @@
         <packages>
             <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
         </packages>
+    </test>
+    <test name="carbon-app-tests" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
+        </classes>
     </test>
     -->
 
