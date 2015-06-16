@@ -294,6 +294,13 @@
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.client.configcontext.provider</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/test/lib/org.wso2.carbon.client.configcontext.provider-1.0.0.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

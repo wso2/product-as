@@ -21,6 +21,7 @@
             <package name="org.wso2.appserver.integration.tests.webapp.mgt"/>
             <package name="org.wso2.appserver.integration.tests.webapp.spring"/>
             <package name="org.wso2.appserver.integration.tests.webapp.virtualhost"/>
+            <package name="org.wso2.appserver.integration.tests.osgiservice"/>
         </packages>
     </test>
 
