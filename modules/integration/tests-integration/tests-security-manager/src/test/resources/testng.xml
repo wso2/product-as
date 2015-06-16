@@ -1,0 +1,22 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="ASSecurityManagerTestSuite" parallel="false">
+    <listeners>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestExecutionListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestSuiteListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestTransformerListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestManagerListener"/>
+        <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestReportListener"/>
+    </listeners>
+
+
+    <test name="Test-Java-Security-Manager" preserve-order="true" verbose="2" parallel="false">
+        <classes>
+            <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerTestCase"/>
+            <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerPolicyTestCase"/>
+        </classes>
+    </test>
+
+</suite>
+
+

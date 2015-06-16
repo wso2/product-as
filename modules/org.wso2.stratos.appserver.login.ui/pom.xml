@@ -20,13 +20,12 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>wso2appserver-parent</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.stratos.appserver.login.ui</artifactId>
-    <version>${stratos.version}</version>
     <packaging>bundle</packaging>
     <name>WSO2 AS - Login User Interface</name>
 

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>org.wso2.appserver.nested.categories</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -56,20 +56,32 @@
                                 </properties>
                             </adviceFile>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.ntask:${carbon.platform.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.event.common:${carbon.platform.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.event.server:${carbon.platform.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.event.ui:${carbon.platform.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.discovery.core:${carbon.platform.version}
-                                </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.discovery.admin.ui:${carbon.platform.version}
-                                </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.deployment.synchronizer:${carbon.platform.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.ntask:${carbon.commons.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.deployment.synchronizer.git:${carbon.platform.version}
+                                    org.wso2.carbon.event.common:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.transaction.manager:${carbon.platform.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.event.server:${carbon.commons.version}
+                                </importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.event.ui:${carbon.commons.version}
+                                </importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.discovery.core:${carbon.commons.version}
+                                </importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.discovery.admin.ui:${carbon.commons.version}
+                                </importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.deployment.synchronizer:${carbon.commons.version}
+                                </importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.deployment.synchronizer.git:${carbon.commons.version}
+                                </importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.transaction.manager:${carbon.commons.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

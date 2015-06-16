@@ -1,0 +1,27 @@
+env/comp/ComponentName=tomee-ejb-examples-1.1.0
+env/comp/TransactionManager=org.apache.geronimo.transaction.manager.GeronimoTransactionManager
+env/comp/TransactionSynchronizationRegistry=org.apache.geronimo.transaction.manager.GeronimoTransactionManager
+env/context.xml/environment=ContextString
+env/context.xml/resource=[ResourceBean ContextResource]
+env/jpa-example=org.apache.openejb.assembler.classic.ReloadableEntityManagerFactory
+env/module/ModuleName=tomee-ejb-examples-1.1.0
+env/org.superbiz.servlet.AnnotatedEJB/ds=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
+env/org.superbiz.servlet.AnnotatedServlet/ds=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
+env/org.superbiz.servlet.AnnotatedServlet/localbeanEJB=AnnotatedEJB[name=foo]
+env/org.superbiz.servlet.AnnotatedServlet/localEJB=proxy=org.superbiz.servlet.AnnotatedEJBLocal;deployment=AnnotatedEJB;pk=null
+env/org.superbiz.servlet.AnnotatedServlet/remoteEJB=proxy=org.superbiz.servlet.AnnotatedEJBRemote;deployment=AnnotatedEJB;pk=null
+env/org.superbiz.servlet.RunAsServlet/secureEJBLocal=proxy=org.superbiz.servlet.SecureEJBLocal;deployment=SecureEJB;pk=null
+env/org.superbiz.servlet.SecureServlet/secureEJBLocal=proxy=org.superbiz.servlet.SecureEJBLocal;deployment=SecureEJB;pk=null
+##env/org.superbiz.servlet.WebserviceServlet/helloEjb=ERROR: java.util.HashSet cannot be cast to java.util.List
+##env/org.superbiz.servlet.WebserviceServlet/helloPojo=ERROR: java.util.HashSet cannot be cast to java.util.List
+env/web.xml/Data Source=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
+env/web.xml/EjbRemote=proxy=org.superbiz.servlet.AnnotatedEJBRemote;deployment=AnnotatedEJB;pk=null
+env/web.xml/EjLocal=proxy=org.superbiz.servlet.AnnotatedEJBLocal;deployment=AnnotatedEJB;pk=null
+env/web.xml/env-entry=WebValue
+env/web.xml/PersistenceContext=org.apache.openejb.persistence.JtaEntityManager
+env/web.xml/PersistenceUnit=org.apache.openejb.assembler.classic.ReloadableEntityManagerFactory
+env/web.xml/resource-env-ref=[ResourceBean ContextResourceEnvRef]
+env/web.xml/resource-ref=[ResourceBean ContextResourceRef]
+TransactionManager=org.apache.geronimo.transaction.manager.GeronimoTransactionManager
+TransactionSynchronizationRegistry=org.apache.geronimo.transaction.manager.GeronimoTransactionManager
+UserTransaction=org.apache.geronimo.transaction.manager.GeronimoTransactionManager

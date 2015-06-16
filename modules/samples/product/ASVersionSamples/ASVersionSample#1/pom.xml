@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>wso2appserver-version-samples</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -12,7 +12,6 @@
     <name>Web Version Demo</name>
     <description>Web Version Demo</description>
     <packaging>war</packaging>
-
 
     <build>
         <finalName>VersionSample#1</finalName>
@@ -23,11 +22,9 @@
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
-                <version>2.3.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
                 <configuration>
                     <buildcommands>
                         <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
@@ -50,7 +47,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.7</version>
                         <executions>
                             <execution>
                                 <phase>compile</phase>
@@ -73,7 +69,4 @@
             </build>
         </profile>
     </profiles>
-
-
-
 </project>

@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>wso2appserver-cxf-samples</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -38,26 +38,22 @@
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
-                <version>2.3.2</version>
             </plugin>
-		<plugin>
-        		<artifactId>maven-eclipse-plugin</artifactId>
-        		<version>2.9</version>
-        		<configuration>
-          			<buildcommands>
-            				<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-          			</buildcommands>
-          			<projectnatures>
-            				<projectnature>org.wso2.developerstudio.eclipse.jaxws.project.nature</projectnature>
-            				<projectnature>org.eclipse.jdt.core.javanature</projectnature>
-          			</projectnatures>
-        		</configuration>
-		</plugin>
+            <plugin>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <buildcommands>
+                        <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+                    </buildcommands>
+                    <projectnatures>
+                        <projectnature>org.wso2.developerstudio.eclipse.jaxws.project.nature</projectnature>
+                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                    </projectnatures>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
-                     
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <warName>${project.artifactId}</warName>
                 </configuration>
@@ -65,7 +61,6 @@
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
-                <version>${cxf.version}</version>
                 <executions>
                     <execution>
                         <id>generate-sources</id>
@@ -86,26 +81,25 @@
                     </execution>
                 </executions>
             </plugin>
-            
-		<plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-dependency-plugin</artifactId>
-		<version>2.4</version>
-		<executions>
-		  <execution>
-		    <id>copy-dependencies</id>
-		    <phase>package</phase>
-		    <goals>
-		      <goal>copy-dependencies</goal>
-		    </goals>
-		    <configuration>
-		      <outputDirectory>${basedir}/../junit</outputDirectory>
-		      <includeArtifactIds>junit</includeArtifactIds>
-	              <excludeTransitive>true</excludeTransitive>
-		    </configuration>
-		  </execution>
-		</executions>
-	      </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/../junit</outputDirectory>
+                            <includeArtifactIds>junit</includeArtifactIds>
+                            <excludeTransitive>true</excludeTransitive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -118,7 +112,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.7</version>
                         <executions>
                             <execution>
                                 <phase>compile</phase>
@@ -148,7 +141,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.2.1</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -174,7 +166,6 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-bundle</artifactId>
-            <version>${cxf.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
