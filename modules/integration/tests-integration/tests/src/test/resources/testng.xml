@@ -4,6 +4,7 @@
     <parameter name="useDefaultListeners" value="false"/>
 
     <test name="logviewer-tests" parallel="false">
+        <!--todo-->
         <packages>
             <package name="org.wso2.appserver.integration.tests.logviewer"></package>
         </packages>
@@ -23,77 +24,36 @@
         </packages>
     </test>
 
-    <!--<test name="module-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.deployedmoduleservice"/>
-        </packages>
-    </test>-->
-
-  <!--  <test name="sample-service-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.sampleservices.*"/>
-        </packages>
-    </test>-->
-
-    <!--<test name="rest-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.rest.test.poxsecurity"/>
-        </packages>
-    </test>-->
-
     <test name="carbon-app-tests" preserve-order="true" parallel="false">
         <classes>
-            <!--FIXME: WSAS-1888
-            <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
-            -->
-            <!--Todo - Need to enabled once Carbon-Deployment 4.4.2 released -->
-            <!--<class name="org.wso2.appserver.integration.tests.carbonappservice.WSAS1798CAppWarUndeployTest"/>-->
+            <!--Todo-->
+            <class name="org.wso2.appserver.integration.tests.carbonappservice.WSAS1798CAppWarUndeployTest"/>
         </classes>
     </test>
 
     <test name="services-tests" preserve-order="true" parallel="false">
         <packages>
-            <!--<package name="org.wso2.appserver.integration.tests.springservice"/>
-            <package name="org.wso2.appserver.integration.tests.jarservice"/>
-            <package name="org.wso2.appserver.integration.tests.aarservice"/>-->
-            <!--<package name="org.wso2.appserver.integration.tests.commodityquoteservice"/>-->
-            <!--<package name="org.wso2.appserver.integration.tests.helloworldsampleservice"/>-->
+            <!--Todo-->
             <package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>
             <package name="org.wso2.appserver.integration.tests.jndi"/>
-            <!--<package name="org.wso2.appserver.integration.tests.jsonservice"/>-->
-            <!--<package name="org.wso2.appserver.integration.tests.mtomservice"/>-->
-            <!--<package name="org.wso2.appserver.integration.tests.qualityofservice"/>-->
-            <!--<package name="org.wso2.appserver.integration.tests.security"/>-->
         </packages>
     </test>
 
-<!--
-    FIXME: WSAS-1738
-    <test name="wsdl2java-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
-        </packages>
-    </test>
--->
+    <!--FIXME: WSAS-1887 - Need to enable after integrating cipherTool-->
+    <!--<test name="ciphertool-tests" preserve-order="true" parallel="false">-->
+    <!--<packages>-->
+    <!--<package name="org.wso2.appserver.integration.tests.ciphertool"/>-->
+    <!--</packages>-->
+    <!--</test>-->
 
-<!--
-   FIXME: WSAS-1746
     <test name="jaggery-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.jaggery"/>
         </packages>
+        <classes>
+            <!-- Todo - enable WSStubHostObjectTestCase once WSAS-1708 fixed-->
+        </classes>
     </test>
--->
-
-<!--
-  FIXME: WSAS-1887
-    <test name="ciphertool-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.ciphertool"/>
-        </packages>
-    </test>
--->
-
 
     <test name="carbontool-tests" preserve-order="true" parallel="false">
         <packages>
@@ -101,13 +61,51 @@
         </packages>
     </test>
 
-    <test name="jaggery-tests" preserve-order="true" parallel="false">
+    <!-- Commented since ModuleAdminService are removed from AS -->
+    <!--<test name="module-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.deployedmoduleservice"/>
+        </packages>
+    </test>-->
+
+    <!-- Commented since serviceMgt AdminServices are removed from AS -->
+    <!--  <test name="sample-service-tests" preserve-order="true" parallel="false">
+          <packages>
+              <package name="org.wso2.appserver.integration.tests.sampleservices.*"/>
+          </packages>
+      </test>
+      <test name="rest-tests" preserve-order="true" parallel="false">
+          <packages>
+              <package name="org.wso2.appserver.integration.tests.rest.test.poxsecurity"/>
+          </packages>
+      </test>-->
+
+    <!-- Due to ServiceAdminService is removed
+    <test name="wsdl2java-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
+        </packages>
+    </test>
+    <test name="carbon-app-tests" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886RegistryTest"/>
-            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886ServerServerTest"/>
-            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886ServerTest"/>
-            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886UserManagerTest"/>
-            <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886UserTest"/>
+            <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
         </classes>
     </test>
+    -->
+
+    <!-- Commented since serviceMgt AdminServices are removed from AS
+    <test name="services-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.springservice"/>
+            <package name="org.wso2.appserver.integration.tests.jarservice"/>
+            <package name="org.wso2.appserver.integration.tests.aarservice"/>
+            <package name="org.wso2.appserver.integration.tests.commodityquoteservice"/>
+            <package name="org.wso2.appserver.integration.tests.helloworldsampleservice"/>
+            <package name="org.wso2.appserver.integration.tests.jsonservice"/>
+            <package name="org.wso2.appserver.integration.tests.mtomservice"/>
+            <package name="org.wso2.appserver.integration.tests.qualityofservice"/>
+            <package name="org.wso2.appserver.integration.tests.security"/>
+        </packages>
+    </test> -->
+
 </suite>
