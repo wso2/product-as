@@ -239,7 +239,7 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
             "All request should  get expected output",
-            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPInCarbonAppUsageInGhostDeployment", enabled = true)
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPInCarbonAppUsageInGhostDeployment", enabled = false)
     public void testConcurrentWebAPPInCarbonAppInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
@@ -313,6 +313,8 @@ public class CarbonAppGhostDeploymentTestCase extends LazyLoadingBaseTest {
     public void testConcurrentWebAPPInCarbonAppInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
         //This test method case disable because of CARBON-15270
         serverManager.restartGracefully();
+        responseDataList.clear();
+        responseDetailedInfoList.clear();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(tenant1WebApp2URL, null);
