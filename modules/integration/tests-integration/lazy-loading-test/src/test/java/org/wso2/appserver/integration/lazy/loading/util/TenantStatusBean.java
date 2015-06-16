@@ -18,20 +18,19 @@
 
 package org.wso2.appserver.integration.lazy.loading.util;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Bean class to store tenant information.
  */
-@XmlRootElement(name = "TenantStatus")
-public class TenantStatus {
+
+public class TenantStatusBean {
 
     private boolean tenantContextLoaded;
 
     /**
      * No argument constructor.
      */
-    public TenantStatus() {
+    public TenantStatusBean() {
     }
 
     /**
@@ -39,7 +38,7 @@ public class TenantStatus {
      *
      * @param tenantContextLoaded true if tenant context is loaded or else false
      */
-    public TenantStatus(boolean tenantContextLoaded) {
+    public TenantStatusBean(boolean tenantContextLoaded) {
         this.tenantContextLoaded = tenantContextLoaded;
 
     }
