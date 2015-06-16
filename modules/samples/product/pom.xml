@@ -54,6 +54,7 @@
         <module>TomcatWebApps/CarbonDataSourceAccessExample</module>
         <module>Axis2Module</module>
         <module>EntitlementFilter</module>
+        <module>SSOValveSample</module>
     </modules>
 
 </project>
