@@ -576,6 +576,12 @@
             <fileMode>644</fileMode>
         </file>
         <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/sso-sp-config.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
             <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/system.properties</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomee</outputDirectory>
             <filtered>true</filtered>
