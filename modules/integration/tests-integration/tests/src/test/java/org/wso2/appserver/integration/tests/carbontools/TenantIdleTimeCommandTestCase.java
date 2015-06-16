@@ -26,7 +26,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
-import org.wso2.carbon.integration.common.extensions.carbonserver.MultipleServersManager;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
 import org.wso2.carbon.integration.common.extensions.usermgt.UserPopulator;
 import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;

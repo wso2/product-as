@@ -75,7 +75,6 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.PLATFORM})
     @Test(groups = "wso2.as", description = "MySQL Password changing script run test", enabled = false)
     public void testScriptRunChangeUserPasswordMySqlDB() throws Exception {
-        final char[] dbPassword = {'w', 's', 'o', '2', 'c', 'a', 'r', 'b', 'o', 'n'};
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         AutomationContext autoCtx = new AutomationContext();
 

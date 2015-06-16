@@ -71,7 +71,6 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
 
     @Test(groups = "wso2.as", description = "H2DB Password changing script run test")
     public void testScriptRunChangeUserPasswordWithCharacterH2DBTestCase() throws Exception {
-        final char[] dbPassword = {'w', 's', 'o', '2', 'c', 'a', 'r', 'b', 'o', 'n'};
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         AutomationContext autoCtx = new AutomationContext();
 

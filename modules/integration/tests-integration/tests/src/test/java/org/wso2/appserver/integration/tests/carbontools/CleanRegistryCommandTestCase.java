@@ -32,9 +32,10 @@ import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.integration.common.extensions.carbonserver.MultipleServersManager;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
 import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
+import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 import org.xml.sax.SAXException;
 
 import javax.activation.DataHandler;
@@ -127,7 +128,8 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
 
     private void initEnvironment()
             throws IOException, XPathExpressionException, URISyntaxException, SAXException,
-                   XMLStreamException, LoginAuthenticationExceptionException {
+                   XMLStreamException, LoginAuthenticationExceptionException,
+                   AutomationUtilException {
         LoginLogoutClient loginLogoutClientForInstance002 = new LoginLogoutClient(context);
         sessionCookieForInstance002 = loginLogoutClientForInstance002.login();
         backendURLForInstance002 = context.getContextUrls().getBackEndUrl();

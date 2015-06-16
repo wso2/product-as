@@ -50,7 +50,6 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
     private AutomationContext automationContext;
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private String H2DB_URL;
     private AuthenticatorClient authenticatorClient;
     private static final char[] userNewPassword = {'t', 'e', 's', 't', 'u', '1', '2', '3', 'U', 'D', '9'};
     private DataSourceBean dataSourceBean;
@@ -72,7 +71,6 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "H2DB Password changing script run test")
     public void testScriptRunChangeUserPasswordH2DB() throws Exception {
-        final char[] dbPassword = {'w', 's', 'o', '2', 'c', 'a', 'r', 'b', 'o', 'n'};
 
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         AutomationContext autoCtx = new AutomationContext();

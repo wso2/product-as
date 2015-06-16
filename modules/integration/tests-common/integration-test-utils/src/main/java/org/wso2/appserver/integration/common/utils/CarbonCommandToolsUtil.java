@@ -18,7 +18,7 @@
 
 package org.wso2.appserver.integration.common.utils;
 
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.appserver.integration.common.bean.DataSourceBean;
@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 /**
  * This class has the method which using by carbon tools test cases
@@ -311,7 +312,8 @@ public class CarbonCommandToolsUtil {
      */
     private static String[] mergePropertiesToCommandArray(String[] parameters, String[] cmdArray) {
         if (parameters != null && cmdArray != null) {
-            cmdArray = ArrayUtils.addAll(cmdArray, parameters);
+            Object[] cmdObjectArray = ArrayUtils.addAll(cmdArray, parameters);
+            cmdArray = Arrays.asList(cmdObjectArray).toArray(new String[cmdObjectArray.length]);
         }
         return cmdArray;
     }
