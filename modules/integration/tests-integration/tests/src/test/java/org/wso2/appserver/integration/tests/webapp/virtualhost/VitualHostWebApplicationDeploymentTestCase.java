@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
 /*
@@ -46,9 +47,13 @@ import static org.testng.Assert.assertTrue;
 public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTest {
     private static int GET_RESPONSE_DELAY = 30 * 1000;
     private final String webAppFileName = "appServer-valied-deploymant-1.0.0.war";
+    private final String webAppFileName1 = "HelloWorldWebapp.war";
     private final String webAppName = "appServer-valied-deploymant-1.0.0";
+    private final String webAppName1 = "HelloWorldWebapp";
     private final String appBaseDir = "dir";
+    private final String appBaseDir1 = "dir1";
     private final String vhostName = "www.vhost.com";
+    private final String vhostName1 = "www.vhost1.com";
     private ServerConfigurationManager serverManager;
     private WebAppAdminClient webAppAdminClient;
 
@@ -80,16 +85,20 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
 
     @Test
     public void testWebApplicationDeployment() throws Exception {
-        uploadWarFileToAppBase();
+        uploadWarFile(appBaseDir, webAppFileName);
+        uploadWarFile(appBaseDir1, webAppFileName1);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
                 backendURL, sessionCookie, webAppName)
+                , "Web Application Deployment failed");
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
+                backendURL, sessionCookie, webAppName1)
                 , "Web Application Deployment failed");
     }
 
     @Test(dependsOnMethods = "testWebApplicationDeployment")
     public void testInvokeWebApplication() throws Exception {
 
-        GetMethod getRequest = invokeWebapp();
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, vhostName);
         String response = getRequest.getResponseBodyAsString();
         int statusCode = getRequest.getStatusCode();
 
@@ -98,35 +107,156 @@ public class VitualHostWebApplicationDeploymentTestCase extends ASIntegrationTes
 
     }
 
-    @Test(dependsOnMethods = {"testWebApplicationDeployment", "testInvokeWebApplication"})
+    @Test(dependsOnMethods = "testWebApplicationDeployment")
+    public void testInvokeWebApplicationWithLocalhost() throws Exception {
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, null);
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertNotEquals("<status>success</status>\n", response, "Unexpected response: " + response);
+
+    }
+
+    @Test(dependsOnMethods = "testWebApplicationDeployment")
+    public void testInvokeWebApplicationWithDifferentVirtualHost() throws Exception {
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, vhostName1);
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_NOT_FOUND,
+                "Unexpectedly able to access the Webapp via invalid virtual host. Received response code " + statusCode);
+
+    }
+
+    @Test(dependsOnMethods = "testWebApplicationDeployment")
+    public void testInvokeWebApplicationsInDifferentVirtualHost() throws Exception {
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, vhostName);
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertEquals("<status>success</status>\n", response, "Unexpected response: " + response);
+
+        getRequest = invokeWebapp(webAppURL, webAppName1, vhostName1);
+        response = getRequest.getResponseBodyAsString();
+        statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertTrue(response.contains("Hello 1!"), "Unexpected response: " + response);
+    }
+
+    @Test(dependsOnMethods = {"testWebApplicationDeployment", "testInvokeWebApplication",
+            "testInvokeWebApplicationWithLocalhost", "testInvokeWebApplicationWithDifferentVirtualHost",
+            "testInvokeWebApplicationsInDifferentVirtualHost"})
     public void testDeleteWebApplication() throws Exception {
         webAppAdminClient.deleteWebAppFile(webAppFileName, vhostName);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, vhostName1);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName),
                 "Web Application unDeployment failed");
 
-        GetMethod getRequest = invokeWebapp();
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, vhostName);
         int statusCode = getRequest.getStatusCode();
         assertEquals(statusCode, HttpStatus.SC_NOT_FOUND, "Response code mismatch. Client request " +
                 "got a response even after web app is undeployed , Status code: " + statusCode);
     }
 
-    private void uploadWarFileToAppBase() throws IOException {
+    @Test (dependsOnMethods = {"testDeleteWebApplication"})
+    public void testWebApplicationDeploymentInDefaultHost() throws Exception {
+        uploadWarFile("webapps", webAppFileName);
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
+                backendURL, sessionCookie, webAppName)
+                , "Web Application Deployment failed");
+    }
+
+    @Test(dependsOnMethods = "testWebApplicationDeploymentInDefaultHost")
+    public void testInvokeWebApplicationInDefaultHost() throws Exception {
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, null);
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertEquals("<status>success</status>\n", response, "Unexpected response: " + response);
+
+    }
+
+    @Test(dependsOnMethods = "testWebApplicationDeploymentInDefaultHost")
+    public void testInvokeWebApplicationInDefaultHostWithLocalhost() throws Exception {
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, "localhost");
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertEquals("<status>success</status>\n", response, "Unexpected response: " + response);
+
+    }
+
+    @Test(dependsOnMethods = "testWebApplicationDeploymentInDefaultHost")
+    public void testInvokeWebApplicationInDefaultHostWithNonExistingHost() throws Exception {
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, "nonexisting.com");
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertEquals("<status>success</status>\n", response, "Unexpected response: " + response);
+
+    }
+
+    @Test(dependsOnMethods = "testWebApplicationDeploymentInDefaultHost")
+    public void testInvokeWebApplicationInDefaultHostWithOtherExistingHost() throws Exception {
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, vhostName);
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_NOT_FOUND, "Response code mismatch. Client request " +
+                "got a response with other virtual host , Status code: " + statusCode);
+
+    }
+
+    @Test(dependsOnMethods = {"testWebApplicationDeploymentInDefaultHost", "testInvokeWebApplicationInDefaultHost",
+        "testInvokeWebApplicationInDefaultHostWithLocalhost" ,"testInvokeWebApplicationInDefaultHostWithNonExistingHost",
+        "testInvokeWebApplicationInDefaultHostWithOtherExistingHost"})
+    public void testDeleteWebApplicationInDefaultHost() throws Exception {
+        webAppAdminClient.deleteWebAppFile(webAppFileName, "localhost");
+        assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
+                        backendURL, sessionCookie, webAppName),
+                "Web Application unDeployment failed");
+
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName, vhostName);
+        int statusCode = getRequest.getStatusCode();
+        assertEquals(statusCode, HttpStatus.SC_NOT_FOUND, "Response code mismatch. Client request " +
+                "got a response even after web app is undeployed , Status code: " + statusCode);
+    }
+
+    private void uploadWarFile(String appBaseDir, String webAppFileName) throws IOException {
         //add war file to a virtual host appBase
         String sourceLocation = TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" +
                 File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName;
         String targetLocation = System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" +
-                File.separator + "deployment" + File.separator + "server" + File.separator + appBaseDir;
+                File.separator + "deployment" + File.separator + "server";
+        if (appBaseDir != null) {
+            targetLocation += File.separator + appBaseDir;
+        }
         FileManager.copyResourceToFileSystem(sourceLocation, targetLocation, webAppFileName);
     }
 
-    private GetMethod invokeWebapp() throws IOException {
+    private GetMethod invokeWebapp(String webAppURL, String webAppName, String vhostName) throws IOException {
         String webappUrl = webAppURL + "/" + webAppName + "/";
         HttpClient client = new HttpClient();
         GetMethod getRequest = new GetMethod(webappUrl);
-        //set Host tag value of request header to $vhostName
-        //(This avoids the requirement to add an entry to etc/hosts/ to pass this test case)
-        getRequest.getParams().setVirtualHost(vhostName);
+        if (vhostName != null) {
+            //set Host tag value of request header to $vhostName
+            //(This avoids the requirement to add an entry to etc/hosts/ to pass this test case)
+            getRequest.getParams().setVirtualHost(vhostName);
+        }
         Calendar startTime = Calendar.getInstance();
         while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < GET_RESPONSE_DELAY) {
             client.executeMethod(getRequest);
