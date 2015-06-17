@@ -231,7 +231,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send concurrent requests  when tenant context is not loaded." +
             "All request should  get expected output",
-            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment", enabled = true)
+            dependsOnMethods = "testTenantUnloadInIdleTimeAfterWebAPPUsageInGhostDeployment", enabled = false)
     public void testConcurrentWebAPPInvocationsWhenTenantContextNotLoadedInGhostDeployment() throws Exception {
         serverManager.restartGracefully();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
@@ -240,6 +240,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
         for (int i = 0; i < CONCURRENT_THREAD_COUNT; i++) {
+            final int requestId = i;
             executorService.execute(new Runnable() {
 
                 public void run() {
@@ -253,11 +254,12 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         String responseDetailedInfo;
                         String responseData;
                         if (httpResponse != null) {
-                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data :" + httpResponse.getData() +
                                     "\tResponse Code:" + httpResponse.getResponseCode();
                             responseData = httpResponse.getData();
                         } else {
-                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data : NULL Object return from " +
+                                    "HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
                         responseDataList.add(responseData);
@@ -304,18 +306,23 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
     public void testConcurrentWebAPPInvocationsWhenTenantContextLoadedInGhostDeployment() throws Exception {
         //This test method case disable because of CARBON-15270
         serverManager.restartGracefully();
+        responseDataList.clear();
+        responseDetailedInfoList.clear();
         assertFalse(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  loaded before access. Tenant name: " + tenantDomain1);
+
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(tenant1WebApp2URL, null);
         assertTrue(httpResponseApp2.getData().contains(WEB_APP2_RESPONSE), "Invocation of Web-App fail :"
                 + tenant1WebApp2URL);
         assertTrue(getTenantStatus(tenantDomain1).isTenantContextLoaded(),
                 "Tenant context is  not loaded after access. Tenant name: " + tenantDomain1);
+
         WebAppStatusBean webAppStatusTenant1WebApp2 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME2);
         assertTrue(webAppStatusTenant1WebApp2.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME2 +
                 " is not started in Tenant:" + tenantDomain1);
         assertFalse(webAppStatusTenant1WebApp2.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME2 +
                 " is in ghost mode after invoking in Tenant:" + tenantDomain1);
+
         WebAppStatusBean webAppStatusTenant1WebApp1 = getWebAppStatus(tenantDomain1, WEB_APP_FILE_NAME1);
         assertTrue(webAppStatusTenant1WebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 +
                 " is not started in Tenant:" + tenantDomain1);
@@ -326,6 +333,7 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
         for (int i = 0; i < CONCURRENT_THREAD_COUNT; i++) {
+            final int requestId = i;
             executorService.execute(new Runnable() {
 
                 public void run() {
@@ -339,11 +347,12 @@ public class WebApplicationGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         String responseDetailedInfo;
                         String responseData;
                         if (httpResponse != null) {
-                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data :" + httpResponse.getData() +
                                     "\tResponse Code:" + httpResponse.getResponseCode();
                             responseData = httpResponse.getData();
                         } else {
-                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseDetailedInfo = "Request ID " + requestId + "Response Data : NULL Object return from " +
+                                    "HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
                         responseDataList.add(responseData);

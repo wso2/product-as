@@ -135,8 +135,8 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
 
     @Test(groups = "wso2.as.lazy.loading", description = "Send a Get request after a web app is auto unload  and reload" +
             " in to Ghost form. After access web app, it should be in fully load form  the Ghost form",
-            dependsOnMethods = "testInvokeWebAppInGhostDeploymentOnSuperTenant", enabled = false)
-    public void testWebAppAutoUnLoadAndInvokeInGhostDeploymentOnSupperTenant() throws LazyLoadingTestException {
+            dependsOnMethods = "testInvokeWebAppInGhostDeploymentOnSuperTenant")
+    public void testWebAppAutoUnLoadAndInvokeInGhostDeploymentOnSuperTenant() throws LazyLoadingTestException {
         assertTrue(checkWebAppAutoUnloadingToGhostState(superTenantDomain, WEB_APP_FILE_NAME1),
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass in super tenant " +
                         "Web_app Name: " + WEB_APP_FILE_NAME1);
@@ -162,7 +162,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
     @Test(groups = "wso2.as.lazy.loading", description = "Test web application auto unload  and reload in Ghost" +
             " format. After access web app, it should be in fully load form  but after configured web app idle time pass" +
             " it should get auto unload ne reload in Ghost form.",
-            dependsOnMethods = "testInvokeWebAppInGhostDeploymentOnSuperTenant")
+            dependsOnMethods = "testWebAppAutoUnLoadAndInvokeInGhostDeploymentOnSuperTenant")
     public void testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant() throws Exception {
         serverManager.restartGracefully();
         HttpResponse httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
@@ -200,6 +200,7 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
         log.info("Concurrent invocation Start");
         log.info("Expected Response Data:" + WEB_APP1_RESPONSE);
         for (int i = 0; i < CONCURRENT_THREAD_COUNT; i++) {
+            final int requestId = i;
             executorService.execute(new Runnable() {
 
                 public void run() {
@@ -213,11 +214,12 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         String responseDetailedInfo;
                         String responseData;
                         if (httpResponse != null) {
-                            responseDetailedInfo = "Response Data :" + httpResponse.getData() +
+                            responseDetailedInfo = "Request ID " + requestId + " Response Data :" + httpResponse.getData() +
                                     "\tResponse Code:" + httpResponse.getResponseCode();
                             responseData = httpResponse.getData();
                         } else {
-                            responseDetailedInfo = "Response Data : NULL Object return from HttpURLConnectionClient";
+                            responseDetailedInfo = "Request ID " + requestId + " Response Data : NULL Object return from" +
+                                    " HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
                         responseDataList.add(responseData);
