@@ -518,6 +518,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <product.as.version>5.3.0-SNAPSHOT</product.as.version>
+        <appserver.version>${product.as.version}</appserver.version>
 
 <!--
         <synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
@@ -556,7 +557,6 @@
 -->
         <jibx.version>1.2.1.wso2v1</jibx.version>
         <jaxb.version>2.2.5.wso2v1</jaxb.version>
-        <appserver.version>5.2.1</appserver.version>
         <stratos.version.221>2.2.1</stratos.version.221>
         <stratos.version.222>2.2.2</stratos.version.222>
         <version.equinox.osgi.services>3.3.100.v20130513-1956</version.equinox.osgi.services>

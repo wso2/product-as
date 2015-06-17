@@ -34,25 +34,17 @@
     <modules>
         <module>ASVersionSamples</module>
         <module>Chad</module>
-        <!--<module>CommodityQuote</module>-->
         <module>TinyURL</module>
-        <!--module>Trader</module-->
         <module>FlickrClient</module>
-        <module>MTOM</module>
         <module>Jaxws-Jaxrs</module>
         <module>JavaEE-TomEE</module>
-        <module>JSON</module>
-        <module>Jibx</module>
         <module>HelloWorld</module>
-        <module>ClientAPI</module>
-        <module>Mail</module>
         <module>HelloWorldWebapp</module>
         <module>WebappVersioning</module>
         <module>VirtualDirectoryListing</module>
         <module>TomcatWebApps/GenericJavaBeanResource</module>
         <module>TomcatWebApps/JDBCDataSource</module>
         <module>TomcatWebApps/CarbonDataSourceAccessExample</module>
-        <module>Axis2Module</module>
         <module>EntitlementFilter</module>
         <module>SSOValveSample</module>
     </modules>
