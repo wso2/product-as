@@ -103,4 +103,9 @@
             <class name="org.wso2.appserver.integration.tests.jaggery.WSAS1886UserTest"/>
         </classes>
     </test>
+    <test name="tenant" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.tenant"/>
+        </packages>
+    </test>
 </suite>
