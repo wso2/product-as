@@ -11,11 +11,11 @@ Welcome to the WSO2 Application Server ${appserver.version} release
 
 New Features
 ------------
-* Websocket 1.1 API Support as defined by the JSR-356 specification
 * JavaEE 6 Web Profile support via TomEE 1.7.2 integration
+* Websocket 1.1 API Support as defined by the JSR-356 specification
 * Tomcat Virtual Hosts support
 * SAML2 Single-Sign-On support for web applications
-* WS-Discovery support for JAX-WS and JAX-RS services
+* WS-Discovery support for CXF JAX-WS and JAX-RS services
 * OSGi ServiceLoader Mediator specification support via SPI-Fly
 
 * Removed the first class support provided for deploying Axis2 AAR Services
@@ -69,7 +69,7 @@ Known Issues in This Release
 Including External Dependencies
 --------------------------------
 For a complete guide on adding external dependencies to WSO2 Application Server & other carbon related products refer to the article:
-http://wso2.org/library/knowledgebase/add-external-jar-libraries-wso2-carbon-based-products
+http://wso2.org/library/knowlegebase/add-external-jar-libraries-wso2-carbon-based-products
 
 Application Server Binary Distribution Directory Structure
 --------------------------------------------
