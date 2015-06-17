@@ -55,6 +55,12 @@
         </classes>
     </test>
 
+    <test name="carbontool-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.carbontools"/>
+        </packages>
+    </test>
+
     <test name="spi-fly-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.spi.fly"/>
