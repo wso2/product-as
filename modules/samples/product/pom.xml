@@ -46,6 +46,7 @@
         <module>TomcatWebApps/JDBCDataSource</module>
         <module>TomcatWebApps/CarbonDataSourceAccessExample</module>
         <module>EntitlementFilter</module>
+        <module>SSOValveSample</module>
     </modules>
 
 </project>
