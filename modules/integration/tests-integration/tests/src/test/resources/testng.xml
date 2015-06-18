@@ -62,6 +62,12 @@
         </packages>
     </test>
 
+    <test name="spi-fly-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.spi.fly"/>
+        </packages>
+    </test>
+
     <!-- Commented since ModuleAdminService are removed from AS -->
     <!--<test name="module-tests" preserve-order="true" parallel="false">
         <packages>

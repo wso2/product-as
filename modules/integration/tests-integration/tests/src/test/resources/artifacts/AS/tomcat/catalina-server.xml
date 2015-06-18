@@ -98,7 +98,17 @@
                 <Valve className="org.wso2.carbon.bam.webapp.stat.publisher.WebAppStatisticPublisherValve"/>
                 <Valve className="org.wso2.carbon.statistics.webapp.RequestIntercepterValve"/>
             </Host>
-            <Host name="www.vhost.com" unpackWARs="true" deployOnStartup="false" autoDeploy="false" appBase="${carbon.home}/repository/deployment/server/dir/">
+            <Host name="www.vhost1.com" unpackWARs="true" deployOnStartup="false" autoDeploy="false" appBase="${carbon.home}/repository/deployment/server/dir1/">
+                <Valve className="org.wso2.carbon.tomcat.ext.valves.CarbonContextCreatorValve"/>
+                <Valve className="org.apache.catalina.valves.AccessLogValve" directory="${carbon.home}/repository/logs"
+                       prefix="http_access_" suffix=".log"
+                       pattern="combined" />
+                <Valve className="org.wso2.carbon.tomcat.ext.valves.CarbonStuckThreadDetectionValve" threshold="600"/>
+                <Valve className="org.wso2.carbon.tomcat.ext.valves.CompositeValve"/>
+                <Valve className="org.wso2.carbon.bam.webapp.stat.publisher.WebAppStatisticPublisherValve"/>
+                <Valve className="org.wso2.carbon.statistics.webapp.RequestIntercepterValve"/>
+            </Host>
+            <Host name="www.vhost2.com" unpackWARs="true" deployOnStartup="false" autoDeploy="false" appBase="${carbon.home}/repository/deployment/server/dir2/">
                 <Valve className="org.wso2.carbon.tomcat.ext.valves.CarbonContextCreatorValve"/>
                 <Valve className="org.apache.catalina.valves.AccessLogValve" directory="${carbon.home}/repository/logs"
                        prefix="http_access_" suffix=".log"
