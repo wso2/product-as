@@ -454,6 +454,24 @@
                 <version>${jacoco.agent.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity</groupId>
+                <artifactId>org.wso2.carbon.identity.sso.saml</artifactId>
+                <version>${carbon.identity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity</groupId>
+                <artifactId>org.wso2.carbon.identity.sso.saml.stub</artifactId>
+                <version>${carbon.identity.version}</version>
+            </dependency>
+
+            <!--
+                        <dependency>
+                            <groupId>org.codehaus.jettison</groupId>
+                            <artifactId>jettison</artifactId>
+                            <version>${version.jettison}</version>
+                        </dependency>
+            -->
         </dependencies>
     </dependencyManagement>
 
@@ -589,6 +607,8 @@
         <selenium.version>2.40.0</selenium.version>
 
         <ehcache.version>1.5.0.wso2v3</ehcache.version>
+
+        <!--<version.jettison>1.3.4</version.jettison>-->
 
         <project.scm.id>my-scm-server</project.scm.id>
         <cxf.version>2.7.6</cxf.version>
