@@ -13,8 +13,9 @@ New Features
 ------------
 * JavaEE 6 Web Profile support via TomEE 1.7.2 integration
 * Websocket 1.1 API Support as defined by the JSR-356 specification
-* Tomcat Virtual Hosts support
 * SAML2 Single-Sign-On support for web applications
+* Tomcat Virtual Hosts support
+* HTTP Session Persistence support
 * WS-Discovery support for CXF JAX-WS and JAX-RS services
 * OSGi ServiceLoader Mediator specification support via SPI-Fly
 
