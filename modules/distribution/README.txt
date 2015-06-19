@@ -41,8 +41,7 @@ Key Features
 
 Issues Fixed in This Release
 ----------------------------
-#####TODO
-      https://wso2.org/jira/issues/?filter=11684
+      https://wso2.org/jira/issues/?filter=12251
 
 Installation & Running
 ----------------------
@@ -63,8 +62,7 @@ http://docs.wso2.org/wiki/display/AS530/Installing+the+Product
 
 Known Issues in This Release
 ----------------------------
-#####TODO
-       https://wso2.org/jira/issues/?filter=11685
+       https://wso2.org/jira/issues/?filter=12250
 
 Including External Dependencies
 --------------------------------
