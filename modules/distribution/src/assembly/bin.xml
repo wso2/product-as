@@ -95,228 +95,6 @@
             </includes>
         </fileSet>
 
-        <!--  copying samples -->
-        <fileSet>
-            <directory>../samples/product</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/target/**</exclude>
-                <exclude>**/Jaxws-Jaxrs/**</exclude>
-                <exclude>**/Axis2Module/**</exclude>                
-		<exclude>STS/**</exclude>
-            </excludes>
-        </fileSet>
-		
-
-		<!--  copying jaggery samples-->
-		<fileSet>
-            <directory>../samples/jaggerySamples/docs</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/docs</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/sample</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/sample</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/taskmaster</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/taskmaster</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/coffeeshop</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/coffeeshop</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/shout</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/shout</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/freshometer</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/freshometer</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples</outputDirectory>
-			<excludes>
-			 <exclude>**/taskmaster/**</exclude>
-			 <exclude>**/sample/**</exclude>
-			 <exclude>**/docs/**</exclude>
-			 <exclude>**/coffeeshop/**</exclude>
-			 <exclude>**/shout/**</exclude>
-			 <exclude>**/freshometer/**</exclude>
-			 </excludes>
-        </fileSet>
-
-	<!--  copying samples -->
-        <fileSet>
-            <directory>../samples/dataServiceSamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/pom.xml</exclude>
-                <exclude>**/build.xml</exclude>
-                <exclude>**/CSVSampleService.dbs</exclude>
-                <exclude>**/ExcelSampleService.dbs</exclude>
-            </excludes>
-        </fileSet>
-
-        <!-- copy executables in samples with execute permissions -->
-        <fileSet>
-            <directory>../samples/dataServiceSamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples</outputDirectory>
-            <includes>
-                <include>**/**.sh</include>
-            </includes>
-            <fileMode>755</fileMode>
-        </fileSet>
-
-		
-		
-		 <!--  copying mashup samples -->
-        <fileSet>
-            <directory>../samples/mashupSamples/RdfDocQueryService</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/RdfDocQueryService</outputDirectory>
-        </fileSet>
-        
-        <fileSet>
-            <directory>../samples/mashupSamples/SparqlEndPointService</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/SparqlEndPointService</outputDirectory>
-        </fileSet>
-        
-        <fileSet>
-            <directory>../samples/mashupSamples/digit2image</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/digit2image</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/exchangeRate</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/exchangeRate</outputDirectory>
-        </fileSet>
-
-        <!--fileSet>
-            <directory>../samples/mashupSamples/feedCache</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jsservices/admin</outputDirectory>
-        </fileSet-->
-
-        <fileSet>
-            <directory>../samples/mashupSamples/RESTSample</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jsservices/admin</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/storexml</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/storexml</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/sudoku</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/sudoku</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/tomatoTube</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/tomatoTube</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/TwitterMap</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/TwitterMap</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/upgradeChecker</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/upgradeChecker</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/yahooGeoCode</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/yahooGeoCode</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/gmapsAPIKey</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/gmapsAPIKey</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/version</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/version</outputDirectory>
-            <excludes>
-                <exclude>**/version.xml</exclude>
-            </excludes>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/mashupSamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples</outputDirectory>
-			<excludes>
-			 <exclude>**/digit2image/**</exclude>
-			 <exclude>**/exchangeRate/**</exclude>
-			 <exclude>**/gmapsAPIKey/**</exclude>
-			 <exclude>**/storexml/**</exclude>
-			 <exclude>**/sudoku/**</exclude>
-			 <exclude>**/tomatoTube/**</exclude>
-			 <exclude>**/TwitterMap/**</exclude>
-			 <exclude>**/upgradeChecker/**</exclude>
-			 <exclude>**/version/**</exclude>
-			 <exclude>**/yahooGeoCode/**</exclude>
-			 </excludes>
-        </fileSet>
-
-        <!--  copying JAX-WS/JAX-RS samples and Axis2Module with pom.xml files-->
-        <fileSet>
-            <directory>../samples/product/Jaxws-Jaxrs</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Jaxws-Jaxrs</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/target/**</exclude>
-            </excludes>
-        </fileSet>
-        <fileSet>
-            <directory>../samples/product/Axis2Module</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Axis2Module</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/target/**</exclude>
-            </excludes>
-        </fileSet>
-
-        <!--  copying default samples into repository-->
-        <fileSet>
-            <directory>../samples/product/HelloWorld/target/repository/services</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services</outputDirectory>
-            <includes>
-                <include>**/**.aar</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>../samples/common/webapp/target</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
-            </outputDirectory>
-            <includes>
-                <include>**/**.war</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>../samples/product/Jaxws-Jaxrs/jaxrs_basic/target</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
-            </outputDirectory>
-            <includes>
-                <include>**/**.war</include>
-            </includes>
-        </fileSet>
-
-        <!-- copy executables in samples with execute permissions -->
-        <fileSet>
-            <directory>../samples/product</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples</outputDirectory>
-            <includes>
-                <include>**/**.sh</include>
-            </includes>
-            <excludes>
-                <exclude>**/STS/**</exclude>
-            </excludes>
-            <fileMode>755</fileMode>
-        </fileSet>
 
         <!--copying qpid config files -->
         <fileSet>
@@ -459,13 +237,281 @@
             </excludes>
         </fileSet>
 
-        <!-- Kernal patches -->
 
 	<!-- AS HTTP Monitoring toolbox -->
         <fileSet>
             <directory>src/monitoring/target</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/monitoring</outputDirectory>
         </fileSet>
+
+
+        <!-- ################ Copy Samples - Start ################ -->
+
+        <!--  copying jaggery samples-->
+        <fileSet>
+            <directory>../samples/jaggerySamples/docs</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/docs</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/sample</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/sample</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/taskmaster</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/taskmaster</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/coffeeshop</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/coffeeshop</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/shout</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/shout</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/freshometer</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/freshometer</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples</outputDirectory>
+            <excludes>
+                <exclude>**/taskmaster/**</exclude>
+                <exclude>**/sample/**</exclude>
+                <exclude>**/docs/**</exclude>
+                <exclude>**/coffeeshop/**</exclude>
+                <exclude>**/shout/**</exclude>
+                <exclude>**/freshometer/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copy example Sample -->
+        <fileSet>
+            <directory>../samples/example</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/example</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/example/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <includes>
+                <include>**/**.war</include>
+            </includes>
+        </fileSet>
+
+        <!-- copying ASVersion Samples -->
+        <fileSet>
+            <directory>../samples/ASVersionSamples</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/ASVersionSamples</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copying Chad -->
+        <fileSet>
+            <directory>../samples/Chad</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Chad</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copying conf -->
+        <fileSet>
+            <directory>../samples/conf</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/conf</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copying EntitlementFilter -->
+        <fileSet>
+            <directory>../samples/EntitlementFilter</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/EntitlementFilter</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/EntitlementFilter</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/EntitlementFilter</outputDirectory>
+            <includes>
+                <include>**/**.sh</include>
+            </includes>
+            <excludes>
+                <exclude>**/STS/**</exclude>
+            </excludes>
+            <fileMode>755</fileMode>
+        </fileSet>
+
+        <!-- copying FlickrClient -->
+        <fileSet>
+            <directory>../samples/FlickrClient</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/FlickrClient</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/FlickrClient</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/FlickrClient</outputDirectory>
+            <includes>
+                <include>**/**.sh</include>
+            </includes>
+            <excludes>
+                <exclude>**/STS/**</exclude>
+            </excludes>
+            <fileMode>755</fileMode>
+        </fileSet>
+
+
+        <!-- copying HelloWorld -->
+        <fileSet>
+            <directory>../samples/HelloWorld</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/HelloWorld</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/product/HelloWorld/target/repository/services</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services</outputDirectory>
+            <includes>
+                <include>**/**.aar</include>
+            </includes>
+        </fileSet>
+
+        <!-- copying HelloWorldWebapp -->
+        <fileSet>
+            <directory>../samples/HelloWorldWebapp</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/HelloWorldWebapp</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- copying JavaEE-TomEE -->
+        <fileSet>
+            <directory>../samples/JavaEE-TomEE</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/JavaEE-TomEE</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying JAX-WS/JAX-RS samples -->
+        <fileSet>
+            <directory>../samples/Jaxws-Jaxrs</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Jaxws-Jaxrs</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/Jaxws-Jaxrs</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Jaxws-Jaxrs</outputDirectory>
+            <includes>
+                <include>**/**.sh</include>
+            </includes>
+            <excludes>
+                <exclude>**/STS/**</exclude>
+            </excludes>
+            <fileMode>755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/product/Jaxws-Jaxrs/jaxrs_basic/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <includes>
+                <include>**/**.war</include>
+            </includes>
+        </fileSet>
+
+        <!--  copying SSOValveSample -->
+        <fileSet>
+            <directory>../samples/SSOValveSample</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/SSOValveSample</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying TinyURL -->
+        <fileSet>
+            <directory>../samples/TinyURL</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/TinyURL</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying TomcatWebApps -->
+        <fileSet>
+            <directory>../samples/TomcatWebApps</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/TomcatWebApps</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying TomcatWebApps -->
+        <fileSet>
+            <directory>../samples/VirtualDirectoryListing</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/VirtualDirectoryListing</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying WebappVersioning -->
+        <fileSet>
+            <directory>../samples/WebappVersioning</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/WebappVersioning</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- copying Axis2Module -->
+        <fileSet>
+            <directory>../samples/Axis2Module</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Axis2Module</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- ################ Copy Samples - End ################ -->
 
     </fileSets>
 
@@ -611,48 +657,24 @@
             <filtered>true</filtered>
 			<fileMode>644</fileMode>
         </file>
+
+        <!-- ################ Copy Files - Samples - Start ################ -->
+
         <file>
             <source>../samples/README</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/samples/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-		 <file>
-            <source>../samples/mashupSamples/version/version.resources/version.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/version/version.resources</outputDirectory>
+
+        <file>
+            <source>../samples/pom.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/</outputDirectory>
             <filtered>true</filtered>
+            <fileMode>644</fileMode>
         </file>
-        <!-- Copying additional resources used by data services samples -->
-	<file>
-            <source>src/resources/dataService/dbs/csv/CSVSampleService.dbs</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/dbs/csv
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/dbs/excel/ExcelSampleService.dbs</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/dbs/excel
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/clients/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/clients
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/OSSLicenseManager/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/OSSLicenseManager
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/OSSLicenseManager/flexui/source/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/OSSLicenseManager/flexui/source
-            </outputDirectory>
-        </file>
+
+        <!-- ################ Copy Files - Samples - End ################ -->
 
 	<!-- Coping catalina-server.xml to add bam.web.app.statistic tomcat-valve and web.statistic tomcat-valve -->
 	<file>
