@@ -616,6 +616,7 @@
         <process.module.version>1.2.0</process.module.version>
         <uuid.module.version>1.2.0</uuid.module.version>
         <ws.module.version>1.2.0</ws.module.version>
+        <cipher.tool.version>1.0.0-wso2v3-SNAPSHOT</cipher.tool.version>
     </properties>
 
     <mailingLists>
