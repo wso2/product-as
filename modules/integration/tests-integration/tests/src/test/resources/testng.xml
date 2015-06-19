@@ -67,6 +67,12 @@
         </packages>
     </test>
 
+    <test name="session-persistence-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.session.persistence"/>
+        </packages>
+    </test>
+
     <!-- Commented since ModuleAdminService are removed from AS -->
     <!--<test name="module-tests" preserve-order="true" parallel="false">
         <packages>

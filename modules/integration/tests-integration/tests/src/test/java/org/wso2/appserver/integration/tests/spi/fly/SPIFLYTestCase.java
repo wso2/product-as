@@ -51,7 +51,7 @@ public class SPIFLYTestCase extends ASIntegrationTest {
     private static final String SPIFLY_EXAMPLE_CLIENT_BUNDLE = "org.apache.aries.spifly.examples.client1.bundle-1.0.1-SNAPSHOT_spifly.jar";
     private static final String ARIES_UTIL_BUNDLE = "org.apache.aries.util-1.1.0.jar";
     private static final String ARIES_STATIC_WEAVING_BUNDLE = "org.apache.aries.spifly.static.bundle-1.0.0.jar";
-    protected String ARTIFACTS_LOCATION = TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
+    private static final String ARTIFACTS_LOCATION = TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
             "AS" + File.separator + "bundles" + File.separator;
 
     File spiBundle = new File(ARTIFACTS_LOCATION + SPIFLY_EXAMPLE_SPI_BUNDLE);
