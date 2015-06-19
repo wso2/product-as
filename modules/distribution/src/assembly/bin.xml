@@ -30,7 +30,7 @@
                 <exclude>**/*.sh</exclude>
                 <exclude>**/wso2server.bat</exclude>
                 <exclude>**/axis2services/sample01.aar</exclude>
-		<exclude>**/log4j.properties</exclude>
+                <exclude>**/log4j.properties</exclude>
                 <exclude>**/axis2services/echo/**</exclude>
                 <exclude>**/axis2services/version/**</exclude>
                 <exclude>**/pom.xml</exclude>
@@ -41,29 +41,29 @@
                 <exclude>**/release-notes.html</exclude>
                 <exclude>**/carbon.xml</exclude>
                 <!--exclude>**/axis2/axis2.xml</exclude-->
-		<exclude>**/dbscripts/**</exclude>
-		<exclude>**/catalina-server.xml</exclude>
+                <exclude>**/dbscripts/**</exclude>
+                <exclude>**/catalina-server.xml</exclude>
                 <!-- Changes related to Carbon kernel 4.2.0 patches -->
                 <exclude>**/lib/org.wso2.carbon.server-4.2.0.jar</exclude>
                 <exclude>**/repository/conf/security/cipher-text.properties</exclude>
                 <exclude>**/repository/conf/security/cipher-tool.properties</exclude>
-		<!--exclude>**/axis2/*</exclude-->
+                <!--exclude>**/axis2/*</exclude-->
                 <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
             </excludes>
         </fileSet>
-		<!--  copying modules xml -->
+        <!--  copying modules xml -->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/modules</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/modules/</outputDirectory>
-	    	<includes>
+            <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
-		<!--copying runtimes-->
-	    <fileSet>
+        <!--copying runtimes-->
+        <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/runtimes</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/lib/runtimes/</outputDirectory>
-	    	<includes>
+            <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
@@ -84,8 +84,8 @@
             <directory>target/wso2carbon-core-${carbon.kernel.version}/dbscripts</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts</outputDirectory>
         </fileSet>
-	
-	    <fileSet>
+
+        <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/service-provider/
             </directory>
@@ -116,18 +116,18 @@
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <includes>
-	        <include>**/identity.xml</include>
+                <include>**/identity.xml</include>
             </includes>
-	    <excludes>
+            <excludes>
                 <exclude>**/catalina-server.xml</exclude>
-		<!-- Changes related to Carbon kernel 4.2.0 patches -->
-		<exclude>**/axis2/*</exclude>
-		<!-- End - Changes related to Carbon kernel 4.2.0 patches -->
+                <!-- Changes related to Carbon kernel 4.2.0 patches -->
+                <exclude>**/axis2/*</exclude>
+                <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
             </excludes>
         </fileSet>
 
-	<!--Multitenancy related file -->
-	<fileSet>
+        <!--Multitenancy related file -->
+        <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
             </directory>
@@ -135,8 +135,8 @@
             <includes>
                 <include>**/stratos.xml</include>
                 <include>**/multitenancy-packages.xml</include>
-		<include>**/usage-throttling-agent-config.xml</include>
-		<include>**/cloud-services-desc.xml</include>
+                <include>**/usage-throttling-agent-config.xml</include>
+                <include>**/cloud-services-desc.xml</include>
             </includes>
         </fileSet>
 
@@ -149,8 +149,8 @@
                 <include>**/bam.xml</include>
             </includes>
         </fileSet>
-	
- 	<fileSet>
+
+        <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/data-bridge/
             </directory>
@@ -159,9 +159,9 @@
                 <include>**/thrift-agent-config.xml</include>
             </includes>
         </fileSet>
-   
 
-       <!--copying Kerberos conf files-->
+
+        <!--copying Kerberos conf files-->
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security
@@ -177,14 +177,14 @@
                 <exclude>**/cipher-tool.properties</exclude>
             </excludes>
             <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
-        </fileSet>  
+        </fileSet>
 
         <!-- copying WS RM DB Scripts -->
         <!--fileSet>
             <directory>wsrm-dbscripts</directory>
             <outputDirectory>wso2as-${pom.version}/dbscripts/wsrm-dbscripts</outputDirectory>
             <fileMode>755</fileMode>
-        </fileSet-->          
+        </fileSet-->
 
         <!-- copy documentation
         <fileSet>
@@ -194,10 +194,11 @@
         </fileSet>
 	-->
 
-		<!-- copy the landing page webapp -->
+        <!-- copy the landing page webapp -->
         <fileSet>
-			<directory>lib/home</directory>
-			<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps/STRATOS_ROOT</outputDirectory>
+            <directory>lib/home</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps/STRATOS_ROOT
+            </outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/</directory>
@@ -229,7 +230,7 @@
                 <include>**/**.jrxml</include>
             </includes>
         </fileSet>
-	<fileSet>
+        <fileSet>
             <directory>src/resources</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/lib/runtimes/ext</outputDirectory>
             <excludes>
@@ -238,7 +239,7 @@
         </fileSet>
 
 
-	<!-- AS HTTP Monitoring toolbox -->
+        <!-- AS HTTP Monitoring toolbox -->
         <fileSet>
             <directory>src/monitoring/target</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/monitoring</outputDirectory>
@@ -250,7 +251,8 @@
         <!--  copying jaggery samples-->
         <fileSet>
             <directory>../samples/jaggerySamples/docs</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/docs</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/docs
+            </outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../samples/jaggerySamples/sample</directory>
@@ -394,7 +396,8 @@
         </fileSet>
         <fileSet>
             <directory>../samples/product/HelloWorld/target/repository/services</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services
+            </outputDirectory>
             <includes>
                 <include>**/**.aar</include>
             </includes>
@@ -547,7 +550,7 @@
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/
             </outputDirectory>
-        </file>  
+        </file>
         <!-- Including log4j.properties file -->
         <file>
             <source>
@@ -555,7 +558,7 @@
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/
             </outputDirectory>
-        </file> 
+        </file>
         <file>
             <source>INSTALL.txt</source>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
@@ -604,37 +607,48 @@
             <fileMode>644</fileMode>
         </file-->
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/context.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/context.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/sso-sp-config.properties</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/sso-sp-config.properties
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/system.properties</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/system.properties
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomee</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/tomee.xml</source>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/tomee.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomee</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
@@ -661,7 +675,7 @@
             <source>src/resources/db/demo.h2.db</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/tmp/</outputDirectory>
             <filtered>true</filtered>
-			<fileMode>644</fileMode>
+            <fileMode>644</fileMode>
         </file>
 
         <!-- ################ Copy Files - Samples - Start ################ -->
@@ -682,18 +696,19 @@
 
         <!-- ################ Copy Files - Samples - End ################ -->
 
-	<!-- Coping catalina-server.xml to add bam.web.app.statistic tomcat-valve and web.statistic tomcat-valve -->
-	<file>
+        <!-- Coping catalina-server.xml to add bam.web.app.statistic tomcat-valve and web.statistic tomcat-valve -->
+        <file>
             <source>src/resources/tomcat/catalina-server.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
-	    <filtered>true</filtered>
-            <fileMode>644</fileMode>	
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
         </file>
-	<file>
+        <file>
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/identity-providers/default.xml
             </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers
+            </outputDirectory>
             <fileMode>644</fileMode>
         </file>
         <file>
@@ -707,61 +722,63 @@
 
         <!-- Changes related to Carbon kernel 4.2.0 patches -->
         <!-- Files WSO2-CARBON-PATCH-4.2.0-0001 - Start -->
-<!--
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/lib/org.wso2.carbon.server-4.2.0.jar</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/lib/</outputDirectory>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/db2.sql</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-	    <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/mysql.sql</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-	    <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0003/dbscripts/mysql_cluster.sql</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-	    <fileMode>644</fileMode>
-        </file>
--->
+        <!--
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/lib/org.wso2.carbon.server-4.2.0.jar</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/lib/</outputDirectory>
+                </file>
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/db2.sql</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
+                <fileMode>644</fileMode>
+                </file>
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/mysql.sql</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
+                <fileMode>644</fileMode>
+                </file>
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0003/dbscripts/mysql_cluster.sql</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
+                <fileMode>644</fileMode>
+                </file>
+        -->
         <!-- Files WSO2-CARBON-PATCH-4.2.0-0002 - Start -->
-<!--
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-text.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-tool.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
-	<file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/tenant-axis2.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2_client.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
--->
+        <!--
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-text.properties</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+                </file>
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-tool.properties</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
+                </file>
+            <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2.xml</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
+                    <filtered>true</filtered>
+                    <fileMode>644</fileMode>
+                </file>
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/tenant-axis2.xml</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
+                    <filtered>true</filtered>
+                    <fileMode>644</fileMode>
+                </file>
+                <file>
+                    <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2_client.xml</source>
+                    <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
+                    <filtered>true</filtered>
+                    <fileMode>644</fileMode>
+                </file>
+        -->
         <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
 
         <!-- Copy ntask Component files -->
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
