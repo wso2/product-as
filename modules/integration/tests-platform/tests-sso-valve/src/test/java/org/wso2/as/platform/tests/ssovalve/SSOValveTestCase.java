@@ -20,12 +20,16 @@ package org.wso2.as.platform.tests.ssovalve;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
+import org.wso2.carbon.automation.extensions.jmeter.JMeterTest;
+import org.wso2.carbon.automation.extensions.jmeter.JMeterTestManager;
+import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.identity.sso.saml.stub.IdentitySAMLSSOConfigServiceIdentityException;
 import org.wso2.carbon.identity.sso.saml.stub.types.SAMLSSOServiceProviderDTO;
 import org.wso2.carbon.automation.extensions.servers.carbonserver.CarbonServerExtension;
@@ -38,36 +42,49 @@ import static org.testng.Assert.assertTrue;
 public class SSOValveTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(SSOValveTestCase.class);
-    private static final String CONTENT_TYPE = "text/html";
     private static final String fooAppFileName = "foo-app.war";
     private static final String fooAppName = "foo-app";
-    private static final String barAppFileName = "bar-app";
-    private static final String barAppName = "bar-app.war";
+    private static final String barAppFileName = "bar-app.war";
+    private static final String barAppName = "bar-app";
+    private String isBackendURL;
+    private String asBackendURL;
+    private String isSessionCookie;
+    private String asSessionCookie;
     private WebAppAdminClient webAppAdminClient;
     private SAMLSSOConfigServiceClient ssoConfigServiceClient;
-
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
-        AutomationContext identityServerAutomationContext = new AutomationContext("IS", "is001",
-                TestUserMode.SUPER_TENANT_ADMIN);
+        AutomationContext identityServerAutomationContext =
+                new AutomationContext("IS", "is001", TestUserMode.SUPER_TENANT_ADMIN);
+        AutomationContext applicationServerAutomationContext =
+                new AutomationContext("AS", "appServerInstance0001", TestUserMode.SUPER_TENANT_ADMIN);
 
-        ssoConfigServiceClient = new SAMLSSOConfigServiceClient(backendURL, sessionCookie);
+        isBackendURL = identityServerAutomationContext.getContextUrls().getBackEndUrl();
+        isSessionCookie = loginLogoutClient.login(identityServerAutomationContext.getContextTenant().getContextUser().getUserName(),
+                identityServerAutomationContext.getContextTenant().getContextUser().getPassword(),
+                identityServerAutomationContext.getInstance().getHosts().get("default"));
+//        ssoConfigServiceClient = new SAMLSSOConfigServiceClient(isBackendURL, isSessionCookie);
+        ssoConfigServiceClient = new SAMLSSOConfigServiceClient(isBackendURL,
+                identityServerAutomationContext.getContextTenant().getContextUser().getUserName(),
+                identityServerAutomationContext.getContextTenant().getContextUser().getPassword());
         addServiceProviders();
 
-        webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+        asBackendURL = applicationServerAutomationContext.getContextUrls().getBackEndUrl();
+        asSessionCookie = loginLogoutClient.login();
+        webAppAdminClient = new WebAppAdminClient(asBackendURL, sessionCookie);
         // Uploading the foo-app
         webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
-                "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + fooAppFileName);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, fooAppName),
+                "artifacts" + File.separator + "AS" + File.separator + "webapps" + File.separator + fooAppFileName);
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, asSessionCookie, fooAppName),
                 "Foo Web Application Deployment failed");
 
         // Uploading the bar-app
         webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
-                "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + barAppFileName);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, barAppName),
-                "BAR Web Application Deployment failed");
+                "artifacts" + File.separator + "AS" + File.separator + "webapps" + File.separator + barAppFileName);
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, asSessionCookie, barAppName),
+                "Bar Web Application Deployment failed");
 
         // Waiting till the Apps available in the AS
         Thread.sleep(20000);
@@ -78,25 +95,35 @@ public class SSOValveTestCase extends ASIntegrationTest {
         //registering SP for foo-app
         SAMLSSOServiceProviderDTO fooAppDTO = createSsoServiceProviderDTO();
         fooAppDTO.setIssuer("foo-app");
-        fooAppDTO.setAssertionConsumerUrl("http://localhost:9764/foo-app/acs");
+        fooAppDTO.setAssertionConsumerUrl("https://localhost:9444/foo-app/acs");
         ssoConfigServiceClient.addServiceProvider(fooAppDTO);
 
         //registering SP for bar-app
         SAMLSSOServiceProviderDTO barAppDTO = createSsoServiceProviderDTO();
         barAppDTO.setIssuer("bar-app");
-        barAppDTO.setAssertionConsumerUrl("http://localhost:9764/bar-app/acs");
+        barAppDTO.setAssertionConsumerUrl("https://localhost:9444/bar-app/acs");
         ssoConfigServiceClient.addServiceProvider(barAppDTO);
-
 
         SAMLSSOServiceProviderDTO[] samlssoServiceProviderDTOs = ssoConfigServiceClient
                 .getServiceProviders().getServiceProviders();
+    }
 
+    @Test(groups = "wso2.as", description = "Testing SSO Valve")
+    public void testSSOValve() throws Exception {
+
+        log.info("Starting CacheEviction Test.");
+        JMeterTest ssoTestScript = new JMeterTest(new File(TestConfigurationProvider.getResourceLocation() +
+                File.separator + "artifacts" + File.separator + "AS" + File.separator + "scripts"
+                + File.separator + "sso-valve_webapp-sso-test.jmx"));
+
+        JMeterTestManager manager = new JMeterTestManager();
+        manager.runTest(ssoTestScript);
+
+        log.info("Finished running SSO Valve test");
     }
 
     private SAMLSSOServiceProviderDTO createSsoServiceProviderDTO() {
         SAMLSSOServiceProviderDTO serviceProviderDTO = new SAMLSSOServiceProviderDTO();
-//        serviceProviderDTO.setIssuer("foo-app");
-//        serviceProviderDTO.setAssertionConsumerUrl("http://localhost:9764/foo-app/acs");
         serviceProviderDTO.setCertAlias("wso2carbon");
         serviceProviderDTO.setLogoutURL("");
         serviceProviderDTO.setAttributeConsumingServiceIndex("");
@@ -113,52 +140,4 @@ public class SSOValveTestCase extends ASIntegrationTest {
 
         return serviceProviderDTO;
     }
-
-    /*private static class SAMLConfig{
-        private TestUserMode userMode;
-        private User user;
-        private HttpBinding httpBinding;
-        private ClaimType claimType;
-        private App app;
-
-        private SAMLConfig(TestUserMode userMode, User user, HttpBinding httpBinding, ClaimType claimType, App app) {
-            this.userMode = userMode;
-            this.user = user;
-            this.httpBinding = httpBinding;
-            this.claimType = claimType;
-            this.app = app;
-        }
-
-        public TestUserMode getUserMode() {
-            return userMode;
-        }
-
-        public App getApp() {
-            return app;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public ClaimType getClaimType() {
-            return claimType;
-        }
-
-        public HttpBinding getHttpBinding() {
-            return httpBinding;
-        }
-
-        @Override
-        public String toString() {
-            return "SAMLConfig[" +
-                    ", userMode=" + userMode.name() +
-                    ", user=" + user.getUsername() +
-                    ", httpBinding=" + httpBinding +
-                    ", claimType=" + claimType +
-                    ", app=" + app.getArtifact() +
-                    ']';
-        }
-    }*/
-
 }
