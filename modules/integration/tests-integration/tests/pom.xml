@@ -269,6 +269,18 @@
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.carbon.registry</groupId>
+            <artifactId>org.wso2.carbon.registry.resource.stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.registry</groupId>
+            <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.automationutils</groupId>
+            <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.xfer</groupId>
             <artifactId>wso2xfer</artifactId>
             <type>jar</type>
@@ -281,6 +293,16 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.tomcat</groupId>
+            <artifactId>tomcat</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.tyrus.bundles</groupId>
+            <artifactId>tyrus-standalone-client</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
