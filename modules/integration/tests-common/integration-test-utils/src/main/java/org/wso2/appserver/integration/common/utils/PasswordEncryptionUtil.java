@@ -77,7 +77,7 @@ public class PasswordEncryptionUtil {
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Element eElement = (Element) nodeList.item(i);
                 if (eElement.getAttribute(ASIntegrationConstants.PASSWORD_PROPERTY_SECRET_ALIAS_KEY).
-                        equals(ASIntegrationConstants.PASSWORD_PROPERTY_SECRET_ALIAS_VALUE)
+                        equals(ASIntegrationConstants.SVN_SECRET_ALIAS_WSO2_DATASOURCE)
                     && nodeList.item(i).getFirstChild().getNodeValue().equals("password")) {
                     foundEncryption = true;
                     break;

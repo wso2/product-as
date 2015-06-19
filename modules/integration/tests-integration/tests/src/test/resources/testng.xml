@@ -40,12 +40,11 @@
         </packages>
     </test>
 
-    <!--FIXME: WSAS-1887 - Need to enable after integrating cipherTool-->
-    <!--<test name="ciphertool-tests" preserve-order="true" parallel="false">-->
-    <!--<packages>-->
-    <!--<package name="org.wso2.appserver.integration.tests.ciphertool"/>-->
-    <!--</packages>-->
-    <!--</test>-->
+    <test name="ciphertool-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.ciphertool"/>
+        </packages>
+    </test>
 
     <test name="jaggery-tests" preserve-order="true" parallel="false">
         <packages>

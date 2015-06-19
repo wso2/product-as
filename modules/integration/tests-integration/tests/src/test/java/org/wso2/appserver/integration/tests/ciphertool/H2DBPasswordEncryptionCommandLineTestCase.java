@@ -124,7 +124,7 @@ public class H2DBPasswordEncryptionCommandLineTestCase extends ASIntegrationTest
 
         AutomationContext automationContext =
                 new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
-                                      ASIntegrationConstants.AS_INSTANCE_0002,
+                                      ASIntegrationConstants.AS_INSTANCE_0003,
                                       ContextXpathConstants.SUPER_TENANT,
                                       ContextXpathConstants.ADMIN);
 
