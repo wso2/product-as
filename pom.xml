@@ -164,7 +164,6 @@
                 <version>${orbit.version.tomcat.jsp.api}</version>
             </dependency>
 
-
             <!-- For stratos service -->
             <dependency>
                 <groupId>org.apache.felix</groupId>
@@ -253,6 +252,20 @@
 
 
             <!--Dependencies for integration tests  -->
+            <dependency>
+                <groupId>org.wso2.tomcat</groupId>
+                <artifactId>tomcat</artifactId>
+                <version>${tomcat.orbit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- websocket client -->
+            <dependency>
+                <groupId>org.glassfish.tyrus.bundles</groupId>
+                <artifactId>tyrus-standalone-client</artifactId>
+                <version>1.7</version>
+                <scope>test</scope>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxrs</artifactId>
@@ -543,6 +556,7 @@
         <axis2.jaxb.version>${orbit.version.axis2}</axis2.jaxb.version>
         <axis2.version>${orbit.version.axis2}</axis2.version>
 
+        <tomcat.orbit.version>7.0.59.wso2v3</tomcat.orbit.version>
         <orbit.version.tomcat.jsp.api>7.0.59.wso2v1</orbit.version.tomcat.jsp.api>
 
         <javax.servlet.version>3.0.0.v201112011016</javax.servlet.version>

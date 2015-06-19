@@ -634,6 +634,12 @@
             <fileMode>644</fileMode>
         </file>
         <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/tomee.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomee</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
             <source>target/wso2carbon-core-${carbon.kernel.version}/repository/conf/README</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/</outputDirectory>
             <filtered>true</filtered>
