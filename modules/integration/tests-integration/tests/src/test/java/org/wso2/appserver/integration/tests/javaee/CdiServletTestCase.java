@@ -50,8 +50,4 @@ public class CdiServletTestCase extends WebappDeploymentTestCase {
         assertTrue(result.contains("Bye !"),
                    "Response doesn't contain the greeting, bye, of the url " + servletUrl);
     }
-
-
-
-
 }

@@ -22,10 +22,10 @@ import javax.jws.HandlerChain;
 import javax.jws.WebService;
 
 @WebService(
-               portName = "HelloEjbPort",
-               serviceName = "HelloEjbService",
-               targetNamespace = "http://examples.org/wsdl",
-               endpointInterface = "org.superbiz.servlet.HelloEjb"
+        portName = "HelloEjbPort",
+        serviceName = "HelloEjbService",
+        targetNamespace = "http://examples.org/wsdl",
+        endpointInterface = "org.superbiz.servlet.HelloEjb"
 )
 @HandlerChain(file = "server-handlers.xml")
 @Stateless

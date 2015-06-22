@@ -61,7 +61,4 @@ public class JpaJaxRsTestCase extends WebappDeploymentTestCase {
         assertEquals(students.getFirstChildWithName(new QName("name")).toString(), "<name>John</name>",
                      "response is invalid for " + jndiUrl);
     }
-
-
-
 }

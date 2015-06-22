@@ -28,13 +28,22 @@ import java.io.IOException;
 
 public class WebserviceServlet extends HttpServlet {
 
+    private static ServletOutputStream OUT;
     @WebServiceRef
     @HandlerChain(file = "client-handlers.xml")
     private HelloPojo helloPojo;
-
     @WebServiceRef
     @HandlerChain(file = "client-handlers.xml")
     private HelloEjb helloEjb;
+
+    public static void write(String message) {
+        try {
+            ServletOutputStream out = OUT;
+            out.println(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
@@ -54,17 +63,6 @@ public class WebserviceServlet extends HttpServlet {
             out.println();
         } finally {
             OUT = out;
-        }
-    }
-
-    private static ServletOutputStream OUT;
-
-    public static void write(String message) {
-        try {
-            ServletOutputStream out = OUT;
-            out.println(message);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
