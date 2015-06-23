@@ -59,7 +59,7 @@ public class CustomViewHandler extends ViewHandlerWrapper {
             String pathPrefix = "";
             if (subpath > 0) {
                 while (subpath > 0) {
-                    pathPrefix += "/..";
+                    pathPrefix += "/src/main";
                     subpath--;
                 }
                 pathPrefix = StringUtils.removeStart(pathPrefix, "/");

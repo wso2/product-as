@@ -1,4 +1,4 @@
-package org.wso2.appserver;
+package org.wso2.appserver.sample.ee.jta.servlet;
 
 import javax.persistence.*;
 import java.util.Date;
