@@ -14,6 +14,7 @@
         <packages>
             <!--Todo - Need to enabled when JavaEE feature is completed -->
             <!--<package name="org.wso2.appserver.integration.tests.javaee"/>-->
+            <package name="org.wso2.appserver.integration.tests.webapp.websocket"/>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
             <package name="org.wso2.appserver.integration.tests.webapp.classloading"/>
             <package name="org.wso2.appserver.integration.tests.webapp.concurrency"/>
@@ -39,12 +40,11 @@
         </packages>
     </test>
 
-    <!--FIXME: WSAS-1887 - Need to enable after integrating cipherTool-->
-    <!--<test name="ciphertool-tests" preserve-order="true" parallel="false">-->
-    <!--<packages>-->
-    <!--<package name="org.wso2.appserver.integration.tests.ciphertool"/>-->
-    <!--</packages>-->
-    <!--</test>-->
+    <test name="ciphertool-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.ciphertool"/>
+        </packages>
+    </test>
 
     <test name="jaggery-tests" preserve-order="true" parallel="false">
         <packages>
@@ -64,6 +64,12 @@
     <test name="spi-fly-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.spi.fly"/>
+        </packages>
+    </test>
+
+    <test name="session-persistence-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.session.persistence"/>
         </packages>
     </test>
 
