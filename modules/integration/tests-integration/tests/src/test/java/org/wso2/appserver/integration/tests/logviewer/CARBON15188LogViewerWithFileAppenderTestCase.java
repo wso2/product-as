@@ -45,8 +45,9 @@ public class CARBON15188LogViewerWithFileAppenderTestCase extends ASIntegrationT
     public void setup() throws Exception {
         super.init();
         serverConfigurationManager = new ServerConfigurationManager(asServer);
-        String log4jFilePath = TestConfigurationProvider.getResourceLocation() + File.separator + "log4j"
-                               + File.separator + "carbon15188" + File.separator + "log4j.properties";
+        String log4jFilePath = TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" 
+                               + File.separator + "AS" + File.separator + "log4j" + File.separator + "carbon15188" 
+                               + File.separator + "log4j.properties";
         serverConfigurationManager.applyConfiguration(new File(log4jFilePath));
         super.init();
     }
