@@ -5,15 +5,22 @@ ${buildNumber}
 
 Welcome to the WSO2 Application Server ${appserver.version} release
 
- The WSO2 Application Server is an enterprise-ready cloud-enabled application server, powered by Apache Tomcat and also integrates Apache Axis2 and Apache CXF frameworks. It provides first class support for standard Web applications, JAX-WS/RS applications and Jaggery scripting applications. Coupled with features of WSO2 Carbon, users can now manage their applications including JAX-WS and JAX-RS to web applications in a unified manner within the management console itself.
+ The WSO2 Application Server is an enterprise-ready cloud-enabled application server, powered by Apache Tomcat, and Apache TomEE, it integrates Apache CXF framework. It provides first class support for standard Web applications, JAX-WS/JAX-RS applications and Jaggery scripting applications. Coupled with features of WSO2 Carbon, users can now manage their applications including JAX-WS and JAX-RS to web applications in a unified manner within the management console itself.
 
- Application Server also provides a comprehensive Web services server platform using Axis2 and CXF as its Web services runtimes, and provides many value additions on top of these runtimes. It can expose services using both SOAP and REST models and supports a comprehensive set of WS-* specifications such as WS-Security, WS-Trust, WS-SecureConversation, WS-Reliable Messaging, WS-Addressing, WS-Policy, WS-SecurityPolicy, etc. WSO2 Application Server also has inbuilt support for Jaggery, WSO2 Data services, and Mashup services. WSO2 Application Server can be installed on on-premise or any public/private cloud infrastructure and provide unified management console and lifecycle management features which are independent from underlying deployment option.
+ Application Server also provides a comprehensive Web services server platform using CXF as its Web services runtime, and provides many value additions on top of this runtime. It can expose services using both SOAP and REST models and supports a comprehensive set of WS-* specifications such as WS-Security, WS-Trust, WS-SecureConversation, WS-Addressing, WS-SecurityPolicy, etc. WSO2 Application Server also has inbuilt support for Jaggery. WSO2 Application Server can be installed on on-premise or any public/private cloud infrastructure and provide unified management console and lifecycle management features which are independent from underlying deployment option.
 
-WSO2 Application Server is a part of WSO2 Stratos cloud platform (PaaS) and hosted offering of WSO2 Application Server as a service  can be accessed from here  https://management.appserver.stratoslive.wso2.com .
+New Features
+------------
+* JavaEE 6 Web Profile support via TomEE 1.7.2 integration
+* Websocket 1.1 API Support as defined by the JSR-356 specification
+* SAML2 Single-Sign-On support for web applications
+* Tomcat Virtual Hosts support
+* HTTP Session Persistence support
+* WS-Discovery support for CXF JAX-WS and JAX-RS services
+* OSGi ServiceLoader Mediator specification support via SPI-Fly
 
-
-This is a patch release of Application Server and does not contain any new features.
-Key features of the WSO2 Application Server are as following,
+* Removed the first class support provided for deploying Axis2 AAR Services
+* Removed the data services hosting support from AS. Users can use the WSO2 Data Services Server product to deploy data services.
 
 Key Features
 ------------
@@ -21,7 +28,6 @@ Key Features
 * Full JAX-WS 2.2 and JAX-RS 2.0 Specification support
 * Integration of Jaggery - server side scripting framework
 * Unified Application listing and management UI for WebApps, JAX-WS/RS, Jaggery
-* Inbuilt Mashup services support
 * Multi Tenant support for standalone deployment
 * 100% Apache Tomcat compliance runtime
 * Lazy loading for web applications and services
@@ -36,9 +42,7 @@ Key Features
 
 Issues Fixed in This Release
 ----------------------------
-
-* Application Server related components of the WSO2 Carbon Platform -
-      https://wso2.org/jira/issues/?filter=11684
+      https://wso2.org/jira/issues/?filter=12251
 
 Installation & Running
 ----------------------
@@ -55,18 +59,16 @@ System Requirements
 3. The Management Console requires full Javascript enablement of the Web browser
 
 For more details see the Installation guide or,
-http://docs.wso2.org/wiki/display/AS520/Installing+the+Product
+http://docs.wso2.org/wiki/display/AS530/Installing+the+Product
 
 Known Issues in This Release
 ----------------------------
-
-* Application Server related components of the WSO2 Carbon Platform -
-       https://wso2.org/jira/issues/?filter=11685
+       https://wso2.org/jira/issues/?filter=12250
 
 Including External Dependencies
 --------------------------------
 For a complete guide on adding external dependencies to WSO2 Application Server & other carbon related products refer to the article:
-http://wso2.org/library/knowledgebase/add-external-jar-libraries-wso2-carbon-based-products
+http://wso2.org/library/knowlegebase/add-external-jar-libraries-wso2-carbon-based-products
 
 Application Server Binary Distribution Directory Structure
 --------------------------------------------
@@ -193,7 +195,7 @@ By default mode, it would ask you to enter the master password
 > ciphertool -Dchange  (in UNIX)
 
 For more details see
-http://docs.wso2.org/wiki/display/Carbon410/WSO2+Carbon+Secure+Vault
+http://docs.wso2.org/wiki/display/Carbon440/WSO2+Carbon+Secure+Vault
 
 Training
 --------
@@ -249,7 +251,7 @@ Bouncycastle     : http://www.bouncycastle.org/
 
 
 For further details, see the WSO2 Application Server documentation at
-http://docs.wso2.org/wiki/display/AS521/
+http://docs.wso2.org/wiki/display/AS530/
 
 ---------------------------------------------------------------------------
-(c) Copyright 2013 WSO2 Inc.
+(c) Copyright 2015 WSO2 Inc.

@@ -30,7 +30,7 @@
                 <exclude>**/*.sh</exclude>
                 <exclude>**/wso2server.bat</exclude>
                 <exclude>**/axis2services/sample01.aar</exclude>
-		<exclude>**/log4j.properties</exclude>
+                <exclude>**/log4j.properties</exclude>
                 <exclude>**/axis2services/echo/**</exclude>
                 <exclude>**/axis2services/version/**</exclude>
                 <exclude>**/pom.xml</exclude>
@@ -41,29 +41,28 @@
                 <exclude>**/release-notes.html</exclude>
                 <exclude>**/carbon.xml</exclude>
                 <!--exclude>**/axis2/axis2.xml</exclude-->
-		<exclude>**/dbscripts/**</exclude>
-		<exclude>**/catalina-server.xml</exclude>
+                <exclude>**/dbscripts/**</exclude>
+                <exclude>**/catalina-server.xml</exclude>
                 <!-- Changes related to Carbon kernel 4.2.0 patches -->
                 <exclude>**/lib/org.wso2.carbon.server-4.2.0.jar</exclude>
                 <exclude>**/repository/conf/security/cipher-text.properties</exclude>
                 <exclude>**/repository/conf/security/cipher-tool.properties</exclude>
-		<!--exclude>**/axis2/*</exclude-->
                 <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
             </excludes>
         </fileSet>
-		<!--  copying modules xml -->
+        <!--  copying modules xml -->
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/modules</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/modules/</outputDirectory>
-	    	<includes>
+            <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
-		<!--copying runtimes-->
-	    <fileSet>
+        <!--copying runtimes-->
+        <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/runtimes</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/lib/runtimes/</outputDirectory>
-	    	<includes>
+            <includes>
                 <include>*/**</include>
             </includes>
         </fileSet>
@@ -84,8 +83,8 @@
             <directory>target/wso2carbon-core-${carbon.kernel.version}/dbscripts</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts</outputDirectory>
         </fileSet>
-	
-	    <fileSet>
+
+        <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/service-provider/
             </directory>
@@ -95,228 +94,6 @@
             </includes>
         </fileSet>
 
-        <!--  copying samples -->
-        <fileSet>
-            <directory>../samples/product</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/target/**</exclude>
-                <exclude>**/Jaxws-Jaxrs/**</exclude>
-                <exclude>**/Axis2Module/**</exclude>                
-		<exclude>STS/**</exclude>
-            </excludes>
-        </fileSet>
-		
-
-		<!--  copying jaggery samples-->
-		<fileSet>
-            <directory>../samples/jaggerySamples/docs</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/docs</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/sample</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/sample</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/taskmaster</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/taskmaster</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/coffeeshop</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/coffeeshop</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/shout</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/shout</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples/freshometer</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/freshometer</outputDirectory>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/jaggerySamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples</outputDirectory>
-			<excludes>
-			 <exclude>**/taskmaster/**</exclude>
-			 <exclude>**/sample/**</exclude>
-			 <exclude>**/docs/**</exclude>
-			 <exclude>**/coffeeshop/**</exclude>
-			 <exclude>**/shout/**</exclude>
-			 <exclude>**/freshometer/**</exclude>
-			 </excludes>
-        </fileSet>
-
-	<!--  copying samples -->
-        <fileSet>
-            <directory>../samples/dataServiceSamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/pom.xml</exclude>
-                <exclude>**/build.xml</exclude>
-                <exclude>**/CSVSampleService.dbs</exclude>
-                <exclude>**/ExcelSampleService.dbs</exclude>
-            </excludes>
-        </fileSet>
-
-        <!-- copy executables in samples with execute permissions -->
-        <fileSet>
-            <directory>../samples/dataServiceSamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples</outputDirectory>
-            <includes>
-                <include>**/**.sh</include>
-            </includes>
-            <fileMode>755</fileMode>
-        </fileSet>
-
-		
-		
-		 <!--  copying mashup samples -->
-        <fileSet>
-            <directory>../samples/mashupSamples/RdfDocQueryService</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/RdfDocQueryService</outputDirectory>
-        </fileSet>
-        
-        <fileSet>
-            <directory>../samples/mashupSamples/SparqlEndPointService</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/SparqlEndPointService</outputDirectory>
-        </fileSet>
-        
-        <fileSet>
-            <directory>../samples/mashupSamples/digit2image</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/digit2image</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/exchangeRate</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/exchangeRate</outputDirectory>
-        </fileSet>
-
-        <!--fileSet>
-            <directory>../samples/mashupSamples/feedCache</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jsservices/admin</outputDirectory>
-        </fileSet-->
-
-        <fileSet>
-            <directory>../samples/mashupSamples/RESTSample</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jsservices/admin</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/storexml</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/storexml</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/sudoku</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/sudoku</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/tomatoTube</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/tomatoTube</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/TwitterMap</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/TwitterMap</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/upgradeChecker</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/upgradeChecker</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/yahooGeoCode</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/yahooGeoCode</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/gmapsAPIKey</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/gmapsAPIKey</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>../samples/mashupSamples/version</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/version</outputDirectory>
-            <excludes>
-                <exclude>**/version.xml</exclude>
-            </excludes>
-        </fileSet>
-		<fileSet>
-            <directory>../samples/mashupSamples</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples</outputDirectory>
-			<excludes>
-			 <exclude>**/digit2image/**</exclude>
-			 <exclude>**/exchangeRate/**</exclude>
-			 <exclude>**/gmapsAPIKey/**</exclude>
-			 <exclude>**/storexml/**</exclude>
-			 <exclude>**/sudoku/**</exclude>
-			 <exclude>**/tomatoTube/**</exclude>
-			 <exclude>**/TwitterMap/**</exclude>
-			 <exclude>**/upgradeChecker/**</exclude>
-			 <exclude>**/version/**</exclude>
-			 <exclude>**/yahooGeoCode/**</exclude>
-			 </excludes>
-        </fileSet>
-
-        <!--  copying JAX-WS/JAX-RS samples and Axis2Module with pom.xml files-->
-        <fileSet>
-            <directory>../samples/product/Jaxws-Jaxrs</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Jaxws-Jaxrs</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/target/**</exclude>
-            </excludes>
-        </fileSet>
-        <fileSet>
-            <directory>../samples/product/Axis2Module</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Axis2Module</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/target/**</exclude>
-            </excludes>
-        </fileSet>
-
-        <!--  copying default samples into repository-->
-        <fileSet>
-            <directory>../samples/product/HelloWorld/target/repository/services</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services</outputDirectory>
-            <includes>
-                <include>**/**.aar</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>../samples/common/webapp/target</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
-            </outputDirectory>
-            <includes>
-                <include>**/**.war</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>../samples/product/Jaxws-Jaxrs/jaxrs_basic/target</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
-            </outputDirectory>
-            <includes>
-                <include>**/**.war</include>
-            </includes>
-        </fileSet>
-
-        <!-- copy executables in samples with execute permissions -->
-        <fileSet>
-            <directory>../samples/product</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples</outputDirectory>
-            <includes>
-                <include>**/**.sh</include>
-            </includes>
-            <excludes>
-                <exclude>**/STS/**</exclude>
-            </excludes>
-            <fileMode>755</fileMode>
-        </fileSet>
 
         <!--copying qpid config files -->
         <fileSet>
@@ -338,18 +115,18 @@
             </directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <includes>
-	        <include>**/identity.xml</include>
+                <include>**/identity.xml</include>
             </includes>
-	    <excludes>
+            <excludes>
                 <exclude>**/catalina-server.xml</exclude>
-		<!-- Changes related to Carbon kernel 4.2.0 patches -->
-		<exclude>**/axis2/*</exclude>
-		<!-- End - Changes related to Carbon kernel 4.2.0 patches -->
+                <!-- Changes related to Carbon kernel 4.2.0 patches -->
+                <exclude>**/axis2/*</exclude>
+                <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
             </excludes>
         </fileSet>
 
-	<!--Multitenancy related file -->
-	<fileSet>
+        <!--Multitenancy related file -->
+        <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
             </directory>
@@ -357,8 +134,8 @@
             <includes>
                 <include>**/stratos.xml</include>
                 <include>**/multitenancy-packages.xml</include>
-		<include>**/usage-throttling-agent-config.xml</include>
-		<include>**/cloud-services-desc.xml</include>
+                <include>**/usage-throttling-agent-config.xml</include>
+                <include>**/cloud-services-desc.xml</include>
             </includes>
         </fileSet>
 
@@ -371,8 +148,8 @@
                 <include>**/bam.xml</include>
             </includes>
         </fileSet>
-	
- 	<fileSet>
+
+        <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/data-bridge/
             </directory>
@@ -381,9 +158,9 @@
                 <include>**/thrift-agent-config.xml</include>
             </includes>
         </fileSet>
-   
 
-       <!--copying Kerberos conf files-->
+
+        <!--copying Kerberos conf files-->
         <fileSet>
             <directory>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security
@@ -393,20 +170,14 @@
                 <include>**/krb5.conf</include>
                 <include>**/jaas.conf</include>
             </includes>
-            <!-- Changes related to Carbon kernel 4.2.0 patches -->
-            <excludes>
-                <exclude>**/cipher-text.properties</exclude>
-                <exclude>**/cipher-tool.properties</exclude>
-            </excludes>
-            <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
-        </fileSet>  
+        </fileSet>
 
         <!-- copying WS RM DB Scripts -->
         <!--fileSet>
             <directory>wsrm-dbscripts</directory>
             <outputDirectory>wso2as-${pom.version}/dbscripts/wsrm-dbscripts</outputDirectory>
             <fileMode>755</fileMode>
-        </fileSet-->          
+        </fileSet-->
 
         <!-- copy documentation
         <fileSet>
@@ -416,10 +187,11 @@
         </fileSet>
 	-->
 
-		<!-- copy the landing page webapp -->
+        <!-- copy the landing page webapp -->
         <fileSet>
-			<directory>lib/home</directory>
-			<outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps/STRATOS_ROOT</outputDirectory>
+            <directory>lib/home</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps/STRATOS_ROOT
+            </outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/</directory>
@@ -451,7 +223,7 @@
                 <include>**/**.jrxml</include>
             </includes>
         </fileSet>
-	<fileSet>
+        <fileSet>
             <directory>src/resources</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/lib/runtimes/ext</outputDirectory>
             <excludes>
@@ -459,13 +231,283 @@
             </excludes>
         </fileSet>
 
-        <!-- Kernal patches -->
 
-	<!-- AS HTTP Monitoring toolbox -->
+        <!-- AS HTTP Monitoring toolbox -->
         <fileSet>
             <directory>src/monitoring/target</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/monitoring</outputDirectory>
         </fileSet>
+
+
+        <!-- ################ Copy Samples - Start ################ -->
+
+        <!--  copying jaggery samples-->
+        <fileSet>
+            <directory>../samples/jaggerySamples/docs</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/jaggeryapps/docs
+            </outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/sample</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/sample</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/taskmaster</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/taskmaster</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/coffeeshop</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/coffeeshop</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/shout</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/shout</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples/freshometer</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples/freshometer</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/jaggerySamples</outputDirectory>
+            <excludes>
+                <exclude>**/taskmaster/**</exclude>
+                <exclude>**/sample/**</exclude>
+                <exclude>**/docs/**</exclude>
+                <exclude>**/coffeeshop/**</exclude>
+                <exclude>**/shout/**</exclude>
+                <exclude>**/freshometer/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copy example Sample -->
+        <fileSet>
+            <directory>../samples/example</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/example</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/example/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <includes>
+                <include>**/**.war</include>
+            </includes>
+        </fileSet>
+
+        <!-- copying ASVersion Samples -->
+        <fileSet>
+            <directory>../samples/ASVersionSamples</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/ASVersionSamples</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copying Chad -->
+        <fileSet>
+            <directory>../samples/Chad</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Chad</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copying conf -->
+        <fileSet>
+            <directory>../samples/conf</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/conf</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- Copying EntitlementFilter -->
+        <fileSet>
+            <directory>../samples/EntitlementFilter</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/EntitlementFilter</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/EntitlementFilter</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/EntitlementFilter</outputDirectory>
+            <includes>
+                <include>**/**.sh</include>
+            </includes>
+            <excludes>
+                <exclude>**/STS/**</exclude>
+            </excludes>
+            <fileMode>755</fileMode>
+        </fileSet>
+
+        <!-- copying FlickrClient -->
+        <fileSet>
+            <directory>../samples/FlickrClient</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/FlickrClient</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/FlickrClient</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/FlickrClient</outputDirectory>
+            <includes>
+                <include>**/**.sh</include>
+            </includes>
+            <excludes>
+                <exclude>**/STS/**</exclude>
+            </excludes>
+            <fileMode>755</fileMode>
+        </fileSet>
+
+
+        <!-- copying HelloWorld -->
+        <fileSet>
+            <directory>../samples/HelloWorld</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/HelloWorld</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/product/HelloWorld/target/repository/services</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services
+            </outputDirectory>
+            <includes>
+                <include>**/**.aar</include>
+            </includes>
+        </fileSet>
+
+        <!-- copying HelloWorldWebapp -->
+        <fileSet>
+            <directory>../samples/HelloWorldWebapp</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/HelloWorldWebapp</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- copying JavaEE-TomEE -->
+        <fileSet>
+            <directory>../samples/JavaEE-TomEE</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/JavaEE-TomEE</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>STS/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying JAX-WS/JAX-RS samples -->
+        <fileSet>
+            <directory>../samples/Jaxws-Jaxrs</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Jaxws-Jaxrs</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/Jaxws-Jaxrs</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Jaxws-Jaxrs</outputDirectory>
+            <includes>
+                <include>**/**.sh</include>
+            </includes>
+            <excludes>
+                <exclude>**/STS/**</exclude>
+            </excludes>
+            <fileMode>755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/product/Jaxws-Jaxrs/jaxrs_basic/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
+            </outputDirectory>
+            <includes>
+                <include>**/**.war</include>
+            </includes>
+        </fileSet>
+
+        <!--  copying SSOValveSample -->
+        <fileSet>
+            <directory>../samples/SSOValveSample</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/SSOValveSample</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying TinyURL -->
+        <fileSet>
+            <directory>../samples/TinyURL</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/TinyURL</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying TomcatWebApps -->
+        <fileSet>
+            <directory>../samples/TomcatWebApps</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/TomcatWebApps</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying TomcatWebApps -->
+        <fileSet>
+            <directory>../samples/VirtualDirectoryListing</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/VirtualDirectoryListing</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!--  copying WebappVersioning -->
+        <fileSet>
+            <directory>../samples/WebappVersioning</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/WebappVersioning</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- copying Axis2Module -->
+        <fileSet>
+            <directory>../samples/Axis2Module</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/Axis2Module</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+            </excludes>
+        </fileSet>
+
+        <!-- ################ Copy Samples - End ################ -->
 
     </fileSets>
 
@@ -501,7 +543,7 @@
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/
             </outputDirectory>
-        </file>  
+        </file>
         <!-- Including log4j.properties file -->
         <file>
             <source>
@@ -509,7 +551,7 @@
             </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/
             </outputDirectory>
-        </file> 
+        </file>
         <file>
             <source>INSTALL.txt</source>
             <outputDirectory>${pom.artifactId}-${pom.version}</outputDirectory>
@@ -558,25 +600,48 @@
             <fileMode>644</fileMode>
         </file-->
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/webapp-classloading-environments.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/context.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomcat/context.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/system.properties</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/security/sso-sp-config.properties
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/system.properties
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomee</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/tomee/tomee.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomee</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
@@ -603,63 +668,40 @@
             <source>src/resources/db/demo.h2.db</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/tmp/</outputDirectory>
             <filtered>true</filtered>
-			<fileMode>644</fileMode>
+            <fileMode>644</fileMode>
         </file>
+
+        <!-- ################ Copy Files - Samples - Start ################ -->
+
         <file>
             <source>../samples/README</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/samples/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
-		 <file>
-            <source>../samples/mashupSamples/version/version.resources/version.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/mashupSamples/version/version.resources</outputDirectory>
+
+        <file>
+            <source>../samples/pom.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/</outputDirectory>
             <filtered>true</filtered>
-        </file>
-        <!-- Copying additional resources used by data services samples -->
-	<file>
-            <source>src/resources/dataService/dbs/csv/CSVSampleService.dbs</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/dbs/csv
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/dbs/excel/ExcelSampleService.dbs</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/dbs/excel
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/clients/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/clients
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/OSSLicenseManager/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/OSSLicenseManager
-            </outputDirectory>
-        </file>
-        <file>
-            <source>src/resources/dataService/OSSLicenseManager/flexui/source/build.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/dataServiceSamples/OSSLicenseManager/flexui/source
-            </outputDirectory>
+            <fileMode>644</fileMode>
         </file>
 
-	<!-- Coping catalina-server.xml to add bam.web.app.statistic tomcat-valve and web.statistic tomcat-valve -->
-	<file>
+        <!-- ################ Copy Files - Samples - End ################ -->
+
+        <!-- Coping catalina-server.xml to add bam.web.app.statistic tomcat-valve and web.statistic tomcat-valve -->
+        <file>
             <source>src/resources/tomcat/catalina-server.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
-	    <filtered>true</filtered>
-            <fileMode>644</fileMode>	
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
         </file>
-	<file>
+        <file>
             <source>
                 ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/identity/identity-providers/default.xml
             </source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers</outputDirectory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/identity/identity-providers
+            </outputDirectory>
             <fileMode>644</fileMode>
         </file>
         <file>
@@ -670,69 +712,40 @@
             <fileMode>644</fileMode>
         </file>
 
-
-        <!-- Changes related to Carbon kernel 4.2.0 patches -->
-        <!-- Files WSO2-CARBON-PATCH-4.2.0-0001 - Start -->
-<!--
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/lib/org.wso2.carbon.server-4.2.0.jar</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/lib/</outputDirectory>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/db2.sql</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-	    <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0001/dbscripts/mysql.sql</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-	    <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0003/dbscripts/mysql_cluster.sql</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/</outputDirectory>
-	    <fileMode>644</fileMode>
-        </file>
--->
-        <!-- Files WSO2-CARBON-PATCH-4.2.0-0002 - Start -->
-<!--
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-text.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/security/cipher-tool.properties</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security/</outputDirectory>
-        </file>
-	<file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/tenant-axis2.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
-        <file>
-            <source>../p2-profile-gen/target/WSO2-CARBON-PATCH-${carbon.kernel.version}-0002/repository/conf/axis2/axis2_client.xml</source>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/axis2/</outputDirectory>
-            <filtered>true</filtered>
-            <fileMode>644</fileMode>
-        </file>
--->
-        <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
-
         <!-- Copy ntask Component files -->
         <file>
-            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml</source>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/etc/tasks-config.xml
+            </source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc/</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
 
+        <!-- Cipher-Tool Files -->
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.sh</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
+            <fileMode>755</fileMode>
+        </file>
+        <file>
+            <source>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/bin/ciphertool.bat</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/bin</outputDirectory>
+        </file>
+        <file>
+            <source>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/lib/org.wso2.ciphertool-${cipher.tool.version}.jar
+            </source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/lib</outputDirectory>
+        </file>
+        <file>
+            <source>./repository/conf/security/cipher-text.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+        </file>
+        <file>
+            <source>./repository/conf/security/cipher-tool.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
+        </file>
 
     </files>
 </assembly>
