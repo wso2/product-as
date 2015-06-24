@@ -124,14 +124,5 @@
             <artifactId>org.wso2.carbon.automation.engine</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.automationutils</groupId>
-            <artifactId>org.wso2.carbon.integration.common.utils</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.agent</artifactId>
-        </dependency>
     </dependencies>
 </project>
