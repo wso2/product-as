@@ -36,6 +36,7 @@
     <modules>
         <module>tests-common</module>
         <module>tests-integration</module>
+        <module>tests-integration/reports</module>
         <module>tests-ui-integration</module>
     </modules>
 
