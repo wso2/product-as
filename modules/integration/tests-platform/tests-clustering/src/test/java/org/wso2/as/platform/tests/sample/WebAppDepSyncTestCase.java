@@ -18,6 +18,7 @@
 
 package org.wso2.as.platform.tests.sample;
 
+import org.apache.axis2.AxisFault;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -29,7 +30,9 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
+import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 
 import static org.testng.Assert.assertTrue;
@@ -43,25 +46,28 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
 
     private final String webAppFileName = "wso2appserver-samples-hello-webapp-5.3.0-SNAPSHOT.war";
     private final String webAppName = "wso2appserver-samples-hello-webapp-5.3.0-SNAPSHOT";
-    private final String hostName = "localhost";
     private WebAppAdminClient webAppAdminClient;
     private AutomationContext managerNode;
-    private AutomationContext workerNode;
+    private AutomationContext workerNode1;
+    private AutomationContext workerNode2;
+    private AutomationContext lbNode;
     private String managerSessionCookie;
     private String webAppURLWorkerNode;
 
     @BeforeClass(alwaysRun = true)
-    public void init() throws Exception {
+    public void init() throws XPathExpressionException, AutomationUtilException, AxisFault {
         super.initCluster(TestUserMode.SUPER_TENANT_ADMIN);
-        managerNode = getAutomationContextWithKey("appServerInstance0001");
-        workerNode = getAutomationContextWithKey("appserver.carbon-test.org");
+        managerNode = getAutomationContextWithKey("manager");
+        workerNode1 = getAutomationContextWithKey("worker-1");
+        workerNode2 = getAutomationContextWithKey("worker-2");
+        lbNode = getAutomationContextWithKey("LB");
         managerSessionCookie = login(managerNode);
         webAppAdminClient = new WebAppAdminClient(managerNode.getContextUrls().getBackEndUrl(),managerSessionCookie);
     }
 
     @AfterClass(alwaysRun = true)
     public void  clean() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName, workerNode.getWorkerInstanceName());
+        webAppAdminClient.deleteWebAppFile(webAppFileName, lbNode.getDefaultInstance().getHosts().get("default"));
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                         managerNode.getContextUrls().getBackEndUrl(), managerSessionCookie, webAppName),
                 "Web Application unDeployment failed");
@@ -76,24 +82,66 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
                 managerNode.getContextUrls().getBackEndUrl(), managerSessionCookie, webAppName)
                 , "Web Application Deployment failed");
-
-        Thread.sleep(30000);
-
     }
 
-    @Test(groups = "wso2.as", description = "Invoke web application",
+    @Test(groups = "wso2.as", description = "Invoke web application and test dep sync",
             dependsOnMethods = "testWebApplicationDeployment")
     public void testInvokeWebApp() throws Exception {
-        webAppURLWorkerNode = workerNode.getContextUrls().getWebAppURL();
+
+        String workerNode1_IP = workerNode1.getDefaultInstance().getHosts().get("default");
+        int depSyncTimeOut = 30000;
+        webAppURLWorkerNode = workerNode1.getContextUrls().getWebAppURL();
 
         String webAppURLLocal = webAppURLWorkerNode + "/" + webAppName + "/";
-        log.info("Web app URL = " + webAppURLLocal);
 
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
 
-        log.info("Response from web app : " + response.getData() + "\n");
+        long currentTime = System.currentTimeMillis();
 
-        assertTrue(response.getData().contains(workerNode.getDefaultInstance().getHosts().get("default")), "Invalid response");
+        while ((response.getResponseCode() != 200) || ((System.currentTimeMillis() - currentTime) < depSyncTimeOut)) {
+            Thread.sleep(5000);
+            response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        }
+
+        log.info("Response from web app : " + response.getData() + "\n\n\n");
+
+        assertTrue(response.getData().contains(workerNode1_IP), "Invalid response");
+
+    }
+
+    /**
+     * requests are sent to load balancer node, reply should include the originated worker node IP
+     * @throws Exception
+     */
+    @Test(groups = "wso2.as", description = "Check all nodes serve web application requests",
+            dependsOnMethods = "testInvokeWebApp")
+    public void testAllNodesServeWebAppRequests() throws Exception {
+
+        String workerNode1_IP = workerNode1.getDefaultInstance().getHosts().get("default");
+        String workerNode2_IP = workerNode2.getDefaultInstance().getHosts().get("default");
+        String webAppURLLocal = lbNode.getContextUrls().getWebAppURL() + "/" + webAppName + "/";
+
+        boolean worker1 = false;
+        boolean worker2 = false;
+
+        HttpResponse response;
+
+        for (int i = 0; i < 10; i++) {
+
+            response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+
+            if (response.getData().contains(workerNode1_IP)) {
+                worker1 = true;
+            }
+
+            if (response.getData().contains(workerNode2_IP)) {
+                worker2 = true;
+            }
+
+        }
+
+        assertTrue(worker1 && worker2, "Web app not served in both worker nodes");
+
     }
 
 

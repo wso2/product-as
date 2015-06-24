@@ -122,8 +122,7 @@ public class ASPlatformBaseTest {
      * @throws LoginAuthenticationExceptionException
      */
     protected String login(AutomationContext context)
-            throws IOException, XPathExpressionException, URISyntaxException, SAXException,
-            XMLStreamException, LoginAuthenticationExceptionException, AutomationUtilException {
+            throws AutomationUtilException {
         LoginLogoutClient loginLogoutClient = new LoginLogoutClient(context);
         return loginLogoutClient.login();
     }

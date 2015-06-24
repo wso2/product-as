@@ -209,9 +209,9 @@
         <!--
         cluster instance details to be used to platform test execution
         -->
-        <productGroup name="AS" clusteringEnabled="false" default="true">
+        <productGroup name="AS" clusteringEnabled="true" default="true">
 
-            <instance name="appServerInstance0001" type="standalone" nonBlockingTransportEnabled="false">
+            <instance name="manager" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
                     <host type="default">192.168.57.161</host>
                 </hosts>
@@ -222,7 +222,7 @@
                 <properties>
                 </properties>
             </instance>
-            <instance name="appserver.carbon-test.org" type="standalone" nonBlockingTransportEnabled="false">
+            <instance name="worker-1" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
                     <host type="default">192.168.57.164</host>
                 </hosts>
@@ -233,20 +233,26 @@
                 <properties>
                 </properties>
             </instance>
-
-        </productGroup>
-        <productGroup name="IS" clusteringEnabled="false" default="false">
-
-            <instance name="is001" type="standalone" nonBlockingTransportEnabled="false">
+            <instance name="worker-2" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
-                    <host type="default">localhost</host>
+                    <host type="default">192.168.57.165</host>
                 </hosts>
                 <ports>
                     <port type="http">9763</port>
-                    <port type="https">9443</port>
+                    <port type="https">9763</port>
                 </ports>
                 <properties>
-
+                </properties>
+            </instance>
+            <instance name="LB" type="standalone" nonBlockingTransportEnabled="false">
+                <hosts>
+                    <host type="default">appserver.carbon-test.org</host>
+                </hosts>
+                <!--<ports>
+                    <port type="http">9763</port>
+                    <port type="https">9763</port>
+                </ports>-->
+                <properties>
                 </properties>
             </instance>
         </productGroup>
