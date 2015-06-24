@@ -86,8 +86,8 @@
                 <version>${version.equinox.osgi.services}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.equinox</groupId>
-                <artifactId>javax.servlet</artifactId>
+                <groupId>org.wso2.tomcat</groupId>
+                <artifactId>tomcat-servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
             </dependency>
             <dependency>
@@ -184,11 +184,6 @@
                 <groupId>org.eclipse.equinox</groupId>
                 <artifactId>org.eclipse.equinox.http.servlet</artifactId>
                 <version>${version.equinox.http.servlet}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.equinox</groupId>
-                <artifactId>javax.servlet.jsp</artifactId>
-                <version>${javax.servlet.jsp.version}</version>
             </dependency>
 
             <!-- For stratos service samples -->
@@ -577,8 +572,8 @@
         <tomcat.orbit.version>7.0.59.wso2v3</tomcat.orbit.version>
         <orbit.version.tomcat.jsp.api>7.0.59.wso2v1</orbit.version.tomcat.jsp.api>
 
-        <javax.servlet.version>3.0.0.v201112011016</javax.servlet.version>
-        <javax.servlet.jsp.version>2.2.0.v201112011158</javax.servlet.jsp.version>
+        <javax.servlet.version>7.0.59.wso2v1</javax.servlet.version>
+        <javax.servlet.jsp.version>7.0.59.wso2v1</javax.servlet.jsp.version>
         <apache.derby.version>10.3.2.1wso2v1</apache.derby.version>
         <hibernate.version>3.2.5.ga-wso2v1</hibernate.version>
         <bcel.version>5.2.0.wso2v1</bcel.version>
