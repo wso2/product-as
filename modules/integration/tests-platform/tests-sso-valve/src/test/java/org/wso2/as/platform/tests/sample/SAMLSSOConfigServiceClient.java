@@ -16,7 +16,7 @@
 *under the License.
 */
 
-package org.wso2.as.platform.tests.ssovalve;
+package org.wso2.as.platform.tests.sample;
 
 import org.apache.axis2.AxisFault;
 import org.apache.commons.logging.Log;
