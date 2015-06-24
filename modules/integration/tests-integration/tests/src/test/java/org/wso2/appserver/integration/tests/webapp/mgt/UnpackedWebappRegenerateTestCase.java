@@ -63,7 +63,7 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     }
 
-    @Test(groups = "wso2.as", description = "Deploying web application", enabled = false)
+    @Test(groups = "wso2.as", description = "Deploying web application")
     public void testWebApplicationDeployment() throws Exception {
         webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war"
@@ -76,7 +76,7 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
         File unpackedWebappFile = new File(webAppDeploymentDir + webAppName);
         assertTrue(unpackedWebappFile.exists(), "Webapp was not unpacked.");
 
-        FileUtils.deleteDirectory(unpackedWebappFile);
+        deleteDirectory(unpackedWebappFile);
         assertTrue(isUnpackedDirCreated(unpackedWebappFile),
                 "Unpack directory has not been re-created within the time frame");
 
@@ -114,6 +114,14 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
         log.error(webAppFileName + " Unpack directory has not been re-created within the time frame - "
                 + WEBAPP_DEPLOYMENT_DELAY);
         return false;
+    }
+
+    private void deleteDirectory(File unpackedDirectory) throws Exception {
+        try {
+            Thread.sleep(45000); //fix: WSAS-1991
+        } catch (InterruptedException ignored) {
+        }
+        FileUtils.deleteDirectory(unpackedDirectory);
     }
 
     @AfterClass(alwaysRun = true)
