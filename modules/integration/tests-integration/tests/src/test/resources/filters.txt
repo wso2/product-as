@@ -21,4 +21,3 @@
 -*transports*
 -org.wso2.carbon.mediation.statistics*
 -*startup*
--org.wso2.carbon.tryit*
