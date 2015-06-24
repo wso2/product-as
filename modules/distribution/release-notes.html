@@ -16,40 +16,23 @@
 <html>
 <head>
     <meta http-equiv="content-type" content=""/>
-    <title>WSO2 Application Server 5.2.1 Release Notes</title>
+    <title>WSO2 Application Server 5.3.0 Release Notes</title>
     <link href="./tools/cmd/css/wsas-dist-doc.css" rel="stylesheet"
           type="text/css" media="all"/>
 </head>
 
 <body>
-<h1>WSO2 Application Server(WSO2 AS) 5.2.1
+<h1>WSO2 Application Server(WSO2 AS) 5.3.0
     Release Notes</h1>
 
-<h3>December 2013</h3>
+<h3>December 2015</h3>
 
-<p>The WSO2 Application Server is an enterprise-ready cloud-enabled application server, powered
-    by Apache Tomcat and also integrates Apache Axis2 and Apache CXF frameworks. It provides
-    first class support for standard Web applications, JAX-WS/RS applications and Jaggery
-    scripting applications. Coupled with features of
+<p>The WSO2 Application Server is an enterprise-ready cloud-enabled application server, powered by Apache Tomcat, and Apache TomEE, it integrates Apache CXF framework. It provides first class support for standard Web applications, JAX-WS/JAX-RS applications and Jaggery scripting applications. Coupled with features of 
     <a target="_blank" href="http://wso2.com/products/carbon/">
         WSO2 Carbon
-    </a>, users can now manage their applications including JAX-WS and JAX-RS to web
-    applications in a unified manner within the management console itself.
+    </a>, users can now manage their applications including JAX-WS and JAX-RS to web applications in a unified manner within the management console itself.
 </p>
-<p>Application Server also provides a comprehensive Web services server platform, using Axis2
-    and CXF as its Web services runtimes and provide many value additions on top of service
-    runtime. It can expose services using both SOAP and REST models and supports a comprehensive
-    set of WS-* specifications such as WS-Security, WS-Trust, WS-SecureConversation, WS-Reliable
-    Messaging, WS-Addressing, WS-Policy, WS-SecurityPolicy, etc. WSO2 Application Server also
-    has inbuilt support for Mashup services and WSO2 Data services. WSO2 Application Server can
-    be installed on on-premise or any public/private cloud infrastructure and provide unified
-    management console and lifestyle management features which are independent from underlying
-    deployment option.
-</p>
-
-<p>WSO2 Application Server is a part of WSO2 Stratos cloud platform (PaaS) and hosted offering
-    of WSO2 Application Server as a service can be accessed from here
-    <a href="https://management.appserver.stratoslive.wso2.com" target="new">https://management.appserver.stratoslive.wso2.com.</a>
+<p>Application Server also provides a comprehensive Web services server platform using CXF as its Web services runtime, and provides many value additions on top of this runtime. It can expose services using both SOAP and REST models and supports a comprehensive set of WS-* specifications such as WS-Security, WS-Trust, WS-SecureConversation, WS-Addressing, WS-SecurityPolicy, etc. WSO2 Application Server also has inbuilt support for Jaggery. WSO2 Application Server can be installed on on-premise or any public/private cloud infrastructure and provide unified management console and lifecycle management features which are independent from underlying deployment option.
 </p>
 
 <p>An open source product, WSO2 AppServer is available under the
@@ -60,8 +43,19 @@
     functionality as well.
 </p>
 
-This is a patch release of Application Server and does not contain any new features.
-Key features of the WSO2 Application Server are as following,
+<h2>New Features</h2>
+
+<ul>
+    <li>JavaEE 6 Web Profile support via TomEE 1.7.2 integration</li>
+    <li>Websocket 1.1 API Support as defined by the JSR-356 specification</li>
+    <li>Tomcat Virtual Hosts support</li>
+    <li>SAML2 Single-Sign-On support for web applications</li>
+    <li>WS-Discovery support for CXF JAX-WS and JAX-RS services</li>
+    <li>OSGi ServiceLoader Mediator specification support via SPI-Fly</li>
+    <br/>
+    <li>Removed the first class support provided for deploying Axis2 AAR Services</li>
+    <li>Removed the data services hosting support from AS. Users can use the WSO2 Data Services Server product to deploy data services.</li>
+</ul>
 
 <h2>Key Features</h2>
 
@@ -90,7 +84,7 @@ Key features of the WSO2 Application Server are as following,
 
 <h2>Issues Fixed for this release</h2>
 <ul>
-    <li>AppServer related components of the WSO2 Carbon Platform -
+    <li>AppServer related components of the WSO2 Carbon Platform - #####TODO
         <a href="https://wso2.org/jira/issues/?filter=11684">
             https://wso2.org/jira/issues/?filter=11684
         </a>
@@ -117,24 +111,28 @@ Key features of the WSO2 Application Server are as following,
 </ul>
 
 </br>
-<h2>J2EE Web application Standards Support</h2>
+<h2>JavaEE Web application Standards Support</h2>
 <ul>
-    <li>Servlet 3.0</li>
+    <li>Java API for RESTful Web Services (JAX-RS) 1.1</li>
+    <li>Java API for XML-Based Web Services (JAX-WS) 2.2</li>
+    <li>Java Servlet 3.0</li>
     <li>JavaServer Pages (JSP) 2.2</li>
     <li>Expression Language (EL) 2.2</li>
     <li>Standard Tag Library for JavaServer Pages (JSTL) 1.2</li>
-    <li>Java Naming and Directory Interface (JNDI)</li>
-    <li>Java Server Faces (JSF) 2.1</li>
+    <li>Java Server Faces (JSF) 2.0</li>
     <li>Java Persistence API (JPA) 2.0</li>
-    <li>Java Transaction API (JTA) - JSR-907</li>
-    <li>JAXB 2.2</li>
-    <li>JMS</li>
-    <li>Java Mail</li>
+    <li>Java Transaction API (JTA) 1.1</li>
+    <li>Contexts and Dependency Injection for Java (CDI) 1.0</li>
+    <li>Enterprise JavaBeans (EJB) 3.1</li>
+    <li>Bean Validation 1.0</li>
+    <li>Java Architecture for XML Binding (JAXB) 2.2</li>    	
+    <li>Common Annotations for the Java Platform (JSR-250) 1.1</li>
 </ul>
 
 <h2>Open Source components included in WSO2 Application Server</h2>
 <ul>
     <li>Embedded Apache Tomcat</li>
+    <li>Apache TomEE</li>
     <li>Apache CXF: Supporting JAX-WS and JAX-RS</li>
     <li>Apache Axis2 (SOAP)</li>
     <li>Apache Axiom (High performance XML Object Model)</li>
@@ -144,13 +142,13 @@ Key features of the WSO2 Application Server are as following,
     <li>WS-Addressing implementation in Axis2</li>
     <li>Apache Neethi (WS-Policy)</li>
     <li>WS-SecurityPolicy implementation in Axis2</li>
-    <li>Apache XML Schema</li>    
+    <li>Apache XML Schema</li>
     <li>Apache Tribes (Group Communications Framework)</li>
 </ul>
 
 <h2>Known Issues</h2>
 <ul>
-    <li>Application Server related components of the WSO2 Carbon Platform -
+    <li>Application Server related components of the WSO2 Carbon Platform - ########TODO
         <a href="https://wso2.org/jira/issues/?filter=11685">
             https://wso2.org/jira/issues/?filter=11685
         </a>
@@ -158,7 +156,7 @@ Key features of the WSO2 Application Server are as following,
 </ul>
 
 <h2>Reporting Problems</h2>
-<p>Issues can be reported using the public JIRA available at
+<p>Issues can be reported using the public JIRA available at ########TODO
     <a href="https://wso2.org/jira/browse/WSAS" target="_blank">
         https://wso2.org/jira/browse/WSAS</a>.
 </p>
