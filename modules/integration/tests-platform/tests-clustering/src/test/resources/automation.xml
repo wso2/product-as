@@ -228,7 +228,7 @@
                 </hosts>
                 <ports>
                     <port type="http">9763</port>
-                    <port type="https">9763</port>
+                    <port type="https">9443</port>
                 </ports>
                 <properties>
                 </properties>
@@ -239,19 +239,20 @@
                 </hosts>
                 <ports>
                     <port type="http">9763</port>
-                    <port type="https">9763</port>
+                    <port type="https">9443</port>
                 </ports>
                 <properties>
                 </properties>
             </instance>
-            <instance name="LB" type="standalone" nonBlockingTransportEnabled="false">
+            <instance name="lbwm" type="lb_worker_manager" nonBlockingTransportEnabled="true">
                 <hosts>
-                    <host type="default">appserver.carbon-test.org</host>
+                    <host type="worker">appserver.carbon-test.org</host>
+                    <host type="manager">mgt.appserver.carbon-test.org</host>
                 </hosts>
-                <!--<ports>
-                    <port type="http">9763</port>
-                    <port type="https">9763</port>
-                </ports>-->
+                <ports>
+                    <port type="http">80</port>
+                    <port type="https">443</port>
+                </ports>
                 <properties>
                 </properties>
             </instance>
@@ -261,14 +262,6 @@
     <listenerExtensions>
         <platformExecutionManager>
             <extentionClasses>
-                <class>
-                    <!--<name>org.wso2.carbon.automation.extensions.servers.carbonserver.CarbonServerExtension</name>-->
-                    <!--<parameter name="-DportOffset" value="0" />-->
-                    <!--<parameter name="cmdArg" value="debug 5005" />-->
-                </class>
-                <class>
-                    <!--<name>org.wso2.carbon.integration.common.extensions.usermgt.UserPopulateExtension</name>-->
-                </class>
             </extentionClasses>
         </platformExecutionManager>
 

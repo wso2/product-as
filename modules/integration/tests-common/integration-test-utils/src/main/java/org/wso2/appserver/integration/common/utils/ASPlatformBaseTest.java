@@ -126,4 +126,5 @@ public class ASPlatformBaseTest {
         LoginLogoutClient loginLogoutClient = new LoginLogoutClient(context);
         return loginLogoutClient.login();
     }
+
 }

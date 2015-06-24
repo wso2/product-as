@@ -34,6 +34,7 @@ import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilExcepti
 
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
+import java.io.IOException;
 
 import static org.testng.Assert.assertTrue;
 
@@ -60,14 +61,14 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
         managerNode = getAutomationContextWithKey("manager");
         workerNode1 = getAutomationContextWithKey("worker-1");
         workerNode2 = getAutomationContextWithKey("worker-2");
-        lbNode = getAutomationContextWithKey("LB");
+        lbNode = getAutomationContextWithKey("lbwm");
         managerSessionCookie = login(managerNode);
         webAppAdminClient = new WebAppAdminClient(managerNode.getContextUrls().getBackEndUrl(),managerSessionCookie);
     }
 
     @AfterClass(alwaysRun = true)
     public void  clean() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppFileName, lbNode.getDefaultInstance().getHosts().get("default"));
+        webAppAdminClient.deleteWebAppFile(webAppFileName, lbNode.getDefaultInstance().getHosts().get("worker"));
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                         managerNode.getContextUrls().getBackEndUrl(), managerSessionCookie, webAppName),
                 "Web Application unDeployment failed");
@@ -86,8 +87,9 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
 
     @Test(groups = "wso2.as", description = "Invoke web application and test dep sync",
             dependsOnMethods = "testWebApplicationDeployment")
-    public void testInvokeWebApp() throws Exception {
+    public void testInvokeWebApp() throws XPathExpressionException, IOException {
 
+        //request are sent directly to the worker node , if dep sync works web app should send the IP of worker node
         String workerNode1_IP = workerNode1.getDefaultInstance().getHosts().get("default");
         int depSyncTimeOut = 30000;
         webAppURLWorkerNode = workerNode1.getContextUrls().getWebAppURL();
@@ -98,24 +100,26 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
 
         long currentTime = System.currentTimeMillis();
 
+        // check whether dep sync correctly deployed the app on worker node within 30 seconds
+
         while ((response.getResponseCode() != 200) || ((System.currentTimeMillis() - currentTime) < depSyncTimeOut)) {
-            Thread.sleep(5000);
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                //ignored the exception here since it will exit the execution
+            }
             response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         }
-
-        log.info("Response from web app : " + response.getData() + "\n\n\n");
 
         assertTrue(response.getData().contains(workerNode1_IP), "Invalid response");
 
     }
 
-    /**
-     * requests are sent to load balancer node, reply should include the originated worker node IP
-     * @throws Exception
-     */
     @Test(groups = "wso2.as", description = "Check all nodes serve web application requests",
             dependsOnMethods = "testInvokeWebApp")
-    public void testAllNodesServeWebAppRequests() throws Exception {
+    public void testAllNodesServeWebAppRequests() throws XPathExpressionException, IOException {
+
+        //requests are sent to load balancer node, reply should include the originated worker node IP
 
         String workerNode1_IP = workerNode1.getDefaultInstance().getHosts().get("default");
         String workerNode2_IP = workerNode2.getDefaultInstance().getHosts().get("default");
@@ -141,8 +145,6 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
         }
 
         assertTrue(worker1 && worker2, "Web app not served in both worker nodes");
-
     }
-
 
 }
