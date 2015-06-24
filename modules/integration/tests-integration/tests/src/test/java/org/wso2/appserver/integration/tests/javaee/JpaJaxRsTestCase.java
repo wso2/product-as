@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.tests.javaee.cdi.CdiProducesTestCase;
 
 import javax.xml.namespace.QName;
 
@@ -27,7 +28,7 @@ import static org.testng.Assert.assertEquals;
 
 public class JpaJaxRsTestCase extends WebappDeploymentTestCase {
 
-    private static final Log log = LogFactory.getLog(CdiServletTestCase.class);
+    private static final Log log = LogFactory.getLog(CdiProducesTestCase.class);
     private static final String webAppFileName = "jpa-student-register-1.0.war";
     private static final String webAppName = "jpa-student-register-1.0";
     private static final String webAppLocalURL ="/jpa-student-register-1.0";

@@ -1,15 +1,17 @@
 package org.wso2.appserver.sample.ee.cdi.scope;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
-
 @Named("Receptionist")
 @RequestScoped
 public class Receptionist implements Greeter {
+    private static final Log log = LogFactory.getLog(Receptionist.class);
 
     private int meetings;
 
@@ -19,7 +21,7 @@ public class Receptionist implements Greeter {
 
     @Override
     public String greet() {
-        String greeting = "";
+        String greeting;
 
         if (meetings == 0)
             greeting = "Receptionist: Hi, this is the first time I meet you";
@@ -32,11 +34,11 @@ public class Receptionist implements Greeter {
 
     @PostConstruct
     public void postConstruct() {
-        System.out.println("Post construct of Receptionist");
+        log.info("Post construct of Receptionist");
     }
 
     @PreDestroy
     public void preDestroy() {
-        System.out.println("Pre destroy of Receptionist");
+        log.info("Pre destroy of Receptionist");
     }
 }

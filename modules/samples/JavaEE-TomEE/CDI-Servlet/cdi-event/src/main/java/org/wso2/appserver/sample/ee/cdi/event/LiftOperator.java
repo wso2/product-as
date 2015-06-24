@@ -16,7 +16,7 @@ public class LiftOperator implements Greeter {
 
     @Override
     public String greet() {
-        String greeting = "";
+        String greeting;
 
         if (meetings == 0)
             greeting = "Lift Operator: Hi, this is the first time I meet you";

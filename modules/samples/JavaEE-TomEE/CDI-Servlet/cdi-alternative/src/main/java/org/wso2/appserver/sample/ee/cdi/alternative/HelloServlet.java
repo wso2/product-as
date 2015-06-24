@@ -20,7 +20,7 @@ public class HelloServlet extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         PrintWriter writer = response.getWriter();
         writer.println(greeter.greet());
-        writer.println(namedGreeter.greet());
+//        writer.println(namedGreeter.greet());
         writer.close();
     }
 }

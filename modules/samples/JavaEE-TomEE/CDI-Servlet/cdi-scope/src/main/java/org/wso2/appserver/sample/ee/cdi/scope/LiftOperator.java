@@ -1,5 +1,7 @@
 package org.wso2.appserver.sample.ee.cdi.scope;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -7,6 +9,7 @@ import javax.inject.Named;
 
 @Named("LiftOperator")
 public class LiftOperator implements Greeter {
+    private static final Log log = LogFactory.getLog(LiftOperator.class);
 
     private int meetings;
 
@@ -16,7 +19,7 @@ public class LiftOperator implements Greeter {
 
     @Override
     public String greet() {
-        String greeting = "";
+        String greeting;
 
         if (meetings == 0)
             greeting = "Lift Operator: Hi, this is the first time I meet you";
@@ -29,12 +32,12 @@ public class LiftOperator implements Greeter {
 
     @PostConstruct
     public void postConstruct() {
-        System.out.println("Post construct of LiftOperator");
+        log.info("Post construct of LiftOperator");
     }
 
     @PreDestroy
     public void preDestroy() {
-        System.out.println("Pre destroy of LifeOperator");
+        log.info("Pre destroy of LifeOperator");
     }
 
 }

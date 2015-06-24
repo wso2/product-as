@@ -13,41 +13,47 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.wso2.appserver.integration.tests.javaee;
+package org.wso2.appserver.integration.tests.javaee.cdi;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.tests.javaee.WebappDeploymentTestCase;
+import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import static org.testng.Assert.assertTrue;
 
-public class CdiServletTestCase extends WebappDeploymentTestCase {
+public class CdiProducesTestCase extends WebappDeploymentTestCase {
 
-    private static final Log log = LogFactory.getLog(CdiServletTestCase.class);
+    private static final Log log = LogFactory.getLog(CdiProducesTestCase.class);
     private static final String webAppFileName = "cdi-produces-1.0.war";
+    private static final String webAppFilePath = "cdi";
     private static final String webAppName = "cdi-produces-1.0";
-    private static final String webAppLocalURL ="/cdi-produces-1.0";
+    private static final String webAppLocalURL = "/cdi-produces-1.0";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
         setWebAppFileName(webAppFileName);
+        setWebAppFilePath(webAppFilePath);
         setWebAppName(webAppName);
         setWebAppURL(getWebAppURL() + webAppLocalURL);
     }
 
-    @Test(groups = "wso2.as", description = "test cdi with servlet", dependsOnMethods = "webApplicationDeploymentTest")
+    @Test(groups = "wso2.as", description = "test cdi produce with servlet", dependsOnMethods = "webApplicationDeploymentTest")
     public void testCdiServlet() throws Exception {
 
         String servletUrl = getWebAppURL();
-        String result = runAndGetResultAsString(servletUrl);
+        HttpResponse response = HttpRequestUtil.sendGetRequest(servletUrl, null);
+        String result = response.getData();
 
         log.info("Response - " + result);
 
         assertTrue(result.startsWith("Hi, greetings from implementation one"),
-                   "Response doesn't contain the greeting, hi, of the url " + servletUrl);
+                "Response doesn't contain the greeting, hi, of the url " + servletUrl);
         assertTrue(result.contains("Bye !"),
-                   "Response doesn't contain the greeting, bye, of the url " + servletUrl);
+                "Response doesn't contain the greeting, bye, of the url " + servletUrl);
     }
 }
