@@ -35,6 +35,7 @@
     <modules>
         <module>lazy-loading-info</module>
         <module>context-reload-test-webapp</module>
+        <module>host-info</module>
     </modules>
 
 </project>
