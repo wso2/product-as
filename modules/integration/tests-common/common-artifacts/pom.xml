@@ -34,6 +34,8 @@
 
     <modules>
         <module>lazy-loading-info</module>
+        <module>carbon-datasource-lookup</module>
+        <module>tomcat-jndi-resource-lookup</module>
     </modules>
 
 </project>

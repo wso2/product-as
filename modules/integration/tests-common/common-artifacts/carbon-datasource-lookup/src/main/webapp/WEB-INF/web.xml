@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+
+    <servlet>
+        <servlet-name>CarbonDataSourceLookupServlet</servlet-name>
+        <servlet-class>org.wso2.appserver.samples.jndi.CarbonDataSourceLookupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CarbonDataSourceLookupServlet</servlet-name>
+        <url-pattern>/jndi/carbon-datasource-lookup</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TomcatDataSourceLookupServlet</servlet-name>
+        <servlet-class>org.wso2.appserver.samples.jndi.TomcatDataSourceLookupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TomcatDataSourceLookupServlet</servlet-name>
+        <url-pattern>/jndi/tomcat-resource-lookup</url-pattern>
+    </servlet-mapping>
+
+    <!--<servlet>-->
+        <!--<servlet-name>CarbonContextServlet</servlet-name>-->
+        <!--<servlet-class>org.wso2.carbon.CarbonContext</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>CarbonContextServlet</servlet-name>-->
+        <!--<url-pattern>/carbon/CarbonContext</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet>-->
+        <!--<servlet-name>TomcatContextServlet</servlet-name>-->
+        <!--<servlet-class>org.wso2.tomcat.context.TomcatContext</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>TomcatContextServlet</servlet-name>-->
+        <!--<url-pattern>/tomcat/tomcatcontext</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+
+    <!--<servlet>-->
+        <!--<servlet-name>WebAppContextServlet</servlet-name>-->
+        <!--<servlet-class>org.wso2.webapp.WebAppContext</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>WebAppContextServlet</servlet-name>-->
+        <!--<url-pattern>/webapp/webappContext</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet>-->
+        <!--<servlet-name>CatalinaTomcatContextServlet</servlet-name>-->
+        <!--<servlet-class>org.wso2.tomcat.catalinatomcatcontext.CatalinaTomcatContextLink</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>CatalinaTomcatContextServlet</servlet-name>-->
+        <!--<url-pattern>/tomcat/CatalinaTomcatContext</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <!--<servlet>-->
+        <!--<servlet-name>TestCatalinaWebAppLinkContextJNDI</servlet-name>-->
+        <!--<servlet-class>org.wso2.tomcat.catalinawebappcontext.CatalinaWebAppLink</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>TestCatalinaWebAppLinkContextJNDI</servlet-name>-->
+        <!--<url-pattern>/webapp/CatalinaWebAppTestContext</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+</web-app>
