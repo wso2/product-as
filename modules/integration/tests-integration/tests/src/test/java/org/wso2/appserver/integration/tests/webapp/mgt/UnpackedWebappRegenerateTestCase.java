@@ -93,13 +93,8 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
     private boolean isUnpackedDirCreated(File unpackedWebappDirectory) throws Exception {
         log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for unpacked directory creation - " + webAppFileName);
 
-        log.info("unpack dir - " + unpackedWebappDirectory.getAbsolutePath()); //todo
         Calendar startTime = Calendar.getInstance();
         while ( (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
-            log.info("****************** iteration -  " + (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis())); //todo remove
-            for (String file : new File(webAppDeploymentDir).list()) {
-                log.info("Files - " + file);
-            }
             if (unpackedWebappDirectory.exists()) {
                 log.info(webAppFileName + " Unpack directory has been re-created.");
                 return true;
