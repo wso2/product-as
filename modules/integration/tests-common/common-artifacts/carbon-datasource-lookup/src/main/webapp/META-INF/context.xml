@@ -31,19 +31,7 @@
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
 
-
     -->
-
-    <!--<Resource name="jdbc/WebappContextDB" auth="Container" type="javax.sql.DataSource"-->
-              <!--maxActive="100" maxIdle="30" maxWait="10000"-->
-              <!--username="saman" password="saman" driverClassName="com.mysql.jdbc.Driver"-->
-              <!--url="jdbc:mysql://192.168.4.50:3306/WebAppTestDB"/>-->
-
-    <!--<Resource name="bean/MyBeanFactory" auth="Container"-->
-              <!--type="org.wso2.appserver.samples.jndi.beans.MyBean"-->
-              <!--factory="org.apache.naming.factory.BeanFactory"-->
-              <!--bar="23" foo="68"/>-->
-
 
     <!--<ResourceLink name="jdbc/CatalinaWebAppTestDB"-->
     <!--global="jdbc/CatalinaWebAppTestDB"-->

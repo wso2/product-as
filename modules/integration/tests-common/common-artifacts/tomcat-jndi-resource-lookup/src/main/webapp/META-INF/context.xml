@@ -36,8 +36,8 @@
 
     <Resource name="jdbc/WebappContextDB" auth="Container" type="javax.sql.DataSource"
               maxActive="100" maxIdle="30" maxWait="10000"
-              username="saman" password="saman" driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://192.168.4.50:3306/WebAppTestDB"/>
+              username="user" password="user123" driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/WebAppTestDB"/>
 
     <Resource name="bean/MyBeanFactory" auth="Container"
               type="org.wso2.appserver.samples.jndi.beans.MyBean"

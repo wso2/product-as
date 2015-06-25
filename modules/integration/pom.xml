@@ -31,11 +31,19 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>integration-appSever</artifactId>
     <name>WSO2 AppServer - Integration Tests</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.wso2.carbon.automationutils</groupId>
+            <artifactId>org.wso2.carbon.integration.common.utils</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+    </dependencies>
     <packaging>pom</packaging>
 
     <modules>
         <module>tests-common</module>
         <module>tests-integration</module>
+        <module>tests-integration/reports</module>
         <module>tests-ui-integration</module>
         <!--<module>tests-platform</module>-->
     </modules>

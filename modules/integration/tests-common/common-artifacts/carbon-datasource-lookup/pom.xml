@@ -36,11 +36,11 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>javax.servlet</artifactId>
+	<dependency>
+            <groupId>org.wso2.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
             <scope>provided</scope>
-        </dependency>
+         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>

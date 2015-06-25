@@ -28,6 +28,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -41,11 +42,16 @@ public class TomcatDataSourceLookupServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            String dsName = request.getParameter("dsName");
             initCtx = new InitialContext();
             Context envContext = (Context) initCtx.lookup("java:comp/env");
-            Object dataSource = envContext.lookup(dsName);
-            out.write("DataSourceAvailable");
+
+            String dsName = request.getParameter("dsName");
+            if (dsName != null && !dsName.equals("")) {
+                DataSource dataSource = (DataSource) envContext.lookup(dsName);
+                out.write("DataSourceAvailable");
+            } else {
+                out.write("DataSourceNotFound");
+            }
         } catch (NamingException e) {
             log.error("JNDI resource not available", e);
             out.write("DataSourceNotFound");

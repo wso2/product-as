@@ -26,6 +26,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
+import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.integration.common.admin.client.NDataSourceAdminServiceClient;
@@ -67,17 +68,17 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
         carbonDataSourceLookupWebApp = "carbon-datasource-lookup";
         carbonWebAppContext = "/carbon-datasource-lookup";
         serverConfigurationManager = new ServerConfigurationManager(asServer);
-//        serverConfigurationManager.
-//                                  FrameworkPathUtil.getCarbonHome()
     }
 
-//    @AfterClass(alwaysRun = true)
-//    public void deteleteWebApp() throws Exception {
-//        webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-//        String hostName = "localhost";
-//        webAppAdminClient.deleteWebAppFile(tomcatJNDIResourceLookupWebApp + ".war", hostName);
-//        webAppAdminClient.deleteWebAppFile(carbonDataSourceLookupWebApp + ".war", hostName);
-//    }
+    @AfterClass(alwaysRun = true)
+    public void deleteWebApp() throws Exception {
+//        if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
+            webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+            String defaultHost = asServer.getDefaultInstance().getHosts().get("default");
+            webAppAdminClient.deleteWebAppFile(tomcatJNDIResourceLookupWebApp + ".war", defaultHost);
+            webAppAdminClient.deleteWebAppFile(carbonDataSourceLookupWebApp + ".war", defaultHost);
+//        }
+    }
 
     @Test(groups = "wso2.as", description = "Deploying web application")
     public void testTomcatJNDIResourceWebApplicationDeployment() throws Exception {
@@ -105,20 +106,21 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
         Assert.assertEquals(response.getData(), "DataSourceAvailable");
     }
 
+    //TODO Check whether this behaviour is correct in Tenant mode.
     @Test(groups = "wso2.as", description = "test JNDI look up on Tomcat's context",
             dependsOnMethods = "testTomcatJNDIResourceWebApplicationDeployment")
     public void testJNDILookupOnTomcatContext() throws Exception {
 
         if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
-            String sourceFilePath = FrameworkPathUtil.getSystemResourceLocation() + File.separator + "artifacts" +
-                    File.separator + "AS" + File.separator + "configs" + File.separator + "tomcat" + File.separator +
-                    "context.xml";
+            String sourceFilePath = TestConfigurationProvider.getResourceLocation("AS") + File.separator + "configs" +
+                    File.separator + "tomcat" + File.separator + "context.xml";
             String targetFilePath = FrameworkPathUtil.getCarbonHome() + File.separator + "repository" + File.separator +
                     "conf" + File.separator + "tomcat" + File.separator + "context.xml";
 
-            serverConfigurationManager.applyConfiguration(new File(sourceFilePath), new File(targetFilePath), false, true);
-            super.init(userMode);
+            serverConfigurationManager.applyConfiguration(new File(sourceFilePath),
+                    new File(targetFilePath), false, true);
         }
+        super.init(userMode);
 
         String webAppURLLocal = "";
         if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
@@ -157,8 +159,6 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
             HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WSO2CarbonDB");
             Assert.assertEquals(response.getData(), "DataSourceNotFound");
         }
-
-
     }
 
     @Test(groups = "wso2.as", description = "test JNDI lookup for a resource registered in another webapp's context.xml",
@@ -217,7 +217,6 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/myCarbonDS");
         Assert.assertEquals(response.getData(), "DataSourceAvailable");
     }
-
 
     @DataProvider
     private static TestUserMode[][] userModeProvider() {

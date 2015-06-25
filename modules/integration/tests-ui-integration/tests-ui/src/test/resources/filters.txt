@@ -1,3 +1,9 @@
+-org.apache.axis2.jaxws.*
+-org.apache.cxf.aegis.*
+-org.apache.axis2.clustering.*
+-org.apache.cxf.binding.*
+-org.apache.cxf.tools.*
+-org.apache.xmlbeans.*
 -*.stub*
 -*.stub_
 -*.stub_4.0.0
