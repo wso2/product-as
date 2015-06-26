@@ -19,6 +19,7 @@ package org.wso2.appserver.integration.tests.jndi;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.testng.SkipException;
 import org.testng.annotations.*;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.testng.Assert;
@@ -127,7 +128,8 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
             webAppURLLocal = webAppURL + tomcatWebAppContext + "/jndi/tomcat-resource-lookup";
 
         } else if (userMode == TestUserMode.TENANT_ADMIN) {
-            webAppURLLocal = webAppURL + "/webapps" + tomcatWebAppContext + "/jndi/tomcat-resource-lookup";
+            throw new SkipException("Skipping becauese of a product bug - https://wso2.org/jira/browse/WSAS-1994");
+//            webAppURLLocal = webAppURL + "/webapps" + tomcatWebAppContext + "/jndi/tomcat-resource-lookup";
         }
 
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/TomcatContextDB");
