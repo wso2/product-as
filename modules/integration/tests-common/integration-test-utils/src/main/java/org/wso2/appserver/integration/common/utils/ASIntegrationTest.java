@@ -66,6 +66,7 @@ public class ASIntegrationTest {
         sessionCookie = loginLogoutClient.login();
         backendURL = asServer.getContextUrls().getBackEndUrl();
         webAppURL = asServer.getContextUrls().getWebAppURL();
+	    userInfo = asServer.getContextTenant().getContextUser();
     }
 
     protected String getWebAppURL(WebAppTypes webAppType) throws XPathExpressionException {
