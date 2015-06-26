@@ -15,6 +15,7 @@
 */
 package org.wso2.appserver.integration.tests.javaee.cdi;
 
+import java.io.File;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
@@ -30,7 +31,6 @@ import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
-import java.io.File;
 
 import static org.testng.Assert.assertTrue;
 
@@ -75,14 +75,13 @@ public class CdiAlternativesTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "test cdi alternatives with servlet")
     public void testCdiServlet() throws Exception {
 
-        String servletUrl = webAppURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL, null);
         String result = response.getData();
 
         log.info("Response - " + result);
 
         assertTrue(result.startsWith("Have a good day, Bye!"),
-                "Response doesn't contain the alternative's greeting " + servletUrl);
+                "Response doesn't contain the alternative's greeting " + webAppURL);
     }
 
     @AfterClass(alwaysRun = true)
