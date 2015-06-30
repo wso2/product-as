@@ -304,6 +304,10 @@
             <artifactId>tyrus-standalone-client</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database.wso2</groupId>
+            <artifactId>h2-database-engine</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
