@@ -1,13 +1,13 @@
 package org.wso2.appserver.sample.ee.cdi.jpa.jaxws;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebService
-public class CustomersDatabaseService {
+public class CustomersDatabaseService implements CustomersDatabase {
 
     @EJB
     ContactManager contactManager;

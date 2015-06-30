@@ -2,14 +2,13 @@
 
 package org.wso2.appserver.sample.ee.cdi.scope;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.annotation.WebServlet;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @WebServlet(name = "HelloServlet", urlPatterns = "/")
 public class HelloServlet extends javax.servlet.http.HttpServlet {

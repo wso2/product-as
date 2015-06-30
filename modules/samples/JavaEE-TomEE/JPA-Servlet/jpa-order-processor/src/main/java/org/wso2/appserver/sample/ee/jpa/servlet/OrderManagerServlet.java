@@ -1,14 +1,13 @@
 package org.wso2.appserver.sample.ee.jpa.servlet;
 
-import org.apache.openjpa.persistence.PersistenceException;
-
+import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.apache.openjpa.persistence.PersistenceException;
 
 @WebServlet(name = "OrderManagerServlet", urlPatterns = "/")
 public class OrderManagerServlet extends HttpServlet {

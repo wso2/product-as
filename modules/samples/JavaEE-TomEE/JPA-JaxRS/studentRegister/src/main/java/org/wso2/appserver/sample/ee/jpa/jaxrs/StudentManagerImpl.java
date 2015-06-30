@@ -1,12 +1,12 @@
 package org.wso2.appserver.sample.ee.jpa.jaxrs;
 
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
-import java.util.List;
 
 @Stateful
 public class StudentManagerImpl implements StudentManager {

@@ -1,10 +1,9 @@
 package org.wso2.appserver.sample.ee.cdi.interceptor;
 
-import org.apache.commons.logging.LogFactory;
-
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import org.apache.commons.logging.LogFactory;
 
 @Interceptor
 @Log

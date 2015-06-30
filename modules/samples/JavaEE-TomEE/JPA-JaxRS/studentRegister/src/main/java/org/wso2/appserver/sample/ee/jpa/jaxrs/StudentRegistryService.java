@@ -1,10 +1,16 @@
 package org.wso2.appserver.sample.ee.jpa.jaxrs;
 
-import javax.ejb.EJB;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 
 @Path("/student")
@@ -15,7 +21,7 @@ public class StudentRegistryService {
 
     @POST
     @Path("add")
-    @Consumes({"application/json", "application/xml", "text/json", "text/xml"})
+    @Consumes({"application/json"})
     public Response addStudent(StudentDTO stu) {
         Student student = new Student(stu.getIndex(), stu.getName());
         Student result = studentManager.addStudent(student);
@@ -27,7 +33,7 @@ public class StudentRegistryService {
 
     @GET
     @Path("getall")
-    @Produces({"application/json", "application/xml", "text/json", "text/xml"})
+    @Produces({"application/json"})
     public Response getAllStudents() {
         List<Student> students = studentManager.getAllStudents();
         List<StudentDTO> studentsResponse = new ArrayList<StudentDTO>();
@@ -42,7 +48,7 @@ public class StudentRegistryService {
 
     @GET
     @Path("get/{index}")
-    @Produces({"application/json", "application/xml", "text/json", "text/xml"})
+    @Produces({"application/json"})
     public Response getStudent(@PathParam("index") int index) {
         Student student = studentManager.getStudent(index);
         if (student != null) {

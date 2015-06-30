@@ -1,12 +1,11 @@
 package org.wso2.appserver.sample.ee.cdi.scope;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @Named("Receptionist")
 @RequestScoped

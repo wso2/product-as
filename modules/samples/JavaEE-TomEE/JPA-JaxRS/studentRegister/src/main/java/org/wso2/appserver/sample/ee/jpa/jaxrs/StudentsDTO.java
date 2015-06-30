@@ -1,7 +1,7 @@
 package org.wso2.appserver.sample.ee.jpa.jaxrs;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "Students")
 public class StudentsDTO {

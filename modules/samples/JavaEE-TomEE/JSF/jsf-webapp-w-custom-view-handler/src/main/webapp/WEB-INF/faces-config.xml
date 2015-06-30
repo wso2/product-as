@@ -6,7 +6,7 @@
               version="2.0">
 
     <application>
-        <view-handler>CustomViewHandler</view-handler>
+        <view-handler>org.wso2.appserver.sample.ee.jsf.CustomViewHandler</view-handler>
     </application>
 
     <navigation-rule>

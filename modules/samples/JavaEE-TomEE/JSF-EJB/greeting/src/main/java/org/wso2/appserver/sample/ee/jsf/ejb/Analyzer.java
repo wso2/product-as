@@ -1,8 +1,8 @@
 package org.wso2.appserver.sample.ee.jsf.ejb;
 
-import javax.ejb.Stateless;
 import java.util.HashSet;
 import java.util.Set;
+import javax.ejb.Stateless;
 
 @Stateless
 public class Analyzer {

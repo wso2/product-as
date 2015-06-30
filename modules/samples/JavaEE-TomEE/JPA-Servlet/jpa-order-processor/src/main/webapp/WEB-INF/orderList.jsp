@@ -1,5 +1,5 @@
-<%@ page import="org.wso2.appserver.sample.ee.jpa.servlet.Order" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.wso2.appserver.sample.ee.jpa.servlet.Order" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

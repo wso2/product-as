@@ -1,8 +1,8 @@
 package org.wso2.appserver.sample.ee.cdi.produces;
 
+import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
-import java.io.Serializable;
 
 @SessionScoped
 public class GreeterFactory implements Serializable {
