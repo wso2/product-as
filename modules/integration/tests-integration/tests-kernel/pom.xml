@@ -29,6 +29,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${maven.test.skip}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.wso2.carbon</groupId>
@@ -69,6 +70,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
+                            <skip>${maven.test.skip}</skip>
                             <outputDirectory>${basedir}/target/security-verifier</outputDirectory>
                             <includeTypes>aar</includeTypes>
                             <includeArtifactIds>SecVerifier</includeArtifactIds>
@@ -93,9 +95,13 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <skip>${maven.test.skip}</skip>
                     <executable>java</executable>
                     <arguments>
                         <argument>-Dbasedir=${basedir}</argument>
+                        <argument>-Dmaven.test.failure.ignore=${maven.test.failure.ignore}</argument>
+                        <argument>-Dmaven.test.skip=${maven.test.skip}</argument>
+                        <argument>-DskipTests=${skipTests}</argument>
                         <argument>-Djava.io.tmpdir=${basedir}/target/</argument>
                         <argument>
                             -Dcarbon.zip=${basedir}/../../../distribution/target/wso2as-${project.version}.zip
