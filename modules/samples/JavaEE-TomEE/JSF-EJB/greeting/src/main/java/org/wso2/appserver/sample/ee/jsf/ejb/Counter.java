@@ -1,8 +1,8 @@
 package org.wso2.appserver.sample.ee.jsf.ejb;
 
+import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-import java.io.Serializable;
 
 @Named
 @SessionScoped

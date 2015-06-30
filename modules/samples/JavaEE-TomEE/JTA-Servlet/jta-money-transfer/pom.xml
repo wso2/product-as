@@ -29,6 +29,14 @@
             <groupId>org.apache.openejb</groupId>
             <artifactId>javaee-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>${version.commons.logging}</version>
+        </dependency>
     </dependencies>
 
+    <build>
+        <finalName>${project.artifactId}</finalName>
+    </build>
 </project>

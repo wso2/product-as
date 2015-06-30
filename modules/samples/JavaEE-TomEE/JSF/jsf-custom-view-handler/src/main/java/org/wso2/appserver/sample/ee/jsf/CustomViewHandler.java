@@ -1,17 +1,16 @@
 package org.wso2.appserver.sample.ee.jsf;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.faces.application.ViewHandler;
-import javax.faces.application.ViewHandlerWrapper;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.ViewHandler;
+import javax.faces.application.ViewHandlerWrapper;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class CustomViewHandler extends ViewHandlerWrapper {
     private static final Log log = LogFactory.getLog(CustomViewHandler.class);

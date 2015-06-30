@@ -17,7 +17,7 @@ public class Receptionist implements Greeter {
 
     @Override
     public String greet() {
-        String greeting = "";
+        String greeting;
 
         if (meetings == 0)
             greeting = "Receptionist: Hi, this is the first time I meet you";

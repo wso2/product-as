@@ -1,7 +1,6 @@
 package org.wso2.appserver.sample.ee.cdi.jpa.jaxws;
 
-import org.apache.bval.constraints.Email;
-
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
+import org.apache.bval.constraints.Email;
 
 @Entity
 public class Contact {

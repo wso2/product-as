@@ -5,7 +5,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-@ManagedBean(name = "org.wso2.appserver.sample.ee.jsf.bval.Calculator")
+@ManagedBean(name = "Calculator")
 public class Calculator {
 
     @NotNull

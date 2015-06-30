@@ -22,6 +22,7 @@
                 <inherited>false</inherited>
                 <configuration>
                     <argLine>-Xmx1024m -XX:-UseSplitVerifier</argLine>
+                    <!--<argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8001</argLine>-->
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-server-mgt.xml</suiteXmlFile>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
@@ -264,7 +265,7 @@
             <groupId>org.wso2.carbon.automationutils</groupId>
             <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
         </dependency>
@@ -275,10 +276,6 @@
         <dependency>
             <groupId>org.wso2.carbon.registry</groupId>
             <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.automationutils</groupId>
-            <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.xfer</groupId>
@@ -302,6 +299,13 @@
         <dependency>
             <groupId>org.glassfish.tyrus.bundles</groupId>
             <artifactId>tyrus-standalone-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-contacts-database</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>classes</classifier>
             <scope>test</scope>
         </dependency>
     </dependencies>
