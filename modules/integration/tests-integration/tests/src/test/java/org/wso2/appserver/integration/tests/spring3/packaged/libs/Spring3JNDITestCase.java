@@ -49,7 +49,7 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
     private TestUserMode userMode;
     private WebAppAdminClient webAppAdminClient;
     private SqlDataSourceUtil sqlDataSource;
-    private String webAppName = "spring3-restful";
+    private String webAppName = "spring3-restful-packaged-libs";
     private String endpointURL = "/student";
     private String contentType = "application/json";
 
