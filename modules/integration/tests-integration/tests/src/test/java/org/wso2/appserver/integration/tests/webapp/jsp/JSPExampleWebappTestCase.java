@@ -118,8 +118,8 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
         //tag plugins - c:choose
         url = webAppBaseURL + "choose.jsp";
         response = HttpRequestUtil.sendGetRequest(url, null);
-        String actualString = response.getData().replaceAll("\\n|\\r|\\w", "");
-            expectedString = "#0:Huh?";
+        String actualString = response.getData().replaceAll("\\n|\\r|\\s", "");
+        expectedString = "#0:Huh?";
         assertTrue(actualString.contains(expectedString),
                 getFailMessage(actualString, expectedString));
         expectedString = "#1:One!";
@@ -135,9 +135,8 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
          * Generates a meaningful fail message for String#contains checks.
          */
     private String getFailMessage(String completeString, String expectedString) {
-        String failMsg = String.format("String contains validation failed " +
+        return String.format("String contains validation failed " +
                 "Expected substring, %s, in \n %s.", expectedString, completeString);
-        return failMsg;
     }
 
 }
