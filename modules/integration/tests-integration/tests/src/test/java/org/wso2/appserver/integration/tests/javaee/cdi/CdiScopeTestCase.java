@@ -40,7 +40,6 @@ public class CdiScopeTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(CdiScopeTestCase.class);
     private static final String webAppFileName = "cdi-scope.war";
-    private static final String webAppFilePath = "cdi";
     private static final String webAppName = "cdi-scope";
     private static final String webAppLocalURL = "/cdi-scope";
     String hostname;

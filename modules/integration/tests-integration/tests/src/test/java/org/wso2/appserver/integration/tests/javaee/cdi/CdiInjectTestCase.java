@@ -38,7 +38,6 @@ public class CdiInjectTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(CdiInjectTestCase.class);
     private static final String webAppFileName = "cdi-inject.war";
-    private static final String webAppFilePath = "cdi";
     private static final String webAppName = "cdi-inject";
     private static final String webAppLocalURL = "/cdi-inject";
     String hostname;

@@ -38,7 +38,6 @@ public class CdiQualifierTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(CdiQualifierTestCase.class);
     private static final String webAppFileName = "cdi-qualifier.war";
-    private static final String webAppFilePath = "cdi";
     private static final String webAppName = "cdi-qualifier";
     private static final String webAppLocalURL = "/cdi-qualifier";
     String hostname;

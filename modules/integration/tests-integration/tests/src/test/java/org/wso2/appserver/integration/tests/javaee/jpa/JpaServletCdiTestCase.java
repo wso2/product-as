@@ -13,9 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.wso2.appserver.integration.tests.javaee.cdi;
+package org.wso2.appserver.integration.tests.javaee.jpa;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
@@ -23,30 +25,29 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
-import org.wso2.appserver.integration.common.clients.LogViewerClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
-import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 
 
 import static org.testng.Assert.assertTrue;
 
-public class CdiInteceptortTestCase extends ASIntegrationTest {
+public class JpaServletCdiTestCase extends ASIntegrationTest {
 
-    private static final Log log = LogFactory.getLog(CdiInteceptortTestCase.class);
-    private static final String webAppFileName = "cdi-inteceptor.war";
-    private static final String webAppName = "cdi-inteceptor";
-    private static final String webAppLocalURL = "/cdi-inteceptor";
-    String hostname;
+    private static final Log log = LogFactory.getLog(JpaServletCdiTestCase.class);
+    private static final String webAppFileName = "jpa-order-processor.war";
+    private static final String webAppName = "jpa-order-processor";
+    private static final String webAppLocalURL = "/jpa-order-processor";
     private TestUserMode userMode;
+    private String hostname;
 
     @Factory(dataProvider = "userModeProvider")
-    public CdiInteceptortTestCase(TestUserMode userMode) {
+    public JpaServletCdiTestCase(TestUserMode userMode) {
         this.userMode = userMode;
     }
 
@@ -54,8 +55,20 @@ public class CdiInteceptortTestCase extends ASIntegrationTest {
     private static TestUserMode[][] userModeProvider() {
         return new TestUserMode[][]{
                 new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new TestUserMode[]{TestUserMode.TENANT_USER},
+                //todo enable tenant mode after fixing sample issue with tenant
+                //jira : https://wso2.org/jira/browse/WSAS-1998
+                //new TestUserMode[]{TestUserMode.TENANT_USER},
         };
+    }
+
+    public static void main(String[] args) {
+        try {
+            URL orderEp = new URL("http://localhost:9768/jpa-order-processor/order");
+            HttpResponse response = HttpRequestUtil.doPost(orderEp, "item=Item0001&quantity=100&placeOrder=Place+Order");
+            System.out.println(response.getData());
+        } catch (AutomationFrameworkException | MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     @BeforeClass(alwaysRun = true)
@@ -66,30 +79,23 @@ public class CdiInteceptortTestCase extends ASIntegrationTest {
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS) + webAppLocalURL;
 
         String webAppFilePath = FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator +
-                "AS" + File.separator + "javaee" + File.separator + "cdi" + File.separator + webAppFileName;
+                "AS" + File.separator + "javaee" + File.separator + "jpa" + File.separator + webAppFileName;
         WebAppDeploymentUtil.deployWebApplication(backendURL, sessionCookie, webAppFilePath);
 
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
                 "Web Application Deployment failed");
     }
 
-    @Test(groups = "wso2.as", description = "test cdi interceptor with servlet")
-    public void testCdiServlet() throws Exception {
-
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL, null);
+    @Test(groups = "wso2.as", description = "test jpa and jax-ws")
+    public void testJpaServletCdi() throws Exception {
+        URL orderEp = new URL(webAppURL + "/order");
+        HttpResponse response = HttpRequestUtil.doPost(orderEp, "item=Item0001&quantity=100&placeOrder=Place+Order");
         String result = response.getData();
 
         log.info("Response - " + result);
 
-        assertTrue(result.startsWith("Hi, please check the console for interceptor messages"),
-                "Response doesn't contain the greeting " + webAppURL);
-
-        LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
-        PaginatedLogEvent paginatedLogEvent = logViewerClient.getPaginatedApplicationLogEvents(0, "ALL", "", webAppName, "", "");
-
-        assertTrue("Before greeting".equals(paginatedLogEvent.getLogInfo()[2].getMessage()));
-        assertTrue("Inside greet method".equals(paginatedLogEvent.getLogInfo()[1].getMessage()));
-        assertTrue("After greeting".equals(paginatedLogEvent.getLogInfo()[0].getMessage()));
+        assertTrue(result.contains("        <tr>        <td>1        </td>        <td>Item0001        </td>        <td>100        </td>"),
+                "Response doesn't contain expected data");
     }
 
     @AfterClass(alwaysRun = true)

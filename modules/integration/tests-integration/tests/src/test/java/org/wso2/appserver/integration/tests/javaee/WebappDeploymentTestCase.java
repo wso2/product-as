@@ -18,6 +18,14 @@
 
 package org.wso2.appserver.integration.tests.javaee;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.stream.XMLStreamException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.commons.logging.Log;
@@ -29,16 +37,9 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.testng.Assert.assertTrue;
 
@@ -53,9 +54,15 @@ public abstract class WebappDeploymentTestCase extends ASIntegrationTest {
     private String webAppFilePath;
     private String webAppName;
 
-    @BeforeClass(alwaysRun = true)
+    //    @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
+        webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+    }
+
+    @BeforeClass(alwaysRun = true)
+    public void init(TestUserMode testUserMode) throws Exception {
+        super.init(testUserMode);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
     }
 
@@ -99,7 +106,6 @@ public abstract class WebappDeploymentTestCase extends ASIntegrationTest {
             }
 
         }
-
         Assert.assertEquals(responseCode1, 200, "Response code not 200 for " + webAppURL);
 
         return text;

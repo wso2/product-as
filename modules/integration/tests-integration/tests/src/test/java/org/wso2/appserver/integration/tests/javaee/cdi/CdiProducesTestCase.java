@@ -38,7 +38,6 @@ public class CdiProducesTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(CdiProducesTestCase.class);
     private static final String webAppFileName = "cdi-produces-1.0.war";
-    private static final String webAppFilePath = "cdi";
     private static final String webAppName = "cdi-produces-1.0";
     private static final String webAppLocalURL = "/cdi-produces-1.0";
     String hostname;

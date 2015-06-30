@@ -13,9 +13,13 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.wso2.appserver.integration.tests.javaee.cdi;
+package org.wso2.appserver.integration.tests.javaee.jpa;
 
 import java.io.File;
+import java.net.URL;
+import java.util.Date;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
@@ -23,30 +27,31 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
-import org.wso2.appserver.integration.common.clients.LogViewerClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
+import org.wso2.appserver.sample.ee.cdi.jpa.jaxws.ContactDTO;
+import org.wso2.appserver.sample.ee.cdi.jpa.jaxws.ContactsDTO;
+import org.wso2.appserver.sample.ee.cdi.jpa.jaxws.CustomersDatabase;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
-import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-public class CdiInteceptortTestCase extends ASIntegrationTest {
+public class JpaJaxWsTestCase extends ASIntegrationTest {
 
-    private static final Log log = LogFactory.getLog(CdiInteceptortTestCase.class);
-    private static final String webAppFileName = "cdi-inteceptor.war";
-    private static final String webAppName = "cdi-inteceptor";
-    private static final String webAppLocalURL = "/cdi-inteceptor";
-    String hostname;
+    private static final Log log = LogFactory.getLog(JpaJaxWsTestCase.class);
+    private static final String webAppFileName = "jpa-contacts-database.war";
+    private static final String webAppName = "jpa-contacts-database";
+    private static final String webAppLocalURL = "/jpa-contacts-database";
     private TestUserMode userMode;
+    private String hostname;
 
     @Factory(dataProvider = "userModeProvider")
-    public CdiInteceptortTestCase(TestUserMode userMode) {
+    public JpaJaxWsTestCase(TestUserMode userMode) {
         this.userMode = userMode;
     }
 
@@ -66,30 +71,42 @@ public class CdiInteceptortTestCase extends ASIntegrationTest {
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS) + webAppLocalURL;
 
         String webAppFilePath = FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator +
-                "AS" + File.separator + "javaee" + File.separator + "cdi" + File.separator + webAppFileName;
+                "AS" + File.separator + "javaee" + File.separator + "jpa" + File.separator + webAppFileName;
         WebAppDeploymentUtil.deployWebApplication(backendURL, sessionCookie, webAppFilePath);
 
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
                 "Web Application Deployment failed");
     }
 
-    @Test(groups = "wso2.as", description = "test cdi interceptor with servlet")
-    public void testCdiServlet() throws Exception {
+    //todo enable this test method after the sample is fixed
+    //todo jira : https://wso2.org/jira/browse/WSAS-1997
+    @Test(groups = "wso2.as", description = "test jpa and jax-ws", enabled = false)
+    public void testJpaWsGet() throws Exception {
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL, null);
-        String result = response.getData();
+        String serviceName = "CustomersDatabaseServiceService";
+        String wsdlUrl = webAppURL + "/" + serviceName + "?wsdl";
 
-        log.info("Response - " + result);
+        Service customerDataService = Service.create(
+                new URL(wsdlUrl),
+                new QName("http://jaxws.jpa.cdi.ee.sample.appserver.wso2.org/", serviceName));
 
-        assertTrue(result.startsWith("Hi, please check the console for interceptor messages"),
-                "Response doesn't contain the greeting " + webAppURL);
+        assertNotNull(customerDataService);
 
-        LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
-        PaginatedLogEvent paginatedLogEvent = logViewerClient.getPaginatedApplicationLogEvents(0, "ALL", "", webAppName, "", "");
+        CustomersDatabase customersDatabase = customerDataService.getPort(CustomersDatabase.class);
+        ContactDTO contact = new ContactDTO("Bob", "0123456789", 25, "bob@bob.com", new Date());
 
-        assertTrue("Before greeting".equals(paginatedLogEvent.getLogInfo()[2].getMessage()));
-        assertTrue("Inside greet method".equals(paginatedLogEvent.getLogInfo()[1].getMessage()));
-        assertTrue("After greeting".equals(paginatedLogEvent.getLogInfo()[0].getMessage()));
+        String response = customersDatabase.addContact(contact);
+        log.info("Response : " + response);
+
+        assertEquals("Contact was saved successfully.", response,
+                "AddContact response doesn't contain the expected success message");
+
+        ContactsDTO contacts = customersDatabase.getContacts();
+
+        ContactDTO contact1 = contacts.getContacts().get(1);
+        log.info("Contact details retrieved, name: " + contact1.getName() + ", email: " + contact1.getEmail());
+
+        assertEquals(contact.getName(), contact1.getName(), "Contact name doesn't match");
     }
 
     @AfterClass(alwaysRun = true)
@@ -98,4 +115,5 @@ public class CdiInteceptortTestCase extends ASIntegrationTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, webAppName),
                 "Web Application unDeployment failed");
     }
+
 }

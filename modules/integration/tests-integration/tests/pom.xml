@@ -265,7 +265,7 @@
             <groupId>org.wso2.carbon.automationutils</groupId>
             <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
         </dependency>
@@ -276,10 +276,6 @@
         <dependency>
             <groupId>org.wso2.carbon.registry</groupId>
             <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.automationutils</groupId>
-            <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.xfer</groupId>
@@ -303,6 +299,13 @@
         <dependency>
             <groupId>org.glassfish.tyrus.bundles</groupId>
             <artifactId>tyrus-standalone-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-contacts-database</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>classes</classifier>
             <scope>test</scope>
         </dependency>
     </dependencies>
