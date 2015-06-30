@@ -112,7 +112,7 @@
                         <argument>-Dframework.resource.location=${basedir}/target/
                         </argument>
                         <argument>-Dfilters.file=${basedir}/target/filters.txt</argument>
-                        <argument>-Dinstr.file=${basedir}/src/test/resources/instrumentation.txt</argument>
+                        <argument>-Dinstr.file=${basedir}/target/instrumentation.txt</argument>
                         <argument>-Dsec.verifier.dir=${basedir}/target/security-verifier/</argument>
                         <argument>-classpath</argument>
                         <classpath/>
