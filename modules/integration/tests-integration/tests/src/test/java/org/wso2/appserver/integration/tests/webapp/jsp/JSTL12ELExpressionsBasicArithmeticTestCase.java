@@ -112,7 +112,7 @@ public class JSTL12ELExpressionsBasicArithmeticTestCase extends ASIntegrationTes
 
             String correctValue = correctValues.getProperty(expression);
 
-            assertEquals(evaluatedValue, correctValue, "El expression validation failed for the expression - "
+            assertEquals(correctValue, evaluatedValue, "El expression validation failed for the expression - "
                     + expression);
         }
     }
