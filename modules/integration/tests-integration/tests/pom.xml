@@ -90,6 +90,20 @@
                     </execution>
 
                     <execution>
+                        <id>copy-spring3-restful-compile-libs</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>spring3-restful-simple-service</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>unpack-mar-jks</id>
                         <phase>compile</phase>
                         <goals>
@@ -303,6 +317,15 @@
             <groupId>org.glassfish.tyrus.bundles</groupId>
             <artifactId>tyrus-standalone-client</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database.wso2</groupId>
+            <artifactId>h2-database-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-simple-service</artifactId>
+            <type>war</type>
         </dependency>
     </dependencies>
 

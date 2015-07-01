@@ -480,6 +480,18 @@
                             <version>${version.jettison}</version>
                         </dependency>
             -->
+            <dependency>
+                <groupId>com.h2database.wso2</groupId>
+                <artifactId>h2-database-engine</artifactId>
+                <version>${h2.orbit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>spring3-restful-simple-service</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -631,6 +643,7 @@
         <process.module.version>1.2.0</process.module.version>
         <uuid.module.version>1.2.0</uuid.module.version>
         <ws.module.version>1.2.0</ws.module.version>
+        <h2.orbit.version>1.2.140.wso2v3</h2.orbit.version>
         <cipher.tool.version>1.0.0-wso2v3</cipher.tool.version>
     </properties>
 

@@ -17,8 +17,11 @@
 */
 package org.wso2.appserver.integration.common.utils;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.testng.Assert;
 import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
 import org.wso2.appserver.integration.common.clients.ServiceAdminClient;
 import org.wso2.carbon.automation.engine.FrameworkConstants;
@@ -26,11 +29,17 @@ import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.context.beans.User;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
+import org.wso2.carbon.integration.common.admin.client.NDataSourceAdminServiceClient;
 import org.wso2.carbon.integration.common.admin.client.SecurityAdminServiceClient;
 import org.wso2.carbon.integration.common.admin.client.ServerAdminClient;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
+import org.wso2.carbon.ndatasource.ui.stub.core.services.xsd.WSDataSourceInfo;
+import org.wso2.carbon.ndatasource.ui.stub.core.services.xsd.WSDataSourceMetaInfo;
+import org.wso2.carbon.ndatasource.ui.stub.core.services.xsd.WSDataSourceMetaInfo_WSDataSourceDefinition;
+import org.wso2.carbon.ndatasource.ui.stub.core.xsd.JNDIConfig;
 import org.wso2.carbon.security.mgt.stub.config.SecurityAdminServiceSecurityConfigExceptionException;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.rmi.RemoteException;
@@ -79,7 +88,7 @@ public class ASIntegrationTest {
                 asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
             webAppURL = asServer.getContextUrls().getWebAppURL() + "/webapps";
 
-        } else if(asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)){
+        } else if (asServer.getContextTenant().getDomain().equals(FrameworkConstants.SUPER_TENANT_DOMAIN_NAME)) {
             webAppURL = asServer.getContextUrls().getWebAppURL();
         }
 
@@ -102,19 +111,19 @@ public class ASIntegrationTest {
         aarServiceUploaderClient.uploadAARFile(fileNameWithExtension, filePath, serviceHierarchy);
         ServiceDeploymentUtil.isServiceDeployed(backendURL, sessionCookie, serviceName);
         assertTrue(ServiceDeploymentUtil.
-                isServiceDeployed(backendURL, sessionCookie, serviceName),
-                "Service file uploading failed withing given deployment time");
+                                                isServiceDeployed(backendURL, sessionCookie, serviceName),
+                   "Service file uploading failed withing given deployment time");
     }
 
     protected void deleteService(String serviceName) throws RemoteException {
         ServiceAdminClient adminServiceService =
                 new ServiceAdminClient(backendURL, sessionCookie);
         if (ServiceDeploymentUtil.isFaultyService(backendURL,
-                sessionCookie, serviceName)) {
+                                                  sessionCookie, serviceName)) {
             adminServiceService.deleteFaultyServiceByServiceName(serviceName);
         } else if (ServiceDeploymentUtil.isServiceExist(backendURL,
-                sessionCookie, serviceName)) {
-            adminServiceService.deleteService(new String[]{adminServiceService.getServiceGroup(serviceName)});
+                                                        sessionCookie, serviceName)) {
+            adminServiceService.deleteService(new String[] { adminServiceService.getServiceGroup(serviceName) });
         }
         ServiceDeploymentUtil.isServiceDeleted(backendURL, sessionCookie, serviceName);
     }
@@ -123,19 +132,21 @@ public class ASIntegrationTest {
         //regenerate the context with super tenant domain
         AutomationContext adminContext = new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN);
         ServerAdminClient serverAdminClient = new ServerAdminClient(backendURL,
-                adminContext.getSuperTenant().getTenantAdmin().getUserName(),
-                adminContext.getSuperTenant().getTenantAdmin().getPassword());
+                                                                    adminContext.getSuperTenant().getTenantAdmin()
+                                                                                .getUserName(),
+                                                                    adminContext.getSuperTenant().getTenantAdmin()
+                                                                                .getPassword());
         serverAdminClient.restartGracefully();
     }
 
     protected boolean isServiceDeployed(String serviceName) throws RemoteException {
         return ServiceDeploymentUtil.isServiceDeployed(backendURL,
-                sessionCookie, serviceName);
+                                                       sessionCookie, serviceName);
     }
 
     protected boolean isServiceFaulty(String serviceName) throws RemoteException {
         return ServiceDeploymentUtil.isServiceFaulty(backendURL,
-                sessionCookie, serviceName);
+                                                     sessionCookie, serviceName);
     }
 
     protected String getSecuredServiceEndpoint(String serviceName) throws XPathExpressionException {
@@ -144,15 +155,58 @@ public class ASIntegrationTest {
 
     protected void applySecurity(String scenarioNumber, String serviceName, String userGroup)
             throws RemoteException, InterruptedException, XPathExpressionException,
-            SecurityAdminServiceSecurityConfigExceptionException {
+                   SecurityAdminServiceSecurityConfigExceptionException {
         securityAdminServiceClient =
                 new SecurityAdminServiceClient(backendURL, sessionCookie);
         String keyStorePath = FrameworkPathUtil.getSystemResourceLocation()
-                + asServer.getConfigurationValue("//keystore/fileName/text()");
+                              + asServer.getConfigurationValue("//keystore/fileName/text()");
         String keyStoreName = new File(keyStorePath).getName();
-        securityAdminServiceClient.applySecurity(serviceName, scenarioNumber, new String[]{userGroup},
-                new String[]{keyStoreName}, keyStoreName);
+        securityAdminServiceClient.applySecurity(serviceName, scenarioNumber, new String[] { userGroup },
+                                                 new String[] { keyStoreName }, keyStoreName);
         Thread.sleep(2000);//wait for security application
+    }
+
+    protected void createDataSource(String dataSourceName, SqlDataSourceUtil sqlDataSource) throws Exception {
+
+        NDataSourceAdminServiceClient dataSourceAdminService =
+                new NDataSourceAdminServiceClient(asServer.getContextUrls().getBackEndUrl(), sessionCookie);
+        WSDataSourceMetaInfo dataSourceInfo;
+        String databaseName = sqlDataSource.getDatabaseName();
+        WSDataSourceInfo wsDataSourceInfo = dataSourceAdminService.getDataSource(dataSourceName);
+        if (wsDataSourceInfo != null && wsDataSourceInfo.getDsMetaInfo() != null) {
+            dataSourceAdminService.deleteDataSource(dataSourceName);
+        }
+        dataSourceInfo = getDataSourceInformation(dataSourceName, sqlDataSource);
+        dataSourceAdminService.addDataSource(dataSourceInfo);
+
+        wsDataSourceInfo = dataSourceAdminService.getDataSource(dataSourceName);
+        if (wsDataSourceInfo == null) {
+            Assert.assertNotNull("DataSource Not found in DataSource List", dataSourceName);
+        }
+    }
+
+    protected WSDataSourceMetaInfo getDataSourceInformation(String dataSourceName, SqlDataSourceUtil sqlDataSource)
+            throws XMLStreamException {
+        WSDataSourceMetaInfo dataSourceInfo = new WSDataSourceMetaInfo();
+        JNDIConfig jndiConfig = new JNDIConfig();
+        jndiConfig.setName("jdbc/" + dataSourceName);
+        dataSourceInfo.setJndiConfig(jndiConfig);
+        dataSourceInfo.setName(dataSourceName);
+        WSDataSourceMetaInfo_WSDataSourceDefinition dataSourceDefinition =
+                new WSDataSourceMetaInfo_WSDataSourceDefinition();
+        dataSourceDefinition.setType("RDBMS");
+        OMElement dsConfig = AXIOMUtil.stringToOM("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                                                  "<configuration>\n" +
+                                                  "<driverClassName>" + sqlDataSource.getDriver() +
+                                                  "</driverClassName>\n" +
+                                                  "<url>" + sqlDataSource.getJdbcUrl() + "</url>\n" +
+                                                  "<username>" + sqlDataSource.getDatabaseUser() + "</username>\n" +
+                                                  "<password encrypted=\"true\">" +
+                                                  sqlDataSource.getDatabasePassword() + "</password>\n" +
+                                                  "</configuration>");
+        dataSourceDefinition.setDsXMLConfiguration(dsConfig.toString());
+        dataSourceInfo.setDefinition(dataSourceDefinition);
+        return dataSourceInfo;
     }
 
     protected void cleanup() {

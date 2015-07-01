@@ -38,6 +38,7 @@
         <module>tomcat-jndi-resource-lookup</module>
         <module>context-reload-test-webapp</module>
         <module>host-info</module>
+        <module>spring</module>
     </modules>
 
 </project>
