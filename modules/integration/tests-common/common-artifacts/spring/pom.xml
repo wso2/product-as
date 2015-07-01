@@ -33,8 +33,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>packaged-libs/spring3-restful</module>
-        <module>runtime-libs/spring3-restful</module>
+        <module>spring3-restful</module>
     </modules>
 
 </project>
