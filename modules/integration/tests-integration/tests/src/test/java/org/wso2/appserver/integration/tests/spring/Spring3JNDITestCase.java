@@ -157,6 +157,15 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
         }
     }
 
+    @Test(groups = "wso2.as", description = "Verfiy if the webapp is unpacked for Tenants",
+            dependsOnMethods = "testDeleteOperation")
+    public void testTenantWebappUnpack() throws Exception {
+        if (userMode.equals(TestUserMode.TENANT_USER)) {
+            assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
+                       "Web Application Deployment failed");
+        }
+    }
+
     @AfterClass(alwaysRun = true)
     public void deteleteWebApp() throws Exception {
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
