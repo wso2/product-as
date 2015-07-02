@@ -73,6 +73,12 @@
             <password>wso2carbon</password>
             <driverClassName>org.h2.Driver</driverClassName>
         </datasource>
+        <datasource name="default">
+            <url>/repository/database/WSO2CARBON_DB</url>
+            <username>wso2carbon</username>
+            <password>wso2carbon</password>
+            <driverClassName>org.h2.Driver</driverClassName>
+        </datasource>
     </datasources>
 
     <!-- Database urls for change password testing by carbon tool chpasswd.sh-->
