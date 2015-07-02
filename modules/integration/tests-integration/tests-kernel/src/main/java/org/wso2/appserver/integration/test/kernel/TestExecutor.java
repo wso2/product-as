@@ -40,9 +40,10 @@ public class TestExecutor {
     private static final String MAVEN_TEST_FAILURE_IGNORE = "maven.test.failure.ignore";
 
     public static void main(String[] args) throws Exception {
+
         //skip running test cases when the maven.test.skip property is true
         if (!(Boolean.parseBoolean(System.getProperty(MAVEN_TEST_SKIP))
-            || Boolean.parseBoolean(System.getProperty(SKIP_TEST)))) {
+              || Boolean.parseBoolean(System.getProperty(SKIP_TEST)))) {
             TestListenerAdapter tla = new TestListenerAdapter();
             TestNG tng = new TestNG();
             tng.addListener(tla);
@@ -78,3 +79,4 @@ public class TestExecutor {
         }
     }
 }
+

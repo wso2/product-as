@@ -97,6 +97,8 @@
                 <configuration>
                     <skip>${maven.test.skip}</skip>
                     <executable>java</executable>
+                    <cleanupDaemonThreads>true</cleanupDaemonThreads>
+                    <stopUnresponsiveDaemonThreads>true</stopUnresponsiveDaemonThreads>
                     <arguments>
                         <argument>-Dbasedir=${basedir}</argument>
                         <argument>-Dmaven.test.failure.ignore=${maven.test.failure.ignore}</argument>
