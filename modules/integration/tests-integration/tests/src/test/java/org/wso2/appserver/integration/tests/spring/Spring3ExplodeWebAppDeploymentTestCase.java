@@ -65,7 +65,7 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
     }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
-    @Test(groups = "wso2.as", description = "Deploying exploded web application file to deployment directory", enabled = false)
+    @Test(groups = "wso2.as", description = "Deploying exploded web application file to deployment directory", enabled = true)
     public void testWebApplicationExplodedDeployment() throws Exception {
         String source = System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
                         File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" +
@@ -79,7 +79,7 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "Verify Get Operation",
-            dependsOnMethods = "testWebApplicationExplodedDeployment", enabled = false)
+            dependsOnMethods = "testWebApplicationExplodedDeployment", enabled = true)
     public void testGetOperation() throws Exception {
         String endpoint = webAppURL + "/" + webAppName + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
@@ -93,7 +93,7 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
     @SetEnvironment(executionEnvironments =  {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "Deploy a WAR file which has the same name as the exploded Web Application, but with changes in it",
-            dependsOnMethods = "testGetOperation", enabled = false)
+            dependsOnMethods = "testGetOperation", enabled = true)
     public void testDeployModifiedWAROverExplodedWebApp() throws Exception {
         String newWebAppName = "spring3-restful-simple-service";
         File sourceFile = new File(
@@ -108,6 +108,10 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.uploadWarFile(changeWarFilename.getAbsolutePath());
+        try {
+            Thread.sleep(90000); //Todo: WSAS-1991 : Unpacked directory doesn't get re-created if it is deleted immediately after deployment
+        } catch (InterruptedException ignored) {
+        }
         String endpoint = webAppURL + "/" + webAppName + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         String expectedMsg = "{\"status\":\"success\"}";
@@ -122,11 +126,12 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
     }
 
     private void createTable() throws Exception {
-        sqlDataSource = new SqlDataSourceUtil(sessionCookie,asServer.getContextUrls().getBackEndUrl());
+        sqlDataSource = new SqlDataSourceUtil(sessionCookie, asServer.getContextUrls().getBackEndUrl());
         File sqlFile = new File(TestConfigurationProvider.getResourceLocation() + "artifacts" + File.separator + "AS" +
                                 File.separator + "spring" + File.separator + "studentDb.sql");
         List<File> sqlFileList = new ArrayList<>();
         sqlFileList.add(sqlFile);
-        sqlDataSource.createDataSource(sqlFileList, "dataService");;
+        sqlDataSource.createDataSource(sqlFileList, "dataService");
+        ;
     }
 }
