@@ -63,7 +63,10 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     }
 
-    @Test(groups = "wso2.as", description = "Deploying web application")
+    /**
+     * Due to WSAS-1991
+     */
+    @Test(groups = "wso2.as", description = "Deploying web application", enabled = false)
     public void testWebApplicationDeployment() throws Exception {
         webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war"
@@ -83,7 +86,7 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
         testInvokeWebApp();
     }
 
-    public void testInvokeWebApp() throws Exception {
+    private void testInvokeWebApp() throws Exception {
         String webAppURLLocal = webAppURL + "/appServer-valied-deploymant-1.0.0";
         HttpClientUtil client = new HttpClientUtil();
         OMElement omElement = client.get(webAppURLLocal);
@@ -113,7 +116,7 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     private void deleteDirectory(File unpackedDirectory) throws Exception {
         try {
-            Thread.sleep(45000); //fix: WSAS-1991
+            Thread.sleep(90000); //fix: WSAS-1991
         } catch (InterruptedException ignored) {
         }
         FileUtils.deleteDirectory(unpackedDirectory);
