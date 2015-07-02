@@ -178,7 +178,7 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
                                 File.separator + "spring" + File.separator + "studentDb.sql");
         List<File> sqlFileList = new ArrayList<>();
         sqlFileList.add(sqlFile);
-        sqlDataSource.createDataSource(sqlFileList);
+        sqlDataSource.createDataSource(sqlFileList, "dataService");
     }
 
     private static int sendDeleteRequest(URL endpoint, String contentType) throws AutomationFrameworkException {

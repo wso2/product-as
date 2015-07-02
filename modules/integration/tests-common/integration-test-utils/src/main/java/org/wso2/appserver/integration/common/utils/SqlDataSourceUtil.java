@@ -152,14 +152,15 @@ public class SqlDataSourceUtil {
         }
     }
 
-    public void createDataSource(List<File> sqlFileList) throws Exception {
+    public void createDataSource(List<File> sqlFileList, String dataSourceName) throws Exception {
 
         if (automationContext == null) {
             init();
         }
         databaseName = "testdb";
         databasePassword = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DB_PASSWORD);
-        jdbcUrl = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_URL);
+        jdbcUrl = automationContext
+                .getConfigurationValue(String.format("//datasources/datasource[@name='%s']/url", dataSourceName));
         jdbcDriver = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DRIVER_CLASS_NAME);
         databaseUser = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DB_USER_NAME);
 

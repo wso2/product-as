@@ -65,7 +65,7 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
     }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
-    @Test(groups = "wso2.as", description = "Deploying exploded web application file to deployment directory")
+    @Test(groups = "wso2.as", description = "Deploying exploded web application file to deployment directory", enabled = false)
     public void testWebApplicationExplodedDeployment() throws Exception {
         String source = System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
                         File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" +
@@ -79,7 +79,7 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "Verify Get Operation",
-            dependsOnMethods = "testWebApplicationExplodedDeployment")
+            dependsOnMethods = "testWebApplicationExplodedDeployment", enabled = false)
     public void testGetOperation() throws Exception {
         String endpoint = webAppURL + "/" + webAppName + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
@@ -93,7 +93,7 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
     @SetEnvironment(executionEnvironments =  {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "Deploy a WAR file which has the same name as the exploded Web Application, but with changes in it",
-            dependsOnMethods = "testGetOperation")
+            dependsOnMethods = "testGetOperation", enabled = false)
     public void testDeployModifiedWAROverExplodedWebApp() throws Exception {
         String newWebAppName = "spring3-restful-simple-service";
         File sourceFile = new File(
@@ -127,6 +127,6 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
                                 File.separator + "spring" + File.separator + "studentDb.sql");
         List<File> sqlFileList = new ArrayList<>();
         sqlFileList.add(sqlFile);
-        sqlDataSource.createDataSource(sqlFileList);
+        sqlDataSource.createDataSource(sqlFileList, "dataService");;
     }
 }

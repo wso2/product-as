@@ -150,6 +150,6 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
                                 File.separator + "spring" + File.separator + "studentDb.sql");
         List<File> sqlFileList = new ArrayList<>();
         sqlFileList.add(sqlFile);
-        sqlDataSource.createDataSource(sqlFileList);
+        sqlDataSource.createDataSource(sqlFileList, "dataService");
     }
 }
