@@ -15,7 +15,7 @@ public class StudentController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public String getallStudent() {
+    public String getStatus() {
         String statusMsg = "{\"status\":\"success\"}";
         return statusMsg;
     }
