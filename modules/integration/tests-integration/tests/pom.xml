@@ -91,20 +91,6 @@
                     </execution>
 
                     <execution>
-                        <id>copy-spring3-restful-compile-libs</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
-                            <includeTypes>war</includeTypes>
-                            <includeArtifactIds>spring3-restful-simple-service</includeArtifactIds>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>unpack-mar-jks</id>
                         <phase>compile</phase>
                         <goals>
@@ -120,6 +106,40 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/target/tobeCopied/</outputDirectory>
                                     <includes>**/*.jks,**/*.mar,**/axis2_client.xml</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-spring3-restful-compile-libs</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>spring3-restful-simple-service, spring3-restful-webapp-classloading</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>unpack-spring3-restful-runtime-libs</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wso2.appserver</groupId>
+                                    <artifactId>spring3-restful-runtime-libs</artifactId>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
+                                    <includes>**/*.jar</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -330,6 +350,16 @@
             <version>${project.parent.version}</version>
             <classifier>classes</classifier>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-webapp-classloading</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-runtime-libs</artifactId>
+            <type>zip</type>
         </dependency>
     </dependencies>
 
