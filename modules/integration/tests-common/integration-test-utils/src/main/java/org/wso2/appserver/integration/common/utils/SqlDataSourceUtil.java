@@ -16,9 +16,6 @@
  *   under the License.
  */
 
-/**
- * Created by Niranjan Karunanandham on 6/25/15.
- */
 package org.wso2.appserver.integration.common.utils;
 
 import org.apache.axiom.attachments.ByteArrayDataSource;
