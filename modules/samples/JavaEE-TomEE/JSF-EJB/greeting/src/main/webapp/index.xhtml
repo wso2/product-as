@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+    <h2>Hi, this is the Greetings JSF EJB sample</h2>
+    <h:form>
+        <h:outputLabel value="Enter your name"/>
+        <h:inputText value="#{person.name}"/>
+        <h:commandButton action="#{person.enterPerson}" value="Enter"/>
+    </h:form>
+</f:view>
+</html>
+
+
+
+
+
+

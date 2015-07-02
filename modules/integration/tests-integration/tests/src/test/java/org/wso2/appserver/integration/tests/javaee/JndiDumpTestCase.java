@@ -15,17 +15,17 @@
 */
 package org.wso2.appserver.integration.tests.javaee;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -41,7 +41,7 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
     private static final Log log = LogFactory.getLog(JndiDumpTestCase.class);
     private static final String webAppFileName = "tomee-ejb-examples-1.1.0.war";
     private static final String webAppName = "tomee-ejb-examples-1.1.0";
-    private static final String webAppLocalURL ="/tomee-ejb-examples-1.1.0";
+    private static final String webAppLocalURL = "/tomee-ejb-examples-1.1.0";
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -51,7 +51,7 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
         setWebAppURL(getWebAppURL() + webAppLocalURL);
     }
 
-    @Test(groups = "wso2.as", description = "test jndi dump", dependsOnMethods = "webApplicationDeploymentTest")
+    @Test(groups = "wso2.as", description = "test jndi dump")
     public void annotatedServletTest() throws Exception {
         String annotatedServletUrl = getWebAppURL() + "/annotated";
         String result = runAndGetResultAsString(annotatedServletUrl);
@@ -60,13 +60,13 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
 
         //local bean ejb
         assertTrue(result.contains("@EJB=AnnotatedEJB[name=foo]"),
-                   "Response doesn't contain @EJB=AnnotatedEJB[name=foo]");
+                "Response doesn't contain @EJB=AnnotatedEJB[name=foo]");
         assertTrue(result.contains("@EJB.getName()=foo"),
-                   "Response doesn't contain @EJB.getName()=foo");
+                "Response doesn't contain @EJB.getName()=foo");
         assertTrue(result.contains("@EJB.getDs()=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource"),
-                   "Response doesn't contain @EJB.getDs()=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource");
+                "Response doesn't contain @EJB.getDs()=org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource");
         assertTrue(result.contains("JNDI=AnnotatedEJB[name=foo]"),
-                   "Response doesn't contain JNDI=AnnotatedEJB[name=foo]");
+                "Response doesn't contain JNDI=AnnotatedEJB[name=foo]");
 
         // local ejb
         assertTrue(result.contains("@EJB=proxy=org.superbiz.servlet.AnnotatedEJBLocal;deployment=AnnotatedEJB;pk=null"));
@@ -83,7 +83,6 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
     }
 
 
-
     @Test(groups = "wso2.as", description = "test jndi dump",
             dependsOnMethods = {"webApplicationDeploymentTest", "annotatedServletTest"})
     public void testJndiDump() throws Exception {
@@ -91,12 +90,12 @@ public class JndiDumpTestCase extends WebappDeploymentTestCase {
 
         try {
             String jndiUrl = getWebAppURL() + "/jndi";
-            Map<String, String > resultMap = toResultMap(
+            Map<String, String> resultMap = toResultMap(
                     runAndGetResultAsString(jndiUrl));
 
             String defaultJndiInfoPath = FrameworkPathUtil.getSystemResourceLocation()
-                                         + "artifacts" + File.separator + "AS" + File.separator
-                                         + "javaee" + File.separator + "default-jndi-dump.txt";
+                    + "artifacts" + File.separator + "AS" + File.separator
+                    + "javaee" + File.separator + "default-jndi-dump.txt";
             in = new BufferedReader(new FileReader(defaultJndiInfoPath));
 
             String inputLine;

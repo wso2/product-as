@@ -86,7 +86,7 @@ public class UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
         testInvokeWebApp();
     }
 
-    public void testInvokeWebApp() throws Exception {
+    private void testInvokeWebApp() throws Exception {
         String webAppURLLocal = webAppURL + "/appServer-valied-deploymant-1.0.0";
         HttpClientUtil client = new HttpClientUtil();
         OMElement omElement = client.get(webAppURLLocal);
