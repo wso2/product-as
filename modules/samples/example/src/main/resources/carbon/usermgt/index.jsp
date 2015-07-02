@@ -23,21 +23,35 @@
 <h2>WSO2 Carbon User Manage Usage Demo</h2>
 
 <%
-    String username = request.getParameter("username");
-    String pass = request.getParameter("password");
-    if (username != null && username.trim().length() > 0) {
-        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-        UserRealm realm = context.getUserRealm();
-        if (!realm.getUserStoreManager().isExistingUser(username)) {
-            realm.getUserStoreManager().addUser(username, pass, null, null, null);
-        } else {
+    if(request.getParameter("add") != null){
+        String username = request.getParameter("username");
+        String pass = request.getParameter("password");
+        if (username != null && username.trim().length() > 0) {
+            CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+            UserRealm realm = context.getUserRealm();
+            if (!realm.getUserStoreManager().isExistingUser(username)) {
+                realm.getUserStoreManager().addUser(username, pass, null, null, null);
+            } else {
 %> <p><b>The user <%=username%> already exists</b></p> <%
+            }
         }
-
+    } else if(request.getParameter("delete") != null){
+        String username = request.getParameter("username");
+        if(username != null && !username.trim().isEmpty()){
+            CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+            UserRealm realm = context.getUserRealm();
+            if (realm.getUserStoreManager().isExistingUser(username)) {
+                realm.getUserStoreManager().deleteUser(username);
+            } else {
+%> <p><b>The user <%=username%> does not exists</b></p> <%
+            }
+        }
     }
 %>
 
-<form action="index.jsp">
+<h3>Add User</h3>
+<p>
+<form action="index.jsp" method="POST">
     <table>
         <tr>
             <td>Username</td>
@@ -48,23 +62,41 @@
             <td><input type="text" name="password"/></td>
         </tr>
         <tr>
-            <td colspan="2">&nbsp;</td>
-        </tr>
-        <tr>
             <td>&nbsp;</td>
-            <td><input type="submit" value="Add"/></td>
+            <td><input type="submit" value="Add" name="add"/></td>
         </tr>
     </table>
 </form>
+</p>
+</hr>
 
-<p><b>The user list</b></p>
+<h3>Delete User</h3>
+<p>
+<form action="index.jsp" method="POST">
+    <table>
+        <tr>
+            <td>Username</td>
+            <td><input type="text" name="username"/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="Delete" name="delete"/></td>
+        </tr>
+    </table>
+</form>
+</p>
+</hr>
+
+<h3>The user list</h3>
+<ol>
 <%
     CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
     UserRealm realm = context.getUserRealm();
     String[] names = realm.getUserStoreManager().listUsers("*", 100);
     for (String name : names) {
-%><%=name%><br/><%
+%><li><%=name%></li><%
     }
 %>
+</ol>
 </body>
 </html>

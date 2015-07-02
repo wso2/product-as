@@ -18,23 +18,36 @@
 <%@ page import="org.wso2.carbon.context.CarbonContext" %>
 <%@ page import="org.wso2.carbon.user.api.UserRealm" %>
 <%@ page import="org.wso2.carbon.user.api.UserStoreException" %>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.Arrays"%>
 <%
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    String role = request.getParameter("role");
     boolean status = false;
 
-    if (username != null && username.trim().length() > 0) {
-        try {
-            CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-            UserRealm realm = context.getUserRealm();
-            status = realm.getUserStoreManager().authenticate(username, password);
-        } catch (UserStoreException e) {
-            e.printStackTrace();
+    try {
+        CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+        UserRealm realm = context.getUserRealm();
+        if(role == null){
+            if (username != null && username.trim().length() > 0) {
+                status = realm.getUserStoreManager().authenticate(username, password);
+            }
+        } else {
+            if (username != null && username.trim().length() > 0) {
+                status = Arrays.asList(realm.getUserStoreManager().getRoleListOfUser(username)).contains(role);
+            }
         }
+    } catch (UserStoreException e) {
+        e.printStackTrace();
     }
+
     if (status) {
         session.setAttribute("logged-in", "true");
         session.setAttribute("username", username);
+        if(role != null){
+            session.setAttribute("logged-in-with-role", "true");
+        }
         response.sendRedirect("index.jsp");
     } else {
         session.invalidate();

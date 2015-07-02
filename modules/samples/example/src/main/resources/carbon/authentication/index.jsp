@@ -34,6 +34,7 @@
         String userName = (String) session.getAttribute("username");
         response.addHeader("logged-in", "true");
         response.addHeader("username", userName);
+        response.addHeader("logged-in-with-role", (String) session.getAttribute("logged-in-with-role"));
 %>
 <p>
     Welcome <%= userName %>&nbsp;<a href="index.jsp?logout=true">Logout</a>
@@ -43,6 +44,7 @@
     } else {
         if (request.getParameter("logout") != null) {
             session.invalidate();
+            response.addHeader("logged-out", "true");
         }
 %>
 <form action="login.jsp" name="loginFrm" method="POST">
