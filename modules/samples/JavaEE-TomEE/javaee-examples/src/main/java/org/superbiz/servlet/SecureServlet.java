@@ -17,6 +17,8 @@
  */
 package org.superbiz.servlet;
 
+import java.io.IOException;
+import java.security.Principal;
 import javax.ejb.EJB;
 import javax.ejb.EJBAccessException;
 import javax.servlet.ServletException;
@@ -24,8 +26,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.Principal;
 
 public class SecureServlet extends HttpServlet {
 

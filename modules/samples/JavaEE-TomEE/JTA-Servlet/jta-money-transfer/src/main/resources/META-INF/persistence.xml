@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="unit-bank" transaction-type="RESOURCE_LOCAL">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        <non-jta-data-source>java:/comp/env/jdbc/bank</non-jta-data-source>
+        <class>org.wso2.appserver.sample.ee.jta.servlet.Account</class>
+        <class>org.wso2.appserver.sample.ee.jta.servlet.Account1</class>
+        <class>org.wso2.appserver.sample.ee.jta.servlet.Account2</class>
+        <class>org.wso2.appserver.sample.ee.jta.servlet.Log</class>
+        <properties>
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"></property>
+        </properties>
+    </persistence-unit>
+</persistence>

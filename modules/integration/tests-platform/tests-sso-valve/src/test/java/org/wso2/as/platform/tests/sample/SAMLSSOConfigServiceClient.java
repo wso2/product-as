@@ -79,7 +79,7 @@ public class SAMLSSOConfigServiceClient {
         try {
             return identitySAMLSSOConfigServiceStub.addRPServiceProvider(ssoServiceProviderDTO);
         } catch (RemoteException e) {
-            throw new RemoteException("Error while adding service provider "+ssoServiceProviderDTO.getIssuer(), e);
+            throw new RemoteException("Error while adding service provider " + ssoServiceProviderDTO.getIssuer(), e);
         } catch (IdentitySAMLSSOConfigServiceIdentityException e) {
             throw new IdentitySAMLSSOConfigServiceIdentityException("Error while adding service provider ", e);
         }
