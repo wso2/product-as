@@ -48,9 +48,9 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
     private TestUserMode userMode;
     private WebAppAdminClient webAppAdminClient;
     private SqlDataSourceUtil sqlDataSource;
-    private String webAppName = "spring3-restful-simple-service";
-    private String endpointURL = "/student";
-    private String contentType = "application/json";
+    private final String webAppName = "spring3-restful-simple-service";
+    private final String endpointURL = "/student";
+    private final String contentType = "application/json";
 
     @Factory(dataProvider = "userModeProvider")
     public Spring3JNDITestCase(TestUserMode userMode) {

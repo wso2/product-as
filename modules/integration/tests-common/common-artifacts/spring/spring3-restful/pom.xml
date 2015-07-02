@@ -35,6 +35,7 @@
     <modules>
         <module>simple-service</module>
         <module>webapp-classloading</module>
+        <module>runtime-libs</module>
     </modules>
 
     <dependencyManagement>
