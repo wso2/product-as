@@ -30,4 +30,8 @@ public class ASIntegrationConstants {
     public static final String ENCRYPTED_PASSWD_URL =
             "//datasources-configuration/datasources/datasource[name='WSO2_CARBON_DB']/definition[@type='RDBMS']" +
             "/configuration/password";
+    public static final String DATA_SOURCE_URL = "//datasources/datasource[@name='%s']/url";
+    public static final String DATA_SOURCE_DRIVER_CLASS_NAME = "//datasources/datasource[@name='%s']/driverClassName";
+    public static final String DATA_SOURCE_DB_USER_NAME = "//datasources/datasource[@name='%s']/username";
+    public static final String DATA_SOURCE_DB_PASSWORD = "//datasources/datasource[@name='%s']/password";
 }
