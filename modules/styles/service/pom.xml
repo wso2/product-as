@@ -105,9 +105,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>javax.servlet.jsp</artifactId>
-            <version>${javax.servlet.jsp.version}</version>
+            <groupId>org.wso2.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
         </dependency>
     </dependencies>
 </project>

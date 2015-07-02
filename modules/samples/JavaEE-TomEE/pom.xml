@@ -14,15 +14,15 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-
     <parent>
-    	<groupId>org.wso2.appserver</groupId>
-    	<artifactId>wso2appserver-samples</artifactId>
-    	<version>5.3.0-SNAPSHOT</version>
+        <groupId>org.wso2.appserver</groupId>
+        <artifactId>wso2appserver-samples</artifactId>
+        <version>5.3.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -32,6 +32,22 @@
 
     <modules>
         <module>javaee-examples</module>
+        <module>CDI-Servlet/cdi-alternative</module>
+        <module>CDI-Servlet/cdi-decorator</module>
+        <module>CDI-Servlet/cdi-event</module>
+        <module>CDI-Servlet/cdi-inject</module>
+        <module>CDI-Servlet/cdi-interceptor</module>
+        <module>CDI-Servlet/cdi-produces</module>
+        <module>CDI-Servlet/cdi-qualifier</module>
+        <module>CDI-Servlet/cdi-scope</module>
+        <module>JPA-Servlet/jpa-order-processor</module>
+        <module>JPA-JaxRS/studentRegister</module>
+        <module>JPA-JaxWS/jpa-contacts-database</module>
+        <module>JSF/jsf-custom-view-handler</module>
+        <module>JSF/jsf-webapp-w-custom-view-handler</module>
+        <module>JSF-EJB/greeting</module>
+        <module>JSF-BVAL/jsf-marks-calculator</module>
+        <module>JTA-Servlet/jta-money-transfer</module>
     </modules>
 
     <dependencyManagement>
@@ -40,6 +56,12 @@
                 <groupId>javax.ws.rs</groupId>
                 <artifactId>jsr311-api</artifactId>
                 <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openejb</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>6.0-6</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
