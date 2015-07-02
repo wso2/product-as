@@ -28,8 +28,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer - Spring Restful - Simple Service</name>
-    <artifactId>spring3-restful-simple-service</artifactId>
+    <name>WSO2 AppServer - Spring Restful - JNDI Service</name>
+    <artifactId>spring3-restful-jndi-service</artifactId>
     <packaging>war</packaging>
 
     <dependencies>

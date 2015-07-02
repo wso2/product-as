@@ -33,7 +33,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>simple-service</module>
+        <module>jndi-service</module>
         <module>webapp-classloading</module>
         <module>runtime-libs</module>
     </modules>

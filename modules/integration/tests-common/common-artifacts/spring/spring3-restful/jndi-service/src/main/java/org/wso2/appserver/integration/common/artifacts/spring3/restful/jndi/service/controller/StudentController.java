@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.controller;
+package org.wso2.appserver.integration.common.artifacts.spring3.restful.jndi.service.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,8 +25,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.model.Status;
-import org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.model.Student;
+import org.wso2.appserver.integration.common.artifacts.spring3.restful.jndi.service.model.Status;
+import org.wso2.appserver.integration.common.artifacts.spring3.restful.jndi.service.model.Student;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
