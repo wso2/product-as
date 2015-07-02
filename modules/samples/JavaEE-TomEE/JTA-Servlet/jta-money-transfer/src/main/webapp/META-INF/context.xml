@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource
+            name="jdbc/bank"
+            auth="Container"
+            type="javax.sql.DataSource"
+            driverClassName="org.h2.Driver"
+            url="jdbc:h2:mem:bank"
+            username="sa"
+            password="sa"
+            />
+</Context>
