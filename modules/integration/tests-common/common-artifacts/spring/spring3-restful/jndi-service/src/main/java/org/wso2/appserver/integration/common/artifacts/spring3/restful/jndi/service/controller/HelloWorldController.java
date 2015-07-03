@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.controller;
+package org.wso2.appserver.integration.common.artifacts.spring3.restful.jndi.service.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
