@@ -1,123 +1,480 @@
-<!--
- ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- ~
- ~ WSO2 Inc. licenses this file to you under the Apache License,
- ~ Version 2.0 (the "License"); you may not use this file except
- ~ in compliance with the License.
- ~ You may obtain a copy of the License at
- ~
- ~    http://www.apache.org/licenses/LICENSE-2.0
- ~
- ~ Unless required by applicable law or agreed to in writing,
- ~ software distributed under the License is distributed on an
- ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- ~ KIND, either express or implied.  See the License for the
- ~ specific language governing permissions and limitations
- ~ under the License.
- -->
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:12pt;"><span style="color:#800000;background-color:#f0f0f0;">  1 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.context.CarbonContext" %&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">  2 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.context.RegistryType" %&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">  3 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.registry.api.Registry" %&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">  4 </span><span style="background-color:#edffed;">&lt;%@ page import="org.wso2.carbon.registry.api.Resource" %&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">  5
-  6 </span><span style="background-color:#edffed;font-weight:bold;">&lt;h2&gt;WSO2 Carbon Registry Usage Demo&lt;/h2&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">  7
-  8 </span><span style="background-color:#edffed;font-weight:bold;">&lt;hr/&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">  9 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 10
- 11 </span><span style="background-color:#edffed;font-weight:bold;">&lt;h3&gt;Add New Resource&lt;/h3&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 12 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 13 </span><span style="background-color:#edffed;font-weight:bold;">&lt;form action="index.jsp" method="POST"&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 14 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;table border="0"&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 15 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 16 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Registry Type&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 17 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 18 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;select name="registryType"&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 19 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option selected="true"&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_CONFIGURATION.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 20 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_GOVERNANCE.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 21 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;/select&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 22 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 23 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 24 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 25 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Resource Path&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 26 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="text" name="resourcePath" value="foo/bar"/&gt;&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 27 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 28 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 29 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Value&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 30 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="text" name="value" value="WSO2 Carbon"/&gt;&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 31 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 32 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 33 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&nbsp;&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 34 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="submit" value="Add" name="add"&gt;&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 35 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 36 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;/table&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 37 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/form&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 38 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 39 </span><span style="background-color:#edffed;font-weight:bold;">&lt;hr/&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 40 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 41
- 42 </span><span style="background-color:#edffed;font-weight:bold;">&lt;h3&gt;View Resource&lt;/h3&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 43 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 44 </span><span style="background-color:#edffed;font-weight:bold;">&lt;form action="index.jsp" method="POST"&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 45 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;table border="0"&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 46 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 47 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Registry Type&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 48 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 49 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;select name="registryType"&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 50 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option selected="true"&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_CONFIGURATION.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 51 </span><span style="background-color:#edffed;font-weight:bold;">                    &lt;option&gt;</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> RegistryType.SYSTEM_GOVERNANCE.toString() </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">&lt;/option&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 52 </span><span style="background-color:#edffed;font-weight:bold;">                &lt;/select&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 53 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 54 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 55 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 56 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;Resource Path&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 57 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="text" name="resourcePath" value="foo/bar"/&gt;&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 58 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 59 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 60 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&nbsp;&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 61 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;td&gt;&lt;input type="submit" value="View" name="view"&gt;&lt;/td&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 62 </span><span style="background-color:#edffed;font-weight:bold;">        &lt;/tr&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 63 </span><span style="background-color:#edffed;font-weight:bold;">    &lt;/table&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 64 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/form&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 65 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 66 </span><span style="background-color:#edffed;font-weight:bold;">&lt;hr/&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 67
- 68 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
-</span><span style="color:#800000;background-color:#f0f0f0;"> 69 </span><span style="background-color:#edffed;">    // Obtain the reference to the registry from the CarbonContext
-</span><span style="color:#800000;background-color:#f0f0f0;"> 70 </span><span style="background-color:#edffed;">    CarbonContext cCtx = CarbonContext.getThreadLocalCarbonContext();
-</span><span style="color:#800000;background-color:#f0f0f0;"> 71
- 72 </span><span style="background-color:#edffed;">    Registry registry = cCtx.getRegistry(RegistryType.SYSTEM_CONFIGURATION);
-</span><span style="color:#800000;background-color:#f0f0f0;"> 73 </span><span style="background-color:#edffed;">    String registryType = request.getParameter("registryType");
-</span><span style="color:#800000;background-color:#f0f0f0;"> 74 </span><span style="background-color:#edffed;">    if(registryType != null) {
-</span><span style="color:#800000;background-color:#f0f0f0;"> 75 </span><span style="background-color:#edffed;">       registry = cCtx.getRegistry(RegistryType.valueOf(registryType));
-</span><span style="color:#800000;background-color:#f0f0f0;"> 76 </span><span style="background-color:#edffed;">    }
-</span><span style="color:#800000;background-color:#f0f0f0;"> 77
- 78 </span><span style="background-color:#edffed;">    if (request.getParameter("add") != null) {
-</span><span style="color:#800000;background-color:#f0f0f0;"> 79 </span><span style="background-color:#edffed;">        Resource resource = registry.newResource();
-</span><span style="color:#800000;background-color:#f0f0f0;"> 80 </span><span style="background-color:#edffed;">        resource.setContent(request.getParameter("value"));
-</span><span style="color:#800000;background-color:#f0f0f0;"> 81 </span><span style="background-color:#edffed;">        String resourcePath = request.getParameter("resourcePath");
-</span><span style="color:#800000;background-color:#f0f0f0;"> 82 </span><span style="background-color:#edffed;">        registry.put(resourcePath, resource);
-</span><span style="color:#800000;background-color:#f0f0f0;"> 83 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 84 </span><span style="background-color:#edffed;font-weight:bold;">&lt;p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 85 </span><span style="background-color:#edffed;font-weight:bold;">    Added resource: </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> resourcePath </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 86 </span><span style="background-color:#edffed;font-weight:bold;">&lt;/p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 87 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
-</span><span style="color:#800000;background-color:#f0f0f0;"> 88 </span><span style="background-color:#edffed;">    } else if (request.getParameter("view") != null) {
-</span><span style="color:#800000;background-color:#f0f0f0;"> 89 </span><span style="background-color:#edffed;">        String resourcePath = request.getParameter("resourcePath");
-</span><span style="color:#800000;background-color:#f0f0f0;"> 90 </span><span style="background-color:#edffed;">        if (registry.resourceExists(resourcePath)) {
-</span><span style="color:#800000;background-color:#f0f0f0;"> 91 </span><span style="background-color:#edffed;">            Resource resource = registry.get(resourcePath);
-</span><span style="color:#800000;background-color:#f0f0f0;"> 92 </span><span style="background-color:#edffed;">            String content = new String((byte[]) resource.getContent());
-</span><span style="color:#800000;background-color:#f0f0f0;"> 93 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 94 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 95 </span><span style="background-color:#edffed;font-weight:bold;">                Resource at in Registry </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> registryType</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;"> path </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> resourcePath</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;"> : </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> content </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 96 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;"> 97 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
-</span><span style="color:#800000;background-color:#f0f0f0;"> 98 </span><span style="background-color:#edffed;">        } else {
-</span><span style="color:#800000;background-color:#f0f0f0;"> 99 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">100 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">101 </span><span style="background-color:#edffed;font-weight:bold;">                Resource at path </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> resourcePath</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;"> does not exist in Registry </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%=</span><span style="background-color:#edffed;"> registryType</span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span><span style="background-color:#edffed;font-weight:bold;">!
-</span><span style="color:#800000;background-color:#f0f0f0;">102 </span><span style="background-color:#edffed;font-weight:bold;">            &lt;/p&gt;
-</span><span style="color:#800000;background-color:#f0f0f0;">103 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">&lt;%
-</span><span style="color:#800000;background-color:#f0f0f0;">104 </span><span style="background-color:#edffed;">        }
-</span><span style="color:#800000;background-color:#f0f0f0;">105 </span><span style="background-color:#edffed;">    }
-</span><span style="color:#800000;background-color:#f0f0f0;">106 </span><span style="color:#000080;background-color:#fffce4;font-weight:bold;">%&gt;</span></pre>
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;org.wso2.carbon.context.CarbonContext&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;org.wso2.carbon.context.RegistryType&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;org.wso2.carbon.registry.api.Registry&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;org.wso2.carbon.registry.api.Resource&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;org.wso2.carbon.registry.api.Collection&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;h2&gt;</span>WSO2 Carbon Registry Usage Demo<span style="color: #008000; font-weight: bold">&lt;/h2&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Add New Resource<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;table</span> <span style="color: #7D9029">border=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Registry Type<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;select</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;registryType&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option</span> <span style="color: #7D9029">selected=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_CONFIGURATION</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_GOVERNANCE</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;/select&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Resource Path<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;resourcePath&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;foo/bar&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Value<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;value&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;WSO2 Carbon&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;Add&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;add&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>View Resource<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;table</span> <span style="color: #7D9029">border=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Registry Type<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;select</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;registryType&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option</span> <span style="color: #7D9029">selected=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_CONFIGURATION</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_GOVERNANCE</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;/select&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Resource Path<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;resourcePath&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;foo/bar&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;View&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;view&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Add Collection<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;table</span> <span style="color: #7D9029">border=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Registry Type<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;select</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;registryType&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option</span> <span style="color: #7D9029">selected=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_CONFIGURATION</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_GOVERNANCE</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;/select&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Resource Path<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;collectionPath&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;bar&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;Add&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;addCollection&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Is Collection Exist<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;table</span> <span style="color: #7D9029">border=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Registry Type<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;select</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;registryType&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option</span> <span style="color: #7D9029">selected=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_CONFIGURATION</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_GOVERNANCE</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;/select&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Collection Path<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;collectionPath&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;bar&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;View&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;viewCollection&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Delete Resource/Collection<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;table</span> <span style="color: #7D9029">border=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Registry Type<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;select</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;registryType&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option</span> <span style="color: #7D9029">selected=</span><span style="color: #BA2121">&quot;true&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_CONFIGURATION</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;option&gt;&lt;%=</span> RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_GOVERNANCE</span><span style="color: #666666">.</span><span style="color: #7D9029">toString</span><span style="color: #666666">()</span> <span style="color: #008000; font-weight: bold">%&gt;&lt;/option&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;/select&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Registry Path<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;registryPath&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;bar&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;Delete&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;delete&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+    <span style="color: #408080; font-style: italic">// Obtain the reference to the registry from the CarbonContext</span>
+    CarbonContext cCtx <span style="color: #666666">=</span> CarbonContext<span style="color: #666666">.</span><span style="color: #7D9029">getThreadLocalCarbonContext</span><span style="color: #666666">();</span>
+
+    Registry registry <span style="color: #666666">=</span> cCtx<span style="color: #666666">.</span><span style="color: #7D9029">getRegistry</span><span style="color: #666666">(</span>RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">SYSTEM_CONFIGURATION</span><span style="color: #666666">);</span>
+    String registryType <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;registryType&quot;</span><span style="color: #666666">);</span>
+    <span style="color: #008000; font-weight: bold">if</span><span style="color: #666666">(</span>registryType <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+       registry <span style="color: #666666">=</span> cCtx<span style="color: #666666">.</span><span style="color: #7D9029">getRegistry</span><span style="color: #666666">(</span>RegistryType<span style="color: #666666">.</span><span style="color: #7D9029">valueOf</span><span style="color: #666666">(</span>registryType<span style="color: #666666">));</span>
+    <span style="color: #666666">}</span>
+
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;add&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        Resource resource <span style="color: #666666">=</span> registry<span style="color: #666666">.</span><span style="color: #7D9029">newResource</span><span style="color: #666666">();</span>
+        resource<span style="color: #666666">.</span><span style="color: #7D9029">setContent</span><span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;value&quot;</span><span style="color: #666666">));</span>
+        String resourcePath <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;resourcePath&quot;</span><span style="color: #666666">);</span>
+        registry<span style="color: #666666">.</span><span style="color: #7D9029">put</span><span style="color: #666666">(</span>resourcePath<span style="color: #666666">,</span> resource<span style="color: #666666">);</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+    Added resource: <span style="color: #008000; font-weight: bold">&lt;%=</span> resourcePath <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+    <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;view&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        String resourcePath <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;resourcePath&quot;</span><span style="color: #666666">);</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>registry<span style="color: #666666">.</span><span style="color: #7D9029">resourceExists</span><span style="color: #666666">(</span>resourcePath<span style="color: #666666">))</span> <span style="color: #666666">{</span>
+            Resource resource <span style="color: #666666">=</span> registry<span style="color: #666666">.</span><span style="color: #7D9029">get</span><span style="color: #666666">(</span>resourcePath<span style="color: #666666">);</span>
+            String content <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">new</span> String<span style="color: #666666">((</span><span style="color: #B00040">byte</span><span style="color: #666666">[])</span> resource<span style="color: #666666">.</span><span style="color: #7D9029">getContent</span><span style="color: #666666">());</span>
+            response<span style="color: #666666">.</span><span style="color: #7D9029">addHeader</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;resource-content&quot;</span><span style="color: #666666">,</span> content<span style="color: #666666">);</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                Resource at in Registry <span style="color: #008000; font-weight: bold">&lt;%=</span> registryType<span style="color: #008000; font-weight: bold">%&gt;</span> path <span style="color: #008000; font-weight: bold">&lt;%=</span> resourcePath<span style="color: #008000; font-weight: bold">%&gt;</span> : <span style="color: #008000; font-weight: bold">&lt;%=</span> content <span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                Resource at path <span style="color: #008000; font-weight: bold">&lt;%=</span> resourcePath<span style="color: #008000; font-weight: bold">%&gt;</span> does not exist in Registry <span style="color: #008000; font-weight: bold">&lt;%=</span> registryType<span style="color: #008000; font-weight: bold">%&gt;</span>!
+            <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+        <span style="color: #666666">}</span>
+    <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;delete&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        String registryPath <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;registryPath&quot;</span><span style="color: #666666">);</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>registry<span style="color: #666666">.</span><span style="color: #7D9029">resourceExists</span><span style="color: #666666">(</span>registryPath<span style="color: #666666">))</span> <span style="color: #666666">{</span>
+            Resource resource <span style="color: #666666">=</span> registry<span style="color: #666666">.</span><span style="color: #7D9029">get</span><span style="color: #666666">(</span>registryPath<span style="color: #666666">);</span>
+            registry<span style="color: #666666">.</span><span style="color: #7D9029">delete</span><span style="color: #666666">(</span>registryPath<span style="color: #666666">);</span>
+            <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(!</span>registry<span style="color: #666666">.</span><span style="color: #7D9029">resourceExists</span><span style="color: #666666">(</span>registryPath<span style="color: #666666">))</span> <span style="color: #666666">{</span>
+            	response<span style="color: #666666">.</span><span style="color: #7D9029">addHeader</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;resource-deleted&quot;</span><span style="color: #666666">,</span> <span style="color: #BA2121">&quot;true&quot;</span><span style="color: #666666">);</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;%=</span> registryPath<span style="color: #008000; font-weight: bold">%&gt;</span> path deleted from <span style="color: #008000; font-weight: bold">&lt;%=</span> registryType<span style="color: #008000; font-weight: bold">%&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+            <span style="color: #666666">}</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;%=</span> registryPath<span style="color: #008000; font-weight: bold">%&gt;</span> does not exist in Registry <span style="color: #008000; font-weight: bold">&lt;%=</span> registryType<span style="color: #008000; font-weight: bold">%&gt;</span>!
+            <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+        <span style="color: #666666">}</span>
+    <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;viewCollection&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+         String collectionPath <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;collectionPath&quot;</span><span style="color: #666666">);</span>
+         <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>registry<span style="color: #666666">.</span><span style="color: #7D9029">resourceExists</span><span style="color: #666666">(</span>collectionPath<span style="color: #666666">))</span> <span style="color: #666666">{</span>
+             Resource resource <span style="color: #666666">=</span> registry<span style="color: #666666">.</span><span style="color: #7D9029">get</span><span style="color: #666666">(</span>collectionPath<span style="color: #666666">);</span>
+             <span style="color: #008000; font-weight: bold">if</span><span style="color: #666666">(</span>resource <span style="color: #008000; font-weight: bold">instanceof</span> Collection<span style="color: #666666">){</span>
+                response<span style="color: #666666">.</span><span style="color: #7D9029">addHeader</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;collection-exist&quot;</span><span style="color: #666666">,</span> <span style="color: #BA2121">&quot;true&quot;</span><span style="color: #666666">);</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                    Registry collection exists in <span style="color: #008000; font-weight: bold">&lt;%=</span> registryType<span style="color: #008000; font-weight: bold">%&gt;</span> path <span style="color: #008000; font-weight: bold">&lt;%=</span> collectionPath<span style="color: #008000; font-weight: bold">%&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+             <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+                <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                    <span style="color: #008000; font-weight: bold">&lt;%=</span> collectionPath<span style="color: #008000; font-weight: bold">%&gt;</span> is not a collection.
+                <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+             <span style="color: #666666">}</span>
+         <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                Collection at path <span style="color: #008000; font-weight: bold">&lt;%=</span> collectionPath<span style="color: #008000; font-weight: bold">%&gt;</span> does not exist in Registry <span style="color: #008000; font-weight: bold">&lt;%=</span> registryType<span style="color: #008000; font-weight: bold">%&gt;</span>!
+            <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+         <span style="color: #666666">}</span>
+    <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;addCollection&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+         Resource collection <span style="color: #666666">=</span> registry<span style="color: #666666">.</span><span style="color: #7D9029">newCollection</span><span style="color: #666666">();</span>
+         String collectionPath <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;collectionPath&quot;</span><span style="color: #666666">);</span>
+         registry<span style="color: #666666">.</span><span style="color: #7D9029">put</span><span style="color: #666666">(</span>collectionPath<span style="color: #666666">,</span> collection<span style="color: #666666">);</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+            Added collection : <span style="color: #008000; font-weight: bold">&lt;%=</span> collectionPath <span style="color: #008000; font-weight: bold">%&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+    <span style="color: #666666">}</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+</pre></td></tr></table></div>

@@ -15,83 +15,165 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:10pt;"><span style="background-color:#edffed;">&lt;%@ page import="javax.cache.CacheManager" %&gt;
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:10pt;"><span style="background-color:#edffed;">&lt;%@ page import="javax.cache.Caching" %&gt;
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:10pt;"><span style="background-color:#edffed;">&lt;%@ page import="javax.cache.Cache" %&gt;
+<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;javax.cache.CacheManager&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;javax.cache.Caching&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%@</span> page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;javax.cache.Cache&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
 
-&lt;h2&gt;WSO2 Carbon Caching Demo&lt;/h2&gt;
+<span style="color: #008000; font-weight: bold">&lt;h2&gt;</span>WSO2 Carbon Caching Demo<span style="color: #008000; font-weight: bold">&lt;/h2&gt;</span>
 
-&lt;hr/&gt;
-&lt;p&gt;
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
 
-&lt;h3&gt;Add to Cache&lt;/h3&gt;
+<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Add to Cache<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
 
-&lt;form action="index.jsp" method="POST"&gt;
-    &lt;table border="0"&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Key&lt;/td&gt;
-            &lt;td&gt;&lt;input type="text" name="key"/&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Value&lt;/td&gt;
-            &lt;td&gt;&lt;input type="text" name="value"/&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;&nbsp;&lt;/td&gt;
-            &lt;td&gt;&lt;input type="submit" value="Add" name="add"&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/form&gt;
-&lt;/p&gt;
-&lt;hr/&gt;
-&lt;p&gt;
+<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;table</span> <span style="color: #7D9029">border=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Key<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;key&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Value<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;value&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;Add&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;add&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
 
-&lt;h3&gt;Read from Cache&lt;/h3&gt;
+<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Read from Cache<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
 
-&lt;form action="index.jsp" method="POST"&gt;
-    &lt;table border="0"&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Key&lt;/td&gt;
-            &lt;td&gt;&lt;input type="text" name="key"/&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;&nbsp;&lt;/td&gt;
-            &lt;td&gt;&lt;input type="submit" value="View" name="view"&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/form&gt;
-&lt;/p&gt;
-&lt;hr/&gt;
+<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;table</span> <span style="color: #7D9029">border=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Key<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;key&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;View&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;view&quot;</span><span style="color: #008000; font-weight: bold">&gt;&lt;/td&gt;</span>
+        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;hr/&gt;</span>
 
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">    // The javax.cache.CacheManager instance used to obtain the cache
-    CacheManager cacheManager =   Caching.getCacheManagerFactory().getCacheManager("tsampleCacheManager");
-    Cache<String, String> cache = cacheManager.getCache("sampleCache");
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+    <span style="color: #408080; font-style: italic">// The javax.cache.CacheManager instance used to obtain the cache</span>
+    CacheManager cacheManager <span style="color: #666666">=</span>   Caching<span style="color: #666666">.</span><span style="color: #7D9029">getCacheManagerFactory</span><span style="color: #666666">().</span><span style="color: #7D9029">getCacheManager</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;tsampleCacheManager&quot;</span><span style="color: #666666">);</span>
+    Cache<span style="color: #666666">&lt;</span>String<span style="color: #666666">,</span> String<span style="color: #666666">&gt;</span> cache <span style="color: #666666">=</span> cacheManager<span style="color: #666666">.</span><span style="color: #7D9029">getCache</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;sampleCache&quot;</span><span style="color: #666666">);</span>
 
-    if (request.getParameter("add") != null) {
-        String key = request.getParameter("key");
-        String value = request.getParameter("value");
-        cache.put(key, value);
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">&lt;p&gt;
-    Added entry: </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> key </span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">&lt;/p&gt;
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">    } else if (request.getParameter("view") != null) {
-        String key = request.getParameter("key");
-        if (cache.get(key) != null) {
-            String content = (String) cache.get(key);
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">            &lt;p&gt;
-                Value of entry </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> key</span><span style="color:#000080;background-color:#fffce4;">%&gt;</span><span style="background-color:#edffed;"> : </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> content </span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">            &lt;/p&gt;
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">        } else {
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">            &lt;p&gt;
-                Unable to find an entry by the given key </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> key</span><span style="color:#000080;background-color:#fffce4;">%&gt;</span><span style="background-color:#edffed;">!
-            &lt;/p&gt;
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">        }
-    }
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;</span></pre>
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;add&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        String key <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;key&quot;</span><span style="color: #666666">);</span>
+        String value <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;value&quot;</span><span style="color: #666666">);</span>
+        cache<span style="color: #666666">.</span><span style="color: #7D9029">put</span><span style="color: #666666">(</span>key<span style="color: #666666">,</span> value<span style="color: #666666">);</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+    Added entry: <span style="color: #008000; font-weight: bold">&lt;%=</span> key <span style="color: #008000; font-weight: bold">%&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+    <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;view&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        String key <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;key&quot;</span><span style="color: #666666">);</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>cache<span style="color: #666666">.</span><span style="color: #7D9029">get</span><span style="color: #666666">(</span>key<span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            String content <span style="color: #666666">=</span> <span style="color: #666666">(</span>String<span style="color: #666666">)</span> cache<span style="color: #666666">.</span><span style="color: #7D9029">get</span><span style="color: #666666">(</span>key<span style="color: #666666">);</span>
+            response<span style="color: #666666">.</span><span style="color: #7D9029">addHeader</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;cache-value&quot;</span><span style="color: #666666">,</span> content<span style="color: #666666">);</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                Value of entry <span style="color: #008000; font-weight: bold">&lt;%=</span> key<span style="color: #008000; font-weight: bold">%&gt;</span> : <span style="color: #008000; font-weight: bold">&lt;%=</span> content <span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
+                Unable to find an entry by the given key <span style="color: #008000; font-weight: bold">&lt;%=</span> key<span style="color: #008000; font-weight: bold">%&gt;</span>!
+            <span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;%</span>
+        <span style="color: #666666">}</span>
+    <span style="color: #666666">}</span>
+<span style="color: #008000; font-weight: bold">%&gt;</span>
+</pre></td></tr></table></div>

@@ -24,7 +24,7 @@
  -->
 <head></head>
 <body>
-<h2>WSO2 Carbon User Manage Usage Demo</h2>
+<h2>WSO2 Carbon Role Manage Usage Demo</h2>
 
 <%
     CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
