@@ -12,8 +12,6 @@
 
     <test name="webapp-tests" preserve-order="true" parallel="false">
         <packages>
-            <!--Todo - Need to enabled when JavaEE feature is completed -->
-            <!--<package name="org.wso2.appserver.integration.tests.javaee"/>-->
             <package name="org.wso2.appserver.integration.tests.webapp.websocket"/>
             <package name="org.wso2.appserver.integration.tests.webappsampleservice"/>
             <package name="org.wso2.appserver.integration.tests.webapp.classloading"/>
@@ -23,6 +21,15 @@
             <package name="org.wso2.appserver.integration.tests.webapp.spring"/>
             <package name="org.wso2.appserver.integration.tests.webapp.virtualhost"/>
             <package name="org.wso2.appserver.integration.tests.webapp.jsp"/>
+        </packages>
+    </test>
+
+    <test name="javaee-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.javaee.cdi.*"/>
+            <package name="org.wso2.appserver.integration.tests.javaee.jpa.*"/>
+            <package name="org.wso2.appserver.integration.tests.javaee.jsf.*"/>
+            <package name="org.wso2.appserver.integration.tests.javaee.jta.*"/>
         </packages>
     </test>
 
@@ -120,5 +127,11 @@
             <package name="org.wso2.appserver.integration.tests.security"/>
         </packages>
     </test> -->
+
+    <test name="spring3" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.spring" />
+        </packages>
+    </test>
 
 </suite>
