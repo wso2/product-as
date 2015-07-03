@@ -21,6 +21,7 @@
             <package name="org.wso2.appserver.integration.tests.webapp.spring"/>
             <package name="org.wso2.appserver.integration.tests.webapp.virtualhost"/>
             <package name="org.wso2.appserver.integration.tests.webapp.jsp"/>
+            <package name="org.wso2.appserver.integration.tests.jmx"/>
         </packages>
     </test>
 
