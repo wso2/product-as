@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.as.platform.tests.ssovalve;
+package org.wso2.as.platform.tests.sample;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

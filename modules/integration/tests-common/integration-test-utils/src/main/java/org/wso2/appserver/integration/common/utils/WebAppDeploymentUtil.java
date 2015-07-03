@@ -17,42 +17,42 @@
 */
 package org.wso2.appserver.integration.common.utils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-
 import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 
 public class WebAppDeploymentUtil {
     private static Log log = LogFactory.getLog(WebAppDeploymentUtil.class);
     private static int WEBAPP_DEPLOYMENT_DELAY = 90 * 1000;
 
     public static boolean isWebApplicationDeployed(String backEndUrl, String sessionCookie,
-                                                   String webAppFileName) throws Exception {
-        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service deployment " + webAppFileName);
+                                                   String webAppName) throws Exception {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service deployment " + webAppName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backEndUrl, sessionCookie);
         List<String> webAppList;
         List<String> faultyWebAppList;
-        String webAppName = webAppFileName + ".war";
+        String warName = webAppName + ".war";
 
         Calendar startTime = Calendar.getInstance();
         long time;
         while ((time = (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis())) < WEBAPP_DEPLOYMENT_DELAY) {
-            webAppList = webAppAdminClient.getWebApplist(webAppFileName);
-            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppFileName);
+            webAppList = webAppAdminClient.getWebApplist(webAppName);
+            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppName);
 
             for (String faultWebAppName : faultyWebAppList) {
-                if (webAppName.equalsIgnoreCase(faultWebAppName)) {
-                    log.info(webAppFileName + " - Web Application is faulty");
+                //need to check both unpacked webapps and war file based webapps
+                if (webAppName.equalsIgnoreCase(faultWebAppName) || warName.equalsIgnoreCase(faultWebAppName)) {
+                    log.info(webAppName + "- Web Application is faulty");
                     return Boolean.FALSE;
                 }
             }
 
             for (String name : webAppList) {
-                if (webAppName.equalsIgnoreCase(name)) {
-                    log.info(webAppFileName + " Web Application deployed in " + time + " millis");
+                if (webAppName.equalsIgnoreCase(name) || warName.equalsIgnoreCase(name)) {
+                    log.info(webAppName + " Web Application deployed in " + time + " millis");
                     return Boolean.TRUE;
                 }
             }
@@ -67,18 +67,19 @@ public class WebAppDeploymentUtil {
     }
 
     public static boolean isWebApplicationUnDeployed(String backEndUrl, String sessionCookie,
-                                                     String webAppFileName) throws Exception {
-        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for webApp undeployment " + webAppFileName);
+                                                     String webAppName) throws Exception {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for webApp undeployment " + webAppName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backEndUrl, sessionCookie);
         List<String> webAppList;
+        String warName = webAppName + ".war";
 
         Calendar startTime = Calendar.getInstance();
         while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
-            webAppList = webAppAdminClient.getWebApplist(webAppFileName);
+            webAppList = webAppAdminClient.getWebApplist(webAppName);
             if (webAppList.size() != 0) {
                 for (String name : webAppList) {
-                    if (webAppFileName.equalsIgnoreCase(name)) {
-                        log.info(webAppFileName + " -  Web Application not undeployed yet");
+                    if (webAppName.equalsIgnoreCase(name) || warName.equalsIgnoreCase(name)) {
+                        log.info(webAppName + " -  Web Application not undeployed yet");
                         break;
                     }
                 }
@@ -95,19 +96,19 @@ public class WebAppDeploymentUtil {
     }
 
     public static boolean isFaultyWebApplicationUnDeployed(String backEndUrl, String sessionCookie,
-                                                           String webAppFileName) throws Exception {
-        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service undeployment " + webAppFileName);
+                                                           String webAppName) throws Exception {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service undeployment " + webAppName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backEndUrl, sessionCookie);
         List<String> faultyWebAppList;
-        String webAppName = webAppFileName + ".war";
+        String warName = webAppName + ".war";
 
         Calendar startTime = Calendar.getInstance();
         while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
-            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppFileName);
+            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppName);
             if (faultyWebAppList.size() != 0) {
                 for (String faultWebAppName : faultyWebAppList) {
-                    if (webAppName.equalsIgnoreCase(faultWebAppName)) {
-                        log.info(webAppFileName + "- Web Application is faulty");
+                    if (webAppName.equalsIgnoreCase(faultWebAppName) || warName.equalsIgnoreCase(faultWebAppName)) {
+                        log.info(webAppName + "- Web Application is faulty");
                         break;
                     }
                 }

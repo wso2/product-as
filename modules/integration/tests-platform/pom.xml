@@ -32,7 +32,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>tests-sso-valve</module>
+        <!--<module>tests-sso-valve</module>-->
+        <module>tests-clustering</module>
     </modules>
 
 </project>

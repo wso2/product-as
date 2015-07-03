@@ -22,7 +22,7 @@
     <parameter name="useDefaultListeners" value="false"/>
     <test name="sso-valve-tests" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.as.platform.tests.ssovalve.SSOValveTestCase"/>
+            <class name="org.wso2.as.platform.tests.sample.SSOValveTestCase"/>
         </classes>
     </test>
 </suite>

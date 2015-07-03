@@ -34,6 +34,11 @@
 
     <modules>
         <module>lazy-loading-info</module>
+        <module>carbon-datasource-lookup</module>
+        <module>tomcat-jndi-resource-lookup</module>
+        <module>context-reload-test-webapp</module>
+        <module>host-info</module>
+        <module>spring</module>
     </modules>
 
 </project>

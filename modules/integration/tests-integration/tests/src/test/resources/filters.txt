@@ -21,4 +21,8 @@
 -*transports*
 -org.wso2.carbon.mediation.statistics*
 -*startup*
--org.wso2.carbon.tryit*
+**\sun\**\*.class
+**\javax\**\*.class
+**\log4j\**\*.class
+**\axis2\**\*.class
+**\commons\logging\**\*.class

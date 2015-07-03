@@ -20,6 +20,7 @@
             <package name="org.wso2.appserver.integration.tests.webapp.mgt"/>
             <package name="org.wso2.appserver.integration.tests.webapp.spring"/>
             <package name="org.wso2.appserver.integration.tests.webapp.virtualhost"/>
+            <package name="org.wso2.appserver.integration.tests.webapp.jsp"/>
         </packages>
     </test>
 
@@ -126,5 +127,11 @@
             <package name="org.wso2.appserver.integration.tests.security"/>
         </packages>
     </test> -->
+
+    <test name="spring3" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.spring" />
+        </packages>
+    </test>
 
 </suite>

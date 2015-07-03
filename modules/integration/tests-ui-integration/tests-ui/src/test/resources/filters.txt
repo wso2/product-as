@@ -1,3 +1,9 @@
+-org.apache.axis2.jaxws.*
+-org.apache.cxf.aegis.*
+-org.apache.axis2.clustering.*
+-org.apache.cxf.binding.*
+-org.apache.cxf.tools.*
+-org.apache.xmlbeans.*
 -*.stub*
 -*.stub_
 -*.stub_4.0.0
@@ -15,3 +21,8 @@
 -*transports*
 -org.wso2.carbon.mediation.statistics*
 -*startup*
+**\sun\**\*.class
+**\javax\**\*.class
+**\log4j\**\*.class
+**\axis2\**\*.class
+**\commons\logging\**\*.class
