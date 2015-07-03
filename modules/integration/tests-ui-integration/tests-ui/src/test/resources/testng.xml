@@ -14,7 +14,7 @@
 
     <test name="AS-UI-tests" parallel="false" verbose="2">
         <packages>
-            <!--<package name="org.wso2.appserver.ui.integration.test.*"/>-->
+            <package name="org.wso2.appserver.ui.integration.test.*"/>
         </packages>
     </test>
 

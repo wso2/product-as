@@ -44,16 +44,16 @@ import static org.testng.Assert.assertTrue;
 
 public class Spring3WebappClassloading extends ASIntegrationTest{
 
-    private ServerConfigurationManager serverConfigurationManager;
+    private static ServerConfigurationManager serverConfigurationManager;
     private TestUserMode userMode;
     private WebAppAdminClient webAppAdminClient;
     private SqlDataSourceUtil sqlDataSource;
     private String webAppName = "spring3-restful-webapp-classloading";
     private String endpointURL = "/student";
     private String webappClassloadingEnv = "webapp-classloading-environments.xml";
-    private File destRuntimeLibDir;
-    private File destWebappClassloadingDir;
-    private static boolean isRestarted = false;
+    private static File destRuntimeLibDir;
+    private static File destWebappClassloadingDir;
+    private static int isRestarted = 0;
 
     @Factory(dataProvider = "userModeProvider")
     public Spring3WebappClassloading(TestUserMode userMode) {
@@ -75,7 +75,7 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS);
 
         //Restart the Server only once
-        if (!isRestarted) {
+        if (isRestarted == 0) {
             serverConfigurationManager =
                     new ServerConfigurationManager(new AutomationContext("AS", TestUserMode.SUPER_TENANT_USER));
             File sourceWebappClassloadingDir = new File(
@@ -99,8 +99,8 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
 
             serverConfigurationManager.applyConfiguration(sourceWebappClassloadingDir, destWebappClassloadingDir, true,
                                                           true);
-            isRestarted = true;
         }
+        ++isRestarted;
         sessionCookie = loginLogoutClient.login();
 
         createTable();
@@ -137,10 +137,10 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
         webAppAdminClient.deleteWebAppFile(webAppName + ".war", asServer.getInstance().getHosts().get("default"));
 
         //Revert and restart only once
-        if (isRestarted) {
+        --isRestarted;
+        if (isRestarted == 0) {
             FileManipulator.deleteDir(destRuntimeLibDir);
-            serverConfigurationManager.restoreToLastConfiguration(true);
-            isRestarted = false;
+            serverConfigurationManager.restoreToLastConfiguration();
         }
     }
 
@@ -150,6 +150,6 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
                                 File.separator + "spring" + File.separator + "studentDb.sql");
         List<File> sqlFileList = new ArrayList<>();
         sqlFileList.add(sqlFile);
-        sqlDataSource.createDataSource(sqlFileList);
+        sqlDataSource.createDataSource(sqlFileList, "dataService");
     }
 }

@@ -485,9 +485,18 @@
                 <artifactId>h2-database-engine</artifactId>
                 <version>${h2.orbit.version}</version>
             </dependency>
+
+            <!-- Spring Service Integration Test Common Artifacts -->
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>spring3-restful-simple-service</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>spring3-restful-jndi-service</artifactId>
                 <type>war</type>
                 <version>${project.version}</version>
                 <scope>test</scope>
