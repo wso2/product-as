@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.model;
+package org.wso2.appserver.integration.common.artifacts.spring3.restful.jndi.service.model;
 
 public class Status {
     private String status;

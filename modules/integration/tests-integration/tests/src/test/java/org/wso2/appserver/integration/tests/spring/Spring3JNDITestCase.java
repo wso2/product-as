@@ -48,7 +48,7 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
     private TestUserMode userMode;
     private WebAppAdminClient webAppAdminClient;
     private SqlDataSourceUtil sqlDataSource;
-    private final String webAppName = "spring3-restful-simple-service";
+    private final String webAppName = "spring3-restful-jndi-service";
     private final String endpointURL = "/student";
     private final String contentType = "application/json";
 
@@ -157,6 +157,15 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
         }
     }
 
+    @Test(groups = "wso2.as", description = "Verfiy if the webapp is unpacked for Tenants",
+            dependsOnMethods = "testDeleteOperation")
+    public void testTenantWebappUnpack() throws Exception {
+        if (userMode.equals(TestUserMode.TENANT_USER)) {
+            assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
+                       "Web Application Deployment failed");
+        }
+    }
+
     @AfterClass(alwaysRun = true)
     public void deteleteWebApp() throws Exception {
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
@@ -169,7 +178,7 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
                                 File.separator + "spring" + File.separator + "studentDb.sql");
         List<File> sqlFileList = new ArrayList<>();
         sqlFileList.add(sqlFile);
-        sqlDataSource.createDataSource(sqlFileList);
+        sqlDataSource.createDataSource(sqlFileList, "dataService");
     }
 
     private static int sendDeleteRequest(URL endpoint, String contentType) throws AutomationFrameworkException {
