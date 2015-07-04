@@ -37,9 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /*
 *  catalina-server.xml should have a virtual host entry as follows to pass this test case
@@ -47,7 +45,7 @@ import static org.testng.Assert.assertTrue;
 */
 
 public class VirtualHostWebApplicationDeploymentTestCase extends ASIntegrationTest {
-    private static int GET_RESPONSE_DELAY = 15 * 1000;
+    private static int GET_RESPONSE_DELAY = 20 * 1000;
     private final String webAppFileName1 = "appServer-valied-deploymant-1.0.0.war";
     private final String webAppFileName2 = "HelloWorldWebapp.war";
     private final String webAppName1 = "appServer-valied-deploymant-1.0.0";
@@ -218,6 +216,24 @@ public class VirtualHostWebApplicationDeploymentTestCase extends ASIntegrationTe
         int statusCode = getRequest.getStatusCode();
         assertEquals(statusCode, HttpStatus.SC_NOT_FOUND, "Response code mismatch. Client request " +
                 "got a response even after web app is undeployed , Status code: " + statusCode);
+    }
+
+    @Test(expectedExceptions = {java.net.UnknownHostException.class}, expectedExceptionsMessageRegExp = "www.vhost2.com",
+            dependsOnMethods = {"testDeleteWebApplicationInDefaultHost"})
+    public void testVirtualHostDeletionAfterWebappDeployment() throws Exception {
+        uploadWarFile(appBaseDir2, webAppFileName1);
+        GetMethod getRequest = invokeWebapp(webAppURL, webAppName1, vhostName2);
+        String response = getRequest.getResponseBodyAsString();
+        int statusCode = getRequest.getStatusCode();
+
+        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertEquals("<status>success</status>\n", response, "Unexpected response: " + response);
+
+        Path sourcePath = Paths.get(TestConfigurationProvider.getResourceLocation(), "artifacts", "AS", "tomcat", "catalina-server-with-vhost1.xml");
+        Path targetPath = Paths.get(System.getProperty(ServerConstants.CARBON_HOME), "repository", "conf", "tomcat", "catalina-server.xml");
+        serverManager.applyConfiguration(sourcePath.toFile(), targetPath.toFile(), false, true);
+
+        assertNotNull(invokeWebapp(webAppURL, webAppName1, vhostName2));
     }
 
     private void uploadWarFile(String appBaseDir, String webAppFileName) throws IOException {
