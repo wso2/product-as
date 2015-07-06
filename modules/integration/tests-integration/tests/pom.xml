@@ -122,7 +122,7 @@
                             <includeTypes>war</includeTypes>
                             <includeArtifactIds>
                                 spring3-restful-simple-service, spring3-restful-jndi-service,
-                                spring3-restful-webapp-classloading
+                                spring3-restful-webapp-classloading, spring3-restful-faulty-service
                             </includeArtifactIds>
                             <stripVersion>true</stripVersion>
                         </configuration>
@@ -371,6 +371,12 @@
             <artifactId>spring3-restful-runtime-libs</artifactId>
             <type>zip</type>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-faulty-service</artifactId>
+            <type>war</type>
+        </dependency>
+
     </dependencies>
 
 </project>
