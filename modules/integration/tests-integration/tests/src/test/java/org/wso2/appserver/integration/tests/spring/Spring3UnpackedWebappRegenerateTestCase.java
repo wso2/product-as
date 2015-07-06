@@ -18,11 +18,8 @@
 
 package org.wso2.appserver.integration.tests.spring;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -44,8 +41,6 @@ public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     private final String webAppName = "spring3-restful-simple-service";
     private final String webAppFileName = "spring3-restful-simple-service.war";
-    private final String endpointURL = "/student";
-    private final String hostName = "localhost";
     private WebAppAdminClient webAppAdminClient;
     private String webAppDeploymentDir;
     private static final int WEBAPP_DEPLOYMENT_DELAY = 90 * 1000;
@@ -81,6 +76,7 @@ public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
     }
 
     private void testInvokeWebApp() throws Exception {
+        String endpointURL = "/student";
         String endpoint = webAppURL + "/" + webAppName + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         String expectedMsg = "{\"status\":\"success\"}";
@@ -116,6 +112,7 @@ public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void destroy() throws Exception {
+        String hostName = "localhost";
         if (webAppAdminClient.getWebApplist(webAppName).contains(webAppFileName)) {
             webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         }

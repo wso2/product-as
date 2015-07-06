@@ -49,10 +49,7 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
     private WebAppAdminClient webAppAdminClient;
     private SqlDataSourceUtil sqlDataSource;
     private String webAppName = "spring3-restful-webapp-classloading";
-    private String endpointURL = "/student";
-    private String webappClassloadingEnv = "webapp-classloading-environments.xml";
     private static File destRuntimeLibDir;
-    private static File destWebappClassloadingDir;
     private static int isRestarted = 0;
 
     @Factory(dataProvider = "userModeProvider")
@@ -72,6 +69,8 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
     public void init() throws Exception {
         super.init(userMode);
         String dataSourceName = "spring3-restful-testdb";
+        String webappClassloadingEnv = "webapp-classloading-environments.xml";
+
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS);
 
         //Restart the Server only once
@@ -83,7 +82,7 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
                     File.separator +
                     "spring" + File.separator + "webapp" + File.separator + "classloading" + File.separator +
                     webappClassloadingEnv);
-            destWebappClassloadingDir = new File(
+            File destWebappClassloadingDir = new File(
                     System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" + File.separator +
                     "conf" + File.separator + "tomcat" + File.separator + webappClassloadingEnv);
 
@@ -120,6 +119,7 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
 
     @Test(groups = "wso2.as", description = "Verify Get Operation", dependsOnMethods = "testSpringWARUpload")
     public void testGetOperation() throws Exception {
+        String endpointURL = "/student";
         String endpoint = webAppURL + "/" + webAppName + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         try {
