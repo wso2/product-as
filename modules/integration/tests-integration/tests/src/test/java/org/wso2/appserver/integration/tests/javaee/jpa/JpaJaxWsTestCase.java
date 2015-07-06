@@ -93,7 +93,7 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
         assertNotNull(customerDataService);
 
         CustomersDatabase customersDatabase = customerDataService.getPort(CustomersDatabase.class);
-        ContactDTO contact = new ContactDTO("Bob", "0123456789", 25, "bob@bob.com", new Date());
+        ContactDTO contact = new ContactDTO("Bob", "(012)345-6789", 25, "bob@bob.com", new Date());
 
         String response = customersDatabase.addContact(contact);
         log.info("Response : " + response);
@@ -103,7 +103,7 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
 
         ContactsDTO contacts = customersDatabase.getContacts();
 
-        ContactDTO contact1 = contacts.getContacts().get(1);
+        ContactDTO contact1 = contacts.getContacts().get(0);
         log.info("Contact details retrieved, name: " + contact1.getName() + ", email: " + contact1.getEmail());
 
         assertEquals(contact.getName(), contact1.getName(), "Contact name doesn't match");
