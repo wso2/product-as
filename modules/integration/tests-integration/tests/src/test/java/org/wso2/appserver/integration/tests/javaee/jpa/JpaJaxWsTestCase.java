@@ -59,7 +59,9 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
     private static TestUserMode[][] userModeProvider() {
         return new TestUserMode[][]{
                 new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new TestUserMode[]{TestUserMode.TENANT_USER},
+                //todo enable tenant mode after fixing sample issue with tenant
+                //jira : https://wso2.org/jira/browse/WSAS-1998
+//                new TestUserMode[]{TestUserMode.TENANT_USER},
         };
     }
 
@@ -78,9 +80,7 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
                 "Web Application Deployment failed");
     }
 
-    //todo enable this test method after the sample is fixed
-    //todo jira : https://wso2.org/jira/browse/WSAS-1997
-    @Test(groups = "wso2.as", description = "test jpa and jax-ws", enabled = false)
+    @Test(groups = "wso2.as", description = "test jpa and jax-ws", enabled = true)
     public void testJpaWsGet() throws Exception {
 
         String serviceName = "CustomersDatabaseServiceService";
