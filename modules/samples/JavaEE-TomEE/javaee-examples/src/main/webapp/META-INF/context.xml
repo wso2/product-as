@@ -20,41 +20,41 @@
 <!-- $Rev$ $Date$ -->
 
 <Context>
-  <!-- This only works if the context is installed under the correct name -->
-<!--  <Realm className="org.apache.catalina.realm.MemoryRealm"
-         pathname="webapps/ejb-examples-1.0-SNAPSHOT/WEB-INF/tomcat-users.xml"/>
--->
+    <!-- This only works if the context is installed under the correct name -->
+    <!--  <Realm className="org.apache.catalina.realm.MemoryRealm"
+             pathname="webapps/ejb-examples-1.0-SNAPSHOT/WEB-INF/tomcat-users.xml"/>
+    -->
 
-  <Environment
-      name="context.xml/environment"
-      value="ContextString"
-      type="java.lang.String"/>
-  <Resource
-      name="context.xml/resource"
-      auth="Container"
-      type="org.superbiz.servlet.ResourceBean"
-      factory="org.apache.naming.factory.BeanFactory"
-      value="ContextResource"/>
-  <ResourceLink
-      name="context.xml/resource-link"
-      global="server.xml/environment"
-      type="java.lang.String"/>
+    <Environment
+            name="context.xml/environment"
+            value="ContextString"
+            type="java.lang.String"/>
+    <Resource
+            name="context.xml/resource"
+            auth="Container"
+            type="org.superbiz.servlet.ResourceBean"
+            factory="org.apache.naming.factory.BeanFactory"
+            value="ContextResource"/>
+    <ResourceLink
+            name="context.xml/resource-link"
+            global="server.xml/environment"
+            type="java.lang.String"/>
 
-  <!-- web.xml resources -->
-  <Resource
-      name="web.xml/resource-env-ref"
-      auth="Container"
-      type="org.superbiz.servlet.ResourceBean"
-      factory="org.apache.naming.factory.BeanFactory"
-      value="ContextResourceEnvRef"/>
-  <Resource
-      name="web.xml/resource-ref"
-      auth="Container"
-      type="org.superbiz.servlet.ResourceBean"
-      factory="org.apache.naming.factory.BeanFactory"
-      value="ContextResourceRef"/>
-  <ResourceLink
-      name="web.xml/resource-link"
-      global="server.xml/environment"
-      type="java.lang.String"/>
+    <!-- web.xml resources -->
+    <Resource
+            name="web.xml/resource-env-ref"
+            auth="Container"
+            type="org.superbiz.servlet.ResourceBean"
+            factory="org.apache.naming.factory.BeanFactory"
+            value="ContextResourceEnvRef"/>
+    <Resource
+            name="web.xml/resource-ref"
+            auth="Container"
+            type="org.superbiz.servlet.ResourceBean"
+            factory="org.apache.naming.factory.BeanFactory"
+            value="ContextResourceRef"/>
+    <ResourceLink
+            name="web.xml/resource-link"
+            global="server.xml/environment"
+            type="java.lang.String"/>
 </Context>

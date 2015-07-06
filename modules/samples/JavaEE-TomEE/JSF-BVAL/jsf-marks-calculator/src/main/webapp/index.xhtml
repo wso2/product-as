@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+    <h2>Welcome to Marks org.wso2.appserver.sample.ee.jsf.bval.Calculator</h2>
+    <h:form>
+        <h:panelGrid columns="2" cellspacing="10">
+            <h:outputText>Subject 1 marks:</h:outputText>
+            <h:inputText label="Subject 1 marks" value="#{Calculator.mark1}"/>
+            <h:outputText>Subject 2 marks:</h:outputText>
+            <h:inputText label="Subject 2 marks" value="#{Calculator.mark2}"/>
+        </h:panelGrid>
+        <h:commandButton value="Calculate" action="#{Calculator.calculate}"/>
+        <h:messages style="color: red;"/>
+    </h:form>
+</f:view>
+</html>

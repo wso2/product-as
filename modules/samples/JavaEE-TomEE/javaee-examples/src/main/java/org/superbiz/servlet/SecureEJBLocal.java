@@ -17,8 +17,8 @@
  */
 package org.superbiz.servlet;
 
-import javax.ejb.Local;
 import java.security.Principal;
+import javax.ejb.Local;
 
 @Local
 public interface SecureEJBLocal {

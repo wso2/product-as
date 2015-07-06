@@ -189,11 +189,6 @@
 
         <!-- copy the landing page webapp -->
         <fileSet>
-            <directory>lib/home</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps/STRATOS_ROOT
-            </outputDirectory>
-        </fileSet>
-        <fileSet>
             <directory>../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/dbscripts/identity/</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/dbscripts/identity</outputDirectory>
             <includes>

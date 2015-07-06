@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<f:view>
+    <h2>Marks org.wso2.appserver.sample.ee.jsf.bval.Calculator - Results</h2>
+    <h:panelGrid columns="2" cellspacing="10">
+        <h:outputText>Subject 1 marks:</h:outputText>
+        #{Calculator.mark1}
+        <h:outputText>Subject 2 marks:</h:outputText>
+        #{Calculator.mark2}
+        <h:outputText>Total marks:</h:outputText>
+        #{Calculator.total}
+        <h:outputText>Average marks:</h:outputText>
+        #{Calculator.average}
+    </h:panelGrid>
+    <h:form>
+        <h:commandButton value="Back" action="index"/>
+    </h:form>
+</f:view>
+</html>

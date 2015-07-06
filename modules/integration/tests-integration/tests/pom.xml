@@ -22,9 +22,10 @@
                 <inherited>false</inherited>
                 <configuration>
                     <argLine>-Xmx1024m -XX:-UseSplitVerifier</argLine>
+                    <!--<argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8001</argLine>-->
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-server-mgt.xml</suiteXmlFile>
-                        <!--<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>-->
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
 
                     <systemProperties>
@@ -107,6 +108,58 @@
                                     <includes>**/*.jks,**/*.mar,**/axis2_client.xml</includes>
                                 </artifactItem>
                             </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-spring3-restful</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                spring3-restful-simple-service, spring3-restful-jndi-service,
+                                spring3-restful-webapp-classloading
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>unpack-spring3-restful-runtime-libs</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wso2.appserver</groupId>
+                                    <artifactId>spring3-restful-runtime-libs</artifactId>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
+                                    <includes>**/*.jar</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-jaxrs-restful</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/jaxrs/client</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                jaxrs-client-api-test-webapp
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                 </executions>
@@ -264,7 +317,7 @@
             <groupId>org.wso2.carbon.automationutils</groupId>
             <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
         </dependency>
@@ -275,10 +328,6 @@
         <dependency>
             <groupId>org.wso2.carbon.registry</groupId>
             <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.automationutils</groupId>
-            <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.xfer</groupId>
@@ -303,6 +352,44 @@
             <groupId>org.glassfish.tyrus.bundles</groupId>
             <artifactId>tyrus-standalone-client</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database.wso2</groupId>
+            <artifactId>h2-database-engine</artifactId>
+        </dependency>
+
+        <!-- Spring Service Integration Test Common Artifacts -->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-simple-service</artifactId>
+            <type>war</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-contacts-database</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>classes</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-jndi-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-webapp-classloading</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-runtime-libs</artifactId>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jaxrs-client-api-test-webapp</artifactId>
+            <type>war</type>
         </dependency>
     </dependencies>
 
