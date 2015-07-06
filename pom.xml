@@ -515,6 +515,15 @@
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <!-- JAX-RS Test Related Webapps-->
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jaxrs-client-api-test-webapp</artifactId>
+                <type>war</type>
+                <version>1.0.0</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
