@@ -27,9 +27,9 @@ Please pay attention to the constrains defined in Contacts Entity when invoking 
    <soapenv:Body>
       <jax:addContact>
          <arg0>
-            <age>26</age>
-            <birthday>1988-11-29</birthday>
-            <contactNumber>(077)650-9215</contactNumber>
+            <age>20</age>
+            <birthday>2015-06-01</birthday>
+            <contactNumber>(012)345-6789</contactNumber>
             <email>kalpaw@wso2.com</email>
             <name>Kalpa Welivitigoda</name>
          </arg0>
