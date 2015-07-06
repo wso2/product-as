@@ -147,6 +147,21 @@
                             </artifactItems>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-jaxrs-restful</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/jaxrs/client</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                jaxrs-client-api-test-webapp
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -370,6 +385,11 @@
             <groupId>org.wso2.appserver</groupId>
             <artifactId>spring3-restful-runtime-libs</artifactId>
             <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jaxrs-client-api-test-webapp</artifactId>
+            <type>war</type>
         </dependency>
     </dependencies>
 
