@@ -39,7 +39,7 @@
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/</outputDirectory>
-                                    <includes>**/*.*</includes>
+                                    <includes>**/**</includes>
                                     <excludes>**/*.class</excludes>
                                 </artifactItem>
                             </artifactItems>
