@@ -56,7 +56,6 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
     private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
     private AutomationContext context;
     private int portOffset = 1;
-    private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
     private DataSourceBean dataSourceBean;
     private AuthenticatorClient authenticatorClient;
     private final char[] userNewPassword = {'m', '7', 'c', 't', '6', 'b', ']', ']', ':', '}', 'a', '3', '#', 'F', 'B', 'n'};
