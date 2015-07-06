@@ -24,7 +24,7 @@
                     <argLine>-Xmx1024m -XX:-UseSplitVerifier</argLine>
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-server-mgt.xml</suiteXmlFile>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                        <!--<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>-->
                     </suiteXmlFiles>
 
                     <systemProperties>
