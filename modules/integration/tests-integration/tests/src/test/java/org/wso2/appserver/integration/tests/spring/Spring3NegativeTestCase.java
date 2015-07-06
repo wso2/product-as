@@ -97,7 +97,8 @@ public class Spring3NegativeTestCase extends ASIntegrationTest {
                 File.separator + faultyWebAppName + ".war";
         webAppAdminClient.uploadWarFile(webappFilePath);
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, faultyWebAppName));
-        webAppAdminClient.deleteFaultyWebAppFile(faultyWebAppName + ".war", asServer.getInstance().getHosts().get("default"));
+        webAppAdminClient
+                .deleteFaultyWebAppFile(faultyWebAppName + ".war", asServer.getInstance().getHosts().get("default"));
     }
 
     @Test(groups = "wso2.as", description = "Upload faulty webapp and then upload webapp with the same name which has no issues")
