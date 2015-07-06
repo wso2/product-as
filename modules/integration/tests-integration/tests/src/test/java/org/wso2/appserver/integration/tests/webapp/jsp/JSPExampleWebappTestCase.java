@@ -77,9 +77,7 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
         // JSP-to-Servlet-to-JSP
         url = webAppBaseURL + "jsptoserv/jsptoservlet.jsp";
         response = HttpRequestUtil.sendGetRequest(url, null);
-        expectedString = "I have been invoked by\n" +
-                "servletToJsp\n" +
-                "Servlet.";
+        expectedString = "I have been invoked byservletToJspServlet.";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
 
