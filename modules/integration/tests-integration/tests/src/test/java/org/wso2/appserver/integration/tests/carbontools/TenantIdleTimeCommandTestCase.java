@@ -24,11 +24,10 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
+import org.wso2.appserver.integration.tests.carbontools.test.servers.CarbonTestServerManager;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
-import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
 import org.wso2.carbon.integration.common.extensions.usermgt.UserPopulator;
-import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 
 import java.util.HashMap;
@@ -41,7 +40,6 @@ import static org.testng.Assert.assertTrue;
 public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private MultipleServersManager asServerManager = new MultipleServersManager();
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -50,12 +48,8 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
         int idleTime = 1;
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         serverPropertyMap.put("-Dtenant.idle.time", Integer.toString(idleTime));
-        AutomationContext autoCtx = new AutomationContext();
 
-        CarbonTestServerManager server =
-                new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
-
-        asServerManager.startServers(server);
+        CarbonTestServerManager.start(serverPropertyMap);
 
         UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
                                                         ASIntegrationConstants.AS_INSTANCE_0002);
@@ -93,6 +87,6 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void serverShutDown() throws Exception {
-        asServerManager.stopAllServers();
+        CarbonTestServerManager.stop();
     }
 }
