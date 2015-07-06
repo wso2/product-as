@@ -14,10 +14,7 @@ org.wso2.carbon.ndatasource.datasources*
 org.wso2.carbon.ndatasource.rdbms*
 org.wso2.carbon.osgi.security*
 org.wso2.carbon.p2.touchpoint*
-org.wso2.carbon.repomanager.axis2*
-org.wso2.carbon.roles.mgt*
 org.wso2.carbon.securevault*
-org.wso2.carbon.security.mgt*
 org.wso2.carbon.server.admin.common*
 org.wso2.carbon.server.admin*
 org.wso2.carbon.statistics*
@@ -52,6 +49,7 @@ org.wso2.carbon.transaction.manager*
 org.wso2.carbon.tryit*
 org.wso2.carbon.user.api*
 org.wso2.carbon.user.core*
+org.wso2.carbon.roles.mgt*
 org.wso2.carbon.user.mgt.common*
 org.wso2.carbon.user.mgt*
 org.wso2.carbon.utils*
