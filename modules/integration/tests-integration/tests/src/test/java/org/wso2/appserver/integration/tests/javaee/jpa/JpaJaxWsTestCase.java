@@ -59,7 +59,9 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
     private static TestUserMode[][] userModeProvider() {
         return new TestUserMode[][]{
                 new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new TestUserMode[]{TestUserMode.TENANT_USER},
+                //todo enable tenant mode after fixing sample issue with tenant
+                //jira : https://wso2.org/jira/browse/WSAS-1998
+//                new TestUserMode[]{TestUserMode.TENANT_USER},
         };
     }
 
@@ -78,9 +80,7 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
                 "Web Application Deployment failed");
     }
 
-    //todo enable this test method after the sample is fixed
-    //todo jira : https://wso2.org/jira/browse/WSAS-1997
-    @Test(groups = "wso2.as", description = "test jpa and jax-ws", enabled = false)
+    @Test(groups = "wso2.as", description = "test jpa and jax-ws", enabled = true)
     public void testJpaWsGet() throws Exception {
 
         String serviceName = "CustomersDatabaseServiceService";
@@ -93,7 +93,7 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
         assertNotNull(customerDataService);
 
         CustomersDatabase customersDatabase = customerDataService.getPort(CustomersDatabase.class);
-        ContactDTO contact = new ContactDTO("Bob", "0123456789", 25, "bob@bob.com", new Date());
+        ContactDTO contact = new ContactDTO("Bob", "(012)345-6789", 25, "bob@bob.com", new Date());
 
         String response = customersDatabase.addContact(contact);
         log.info("Response : " + response);
@@ -103,7 +103,7 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
 
         ContactsDTO contacts = customersDatabase.getContacts();
 
-        ContactDTO contact1 = contacts.getContacts().get(1);
+        ContactDTO contact1 = contacts.getContacts().get(0);
         log.info("Contact details retrieved, name: " + contact1.getName() + ", email: " + contact1.getEmail());
 
         assertEquals(contact.getName(), contact1.getName(), "Contact name doesn't match");

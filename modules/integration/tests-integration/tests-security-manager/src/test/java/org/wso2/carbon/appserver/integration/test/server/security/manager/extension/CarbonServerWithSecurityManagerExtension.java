@@ -104,7 +104,9 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
         try {
             testEsbServerWithSecurityManager.startServer();
         } catch (IOException e) {
-            throw new AutomationFrameworkException("Error while starting server", e);
+            throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
+        } catch (XPathExpressionException e) {
+            throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
         }
 
     }
