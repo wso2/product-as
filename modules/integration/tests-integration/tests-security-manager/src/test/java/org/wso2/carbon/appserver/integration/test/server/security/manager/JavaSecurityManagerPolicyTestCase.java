@@ -65,8 +65,8 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME)
-                .contains(OperatingSystems.WINDOWS.toString())) {
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
             throw new SkipException("Skipping this test case in windows");
         }
         //replacing sec.policy file
@@ -174,8 +174,8 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void clean() throws Exception {
-        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME)
-                .contains(OperatingSystems.WINDOWS.toString())) {
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
             throw new SkipException("Skipping this test case in windows");
         }
         String hostName = "localhost";
