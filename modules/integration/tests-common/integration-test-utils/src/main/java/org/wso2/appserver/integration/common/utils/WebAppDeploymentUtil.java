@@ -132,7 +132,8 @@ public class WebAppDeploymentUtil {
         webAppAdminClient.uploadWarFile(webAppFilePath);
     }
 
-    public static void unDeployWebApplication(String backendURL, String hostname, String sessionCookie, String webAppFileName) throws RemoteException {
+    public static void unDeployWebApplication(String backendURL, String hostname, String sessionCookie,
+                                              String webAppFileName) throws RemoteException {
         log.info("UnDeploying web application : " + webAppFileName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.deleteWebAppFile(webAppFileName, hostname);

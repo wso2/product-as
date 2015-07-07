@@ -39,6 +39,7 @@
         <module>context-reload-test-webapp</module>
         <module>host-info</module>
         <module>spring</module>
+        <module>jaxrs</module>
     </modules>
 
 </project>

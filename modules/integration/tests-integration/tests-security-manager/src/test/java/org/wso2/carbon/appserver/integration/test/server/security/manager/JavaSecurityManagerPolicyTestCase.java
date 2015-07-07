@@ -18,6 +18,7 @@
 package org.wso2.carbon.appserver.integration.test.server.security.manager;
 
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -28,9 +29,11 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.appserver.integration.test.server.security.manager.extension.CarbonServerWithSecurityManagerExtension;
+import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
+import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
@@ -62,6 +65,10 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
+            throw new SkipException("Skipping this test case in windows");
+        }
         //replacing sec.policy file
         if(!isPolicyApplied) {
             ServerConfigurationManager serverConfigurationManager = new ServerConfigurationManager(
@@ -167,6 +174,10 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void clean() throws Exception {
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
+            throw new SkipException("Skipping this test case in windows");
+        }
         String hostName = "localhost";
         webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         //let webapp to undeploy

@@ -45,30 +45,57 @@
                         <version>1.2.1</version>
                         <executions>
                             <execution>
-                                <id>my-exec</id>
+                                <id>exec-with-all-features</id>
                                 <phase>install</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-Dbasedir=${basedir}</argument>
+                                        <argument>
+                                            -Dcarbon.zip=${basedir}/../../../distribution/target/wso2as-${project.version}.zip
+                                        </argument>
+                                        <argument>-Dinstr.file=${basedir}/instrumentation.txt</argument>
+                                        <argument>-Dfilters.file=${basedir}/filters.txt</argument>
+                                        <argument>-Dreport.dir=${basedir}/target/jacoco/coverage/all-features</argument>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>
+                                            org.wso2.carbon.automation.engine.frameworkutils.TestCoverageGenerator
+                                        </argument>
+                                    </arguments>
+                                    <workingDirectory>${basedir}/target</workingDirectory>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>exec-with-standalone-features</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-Dbasedir=${basedir}</argument>
+                                        <argument>
+                                            -Dcarbon.zip=${basedir}/../../../distribution/target/wso2as-${project.version}.zip
+                                        </argument>
+                                        <argument>-Dinstr.file=${basedir}/instrumentation-standalone.txt</argument>
+                                        <argument>-Dfilters.file=${basedir}/filters-standalone.txt</argument>
+                                        <argument>-Dreport.dir=${basedir}/target/jacoco/coverage/standalone-features</argument>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>
+                                            org.wso2.carbon.automation.engine.frameworkutils.TestCoverageGenerator
+                                        </argument>
+                                    </arguments>
+                                    <workingDirectory>${basedir}/target</workingDirectory>
+                                </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <executable>java</executable>
-                            <arguments>
-                                <argument>-Dbasedir=${basedir}</argument>
-                                <argument>
-                                    -Dcarbon.zip=${basedir}/../../../distribution/target/wso2as-${project.version}.zip
-                                </argument>
-                                <argument>-Dinstr.file=${basedir}/instrumentation.txt</argument>
-                                <argument>-Dfilters.file=${basedir}/filters.txt</argument>
-                                <argument>-classpath</argument>
-                                <classpath/>
-                                <argument>
-                                    org.wso2.carbon.automation.engine.frameworkutils.TestCoverageGenerator
-                                </argument>
-                            </arguments>
-                            <workingDirectory>${basedir}/target</workingDirectory>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
