@@ -121,7 +121,8 @@ public class JsfEjbTestCase extends ASIntegrationTest {
         log.info("postResponse - " + postResponse);
 
         assertTrue(postResponse.contains("Welcome John Doe"), "Response doesn't contain expected data");
-        assertTrue(postResponse.contains("Distinct characters in the name: d, e, n, o, j, h"), "Response doesn't contain expected data");
+        assertTrue(postResponse.contains("Distinct characters in the name: d, e, n, o, j, h"),
+                "Response doesn't contain expected data");
     }
 
     @AfterClass(alwaysRun = true)
