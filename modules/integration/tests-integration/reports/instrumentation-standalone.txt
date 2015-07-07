@@ -55,3 +55,4 @@ org.wso2.carbon.user.mgt*
 org.wso2.carbon.utils*
 org.wso2.carbon.webapp.deployer*
 org.wso2.carbon.webapp.mgt*
+*org.wso2.carbon.context*
