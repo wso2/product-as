@@ -16,7 +16,7 @@
  *  under the License.
  */
 
-package org.wso2.appserver.integration.tests.spring;
+package org.wso2.appserver.integration.tests.webapp.spring;
 
 import org.h2.server.web.WebApp;
 import org.testng.annotations.BeforeClass;
@@ -38,7 +38,7 @@ import java.util.List;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class Spring3NegativeTestCase extends ASIntegrationTest {
+public class SpringNegativeTestCase extends ASIntegrationTest {
 
     private WebAppMode webAppMode;
     private WebAppAdminClient webAppAdminClient;
@@ -48,7 +48,7 @@ public class Spring3NegativeTestCase extends ASIntegrationTest {
     private static final String SPRING4_FAULTY_WEBAPP = "spring4-restful-faulty-service";
 
     @Factory(dataProvider = "webAppModeProvider")
-    public Spring3NegativeTestCase(WebAppMode webAppMode) {
+    public SpringNegativeTestCase(WebAppMode webAppMode) {
         this.webAppMode = webAppMode;
     }
 

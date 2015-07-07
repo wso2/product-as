@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.tests.spring;
+package org.wso2.appserver.integration.tests.webapp.spring;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +27,6 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppMode;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
@@ -38,16 +37,16 @@ import java.util.Calendar;
 
 import static org.testng.Assert.assertTrue;
 
-public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
+public class SpringUnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     private WebAppMode webAppMode;
     private WebAppAdminClient webAppAdminClient;
     private String webAppDeploymentDir;
     private static final int WEBAPP_DEPLOYMENT_DELAY = 90 * 1000;
-    private static final Log log = LogFactory.getLog(Spring3UnpackedWebappRegenerateTestCase.class);
+    private static final Log log = LogFactory.getLog(SpringUnpackedWebappRegenerateTestCase.class);
 
     @Factory(dataProvider = "webAppModeProvider")
-    public Spring3UnpackedWebappRegenerateTestCase(WebAppMode webAppMode) {
+    public SpringUnpackedWebappRegenerateTestCase(WebAppMode webAppMode) {
         this.webAppMode = webAppMode;
     }
 

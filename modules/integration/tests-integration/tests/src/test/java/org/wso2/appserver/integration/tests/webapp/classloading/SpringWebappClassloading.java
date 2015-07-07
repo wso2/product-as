@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.tests.spring;
+package org.wso2.appserver.integration.tests.webapp.classloading;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +39,7 @@ import java.util.List;
 
 import static org.testng.Assert.assertTrue;
 
-public class Spring3WebappClassloading extends ASIntegrationTest{
+public class SpringWebappClassloading extends ASIntegrationTest{
 
     private WebAppMode webAppMode;
     private static ServerConfigurationManager serverConfigurationManager;
@@ -49,7 +49,7 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
     private static int isRestarted = 0;
 
     @Factory(dataProvider = "webAppModeProvider")
-    public Spring3WebappClassloading(WebAppMode webAppMode) {
+    public SpringWebappClassloading(WebAppMode webAppMode) {
         this.webAppMode = webAppMode;
     }
 

@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.tests.spring;
+package org.wso2.appserver.integration.tests.webapp.spring;
 
 import org.json.JSONArray;
 import org.json.JSONException;

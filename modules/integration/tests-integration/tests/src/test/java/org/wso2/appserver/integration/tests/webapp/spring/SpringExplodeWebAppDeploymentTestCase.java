@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.tests.spring;
+package org.wso2.appserver.integration.tests.webapp.spring;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +40,7 @@ import java.util.List;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
+public class SpringExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
     private WebAppMode webAppMode;
     private final String endpointURL = "/student";
@@ -51,7 +51,7 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
     private WebAppAdminClient webAppAdminClient;
 
     @Factory(dataProvider = "webAppModeProvider")
-    public Spring3ExplodeWebAppDeploymentTestCase(WebAppMode webAppMode) {
+    public SpringExplodeWebAppDeploymentTestCase(WebAppMode webAppMode) {
         this.webAppMode = webAppMode;
     }
 
