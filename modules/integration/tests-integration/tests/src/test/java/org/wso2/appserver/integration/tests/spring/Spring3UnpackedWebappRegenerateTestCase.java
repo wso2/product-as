@@ -20,12 +20,13 @@ package org.wso2.appserver.integration.tests.spring;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
+import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
+import org.wso2.appserver.integration.common.utils.WebAppMode;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
@@ -39,12 +40,24 @@ import static org.testng.Assert.assertTrue;
 
 public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
-    private final String webAppName = "spring3-restful-simple-service";
-    private final String webAppFileName = "spring3-restful-simple-service.war";
+    private WebAppMode webAppMode;
     private WebAppAdminClient webAppAdminClient;
     private String webAppDeploymentDir;
     private static final int WEBAPP_DEPLOYMENT_DELAY = 90 * 1000;
     private static final Log log = LogFactory.getLog(Spring3UnpackedWebappRegenerateTestCase.class);
+
+    @Factory(dataProvider = "webAppModeProvider")
+    public Spring3UnpackedWebappRegenerateTestCase(WebAppMode webAppMode) {
+        this.webAppMode = webAppMode;
+    }
+
+    @DataProvider
+    private static WebAppMode[][] webAppModeProvider() {
+        return new WebAppMode[][] {
+                new WebAppMode[] {new WebAppMode("spring3-restful-simple-service", TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode("spring4-restful-simple-service", TestUserMode.SUPER_TENANT_ADMIN)},
+        };
+    }
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -57,15 +70,14 @@ public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying web application", enabled = false)
     public void testWebApplicationDeployment() throws Exception {
-        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
-                                        "artifacts" + File.separator + "AS" + File.separator + "war"
-                                        + File.separator + webAppFileName);
+        webAppAdminClient.uploadWarFile(ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator +
+                                        webAppMode.getWebAppName() + ".war");
 
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
-                backendURL, sessionCookie, webAppName)
+                backendURL, sessionCookie, webAppMode.getWebAppName())
                 , "Web Application Deployment failed");
 
-        File unpackedWebappFile = new File(webAppDeploymentDir + webAppName);
+        File unpackedWebappFile = new File(webAppDeploymentDir + webAppMode.getWebAppName());
         assertTrue(unpackedWebappFile.exists(), "Webapp was not unpacked.");
 
         deleteDirectory(unpackedWebappFile);
@@ -77,27 +89,24 @@ public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
 
     private void testInvokeWebApp() throws Exception {
         String endpointURL = "/student";
-        String endpoint = webAppURL + "/" + webAppName + endpointURL;
+        String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         String expectedMsg = "{\"status\":\"success\"}";
         assertTrue(expectedMsg.equalsIgnoreCase(response.getData()));
     }
 
     private boolean isUnpackedDirCreated(File unpackedWebappDirectory) throws Exception {
-        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for unpacked directory creation - " + webAppFileName);
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for unpacked directory creation - " +
+                 webAppMode.getWebAppName() + ".war");
         Calendar startTime = Calendar.getInstance();
         while ( (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
             if (unpackedWebappDirectory.exists()) {
-                log.info(webAppFileName + " Unpack directory has been re-created.");
+                log.info(webAppMode.getWebAppName() + ".war: Unpack directory has been re-created.");
                 return true;
             }
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ignored) {
-
-            }
+            Thread.sleep(ASIntegrationConstants.WEBAPP_WAIT_PERIOD);
         }
-        log.error(webAppFileName + " Unpack directory has not been re-created within the time frame - "
+        log.error(webAppMode.getWebAppName() + ".war: Unpack directory has not been re-created within the time frame - "
                   + WEBAPP_DEPLOYMENT_DELAY);
         return false;
     }
@@ -113,8 +122,8 @@ public class Spring3UnpackedWebappRegenerateTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void destroy() throws Exception {
         String hostName = "localhost";
-        if (webAppAdminClient.getWebApplist(webAppName).contains(webAppFileName)) {
-            webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
+        if (webAppAdminClient.getWebApplist(webAppMode.getWebAppName()).contains(webAppMode.getWebAppName() + ".war")) {
+            webAppAdminClient.deleteWebAppFile(webAppMode.getWebAppName() + ".war", hostName);
         }
     }
 

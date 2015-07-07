@@ -25,11 +25,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/student")
 public class StudentController {
     private static final Log log = LogFactory.getLog(StudentController.class);
+    private static final long deployedTime = System.currentTimeMillis();
+
+    @RequestMapping(method = RequestMethod.GET, value = "/deployedtime")
+    @ResponseBody
+    public String getDeployedtime() {
+        return "{\"deployedTime\":\"" + Objects.toString(deployedTime, "") + "\"}";
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody

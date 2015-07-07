@@ -20,16 +20,12 @@ package org.wso2.appserver.integration.tests.spring;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
-import org.wso2.appserver.integration.common.utils.SqlDataSourceUtil;
-import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.common.utils.WebAppTypes;
+import org.wso2.appserver.integration.common.utils.*;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.extensions.servers.utils.ArchiveExtractor;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
@@ -41,47 +37,63 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
-    private final String webAppName = "spring3-restful-jndi-service";
+    private WebAppMode webAppMode;
     private final String endpointURL = "/student";
+    private static final String SPRING3JNDIAPP = "spring3-restful-jndi-service";
+    private static final String SPRING4JNDIAPP = "spring4-restful-jndi-service";
     private SqlDataSourceUtil sqlDataSource;
     private String webAppDeploymentDir;
     private WebAppAdminClient webAppAdminClient;
+
+    @Factory(dataProvider = "webAppModeProvider")
+    public Spring3ExplodeWebAppDeploymentTestCase(WebAppMode webAppMode) {
+        this.webAppMode = webAppMode;
+    }
+
+    @DataProvider
+    private static WebAppMode[][] webAppModeProvider() {
+        return new WebAppMode[][] {
+                new WebAppMode[] {new WebAppMode(SPRING3JNDIAPP, TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode(SPRING3JNDIAPP, TestUserMode.TENANT_USER)},
+                new WebAppMode[] {new WebAppMode(SPRING4JNDIAPP, TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode(SPRING4JNDIAPP, TestUserMode.TENANT_USER)},
+        };
+    }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE })
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
-        String dataSourceName = "spring3-restful-testdb";
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS);
         createTable();
-        createDataSource(dataSourceName, sqlDataSource);
+        createDataSource(webAppMode.getWebAppName(), sqlDataSource);
         webAppDeploymentDir =
                 System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" + File.separator +
                 "deployment" + File.separator + "server" + File.separator + "webapps" + File.separator;
     }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
-    @Test(groups = "wso2.as", description = "Deploying exploded web application file to deployment directory", enabled = false)
+    @Test(groups = "wso2.as", description = "Deploying exploded web application file to deployment directory")
     public void testWebApplicationExplodedDeployment() throws Exception {
-        String source = System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                        File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" +
-                        File.separator + "spring3" + File.separator + webAppName + ".war";
+        String source = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator +
+                        webAppMode.getWebAppName() + ".war";
 
         ArchiveExtractor archiveExtractor = new ArchiveExtractor();
-        archiveExtractor.extractFile(source, webAppDeploymentDir + File.separator + webAppName);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
+        archiveExtractor.extractFile(source, webAppDeploymentDir + File.separator + webAppMode.getWebAppName());
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()),
                    "Web Application Deployment failed");
     }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "Verify Get Operation",
-            dependsOnMethods = "testWebApplicationExplodedDeployment", enabled = false)
+            dependsOnMethods = "testWebApplicationExplodedDeployment")
     public void testGetOperation() throws Exception {
-        String endpoint = webAppURL + "/" + webAppName + endpointURL;
+        String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         try {
             JSONArray jsonArray = new JSONArray(response.getData());
@@ -93,31 +105,39 @@ public class Spring3ExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
     @SetEnvironment(executionEnvironments =  {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "Deploy a WAR file which has the same name as the exploded Web Application, but with changes in it",
-            dependsOnMethods = "testGetOperation", enabled = false)
+            dependsOnMethods = "testGetOperation")
     public void testDeployModifiedWAROverExplodedWebApp() throws Exception {
-        String newWebAppName = "spring3-restful-simple-service";
+        String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL + "/deployedtime";
+        String newWebAppName = "";
+        if (webAppMode.getWebAppName().equalsIgnoreCase(SPRING3JNDIAPP)) {
+            newWebAppName = "spring3-restful-simple-service";
+        } else if (webAppMode.getWebAppName().equalsIgnoreCase(SPRING4JNDIAPP)) {
+            newWebAppName = "spring4-restful-simple-service";
+        } else {
+            assertTrue(false);
+        }
         File sourceFile = new File(
-                System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" + File.separator +
-                "spring3" + File.separator + newWebAppName + ".war");
+                ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + newWebAppName + ".war");
         File changeWarFilename = new File(
-                System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" + File.separator +
-                "spring3" + File.separator + "tmp" + File.separator + webAppName + ".war");
+                ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + "tmp" + File.separator +
+                webAppMode.getWebAppName() + ".war");
         FileManipulator.copyFile(sourceFile, changeWarFilename);
 
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.uploadWarFile(changeWarFilename.getAbsolutePath());
-        String endpoint = webAppURL + "/" + webAppName + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
-        String expectedMsg = "{\"status\":\"success\"}";
-        assertTrue(expectedMsg.equalsIgnoreCase(response.getData()));
+
+        webAppAdminClient.uploadWarFile(changeWarFilename.getAbsolutePath());
+        assertTrue(WebAppDeploymentUtil.isWebAppRedeployed(webAppMode.getWebAppName(), response.getData(), endpoint),
+                   "Web app redeployment failed: " + webAppMode.getWebAppName());
+
     }
 
     @AfterClass(alwaysRun = true)
     public void destroy() throws Exception {
-        webAppAdminClient.deleteWebAppFile(webAppName + ".war", asServer.getInstance().getHosts().get("default"));
-        assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, webAppName),
+        webAppAdminClient.deleteWebAppFile(webAppMode.getWebAppName() + ".war",
+                                           asServer.getInstance().getHosts().get("default"));
+        assertTrue(
+                WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()),
                    "Web Application Deployment failed");
     }
 

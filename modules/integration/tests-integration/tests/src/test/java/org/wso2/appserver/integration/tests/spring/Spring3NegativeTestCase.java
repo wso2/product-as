@@ -18,19 +18,19 @@
 
 package org.wso2.appserver.integration.tests.spring;
 
+import org.h2.server.web.WebApp;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
-import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
-import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.common.utils.WebAppTypes;
+import org.wso2.appserver.integration.common.utils.*;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
+import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.utils.ServerConstants;
 import java.io.File;
 import java.util.List;
@@ -40,27 +40,31 @@ import static org.testng.Assert.assertTrue;
 
 public class Spring3NegativeTestCase extends ASIntegrationTest {
 
-    private TestUserMode userMode;
+    private WebAppMode webAppMode;
     private WebAppAdminClient webAppAdminClient;
-    private final String webAppName = "spring3-restful-simple-service";
-    private final String faultyWebAppName = "spring3-restful-faulty-service";
+    private static final String SPRING3_SIMPLE_WEBAPP = "spring3-restful-simple-service";
+    private static final String SPRING4_SIMPLE_WEBAPP = "spring4-restful-simple-service";
+    private static final String SPRING3_FAULTY_WEBAPP = "spring3-restful-faulty-service";
+    private static final String SPRING4_FAULTY_WEBAPP = "spring4-restful-faulty-service";
 
-    @Factory(dataProvider = "userModeProvider")
-    public Spring3NegativeTestCase(TestUserMode userMode) {
-        this.userMode = userMode;
+    @Factory(dataProvider = "webAppModeProvider")
+    public Spring3NegativeTestCase(WebAppMode webAppMode) {
+        this.webAppMode = webAppMode;
     }
 
     @DataProvider
-    private static TestUserMode[][] userModeProvider() {
-        return new TestUserMode[][] {
-                new TestUserMode[] { TestUserMode.SUPER_TENANT_ADMIN },
-                new TestUserMode[] { TestUserMode.TENANT_USER },
+    private static WebAppMode[][] webAppModeProvider() {
+        return new WebAppMode[][] {
+                new WebAppMode[] {new WebAppMode(SPRING3_SIMPLE_WEBAPP, TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode(SPRING3_SIMPLE_WEBAPP, TestUserMode.TENANT_USER)},
+                new WebAppMode[] {new WebAppMode(SPRING4_SIMPLE_WEBAPP, TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode(SPRING4_SIMPLE_WEBAPP, TestUserMode.TENANT_USER)},
         };
     }
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init(userMode);
+        super.init(webAppMode.getUserMode());
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
     }
@@ -70,7 +74,7 @@ public class Spring3NegativeTestCase extends ASIntegrationTest {
     public void testUploadNotWarFile() throws Exception {
         String webAppDeploymentDir;
         //ToDo : Need to support for Tenant also
-        if (userMode.equals(TestUserMode.SUPER_TENANT_ADMIN)) {
+        if (webAppMode.getUserMode().equals(TestUserMode.SUPER_TENANT_ADMIN)) {
 
             webAppDeploymentDir =
                     System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" + File.separator +
@@ -78,23 +82,30 @@ public class Spring3NegativeTestCase extends ASIntegrationTest {
 
             File sourceFile = new File(
                     ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator +
-                    "spring3" + File.separator + webAppName + ".war");
+                    webAppMode.getWebAppName() + ".war");
             File modifiedExtensionFile = new File(
                     ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator +
-                    "spring3" + File.separator + "tmp" + File.separator + webAppName + ".tar");
+                    "tmp" + File.separator + webAppMode.getWebAppName() + ".tar");
             FileManipulator.copyFile(sourceFile, modifiedExtensionFile);
 
             webAppAdminClient.uploadWarFile(modifiedExtensionFile.getAbsolutePath());
-            assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName));
-            FileManipulator.deleteDir(webAppDeploymentDir + File.separator + webAppName + ".tar");
+            assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()));
+            FileManipulator.deleteDir(webAppDeploymentDir + File.separator + webAppMode.getWebAppName() + ".tar");
         }
     }
 
     @Test(groups = "wso2.as", description = "Upload a faulty webapp")
     public void testUploadFaultyWebapp() throws Exception {
+        String faultyWebAppName = "";
+        if (webAppMode.getWebAppName().equalsIgnoreCase(SPRING3_SIMPLE_WEBAPP)) {
+            faultyWebAppName = SPRING3_FAULTY_WEBAPP;
+        } else if (webAppMode.getWebAppName().equalsIgnoreCase(SPRING4_SIMPLE_WEBAPP)) {
+            faultyWebAppName = SPRING4_FAULTY_WEBAPP;
+        } else {
+            assertTrue(false);
+        }
         String webappFilePath =
-                ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + "spring3" +
-                File.separator + faultyWebAppName + ".war";
+                ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + faultyWebAppName + ".war";
         webAppAdminClient.uploadWarFile(webappFilePath);
         assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, faultyWebAppName));
         webAppAdminClient
@@ -103,41 +114,45 @@ public class Spring3NegativeTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Upload faulty webapp and then upload webapp with the same name which has no issues")
     public void testUploadFaultyWebappFollowedByFixedWebApp() throws Exception {
-        String resourcePath = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + "spring3";
+        String faultyWebAppName = "";
+        if (webAppMode.getWebAppName().equalsIgnoreCase(SPRING3_SIMPLE_WEBAPP)) {
+            faultyWebAppName = SPRING3_FAULTY_WEBAPP;
+        } else if (webAppMode.getWebAppName().equalsIgnoreCase(SPRING4_SIMPLE_WEBAPP)) {
+            faultyWebAppName = SPRING4_FAULTY_WEBAPP;
+        } else {
+            assertTrue(false);
+        }
+        String resourcePath = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" ;
         String tmpResourcePath =
-                ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + "spring3" +
-                File.separator + "tmp";
-        File tmpFaultyWebApp = new File(tmpResourcePath + File.separator + webAppName + ".war");
+                ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + "tmp";
+        File tmpFaultyWebApp = new File(tmpResourcePath + File.separator + webAppMode.getWebAppName() + ".war");
         File faultyWebApp = new File(resourcePath + File.separator + faultyWebAppName + ".war");
-        File simpleWebApp = new File(resourcePath + File.separator + webAppName + ".war");
+        File simpleWebApp = new File(resourcePath + File.separator + webAppMode.getWebAppName() + ".war");
         FileManipulator.copyFile(faultyWebApp, tmpFaultyWebApp);
 
         webAppAdminClient.uploadWarFile(tmpFaultyWebApp.getAbsolutePath());
-        assertFalse(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName));
-
+        WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName());
         webAppAdminClient.uploadWarFile(simpleWebApp.getAbsolutePath());
-        try {
-            Thread.sleep(90000); //Todo: WSAS-1991 : Unpacked directory doesn't get re-created
-        } catch (InterruptedException ignored) {
-        }
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName));
+        WebAppDeploymentUtil.isFaultyWebApplicationUnDeployed(backendURL, sessionCookie, webAppMode.getWebAppName());
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()));
 
-        webAppAdminClient.deleteWebAppFile(webAppName + ".war", asServer.getInstance().getHosts().get("default"));
+        webAppAdminClient.deleteWebAppFile(webAppMode.getWebAppName() + ".war", asServer.getInstance().getHosts().get("default"));
     }
 
     @Test(groups = "wso2.as", description = "Upload Webapp twice and check if its created duplicates")
     public void testUploadWebappTwiceforDuplicates() throws Exception {
-        String webApp = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + "spring3" +
-                        File.separator + webAppName + ".war";
+        String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + "/student/deployedtime";
+        String webApp = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + webAppMode.getWebAppName() + ".war";
         webAppAdminClient.uploadWarFile(webApp);
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()));
+        HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         webAppAdminClient.uploadWarFile(webApp);
-        try {
-            Thread.sleep(90000); //Todo: WSAS-1991 : Unpacked directory doesn't get re-created
-        } catch (InterruptedException ignored) {
-        }
-        List<String> webAppList = webAppAdminClient.getWebApplist(webAppName);
-
+        assertTrue(WebAppDeploymentUtil.isWebAppRedeployed(webAppMode.getWebAppName(), response.getData(), endpoint),
+                   "Web app redeployment failed: " + webAppMode.getWebAppName());
+        List<String> webAppList = webAppAdminClient.getWebApplist(webAppMode.getWebAppName());
         assertTrue(webAppList.size() == 1, "Duplicate web apps have been created");
-        webAppAdminClient.deleteWebAppFile(webAppName + ".war", asServer.getInstance().getHosts().get("default"));
+        webAppAdminClient.deleteWebAppFile(webAppMode.getWebAppName() + ".war",
+                                           asServer.getInstance().getHosts().get("default"));
+        assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()));
     }
 }

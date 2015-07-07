@@ -118,11 +118,13 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/spring</outputDirectory>
                             <includeTypes>war</includeTypes>
                             <includeArtifactIds>
                                 spring3-restful-simple-service, spring3-restful-jndi-service,
-                                spring3-restful-webapp-classloading, spring3-restful-faulty-service
+                                spring3-restful-webapp-classloading, spring3-restful-faulty-service,
+                                spring4-restful-simple-service, spring4-restful-jndi-service,
+                                spring4-restful-webapp-classloading, spring4-restful-faulty-service
                             </includeArtifactIds>
                             <stripVersion>true</stripVersion>
                         </configuration>
@@ -141,7 +143,7 @@
                                     <artifactId>spring3-restful-runtime-libs</artifactId>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${basedir}/target/resources/artifacts/AS/spring/spring3</outputDirectory>
+                                    <outputDirectory>${basedir}/target/resources/artifacts/AS/spring</outputDirectory>
                                     <includes>**/*.jar</includes>
                                 </artifactItem>
                             </artifactItems>
@@ -358,18 +360,19 @@
             <artifactId>h2-database-engine</artifactId>
         </dependency>
 
-        <!-- Spring Service Integration Test Common Artifacts -->
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>spring3-restful-simple-service</artifactId>
-            <type>war</type>
-            </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jpa-contacts-database</artifactId>
             <version>${project.parent.version}</version>
             <classifier>classes</classifier>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Spring Service Integration Test Common Artifacts -->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-simple-service</artifactId>
+            <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
@@ -391,6 +394,27 @@
             <artifactId>spring3-restful-faulty-service</artifactId>
             <type>war</type>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-simple-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-jndi-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-faulty-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-webapp-classloading</artifactId>
+            <type>war</type>
+        </dependency>
+
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jaxrs-client-api-test-webapp</artifactId>

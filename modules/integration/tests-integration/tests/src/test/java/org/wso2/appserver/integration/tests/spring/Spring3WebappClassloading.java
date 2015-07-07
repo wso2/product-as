@@ -22,10 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.testng.annotations.*;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
-import org.wso2.appserver.integration.common.utils.SqlDataSourceUtil;
-import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.common.utils.WebAppTypes;
+import org.wso2.appserver.integration.common.utils.*;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
@@ -44,31 +41,32 @@ import static org.testng.Assert.assertTrue;
 
 public class Spring3WebappClassloading extends ASIntegrationTest{
 
+    private WebAppMode webAppMode;
     private static ServerConfigurationManager serverConfigurationManager;
-    private TestUserMode userMode;
     private WebAppAdminClient webAppAdminClient;
     private SqlDataSourceUtil sqlDataSource;
-    private String webAppName = "spring3-restful-webapp-classloading";
     private static File destRuntimeLibDir;
     private static int isRestarted = 0;
 
-    @Factory(dataProvider = "userModeProvider")
-    public Spring3WebappClassloading(TestUserMode userMode) {
-        this.userMode = userMode;
+    @Factory(dataProvider = "webAppModeProvider")
+    public Spring3WebappClassloading(WebAppMode webAppMode) {
+        this.webAppMode = webAppMode;
     }
 
     @DataProvider
-    private static TestUserMode[][] userModeProvider() {
-        return new TestUserMode[][]{
-                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new TestUserMode[]{TestUserMode.TENANT_USER},
+    private static WebAppMode[][] webAppModeProvider() {
+        return new WebAppMode[][] {
+                new WebAppMode[] {new WebAppMode("spring3-restful-jndi-service", TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode("spring3-restful-jndi-service", TestUserMode.TENANT_USER)},
+//                new WebAppMode[] {new WebAppMode("spring4-restful-jndi-service", TestUserMode.SUPER_TENANT_ADMIN)},
+//                new WebAppMode[] {new WebAppMode("spring4-restful-jndi-service", TestUserMode.TENANT_USER)},
         };
     }
 
+
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init(userMode);
-        String dataSourceName = "spring3-restful-testdb";
+        super.init(webAppMode.getUserMode());
         String webappClassloadingEnv = "webapp-classloading-environments.xml";
 
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS);
@@ -76,24 +74,20 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
         //Restart the Server only once
         if (isRestarted == 0) {
             serverConfigurationManager =
-                    new ServerConfigurationManager(new AutomationContext("AS", TestUserMode.SUPER_TENANT_USER));
+                    new ServerConfigurationManager(new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN));
             File sourceWebappClassloadingDir = new File(
                     FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator + "AS" +
-                    File.separator +
-                    "spring" + File.separator + "webapp" + File.separator + "classloading" + File.separator +
-                    webappClassloadingEnv);
+                    File.separator + "spring" + File.separator + "webapp" + File.separator + "classloading" +
+                    File.separator + webappClassloadingEnv);
             File destWebappClassloadingDir = new File(
                     System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" + File.separator +
                     "conf" + File.separator + "tomcat" + File.separator + webappClassloadingEnv);
 
             File sourceRuntimeLibDir = new File(
-                    System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                    File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" + File.separator +
-                    "spring3" + File.separator + "runtime");
+                    ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + "spring3-runtime");
             destRuntimeLibDir = new File(
                     System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "lib" + File.separator +
-                    "runtimes" +
-                    File.separator + "spring");
+                    "runtimes" + File.separator + "spring3");
             FileManipulator.copyDir(sourceRuntimeLibDir, destRuntimeLibDir);
 
             serverConfigurationManager.applyConfiguration(sourceWebappClassloadingDir, destWebappClassloadingDir, true,
@@ -103,24 +97,22 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
         sessionCookie = loginLogoutClient.login();
 
         createTable();
-        createDataSource(dataSourceName, sqlDataSource);
+        createDataSource(webAppMode.getWebAppName(), sqlDataSource);
     }
 
-    @Test(groups = "wso2.as", description = "Upload Spring 3 WAR and verify deployment")
+    @Test(groups = "wso2.as", description = "Upload Spring WAR and verify deployment")
     public void testSpringWARUpload() throws Exception {
-        String springWarFilePath =
-                System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" + File.separator +
-                "spring3" + File.separator + webAppName + ".war";
+        String springWarFilePath = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator +
+                                   webAppMode.getWebAppName() + ".war";
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.uploadWarFile(springWarFilePath);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName));
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()));
     }
 
     @Test(groups = "wso2.as", description = "Verify Get Operation", dependsOnMethods = "testSpringWARUpload")
     public void testGetOperation() throws Exception {
         String endpointURL = "/student";
-        String endpoint = webAppURL + "/" + webAppName + endpointURL;
+        String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         try {
             JSONArray jsonArray = new JSONArray(response.getData());
@@ -134,7 +126,7 @@ public class Spring3WebappClassloading extends ASIntegrationTest{
     public void restoreServer() throws Exception {
         sessionCookie = loginLogoutClient.login();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.deleteWebAppFile(webAppName + ".war", asServer.getInstance().getHosts().get("default"));
+        webAppAdminClient.deleteWebAppFile(webAppMode.getWebAppName() + ".war", asServer.getInstance().getHosts().get("default"));
 
         //Revert and restart only once
         --isRestarted;

@@ -17,12 +17,15 @@
 */
 package org.wso2.appserver.integration.common.utils;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
+import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 public class WebAppDeploymentUtil {
     private static Log log = LogFactory.getLog(WebAppDeploymentUtil.class);
@@ -136,5 +139,30 @@ public class WebAppDeploymentUtil {
         log.info("UnDeploying web application : " + webAppFileName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.deleteWebAppFile(webAppFileName, hostname);
+    }
+
+    public static boolean isWebAppRedeployed(String webAppName, String previousData, String endpoint) {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for webApp undeployment " + webAppName);
+        HttpResponse response;
+
+        Calendar startTime = Calendar.getInstance();
+        while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
+            try {
+                response = HttpRequestUtil.sendGetRequest(endpoint, null);
+                if (response != null && !response.getData().isEmpty() && !response.getData().equalsIgnoreCase(previousData)) {
+                    return Boolean.TRUE;
+                }
+            } catch (IOException e) {
+                //Ignore IOExceptions
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+
+            }
+
+        }
+        return Boolean.FALSE;
     }
 }

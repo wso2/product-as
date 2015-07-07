@@ -20,10 +20,22 @@ package org.wso2.appserver.integration.common.artifacts.spring4.restful.simple.s
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
+@RequestMapping("/student")
 public class StudentController {
+
+    private static final long deployedTime = System.currentTimeMillis();
+
+    @RequestMapping(method = RequestMethod.GET, value = "/deployedtime")
+    @ResponseBody
+    public String getDeployedtime() {
+        return "{\"deployedTime\":\"" + Objects.toString(deployedTime, "") + "\"}";
+    }
 
     @RequestMapping("/student")
     public String getStatus() {
