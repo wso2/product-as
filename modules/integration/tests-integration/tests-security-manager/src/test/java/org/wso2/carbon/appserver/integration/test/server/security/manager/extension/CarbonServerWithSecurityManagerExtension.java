@@ -52,8 +52,8 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
 
     @Override
     public void initiate() throws AutomationFrameworkException {
-        if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME)
-                .contains(OperatingSystems.WINDOWS.toString())) {
+        if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
             AutomationContext context;
             try {
                 context = new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN);
@@ -108,8 +108,8 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
     @Override
     public void onExecutionStart()
             throws AutomationFrameworkException {
-        if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME)
-                .contains(OperatingSystems.WINDOWS.toString())) {
+        if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
             try {
                 testEsbServerWithSecurityManager.startServer();
             } catch (IOException e) {
@@ -122,8 +122,8 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
 
     @Override
     public void onExecutionFinish() throws AutomationFrameworkException {
-        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME)
-                .contains(OperatingSystems.WINDOWS.toString())) {
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
             testEsbServerWithSecurityManager.stopServer();
         }
 
