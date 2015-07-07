@@ -49,7 +49,7 @@
     </bean>
 
     <bean id="dbStudent" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="jdbc/spring3-restful-testdb"/>
+        <property name="jndiName" value="jdbc/spring3-restful-jndi-service"/>
     </bean>
 
 </beans>

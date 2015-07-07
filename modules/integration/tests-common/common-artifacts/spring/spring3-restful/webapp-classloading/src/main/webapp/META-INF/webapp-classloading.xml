@@ -18,5 +18,5 @@
   -->
 
 <Classloading xmlns="http://wso2.org/projects/as/classloading">
-    <Environments>Spring</Environments>
+    <Environments>Spring3</Environments>
 </Classloading>

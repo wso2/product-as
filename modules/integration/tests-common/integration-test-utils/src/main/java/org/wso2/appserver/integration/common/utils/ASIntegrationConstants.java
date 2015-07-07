@@ -39,4 +39,5 @@ public class ASIntegrationConstants {
     public static final String TARGET_RESOURCE_LOCATION =
             System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
             File.separator + "artifacts" + File.separator + "AS" + File.separator;
+    public static final int WEBAPP_WAIT_PERIOD = 50000;
 }
