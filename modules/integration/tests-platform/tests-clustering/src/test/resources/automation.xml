@@ -213,7 +213,7 @@
 
             <instance name="manager" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
-                    <host type="default">192.168.57.161</host>
+                    <host type="default">as530-node-01</host>
                 </hosts>
                 <ports>
                     <port type="http">9763</port>
@@ -224,7 +224,7 @@
             </instance>
             <instance name="worker-1" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
-                    <host type="default">192.168.57.164</host>
+                    <host type="default">as530-node-04</host>
                 </hosts>
                 <ports>
                     <port type="http">9763</port>
@@ -235,7 +235,7 @@
             </instance>
             <instance name="worker-2" type="standalone" nonBlockingTransportEnabled="false">
                 <hosts>
-                    <host type="default">192.168.57.165</host>
+                    <host type="default">as530-node-05</host>
                 </hosts>
                 <ports>
                     <port type="http">9763</port>
