@@ -17,7 +17,8 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
@@ -25,7 +26,8 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-    <context:component-scan base-package="org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.controller" />
+    <context:component-scan
+            base-package="org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.controller"/>
 
     <mvc:annotation-driven />
 
@@ -37,5 +39,23 @@
                 <entry key="xml"  value="application/xml"/>
             </map>
         </property>
+    </bean>
+
+    <bean id="requestscope"
+          class="org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.impl.RequestScopeDataImpl"
+          scope="request">
+        <constructor-arg>
+            <bean class="java.util.Date"/>
+        </constructor-arg>
+        <aop:scoped-proxy proxy-target-class="false"/>
+    </bean>
+
+    <bean id="sessionscope"
+          class="org.wso2.appserver.integration.common.artifacts.spring3.restful.simple.service.impl.SessionScopeDataImpl"
+          scope="session">
+        <constructor-arg>
+            <bean class="java.util.Date"/>
+        </constructor-arg>
+        <aop:scoped-proxy proxy-target-class="false"/>
     </bean>
 </beans>

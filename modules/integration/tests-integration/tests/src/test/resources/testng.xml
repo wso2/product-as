@@ -128,10 +128,4 @@
         </packages>
     </test> -->
 
-    <test name="spring3" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.spring" />
-        </packages>
-    </test>
-
 </suite>
