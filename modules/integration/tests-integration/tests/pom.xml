@@ -404,6 +404,11 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
+            <artifactId>hibernate-example</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
             <artifactId>jaxrs-client-api-test-webapp</artifactId>
             <type>war</type>
         </dependency>
