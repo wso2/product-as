@@ -81,7 +81,7 @@ public class SpringScopeTestCase extends ASIntegrationTest {
         String responseMsg2 = new BasicResponseHandler().handleResponse(response2);
         httpClient.close();
 
-        assertTrue(!responseMsg1.equalsIgnoreCase(responseMsg2), "Failed: Responses are the same");
+        assertTrue(!responseMsg1.equalsIgnoreCase(responseMsg2), "Failed: Responses should not be the same");
     }
 
     @Test(groups = "wso2.as", description = "Verfiy Spring Session scope")
@@ -100,7 +100,7 @@ public class SpringScopeTestCase extends ASIntegrationTest {
         String responseMsg2 = new BasicResponseHandler().handleResponse(response2);
         httpClient.close();
 
-        assertTrue(responseMsg1.equalsIgnoreCase(responseMsg2), "Failed: Responses are not the same");
+        assertTrue(responseMsg1.equalsIgnoreCase(responseMsg2), "Failed: Responses should be the same");
 
     }
 
