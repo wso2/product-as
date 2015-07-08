@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<resources>
+    <Service id="jacksonJsonProvider" class-name="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider">
+    </Service>
+</resources>
