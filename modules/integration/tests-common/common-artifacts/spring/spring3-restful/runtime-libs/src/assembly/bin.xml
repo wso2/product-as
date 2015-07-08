@@ -28,7 +28,7 @@
     <fileSets>
         <fileSet>
             <directory>${basedir}/target/runtime</directory>
-            <outputDirectory>runtime</outputDirectory>
+            <outputDirectory>spring3-runtime</outputDirectory>
             <includes>
                 <include>*.jar</include>
             </includes>

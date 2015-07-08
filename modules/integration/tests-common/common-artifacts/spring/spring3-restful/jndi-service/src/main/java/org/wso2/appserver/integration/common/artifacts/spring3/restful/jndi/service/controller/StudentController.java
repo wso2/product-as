@@ -36,16 +36,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/student")
 public class StudentController {
 
     private static final Log log = LogFactory.getLog(StudentController.class);
+    private static final long deployedTime = System.currentTimeMillis();
 
     @Autowired
     @Qualifier("dbStudent")
     private DataSource dataSource;
+
+    @RequestMapping(method = RequestMethod.GET, value = "deployedtime")
+    @ResponseBody
+    public String getDeployedtime() {
+        return "{\"deployedTime\":\"" + Objects.toString(deployedTime, "") + "\"}";
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
