@@ -22,7 +22,7 @@
                 <inherited>false</inherited>
                 <configuration>
                     <argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m</argLine>
-                    <!--<argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8001</argLine>-->
+                    <skipTests>${skipPlatformTests}</skipTests>
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-server-mgt.xml</suiteXmlFile>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
@@ -54,10 +54,9 @@
                             <value>false</value>
                         </property>
                         <sec.verifier.dir>${basedir}/target/security-verifier/</sec.verifier.dir>
-                        <emma.home>${basedir}/target/emma</emma.home>
                         <instr.file>${basedir}/src/test/resources/instrumentation.txt</instr.file>
                         <filters.file>${basedir}/src/test/resources/filters.txt</filters.file>
-                        <emma.output>${basedir}/target/emma</emma.output>
+
                     </systemProperties>
                     <workingDirectory>${basedir}/target</workingDirectory>
                 </configuration>
@@ -290,21 +289,10 @@
             <artifactId>org.wso2.appserver.integration.tests</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-<!--
-        <dependency>
-            <groupId>org.skyscreamer</groupId>
-            <artifactId>jsonassert</artifactId>
-            <version>1.2.3</version>
-        </dependency>
--->
-        <!--<dependency>
-            <groupId>org.codehaus.jettison</groupId>
-            <artifactId>jettison</artifactId>
-        </dependency>-->
     </dependencies>
 
     <properties>
-        <skipPlatformTests>false</skipPlatformTests>
+        <skipPlatformTests>true</skipPlatformTests>
     </properties>
 
 </project>
