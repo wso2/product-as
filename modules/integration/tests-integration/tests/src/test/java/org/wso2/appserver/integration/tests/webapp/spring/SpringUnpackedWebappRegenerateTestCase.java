@@ -26,6 +26,8 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppMode;
+import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
+import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
@@ -59,6 +61,7 @@ public class SpringUnpackedWebappRegenerateTestCase extends ASIntegrationTest {
     }
 
     @BeforeClass(alwaysRun = true)
+    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })
     public void init() throws Exception {
         super.init();
         webAppAdminClient = new WebAppAdminClient(backendURL,sessionCookie);
@@ -67,6 +70,7 @@ public class SpringUnpackedWebappRegenerateTestCase extends ASIntegrationTest {
                 "deployment" + File.separator + "server" + File.separator + "webapps" + File.separator;
     }
 
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE })
     @Test(groups = "wso2.as", description = "Deploying web application", enabled = false)
     public void testWebApplicationDeployment() throws Exception {
         webAppAdminClient.uploadWarFile(ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator +
@@ -118,6 +122,7 @@ public class SpringUnpackedWebappRegenerateTestCase extends ASIntegrationTest {
         FileManipulator.deleteDir(unpackedDirectory);
     }
 
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE })
     @AfterClass(alwaysRun = true)
     public void destroy() throws Exception {
         String hostName = "localhost";

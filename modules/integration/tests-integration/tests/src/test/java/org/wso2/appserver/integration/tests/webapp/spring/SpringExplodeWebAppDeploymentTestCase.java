@@ -132,6 +132,7 @@ public class SpringExplodeWebAppDeploymentTestCase extends ASIntegrationTest {
 
     }
 
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE })
     @AfterClass(alwaysRun = true)
     public void destroy() throws Exception {
         webAppAdminClient.deleteWebAppFile(webAppMode.getWebAppName() + ".war",
