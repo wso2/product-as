@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="GregTestSuite">
+    <parameter name="useDefaultListeners" value="false"/>
+    <test name="Test-GREG-app" preserve-order="true" parallel="false">
+        <packages>
+           <package name="org.wso2.appserver.integration.resources.resource.test.*"/>
+           <package name="org.wso2.appserver.integration.resources.search.metadata.test.bean"/>
+        </packages>
+
+    </test>
+</suite>
