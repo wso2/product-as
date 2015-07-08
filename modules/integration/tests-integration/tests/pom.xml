@@ -162,6 +162,22 @@
                             <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>copy-hibernate-war</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war/hibernate</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                hibernate-example
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
