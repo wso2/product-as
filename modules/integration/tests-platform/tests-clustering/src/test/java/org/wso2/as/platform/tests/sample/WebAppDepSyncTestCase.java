@@ -19,6 +19,7 @@
 package org.wso2.as.platform.tests.sample;
 
 import org.apache.axis2.AxisFault;
+import org.apache.commons.httpclient.HttpStatus;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -35,11 +36,8 @@ import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilExcepti
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
-import java.lang.System;
-import java.lang.Thread;
 import java.util.HashMap;
 
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -66,7 +64,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
     private AutomationContext lbNode;
     private String managerSessionCookie;
     private String webAppURLWorkerNode;
-    HashMap<String, String> ipCache = new HashMap<String, String>();
+    private HashMap<String, String> ipCache = new HashMap<String, String>();
     private boolean webAppUndeployed = false;
 
     @BeforeClass(alwaysRun = true)
@@ -118,7 +116,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
 
         // check whether dep sync correctly deployed the app on worker node within 30 seconds
 
-        while ((response.getResponseCode() != 200) || ((System.currentTimeMillis() - currentTime) < depSyncTimeOut)) {
+        while ((response.getResponseCode() != HttpStatus.SC_OK) || ((System.currentTimeMillis() - currentTime) < depSyncTimeOut)) {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -175,13 +173,11 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
 
         String webAppURLLocal = webAppURLWorkerNode + "/" + webAppName + "/";
 
-        //Thread.sleep(40000);
-
         HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
 
         long currentTime = System.currentTimeMillis();
 
-        while ((response.getResponseCode() != 302) || ((System.currentTimeMillis() - currentTime) < depSyncTimeOut)) {
+        while ((response.getResponseCode() != HttpStatus.SC_MOVED_TEMPORARILY) || ((System.currentTimeMillis() - currentTime) < depSyncTimeOut)) {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -191,7 +187,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
         }
 
         // check whether dep sync correctly undeployed the app on worker node within 30 seconds
-        assertTrue(response.getResponseCode() == 302, "Undeploying web app from all nodes failed");
+        assertTrue(response.getResponseCode() == HttpStatus.SC_MOVED_TEMPORARILY, "Undeploying web app from all nodes failed");
     }
 
 }
