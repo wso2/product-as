@@ -45,12 +45,23 @@ import static org.testng.Assert.assertTrue;
  * to check depsync working properly
  * The web app returns the IP address of the host machine in the response
  *
+ * Cluster information
+ *
  * puppet          192.168.57.160  Ubuntu 14.04.1  203.94.95.139
  * as530-node-01   192.168.57.161  Ubuntu 14.04.1  203.94.95.152 mgr
  * as530-node-02   192.168.57.162  Ubuntu 14.04.1  203.94.95.195
  * as530-node-03   192.168.57.163  Ubuntu 14.04.1  203.94.95.196
  * as530-node-04   192.168.57.164  Ubuntu 14.04.1  203.94.95.197 wkr1
  * as530-node-05   192.168.57.165  Ubuntu 14.04.1  203.94.95.198 wkr2
+ *
+ * Please add the following entries to your /etc/hosts file when running platform tests.
+ *
+ * 203.94.95.196  mgt.appserver.carbon-test.org
+ * 203.94.95.196  appserver.carbon-test.org
+ * 203.94.95.195  identity.carbon-test.org
+ * 203.94.95.152  as530-node-01
+ * 203.94.95.197  as530-node-04
+ * 203.94.95.198  as530-node-05
  */
 
 public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
