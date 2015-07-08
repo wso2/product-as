@@ -57,7 +57,7 @@ public class JpaServletCdiTestCase extends ASIntegrationTest {
                 new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
                 //todo enable tenant mode after fixing sample issue with tenant
                 //jira : https://wso2.org/jira/browse/WSAS-1998
-                //new TestUserMode[]{TestUserMode.TENANT_USER},
+                new TestUserMode[]{TestUserMode.TENANT_USER},
         };
     }
 
@@ -94,7 +94,8 @@ public class JpaServletCdiTestCase extends ASIntegrationTest {
 
         log.info("Response - " + result);
 
-        assertTrue(result.contains("        <tr>        <td>1        </td>        <td>Item0001        </td>        <td>100        </td>"),
+        assertTrue(result.contains(
+                "        <tr>        <td>1        </td>        <td>Item0001        </td>        <td>100        </td>"),
                 "Response doesn't contain expected data");
     }
 

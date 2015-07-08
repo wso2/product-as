@@ -74,6 +74,9 @@ public class TestExecutor {
                 if (!(tla.getFailedTests() == null || tla.getFailedTests().isEmpty())) {
                     throw new AutomationFrameworkException("TestFailed " + tla.getFailedTests());
                 }
+                if (!(tla.getConfigurationFailures() == null || tla.getConfigurationFailures().isEmpty())) {
+                    throw new AutomationFrameworkException("TestFailed " + tla.getConfigurationFailures());
+                }
             }
 
         }

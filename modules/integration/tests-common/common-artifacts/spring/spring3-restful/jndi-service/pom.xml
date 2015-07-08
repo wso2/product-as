@@ -28,7 +28,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer - Spring Restful - JNDI Service</name>
+    <name>WSO2 AppServer - Spring 3 Restful - JNDI Service</name>
     <artifactId>spring3-restful-jndi-service</artifactId>
     <packaging>war</packaging>
 

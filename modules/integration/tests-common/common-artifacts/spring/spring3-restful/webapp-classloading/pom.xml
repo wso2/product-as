@@ -28,7 +28,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer - Spring Restful - Webapp Classloading</name>
+    <name>WSO2 AppServer - Spring 3 Restful - Webapp Classloading</name>
     <artifactId>spring3-restful-webapp-classloading</artifactId>
     <packaging>war</packaging>
 

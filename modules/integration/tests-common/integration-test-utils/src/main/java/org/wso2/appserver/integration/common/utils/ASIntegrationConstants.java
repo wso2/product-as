@@ -17,6 +17,8 @@
 */
 package org.wso2.appserver.integration.common.utils;
 
+import java.io.File;
+
 public class ASIntegrationConstants {
     public static final String JAGGERY_APPLICATION = "jaggery";
     public static final String WEB_APPLICATION = "webapps";
@@ -30,4 +32,12 @@ public class ASIntegrationConstants {
     public static final String ENCRYPTED_PASSWD_URL =
             "//datasources-configuration/datasources/datasource[name='WSO2_CARBON_DB']/definition[@type='RDBMS']" +
             "/configuration/password";
+    public static final String DATA_SOURCE_URL = "//datasources/datasource[@name='%s']/url";
+    public static final String DATA_SOURCE_DRIVER_CLASS_NAME = "//datasources/datasource[@name='%s']/driverClassName";
+    public static final String DATA_SOURCE_DB_USER_NAME = "//datasources/datasource[@name='%s']/username";
+    public static final String DATA_SOURCE_DB_PASSWORD = "//datasources/datasource[@name='%s']/password";
+    public static final String TARGET_RESOURCE_LOCATION =
+            System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
+            File.separator + "artifacts" + File.separator + "AS" + File.separator;
+    public static final int WEBAPP_WAIT_PERIOD = 50000;
 }
