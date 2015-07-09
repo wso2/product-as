@@ -29,6 +29,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
@@ -41,8 +42,8 @@ public class EmployeeService {
     @Produces({"application/xml", "application/json"})
     @Path("/get")
     public Response getEmployees() {
-        List employees = employeeManager.getEmployees();
-        return Response.ok().entity(employees).build();
+        List<Employee> employees = employeeManager.getEmployees();
+        return Response.ok().entity(new EmployeeBean(employees)).build();
     }
 
     @POST
@@ -59,8 +60,8 @@ public class EmployeeService {
 
     @PUT
     @Path("/update")
-    public void updateEmployee(@FormParam("id") Integer id,
-                               @FormParam("salary") Integer salary) {
+    public void updateEmployee(@QueryParam("id") Integer id,
+                               @QueryParam("salary") Integer salary) {
         employeeManager.updateEmployee(id, salary);
     }
 

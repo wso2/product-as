@@ -74,8 +74,14 @@
 
     <ExclusiveEnvironments>
         <ExclusiveEnvironment>
-            <Name>Spring</Name>
-            <Classpath>${carbon.home}/lib/runtimes/spring/*.jar;${carbon.home}/lib/runtimes/spring/</Classpath>
+            <Name>Spring3</Name>
+            <Classpath>${carbon.home}/lib/runtimes/spring3/*.jar;${carbon.home}/lib/runtimes/spring3/</Classpath>
+        </ExclusiveEnvironment>
+    </ExclusiveEnvironments>
+    <ExclusiveEnvironments>
+        <ExclusiveEnvironment>
+            <Name>Spring4</Name>
+            <Classpath>${carbon.home}/lib/runtimes/spring4/*.jar;${carbon.home}/lib/runtimes/spring4/</Classpath>
         </ExclusiveEnvironment>
     </ExclusiveEnvironments>
 

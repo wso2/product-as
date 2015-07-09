@@ -590,6 +590,50 @@
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>spring3-restful-faulty-service</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>spring4-restful-simple-service</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>spring4-restful-jndi-service</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>spring4-restful-faulty-service</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>spring4-restful-webapp-classloading</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Hibernate related Webapps -->
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>hibernate-example</artifactId>
+                <type>war</type>
+                <version>1.0.0-SNAPSHOT</version>
+                <scope>test</scope>
+            </dependency>
 
             <!-- JAX-RS Test Related Webapps-->
             <dependency>

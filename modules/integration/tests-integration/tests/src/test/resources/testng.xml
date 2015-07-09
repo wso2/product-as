@@ -128,10 +128,13 @@
         </packages>
     </test> -->
 
+<<<<<<< HEAD
     <test name="spring3" preserve-order="true" parallel="false">
         <packages>
             <!--<package name="org.wso2.appserver.integration.tests.spring" />-->
         </packages>
     </test>
 
+=======
+>>>>>>> c53a873292ce8ba7331d7c785d2405b0da0e1c81
 </suite>
