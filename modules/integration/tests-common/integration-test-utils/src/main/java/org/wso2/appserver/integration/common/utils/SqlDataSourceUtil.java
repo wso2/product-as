@@ -16,9 +16,6 @@
  *   under the License.
  */
 
-/**
- * Created by Niranjan Karunanandham on 6/25/15.
- */
 package org.wso2.appserver.integration.common.utils;
 
 import org.apache.axiom.attachments.ByteArrayDataSource;
@@ -158,11 +155,14 @@ public class SqlDataSourceUtil {
             init();
         }
         databaseName = "testdb";
-        databasePassword = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DB_PASSWORD);
-        jdbcUrl = automationContext
-                .getConfigurationValue(String.format("//datasources/datasource[@name='%s']/url", dataSourceName));
-        jdbcDriver = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DRIVER_CLASS_NAME);
-        databaseUser = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DB_USER_NAME);
+        databasePassword = automationContext
+                .getConfigurationValue(String.format(ASIntegrationConstants.DATA_SOURCE_DB_PASSWORD, dataSourceName));
+        jdbcUrl = automationContext.getConfigurationValue(
+                String.format(ASIntegrationConstants.DATA_SOURCE_URL, dataSourceName));
+        jdbcDriver = automationContext.getConfigurationValue(
+                String.format(ASIntegrationConstants.DATA_SOURCE_DRIVER_CLASS_NAME, dataSourceName));
+        databaseUser = automationContext
+                .getConfigurationValue(String.format(ASIntegrationConstants.DATA_SOURCE_DB_USER_NAME, dataSourceName));
 
         if (jdbcUrl.contains("h2") && jdbcDriver.contains("h2")) {
             //Random number appends to a database name to create new database for H2*//*
@@ -185,15 +185,19 @@ public class SqlDataSourceUtil {
         executeUpdate(sqlFileList);
     }
 
-    public void createDataSource(String dbName, List<File> sqlFileList) throws Exception {
+    public void createDataSource(String dbName, List<File> sqlFileList, String dataSourceName) throws Exception {
         if (automationContext == null) {
             init();
         }
         databaseName = dbName;
-        databasePassword = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DB_PASSWORD);
-        jdbcUrl = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_URL);
-        jdbcDriver = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DRIVER_CLASS_NAME);
-        databaseUser = automationContext.getConfigurationValue(XPathConstants.DATA_SOURCE_DB_USER_NAME);
+        databasePassword = automationContext
+                .getConfigurationValue(String.format(ASIntegrationConstants.DATA_SOURCE_DB_PASSWORD, dataSourceName));
+        jdbcUrl = automationContext.getConfigurationValue(
+                String.format(ASIntegrationConstants.DATA_SOURCE_URL, dataSourceName));
+        jdbcDriver = automationContext.getConfigurationValue(
+                String.format(ASIntegrationConstants.DATA_SOURCE_DRIVER_CLASS_NAME, dataSourceName));
+        databaseUser = automationContext
+                .getConfigurationValue(String.format(ASIntegrationConstants.DATA_SOURCE_DB_USER_NAME, dataSourceName));
 
         if (jdbcUrl.contains("h2") && jdbcDriver.contains("h2")) {
             //Random number appends to a database name to create new database for H2*//*

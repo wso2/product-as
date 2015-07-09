@@ -37,6 +37,7 @@
         <module>jndi-service</module>
         <module>webapp-classloading</module>
         <module>runtime-libs</module>
+        <module>faulty-service</module>
     </modules>
 
     <dependencyManagement>

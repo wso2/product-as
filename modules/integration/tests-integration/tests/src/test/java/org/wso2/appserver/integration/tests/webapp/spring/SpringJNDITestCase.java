@@ -16,7 +16,7 @@
  *   under the License.
  */
 
-package org.wso2.appserver.integration.tests.spring;
+package org.wso2.appserver.integration.tests.webapp.spring;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,10 +24,7 @@ import org.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.testng.annotations.*;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
-import org.wso2.appserver.integration.common.utils.SqlDataSourceUtil;
-import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
-import org.wso2.appserver.integration.common.utils.WebAppTypes;
+import org.wso2.appserver.integration.common.utils.*;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
@@ -43,51 +40,50 @@ import java.util.List;
 
 import static org.testng.Assert.assertTrue;
 
-public class Spring3JNDITestCase extends ASIntegrationTest {
+public class SpringJNDITestCase extends ASIntegrationTest {
 
-    private TestUserMode userMode;
+    private WebAppMode webAppMode;
     private WebAppAdminClient webAppAdminClient;
     private SqlDataSourceUtil sqlDataSource;
-    private final String webAppName = "spring3-restful-jndi-service";
     private final String endpointURL = "/student";
     private final String contentType = "application/json";
 
-    @Factory(dataProvider = "userModeProvider")
-    public Spring3JNDITestCase(TestUserMode userMode) {
-        this.userMode = userMode;
+    @Factory(dataProvider = "webAppModeProvider")
+    public SpringJNDITestCase(WebAppMode webAppMode) {
+        this.webAppMode = webAppMode;
     }
 
     @DataProvider
-    private static TestUserMode[][] userModeProvider() {
-        return new TestUserMode[][]{
-                new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new TestUserMode[]{TestUserMode.TENANT_USER},
+    private static WebAppMode[][] webAppModeProvider() {
+        return new WebAppMode[][] {
+                new WebAppMode[] {new WebAppMode("spring3-restful-jndi-service", TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode("spring3-restful-jndi-service", TestUserMode.TENANT_USER)},
+                new WebAppMode[] {new WebAppMode("spring4-restful-jndi-service", TestUserMode.SUPER_TENANT_ADMIN)},
+                new WebAppMode[] {new WebAppMode("spring4-restful-jndi-service", TestUserMode.TENANT_USER)},
         };
     }
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        String dataSourceName = "spring3-restful-testdb";
-        super.init(userMode);
+        super.init(webAppMode.getUserMode());
         webAppURL = getWebAppURL(WebAppTypes.WEBAPPS);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         createTable();
-        createDataSource(dataSourceName, sqlDataSource);
+        createDataSource(webAppMode.getWebAppName(), sqlDataSource);
     }
 
     @Test(groups = "wso2.as", description = "Upload Spring 3 WAR and verify deployment")
     public void testSpringWARUpload() throws Exception {
-        String springWarFilePath =
-                System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                File.separator + "artifacts" + File.separator + "AS" + File.separator + "spring" + File.separator +
-                "spring3" + File.separator + webAppName + ".war";
+        String springWarFilePath = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator +
+                                   webAppMode.getWebAppName() + ".war";
         webAppAdminClient.uploadWarFile(springWarFilePath);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName));
+        assertTrue(
+                WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()));
     }
 
     @Test(groups = "wso2.as", description = "Verify Get Operation", dependsOnMethods = "testSpringWARUpload")
     public void testGetOperation() throws Exception {
-        String endpoint = webAppURL + "/" + webAppName + endpointURL;
+        String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
         HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
         try {
             JSONArray jsonArray = new JSONArray(response.getData());
@@ -99,8 +95,8 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Verify Put Operation", dependsOnMethods = "testGetOperation")
     public void testPutOperation() throws Exception {
-        URL endpoint = new URL(webAppURL + "/" + webAppName + endpointURL);
-        String getEndpoint = webAppURL + "/" + webAppName + endpointURL;
+        URL endpoint = new URL(webAppURL + "/" + webAppMode.getWebAppName() + endpointURL);
+        String getEndpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
         Reader data = new StringReader("{\"id\": 3,\"firstName\": \"Jack\", \"lastName\":\"Peter\", \"age\":30}");
         Writer writer = new StringWriter();
         HttpResponse response;
@@ -121,9 +117,9 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Verify Update Operation", dependsOnMethods = "testPutOperation")
     public void testUpdateOperation() throws Exception {
-        URL endpoint = new URL(webAppURL + "/" + webAppName + endpointURL);
+        URL endpoint = new URL(webAppURL + "/" + webAppMode.getWebAppName() + endpointURL);
         String expectedData = "{\"id\": 3,\"firstName\": \"Jack\", \"lastName\":\"Peter\", \"age\":16}";
-        String getEndpoint = webAppURL + "/" + webAppName + endpointURL + "/3";
+        String getEndpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL + "/3";
         Reader data = new StringReader(expectedData);
         Writer writer = new StringWriter();
         HttpResponse response;
@@ -139,8 +135,8 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Verify Update Operation", dependsOnMethods = "testUpdateOperation")
     public void testDeleteOperation() throws Exception {
-        URL endpoint = new URL(webAppURL + "/" + webAppName + endpointURL + "/3");
-        String getEndpoint = webAppURL + "/" + webAppName + endpointURL;
+        URL endpoint = new URL(webAppURL + "/" + webAppMode.getWebAppName() + endpointURL + "/3");
+        String getEndpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
         HttpResponse response;
         JSONArray jsonArray;
 
@@ -160,8 +156,9 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Verfiy if the webapp is unpacked for Tenants",
             dependsOnMethods = "testDeleteOperation")
     public void testTenantWebappUnpack() throws Exception {
-        if (userMode.equals(TestUserMode.TENANT_USER)) {
-            assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
+        if (webAppMode.getUserMode().equals(TestUserMode.TENANT_USER)) {
+            assertTrue(WebAppDeploymentUtil
+                               .isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()),
                        "Web Application Deployment failed");
         }
     }
@@ -169,7 +166,8 @@ public class Spring3JNDITestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void deteleteWebApp() throws Exception {
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.deleteWebAppFile(webAppName + ".war", asServer.getInstance().getHosts().get("default"));
+        webAppAdminClient.deleteWebAppFile(webAppMode.getWebAppName() + ".war",
+                                           asServer.getInstance().getHosts().get("default"));
     }
 
     private void createTable() throws Exception {

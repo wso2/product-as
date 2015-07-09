@@ -34,6 +34,7 @@
 
     <modules>
         <module>spring3-restful</module>
+        <module>spring4-restful</module>
     </modules>
 
 </project>
