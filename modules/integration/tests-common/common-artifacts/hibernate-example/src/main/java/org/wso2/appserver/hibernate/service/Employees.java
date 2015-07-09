@@ -22,15 +22,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement (name = "Employees")
-public class EmployeeBean {
+public class Employees {
 
     private List<Employee> employees;
 
-    public EmployeeBean(List<Employee> employees) {
+    public Employees(List<Employee> employees) {
         this.employees = employees;
     }
 
-    public EmployeeBean() {
+    public Employees() {
     }
 
     @XmlElement(name="Employee")
