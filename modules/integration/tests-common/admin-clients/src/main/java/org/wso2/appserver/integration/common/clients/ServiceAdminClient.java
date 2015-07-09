@@ -58,21 +58,11 @@ public class ServiceAdminClient {
     }
 
     public boolean deleteFaultyService(String archiveName) throws RemoteException {
-        try {
             return serviceAdminStub.deleteFaultyServiceGroup(archiveName);
-        } catch (RemoteException e) {
-            log.error("Faulty service deletion fails", e);
-            throw new RemoteException("Faulty service deletion fails", e);
-        }
     }
 
     public boolean deleteFaultyServiceByServiceName(String serviceName) throws RemoteException {
-        try {
             return serviceAdminStub.deleteFaultyServiceGroup(getFaultyData(serviceName).getArtifact());
-        } catch (RemoteException e) {
-            log.error("Faulty service deletion fails", e);
-            throw new RemoteException("Faulty service deletion fails", e);
-        }
     }
 
     public void deleteAllNonAdminServiceGroups() throws RemoteException {

@@ -36,30 +36,15 @@ public class ActivityAdminServiceClient {
     public ActivityAdminServiceClient(String backEndUrl, String userName, String password)
             throws AxisFault {
         this.endPoint = backEndUrl + serviceName;
-        try {
-            activityAdminServiceStub = new ActivityAdminServiceStub(endPoint);
-        } catch (AxisFault axisFault) {
-            log.error("activityAdminServiceStub Initialization fail " + axisFault.getMessage());
-            throw new AxisFault("activityAdminServiceStub Initialization fail ", axisFault);
-        }
+        activityAdminServiceStub = new ActivityAdminServiceStub(endPoint);
         AuthenticateStub.authenticateStub(userName, password, activityAdminServiceStub);
     }
 
     public ActivityBean getActivities(String sessionCookie, String userName, String resourcePath
             , String fromDate, String toDate, String filter, int page)
             throws RemoteException, RegistryExceptionException {
-        try {
-            return activityAdminServiceStub.getActivities(userName, resourcePath, fromDate, toDate
-                    , filter, page + "", sessionCookie);
-        } catch (RemoteException e) {
-            String msg = "Fails to get activities";
-            log.error(msg + " " + e.getMessage());
-            throw new RemoteException(msg, e);
-        } catch (RegistryExceptionException e) {
-            String msg = "Fails to get activities";
-            log.error(msg + " " + e.getMessage());
-            throw new RegistryExceptionException(msg, e);
-        }
+        return activityAdminServiceStub.getActivities(userName, resourcePath, fromDate, toDate
+                , filter, page + "", sessionCookie);
     }
 
     public ConfigurationContext getConfigurationContext() {

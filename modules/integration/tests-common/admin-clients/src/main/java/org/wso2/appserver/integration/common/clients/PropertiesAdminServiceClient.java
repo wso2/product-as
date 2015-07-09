@@ -60,16 +60,7 @@ public class PropertiesAdminServiceClient {
         retentionBean.setDeleteLocked(mode.contains("delete"));
         retentionBean.setFromDate(fromDate);
         retentionBean.setToDate(toDate);
-
-        try {
-            return propertiesAdminServiceStub.setRetentionProperties(path, retentionBean);
-        } catch (RemoteException e) {
-            log.error("Set retention properties failed ", e);
-            throw new RemoteException("Set retention properties failed ", e);
-        } catch (PropertiesAdminServiceRegistryExceptionException e) {
-            log.error("Set retention lock failed ", e);
-            throw new PropertiesAdminServiceRegistryExceptionException("Set retention properties failed ", e);
-        }
+        return propertiesAdminServiceStub.setRetentionProperties(path, retentionBean);
     }
 
     public RetentionBean getRetentionProperties(String path)
@@ -92,13 +83,13 @@ public class PropertiesAdminServiceClient {
         try {
             propertiesAdminServiceStub.setProperty(path, name, value);
         } catch (RemoteException e) {
-            String errMsg="Adding property fails";
+            String errMsg = "Adding property fails";
             log.error(errMsg);
-            throw new RemoteException(errMsg,e);
+            throw new RemoteException(errMsg, e);
         } catch (PropertiesAdminServiceRegistryExceptionException e) {
-            String errMsg="Adding property fails";
+            String errMsg = "Adding property fails";
             log.error(errMsg);
-            throw new PropertiesAdminServiceRegistryExceptionException(errMsg,e);
+            throw new PropertiesAdminServiceRegistryExceptionException(errMsg, e);
         }
     }
 
@@ -107,13 +98,13 @@ public class PropertiesAdminServiceClient {
         try {
             return propertiesAdminServiceStub.getProperties(path, viewProps);
         } catch (RemoteException e) {
-            String errMsg="Getting property fails";
+            String errMsg = "Getting property fails";
             log.error(errMsg);
-            throw new RemoteException(errMsg,e);
+            throw new RemoteException(errMsg, e);
         } catch (PropertiesAdminServiceRegistryExceptionException e) {
-            String errMsg="Getting property fails";
+            String errMsg = "Getting property fails";
             log.error(errMsg);
-            throw new PropertiesAdminServiceRegistryExceptionException(errMsg,e);
+            throw new PropertiesAdminServiceRegistryExceptionException(errMsg, e);
         }
     }
 
@@ -122,13 +113,13 @@ public class PropertiesAdminServiceClient {
         try {
             return propertiesAdminServiceStub.getProperties(path, viewProps);
         } catch (RemoteException e) {
-            String errMsg="Getting properties fails";
+            String errMsg = "Getting properties fails";
             log.error(errMsg);
-            throw new RemoteException(errMsg,e);
+            throw new RemoteException(errMsg, e);
         } catch (PropertiesAdminServiceRegistryExceptionException e) {
-            String errMsg="Getting properties fails";
+            String errMsg = "Getting properties fails";
             log.error(errMsg);
-            throw new PropertiesAdminServiceRegistryExceptionException(errMsg,e);
+            throw new PropertiesAdminServiceRegistryExceptionException(errMsg, e);
         }
     }
 
@@ -137,13 +128,13 @@ public class PropertiesAdminServiceClient {
         try {
             propertiesAdminServiceStub.updateProperty(path, name, value, oldValue);
         } catch (RemoteException e) {
-            String errMsg="Update properties fails";
+            String errMsg = "Update properties fails";
             log.error(errMsg);
-            throw new RemoteException(errMsg,e);
+            throw new RemoteException(errMsg, e);
         } catch (PropertiesAdminServiceRegistryExceptionException e) {
-            String errMsg="Update properties fails";
+            String errMsg = "Update properties fails";
             log.error(errMsg);
-            throw new PropertiesAdminServiceRegistryExceptionException(errMsg,e);
+            throw new PropertiesAdminServiceRegistryExceptionException(errMsg, e);
         }
     }
 
@@ -152,13 +143,13 @@ public class PropertiesAdminServiceClient {
         try {
             propertiesAdminServiceStub.removeProperty(path, viewProps);
         } catch (RemoteException e) {
-            String errMsg="Removing property fails";
+            String errMsg = "Removing property fails";
             log.error(errMsg);
-            throw new RemoteException(errMsg,e);
+            throw new RemoteException(errMsg, e);
         } catch (PropertiesAdminServiceRegistryExceptionException e) {
-            String errMsg="Removing property fails";
+            String errMsg = "Removing property fails";
             log.error(errMsg);
-            throw new PropertiesAdminServiceRegistryExceptionException(errMsg,e);
+            throw new PropertiesAdminServiceRegistryExceptionException(errMsg, e);
         }
     }
 

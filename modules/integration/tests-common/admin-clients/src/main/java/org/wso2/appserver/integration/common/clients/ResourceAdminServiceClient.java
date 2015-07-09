@@ -23,7 +23,6 @@ package org.wso2.appserver.integration.common.clients;
 import org.apache.axis2.AxisFault;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.registry.info.stub.RegistryExceptionException;
 import org.wso2.carbon.registry.resource.stub.ResourceAdminServiceExceptionException;
 import org.wso2.carbon.registry.resource.stub.ResourceAdminServiceResourceServiceExceptionException;
 import org.wso2.carbon.registry.resource.stub.ResourceAdminServiceStub;
@@ -91,23 +90,7 @@ public class ResourceAdminServiceClient {
 
     public CollectionContentBean getCollectionContent(String destinationPath)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        CollectionContentBean collectionContentBean;
-
-        try {
-            collectionContentBean = resourceAdminServiceStub.getCollectionContent(destinationPath);
-        } catch (RemoteException e) {
-            log.error("Resource getting failed due to RemoteException : " + e);
-            throw new RemoteException("Resource getting failed due to RemoteException :",
-                                      e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Resource getting failed due to ResourceAdminServiceExceptionException : ",
-                      e);
-            throw new ResourceAdminServiceExceptionException(
-                    "Resource getting failed due to ResourceAdminServiceExceptionException:",
-                    e);
-        }
-
-        return collectionContentBean;
+        return resourceAdminServiceStub.getCollectionContent(destinationPath);
     }
 
     public boolean deleteResource(String destinationPath)
@@ -266,288 +249,113 @@ public class ResourceAdminServiceClient {
     }
 
     public String getHumanReadableMediaTypes() throws Exception {
-        try {
             return resourceAdminServiceStub.getHumanReadableMediaTypes();
-        } catch (Exception e) {
-            String msg = "get human readable media type error ";
-            throw new Exception(msg, e);
-        }
     }
 
     public String getMimeTypeFromHuman(String mediaType) throws Exception {
-
-        try {
             return resourceAdminServiceStub.getMimeTypeFromHuman(mediaType);
-        } catch (Exception e) {
-            String msg = "get human readable media type error ";
-            throw new Exception(msg, e);
-
-        }
     }
 
     public void updateTextContent(String path, String content)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             resourceAdminServiceStub.updateTextContent(path, content);
-        } catch (RemoteException e) {
-            log.error("Cannot edit the content of the resource : " + e.getMessage());
-            throw new RemoteException("Edit content error : ", e);
-
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Cannot edit the content of the resource : " + e.getMessage());
-            throw new ResourceAdminServiceExceptionException("Get version error : ", e);
-
-        }
     }
 
     public void copyResource(String parentPath, String oldResourcePath, String destinationPath,
                              String targetName)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             resourceAdminServiceStub.copyResource(parentPath, oldResourcePath, destinationPath, targetName);
-        } catch (RemoteException e) {
-            log.error("Copy resource error ");
-            throw new RemoteException("Copy resource error ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Copy resource error");
-            throw new ResourceAdminServiceExceptionException("Copy resource error", e);
-        }
     }
 
     public void moveResource(String parentPath, String oldResourcePath, String destinationPath,
                              String targetName)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             resourceAdminServiceStub.moveResource(parentPath, oldResourcePath, destinationPath, targetName);
-        } catch (RemoteException e) {
-            log.error("Move resource error ");
-            throw new RemoteException("Copy resource error ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Move resource error");
-            throw new ResourceAdminServiceExceptionException("Copy resource error", e);
-        }
     }
 
 
     public VersionPath[] getVersionPaths(String path)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        VersionPath[] versionPaths = null;
-        try {
             VersionsBean vb = resourceAdminServiceStub.getVersionsBean(path);
-            versionPaths = vb.getVersionPaths();
-        } catch (RemoteException e) {
-            log.error("No versions for created path : " + e.getMessage());
-            throw new RemoteException("Get version error : ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Get version error : " + e.getMessage());
-            throw new ResourceAdminServiceExceptionException("Get version error : ", e);
-        }
-        return versionPaths;
+            return vb.getVersionPaths();
     }
 
     public VersionsBean getVersionsBean(String path)
             throws RemoteException, ResourceAdminServiceExceptionException {
-
-        try {
             return resourceAdminServiceStub.getVersionsBean(path);
-        } catch (RemoteException e) {
-            log.error("Get version bean fails: " + e.getMessage());
-            throw new RemoteException("Get version bean fails:  ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Get version bean fails:  " + e.getMessage());
-            throw new ResourceAdminServiceExceptionException("Get version bean fails:  : ", e);
-        }
     }
 
     public void createVersion(String resourcePath)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             resourceAdminServiceStub.createVersion(resourcePath);
-        } catch (RemoteException e) {
-            log.error("Create version error : " + e.getMessage());
-            throw new RemoteException("Create version error : ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Create version error : " + e.getMessage());
-            throw new ResourceAdminServiceExceptionException("Create version error : ", e);
-        }
     }
 
 
     public void deleteVersionHistory(String path, String snapshotID)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             resourceAdminServiceStub.deleteVersionHistory(path, snapshotID);
-
-        } catch (RemoteException e) {
-            log.error("No versions to delete : " + e.getMessage());
-            throw new RemoteException("Delete version error : ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Delete version error : " + e.getMessage());
-            throw new ResourceAdminServiceExceptionException("Delete version error : ", e);
-
-        }
     }
 
 
     public boolean restoreVersion(String path)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        boolean status = false;
-        try {
-            status = resourceAdminServiceStub.restoreVersion(path);
-
-        } catch (RemoteException e) {
-            log.error("No versions to restore : " + e.getMessage());
-            throw new RemoteException("Restore version error : ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Restore version error : " + e.getMessage());
-            throw new ResourceAdminServiceExceptionException("Restore version error : ", e);
-        }
-        return status;
+            return resourceAdminServiceStub.restoreVersion(path);
     }
 
     public String getTextContent(String path)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        String content = null;
-        try {
-            content = resourceAdminServiceStub.getTextContent(path);
-        } catch (RemoteException e) {
-            log.error("Unable get content : " + e.getMessage());
-            throw new RemoteException("Restore version error : ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("GetTextContent Error : " + e.getMessage());
-            throw new ResourceAdminServiceExceptionException("GetTextContent Error :  ", e);
-        }
-        return content;
+        return resourceAdminServiceStub.getTextContent(path);
     }
 
-    public PermissionBean getPermission(String path) throws Exception {
-        try {
+    public PermissionBean getPermission(String path)
+            throws RemoteException, ResourceAdminServiceExceptionException {
             return resourceAdminServiceStub.getPermissions(path);
-        } catch (Exception e) {
-            log.error("Unable to get permission : " + e.getMessage());
-            throw new Exception("Unable to get permission : ", e);
-        }
+
     }
 
 
     public void renameResource(String parentPath, String oldResourcePath, String newResourceName)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             resourceAdminServiceStub.renameResource(parentPath, oldResourcePath, newResourceName);
-        } catch (RemoteException e) {
-            log.error("Rename resource error ");
-            throw new RemoteException("Rename resource error ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Rename resource error");
-            throw new ResourceAdminServiceExceptionException("Rename resource error", e);
-        }
     }
 
     public boolean addExtension(String name, DataHandler content)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             return resourceAdminServiceStub.addExtension(name, content);
-        } catch (RemoteException e) {
-            log.error("Add extension error ");
-            throw new RemoteException("Rename resource error ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Add Extension error");
-            throw new ResourceAdminServiceExceptionException("Rename resource error", e);
-        }
     }
 
     public boolean removeExtension(String name)
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             return resourceAdminServiceStub.removeExtension(name);
-        } catch (RemoteException e) {
-            log.error("Remove extension error ");
-            throw new RemoteException("Remove resource error ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Remove Extension error");
-            throw new ResourceAdminServiceExceptionException("Remove resource error", e);
-        }
     }
 
     public String[] listExtensions()
             throws RemoteException, ResourceAdminServiceExceptionException {
-        try {
             return resourceAdminServiceStub.listExtensions();
-        } catch (RemoteException e) {
-            log.error("List extensions error ");
-            throw new RemoteException("List extensions error ", e);
-        } catch (ResourceAdminServiceExceptionException e) {
-            log.error("List extensions error ");
-            throw new ResourceAdminServiceExceptionException("List extensions error ", e);
-        }
     }
 
 
     public void setDescription(String path, String description)
-            throws RemoteException, RegistryExceptionException {
-        try {
+            throws RemoteException,ResourceAdminServiceExceptionException {
             resourceAdminServiceStub.setDescription(path, description);
-        } catch (RemoteException e) {
-            String msg = "Unable set description for the path - " + path;
-            log.error(msg, e);
-            throw new RemoteException("List extensions error ", e);
-
-        } catch (ResourceAdminServiceExceptionException e) {
-            String msg = "Unable set description for the path - " + path;
-            log.error(msg, e);
-            throw new RegistryExceptionException(msg, e);
-        }
     }
 
 
     public ContentDownloadBean getContentDownloadBean(String path)
-            throws RemoteException, RegistryExceptionException {
-        try {
+            throws RemoteException,ResourceAdminServiceExceptionException {
             return resourceAdminServiceStub.getContentDownloadBean(path);
-        } catch (RemoteException e) {
-            String msg = "Unable to retrieve content download bean - " + path;
-            log.error(msg, e);
-            throw new RemoteException(msg, e);
-
-        } catch (ResourceAdminServiceExceptionException e) {
-            String msg = "Unable to retrieve content download bean - " + path;
-            log.error(msg, e);
-            throw new RegistryExceptionException(msg, e);
-        }
     }
 
 
     public boolean importResource(String parentPath, String resourceName, String mediaType,
                                   String description, String fetchURL, String symLink)
-            throws RemoteException, RegistryExceptionException {
-        try {
+            throws RemoteException, ResourceAdminServiceExceptionException {
             return resourceAdminServiceStub.importResource(parentPath, resourceName, mediaType, description, fetchURL, symLink, null);
-        } catch (RemoteException e) {
-            String msg = "Unable to import resource";
-            log.error(msg, e);
-            throw new RemoteException(msg, e);
-
-        } catch (ResourceAdminServiceExceptionException e) {
-            String msg = "Unable to import resource";
-            log.error(msg, e);
-            throw new RegistryExceptionException(msg, e);
-        }
     }
 
     public ResourceTreeEntryBean getResourceTreeEntryBean(String resourcePath)
-            throws RemoteException, RegistryExceptionException {
-        try {
+            throws RemoteException, ResourceAdminServiceExceptionException {
             return resourceAdminServiceStub.getResourceTreeEntry(resourcePath);
-        } catch (RemoteException e) {
-            String msg = "Unable get resource tree entry";
-            log.error(msg, e);
-            throw new RemoteException(msg, e);
-
-        } catch (ResourceAdminServiceExceptionException e) {
-            String msg = "Unable get resource tree entry";
-            log.error(msg, e);
-            throw new RegistryExceptionException(msg, e);
-        }
     }
 
 }

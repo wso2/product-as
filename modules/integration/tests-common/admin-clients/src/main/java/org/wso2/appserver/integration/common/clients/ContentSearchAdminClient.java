@@ -35,16 +35,6 @@ public class ContentSearchAdminClient {
     }
 
     public SearchResultsBean getContentSearchResults(String searchQuery) throws RemoteException {
-
-        SearchResultsBean bean;
-        try {
-            bean = contentSearchAdminServiceStub.getContentSearchResults(searchQuery);
-        } catch (RemoteException e) {
-            String msg = "Unable o search the contents";
-            log.error(msg + e);
-            throw new RemoteException(msg, e);
-        }
-
-        return bean;
+        return contentSearchAdminServiceStub.getContentSearchResults(searchQuery);
     }
 }
