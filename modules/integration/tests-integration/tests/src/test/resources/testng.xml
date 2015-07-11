@@ -33,6 +33,14 @@
         </packages>
     </test>
 
+    <test name="logging-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.logging.accesslogs.*"/>
+            <package name="org.wso2.appserver.integration.tests.logging.webapplogs.*"/>
+            <package name="org.wso2.appserver.integration.tests.logging.tenantawarelogs*"/>
+        </packages>
+    </test>
+
     <test name="carbon-app-tests" preserve-order="true" parallel="false">
         <classes>
             <!--Todo-->
