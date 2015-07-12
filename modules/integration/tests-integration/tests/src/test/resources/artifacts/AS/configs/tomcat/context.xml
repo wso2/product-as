@@ -18,12 +18,10 @@
 <!-- The contents of this file will be loaded for each web application -->
 <Context>
 
-
     <Resource name="jdbc/TomcatContextDB" auth="Container" type="javax.sql.DataSource"
               maxActive="100" maxIdle="30" maxWait="10000"
-              username="user" password="user123" driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/WebAppTestDB"/>
-
+              username="user" password="user123" driverClassName="org.h2.Driver"
+              url="jdbc:h2:tmp/tempDB"/>
 
     <!-- Default set of monitored resources -->
 
