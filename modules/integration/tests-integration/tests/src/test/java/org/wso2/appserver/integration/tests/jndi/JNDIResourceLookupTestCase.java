@@ -25,6 +25,7 @@ import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.testng.Assert;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
+import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
@@ -53,7 +54,8 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
     private String carbonDataSourceLookupWebApp;
     private String carbonWebAppContext;
     private TestUserMode userMode;
-    private ServerConfigurationManager serverConfigurationManager;
+    private static ServerConfigurationManager serverConfigurationManager;
+    private static int isRestarted = 0;
 
     @Factory(dataProvider = "userModeProvider")
     public JNDIResourceLookupTestCase(TestUserMode userMode) {
@@ -63,32 +65,52 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init(userMode);
+        if (isRestarted == 0) {
+            serverConfigurationManager =
+                    new ServerConfigurationManager(new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN));
+            String sourceFilePath = TestConfigurationProvider.getResourceLocation("AS") + File.separator + "configs" +
+                                    File.separator + "tomcat" + File.separator + "context.xml";
+            String targetFilePath = FrameworkPathUtil.getCarbonHome() + File.separator + "repository" + File.separator +
+                                    "conf" + File.separator + "tomcat" + File.separator + "context.xml";
+
+            serverConfigurationManager.applyConfiguration(new File(sourceFilePath),
+                                                          new File(targetFilePath), true, true);
+
+        }
+        ++isRestarted;
+        sessionCookie = loginLogoutClient.login();
+
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         tomcatJNDIResourceLookupWebApp = "tomcat-jndi-resource-lookup";
         tomcatWebAppContext = "/tomcat-jndi-resource-lookup";
         carbonDataSourceLookupWebApp = "carbon-datasource-lookup";
         carbonWebAppContext = "/carbon-datasource-lookup";
-        serverConfigurationManager = new ServerConfigurationManager(asServer);
     }
 
     @AfterClass(alwaysRun = true)
     public void deleteWebApp() throws Exception {
-//        if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
-            webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-            String defaultHost = asServer.getDefaultInstance().getHosts().get("default");
-            webAppAdminClient.deleteWebAppFile(tomcatJNDIResourceLookupWebApp + ".war", defaultHost);
-            webAppAdminClient.deleteWebAppFile(carbonDataSourceLookupWebApp + ".war", defaultHost);
-//        }
+
+        sessionCookie = loginLogoutClient.login();
+        webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+        String defaultHost = asServer.getDefaultInstance().getHosts().get("default");
+        webAppAdminClient.deleteWebAppFile(tomcatJNDIResourceLookupWebApp + ".war", defaultHost);
+        webAppAdminClient.deleteWebAppFile(carbonDataSourceLookupWebApp + ".war", defaultHost);
+
+        //Revert and restart only once
+        --isRestarted;
+        if (isRestarted == 0) {
+            serverConfigurationManager.restoreToLastConfiguration();
+        }
     }
 
     @Test(groups = "wso2.as", description = "Deploying web application")
     public void testTomcatJNDIResourceWebApplicationDeployment() throws Exception {
-        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
-                "artifacts" + File.separator + "AS" + File.separator + "war"
-                + File.separator + tomcatJNDIResourceLookupWebApp + ".war");
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
-                backendURL, sessionCookie, tomcatJNDIResourceLookupWebApp)
-                , "Web Application Deployment failed: " + tomcatJNDIResourceLookupWebApp);
+        webAppAdminClient.uploadWarFile(
+                FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator + "AS" + File.separator +
+                "war" + File.separator + tomcatJNDIResourceLookupWebApp + ".war");
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie,
+                                                                 tomcatJNDIResourceLookupWebApp),
+                   "Web Application Deployment failed: " + tomcatJNDIResourceLookupWebApp);
     }
 
     @Test(groups = "wso2.as", description = "test JNDI look up on web application's context",
@@ -112,17 +134,6 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
             dependsOnMethods = "testTomcatJNDIResourceWebApplicationDeployment")
     public void testJNDILookupOnTomcatContext() throws Exception {
 
-        if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
-            String sourceFilePath = TestConfigurationProvider.getResourceLocation("AS") + File.separator + "configs" +
-                    File.separator + "tomcat" + File.separator + "context.xml";
-            String targetFilePath = FrameworkPathUtil.getCarbonHome() + File.separator + "repository" + File.separator +
-                    "conf" + File.separator + "tomcat" + File.separator + "context.xml";
-
-            serverConfigurationManager.applyConfiguration(new File(sourceFilePath),
-                    new File(targetFilePath), false, true);
-        }
-        super.init(userMode);
-
         String webAppURLLocal = "";
         if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
             webAppURLLocal = webAppURL + tomcatWebAppContext + "/jndi/tomcat-resource-lookup";
@@ -138,12 +149,12 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Deploying carbon data source lookup web application")
     public void testCarbonDataSourceLookupWebApplicationDeployment() throws Exception {
-        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
-                "artifacts" + File.separator + "AS" + File.separator + "war"
-                + File.separator + carbonDataSourceLookupWebApp + ".war");
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
-                backendURL, sessionCookie, carbonDataSourceLookupWebApp)
-                , "Web Application Deployment failed: " + carbonDataSourceLookupWebApp);
+        webAppAdminClient.uploadWarFile(
+                FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator + "AS" + File.separator +
+                "war" + File.separator + carbonDataSourceLookupWebApp + ".war");
+        assertTrue(
+                WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, carbonDataSourceLookupWebApp),
+                "Web Application Deployment failed: " + carbonDataSourceLookupWebApp);
     }
 
     @Test(groups = "wso2.as", description = "test JNDI lookup for default carbon datasource ",
