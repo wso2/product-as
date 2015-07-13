@@ -1,0 +1,16 @@
+Sample : JulTestWebapp
+===================
+
+Introduction
+============
+
+This is simple webapp sample to generate logs Java Logging APIs
+
+This uses Java Logging API to generate logs.
+This webapp will be deployed and the http GET method will be invoked by the WebAppLoggingTestCase.
+
+
+
+
+
+

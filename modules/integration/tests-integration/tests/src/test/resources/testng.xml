@@ -37,7 +37,7 @@
         <packages>
             <package name="org.wso2.appserver.integration.tests.logging.accesslogs.*"/>
             <package name="org.wso2.appserver.integration.tests.logging.webapplogs.*"/>
-            <package name="org.wso2.appserver.integration.tests.logging.tenantawarelogs*"/>
+            <package name="org.wso2.appserver.integration.tests.logging.tenantawarelogs.*"/>
         </packages>
     </test>
 
