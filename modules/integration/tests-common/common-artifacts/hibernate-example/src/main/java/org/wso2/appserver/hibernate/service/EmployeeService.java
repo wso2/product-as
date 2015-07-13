@@ -15,12 +15,11 @@
  */
 package org.wso2.appserver.hibernate.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.appserver.hibernate.Employee;
 import org.wso2.appserver.hibernate.EmployeeManager;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -29,26 +28,31 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.List;
 
 @Path("/EmployeeService")
 public class EmployeeService {
     EmployeeManager employeeManager = new EmployeeManager();
 
+    private static final Log log = LogFactory.getLog(EmployeeService.class);
+
     @GET
     @Produces({"application/xml", "application/json"})
     @Path("/get")
     public Response getEmployees() {
-        List employees = employeeManager.getEmployees();
-        return Response.ok().entity(employees).build();
+        log.info("Get employees.");
+        List<Employee> employees = employeeManager.getEmployees();
+        return Response.ok().entity(new Employees(employees)).build();
     }
 
     @POST
     @Consumes({"application/xml", "application/json"})
     @Path("/add")
-    public Response addEmployee(Employee employee) {
+    public Response addEmployee(Employees employees) {
+        Employee employee = employees.getEmployees().get(0);
+        log.info("Received employee: " + employee.getFirstName());
         String firstName = employee.getFirstName();
         String lastName = employee.getLastName();
         Integer salary = employee.getSalary();
@@ -61,12 +65,14 @@ public class EmployeeService {
     @Path("/update")
     public void updateEmployee(@FormParam("id") Integer id,
                                @FormParam("salary") Integer salary) {
+        log.info("Received id: " + id + ", salary: " + salary);
         employeeManager.updateEmployee(id, salary);
     }
 
     @DELETE
     @Path("/delete")
-    public void deleteEmployee(Integer id) {
+    public void deleteEmployee(@QueryParam("id" )Integer id) {
+        log.info("Received id: " + id);
         employeeManager.deleteEmployee(id);
     }
 

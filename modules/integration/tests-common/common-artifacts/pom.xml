@@ -41,6 +41,7 @@
         <module>hibernate-example</module>
         <module>spring</module>
         <module>jaxrs</module>
+        <module>security-check</module>
     </modules>
 
 </project>

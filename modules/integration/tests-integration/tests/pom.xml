@@ -16,6 +16,14 @@
     <packaging>jar</packaging>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>${project.basedir}/target/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -428,6 +436,12 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>spring4-restful-webapp-classloading</artifactId>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>hibernate-example</artifactId>
             <type>war</type>
         </dependency>
 

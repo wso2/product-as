@@ -71,12 +71,13 @@ public class EmployeeManager {
         return employeeID;
     }
 
-    public List getEmployees() {
+    public List<Employee> getEmployees() {
         Session session = factory.openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            List employees = session.createQuery("FROM Employee").list();
+            @SuppressWarnings("unchecked") //hibernate does play well with generics
+            List<Employee> employees = (List<Employee>) session.createQuery("FROM Employee").list();
             tx.commit();
             return employees;
         } catch (HibernateException e) {
