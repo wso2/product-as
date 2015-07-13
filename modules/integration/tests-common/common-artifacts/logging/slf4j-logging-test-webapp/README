@@ -1,0 +1,11 @@
+Sample : Slf4jLoggingTestWebapp
+===================
+
+Introduction
+============
+
+This is simple webapp sample to generate logs using Slf4j
+
+This uses slf4j for generate logs. The generated logs will be routed to default log4j appenders
+as specified in log4j.properties file bundled with the web app WEB-INF/classes directory.
+This webapp will be deployed and the http GET method will be invoked by the WebAppLoggingTestCase.

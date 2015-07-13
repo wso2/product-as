@@ -1,0 +1,11 @@
+Sample : CarbonLoggingTestWebapp
+===================
+
+Introduction
+============
+
+This is simple webapp sample to generate logs using WSO2 Carbon logging framework provided by WSO2 Carbon kernel
+
+This uses Apache Commons API and log4j as logging back end. The generated logs will be routed to Carbon appenders as
+specified in log4j.properties file inside repository/conf directory of the WSO2 Application Server.
+This webapp will be deployed and the http GET method will be invoked by the WebAppLoggingTestCase.
