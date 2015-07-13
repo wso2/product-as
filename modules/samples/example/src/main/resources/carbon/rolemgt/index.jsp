@@ -1,10 +1,3 @@
-<%@page import="org.wso2.carbon.user.api.UserRealm" %>
-<%@page import="org.wso2.carbon.context.CarbonContext" %>
-<%@page import="java.util.List"%>
-<%@page import="java.util.Arrays"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="org.wso2.carbon.user.api.Permission"%>
-<html>
 <!--
  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
@@ -22,6 +15,13 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
+<%@page import="org.wso2.carbon.user.api.UserRealm" %>
+<%@page import="org.wso2.carbon.context.CarbonContext" %>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.wso2.carbon.user.api.Permission"%>
+<html>
 <head></head>
 <body>
 <h2>WSO2 Carbon Role Manage Usage Demo</h2>

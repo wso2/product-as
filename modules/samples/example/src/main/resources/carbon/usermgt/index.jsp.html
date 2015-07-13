@@ -15,173 +15,101 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">&lt;%@</span>page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;org.wso2.carbon.user.api.UserRealm&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;%@</span>page import<span style="color: #666666">=</span><span style="color: #BA2121">&quot;org.wso2.carbon.context.CarbonContext&quot;</span> <span style="color: #008000; font-weight: bold">%&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;html&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;head&gt;&lt;/head&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;body&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;h2&gt;</span>WSO2 Carbon User Manage Usage Demo<span style="color: #008000; font-weight: bold">&lt;/h2&gt;</span>
 
-<span style="color: #008000; font-weight: bold">&lt;%</span>
-    <span style="color: #008000; font-weight: bold">if</span><span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;add&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">){</span>
-        String username <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;username&quot;</span><span style="color: #666666">);</span>
-        String pass <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;password&quot;</span><span style="color: #666666">);</span>
-        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>username <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span> <span style="color: #666666">&amp;&amp;</span> username<span style="color: #666666">.</span><span style="color: #7D9029">trim</span><span style="color: #666666">().</span><span style="color: #7D9029">length</span><span style="color: #666666">()</span> <span style="color: #666666">&gt;</span> <span style="color: #666666">0)</span> <span style="color: #666666">{</span>
-            CarbonContext context <span style="color: #666666">=</span> CarbonContext<span style="color: #666666">.</span><span style="color: #7D9029">getThreadLocalCarbonContext</span><span style="color: #666666">();</span>
-            UserRealm realm <span style="color: #666666">=</span> context<span style="color: #666666">.</span><span style="color: #7D9029">getUserRealm</span><span style="color: #666666">();</span>
-            <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(!</span>realm<span style="color: #666666">.</span><span style="color: #7D9029">getUserStoreManager</span><span style="color: #666666">().</span><span style="color: #7D9029">isExistingUser</span><span style="color: #666666">(</span>username<span style="color: #666666">))</span> <span style="color: #666666">{</span>
-                realm<span style="color: #666666">.</span><span style="color: #7D9029">getUserStoreManager</span><span style="color: #666666">().</span><span style="color: #7D9029">addUser</span><span style="color: #666666">(</span>username<span style="color: #666666">,</span> pass<span style="color: #666666">,</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">,</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">,</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">);</span>
-            <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
-<span style="color: #008000; font-weight: bold">%&gt;</span> <span style="color: #008000; font-weight: bold">&lt;p&gt;&lt;b&gt;</span>The user <span style="color: #008000; font-weight: bold">&lt;%=</span>username<span style="color: #008000; font-weight: bold">%&gt;</span> already exists<span style="color: #008000; font-weight: bold">&lt;/b&gt;&lt;/p&gt;</span> <span style="color: #008000; font-weight: bold">&lt;%</span>
-            <span style="color: #666666">}</span>
-        <span style="color: #666666">}</span>
-    <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span><span style="color: #666666">(</span>request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;delete&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span><span style="color: #666666">){</span>
-        String username <span style="color: #666666">=</span> request<span style="color: #666666">.</span><span style="color: #7D9029">getParameter</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;username&quot;</span><span style="color: #666666">);</span>
-        <span style="color: #008000; font-weight: bold">if</span><span style="color: #666666">(</span>username <span style="color: #666666">!=</span> <span style="color: #008000; font-weight: bold">null</span> <span style="color: #666666">&amp;&amp;</span> <span style="color: #666666">!</span>username<span style="color: #666666">.</span><span style="color: #7D9029">trim</span><span style="color: #666666">().</span><span style="color: #7D9029">isEmpty</span><span style="color: #666666">()){</span>
-            CarbonContext context <span style="color: #666666">=</span> CarbonContext<span style="color: #666666">.</span><span style="color: #7D9029">getThreadLocalCarbonContext</span><span style="color: #666666">();</span>
-            UserRealm realm <span style="color: #666666">=</span> context<span style="color: #666666">.</span><span style="color: #7D9029">getUserRealm</span><span style="color: #666666">();</span>
-            <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>realm<span style="color: #666666">.</span><span style="color: #7D9029">getUserStoreManager</span><span style="color: #666666">().</span><span style="color: #7D9029">isExistingUser</span><span style="color: #666666">(</span>username<span style="color: #666666">))</span> <span style="color: #666666">{</span>
-                realm<span style="color: #666666">.</span><span style="color: #7D9029">getUserStoreManager</span><span style="color: #666666">().</span><span style="color: #7D9029">deleteUser</span><span style="color: #666666">(</span>username<span style="color: #666666">);</span>
-            <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
-<span style="color: #008000; font-weight: bold">%&gt;</span> <span style="color: #008000; font-weight: bold">&lt;p&gt;&lt;b&gt;</span>The user <span style="color: #008000; font-weight: bold">&lt;%=</span>username<span style="color: #008000; font-weight: bold">%&gt;</span> does not exists<span style="color: #008000; font-weight: bold">&lt;/b&gt;&lt;/p&gt;</span> <span style="color: #008000; font-weight: bold">&lt;%</span>
-            <span style="color: #666666">}</span>
-        <span style="color: #666666">}</span>
-    <span style="color: #666666">}</span>
-<span style="color: #008000; font-weight: bold">%&gt;</span>
+<html>
+<head>
+    <title></title>
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<a name="line1"> 1</a> &lt;%@page import=&quot;org.wso2.carbon.user.api.UserRealm&quot; %&gt;
+<a name="line2"> 2</a> &lt;%@page import=&quot;org.wso2.carbon.context.CarbonContext&quot; %&gt;
+<a name="line3"> 3</a> &lt;html&gt;
+<a name="line4"> 4</a> &lt;head&gt;&lt;/head&gt;
+<a name="line5"> 5</a> &lt;body&gt;
+<a name="line6"> 6</a> &lt;h2&gt;WSO2 Carbon User Manage Usage Demo&lt;/h2&gt;
+<a name="line7"> 7</a>
+<a name="line8"> 8</a> &lt;%
+<a name="line9"> 9</a>     if(request.getParameter(&quot;add&quot;) != null){
+<a name="line10">10</a>         String username = request.getParameter(&quot;username&quot;);
+<a name="line11">11</a>         String pass = request.getParameter(&quot;password&quot;);
+<a name="line12">12</a>         if (username != null &amp;&amp; username.trim().length() &gt; 0) {
+<a name="line13">13</a>             CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+<a name="line14">14</a>             UserRealm realm = context.getUserRealm();
+<a name="line15">15</a>             if (!realm.getUserStoreManager().isExistingUser(username)) {
+<a name="line16">16</a>                 realm.getUserStoreManager().addUser(username, pass, null, null, null);
+<a name="line17">17</a>             } else {
+<a name="line18">18</a> %&gt; &lt;p&gt;&lt;b&gt;The user &lt;%=username%&gt; already exists&lt;/b&gt;&lt;/p&gt; &lt;%
+<a name="line19">19</a>             }
+<a name="line20">20</a>         }
+<a name="line21">21</a>     } else if(request.getParameter(&quot;delete&quot;) != null){
+<a name="line22">22</a>         String username = request.getParameter(&quot;username&quot;);
+<a name="line23">23</a>         if(username != null &amp;&amp; !username.trim().isEmpty()){
+<a name="line24">24</a>             CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+<a name="line25">25</a>             UserRealm realm = context.getUserRealm();
+<a name="line26">26</a>             if (realm.getUserStoreManager().isExistingUser(username)) {
+<a name="line27">27</a>                 realm.getUserStoreManager().deleteUser(username);
+<a name="line28">28</a>             } else {
+<a name="line29">29</a> %&gt; &lt;p&gt;&lt;b&gt;The user &lt;%=username%&gt; does not exists&lt;/b&gt;&lt;/p&gt; &lt;%
+<a name="line30">30</a>             }
+<a name="line31">31</a>         }
+<a name="line32">32</a>     }
+<a name="line33">33</a> %&gt;
+<a name="line34">34</a>
+<a name="line35">35</a> &lt;h3&gt;Add User&lt;/h3&gt;
+<a name="line36">36</a> &lt;p&gt;
+<a name="line37">37</a> &lt;form action=&quot;index.jsp&quot; method=&quot;POST&quot;&gt;
+<a name="line38">38</a>     &lt;table&gt;
+<a name="line39">39</a>         &lt;tr&gt;
+<a name="line40">40</a>             &lt;td&gt;Username&lt;/td&gt;
+<a name="line41">41</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;username&quot;/&gt;&lt;/td&gt;
+<a name="line42">42</a>         &lt;/tr&gt;
+<a name="line43">43</a>         &lt;tr&gt;
+<a name="line44">44</a>             &lt;td&gt;Password&lt;/td&gt;
+<a name="line45">45</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;password&quot;/&gt;&lt;/td&gt;
+<a name="line46">46</a>         &lt;/tr&gt;
+<a name="line47">47</a>         &lt;tr&gt;
+<a name="line48">48</a>             &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line49">49</a>             &lt;td&gt;&lt;input type=&quot;submit&quot; value=&quot;Add&quot; name=&quot;add&quot;/&gt;&lt;/td&gt;
+<a name="line50">50</a>         &lt;/tr&gt;
+<a name="line51">51</a>     &lt;/table&gt;
+<a name="line52">52</a> &lt;/form&gt;
+<a name="line53">53</a> &lt;/p&gt;
+<a name="line54">54</a> &lt;/hr&gt;
+<a name="line55">55</a>
+<a name="line56">56</a> &lt;h3&gt;Delete User&lt;/h3&gt;
+<a name="line57">57</a> &lt;p&gt;
+<a name="line58">58</a> &lt;form action=&quot;index.jsp&quot; method=&quot;POST&quot;&gt;
+<a name="line59">59</a>     &lt;table&gt;
+<a name="line60">60</a>         &lt;tr&gt;
+<a name="line61">61</a>             &lt;td&gt;Username&lt;/td&gt;
+<a name="line62">62</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;username&quot;/&gt;&lt;/td&gt;
+<a name="line63">63</a>         &lt;/tr&gt;
+<a name="line64">64</a>         &lt;tr&gt;
+<a name="line65">65</a>             &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line66">66</a>             &lt;td&gt;&lt;input type=&quot;submit&quot; value=&quot;Delete&quot; name=&quot;delete&quot;/&gt;&lt;/td&gt;
+<a name="line67">67</a>         &lt;/tr&gt;
+<a name="line68">68</a>     &lt;/table&gt;
+<a name="line69">69</a> &lt;/form&gt;
+<a name="line70">70</a> &lt;/p&gt;
+<a name="line71">71</a> &lt;/hr&gt;
+<a name="line72">72</a>
+<a name="line73">73</a> &lt;h3&gt;The user list&lt;/h3&gt;
+<a name="line74">74</a> &lt;ol&gt;
+<a name="line75">75</a> &lt;%
+<a name="line76">76</a>     CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+<a name="line77">77</a>     UserRealm realm = context.getUserRealm();
+<a name="line78">78</a>     String[] names = realm.getUserStoreManager().listUsers(&quot;*&quot;, 100);
+<a name="line79">79</a>     for (String name : names) {
+<a name="line80">80</a> %&gt;&lt;li&gt;&lt;%=name%&gt;&lt;/li&gt;&lt;%
+<a name="line81">81</a>     }
+<a name="line82">82</a> %&gt;
+<a name="line83">83</a> &lt;/ol&gt;
+<a name="line84">84</a> &lt;/body&gt;
+<a name="line85">85</a> &lt;/html&gt;
 
-<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Add User<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
-    <span style="color: #008000; font-weight: bold">&lt;table&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Username<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;username&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Password<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;password&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;Add&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;add&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
-    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/hr&gt;</span>
-
-<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>Delete User<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;p&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;form</span> <span style="color: #7D9029">action=</span><span style="color: #BA2121">&quot;index.jsp&quot;</span> <span style="color: #7D9029">method=</span><span style="color: #BA2121">&quot;POST&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
-    <span style="color: #008000; font-weight: bold">&lt;table&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span>Username<span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;text&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;username&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;tr&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;</span><span style="color: #999999; font-weight: bold">&amp;nbsp;</span><span style="color: #008000; font-weight: bold">&lt;/td&gt;</span>
-            <span style="color: #008000; font-weight: bold">&lt;td&gt;&lt;input</span> <span style="color: #7D9029">type=</span><span style="color: #BA2121">&quot;submit&quot;</span> <span style="color: #7D9029">value=</span><span style="color: #BA2121">&quot;Delete&quot;</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;delete&quot;</span><span style="color: #008000; font-weight: bold">/&gt;&lt;/td&gt;</span>
-        <span style="color: #008000; font-weight: bold">&lt;/tr&gt;</span>
-    <span style="color: #008000; font-weight: bold">&lt;/table&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/form&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/p&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/hr&gt;</span>
-
-<span style="color: #008000; font-weight: bold">&lt;h3&gt;</span>The user list<span style="color: #008000; font-weight: bold">&lt;/h3&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;ol&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;%</span>
-    CarbonContext context <span style="color: #666666">=</span> CarbonContext<span style="color: #666666">.</span><span style="color: #7D9029">getThreadLocalCarbonContext</span><span style="color: #666666">();</span>
-    UserRealm realm <span style="color: #666666">=</span> context<span style="color: #666666">.</span><span style="color: #7D9029">getUserRealm</span><span style="color: #666666">();</span>
-    String<span style="color: #666666">[]</span> names <span style="color: #666666">=</span> realm<span style="color: #666666">.</span><span style="color: #7D9029">getUserStoreManager</span><span style="color: #666666">().</span><span style="color: #7D9029">listUsers</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;*&quot;</span><span style="color: #666666">,</span> <span style="color: #666666">100);</span>
-    <span style="color: #008000; font-weight: bold">for</span> <span style="color: #666666">(</span>String name <span style="color: #666666">:</span> names<span style="color: #666666">)</span> <span style="color: #666666">{</span>
-<span style="color: #008000; font-weight: bold">%&gt;&lt;li&gt;&lt;%=</span>name<span style="color: #008000; font-weight: bold">%&gt;&lt;/li&gt;&lt;%</span>
-    <span style="color: #666666">}</span>
-<span style="color: #008000; font-weight: bold">%&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/ol&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/body&gt;</span>
-<span style="color: #008000; font-weight: bold">&lt;/html&gt;</span>
-</pre></td></tr></table></div>
+</pre>
+<hr>
+syntax highlighted by <a href="http://www.palfrader.org/code2html">Code2HTML</a>, v. 0.9.1
+</body>
+</html>
