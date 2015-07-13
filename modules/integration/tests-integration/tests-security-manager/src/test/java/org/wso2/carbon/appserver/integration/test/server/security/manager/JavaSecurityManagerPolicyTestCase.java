@@ -63,6 +63,14 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
         this.userMode = userMode;
     }
 
+    @DataProvider
+    public static Object[][] userModeDataProvider() {
+        return new Object[][]{
+                new Object[]{TestUserMode.SUPER_TENANT_ADMIN},
+                new Object[]{TestUserMode.TENANT_ADMIN},
+        };
+    }
+
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
@@ -186,11 +194,4 @@ public class JavaSecurityManagerPolicyTestCase extends ASIntegrationTest {
                    webAppName + " Web Application unDeployment failed");
     }
 
-    @DataProvider
-    public static Object[][] userModeDataProvider() {
-        return new Object[][]{
-                new Object[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new Object[]{TestUserMode.TENANT_ADMIN},
-        };
-    }
 }
