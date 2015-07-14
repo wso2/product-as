@@ -63,6 +63,7 @@
         <module>TomcatWebApps/CarbonDataSourceAccessExample</module>
         <module>EntitlementFilter</module>
         <module>SSOValveSample</module>
+        <module>CarbonSaaSTest</module>
     </modules>
 
     <repositories>
