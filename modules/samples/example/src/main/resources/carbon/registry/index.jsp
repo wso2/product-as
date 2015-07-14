@@ -19,6 +19,7 @@
 <%@ page import="org.wso2.carbon.context.RegistryType" %>
 <%@ page import="org.wso2.carbon.registry.api.Registry" %>
 <%@ page import="org.wso2.carbon.registry.api.Resource" %>
+<%@ page import="org.wso2.carbon.registry.api.Collection" %>
 
 <h2>WSO2 Carbon Registry Usage Demo</h2>
 
@@ -82,6 +83,84 @@
 </p>
 <hr/>
 
+<h3>Add Collection</h3>
+<p>
+<form action="index.jsp" method="POST">
+    <table border="0">
+        <tr>
+            <td>Registry Type</td>
+            <td>
+                <select name="registryType">
+                    <option selected="true"><%= RegistryType.SYSTEM_CONFIGURATION.toString() %></option>
+                    <option><%= RegistryType.SYSTEM_GOVERNANCE.toString() %></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Resource Path</td>
+            <td><input type="text" name="collectionPath" value="bar"/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="Add" name="addCollection"></td>
+        </tr>
+    </table>
+</form>
+</p>
+<hr/>
+
+<h3>Is Collection Exist</h3>
+<p>
+<form action="index.jsp" method="POST">
+    <table border="0">
+        <tr>
+            <td>Registry Type</td>
+            <td>
+                <select name="registryType">
+                    <option selected="true"><%= RegistryType.SYSTEM_CONFIGURATION.toString() %></option>
+                    <option><%= RegistryType.SYSTEM_GOVERNANCE.toString() %></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Collection Path</td>
+            <td><input type="text" name="collectionPath" value="bar"/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="View" name="viewCollection"></td>
+        </tr>
+    </table>
+</form>
+</p>
+<hr/>
+
+<h3>Delete Resource/Collection</h3>
+<p>
+<form action="index.jsp" method="POST">
+    <table border="0">
+        <tr>
+            <td>Registry Type</td>
+            <td>
+                <select name="registryType">
+                    <option selected="true"><%= RegistryType.SYSTEM_CONFIGURATION.toString() %></option>
+                    <option><%= RegistryType.SYSTEM_GOVERNANCE.toString() %></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Registry Path</td>
+            <td><input type="text" name="registryPath" value="bar"/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="Delete" name="delete"></td>
+        </tr>
+    </table>
+</form>
+</p>
+<hr/>
+
 <%
     // Obtain the reference to the registry from the CarbonContext
     CarbonContext cCtx = CarbonContext.getThreadLocalCarbonContext();
@@ -120,5 +199,59 @@
             </p>
 <%
         }
+    } else if (request.getParameter("delete") != null) {
+        String registryPath = request.getParameter("registryPath");
+        if (registry.resourceExists(registryPath)) {
+            Resource resource = registry.get(registryPath);
+            registry.delete(registryPath);
+            if (!registry.resourceExists(registryPath)) {
+            	response.addHeader("resource-deleted", "true");
+%>
+                <p>
+                    <%= registryPath%> path deleted from <%= registryType%>
+                </p>
+<%
+            }
+        } else {
+%>
+            <p>
+                <%= registryPath%> does not exist in Registry <%= registryType%>!
+            </p>
+<%
+        }
+    } else if (request.getParameter("viewCollection") != null) {
+         String collectionPath = request.getParameter("collectionPath");
+         if (registry.resourceExists(collectionPath)) {
+             Resource resource = registry.get(collectionPath);
+             if(resource instanceof Collection){
+                response.addHeader("collection-exist", "true");
+%>
+                <p>
+                    Registry collection exists in <%= registryType%> path <%= collectionPath%>
+                </p>
+<%
+             } else {
+%>
+                <p>
+                    <%= collectionPath%> is not a collection.
+                </p>
+<%
+             }
+         } else {
+%>
+            <p>
+                Collection at path <%= collectionPath%> does not exist in Registry <%= registryType%>!
+            </p>
+<%
+         }
+    } else if (request.getParameter("addCollection") != null) {
+         Resource collection = registry.newCollection();
+         String collectionPath = request.getParameter("collectionPath");
+         registry.put(collectionPath, collection);
+%>
+        <p>
+            Added collection : <%= collectionPath %>
+        </p>
+<%
     }
 %>
