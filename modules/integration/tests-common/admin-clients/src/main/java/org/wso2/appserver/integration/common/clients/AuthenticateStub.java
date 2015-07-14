@@ -35,14 +35,12 @@ public class AuthenticateStub {
     }
 
     public static Stub authenticateStub(Stub stub, String sessionCookie, String backendURL) {
-        long soTimeout = 5 * 60 * 1000; // Three minutes
+        long soTimeout = 5 * 60 * 1000; // Five minutes
 
         ServiceClient client = stub._getServiceClient();
         Options option = client.getOptions();
         option.setManageSession(true);
         option.setTimeOutInMilliSeconds(soTimeout);
-        System.out.println("XXXXXXXXXXXXXXXXXXX" +
-                           backendURL +  client.getServiceContext().getAxisService().getName().replaceAll("[^a-zA-Z]", ""));
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.COOKIE_STRING, sessionCookie);
         option.setTo(new EndpointReference(backendURL +  client.getServiceContext().getAxisService().getName().replaceAll("[^a-zA-Z]", "")));
         if (log.isDebugEnabled()) {

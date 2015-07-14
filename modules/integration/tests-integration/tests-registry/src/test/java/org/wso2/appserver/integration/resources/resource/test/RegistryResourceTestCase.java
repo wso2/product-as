@@ -176,7 +176,6 @@ public class RegistryResourceTestCase extends ASIntegrationTest{
                                "|", "\\", "<", ">", "\"", "\'", ";"};
         for (String aCharBuffer : charBuffer) {
             try {
-                System.out.println(aCharBuffer);
                 resourceAdminServiceClient.addTextResource(PARENT_PATH + "/" + WSO2_COLL,
                                                            TEXT_FILE_NAME + aCharBuffer,
                                                            "text/plain", "sample", "Hello world");
