@@ -1,0 +1,82 @@
+<!--
+ ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<html>
+<head>
+    <title></title>
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<a name="line1"> 1</a> &lt;h2&gt;WSO2 Carbon Authentication Demo&lt;/h2&gt;
+<a name="line2"> 2</a> 
+<a name="line3"> 3</a> &lt;p&gt;
+<a name="line4"> 4</a>     This demo shows how to integrate your Web application with the Carbon authentication mechanism.
+<a name="line5"> 5</a> &lt;/p&gt;
+<a name="line6"> 6</a> &lt;%
+<a name="line7"> 7</a>     Object failed = request.getParameter(&quot;failed&quot;);
+<a name="line8"> 8</a>     if (failed != null) {
+<a name="line9"> 9</a>         response.addHeader(&quot;logged-in&quot;, &quot;false&quot;);
+<a name="line10">10</a> %&gt;
+<a name="line11">11</a> &lt;p&gt;&lt;font color=&quot;red&quot;&gt;Login Failed!&lt;/font&gt;&lt;/p&gt;
+<a name="line12">12</a> &lt;%
+<a name="line13">13</a>     }
+<a name="line14">14</a> %&gt;
+<a name="line15">15</a> &lt;%
+<a name="line16">16</a>     if (request.getParameter(&quot;logout&quot;) == null &amp;&amp; session.getAttribute(&quot;logged-in&quot;) != null) {
+<a name="line17">17</a>         String userName = (String) session.getAttribute(&quot;username&quot;);
+<a name="line18">18</a>         response.addHeader(&quot;logged-in&quot;, &quot;true&quot;);
+<a name="line19">19</a>         response.addHeader(&quot;username&quot;, userName);
+<a name="line20">20</a>         response.addHeader(&quot;logged-in-with-role&quot;, (String) session.getAttribute(&quot;logged-in-with-role&quot;));
+<a name="line21">21</a> %&gt;
+<a name="line22">22</a> &lt;p&gt;
+<a name="line23">23</a>     Welcome &lt;%= userName %&gt;&amp;nbsp;&lt;a href=&quot;index.jsp?logout=true&quot;&gt;Logout&lt;/a&gt;
+<a name="line24">24</a> &lt;/p&gt;
+<a name="line25">25</a> &lt;%
+<a name="line26">26</a>         return;
+<a name="line27">27</a>     } else {
+<a name="line28">28</a>         if (request.getParameter(&quot;logout&quot;) != null) {
+<a name="line29">29</a>             session.invalidate();
+<a name="line30">30</a>             response.addHeader(&quot;logged-out&quot;, &quot;true&quot;);
+<a name="line31">31</a>         }
+<a name="line32">32</a> %&gt;
+<a name="line33">33</a> &lt;form action=&quot;login.jsp&quot; name=&quot;loginFrm&quot; method=&quot;POST&quot;&gt;
+<a name="line34">34</a>     &lt;table&gt;
+<a name="line35">35</a>         &lt;tr&gt;
+<a name="line36">36</a>             &lt;td&gt;Username&lt;/td&gt;
+<a name="line37">37</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;username&quot;/&gt;&lt;/td&gt;
+<a name="line38">38</a>         &lt;/tr&gt;
+<a name="line39">39</a>         &lt;tr&gt;
+<a name="line40">40</a>             &lt;td&gt;Password&lt;/td&gt;
+<a name="line41">41</a>             &lt;td&gt;&lt;input type=&quot;password&quot; name=&quot;password&quot;/&gt;&lt;/td&gt;
+<a name="line42">42</a>         &lt;/tr&gt;
+<a name="line43">43</a>         &lt;tr&gt;
+<a name="line44">44</a>             &lt;td colspan=&quot;2&quot;&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line45">45</a>         &lt;/tr&gt;
+<a name="line46">46</a>         &lt;tr&gt;
+<a name="line47">47</a>             &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line48">48</a>             &lt;td&gt;&lt;input type=&quot;submit&quot; value=&quot;Login&quot;/&gt;&lt;/td&gt;
+<a name="line49">49</a>         &lt;/tr&gt;
+<a name="line50">50</a>     &lt;/table&gt;
+<a name="line51">51</a> &lt;/form&gt;
+<a name="line52">52</a> &lt;%
+<a name="line53">53</a>     }
+<a name="line54">54</a> %&gt;
+
+</pre>
+<!--syntax highlighted by <a href="http://www.palfrader.org/code2html">Code2HTML</a>, v. 0.9.1-->
+</body>
+</html>

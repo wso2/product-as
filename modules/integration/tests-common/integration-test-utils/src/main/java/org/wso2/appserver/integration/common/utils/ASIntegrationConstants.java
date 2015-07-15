@@ -17,7 +17,27 @@
 */
 package org.wso2.appserver.integration.common.utils;
 
+import java.io.File;
+
 public class ASIntegrationConstants {
     public static final String JAGGERY_APPLICATION = "jaggery";
     public static final String WEB_APPLICATION = "webapps";
+    public static final String AS_PRODUCT_GROUP = "AS";
+    public static final String AS_INSTANCE_0002 = "appServerInstance0002";
+    public static final String AS_INSTANCE_0003 = "appServerInstance0003";
+    public static final String CONTEXT_XPATH_DATA_SOURCE = "//datasources/datasource[@name='%s']";
+    public static final String PASSWORD_PROPERTY_SECRET_ALIAS_KEY = "svns:secretAlias";
+    public static final String PASSWORD_PROPERTY_SECRET_ALIAS_VALUE = "svns:secretAlias";
+    public static final String SVN_SECRET_ALIAS_WSO2_DATASOURCE = "Datasources.WSO2_CARBON_DB.Configuration.Password";
+    public static final String ENCRYPTED_PASSWD_URL =
+            "//datasources-configuration/datasources/datasource[name='WSO2_CARBON_DB']/definition[@type='RDBMS']" +
+            "/configuration/password";
+    public static final String DATA_SOURCE_URL = "//datasources/datasource[@name='%s']/url";
+    public static final String DATA_SOURCE_DRIVER_CLASS_NAME = "//datasources/datasource[@name='%s']/driverClassName";
+    public static final String DATA_SOURCE_DB_USER_NAME = "//datasources/datasource[@name='%s']/username";
+    public static final String DATA_SOURCE_DB_PASSWORD = "//datasources/datasource[@name='%s']/password";
+    public static final String TARGET_RESOURCE_LOCATION =
+            System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
+            File.separator + "artifacts" + File.separator + "AS" + File.separator;
+    public static final int WEBAPP_WAIT_PERIOD = 50000;
 }

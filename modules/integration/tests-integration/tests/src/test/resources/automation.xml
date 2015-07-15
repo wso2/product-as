@@ -31,13 +31,9 @@
         -->
         <executionEnvironment>standalone</executionEnvironment>
         <!--
-         Change this to user/tenant to execute test with user mode or tenant mode
-        -->
-        <multiTenantMode>false</multiTenantMode>
-        <!--
          Change this to true if you want to generate coverage statistics
         -->
-        <coverage>false</coverage>
+        <coverage>true</coverage>
         <!--
          Change this to true if you want to enable framework dashboard
         -->
@@ -66,7 +62,7 @@
     -->
     <datasources>
         <datasource name="dataService">
-            <url>jdbc:h2:testDB</url>
+            <url>jdbc:h2:</url>
             <username>wso2carbon</username>
             <password>wso2carbon</password>
             <driverClassName>org.h2.Driver</driverClassName>
@@ -77,7 +73,24 @@
             <password>wso2carbon</password>
             <driverClassName>org.h2.Driver</driverClassName>
         </datasource>
+        <datasource name="default">
+            <url>/repository/database/WSO2CARBON_DB</url>
+            <username>wso2carbon</username>
+            <password>wso2carbon</password>
+            <driverClassName>org.h2.Driver</driverClassName>
+        </datasource>
     </datasources>
+
+    <!-- Database urls for change password testing by carbon tool chpasswd.sh-->
+    <databases>
+        <database name="H2DB">
+            <url>/repository/database/WSO2CARBON_DB</url>
+        </database>
+        <database name="MySQL">
+            <url>jdbc:mysql://localhost:3306/userstore?autoReconnect=true</url>
+        </database>
+    </databases>
+
     <security>
         <!--
                     KeyStore which will be used for encrypting/decrypting passwords
@@ -262,13 +275,18 @@
         <platformExecutionManager>
             <extentionClasses>
                 <class>
-                    <name>org.wso2.carbon.integration.common.extensions.carbonserver.CarbonServerExtension</name>
+                    <name>org.wso2.carbon.automation.extensions.servers.carbonserver.CarbonServerExtension</name>
                     <!--<parameter name="-DportOffset" value="0" />-->
-                    <!--<parameter name="cmdArg" value="debug 5005" />-->
+                    <!--<parameter name="cmdArg" value="debug 8000" />-->
                 </class>
                 <class>
                     <name>org.wso2.carbon.integration.common.extensions.usermgt.UserPopulateExtension</name>
                 </class>
+                <!--<class>-->
+                    <!--<name>org.wso2.carbon.automation.extensions.servers.coverageServer.RemoteCoverageServerExtension</name>-->
+                    <!--<parameter name="coverageServerPort" value="6331" />-->
+                    <!--<parameter name="coverageDumpFilePath" value="/Users/krishantha/Desktop/jacoco" />-->
+                <!--</class>-->
             </extentionClasses>
         </platformExecutionManager>
 

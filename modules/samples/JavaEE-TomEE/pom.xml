@@ -1,0 +1,76 @@
+<!--
+  ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.wso2.appserver</groupId>
+        <artifactId>wso2appserver-samples</artifactId>
+        <version>5.3.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>wso2appserver-javaee-samples</artifactId>
+    <packaging>pom</packaging>
+    <name>Samples/JavaEE-TomEE</name>
+
+    <modules>
+        <module>javaee-examples</module>
+        <module>CDI-Servlet/cdi-alternative</module>
+        <module>CDI-Servlet/cdi-decorator</module>
+        <module>CDI-Servlet/cdi-event</module>
+        <module>CDI-Servlet/cdi-inject</module>
+        <module>CDI-Servlet/cdi-interceptor</module>
+        <module>CDI-Servlet/cdi-produces</module>
+        <module>CDI-Servlet/cdi-qualifier</module>
+        <module>CDI-Servlet/cdi-scope</module>
+        <module>JPA-Servlet/jpa-order-processor</module>
+        <module>JPA-JaxRS/studentRegister</module>
+        <module>JPA-JaxWS/jpa-contacts-database</module>
+        <module>JSF/jsf-custom-view-handler</module>
+        <module>JSF/jsf-webapp-w-custom-view-handler</module>
+        <module>JSF-EJB/greeting</module>
+        <module>JSF-BVAL/jsf-marks-calculator</module>
+        <module>JTA-Servlet/jta-money-transfer</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openejb</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>6.0-6</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <tomee.version>1.6.0.1</tomee.version>
+        <junit.version>4.8.2</junit.version>
+    </properties>
+
+</project>

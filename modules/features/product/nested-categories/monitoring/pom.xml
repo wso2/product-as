@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>org.wso2.appserver.nested.categories</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -56,17 +56,23 @@
                                 </properties>
                             </adviceFile>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.logging.mgt:${carbon.commons.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.logging.mgt:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.system.statistics:${carbon.commons.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.system.statistics:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.soaptracer:${carbon.commons.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.soaptracer:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.databridge.datapublisher:${carbon.commons.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.databridge.datapublisher:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.message.flows:${carbon.commons.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.message.flows:${carbon.commons.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.bam.webapp.agent:${carbon.deployment.version}
+                                <importFeatureDef>
+                                    org.wso2.carbon.bam.webapp.agent:${carbon.deployment.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
                                     org.wso2.carbon.bam.service.agent:${carbon.deployment.version}

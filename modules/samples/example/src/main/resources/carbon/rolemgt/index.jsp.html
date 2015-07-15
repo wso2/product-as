@@ -1,0 +1,132 @@
+<!--
+ ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+
+<html>
+<head>
+    <title></title>
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<a name="line1">  1</a> &lt;%@page import=&quot;org.wso2.carbon.user.api.UserRealm&quot; %&gt;
+<a name="line2">  2</a> &lt;%@page import=&quot;org.wso2.carbon.context.CarbonContext&quot; %&gt;
+<a name="line3">  3</a> &lt;%@page import=&quot;java.util.List&quot;%&gt;
+<a name="line4">  4</a> &lt;%@page import=&quot;java.util.Arrays&quot;%&gt;
+<a name="line5">  5</a> &lt;%@page import=&quot;java.util.ArrayList&quot;%&gt;
+<a name="line6">  6</a> &lt;%@page import=&quot;org.wso2.carbon.user.api.Permission&quot;%&gt;
+<a name="line7">  7</a> &lt;html&gt;
+<a name="line8">  8</a> &lt;head&gt;&lt;/head&gt;
+<a name="line9">  9</a> &lt;body&gt;
+<a name="line10"> 10</a> &lt;h2&gt;WSO2 Carbon Role Manage Usage Demo&lt;/h2&gt;
+<a name="line11"> 11</a>
+<a name="line12"> 12</a> &lt;%
+<a name="line13"> 13</a>     CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+<a name="line14"> 14</a>     UserRealm realm = context.getUserRealm();
+<a name="line15"> 15</a>     String username = request.getParameter(&quot;username&quot;);
+<a name="line16"> 16</a>
+<a name="line17"> 17</a>     if(request.getParameter(&quot;add&quot;) != null || request.getParameter(&quot;remove&quot;) != null){
+<a name="line18"> 18</a>         String role = request.getParameter(&quot;role&quot;);
+<a name="line19"> 19</a>         if (username != null &amp;&amp; username.trim().length() &gt; 0) {
+<a name="line20"> 20</a>             if (realm.getUserStoreManager().isExistingUser(username) &amp;&amp; realm.getUserStoreManager().isExistingRole(role)) {
+<a name="line21"> 21</a>                 List&lt;String&gt; rolesList = new ArrayList&lt;String&gt;(Arrays.asList(realm.getUserStoreManager().getRoleListOfUser(username)));
+<a name="line22"> 22</a>                 if(request.getParameter(&quot;add&quot;) != null){
+<a name="line23"> 23</a>                     if(!rolesList.contains(role)){
+<a name="line24"> 24</a>                         realm.getUserStoreManager().updateRoleListOfUser(username, new String[]{}, new String[]{role});
+<a name="line25"> 25</a>                     } else{
+<a name="line26"> 26</a> %&gt; &lt;p&gt;&lt;b&gt;The user &lt;%=username%&gt; already have &lt;%=role%&gt; &lt;/b&gt;&lt;/p&gt; &lt;%
+<a name="line27"> 27</a>                     }
+<a name="line28"> 28</a>                 } else {
+<a name="line29"> 29</a>                     if(rolesList.contains(role)){
+<a name="line30"> 30</a>                         realm.getUserStoreManager().updateRoleListOfUser(username, new String[]{role}, new String[]{});
+<a name="line31"> 31</a>                     } else {
+<a name="line32"> 32</a> %&gt; &lt;p&gt;&lt;b&gt;The user &lt;%=username%&gt; does not have &lt;%=role%&gt; &lt;/b&gt;&lt;/p&gt; &lt;%
+<a name="line33"> 33</a>                     }
+<a name="line34"> 34</a>                 }
+<a name="line35"> 35</a>             } else {
+<a name="line36"> 36</a> %&gt; &lt;p&gt;&lt;b&gt;The user &lt;%=username%&gt; or &lt;%=role%&gt; does not exist&lt;/b&gt;&lt;/p&gt; &lt;%
+<a name="line37"> 37</a>             }
+<a name="line38"> 38</a>         }
+<a name="line39"> 39</a>     } else if(request.getParameter(&quot;view&quot;) != null){
+<a name="line40"> 40</a>         String[] rolesList = realm.getUserStoreManager().getRoleListOfUser(username);
+<a name="line41"> 41</a> %&gt;&lt;b&gt;Roles of &lt;%=username%&gt;&lt;/b&gt;&lt;ul&gt;&lt;%
+<a name="line42"> 42</a>         for(String role : rolesList){
+<a name="line43"> 43</a> %&gt;&lt;li&gt;&lt;%=role%&gt;&lt;/li&gt;&lt;%
+<a name="line44"> 44</a>         }
+<a name="line45"> 45</a>     }
+<a name="line46"> 46</a> %&gt;
+<a name="line47"> 47</a> &lt;/ul&gt;
+<a name="line48"> 48</a>
+<a name="line49"> 49</a> &lt;h3&gt;Add/Remove Role&lt;/h3&gt;
+<a name="line50"> 50</a> &lt;p&gt;
+<a name="line51"> 51</a> &lt;form action=&quot;index.jsp&quot; method=&quot;POST&quot;&gt;
+<a name="line52"> 52</a>     &lt;table&gt;
+<a name="line53"> 53</a>         &lt;tr&gt;
+<a name="line54"> 54</a>             &lt;td&gt;Username&lt;/td&gt;
+<a name="line55"> 55</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;username&quot;/&gt;&lt;/td&gt;
+<a name="line56"> 56</a>         &lt;/tr&gt;
+<a name="line57"> 57</a>         &lt;tr&gt;
+<a name="line58"> 58</a>             &lt;td&gt;Role&lt;/td&gt;
+<a name="line59"> 59</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;role&quot;/&gt;&lt;/td&gt;
+<a name="line60"> 60</a>         &lt;/tr&gt;
+<a name="line61"> 61</a>         &lt;tr&gt;
+<a name="line62"> 62</a>             &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line63"> 63</a>             &lt;td&gt;
+<a name="line64"> 64</a>                 &lt;input type=&quot;submit&quot; value=&quot;Add&quot; name=&quot;add&quot;/&gt;
+<a name="line65"> 65</a>                 &lt;input type=&quot;submit&quot; value=&quot;Remove&quot; name=&quot;remove&quot;/&gt;
+<a name="line66"> 66</a>             &lt;/td&gt;
+<a name="line67"> 67</a>         &lt;/tr&gt;
+<a name="line68"> 68</a>     &lt;/table&gt;
+<a name="line69"> 69</a> &lt;/form&gt;
+<a name="line70"> 70</a> &lt;/p&gt;
+<a name="line71"> 71</a> &lt;/hr&gt;
+<a name="line72"> 72</a>
+<a name="line73"> 73</a> &lt;h3&gt;Get User Roles&lt;/h3&gt;
+<a name="line74"> 74</a> &lt;p&gt;
+<a name="line75"> 75</a> &lt;form action=&quot;index.jsp&quot; method=&quot;POST&quot;&gt;
+<a name="line76"> 76</a>     &lt;table&gt;
+<a name="line77"> 77</a>         &lt;tr&gt;
+<a name="line78"> 78</a>             &lt;td&gt;Username&lt;/td&gt;
+<a name="line79"> 79</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;username&quot;/&gt;&lt;/td&gt;
+<a name="line80"> 80</a>         &lt;/tr&gt;
+<a name="line81"> 81</a>         &lt;tr&gt;
+<a name="line82"> 82</a>             &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line83"> 83</a>             &lt;td&gt;
+<a name="line84"> 84</a>                 &lt;input type=&quot;submit&quot; value=&quot;View&quot; name=&quot;view&quot;/&gt;
+<a name="line85"> 85</a>             &lt;/td&gt;
+<a name="line86"> 86</a>         &lt;/tr&gt;
+<a name="line87"> 87</a>     &lt;/table&gt;
+<a name="line88"> 88</a> &lt;/form&gt;
+<a name="line89"> 89</a> &lt;/p&gt;
+<a name="line90"> 90</a> &lt;/hr&gt;
+<a name="line91"> 91</a>
+<a name="line92"> 92</a>
+<a name="line93"> 93</a> &lt;h3&gt;The Role list&lt;/h3&gt;
+<a name="line94"> 94</a> &lt;ol&gt;
+<a name="line95"> 95</a> &lt;%
+<a name="line96"> 96</a>     String[] roles = realm.getUserStoreManager().getRoleNames();
+<a name="line97"> 97</a>     for (String role : roles) {
+<a name="line98"> 98</a> %&gt;&lt;li&gt;&lt;%=role%&gt;&lt;/li&gt;&lt;%
+<a name="line99"> 99</a>     }
+<a name="line100">100</a> %&gt;
+<a name="line101">101</a> &lt;/ol&gt;
+<a name="line102">102</a> &lt;/body&gt;
+<a name="line103">103</a> &lt;/html&gt;
+
+</pre>
+<!--syntax highlighted by <a href="http://www.palfrader.org/code2html">Code2HTML</a>, v. 0.9.1-->
+</body>
+</html>

@@ -27,12 +27,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver</groupId>
-    <artifactId>wso2appserver-samples-parent</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <artifactId>wso2appserver-samples</artifactId>
+    <version>5.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>WSO2 AppServer - Samples Parent</name>
+    <name>WSO2 AppServer - Samples</name>
     <url>http://wso2.org/projects/appserver/java</url>
-    <description>WSO2 AppServer Samples Parent</description>
+    <description>WSO2 AppServer Samples</description>
 
     <organization>
         <name>WSO2 Inc</name>
@@ -47,9 +47,22 @@
     </licenses>
 
     <modules>
-        <module>product</module>
-        <module>service</module>
-        <module>common/webapp</module>
+        <module>example</module>
+        <module>ASVersionSamples</module>
+        <module>Chad</module>
+        <module>TinyURL</module>
+        <module>FlickrClient</module>
+        <module>Jaxws-Jaxrs</module>
+        <module>JavaEE-TomEE</module>
+        <module>HelloWorld</module>
+        <module>HelloWorldWebapp</module>
+        <module>WebappVersioning</module>
+        <module>VirtualDirectoryListing</module>
+        <module>TomcatWebApps/GenericJavaBeanResource</module>
+        <module>TomcatWebApps/JDBCDataSource</module>
+        <module>TomcatWebApps/CarbonDataSourceAccessExample</module>
+        <module>EntitlementFilter</module>
+        <module>SSOValveSample</module>
     </modules>
 
     <repositories>

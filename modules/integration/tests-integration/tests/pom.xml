@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>test-integration-appSever</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -16,12 +16,21 @@
     <packaging>jar</packaging>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>${project.basedir}/target/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <inherited>false</inherited>
                 <configuration>
                     <argLine>-Xmx1024m -XX:-UseSplitVerifier</argLine>
+                    <!--<argLine>-Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8001</argLine>-->
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng-server-mgt.xml</suiteXmlFile>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
@@ -53,10 +62,8 @@
                             <value>false</value>
                         </property>
                         <sec.verifier.dir>${basedir}/target/security-verifier/</sec.verifier.dir>
-                        <emma.home>${basedir}/target/emma</emma.home>
                         <instr.file>${basedir}/src/test/resources/instrumentation.txt</instr.file>
                         <filters.file>${basedir}/src/test/resources/filters.txt</filters.file>
-                        <emma.output>${basedir}/target/emma</emma.output>
                     </systemProperties>
                     <workingDirectory>${basedir}/target</workingDirectory>
                 </configuration>
@@ -64,18 +71,16 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-
                     <execution>
-                        <id>copy-emma-dependencies</id>
+                        <id>copy-jacoco-dependencies</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/emma</outputDirectory>
+                            <outputDirectory>${project.build.directory}/jacoco</outputDirectory>
                             <includeTypes>jar</includeTypes>
-                            <includeArtifactIds>emma
-                            </includeArtifactIds>
+                            <includeArtifactIds>org.jacoco.agent</includeArtifactIds>
                         </configuration>
                     </execution>
 
@@ -111,6 +116,96 @@
                                     <includes>**/*.jks,**/*.mar,**/axis2_client.xml</includes>
                                 </artifactItem>
                             </artifactItems>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-spring3-restful</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/spring</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                spring3-restful-simple-service, spring3-restful-jndi-service,
+                                spring3-restful-webapp-classloading, spring3-restful-faulty-service,
+                                spring4-restful-simple-service, spring4-restful-jndi-service,
+                                spring4-restful-webapp-classloading, spring4-restful-faulty-service
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>unpack-spring3-restful-runtime-libs</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wso2.appserver</groupId>
+                                    <artifactId>spring3-restful-runtime-libs</artifactId>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/target/resources/artifacts/AS/spring</outputDirectory>
+                                    <includes>**/*.jar</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-jaxrs-restful</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/jaxrs/client</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                jaxrs-client-api-test-webapp
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-hibernate-war</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war/hibernate</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                hibernate-example
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-logging-artifacts</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                access-logs-test-webapp,
+                                commons-logging-test-webapp,
+                                slf4j-logging-test-webapp,
+                                carbon-logging-test-webapp,
+                                jul-logs-test-webapp
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                 </executions>
@@ -268,9 +363,17 @@
             <groupId>org.wso2.carbon.automationutils</groupId>
             <artifactId>org.wso2.carbon.integration.common.tests</artifactId>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.registry</groupId>
+            <artifactId>org.wso2.carbon.registry.resource.stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.registry</groupId>
+            <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.xfer</groupId>
@@ -281,6 +384,133 @@
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
             <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.tomcat</groupId>
+            <artifactId>tomcat</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.tyrus.bundles</groupId>
+            <artifactId>tyrus-standalone-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database.wso2</groupId>
+            <artifactId>h2-database-engine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-contacts-database</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>classes</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Spring Service Integration Test Common Artifacts -->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-simple-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-jndi-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-webapp-classloading</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-runtime-libs</artifactId>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring3-restful-faulty-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-simple-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-jndi-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-faulty-service</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>spring4-restful-webapp-classloading</artifactId>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>hibernate-example</artifactId>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jaxrs-client-api-test-webapp</artifactId>
+            <type>war</type>
+        </dependency>
+
+        <!-- Logging Test Common Artifacts-->
+        <!--Access logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>access-logs-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--Commons logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>commons-logging-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--Slf4j logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>slf4j-logging-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--Carbon logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>carbon-logging-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--JUL logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jul-logs-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

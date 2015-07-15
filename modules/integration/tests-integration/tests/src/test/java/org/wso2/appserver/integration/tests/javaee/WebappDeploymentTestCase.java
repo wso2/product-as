@@ -18,6 +18,14 @@
 
 package org.wso2.appserver.integration.tests.javaee;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.stream.XMLStreamException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.commons.logging.Log;
@@ -29,70 +37,50 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
+import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.testng.Assert.assertTrue;
 
-public abstract class WebappDeploymentTestCase extends
-                                    ASIntegrationTest {
-
-    private static final Log log = LogFactory.getLog(WebappDeploymentTestCase.class);
+public abstract class WebappDeploymentTestCase extends ASIntegrationTest {
 
     public static final String PASS = "Pass";
     public static final String FAIL = "Fail";
+    private static final Log log = LogFactory.getLog(WebappDeploymentTestCase.class);
     private final String hostName = "localhost";
-
-    private String webAppFileName;
-    private String webAppName;
-    //private String webAppURL;
     protected WebAppAdminClient webAppAdminClient;
+    private String webAppFileName;
+    private String webAppFilePath;
+    private String webAppName;
 
-
-    @BeforeClass(alwaysRun = true)
+    //    @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         super.init();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+    }
 
+    @BeforeClass(alwaysRun = true)
+    public void init(TestUserMode testUserMode) throws Exception {
+        super.init(testUserMode);
+        webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
     }
 
     @AfterClass(alwaysRun = true)
     public void cleanupWebApps() throws Exception {
         webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
-                backendURL, sessionCookie,
-                webAppName), "Web Application unDeployment failed");
-
+        assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, webAppName),
+                "Web Application unDeployment failed");
     }
 
     @Test(groups = "wso2.as", description = "Deploying web application")
     public void webApplicationDeploymentTest() throws Exception {
-        webAppAdminClient
-                .uploadWarFile(FrameworkPathUtil.getSystemResourceLocation()
-                                 + "artifacts" + File.separator + "AS" + File.separator
-                                 + "javaee" + File.separator + webAppFileName);
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator +
+                "AS" + File.separator + "javaee" + File.separator + webAppFilePath + File.separator + webAppFileName);
 
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(
-                backendURL, sessionCookie,
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie,
                 webAppName), "Web Application Deployment failed");
     }
-
-//    @Test(groups = "wso2.as", description = "Invoke web application", dependsOnMethods = "webApplicationDeploymentTest")
-//    public void testInvokeWebApp() throws Exception {
-//        Map<String, String> results = toResultMap(runAndGetResultAsString(webAppURL));
-//        assertEquals(PASS, results.get("Tomcat"));
-//        assertEquals(PASS, results.get("Carbon"));
-//        assertEquals(PASS, results.get("CXF"));
-//        assertEquals(PASS, results.get("Spring"));
-//    }
 
     protected String runAndGetResultAsString(String webAppURL) throws Exception {
         log.info("Webapp URL : " + webAppURL);
@@ -103,7 +91,7 @@ public abstract class WebappDeploymentTestCase extends
         int responseCode1;
         try {
             URL e = new URL(webAppURL);
-            httpCon = (HttpURLConnection)e.openConnection();
+            httpCon = (HttpURLConnection) e.openConnection();
             httpCon.setConnectTimeout(30000);
             InputStream in = httpCon.getInputStream();
             text = getStringFromInputStream(in);
@@ -113,12 +101,11 @@ public abstract class WebappDeploymentTestCase extends
             log.error("Failed to get the response " + var12);
             throw new Exception("Failed to get the response :" + var12);
         } finally {
-            if(httpCon != null) {
+            if (httpCon != null) {
                 httpCon.disconnect();
             }
 
         }
-
         Assert.assertEquals(responseCode1, 200, "Response code not 200 for " + webAppURL);
 
         return text;
@@ -133,7 +120,7 @@ public abstract class WebappDeploymentTestCase extends
         int responseCode1;
         try {
             URL e = new URL(webAppURL);
-            httpCon = (HttpURLConnection)e.openConnection();
+            httpCon = (HttpURLConnection) e.openConnection();
             httpCon.setConnectTimeout(30000);
             httpCon.setRequestProperty("Accept", "application/xml");
             InputStream in = httpCon.getInputStream();
@@ -144,14 +131,14 @@ public abstract class WebappDeploymentTestCase extends
             log.error("Failed to get the response " + var12);
             throw new Exception("Failed to get the response :" + var12);
         } finally {
-            if(httpCon != null) {
+            if (httpCon != null) {
                 httpCon.disconnect();
             }
 
         }
 
         Assert.assertEquals(responseCode1, 200, "Response code not 200");
-        if(xmlContent != null) {
+        if (xmlContent != null) {
             try {
                 return AXIOMUtil.stringToOM(xmlContent);
             } catch (XMLStreamException var11) {
@@ -186,8 +173,8 @@ public abstract class WebappDeploymentTestCase extends
         if (i > 0) {
             key = input.substring(0, i).trim();
         }
-        if (input.length() > i+1) {
-            value = input.substring(i+1).trim();
+        if (input.length() > i + 1) {
+            value = input.substring(i + 1).trim();
         }
 
         keyValue[0] = key;
@@ -203,7 +190,7 @@ public abstract class WebappDeploymentTestCase extends
 
         int i;
         try {
-            while((i = reader.read(buff)) > 0) {
+            while ((i = reader.read(buff)) > 0) {
                 retValue.append(new String(buff, 0, i));
             }
         } catch (Exception var6) {
@@ -219,17 +206,18 @@ public abstract class WebappDeploymentTestCase extends
         return webAppFileName;
     }
 
-    public String getWebAppName() {
-        return webAppName;
-    }
-
     public void setWebAppFileName(String webAppFileName) {
         this.webAppFileName = webAppFileName;
+    }
+
+    public String getWebAppName() {
+        return webAppName;
     }
 
     public void setWebAppName(String webAppName) {
         this.webAppName = webAppName;
     }
+
     public String getWebAppURL() {
         return webAppURL;
     }
@@ -237,5 +225,14 @@ public abstract class WebappDeploymentTestCase extends
     public void setWebAppURL(String webAppURL) {
         this.webAppURL = webAppURL;
     }
+
+    public String getWebAppFilePath() {
+        return webAppFilePath;
+    }
+
+    public void setWebAppFilePath(String webAppFilePath) {
+        this.webAppFilePath = webAppFilePath;
+    }
+
 
 }

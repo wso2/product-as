@@ -19,10 +19,12 @@ package org.wso2.carbon.appserver.integration.test.server.security.manager.exten
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.engine.extensions.ExecutionListenerExtension;
+import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.automation.extensions.ExtensionConstants;
 import org.wso2.carbon.automation.extensions.servers.carbonserver.TestServerManager;
 import org.wso2.carbon.automation.extensions.servers.utils.ServerLogReader;
@@ -50,68 +52,80 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
 
     @Override
     public void initiate() throws AutomationFrameworkException {
-        AutomationContext context;
-        try {
-            context = new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN);
-        } catch (XPathExpressionException e) {
-            throw new AutomationFrameworkException("Error Initiating Server Information", e);
-        }
-
-        //if port offset is not set, setting it to 0
-        if (getParameters().get(ExtensionConstants.SERVER_STARTUP_PORT_OFFSET_COMMAND) == null) {
-            getParameters().put(ExtensionConstants.SERVER_STARTUP_PORT_OFFSET_COMMAND, "0");
-        }
-
-        testEsbServerWithSecurityManager = new TestServerManager(context, null, getParameters()) {
-            public void configureServer() throws AutomationFrameworkException {
-
-                String resourcePtah = TestConfigurationProvider.getResourceLocation("AS")
-                                      + File.separator + "security" + File.separator + "manager";
-
-                //copying java options to wso2server.sh
-                /**
-                 -Djava.security.manager=org.wso2.carbon.bootstrap.CarbonSecurityManager \
-                 -Djava.security.policy=$CARBON_HOME/repository/conf/sec.policy \
-                 -Drestricted.packages=sun.,com.sun.xml.internal.ws.,com.sun.xml.internal.bind.,com.sun.imageio.,org.wso2.carbon. \
-                 -Ddenied.system.properties=javax.net.ssl.trustStore,javax.net.ssl.trustStorePassword,denied.system.properties \
-                 */
-                try {
-                    addSecOptions(new File(testEsbServerWithSecurityManager.getCarbonHome() + File.separator + "bin"
-                                           + File.separator + "wso2server.sh"));
-                    //copying script file to sign the jar files
-                    FileManager.copyFile(new File(resourcePtah + File.separator + "sign-packs.sh")
-                            , testEsbServerWithSecurityManager.getCarbonHome() + File.separator + "sign-packs.sh");
-
-                    File commandDir = new File(testEsbServerWithSecurityManager.getCarbonHome());
-                    //signing the jar files
-                    Process signingProcess = Runtime.getRuntime().exec(new String[]{"sh", "sign-packs.sh"}, null, commandDir);
-                    ServerLogReader signingProcessInputStreamHandler = new ServerLogReader("inputStream"
-                            , signingProcess.getInputStream());
-                    signingProcessInputStreamHandler.start();
-                    //wait signing process to complete
-                    signingProcess.waitFor();
-                } catch (Exception e) {
-                    throw new AutomationFrameworkException(e.getMessage(), e);
-                }
-
+        if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
+            AutomationContext context;
+            try {
+                context = new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN);
+            } catch (XPathExpressionException e) {
+                throw new AutomationFrameworkException("Error Initiating Server Information", e);
             }
-        };
+
+            //if port offset is not set, setting it to 0
+            if (getParameters().get(ExtensionConstants.SERVER_STARTUP_PORT_OFFSET_COMMAND) == null) {
+                getParameters().put(ExtensionConstants.SERVER_STARTUP_PORT_OFFSET_COMMAND, "0");
+            }
+
+            testEsbServerWithSecurityManager = new TestServerManager(context, null, getParameters()) {
+                public void configureServer() throws AutomationFrameworkException {
+
+                    String resourcePtah = TestConfigurationProvider.getResourceLocation("AS")
+                                          + File.separator + "security" + File.separator + "manager";
+
+                    //copying java options to wso2server.sh
+                    /**
+                     -Djava.security.manager=org.wso2.carbon.bootstrap.CarbonSecurityManager \
+                     -Djava.security.policy=$CARBON_HOME/repository/conf/sec.policy \
+                     -Drestricted.packages=sun.,com.sun.xml.internal.ws.,com.sun.xml.internal.bind.
+                     ,com.sun.imageio.,org.wso2.carbon. \
+                     -Ddenied.system.properties=javax.net.ssl.trustStore,javax.net.ssl.trustStorePassword
+                     ,denied.system.properties \
+                     */
+                    try {
+                        addSecOptions(new File(testEsbServerWithSecurityManager.getCarbonHome() + File.separator + "bin"
+                                               + File.separator + "wso2server.sh"));
+                        //copying script file to sign the jar files
+                        FileManager.copyFile(new File(resourcePtah + File.separator + "sign-packs.sh")
+                                , testEsbServerWithSecurityManager.getCarbonHome() + File.separator + "sign-packs.sh");
+
+                        File commandDir = new File(testEsbServerWithSecurityManager.getCarbonHome());
+                        //signing the jar files
+                        Process signingProcess = Runtime.getRuntime().exec(new String[]{"sh", "sign-packs.sh"}, null, commandDir);
+                        ServerLogReader signingProcessInputStreamHandler = new ServerLogReader("inputStream"
+                                , signingProcess.getInputStream());
+                        signingProcessInputStreamHandler.start();
+                        //wait signing process to complete
+                        signingProcess.waitFor();
+                    } catch (Exception e) {
+                        throw new AutomationFrameworkException(e.getMessage(), e);
+                    }
+
+                }
+            };
+        }
     }
 
     @Override
     public void onExecutionStart()
             throws AutomationFrameworkException {
-        try {
-            testEsbServerWithSecurityManager.startServer();
-        } catch (IOException e) {
-            throw new AutomationFrameworkException("Error while starting server", e);
+        if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
+            try {
+                testEsbServerWithSecurityManager.startServer();
+            } catch (IOException e) {
+                throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
+            } catch (XPathExpressionException e) {
+                throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
+            }
         }
-
     }
 
     @Override
     public void onExecutionFinish() throws AutomationFrameworkException {
-        testEsbServerWithSecurityManager.stopServer();
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
+            testEsbServerWithSecurityManager.stopServer();
+        }
 
     }
 
@@ -121,6 +135,7 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
 
     /**
      * Editing the file with java options
+     *
      * @param inFile input file
      * @throws IOException when there is no such file
      */

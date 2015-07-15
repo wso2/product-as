@@ -18,6 +18,7 @@
 package org.wso2.carbon.appserver.integration.test.server.security.manager;
 
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -27,7 +28,10 @@ import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
+import org.wso2.carbon.automation.engine.FrameworkConstants;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
+import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
@@ -55,8 +59,20 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
         this.userMode = userMode;
     }
 
+    @DataProvider
+    public static Object[][] userModeDataProvider() {
+        return new Object[][]{
+                new Object[]{TestUserMode.SUPER_TENANT_ADMIN},
+                new Object[]{TestUserMode.TENANT_ADMIN},
+        };
+    }
+
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
+            throw new SkipException("Skipping this test case in windows");
+        }
         super.init(userMode);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         webAppAdminClient.uploadWarFile(TestConfigurationProvider.getResourceLocation("AS")
@@ -68,6 +84,13 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName)
                 , webAppName + " Web Application Deployment failed");
         webAppUrl = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName;
+
+        if(userMode == TestUserMode.TENANT_ADMIN || userMode == TestUserMode.TENANT_USER) {
+            if(!webAppUrl.contains("/t/")) {
+                throw new AutomationFrameworkException("Web App Url is not correct for tenants when running test " +
+                                                       "for tenants " + userInfo.getUserName() + " > " + webAppUrl);
+            }
+        }
 
     }
 
@@ -167,6 +190,10 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void clean() throws Exception {
+        if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
+                .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
+            throw new SkipException("Skipping this test case in windows");
+        }
         webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
         //let webapp to undeploy
         Thread.sleep(2000);
@@ -174,11 +201,4 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
                    webAppName + " Web Application unDeployment failed");
     }
 
-    @DataProvider
-    public static Object[][] userModeDataProvider() {
-        return new Object[][]{
-                new Object[]{TestUserMode.SUPER_TENANT_ADMIN},
-                new Object[]{TestUserMode.TENANT_ADMIN},
-        };
-    }
 }

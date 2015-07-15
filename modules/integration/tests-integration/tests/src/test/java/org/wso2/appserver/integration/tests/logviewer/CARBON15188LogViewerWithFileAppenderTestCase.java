@@ -28,6 +28,7 @@ import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
 import org.wso2.carbon.logging.view.stub.LogViewerLogViewerException;
 import org.wso2.carbon.logging.view.stub.LogViewerStub;
+import org.wso2.carbon.logging.view.stub.types.carbon.LogEvent;
 
 import java.io.File;
 import java.rmi.RemoteException;
@@ -44,8 +45,9 @@ public class CARBON15188LogViewerWithFileAppenderTestCase extends ASIntegrationT
     public void setup() throws Exception {
         super.init();
         serverConfigurationManager = new ServerConfigurationManager(asServer);
-        String log4jFilePath = TestConfigurationProvider.getResourceLocation() + File.separator + "log4j"
-                               + File.separator + "carbon15188" + File.separator + "log4j.properties";
+        String log4jFilePath = TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" 
+                               + File.separator + "AS" + File.separator + "log4j" + File.separator + "carbon15188" 
+                               + File.separator + "log4j.properties";
         serverConfigurationManager.applyConfiguration(new File(log4jFilePath));
         super.init();
     }
@@ -54,9 +56,14 @@ public class CARBON15188LogViewerWithFileAppenderTestCase extends ASIntegrationT
     public void testLogViewerWithFileAppender() throws RemoteException, LogViewerLogViewerException {
         LogViewerStub logViewerStub = new LogViewerStub(backendURL + "LogViewer");
         AuthenticateStubUtil.authenticateStub(sessionCookie, logViewerStub);
+        boolean errorOnLogger = false;
 
-        // for super tenant logViewerStub.getLocalLogFiles returns null, hence the null check
-        Assert.assertNull(logViewerStub.getLocalLogFiles(0, "", ""), "Error in system log viewer when FileAppender is set as the Appender for CARBON_LOGFILE");
+        for (LogEvent logEvent : logViewerStub.getPaginatedLogEvents(0, "ALL", "", "", "").getLogInfo()) {
+            if (logEvent.getMessage().contains("Error occurred while getting logger data. Backend service may be unavailable")) {
+                errorOnLogger =true;
+            }
+        }
+        Assert.assertFalse(errorOnLogger, "Error in system log viewer when FileAppender is set as the Appender for CARBON_LOGFILE");
     }
 
     @AfterClass(alwaysRun = true)

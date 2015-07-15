@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>test-common</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -34,6 +34,15 @@
 
     <modules>
         <module>lazy-loading-info</module>
+        <module>carbon-datasource-lookup</module>
+        <module>tomcat-jndi-resource-lookup</module>
+        <module>context-reload-test-webapp</module>
+        <module>host-info</module>
+        <module>hibernate-example</module>
+        <module>spring</module>
+        <module>jaxrs</module>
+        <module>security-check</module>
+        <module>logging</module>
     </modules>
 
 </project>

@@ -59,11 +59,9 @@ public class LazyLoadingInfoService {
         WebAppStatus webAppStatus;
         if (MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(tenantDomain)) {
             webAppStatus = LazyLoadingInfoUtil.getSuperTenantWebAppStatus(webAppName);
-
         } else {
             webAppStatus = LazyLoadingInfoUtil.getWebAppStatus(tenantDomain, webAppName);
         }
-
         return webAppStatus;
     }
 

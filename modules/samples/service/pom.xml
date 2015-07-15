@@ -21,12 +21,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.wso2.appserver</groupId>
-    	<artifactId>wso2appserver-samples-parent</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+    	<artifactId>wso2appserver-samples</artifactId>
+        <version>5.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>wso2stratos-as-samples</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>WSO2 Stratos  AppServer - Samples</name>
     <url>http://wso2.org/projects/wsas/java</url>

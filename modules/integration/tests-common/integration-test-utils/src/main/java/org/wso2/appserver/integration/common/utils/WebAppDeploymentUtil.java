@@ -17,50 +17,46 @@
 */
 package org.wso2.appserver.integration.common.utils;
 
-import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
+import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 public class WebAppDeploymentUtil {
     private static Log log = LogFactory.getLog(WebAppDeploymentUtil.class);
     private static int WEBAPP_DEPLOYMENT_DELAY = 90 * 1000;
 
     public static boolean isWebApplicationDeployed(String backEndUrl, String sessionCookie,
-                                                   String webAppFileName) throws Exception {
-        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service deployment " + webAppFileName);
+                                                   String webAppName) throws Exception {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service deployment " + webAppName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backEndUrl, sessionCookie);
         List<String> webAppList;
         List<String> faultyWebAppList;
-        String webAppName = webAppFileName + ".war";
+        String warName = webAppName + ".war";
 
-        boolean isWebAppDeployed = false;
         Calendar startTime = Calendar.getInstance();
         long time;
         while ((time = (Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis())) < WEBAPP_DEPLOYMENT_DELAY) {
-            webAppList = webAppAdminClient.getWebApplist(webAppFileName);
-            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppFileName);
+            webAppList = webAppAdminClient.getWebApplist(webAppName);
+            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppName);
 
             for (String faultWebAppName : faultyWebAppList) {
-                if (webAppName.equalsIgnoreCase(faultWebAppName)) {
-                    isWebAppDeployed = false;
-                    log.info(webAppFileName + "- Web Application is faulty");
-                    return isWebAppDeployed;
+                //need to check both unpacked webapps and war file based webapps
+                if (webAppName.equalsIgnoreCase(faultWebAppName) || warName.equalsIgnoreCase(faultWebAppName)) {
+                    log.info(webAppName + "- Web Application is faulty");
+                    return Boolean.FALSE;
                 }
             }
 
             for (String name : webAppList) {
-                if (webAppName.equalsIgnoreCase(name)) {
-                    isWebAppDeployed = true;
-                    log.info(webAppFileName + " Web Application deployed in " + time + " millis");
-                    return isWebAppDeployed;
+                if (webAppName.equalsIgnoreCase(name) || warName.equalsIgnoreCase(name)) {
+                    log.info(webAppName + " Web Application deployed in " + time + " millis");
+                    return Boolean.TRUE;
                 }
             }
 
@@ -70,29 +66,28 @@ public class WebAppDeploymentUtil {
 
             }
         }
-        return isWebAppDeployed;
+        return Boolean.FALSE;
     }
 
     public static boolean isWebApplicationUnDeployed(String backEndUrl, String sessionCookie,
-                                                     String webAppFileName) throws Exception {
-        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for webApp undeployment " + webAppFileName);
+                                                     String webAppName) throws Exception {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for webApp undeployment " + webAppName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backEndUrl, sessionCookie);
         List<String> webAppList;
+        String warName = webAppName + ".war";
 
-        boolean isWebAppUnDeployed = false;
         Calendar startTime = Calendar.getInstance();
         while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
-            webAppList = webAppAdminClient.getWebApplist(webAppFileName);
+            webAppList = webAppAdminClient.getWebApplist(webAppName);
             if (webAppList.size() != 0) {
                 for (String name : webAppList) {
-                    if (webAppFileName.equalsIgnoreCase(name)) {
-                        isWebAppUnDeployed = false;
-                        log.info(webAppFileName + " -  Web Application not undeployed yet");
+                    if (webAppName.equalsIgnoreCase(name) || warName.equalsIgnoreCase(name)) {
+                        log.info(webAppName + " -  Web Application not undeployed yet");
                         break;
                     }
                 }
             } else {
-                return true;
+                return Boolean.TRUE;
             }
             try {
                 Thread.sleep(500);
@@ -100,30 +95,28 @@ public class WebAppDeploymentUtil {
 
             }
         }
-        return isWebAppUnDeployed;
+        return Boolean.FALSE;
     }
 
     public static boolean isFaultyWebApplicationUnDeployed(String backEndUrl, String sessionCookie,
-                                                           String webAppFileName) throws Exception {
-        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service undeployment " + webAppFileName);
+                                                           String webAppName) throws Exception {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service undeployment " + webAppName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backEndUrl, sessionCookie);
         List<String> faultyWebAppList;
-        String webAppName = webAppFileName + ".war";
+        String warName = webAppName + ".war";
 
-        boolean isWebAppDeployed = false;
         Calendar startTime = Calendar.getInstance();
         while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
-            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppFileName);
+            faultyWebAppList = webAppAdminClient.getFaultyWebAppList(webAppName);
             if (faultyWebAppList.size() != 0) {
                 for (String faultWebAppName : faultyWebAppList) {
-                    if (webAppName.equalsIgnoreCase(faultWebAppName)) {
-                        isWebAppDeployed = false;
-                        log.info(webAppFileName + "- Web Application is faulty");
+                    if (webAppName.equalsIgnoreCase(faultWebAppName) || warName.equalsIgnoreCase(faultWebAppName)) {
+                        log.info(webAppName + "- Web Application is faulty");
                         break;
                     }
                 }
             } else {
-                return true;
+                return Boolean.TRUE;
             }
 
             try {
@@ -132,6 +125,45 @@ public class WebAppDeploymentUtil {
 
             }
         }
-        return isWebAppDeployed;
+        return Boolean.FALSE;
+    }
+
+    public static void deployWebApplication(String backendURL, String sessionCookie, String webAppFilePath)
+            throws RemoteException {
+        log.info("Deploying web application : " + webAppFilePath);
+        WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+        webAppAdminClient.uploadWarFile(webAppFilePath);
+    }
+
+    public static void unDeployWebApplication(String backendURL, String hostname, String sessionCookie,
+                                              String webAppFileName) throws RemoteException {
+        log.info("UnDeploying web application : " + webAppFileName);
+        WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
+        webAppAdminClient.deleteWebAppFile(webAppFileName, hostname);
+    }
+
+    public static boolean isWebAppRedeployed(String webAppName, String previousData, String endpoint) {
+        log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for webApp undeployment " + webAppName);
+        HttpResponse response;
+
+        Calendar startTime = Calendar.getInstance();
+        while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
+            try {
+                response = HttpRequestUtil.sendGetRequest(endpoint, null);
+                if (response != null && !response.getData().isEmpty() && !response.getData().equalsIgnoreCase(previousData)) {
+                    return Boolean.TRUE;
+                }
+            } catch (IOException e) {
+                //Ignore IOExceptions
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+
+            }
+
+        }
+        return Boolean.FALSE;
     }
 }

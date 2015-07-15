@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
     	<artifactId>wso2appserver-styles-parent</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>5.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -105,9 +105,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>javax.servlet.jsp</artifactId>
-            <version>${javax.servlet.jsp.version}</version>
+            <groupId>org.wso2.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
         </dependency>
     </dependencies>
 </project>
