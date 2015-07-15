@@ -34,7 +34,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>tests-kernel</module>
+	<!--TODO: https://wso2.org/jira/browse/WSAS-2015 -->
+        <!--<module>tests-kernel</module>-->
         <module>tests</module>
         <module>lazy-loading-test</module>
         <module>tests-security-manager</module>
