@@ -53,11 +53,7 @@ public class ModuleAdminServiceClient {
      * @throws RemoteException - if module list can not be retrived
      */
     public ModuleMetaData[] listModules() throws RemoteException {
-        try {
             return moduleAdminServiceStub.listModules();
-        } catch (RemoteException e) {
-            throw new RemoteException("Cannot retrieve module list ", e);
-        }
     }
 
     /**
@@ -70,14 +66,7 @@ public class ModuleAdminServiceClient {
      */
     public ModuleMetaData[] listModulesForService(String serviceName)
             throws ModuleAdminServiceModuleMgtExceptionException, RemoteException {
-        try {
             return moduleAdminServiceStub.listModulesForService(serviceName);
-        } catch (ModuleAdminServiceModuleMgtExceptionException e) {
-            throw new ModuleAdminServiceModuleMgtExceptionException("Cannot list modules engaged " +
-                    "with a service", e);
-        } catch (RemoteException e) {
-            throw new RemoteException("Cannot list modules engaged with a service", e);
-        }
     }
 
     public void uploadModule(DataHandler dh) throws RemoteException {

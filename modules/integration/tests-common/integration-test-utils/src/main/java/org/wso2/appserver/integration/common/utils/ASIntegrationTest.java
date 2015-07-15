@@ -209,7 +209,7 @@ public class ASIntegrationTest {
         return dataSourceInfo;
     }
 
-    protected void cleanup() {
+    protected void cleanup() throws RemoteException {
         asServer = null;
     }
 

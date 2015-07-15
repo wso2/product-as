@@ -31,13 +31,16 @@ import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.TestServerManager;
 import org.wso2.carbon.integration.common.admin.client.AuthenticatorClient;
+import org.wso2.carbon.integration.common.extensions.exceptions.AutomationExtensionException;
 import org.wso2.carbon.integration.common.extensions.usermgt.UserPopulator;
-import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
@@ -53,11 +56,11 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
     private static final Log log = LogFactory.getLog(ChangeUserPasswordH2DBTestCase.class);
     private AutomationContext context;
     private int portOffset = 1;
-    private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
     private DataSourceBean dataSourceBean;
     private AuthenticatorClient authenticatorClient;
     private final char[] userNewPassword = {'m', '7', 'c', 't', '6', 'b', ']', ']', ':', '}', 'a', '3', '#', 'F', 'B', 'n'};
     private String userName = "testu1";
+    private TestServerManager testServerManager;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
@@ -71,39 +74,60 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
 
     @Test(groups = "wso2.as", description = "H2DB Password changing script run test")
     public void testScriptRunChangeUserPasswordWithCharacterH2DBTestCase() throws Exception {
-        serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         AutomationContext autoCtx = new AutomationContext();
+        testServerManager = new TestServerManager(autoCtx, portOffset) {
+            public void configureServer() throws AutomationFrameworkException {
 
-        CarbonTestServerManager asServer =
-                new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+                try {
+                    testServerManager.startServer();
+                    UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                                                    ASIntegrationConstants.AS_INSTANCE_0002);
+                    userPopulator.populateUsers();
+                    testServerManager.stopServer();
+                    carbonHome = testServerManager.getCarbonHome();
+                    String commandDirectory = carbonHome + File.separator + "bin";
+                    String[] cmdArray;
 
-        String carbonHome = asServer.startServer();
-        UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
-                                                        ASIntegrationConstants.AS_INSTANCE_0002);
-        userPopulator.populateUsers();
-        asServer.stopServer();
-        String[] cmdArray;
-        String commandDirectory = carbonHome + File.separator + "bin";
-        if ((CarbonCommandToolsUtil.getCurrentOperatingSystem().
-                contains(OperatingSystems.WINDOWS.name().toLowerCase()))) {
-            cmdArray = new String[]{
-                    "cmd.exe", "/c", "chpasswd.bat", "--db-url",
-                    "jdbc:h2:" + carbonHome + dataSourceBean.getUrl(), "--db-driver",
-                    dataSourceBean.getDriverClassName(), "--db-username", dataSourceBean.getUserName(),
-                    "--db-password", String.valueOf(dataSourceBean.getPassWord()), "--username", userName,
-                    "--new-password", String.valueOf(userNewPassword)};
-        } else {
-            cmdArray = new String[]{
-                    "sh", "chpasswd.sh", "--db-url", "jdbc:h2:" + carbonHome + dataSourceBean.getUrl(),
-                    "--db-driver", "org.h2.Driver", "--db-username", "wso2carbon", "--db-password",
-                    String.valueOf(dataSourceBean.getPassWord()), "--username", userName, "--new-password",
-                    String.valueOf(userNewPassword)};
-        }
-        boolean scriptRunStatus = CarbonCommandToolsUtil.isScriptRunSuccessfully(commandDirectory, cmdArray,
-                                                                                 "Password updated successfully");
-        log.info("Script running status : " + scriptRunStatus);
-        assertTrue(scriptRunStatus, "Script executed unsuccessfully");
-        CarbonCommandToolsUtil.startServerUsingCarbonHome(carbonHome, 1, context, null);
+                    if ((CarbonCommandToolsUtil.getCurrentOperatingSystem().contains(
+                            OperatingSystems.WINDOWS.name().toLowerCase()))) {
+
+                        cmdArray =
+                                new String[]{
+                                        "cmd.exe", "/c", "chpasswd.bat",
+                                        "--db-url", "jdbc:h2:" + carbonHome + dataSourceBean.getUrl(),
+                                        "--db-driver", dataSourceBean.getDriverClassName(), "--db-username",
+                                        dataSourceBean.getUserName(), "--db-password",
+                                        String.valueOf(dataSourceBean.getPassWord()), "--username",
+                                        userName, "--new-password", String.valueOf(userNewPassword)};
+                    } else {
+
+                        cmdArray =
+                                new String[]{
+                                        "sh", "chpasswd.sh", "--db-url",
+                                        "jdbc:h2:" + carbonHome + dataSourceBean.getUrl(), "--db-driver",
+                                        "org.h2.Driver", "--db-username", "wso2carbon",
+                                        "--db-password", String.valueOf(dataSourceBean.getPassWord()),
+                                        "--username", userName, "--new-password", String.valueOf(userNewPassword)};
+                    }
+
+                    boolean scriptRunStatus =
+                            CarbonCommandToolsUtil.isScriptRunSuccessfully(commandDirectory, cmdArray,
+                                                                           "Password updated successfully");
+                    log.info("Script running status : " + scriptRunStatus);
+                    assertTrue(scriptRunStatus, "Script executed unsuccessfully");
+
+                } catch (IOException e) {
+                    throw new AutomationFrameworkException("Error when starting the carbon server", e);
+                } catch (CarbonToolsIntegrationTestException e) {
+                    throw new AutomationFrameworkException("Error when running the chpasswd script", e);
+                } catch (XPathExpressionException e) {
+                    throw new AutomationFrameworkException("Error when starting the carbon server", e);
+                } catch (AutomationExtensionException e) {
+                    throw new AutomationFrameworkException("Error when populating users", e);
+                }
+            }
+        };
+        testServerManager.startServer();
     }
 
     @Test(groups = "wso2.as", description = "H2DB password change test",

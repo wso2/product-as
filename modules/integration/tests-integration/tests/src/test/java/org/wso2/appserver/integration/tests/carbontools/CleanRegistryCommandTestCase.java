@@ -24,16 +24,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.ResourceAdminServiceClient;
-import org.wso2.appserver.integration.common.exception.CarbonToolsIntegrationTestException;
 import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.CarbonCommandToolsUtil;
+import org.wso2.appserver.integration.tests.carbontools.test.servers.CarbonTestServerManager;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.ContextXpathConstants;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
-import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 import org.xml.sax.SAXException;
@@ -59,7 +58,6 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
 
     private static final Log log = LogFactory.getLog(CleanRegistryCommandTestCase.class);
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
-    private MultipleServersManager asServerManager = new MultipleServersManager();
     private String carbonHome;
     private AutomationContext context;
     private String sessionCookieForInstance002;
@@ -70,13 +68,16 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
-        AutomationContext autoCtx = new AutomationContext();
 
-        CarbonTestServerManager server =
-                new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), serverPropertyMap);
+        if (CarbonTestServerManager.isServerRunning()) {
+            carbonHome = CarbonTestServerManager.getCarbonHome();
 
-        asServerManager.startServers(server);
-        carbonHome = server.getCarbonHome();
+        } else {
+            CarbonTestServerManager.start(portOffset);
+            carbonHome = CarbonTestServerManager.getCarbonHome();
+
+        }
+
         context = new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
                                         ASIntegrationConstants.AS_INSTANCE_0002,
                                         ContextXpathConstants.SUPER_TENANT,
@@ -99,14 +100,12 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
         DataHandler dh = new DataHandler(new URL("file:///" + resourcePath));
         resourceAdminServiceClient.addResource(configRegistryRepoPath + "resource.txt", "txt", "testDesc", dh);
         isResourceFound = true;
-        asServerManager.stopAllServers();
-        String[] cmdArrayToCleanRegistry;
-
+        CarbonTestServerManager.stop();
         try {
-            cmdArrayToCleanRegistry = new String[]{"--cleanRegistry"};
-            process =
-                    CarbonCommandToolsUtil.startServerUsingCarbonHome(carbonHome, portOffset, context,
-                                                                      cmdArrayToCleanRegistry);
+            // start with -Dsetup command
+            serverPropertyMap.put("--cleanRegistry", "");
+
+            CarbonTestServerManager.start(serverPropertyMap);
 
             boolean startupStatus = CarbonCommandToolsUtil.isServerStartedUp(context, portOffset);
             log.info("Server startup status : " + startupStatus);
@@ -136,8 +135,8 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
     }
 
     @AfterClass(alwaysRun = true)
-    public void serverShutDown() throws CarbonToolsIntegrationTestException {
-        CarbonCommandToolsUtil.serverShutdown(portOffset, context);
+    public void serverShutDown() throws AutomationFrameworkException {
+        CarbonTestServerManager.stop();
     }
 
 }
