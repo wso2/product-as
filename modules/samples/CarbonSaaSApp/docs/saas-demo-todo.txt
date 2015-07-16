@@ -1,0 +1,39 @@
+todo
+
+
+ READme for setup instructions
+- create database
+- load application
+- create tenants
+- login
+
+
+MAIN PAGE:
+
+powered by wso2 carbon logo
+
+links to documentation  -- github, registry, mt-articles, my blog post
+Link to readme
+
+
+#1) switch view across registry paths 
+
+test instructions
+
+TODO:
+queue
+JNDI
+
+Information stored for registry key /custom_validation/SaaSTest
+
+STEPS:
+/custom_validation/test2
+
+
+BUGS:
+context.getusername
+registry query to obtain all resources with specific property key
+
+
+
+

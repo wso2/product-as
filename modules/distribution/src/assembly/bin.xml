@@ -504,8 +504,8 @@
 
         <!-- copying CarbonSaaS Sample App -->
         <fileSet>
-            <directory>../samples/CarbonSaaSTest</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/CarbonSaas</outputDirectory>
+            <directory>../samples/CarbonSaaSApp</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/CarbonSaasApp</outputDirectory>
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>

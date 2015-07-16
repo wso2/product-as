@@ -1,0 +1,201 @@
+body {
+    background:url("/images/carbon_logo_h42.gif") fixed;
+}
+
+.container {
+    background-color:white;
+    height:auto;
+    -webkit-border-radius: 5px;
+border-radius: 5px;
+
+    -webkit-box-shadow:  0px 0px 10px 3px rgba(00, 00, 00, 0.8);
+
+    box-shadow:  0px 0px 10px 3px rgba(00, 00, 00, 0.8);
+            
+}
+
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+	clear: both;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+h1 {
+	font-size: 30px;
+	margin: 20px 0;
+	clear: both;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+td {
+	font-family: Verdana, Arial, sans-serif;
+}
+
+a {
+	color: #4DBEC4;
+	text-decoration: none;
+	font-family: Verdana, Arial, sans-serif;
+	
+}
+
+a:visited {
+	color: #4D9CC4;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+a:focus {
+	outline: thin dotted;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+a:active,
+a:hover {
+	color: #4DBEC4;
+	outline: 0;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+a:hover {
+	text-decoration: underline;
+	font-family: Verdana, Arial, sans-serif;
+}
+
+.formfield-desc {
+	font-family: Verdana, Arial, sans-serif;
+}
+
+.instructions {
+	font-family: Verdana, Arial, sans-serif;
+}
+
+
+.logo {
+    font-size:36px;
+    color: #007654;
+	font-family: Verdana, Arial, sans-serif;
+    text-transform:uppercase;
+    font-weight:bold;
+    margin:20px;
+    float:left;
+}
+
+.operations-main {
+    margin:20px;
+    float:left;
+}
+
+#order-window {
+    margin:10px;
+    padding:10px;
+    box-shadow:0px 0px 5px #CCC;
+    float:left;
+    width:96%;
+}
+.order-number {
+    font-weight:bold;
+    float:left;
+    margin-right:20px;
+}
+
+.order-content {
+    float:left;
+    font-size:16px;
+    font-weight:bold;
+    color:#666;
+}
+
+.notice {
+    padding:20px;
+}
+
+.help-block {
+    font-size:12px;
+    font-style:italic;
+    font-weight:normal;
+}
+
+.amount {
+    float:right;
+    font-size:22px;
+    margin-right:20px;
+    margin-top:5px;
+}
+
+.order-entry {
+    margin-bottom:10px;
+    padding-bottom:10px;
+    border-bottom:1px solid #efefef;
+    width:100%;
+    float:left;
+    padding-top:10px;
+}
+
+.
+
+.request-text, .response-text {
+    width:100%;
+
+
+}
+
+.request-text textarea, .response-text textarea {
+   width:95%;
+    margin-top:10px;
+    height:60px;
+	font-family:'courier new' !IMPORTANT;
+}
+
+.paid, .completed {
+    margin-left:20px;
+    float:left;
+}
+
+.container-collapse {
+    text-align:center;
+    margin-top:20px;
+    padding-top:10px;
+}
+
+.header-max {
+    text-align:left;
+    padding:0px 0px 10px 10px;
+}
+
+.minimize-button {
+    cursor:pointer;
+}
+
+.message-trace h4 {
+    text-align:left;
+    margin:10px;
+}
+
+.additional-toppings {
+}
+
+/* Navbar */
+.navbar {
+	background-color: #AEB3B5;
+	margin: 0 auto;
+	max-width: 1600px;
+	width: 100%;
+}
+
+.site-title {
+	font-size: 40px;
+	font-weight: bold;
+	line-height: 1;
+	margin: 0;
+	padding: 50px 0 20px;
+}
+
+.site-description {
+	font: 300 italic 24px "Source Sans Pro", Helvetica, sans-serif;
+	margin: 0;
+	padding: 40px 0 5px;
+}
+
