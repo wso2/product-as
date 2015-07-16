@@ -72,7 +72,7 @@ public class WebAppSampleTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Login to WSO2 Carbon User Manage Usage Demo")
     public void testUserManagerAndAuthenticationDemo() throws IOException {
-        String urlOne = webAppURL + "/example/carbon" + "/usermgt/index.jsp?username=" +
+        String urlOne = webAppURL + "/example/carbon" + "/usermgt/index.jsp?add=Add&username=" +
                 USER_NAME + "&password=" + PASSWORD;
         GetMethod getMethodOne = new GetMethod(urlOne);
         try {

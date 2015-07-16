@@ -1,0 +1,8 @@
+org.wso2.carbon.registry.common_
+org.wso2.carbon.registry.core_
+org.wso2.carbon.registry.indexing_
+org.wso2.carbon.registry.properties_
+org.wso2.carbon.registry.resource_
+org.wso2.carbon.registry.search_
+org.wso2.carbon.registry.server_
+org.wso2.carbon.registry.servlet_
