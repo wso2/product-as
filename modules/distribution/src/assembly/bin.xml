@@ -502,6 +502,18 @@
             </excludes>
         </fileSet>
 
+        <!-- copying CarbonSaaS Sample App -->
+        <fileSet>
+            <directory>../samples/CarbonSaaSApp</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/samples/CarbonSaaSApp</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>**/**.iml</exclude>
+                <exclude>**/.idea/**</exclude>
+            </excludes>
+        </fileSet>
+
         <!-- ################ Copy Samples - End ################ -->
 
     </fileSets>
