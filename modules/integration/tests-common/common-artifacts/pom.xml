@@ -42,6 +42,7 @@
         <module>spring</module>
         <module>jaxrs</module>
         <module>security-check</module>
+        <module>logging</module>
     </modules>
 
 </project>

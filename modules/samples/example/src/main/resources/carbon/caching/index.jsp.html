@@ -1,5 +1,5 @@
 <!--
- ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
  ~ Version 2.0 (the "License"); you may not use this file except
@@ -15,83 +15,96 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:10pt;"><span style="background-color:#edffed;">&lt;%@ page import="javax.cache.CacheManager" %&gt;
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:10pt;"><span style="background-color:#edffed;">&lt;%@ page import="javax.cache.Caching" %&gt;
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:10pt;"><span style="background-color:#edffed;">&lt;%@ page import="javax.cache.Cache" %&gt;
 
-&lt;h2&gt;WSO2 Carbon Caching Demo&lt;/h2&gt;
+<html>
+<head>
+    <title></title>
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<a name="line1"> 1</a> &lt;%@ page import=&quot;javax.cache.CacheManager&quot; %&gt;
+<a name="line2"> 2</a> &lt;%@ page import=&quot;javax.cache.Caching&quot; %&gt;
+<a name="line3"> 3</a> &lt;%@ page import=&quot;javax.cache.Cache&quot; %&gt;
+<a name="line4"> 4</a>
+<a name="line5"> 5</a> &lt;h2&gt;WSO2 Carbon Caching Demo&lt;/h2&gt;
+<a name="line6"> 6</a>
+<a name="line7"> 7</a> &lt;hr/&gt;
+<a name="line8"> 8</a> &lt;p&gt;
+<a name="line9"> 9</a>
+<a name="line10">10</a> &lt;h3&gt;Add to Cache&lt;/h3&gt;
+<a name="line11">11</a>
+<a name="line12">12</a> &lt;form action=&quot;index.jsp&quot; method=&quot;POST&quot;&gt;
+<a name="line13">13</a>     &lt;table border=&quot;0&quot;&gt;
+<a name="line14">14</a>         &lt;tr&gt;
+<a name="line15">15</a>             &lt;td&gt;Key&lt;/td&gt;
+<a name="line16">16</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;key&quot;/&gt;&lt;/td&gt;
+<a name="line17">17</a>         &lt;/tr&gt;
+<a name="line18">18</a>         &lt;tr&gt;
+<a name="line19">19</a>             &lt;td&gt;Value&lt;/td&gt;
+<a name="line20">20</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;value&quot;/&gt;&lt;/td&gt;
+<a name="line21">21</a>         &lt;/tr&gt;
+<a name="line22">22</a>         &lt;tr&gt;
+<a name="line23">23</a>             &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line24">24</a>             &lt;td&gt;&lt;input type=&quot;submit&quot; value=&quot;Add&quot; name=&quot;add&quot;&gt;&lt;/td&gt;
+<a name="line25">25</a>         &lt;/tr&gt;
+<a name="line26">26</a>     &lt;/table&gt;
+<a name="line27">27</a> &lt;/form&gt;
+<a name="line28">28</a> &lt;/p&gt;
+<a name="line29">29</a> &lt;hr/&gt;
+<a name="line30">30</a> &lt;p&gt;
+<a name="line31">31</a>
+<a name="line32">32</a> &lt;h3&gt;Read from Cache&lt;/h3&gt;
+<a name="line33">33</a>
+<a name="line34">34</a> &lt;form action=&quot;index.jsp&quot; method=&quot;POST&quot;&gt;
+<a name="line35">35</a>     &lt;table border=&quot;0&quot;&gt;
+<a name="line36">36</a>         &lt;tr&gt;
+<a name="line37">37</a>             &lt;td&gt;Key&lt;/td&gt;
+<a name="line38">38</a>             &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;key&quot;/&gt;&lt;/td&gt;
+<a name="line39">39</a>         &lt;/tr&gt;
+<a name="line40">40</a>         &lt;tr&gt;
+<a name="line41">41</a>             &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+<a name="line42">42</a>             &lt;td&gt;&lt;input type=&quot;submit&quot; value=&quot;View&quot; name=&quot;view&quot;&gt;&lt;/td&gt;
+<a name="line43">43</a>         &lt;/tr&gt;
+<a name="line44">44</a>     &lt;/table&gt;
+<a name="line45">45</a> &lt;/form&gt;
+<a name="line46">46</a> &lt;/p&gt;
+<a name="line47">47</a> &lt;hr/&gt;
+<a name="line48">48</a>
+<a name="line49">49</a> &lt;%
+<a name="line50">50</a>     // The javax.cache.CacheManager instance used to obtain the cache
+<a name="line51">51</a>     CacheManager cacheManager =   Caching.getCacheManagerFactory().getCacheManager(&quot;tsampleCacheManager&quot;);
+<a name="line52">52</a>     Cache&lt;String, String&gt; cache = cacheManager.getCache(&quot;sampleCache&quot;);
+<a name="line53">53</a>
+<a name="line54">54</a>     if (request.getParameter(&quot;add&quot;) != null) {
+<a name="line55">55</a>         String key = request.getParameter(&quot;key&quot;);
+<a name="line56">56</a>         String value = request.getParameter(&quot;value&quot;);
+<a name="line57">57</a>         cache.put(key, value);
+<a name="line58">58</a> %&gt;
+<a name="line59">59</a> &lt;p&gt;
+<a name="line60">60</a>     Added entry: &lt;%= key %&gt;
+<a name="line61">61</a> &lt;/p&gt;
+<a name="line62">62</a> &lt;%
+<a name="line63">63</a>     } else if (request.getParameter(&quot;view&quot;) != null) {
+<a name="line64">64</a>         String key = request.getParameter(&quot;key&quot;);
+<a name="line65">65</a>         if (cache.get(key) != null) {
+<a name="line66">66</a>             String content = (String) cache.get(key);
+<a name="line67">67</a>             response.addHeader(&quot;cache-value&quot;, content);
+<a name="line68">68</a> %&gt;
+<a name="line69">69</a>             &lt;p&gt;
+<a name="line70">70</a>                 Value of entry &lt;%= key%&gt; : &lt;%= content %&gt;
+<a name="line71">71</a>             &lt;/p&gt;
+<a name="line72">72</a> &lt;%
+<a name="line73">73</a>         } else {
+<a name="line74">74</a> %&gt;
+<a name="line75">75</a>             &lt;p&gt;
+<a name="line76">76</a>                 Unable to find an entry by the given key &lt;%= key%&gt;!
+<a name="line77">77</a>             &lt;/p&gt;
+<a name="line78">78</a> &lt;%
+<a name="line79">79</a>         }
+<a name="line80">80</a>     }
+<a name="line81">81</a> %&gt;
 
-&lt;hr/&gt;
-&lt;p&gt;
-
-&lt;h3&gt;Add to Cache&lt;/h3&gt;
-
-&lt;form action="index.jsp" method="POST"&gt;
-    &lt;table border="0"&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Key&lt;/td&gt;
-            &lt;td&gt;&lt;input type="text" name="key"/&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Value&lt;/td&gt;
-            &lt;td&gt;&lt;input type="text" name="value"/&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;&nbsp;&lt;/td&gt;
-            &lt;td&gt;&lt;input type="submit" value="Add" name="add"&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/form&gt;
-&lt;/p&gt;
-&lt;hr/&gt;
-&lt;p&gt;
-
-&lt;h3&gt;Read from Cache&lt;/h3&gt;
-
-&lt;form action="index.jsp" method="POST"&gt;
-    &lt;table border="0"&gt;
-        &lt;tr&gt;
-            &lt;td&gt;Key&lt;/td&gt;
-            &lt;td&gt;&lt;input type="text" name="key"/&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;&nbsp;&lt;/td&gt;
-            &lt;td&gt;&lt;input type="submit" value="View" name="view"&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-&lt;/form&gt;
-&lt;/p&gt;
-&lt;hr/&gt;
-
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">    // The javax.cache.CacheManager instance used to obtain the cache
-    CacheManager cacheManager =   Caching.getCacheManagerFactory().getCacheManager("tsampleCacheManager");
-    Cache<String, String> cache = cacheManager.getCache("sampleCache");
-
-    if (request.getParameter("add") != null) {
-        String key = request.getParameter("key");
-        String value = request.getParameter("value");
-        cache.put(key, value);
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">&lt;p&gt;
-    Added entry: </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> key </span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">&lt;/p&gt;
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">    } else if (request.getParameter("view") != null) {
-        String key = request.getParameter("key");
-        if (cache.get(key) != null) {
-            String content = (String) cache.get(key);
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">            &lt;p&gt;
-                Value of entry </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> key</span><span style="color:#000080;background-color:#fffce4;">%&gt;</span><span style="background-color:#edffed;"> : </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> content </span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">            &lt;/p&gt;
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">        } else {
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;
-</span><span style="background-color:#edffed;">            &lt;p&gt;
-                Unable to find an entry by the given key </span><span style="color:#000080;background-color:#fffce4;">&lt;%=</span><span style="background-color:#edffed;"> key</span><span style="color:#000080;background-color:#fffce4;">%&gt;</span><span style="background-color:#edffed;">!
-            &lt;/p&gt;
-</span><span style="color:#000080;background-color:#fffce4;">&lt;%
-</span><span style="background-color:#edffed;">        }
-    }
-</span><span style="color:#000080;background-color:#fffce4;">%&gt;</span></pre>
+</pre>
+<!--syntax highlighted by <a href="http://www.palfrader.org/code2html">Code2HTML</a>, v. 0.9.1-->
+</body>
+</html>

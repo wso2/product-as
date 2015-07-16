@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
@@ -184,6 +184,26 @@
                             <includeTypes>war</includeTypes>
                             <includeArtifactIds>
                                 hibernate-example
+                            </includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-logging-artifacts</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>
+                                access-logs-test-webapp,
+                                commons-logging-test-webapp,
+                                slf4j-logging-test-webapp,
+                                carbon-logging-test-webapp,
+                                jul-logs-test-webapp
                             </includeArtifactIds>
                             <stripVersion>true</stripVersion>
                         </configuration>
@@ -449,6 +469,48 @@
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jaxrs-client-api-test-webapp</artifactId>
             <type>war</type>
+        </dependency>
+
+        <!-- Logging Test Common Artifacts-->
+        <!--Access logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>access-logs-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--Commons logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>commons-logging-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--Slf4j logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>slf4j-logging-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--Carbon logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>carbon-logging-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <!--JUL logs Test webapp dependency-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jul-logs-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

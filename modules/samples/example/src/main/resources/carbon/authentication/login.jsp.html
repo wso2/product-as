@@ -1,5 +1,5 @@
 <!--
- ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
  ~ Version 2.0 (the "License"); you may not use this file except
@@ -15,30 +15,53 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<pre style="line-height: 100%;font-family:monospace;background-color:#ffffff; border-width:0.01mm; border-color:#000000; border-style:solid;padding:4px;font-size:10pt;"><span
-        style="background-color:#ffffff;">&lt;%@ page import="org.wso2.carbon.context.CarbonContext" %&gt;
-&lt;%@ page import="org.wso2.carbon.user.api.UserRealm" %&gt;
-&lt;%@ page import="org.wso2.carbon.user.api.UserStoreException" %&gt;
-&lt;%
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    boolean status = false;
+<html>
+<head>
+    <title></title>
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<pre>
+<a name="line1"> 1</a> &lt;%@ page import=&quot;org.wso2.carbon.context.CarbonContext&quot; %&gt;
+<a name="line2"> 2</a> &lt;%@ page import=&quot;org.wso2.carbon.user.api.UserRealm&quot; %&gt;
+<a name="line3"> 3</a> &lt;%@ page import=&quot;org.wso2.carbon.user.api.UserStoreException&quot; %&gt;
+<a name="line4"> 4</a> &lt;%@ page import=&quot;java.util.List&quot;%&gt;
+<a name="line5"> 5</a> &lt;%@ page import=&quot;java.util.Arrays&quot;%&gt;
+<a name="line6"> 6</a> &lt;%
+<a name="line7"> 7</a>     String username = request.getParameter(&quot;username&quot;);
+<a name="line8"> 8</a>     String password = request.getParameter(&quot;password&quot;);
+<a name="line9"> 9</a>     String role = request.getParameter(&quot;role&quot;);
+<a name="line10">10</a>     boolean status = false;
+<a name="line11">11</a>
+<a name="line12">12</a>     try {
+<a name="line13">13</a>         CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
+<a name="line14">14</a>         UserRealm realm = context.getUserRealm();
+<a name="line15">15</a>         if(role == null){
+<a name="line16">16</a>             if (username != null &amp;&amp; username.trim().length() &gt; 0) {
+<a name="line17">17</a>                 status = realm.getUserStoreManager().authenticate(username, password);
+<a name="line18">18</a>             }
+<a name="line19">19</a>         } else {
+<a name="line20">20</a>             if (username != null &amp;&amp; username.trim().length() &gt; 0) {
+<a name="line21">21</a>                 status = Arrays.asList(realm.getUserStoreManager().getRoleListOfUser(username)).contains(role);
+<a name="line22">22</a>             }
+<a name="line23">23</a>         }
+<a name="line24">24</a>     } catch (UserStoreException e) {
+<a name="line25">25</a>         e.printStackTrace();
+<a name="line26">26</a>     }
+<a name="line27">27</a>
+<a name="line28">28</a>     if (status) {
+<a name="line29">29</a>         session.setAttribute(&quot;logged-in&quot;, &quot;true&quot;);
+<a name="line30">30</a>         session.setAttribute(&quot;username&quot;, username);
+<a name="line31">31</a>         if(role != null){
+<a name="line32">32</a>             session.setAttribute(&quot;logged-in-with-role&quot;, &quot;true&quot;);
+<a name="line33">33</a>         }
+<a name="line34">34</a>         response.sendRedirect(&quot;index.jsp&quot;);
+<a name="line35">35</a>     } else {
+<a name="line36">36</a>         session.invalidate();
+<a name="line37">37</a>         response.sendRedirect(&quot;index.jsp?failed=true&quot;);
+<a name="line38">38</a>     }
+<a name="line39">39</a> %&gt;
 
-    if (username != null && username.trim().length() > 0) {
-        try {
-            CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
-            UserRealm realm = context.getUserRealm();
-            status = realm.getUserStoreManager().authenticate(username, password);
-        } catch (UserStoreException e) {
-            e.printStackTrace();
-        }
-    }
-    if (status) {
-        session.setAttribute("logged-in", "true");
-        session.setAttribute("username", username);
-        response.sendRedirect("index.jsp");
-    } else {
-        session.invalidate();
-        response.sendRedirect("index.jsp?failed=true");
-    }
-%&gt;</span></pre>
+</pre>
+<!--syntax highlighted by <a href="http://www.palfrader.org/code2html">Code2HTML</a>, v. 0.9.1-->
+</body>
+</html>
