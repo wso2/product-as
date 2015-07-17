@@ -36,6 +36,10 @@ import org.wso2.carbon.user.mgt.stub.types.carbon.FlaggedName;
 
 import java.io.File;
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
+
 /**
  * This test class will test the Application Server with Read Only Ldap server as the primary user store
  */
@@ -57,12 +61,23 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
         //Populate roles and users in to ReadWrite Ldap
         userMgtClient.addRole(newUserRole, null, new String[]{"/permission/admin/login"});
         userMgtClient.addUser(newUserName, newUserPassword, new String[]{newUserRole}, null);
-        Assert.assertTrue(userMgtClient.roleNameExists(newUserRole), "Role name doesn't exists");
-        Assert.assertTrue(userMgtClient.userNameExists(newUserRole, newUserName), "User name doesn't exists");
+
+        assertTrue(userMgtClient.roleNameExists(newUserRole), "Role name doesn't exists " + newUserRole);
+        assertTrue(userMgtClient.userNameExists(newUserRole, newUserName), "User name doesn't exists " + newUserName);
+
+        //adding another 3 users
+        for (int i = 1; i < 3; i++) {
+            userMgtClient.addRole(newUserRole + i, null, new String[]{"/permission/admin/login"});
+            userMgtClient.addUser(newUserName + i, newUserPassword, new String[]{newUserRole + i}, null);
+            assertTrue(userMgtClient.roleNameExists(newUserRole + i), "Role name doesn't exists");
+            assertTrue(userMgtClient.userNameExists(newUserRole + i, newUserName + i), "User name doesn't exists");
+        }
+
+
 
         String newUserSessionCookie = authenticatorClient.login(newUserName
                 , newUserPassword, asServer.getInstance().getHosts().get("default"));
-        Assert.assertTrue(newUserSessionCookie.contains("JSESSIONID"), "Session Cookie not found. Login failed");
+        assertTrue(newUserSessionCookie.contains("JSESSIONID"), "Session Cookie not found. Login failed");
         authenticatorClient.logOut();
 
         File userMgtConfigFile = new File(TestConfigurationProvider.getResourceLocation("AS")
@@ -80,36 +95,48 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
     public void userLoginTest() throws Exception {
         String userSessionCookie = authenticatorClient.login(newUserName, newUserPassword
                 , asServer.getInstance().getHosts().get("default"));
-        Assert.assertTrue(userSessionCookie.contains("JSESSIONID"), "Session Cookie not found. Login failed user "
-                                                                + newUserName);
+        assertTrue(userSessionCookie.contains("JSESSIONID"), "Session Cookie not found. Login failed user "
+                                                             + newUserName);
         authenticatorClient.logOut();
     }
 
     @Test(groups = "wso2.as", description = "Getting users of a role")
     public void getUsersOfRoleTest() throws Exception {
-        Assert.assertTrue(nameExists(userMgtClient.getUsersOfRole(newUserRole, newUserName, 10), newUserName)
+        assertTrue(nameExists(userMgtClient.getUsersOfRole(newUserRole, newUserName, 10), newUserName)
                 , "List does not contains the expected user name");
+        for (int i = 1; i < 3; i++) {
+            assertTrue(nameExists(userMgtClient.getUsersOfRole(newUserRole + i, newUserName + i, 10), newUserName + i)
+                    , "List does not contains the expected user name");
+        }
     }
 
     @Test(groups = "wso2.as", description = "Get roles of a particular user")
     public void getRolesOfUser() throws Exception {
-        Assert.assertTrue(nameExists(userMgtClient.getRolesOfUser(newUserName, newUserRole, 10), newUserRole)
+        assertTrue(nameExists(userMgtClient.getRolesOfUser(newUserName, newUserRole, 10), newUserRole)
                 , "List does not contains the expected role name");
     }
 
     @Test(groups = "wso2.as", description = "get all the roles in ldap")
     public void getAllRolesNamesTest() throws Exception {
-        Assert.assertTrue(userMgtClient.getAllRolesNames("*", 10).length >= 1, "No role listed in Ldap");
+        FlaggedName[] flaggedNames = userMgtClient.getAllRolesNames("*", 10);
+        Assert.assertNotNull(flaggedNames, "Role list empty");
+        assertTrue(flaggedNames.length > 3, "No role listed in Ldap");
+        assertTrue(nameExists(flaggedNames, newUserRole));
+        for (int i = 1; i < 3; i++) {
+            assertTrue(nameExists(flaggedNames, newUserRole + i), "Role name not found " + newUserRole + i);
+        }
+
     }
 
     @Test(groups = "wso2.as", description = "Check new role addition failure in readonly Ldap"
             , expectedExceptions = AxisFault.class
             , expectedExceptionsMessageRegExp = "Read only user store or Role creation is disabled")
     public void testAddNewRole() throws Exception {
-        Assert.assertFalse(nameExists(userMgtClient.getAllRolesNames(newUserRole + "1", 100), newUserRole + "1")
+        final String roleName = "addNewRole";
+        assertFalse(nameExists(userMgtClient.getAllRolesNames(roleName, 100), roleName)
                 , "User Role trying to add already exist");
-       userMgtClient.addRole(newUserRole + "1", null, new String[]{"login"}, false);
-       Assert.assertFalse(nameExists(userMgtClient.getAllRolesNames(newUserRole + "1", 100), newUserRole + "1")
+        userMgtClient.addRole(roleName, null, new String[]{"login"}, false);
+        assertFalse(nameExists(userMgtClient.getAllRolesNames(roleName, 100), roleName)
                 , "Role creation success. New role must not be allowed to add in ReadOnly Ldap");
 
     }
@@ -118,18 +145,19 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
           expectedExceptions = UserAdminUserAdminException.class, expectedExceptionsMessageRegExp =
             "UserAdminUserAdminException")
     public void addNewUserTest() throws Exception {
-        userMgtClient.addUser(newUserName + "1", newUserPassword, new String[]{newUserRole}, null);
-        Assert.assertFalse(userMgtClient.userNameExists(newUserName, newUserRole),"New user must not" +
-                                                                                  " be allowed to add in ReadOnly Ldap");
+        final String userName = "addReadOnlyUser";
+        userMgtClient.addUser(userName, newUserPassword, new String[]{newUserRole}, null);
+        assertFalse(nameExists(userMgtClient.listAllUsers(userName, 10), userName), "New user must not" +
+                                                                                          " be allowed to add in ReadOnly Ldap");
     }
 
     @Test(groups = "wso2.as", description = "Check update role name failure", expectedExceptions =
             AxisFault.class, expectedExceptionsMessageRegExp =
-            "Read-only UserStoreManager. Roles cannot be added or modified.")
+                  "Read-only UserStoreManager. Roles cannot be added or modified.")
     public void updateRoleNameTest() throws Exception {
-        String updatedUserRole =  newUserRole + "updated";
+        String updatedUserRole = newUserRole + "updated";
         userMgtClient.updateRoleName(newUserRole, updatedUserRole);
-        Assert.assertFalse(nameExists(userMgtClient.getAllRolesNames(newUserRole + "1", 100), updatedUserRole)
+        assertFalse(nameExists(userMgtClient.getAllRolesNames(newUserRole + "1", 100), updatedUserRole)
                 , "Role has been updated. New role must not be allowed to update in ReadOnly Ldap");
     }
 
@@ -147,19 +175,19 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
             userFlagList[i] = flaggedName;
         }
         userMgtClient.updateUsersOfRole(asServer.getSuperTenant().getTenantAdmin().getUserName(), userFlagList);
-        Assert.fail("Roles of user must not be allowed to add in ReadOnly Ldap");
+        fail("Roles of user must not be allowed to add in ReadOnly Ldap");
 
     }
 
     @Test(groups = "wso2.as", description = "Check add remove roles of user failure", expectedExceptions =
             AxisFault.class, expectedExceptionsMessageRegExp = "Error occurred while getting" +
-                                                                                 " database type from DB connection")
+                                                               " database type from DB connection")
     public void addRemoveRolesOfUserTest() throws Exception {
 
         String[] newRoles = new String[]{FrameworkConstants.ADMIN_ROLE};
         String[] deletedRoles = new String[]{newUserRole};
         userMgtClient.addRemoveRolesOfUser(newUserName, newRoles, deletedRoles);
-        Assert.fail("Roles of user must not be allowed to remove in ReadOnly Ldap");
+        fail("Roles of user must not be allowed to remove in ReadOnly Ldap");
     }
 
     @Test(groups = "wso2.as", description = "Check add remove users of role failure", expectedExceptions =
@@ -170,21 +198,21 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
         String[] deletedUsers = new String[]{newUserName};
         //https://wso2.org/jira/browse/IDENTITY-3433
         userMgtClient.addRemoveUsersOfRole(newUserRole, newUsers, deletedUsers);
-        Assert.fail("User roles must not be allowed to remove in ReadOnly Ldap");
+        fail("User roles must not be allowed to remove in ReadOnly Ldap");
     }
 
     @Test(groups = "wso2.as", description = "Listing all available users")
     public void listAllUsersTest() throws Exception {
         FlaggedName[] userList = userMgtClient.listAllUsers("*", 100);
-        Assert.assertTrue(userList.length > 0, "List all users return empty list");
-        Assert.assertTrue(nameExists(userList, newUserName), "User Not Exist in the user list");
+        assertTrue(userList.length > 0, "List all users return empty list");
+        assertTrue(nameExists(userList, newUserName), "User Not Exist in the user list");
     }
 
     @Test(groups = "wso2.as", description = "Check list users")
     public void listUsersTest() throws Exception {
         String[] usersList = userMgtClient.listUsers("*", 100);
         Assert.assertNotNull(usersList, "UserList null");
-        Assert.assertTrue(usersList.length > 0, "List users return empty list");
+        assertTrue(usersList.length > 0, "List users return empty list");
     }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
@@ -197,14 +225,25 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
         if (nameExists(userMgtClient.listAllUsers(newUserName, 10), newUserName)) {
             userMgtClient.deleteUser(newUserName);
         }
+        for(int i = 0; i < 3; i++) {
+            if (nameExists(userMgtClient.listAllUsers(newUserName + i, 10), newUserName + i)) {
+                userMgtClient.deleteUser(newUserName + i);
+            }
+        }
         if (userMgtClient.roleNameExists(newUserRole)) {
             userMgtClient.deleteRole(newUserRole);
+        }
+        for(int i = 0; i < 3; i++) {
+            if (userMgtClient.roleNameExists(newUserRole + i)) {
+                userMgtClient.deleteRole(newUserRole + i);
+            }
         }
     }
 
     /**
      * Check where given input is existing on FlaggedName array
-     * @param allNames FlaggedName array
+     *
+     * @param allNames  FlaggedName array
      * @param inputName input string to search
      * @return true if input name exist, else false
      */

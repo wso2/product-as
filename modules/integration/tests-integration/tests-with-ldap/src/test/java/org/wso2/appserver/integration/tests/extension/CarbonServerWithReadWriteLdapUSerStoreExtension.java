@@ -61,7 +61,7 @@ public class CarbonServerWithReadWriteLdapUSerStoreExtension extends ExecutionLi
                     log.info("Changing the primary user store configuration to read write ldap");
                     FileManager.copyFile(new File(userMgtXml)
                             , asServerWithApacheLdap.getCarbonHome() + File.separator + "repository" +
-                     File.separator + "conf" + File.separator + "user-mgt.xml");
+                              File.separator + "conf" + File.separator + "user-mgt.xml");
                 } catch (IOException e) {
                     log.error("Error while coping user-mgt.xml", e);
                     throw new AutomationFrameworkException(e.getMessage(), e);
@@ -79,7 +79,6 @@ public class CarbonServerWithReadWriteLdapUSerStoreExtension extends ExecutionLi
         } catch (XPathExpressionException e) {
             throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
         }
-
     }
 
     @Override
@@ -87,10 +86,7 @@ public class CarbonServerWithReadWriteLdapUSerStoreExtension extends ExecutionLi
         asServerWithApacheLdap.stopServer();
     }
 
-
     public static TestServerManager getTestServer() {
         return asServerWithApacheLdap;
     }
-
-
 }
