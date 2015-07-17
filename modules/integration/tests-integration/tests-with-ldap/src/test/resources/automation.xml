@@ -265,7 +265,7 @@
         <platformExecutionManager>
             <extentionClasses>
                 <class>
-                    <name>org.wso2.carbon.automation.extensions.servers.carbonserver.CarbonServerExtension</name>
+                    <name>org.wso2.appserver.integration.tests.extension.CarbonServerWithReadWriteLdapUSerStoreExtension</name>
                     <!--<parameter name="-DportOffset" value="0" />-->
                     <!--<parameter name="cmdArg" value="debug 8000" />-->
                 </class>
