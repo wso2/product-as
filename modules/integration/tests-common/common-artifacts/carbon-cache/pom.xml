@@ -10,7 +10,7 @@
     </parent>
     <name>WSO2 AppServer - Integration Common Artifacts - Cache Retrieval Test App</name>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>cache-test-app</artifactId>
+    <artifactId>carbon-cache</artifactId>
     <packaging>war</packaging>
 
     <dependencies>
@@ -29,7 +29,7 @@
     </dependencies>
 
     <build>
-        <finalName>cache-test-app</finalName>
+        <finalName>carbon-cache</finalName>
     </build>
 
 </project>

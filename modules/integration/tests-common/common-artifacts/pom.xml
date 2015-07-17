@@ -43,8 +43,8 @@
         <module>jaxrs</module>
         <module>security-check</module>
         <module>logging</module>
-        <module>carboncontext-test-app</module>
-        <module>cache-test-app</module>
+        <module>carbon-context</module>
+        <module>carbon-cache</module>
     </modules>
 
 </project>
