@@ -26,31 +26,31 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class OSGiServiceServlet extends HttpServlet {
-	private static final String CARBON_CONTEXT = "cc";
-	private static final String PRIVILEGE_CARBON_CONTEXT = "pcc";
+    private static final String CARBON_CONTEXT = "cc";
+    private static final String PRIVILEGE_CARBON_CONTEXT = "pcc";
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doProcess(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doProcess(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doProcess(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doProcess(request, response);
+    }
 
-	private void doProcess(HttpServletRequest request, HttpServletResponse response) {
-		String action = request.getParameter("action");
-		Object osGiService = null;
-		if (CARBON_CONTEXT.equalsIgnoreCase(action)) {
-			osGiService = CarbonContext.getThreadLocalCarbonContext().getOSGiService(CarbonTomcatService.class, null);
-		} else if (PRIVILEGE_CARBON_CONTEXT.equalsIgnoreCase(action)) {
-			osGiService = PrivilegedCarbonContext.getThreadLocalCarbonContext()
-			                                     .getOSGiService(CarbonTomcatService.class, null);
-		}
-		if (osGiService != null && osGiService instanceof CarbonTomcatService) {
-			CarbonTomcatService carbonTomcatService = (CarbonTomcatService) osGiService;
-			response.addHeader("tomcat-service-name", carbonTomcatService.getTomcat().getService().getName());
-		}
-	}
+    private void doProcess(HttpServletRequest request, HttpServletResponse response) {
+        String action = request.getParameter("action");
+        Object osGiService = null;
+        if (CARBON_CONTEXT.equalsIgnoreCase(action)) {
+            osGiService = CarbonContext.getThreadLocalCarbonContext().getOSGiService(CarbonTomcatService.class, null);
+        } else if (PRIVILEGE_CARBON_CONTEXT.equalsIgnoreCase(action)) {
+            osGiService = PrivilegedCarbonContext.getThreadLocalCarbonContext()
+                                                 .getOSGiService(CarbonTomcatService.class, null);
+        }
+        if (osGiService != null && osGiService instanceof CarbonTomcatService) {
+            CarbonTomcatService carbonTomcatService = (CarbonTomcatService) osGiService;
+            response.addHeader("tomcat-service-name", carbonTomcatService.getTomcat().getService().getName());
+        }
+    }
 }
