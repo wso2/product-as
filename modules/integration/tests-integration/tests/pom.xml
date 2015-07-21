@@ -208,6 +208,62 @@
                             <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>copy-carbon-context-app</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>carbon-context</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-example-webapp</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>example</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-CarbonSaaS-webapp</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>CarbonSaasApp</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-carbon-cache-webapp</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>carbon-cache</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -508,6 +564,42 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jul-logs-test-webapp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+
+        <!--CarbonContext Test Artifact-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>carbon-context</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Example webb app. This is use to test Registry and user mgt as well-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>example</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+
+        <!--CarbonSaaS webb app. This is use to test Registry and user mgt as well-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>CarbonSaasApp</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Cache Test Artifact-->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>carbon-cache</artifactId>
             <version>${project.parent.version}</version>
             <type>war</type>
             <scope>test</scope>
