@@ -48,7 +48,7 @@ import java.nio.charset.Charset;
 
 public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerExtension {
     private static final Log log = LogFactory.getLog(CarbonServerWithSecurityManagerExtension.class);
-    private static TestServerManager testEsbServerWithSecurityManager;
+    private static TestServerManager testServerWithSecurityManager;
 
     @Override
     public void initiate() throws AutomationFrameworkException {
@@ -66,7 +66,7 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
                 getParameters().put(ExtensionConstants.SERVER_STARTUP_PORT_OFFSET_COMMAND, "0");
             }
 
-            testEsbServerWithSecurityManager = new TestServerManager(context, null, getParameters()) {
+            testServerWithSecurityManager = new TestServerManager(context, null, getParameters()) {
                 public void configureServer() throws AutomationFrameworkException {
 
                     String resourcePtah = TestConfigurationProvider.getResourceLocation("AS")
@@ -82,13 +82,13 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
                      ,denied.system.properties \
                      */
                     try {
-                        addSecOptions(new File(testEsbServerWithSecurityManager.getCarbonHome() + File.separator + "bin"
+                        addSecOptions(new File(testServerWithSecurityManager.getCarbonHome() + File.separator + "bin"
                                                + File.separator + "wso2server.sh"));
                         //copying script file to sign the jar files
                         FileManager.copyFile(new File(resourcePtah + File.separator + "sign-packs.sh")
-                                , testEsbServerWithSecurityManager.getCarbonHome() + File.separator + "sign-packs.sh");
+                                , testServerWithSecurityManager.getCarbonHome() + File.separator + "sign-packs.sh");
 
-                        File commandDir = new File(testEsbServerWithSecurityManager.getCarbonHome());
+                        File commandDir = new File(testServerWithSecurityManager.getCarbonHome());
                         //signing the jar files
                         Process signingProcess = Runtime.getRuntime().exec(new String[]{"sh", "sign-packs.sh"}, null, commandDir);
                         ServerLogReader signingProcessInputStreamHandler = new ServerLogReader("inputStream"
@@ -96,7 +96,9 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
                         signingProcessInputStreamHandler.start();
                         //wait signing process to complete
                         signingProcess.waitFor();
-                    } catch (Exception e) {
+                    } catch (IOException e) {
+                        throw new AutomationFrameworkException(e.getMessage(), e);
+                    } catch (InterruptedException e) {
                         throw new AutomationFrameworkException(e.getMessage(), e);
                     }
 
@@ -111,7 +113,7 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
         if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
                 .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
             try {
-                testEsbServerWithSecurityManager.startServer();
+                testServerWithSecurityManager.startServer();
             } catch (IOException e) {
                 throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
             } catch (XPathExpressionException e) {
@@ -124,13 +126,13 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
     public void onExecutionFinish() throws AutomationFrameworkException {
         if (System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
                 .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
-            testEsbServerWithSecurityManager.stopServer();
+            testServerWithSecurityManager.stopServer();
         }
 
     }
 
     public static TestServerManager getTestServer() {
-        return testEsbServerWithSecurityManager;
+        return testServerWithSecurityManager;
     }
 
     /**
