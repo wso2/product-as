@@ -158,4 +158,10 @@
             <package name="org.wso2.appserver.integration.tests.registry"/>
         </packages>
     </test>
+
+    <test name="carboncontext-test" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.carboncontext"/>
+        </packages>
+    </test>
 </suite>
