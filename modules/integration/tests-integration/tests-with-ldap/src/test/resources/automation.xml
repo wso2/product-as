@@ -190,42 +190,6 @@
                     </user>
                 </users>
             </tenant>
-            <!--<tenant domain="abc.com" key="abcDomainKey">-->
-            <!--<admin>-->
-            <!--<user key="admin">-->
-            <!--<userName>admin</userName>-->
-            <!--<password>admin</password>-->
-            <!--</user>-->
-            <!--</admin>-->
-            <!--<users>-->
-            <!--<user key="user1">-->
-            <!--<userName>testuser11</userName>-->
-            <!--<password>testuser11</password>-->
-            <!--</user>-->
-            <!--<user key="user2">-->
-            <!--<userName>testuser21</userName>-->
-            <!--<password>testuser21</password>-->
-            <!--</user>-->
-            <!--</users>-->
-            <!--</tenant>-->
-            <!--<tenant domain="malintha.com" key="malinthaDomainKey">-->
-            <!--<admin>-->
-            <!--<user key="admin">-->
-            <!--<userName>admin</userName>-->
-            <!--<password>admin</password>-->
-            <!--</user>-->
-            <!--</admin>-->
-            <!--<users>-->
-            <!--<user key="userm1">-->
-            <!--<userName>testuse11</userName>-->
-            <!--<password>testuse11</password>-->
-            <!--</user>-->
-            <!--<user key="userm2">-->
-            <!--<userName>testuse21</userName>-->
-            <!--<password>testuse21</password>-->
-            <!--</user>-->
-            <!--</users>-->
-            <!--</tenant>-->
         </tenants>
         <roles>
             <role name="rolenonadmin" key="rolenonadmin">
@@ -308,11 +272,6 @@
                 <class>
                     <name>org.wso2.carbon.integration.common.extensions.usermgt.UserPopulateExtension</name>
                 </class>
-                <!--<class>-->
-                <!--<name>org.wso2.carbon.automation.extensions.servers.coverageServer.RemoteCoverageServerExtension</name>-->
-                <!--<parameter name="coverageServerPort" value="6331" />-->
-                <!--<parameter name="coverageDumpFilePath" value="/Users/krishantha/Desktop/jacoco" />-->
-                <!--</class>-->
             </extentionClasses>
         </platformExecutionManager>
 
