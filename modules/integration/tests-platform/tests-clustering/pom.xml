@@ -108,7 +108,7 @@
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/target/tobeCopied/</outputDirectory>
-                                    <includes>**/*.jks,**/*.mar,**/axis2_client.xml</includes>
+                                    <includes>**/*.mar,**/axis2_client.xml</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
