@@ -164,4 +164,10 @@
             <package name="org.wso2.appserver.integration.tests.carboncontext"/>
         </packages>
     </test>
+
+    <test name="cache-test" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.cahce"/>
+        </packages>
+    </test>
 </suite>
