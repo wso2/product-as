@@ -121,7 +121,7 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
         FlaggedName[] flaggedNames = userMgtClient.getAllRolesNames("*", 10);
         Assert.assertNotNull(flaggedNames, "Role list empty");
         assertTrue(flaggedNames.length > 3, "No role listed in Ldap");
-        assertTrue(nameExists(flaggedNames, newUserRole));
+        assertTrue(nameExists(flaggedNames, newUserRole), "User role not listed " + newUserRole);
         for (int i = 1; i < 3; i++) {
             assertTrue(nameExists(flaggedNames, newUserRole + i), "Role name not found " + newUserRole + i);
         }
