@@ -602,6 +602,20 @@
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jpa-contacts-database</artifactId>
+                <version>${product.as.version}</version>
+                <classifier>classes</classifier>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>org.wso2.appserver.integration.tests</artifactId>
+                <version>${product.as.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+            </dependency>
 
             <!-- Hibernate related Webapps -->
             <dependency>
