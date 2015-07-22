@@ -41,6 +41,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>distribution-with-apache-ldap</module>
         <module>tests-common</module>
         <module>tests-integration</module>
         <module>tests-integration/reports</module>
