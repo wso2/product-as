@@ -49,7 +49,8 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
     private UserManagementClient userMgtClient;
     private AuthenticatorClient authenticatorClient;
     private final String newUserName = "ReadOnlyLDAPUserName";
-    private final String newUserRole = "ReadOnlyLDAPUserRole";
+    //https://wso2.org/jira/browse/IDENTITY-3438 - can not put upper letters as user role when permissions granted
+    private final String newUserRole = "readonlyldapuserrole";
     private final String newUserPassword = "ReadOnlyLDAPUserPass";
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
@@ -58,12 +59,21 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         userMgtClient = new UserManagementClient(backendURL, sessionCookie);
         authenticatorClient = new AuthenticatorClient(backendURL);
+
+        if (userMgtClient.roleNameExists(newUserRole)) {
+            userMgtClient.deleteRole(newUserRole);
+        }
         //Populate roles and users in to ReadWrite Ldap
         userMgtClient.addRole(newUserRole, null, new String[]{"/permission/admin/login"});
         userMgtClient.addUser(newUserName, newUserPassword, new String[]{newUserRole}, null);
 
         assertTrue(userMgtClient.roleNameExists(newUserRole), "Role name doesn't exists " + newUserRole);
         assertTrue(userMgtClient.userNameExists(newUserRole, newUserName), "User name doesn't exists " + newUserName);
+
+        String newUserSessionCookie = authenticatorClient.login(newUserName
+                , newUserPassword, asServer.getInstance().getHosts().get("default"));
+        assertTrue(newUserSessionCookie.contains("JSESSIONID"), "Session Cookie not found. Login failed");
+        authenticatorClient.logOut();
 
         //adding another 3 users
         for (int i = 1; i < 3; i++) {
@@ -72,13 +82,6 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
             assertTrue(userMgtClient.roleNameExists(newUserRole + i), "Role name doesn't exists");
             assertTrue(userMgtClient.userNameExists(newUserRole + i, newUserName + i), "User name doesn't exists");
         }
-
-
-
-        String newUserSessionCookie = authenticatorClient.login(newUserName
-                , newUserPassword, asServer.getInstance().getHosts().get("default"));
-        assertTrue(newUserSessionCookie.contains("JSESSIONID"), "Session Cookie not found. Login failed");
-        authenticatorClient.logOut();
 
         File userMgtConfigFile = new File(TestConfigurationProvider.getResourceLocation("AS")
                                           + File.separator + "configs" + File.separator
@@ -191,7 +194,7 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "Check add remove users of role failure", expectedExceptions =
-            AxisFault.class, expectedExceptionsMessageRegExp = "Read-only user store.Roles cannot be added or modfified")
+            AxisFault.class, expectedExceptionsMessageRegExp = "Read-only user store.Roles cannot be added or modified")
     public void addRemoveUsersOfRoleTest() throws Exception {
 
         String[] newUsers = new String[]{asServer.getSuperTenant().getTenantAdmin().getUserName()};
