@@ -91,13 +91,13 @@ public class WSAS1886UserManagerTest extends ASIntegrationTest {
         }
         assertTrue(status, "Input stream failure");
 
-        String expectedJsonString = "{\"currentList\" : [\"admin\", \"testu1\", \"testu2\", \"testu3\"],"
-                + " \"newUserListBefore\" : [\"admin\", \"chamila\", \"testu1\", \"testu2\", \"testu3\"],"
+        String expectedJsonString = "{\"currentList\" : [\"admin\", \"testu1\", \"testu2\", \"testu3\", \"testu4\"],"
+                + " \"newUserListBefore\" : [\"admin\", \"chamila\", \"testu1\", \"testu2\", \"testu3\", \"testu4\"],"
                 + " \"newUserDetails\" : {\"um\" : {\"server\" : {\"url\" : \"local:/\"}, \"tenantId\" : "
                 + "-1234, \"manager\" : {}, \"authorizer\" : {}}, \"tenantId\" : -1234, \"username\" : "
                 + "\"chamila\"}, \"userExists\" : true, \"newUserListAfter\" : [\"admin\", \"testu1\", "
-                + "\"testu2\", \"testu3\"], \"adminClaims\" : [{}], \"roleList\" : [\"admin\", "
-                + "\"Internal/everyone\"], \"roleExist\" : false}";
+                + "\"testu2\", \"testu3\", \"testu4\"], \"adminClaims\" : [{}], \"roleList\" : [\"admin\", "
+                + "\"rolenonadmin\", \"testrole\", \"Internal/everyone\"], \"roleExist\" : false}";
 
         JSONObject expectedJsonObj = new JSONObject(expectedJsonString);
         JSONObject responseJsonObject = new JSONObject(response);
