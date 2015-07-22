@@ -11,8 +11,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer With Apache Ldap- Integration Test Module</name>
-    <artifactId>org.wso2.appserver.integration.tests.ldap</artifactId>
+    <name>WSO2 AppServer and Apache Ldap User Store - Integration Test Module</name>
+    <artifactId>org.wso2.appserver.integration.tests.ldap.user.store</artifactId>
     <packaging>jar</packaging>
 
     <build>
