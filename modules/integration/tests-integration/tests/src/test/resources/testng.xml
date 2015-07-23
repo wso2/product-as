@@ -170,4 +170,10 @@
             <package name="org.wso2.appserver.integration.tests.cahce"/>
         </packages>
     </test>
+
+    <test name="multi-tenancy-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.multitenancy"/>
+        </packages>
+    </test>
 </suite>
