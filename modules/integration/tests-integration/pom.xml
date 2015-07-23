@@ -39,7 +39,7 @@
         <module>lazy-loading-test</module>
         <module>tests-security-manager</module>
         <module>tests-registry</module>
-        <module>tests-with-ldap</module>
+        <module>tests-ldap-userstore</module>
     </modules>
 
 </project>

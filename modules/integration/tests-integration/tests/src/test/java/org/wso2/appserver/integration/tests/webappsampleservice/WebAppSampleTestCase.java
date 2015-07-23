@@ -69,6 +69,7 @@ public class WebAppSampleTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void delete() throws Exception {
+        sessionCookie = loginLogoutClient.login();
         UserManagementClient userManagementClient = new UserManagementClient(backendURL, sessionCookie);
         userManagementClient.deleteUser("OldUser");
     }
