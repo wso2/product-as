@@ -32,7 +32,7 @@
                 <exclude>**/*.lock</exclude>
                 <exclude>**/.data</exclude>
                 <exclude>**/.settings</exclude>
-                <exclude>features/org.wso2.carbon.as.runtimes.cxf_${carbon.deployment.version}/cxf/*.jar</exclude>
+                <exclude>features/org.wso2.carbon.as.runtimes.cxf_*/cxf/*.jar</exclude>
             </excludes>
         </fileSet>
     </fileSets>

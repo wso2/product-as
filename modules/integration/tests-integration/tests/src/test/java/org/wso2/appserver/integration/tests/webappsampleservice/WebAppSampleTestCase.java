@@ -28,6 +28,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.integration.common.admin.client.UserManagementClient;
 
 import javax.servlet.http.HttpServletResponse;
@@ -51,8 +52,10 @@ public class WebAppSampleTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(WebAppSampleTestCase.class);
     private static final String USER_NAME = "OldUser";
     private static final String PASSWORD = "OldUser";
+    private static final String ROLE = "rolenonadmin";
     private static final String RESOURCE_VALUE = "OldModest";
     private static final String RESOURCE_PATH = "path/to/kicha";
+    private static final String COLLECTION_PATH = "path/to/test/collection";
     private static final String CACHE_KEY = "cacheKey3";
     private static final String CACHE_VALUE = "cacheValue3";
     private static final String CLIENT_AUTH_HEADER = "authorization";
@@ -66,6 +69,7 @@ public class WebAppSampleTestCase extends ASIntegrationTest {
 
     @AfterClass(alwaysRun = true)
     public void delete() throws Exception {
+        sessionCookie = loginLogoutClient.login();
         UserManagementClient userManagementClient = new UserManagementClient(backendURL, sessionCookie);
         userManagementClient.deleteUser("OldUser");
     }
@@ -113,6 +117,90 @@ public class WebAppSampleTestCase extends ASIntegrationTest {
 
     }
 
+    @Test(groups = "wso2.as", description = "Login to webapp with test user", dependsOnMethods = { "testUserLogout" })
+    public void testLoginWebappWithCorrectPermission() throws IOException {
+        String urlOne = webAppURL + "/example/carbon" + "/rolemgt/index.jsp?add=Add&username=" +
+                        USER_NAME + "&role=" + ROLE;
+        GetMethod getMethodOne = new GetMethod(urlOne);
+        try {
+            log.info("Adding test role to " + USER_NAME);
+            int statusCode = httpClient.executeMethod(getMethodOne);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethodOne.getStatusLine());
+            }
+
+        } finally {
+            getMethodOne.releaseConnection();
+        }
+
+        String url = webAppURL + "/example/carbon" + "/authentication/login.jsp?" +
+                     "username=" + USER_NAME + "&password=" + PASSWORD + "&role=" + ROLE;
+        GetMethod getMethod = new GetMethod(url);
+        try {
+            HttpClient httpClient = new HttpClient();
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethod.getStatusLine());
+            } else {
+                assertEquals(getMethod.getResponseHeader("logged-in-with-role").getValue(), "true");
+            }
+        } finally {
+            getMethod.releaseConnection();
+        }
+    }
+
+    @Test(groups = "wso2.as", description = "Login to webapp with test user without permission", dependsOnMethods = {
+            "testUserLogout" })
+    public void testLoginWebappWithoutCorrectPermission() throws IOException {
+        String urlOne = webAppURL + "/example/carbon" + "/rolemgt/index.jsp?remove=Remove&username=" +
+                        USER_NAME + "&role=" + ROLE;
+        GetMethod getMethodOne = new GetMethod(urlOne);
+        try {
+            log.info("Removing role1 from " + USER_NAME);
+            int statusCode = httpClient.executeMethod(getMethodOne);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethodOne.getStatusLine());
+            }
+        } finally {
+            getMethodOne.releaseConnection();
+        }
+
+        String url = webAppURL + "/example/carbon" + "/authentication/login.jsp?" +
+                     "username=" + USER_NAME + "&password=" + PASSWORD + "&role=" + ROLE;
+        GetMethod getMethod = new GetMethod(url);
+        try {
+            HttpClient httpClient = new HttpClient();
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethod.getStatusLine());
+            } else {
+                assertNull(getMethod.getResponseHeader("logged-in-with-role"));
+            }
+        } finally {
+            getMethod.releaseConnection();
+        }
+    }
+
+    @Test(groups = "wso2.as", description = "Logout from the webapp", dependsOnMethods = {
+            "testUserManagerAndAuthenticationDemo" })
+    public void testUserLogout() throws IOException {
+        String url = webAppURL + "/example/carbon" + "/authentication/index.jsp?logout=true";
+        GetMethod getMethod = new GetMethod(url);
+
+        try {
+            log.info("Logout test user");
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethod.getStatusLine());
+            } else {
+                assertEquals(getMethod.getResponseHeader("logged-out").getValue(), "true");
+            }
+        } finally {
+            getMethod.releaseConnection();
+        }
+
+    }
+
     @Test(groups = {"wso2.as"}, description = "Adding a resource",
             dependsOnMethods = "testUserManagerAndAuthenticationDemo")
     public void testRegistryUsageDemo() throws Exception {
@@ -149,8 +237,62 @@ public class WebAppSampleTestCase extends ASIntegrationTest {
         }
     }
 
+    @Test(groups = { "wso2.as" }, description = "Adding a collection")
+    public void testRegistryCollectionUsageDemo() throws Exception {
+        log.info("Running registry collection usage demo test case");
+        String urlOne = webAppURL + "/example/carbon" + "/registry/index.jsp?addCollection=" +
+                        "Add&collectionPath=" + COLLECTION_PATH;
+        GetMethod getMethodOne = new GetMethod(urlOne);
 
-    //Folowing test case is failing because of the new changes
+        try {
+            log.info("Adding test collection to registry");
+            int statusCode = httpClient.executeMethod(getMethodOne);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethodOne.getStatusLine());
+            }
+        } finally {
+            getMethodOne.releaseConnection();
+        }
+
+        String urlTwo = webAppURL + "/example/carbon" + "/registry/index.jsp?viewCollection" +
+                        "=View&collectionPath=" + COLLECTION_PATH;
+        GetMethod getMethodTwo = new GetMethod(urlTwo);
+        try {
+            log.info("Getting test resource content from registry");
+            int statusCode = httpClient.executeMethod(getMethodTwo);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethodTwo.getStatusLine());
+            } else {
+                String resourceContent = getMethodTwo.getResponseHeader("collection-exist").getValue();
+                assertEquals(resourceContent, "true");
+            }
+        } finally {
+            getMethodTwo.releaseConnection();
+        }
+    }
+
+    @Test(groups = { "wso2.as" }, description = "Deleting a registry path")
+    public void testRegistryPathDeleteUsageDemo() throws Exception {
+        log.info("Running registry path deletion usage demo test case");
+        String urlOne = webAppURL + "/example/carbon" + "/registry/index.jsp?delete=" +
+                        "Delete&registryPath=" + COLLECTION_PATH;
+        GetMethod getMethodOne = new GetMethod(urlOne);
+
+        try {
+            log.info("Deleting a registry path from registry");
+            int statusCode = httpClient.executeMethod(getMethodOne);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethodOne.getStatusLine());
+            } else {
+                String isPathDeleted = getMethodOne.getResponseHeader("resource-deleted").getValue();
+                assertEquals(isPathDeleted, "true");
+            }
+        } finally {
+            getMethodOne.releaseConnection();
+        }
+    }
+
+	//Folowing test case is failing because of the new changes
     //to carbon caching (in 4.2.0 release)
     // need to create anew test case for carbon caching demo
 
