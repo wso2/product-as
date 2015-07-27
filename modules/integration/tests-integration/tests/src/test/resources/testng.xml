@@ -176,4 +176,12 @@
             <package name="org.wso2.appserver.integration.tests.multitenancy"/>
         </packages>
     </test>
+
+    <test name="usermgt-profile-tests" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.usermgt.profile.UserProfileMgtTestCase"/>
+            <class name="org.wso2.appserver.integration.tests.usermgt.profile.UserProfileMgtAssociatedIDTestCase"/>
+        </classes>
+    </test>
+
 </suite>
