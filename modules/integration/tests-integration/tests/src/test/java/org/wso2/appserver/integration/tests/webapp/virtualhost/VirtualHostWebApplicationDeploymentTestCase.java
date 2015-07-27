@@ -108,7 +108,8 @@ public class VirtualHostWebApplicationDeploymentTestCase extends ASIntegrationTe
         String response = getRequest.getResponseBodyAsString();
         int statusCode = getRequest.getStatusCode();
 
-        assertEquals(statusCode, HttpStatus.SC_OK, "Request failed. Received response code " + statusCode);
+        assertEquals(statusCode, HttpStatus.SC_MOVED_TEMPORARILY,
+                     "Request failed. Received response code " + statusCode);
         assertNotEquals("<status>success</status>\n", response, "Unexpected response: " + response);
     }
 
@@ -218,8 +219,7 @@ public class VirtualHostWebApplicationDeploymentTestCase extends ASIntegrationTe
                 "got a response even after web app is undeployed , Status code: " + statusCode);
     }
 
-    @Test(expectedExceptions = {java.net.UnknownHostException.class}, expectedExceptionsMessageRegExp = "www.vhost2.com",
-            dependsOnMethods = {"testDeleteWebApplicationInDefaultHost"})
+    @Test(dependsOnMethods = {"testDeleteWebApplicationInDefaultHost"})
     public void testVirtualHostDeletionAfterWebappDeployment() throws Exception {
         uploadWarFile(appBaseDir2, webAppFileName1);
         GetMethod getRequest = invokeWebapp(webAppURL, webAppName1, vhostName2);
@@ -233,7 +233,8 @@ public class VirtualHostWebApplicationDeploymentTestCase extends ASIntegrationTe
         Path targetPath = Paths.get(System.getProperty(ServerConstants.CARBON_HOME), "repository", "conf", "tomcat", "catalina-server.xml");
         serverManager.applyConfiguration(sourcePath.toFile(), targetPath.toFile(), false, true);
 
-        assertNotNull(invokeWebapp(webAppURL, webAppName1, vhostName2));
+        GetMethod errorResponse = invokeWebapp(webAppURL, webAppName1, vhostName2);
+        assertEquals(errorResponse.getStatusCode(), HttpStatus.SC_MOVED_TEMPORARILY, "Request should get redirected.");
     }
 
     private void uploadWarFile(String appBaseDir, String webAppFileName) throws IOException {
@@ -251,6 +252,7 @@ public class VirtualHostWebApplicationDeploymentTestCase extends ASIntegrationTe
         String webappUrl = baseURL + "/" + webappName + "/";
         HttpClient client = new HttpClient();
         GetMethod getRequest = new GetMethod(webappUrl);
+        getRequest.setFollowRedirects(false);
         if (vHostName != null) {
             //set Host tag value of request header to vHostName
             //(This avoids the requirement to add an entry to etc/hosts/ to pass this test case)
