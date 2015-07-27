@@ -114,7 +114,7 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 	}
 
 	@Test(groups = "wso2.as", description = "Test adding duplicate tenant",
-			dependsOnMethods = "testAddTenant", expectedExceptions = { TenantMgtAdminServiceExceptionException.class },
+			dependsOnMethods = "testTenantLogin", expectedExceptions = { TenantMgtAdminServiceExceptionException.class },
 			expectedExceptionsMessageRegExp = "TenantMgtAdminServiceExceptionException")
 	public void testAddingDuplicateTenant() throws Exception {
 		Date date = new Date();
@@ -136,7 +136,7 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 	}
 
 	@Test(groups = "wso2.as", description = "Deactivate loaded tenant and attempt to log",
-			dependsOnMethods = "testTenantLogin", expectedExceptions = {
+			dependsOnMethods = "testAddingDuplicateTenant", expectedExceptions = {
 			AutomationUtilException.class }, expectedExceptionsMessageRegExp = "Error while login as " +
 			                                                                   FIRST_TENANT_USER + "@" +
 			                                                                   FIRST_TENANT_DOMAIN)
@@ -146,7 +146,7 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 		                        asServer.getInstance().getHosts().get("default"));
 	}
 
-	//https://wso2.org/jira/browse/WSAS-2022
+	//ToDo: https://wso2.org/jira/browse/WSAS-2022
 	@Test(enabled = false, groups = "wso2.as", description = "Test access a webapp deployed by a deactivated tenant and re-activate that tenant and access web app",
 			dependsOnMethods = "testTenantDeactivation")
 	public void testAccessWebappOfDeactivatedTenant() throws Exception {
@@ -172,7 +172,8 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 
 	}
 
-	@Test(groups = "wso2.as", description = "Test Login after deactivating unloaded tenant", expectedExceptions = {
+	@Test(groups = "wso2.as", dependsOnMethods = "testTenantDeactivation",
+            description = "Test Login after deactivating unloaded tenant", expectedExceptions = {
 			AutomationUtilException.class }, expectedExceptionsMessageRegExp = "Error while login as " +
 	                                                                           SECOND_TENANT_USER + "@" +
 	                                                                           SECOND_TENANT_DOMAIN)
@@ -218,8 +219,8 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 		             "Tenant update email failed");
 	}
 
-	@Test(groups = "wso2.as", description = "Test adding new tenant from another tenant",
-			expectedExceptions = { RemoteException.class })
+	@Test(groups = "wso2.as", dependsOnMethods = "testUpdateTenant",
+            description = "Test adding new tenant from another tenant", expectedExceptions = { RemoteException.class })
 	public void testAddingTenantFromDifferentTenant() throws Exception {
 		tenantManagementServiceClient.addTenant(THIRD_TENANT_DOMAIN, "admin123", THIRD_TENANT_USER, "Demo");
 		sessionCookie = loginLogoutClient.login(THIRD_TENANT_USER + "@" + THIRD_TENANT_DOMAIN, "admin123",
