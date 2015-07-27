@@ -82,25 +82,13 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon:org.wso2.carbon.core.runtime.feature:${carbon.kernel.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.ndatasource.ui.feature:${carbon.commons.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.xacml.ui.feature:${carbon.identity.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.core.server.feature:${carbon.identity.version}
-                                </featureArtifactDef>
-                                <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.identity.application.mgt.feature:${carbon.identity.version}
-                                </featureArtifactDef>
 
                                 <!-- Application Hosting Nested category -->
                                 <featureArtifactDef>
                                     org.wso2.carbon.deployment:org.wso2.carbon.webapp.mgt.feature:${carbon.deployment.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.identity:org.wso2.carbon.security.mgt.feature:${carbon.identity.version}
+                                    org.wso2.carbon.commons:org.wso2.carbon.ndatasource.ui.feature:${carbon.commons.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.commons:org.wso2.carbon.ndatasource.feature:${carbon.commons.version}
@@ -136,10 +124,7 @@
                                     org.jaggeryjs.modules:ws.feature:${ws.module.version}
                                 </featureArtifactDef>
 
-                                <!-- Application Mgt Nested Category -->
-                                <featureArtifactDef>
-                                    org.wso2.carbon.deployment:org.wso2.carbon.repomanager.axis2.feature:${carbon.deployment.version}
-                                </featureArtifactDef>
+                                <!-- Composite Application Mgt Nested Category -->
                                 <featureArtifactDef>
                                     org.wso2.carbon.commons:org.wso2.carbon.application.mgt.feature:${carbon.commons.version}
                                 </featureArtifactDef>
@@ -150,7 +135,7 @@
                                     org.wso2.carbon.deployment:org.wso2.carbon.application.deployer.webapp.feature:${carbon.deployment.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.appserver:org.wso2.appserver.utils.feature:${project.version}
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.application.mgt.feature:${carbon.identity.version}
                                 </featureArtifactDef>
 
                                 <!-- Javaee Runtime Nested Category -->
@@ -159,6 +144,12 @@
                                 </featureArtifactDef>
 
                                 <!-- Miscellaneous -->
+                                <featureArtifactDef>
+                                    org.wso2.carbon.identity:org.wso2.carbon.security.mgt.feature:${carbon.identity.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.deployment:org.wso2.carbon.repomanager.axis2.feature:${carbon.deployment.version}
+                                </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.commons:org.wso2.carbon.event.common.feature:${carbon.commons.version}
                                 </featureArtifactDef>
@@ -182,6 +173,12 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.commons:org.wso2.carbon.transaction.manager.feature:${carbon.commons.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.ciphertool:org.wso2.ciphertool.feature:${cipher.tool.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.appserver:org.wso2.appserver.utils.feature:${project.version}
                                 </featureArtifactDef>
 
                                 <!-- Monitoring Nested Category -->
@@ -237,7 +234,7 @@
                                 <featureArtifactDef>
                                     org.wso2.carbon.registry:org.wso2.carbon.registry.resource.properties.feature:${carbon.registry.version}
                                 </featureArtifactDef>
-                                <!--Todo -  Added to resolve issue on server shutdown need to remove once this was properly fixed on Jaggary
+                                <!--Todo -  Added to resolve issue on server shutdown need to remove once this was properly fixed on Jaggery
                                 [Dev] [Registry] NoClassDefFoundError when shutdown the AS -->
                                 <featureArtifactDef>
                                     org.wso2.carbon.registry:org.wso2.carbon.registry.contentsearch.feature:${carbon.registry.version}
@@ -270,9 +267,12 @@
                                     org.wso2.carbon.commons:org.wso2.carbon.tryit.feature:${carbon.commons.version}
                                 </featureArtifactDef>
 
-                                <!-- User-Mgt Nested Category -->
+                                <!-- Identity Nested Category -->
                                 <featureArtifactDef>
                                     org.wso2.carbon.commons:org.wso2.carbon.user.mgt.feature:${carbon.commons.version}
+                                </featureArtifactDef>
+                                <featureArtifactDef>
+                                    org.wso2.carbon.identity:org.wso2.carbon.identity.xacml.ui.feature:${carbon.identity.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.deployment:org.wso2.carbon.identity.xacml.filter.feature:${carbon.deployment.version}
@@ -282,10 +282,6 @@
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.identity:org.wso2.carbon.identity.core.feature:${carbon.identity.version}
-                                </featureArtifactDef>
-
-                                <featureArtifactDef>
-                                    org.wso2.ciphertool:org.wso2.ciphertool.feature:${cipher.tool.version}
                                 </featureArtifactDef>
 
                             </featureArtifacts>
