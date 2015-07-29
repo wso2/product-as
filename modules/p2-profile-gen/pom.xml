@@ -931,6 +931,13 @@
                                 </feature>
                                 <!-- end of as -runtime features -->
 
+                                <!--Todo -  Added to resolve issue on server shutdown need to remove once this was properly fixed on Jaggary
+                                [Dev] [Registry] NoClassDefFoundError when shutdown the AS -->
+                                <feature>
+                                    <id>org.wso2.carbon.registry.contentsearch.feature.group</id>
+                                    <version>${carbon.registry.version}</version>
+                                </feature>
+
                             </features>
                         </configuration>
                     </execution>
@@ -1484,6 +1491,13 @@
                                 <feature>
                                     <id>org.wso2.carbon.user.mgt.feature.group</id>
                                     <version>${carbon.commons.version}</version>
+                                </feature>
+
+                                <!--Todo -  Added to resolve issue on server shutdown need to remove once this was properly fixed on Jaggary
+                                [Dev] [Registry] NoClassDefFoundError when shutdown the AS -->
+                                <feature>
+                                    <id>org.wso2.carbon.registry.contentsearch.feature.group</id>
+                                    <version>${carbon.registry.version}</version>
                                 </feature>
 
                             </features>
