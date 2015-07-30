@@ -41,7 +41,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>distribution-with-apache-ldap</module>
+        <module>ldap-server-feature-installed-wso2as</module>
         <module>tests-common</module>
         <module>tests-integration</module>
         <module>tests-integration/reports</module>
