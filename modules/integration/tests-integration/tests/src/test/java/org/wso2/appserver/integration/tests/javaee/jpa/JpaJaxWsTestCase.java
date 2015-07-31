@@ -59,8 +59,6 @@ public class JpaJaxWsTestCase extends ASIntegrationTest {
     private static TestUserMode[][] userModeProvider() {
         return new TestUserMode[][]{
                 new TestUserMode[]{TestUserMode.SUPER_TENANT_ADMIN},
-                //todo enable tenant mode after fixing sample issue with tenant
-                //jira : https://wso2.org/jira/browse/WSAS-1998
                 new TestUserMode[]{TestUserMode.TENANT_USER},
         };
     }
