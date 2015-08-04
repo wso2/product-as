@@ -38,7 +38,6 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>${version.commons.logging}</version>
         </dependency>
     </dependencies>
 
