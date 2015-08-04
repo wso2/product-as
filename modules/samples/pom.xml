@@ -496,7 +496,7 @@
     <properties>
         <samples.carbon.kernel.version>4.4.1</samples.carbon.kernel.version>
         <samples.carbon.identity.version>4.4.0</samples.carbon.identity.version>
-        <samples.appserver.axis2.version>1.6.1.wso2v12</samples.appserver.axis2.version>
+        <samples.appserver.axis2.version>1.6.1.wso2v14</samples.appserver.axis2.version>
         <samples.appserver.axiom.version>1.2.11.wso2v6</samples.appserver.axiom.version>
         <samples.appserver.wss4j.version>1.5.11.wso2v3</samples.appserver.wss4j.version>
         <samples.appserver.rampart.version>1.6.1.wso2v10</samples.appserver.rampart.version>
