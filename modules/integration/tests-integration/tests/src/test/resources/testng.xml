@@ -27,7 +27,6 @@
         </packages>
     </test>
 
-    <!-- ToDo: https://wso2.org/jira/browse/WSAS-2008
     <test name="javaee-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.javaee.cdi.*"/>
@@ -36,7 +35,6 @@
             <package name="org.wso2.appserver.integration.tests.javaee.jta.*"/>
         </packages>
     </test>
-    -->
 
     <test name="logging-tests" preserve-order="true" parallel="false">
         <packages>
