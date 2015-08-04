@@ -18,8 +18,6 @@
 
 package org.wso2.appserver.integration.tests.webapp.mgt.config;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
@@ -31,20 +29,17 @@ import org.wso2.carbon.automation.test.utils.http.client.HttpClientUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Paths;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class WebAppDescriptorTest extends ASIntegrationTest {
+public class WebAppDescriptorTestBase extends ASIntegrationTest {
     public static final String PASS = "Pass";
     public static final String FAIL = "Fail";
-    public static final String SAMPLE_APP_LOCATION =
-            FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator + "AS" + File.separator + "war"
-                    + File.separator + "configTesting";
-    private static final Log log = LogFactory.getLog(WebAppDescriptorTest.class);
+    public static final String SAMPLE_APP_LOCATION = Paths
+            .get(FrameworkPathUtil.getSystemResourceLocation() + "artifacts", "AS", "war", "webAppDescriptorTesting")
+            .toString();
     protected final String webAppFileName;
     protected final String webAppName;
     protected final String webAppLocalURL;
@@ -52,10 +47,10 @@ public class WebAppDescriptorTest extends ASIntegrationTest {
     protected String sampleAppDirectory;
     protected WebAppAdminClient webAppAdminClient;
 
-    public WebAppDescriptorTest(WebAppMode webAppMode) {
+    public WebAppDescriptorTestBase(WebAppMode webAppMode) {
         webAppName = webAppMode.getWebAppName().split(".war")[0];
         webAppFileName = webAppMode.getWebAppName();
-        webAppLocalURL = File.separator + webAppName;
+        webAppLocalURL = "/" + webAppName;
 
     }
 
@@ -65,58 +60,24 @@ public class WebAppDescriptorTest extends ASIntegrationTest {
     }
 
     protected void webApplicationDeployment() throws Exception {
-        webAppAdminClient.uploadWarFile(sampleAppDirectory + File.separator + webAppFileName);
+        webAppAdminClient.uploadWarFile(Paths.get(sampleAppDirectory, webAppFileName).toString());
 
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
-                webAppName+" web Application Deployment failed");
+                webAppName + " web Application Deployment failed");
     }
 
-    /**
-     * This sends a request to the webapp and checks if the expected result is returned
-     *
-     * @param tomcat The expected value for Tomcat
-     * @param carbon The expected value for Carbon
-     * @param cxf    The expected value for CXF
-     * @param spring The expected value for Spring
-     * @throws AutomationFrameworkException
-     */
-    protected void invokeWebApp(boolean tomcat, boolean carbon, boolean cxf, boolean spring)
-            throws AutomationFrameworkException {
-        String webAppURLLocal = webAppURL + webAppLocalURL;
-        Map<String, String> results = toResultMap(runAndGetResultAsString(webAppURLLocal));
-        assertEquals(tomcat ? PASS : FAIL, results.get("Tomcat"),"Tomcat test failed");
-        assertEquals(carbon ? PASS : FAIL, results.get("Carbon"),"Carbon test failed");
-        assertEquals(cxf ? PASS : FAIL, results.get("CXF"),"CXF test failed");
-        assertEquals(spring ? PASS : FAIL, results.get("Spring"),"Spring test failed");
-    }
+    protected void testForEnvironment(boolean shouldPass, String environment) throws AutomationFrameworkException {
+        String webAppURLLocal = webAppURL + webAppLocalURL + "/verifyEnvironment" + "?environment=" + environment;
 
-    /**
-     * Returns a Map after processing the result string
-     *
-     * @param resultString The string to be processed
-     * @return Map
-     */
-    protected Map<String, String> toResultMap(String resultString) {
-        if (resultString == null) {
-            log.warn("resultString is null");
-            return null;
-        }
-        resultString = resultString.replace("<status>", "").replace("</status>", "");
-        Map<String, String> resultMap = new HashMap<>();
-        String[] resultArray = resultString.split(",");
-        for (String s : resultArray) {
-            String[] temp = s.split("-");
-            if (!temp[0].equals("")) {
-                resultMap.put(temp[0], temp[1]);
-            }
-        }
-        log.debug(resultMap);
-        return resultMap;
+        String result = runAndGetResultAsString(webAppURLLocal);
+
+        assertEquals(shouldPass ? PASS : FAIL, result, environment + " test has failed");
+
     }
 
     protected String runAndGetResultAsString(String webAppURL) throws AutomationFrameworkException {
         HttpClientUtil client = new HttpClientUtil();
-        return client.get(webAppURL).toString();
+        return client.get(webAppURL).toString().replace("<status>", "").replace("</status>", "");
     }
 
     protected void deleteWebApplication() throws Exception {

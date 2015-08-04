@@ -30,7 +30,7 @@ import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 
-import java.io.File;
+import java.nio.file.Paths;
 
 import static org.testng.Assert.assertTrue;
 
@@ -38,7 +38,7 @@ import static org.testng.Assert.assertTrue;
  * This class is to test if the changes in the webapp classloading configuration are taken into consideration when
  * redeploying
  */
-public class WebAppDescriptorRedeploymentTestCase extends WebAppDescriptorTest {
+public class WebAppDescriptorRedeploymentTestCase extends WebAppDescriptorTestBase {
     //This app requires Tomcat, Carbon, CXF, Spring
     //wso2as-web.xml doesn't have the environment specified
     private static final String CORRECT_ENV_NOT_SPECIFIED = "appServer-cxf-cl-app-1.0.0-no-env.war";
@@ -57,7 +57,7 @@ public class WebAppDescriptorRedeploymentTestCase extends WebAppDescriptorTest {
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        sampleAppDirectory = SAMPLE_APP_LOCATION + File.separator + "redeployment";
+        sampleAppDirectory = Paths.get(SAMPLE_APP_LOCATION, "redeployment").toString();
 
         super.init();
     }
@@ -73,8 +73,11 @@ public class WebAppDescriptorRedeploymentTestCase extends WebAppDescriptorTest {
             dependsOnMethods = "webApplicationDeploymentTest")
     public void testInvokeWebAppBeforeReload() throws AutomationFrameworkException {
         //Since we have not specified the environments in the configuration file
-        //Only Tomcat and Carbon should PASS
-        invokeWebApp(true, true, false, false);
+        //and this app requires Tomcat, CXF and Spring, only Tomcat should PASS
+        testForEnvironment(true, "Tomcat");
+        testForEnvironment(false, "Carbon");
+        testForEnvironment(false, "CXF");
+        testForEnvironment(false, "Spring");
     }
 
     @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })//TODO: verify
@@ -83,12 +86,11 @@ public class WebAppDescriptorRedeploymentTestCase extends WebAppDescriptorTest {
             dependsOnMethods = "testInvokeWebAppBeforeReload")
     public void testWebApplicationReDeployment() throws Exception {
 
-        String source = SAMPLE_APP_LOCATION + File.separator + "redeployment" + File.separator + "env-added";
+        String source = Paths.get(SAMPLE_APP_LOCATION, "redeployment", "env-added").toString();
 
-        webAppAdminClient.uploadWarFile(source + File.separator + webAppFileName);
+        webAppAdminClient.uploadWarFile(Paths.get(source, webAppFileName).toString());
 
-        //Put this because the waiting time wasn't enough
-        Thread.sleep(90 * 1000);
+        assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, webAppName));
 
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName),
                 "Web Application Deployment failed");
@@ -99,8 +101,11 @@ public class WebAppDescriptorRedeploymentTestCase extends WebAppDescriptorTest {
             description = "Invoke web application after reload",
             dependsOnMethods = "testWebApplicationReDeployment")
     public void testInvokeWebAppAfterReload() throws AutomationFrameworkException {
-        //After redeployment with correct environments, Tomcat,Carbon,CXF and Spring should PASS
-        invokeWebApp(true, true, true, true);
+        //After redeployment with correct environments, all Tomcat,Carbon,CXF and Spring should PASS
+        testForEnvironment(true, "Tomcat");
+        testForEnvironment(true, "Carbon");
+        testForEnvironment(true, "CXF");
+        testForEnvironment(true, "Spring");
     }
 
     @AfterClass(alwaysRun = true)

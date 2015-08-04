@@ -27,35 +27,38 @@ import org.wso2.appserver.integration.common.utils.WebAppMode;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 
-import java.io.File;
+import java.nio.file.Paths;
 
 /**
  * This class to test when different combinations of webapp-classloading.xml and wso2as-web.xml being inside the webapp
  * classloading configuration correctly happens
  */
-public class WebAppDescriptorClassloadingTestCase extends WebAppDescriptorTest {
+public class WebAppDescriptorClassloadingTestCase extends WebAppDescriptorTestBase {
     //This app requires Tomcat, Carbon
-    private static final String NO_CONFIG_FILES = "appServer-carbon-cl-app-1.0.0-no-config-file-present.war";
+    private static final String WEB_APP_WITH_NO_CONFIG_FILES = "appServer-carbon-cl-app-1.0.0-no-config-file-present.war";
 
     //This app requires Tomcat, CXF, Spring
     // webapp-classloading.xml has Tomcat and wso2as-web.xml has CXF
-    private static final String BOTH_FILES_PRESENT_WITH_DIFFERENT_ENV = "appServer-cxf-cl-app-1.0.0-two-config-files-both-have-env.war";
+    private static final String WEB_APP_WITH_TWO_CONFIG_FILES_HAVING_DIFFERENT_ENVIRONMENTS =
+            "appServer-cxf-cl-app-1.0.0-two-config-files-both-have-env.war";
 
     //This app requires Tomcat, Carbon
     //wso2as-web.xml has no environment element present and webapp-classloading.xml has CXF
-    private static final String BOTH_FILES_PRESENT_ONLY_OLD_HAS_ENV = "appServer-carbon-cl-app-1.0.0-two-config-files-old-have-env.war";
+    private static final String WEB_APP_WITH_BOTH_FILES_BUT_ONLY_WEBAPPCLASSLOADING_XML_HAS_ENVIRONMENT =
+            "appServer-carbon-cl-app-1.0.0-two-config-files-old-have-env.war";
 
     //This app requires Tomcat, Carbon
     //Both webapp-classloading.xml and wso2as-web.xml are present but none has the environment specified
-    private static final String BOTH_FILES_PRESENT_ENV_IN_NONE = "appServer-carbon-cl-app-1.0.0-two-config-files-none-have-env.war";
+    private static final String WEB_APP_WITH_BOTH_FILES_BUT_NONE_HAS_ENVIRONMENT =
+            "appServer-carbon-cl-app-1.0.0-two-config-files-none-have-env.war";
 
     //This app requires Tomcat, CXF, Spring
     //Only webapp-classloading.xml is present with CXF specified
-    private static final String ONLY_OLD_CONFIG_FILE_PRESENT = "appServer-cxf-cl-app-1.0.0-old-config-file.war";
+    private static final String WEB_APP_WITH_ONLY_WEBAPPCLASSLOADING_XML = "appServer-cxf-cl-app-1.0.0-old-config-file.war";
 
     //This app requires Tomcat, CXF, Spring
     //Only wso2as-web.xml is present with CXF specified
-    private static final String ONLY_NEW_CONFIG_FILE_PRESENT = "appServer-cxf-cl-app-1.0.0-new-config-file.war";
+    private static final String WEB_APP_WITH_ONLY_WSO2ASWEB_XML = "appServer-cxf-cl-app-1.0.0-new-config-file.war";
 
     @Factory(dataProvider = "webAppModeProvider")
     public WebAppDescriptorClassloadingTestCase(WebAppMode webAppMode) {
@@ -65,24 +68,25 @@ public class WebAppDescriptorClassloadingTestCase extends WebAppDescriptorTest {
     @DataProvider(name = "webAppModeProvider")
     private static WebAppMode[][] WebAppModeProvider() {
         return new WebAppMode[][] {
-                new WebAppMode[] { new WebAppMode(NO_CONFIG_FILES, TestUserMode.SUPER_TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(NO_CONFIG_FILES, TestUserMode.TENANT_USER) }, new WebAppMode[] {
-                new WebAppMode(BOTH_FILES_PRESENT_WITH_DIFFERENT_ENV, TestUserMode.SUPER_TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(BOTH_FILES_PRESENT_WITH_DIFFERENT_ENV, TestUserMode.TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_NO_CONFIG_FILES, TestUserMode.SUPER_TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_NO_CONFIG_FILES, TestUserMode.TENANT_USER) }, new WebAppMode[] {
+                new WebAppMode(WEB_APP_WITH_TWO_CONFIG_FILES_HAVING_DIFFERENT_ENVIRONMENTS, TestUserMode.SUPER_TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_TWO_CONFIG_FILES_HAVING_DIFFERENT_ENVIRONMENTS, TestUserMode.TENANT_USER) },
                 new WebAppMode[] {
-                        new WebAppMode(BOTH_FILES_PRESENT_ONLY_OLD_HAS_ENV, TestUserMode.SUPER_TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(BOTH_FILES_PRESENT_ONLY_OLD_HAS_ENV, TestUserMode.TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(BOTH_FILES_PRESENT_ENV_IN_NONE, TestUserMode.SUPER_TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(BOTH_FILES_PRESENT_ENV_IN_NONE, TestUserMode.TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(ONLY_OLD_CONFIG_FILE_PRESENT, TestUserMode.SUPER_TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(ONLY_OLD_CONFIG_FILE_PRESENT, TestUserMode.TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(ONLY_NEW_CONFIG_FILE_PRESENT, TestUserMode.SUPER_TENANT_USER) },
-                new WebAppMode[] { new WebAppMode(ONLY_NEW_CONFIG_FILE_PRESENT, TestUserMode.TENANT_USER) } };
+                        new WebAppMode(WEB_APP_WITH_BOTH_FILES_BUT_ONLY_WEBAPPCLASSLOADING_XML_HAS_ENVIRONMENT, TestUserMode.SUPER_TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(
+                        WEB_APP_WITH_BOTH_FILES_BUT_ONLY_WEBAPPCLASSLOADING_XML_HAS_ENVIRONMENT, TestUserMode.TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_BOTH_FILES_BUT_NONE_HAS_ENVIRONMENT, TestUserMode.SUPER_TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_BOTH_FILES_BUT_NONE_HAS_ENVIRONMENT, TestUserMode.TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_ONLY_WEBAPPCLASSLOADING_XML, TestUserMode.SUPER_TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_ONLY_WEBAPPCLASSLOADING_XML, TestUserMode.TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_ONLY_WSO2ASWEB_XML, TestUserMode.SUPER_TENANT_USER) },
+                new WebAppMode[] { new WebAppMode(WEB_APP_WITH_ONLY_WSO2ASWEB_XML, TestUserMode.TENANT_USER) } };
     }
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        sampleAppDirectory = SAMPLE_APP_LOCATION + File.separator + "classloading";
+        sampleAppDirectory = Paths.get(SAMPLE_APP_LOCATION, "classloading").toString();
         super.init();
     }
 
@@ -95,8 +99,12 @@ public class WebAppDescriptorClassloadingTestCase extends WebAppDescriptorTest {
     @Test(groups = "wso2.as",
             description = "Invoke web application",
             dependsOnMethods = "webApplicationDeploymentTest")
-    public void testInvokeWebApp() throws AutomationFrameworkException { //TODO: verify the benefit of throwing only Exception
-        invokeWebApp(true, true, true, true);
+    public void testInvokeWebApp()
+            throws AutomationFrameworkException { //TODO: verify the benefit of throwing only Exception
+        testForEnvironment(true, "Tomcat");
+        testForEnvironment(true, "Carbon");
+        testForEnvironment(true, "CXF");
+        testForEnvironment(true, "Spring");
     }
 
     @AfterClass(alwaysRun = true)

@@ -30,8 +30,8 @@ import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 
 import static org.testng.Assert.assertEquals;
@@ -39,7 +39,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * This class is to test if the classloading configuration happens correctly after stopping and starting webapp
  */
-public class WebAppDescriptorStopAndStartTestCase extends WebAppDescriptorTest {
+public class WebAppDescriptorStopAndStartTestCase extends WebAppDescriptorTestBase {
     private static final String WEB_APPLICATION = "appServer-cxf-cl-app-1.0.0.war";
 
     @Factory(dataProvider = "webAppModeProvider")
@@ -56,7 +56,8 @@ public class WebAppDescriptorStopAndStartTestCase extends WebAppDescriptorTest {
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        sampleAppDirectory = SAMPLE_APP_LOCATION + File.separator + "stop-start";
+        //sampleAppDirectory = SAMPLE_APP_LOCATION + File.separator + "stop-start";
+        sampleAppDirectory = Paths.get(SAMPLE_APP_LOCATION ,"stop-start").toString();
         super.init();
     }
 
@@ -70,7 +71,10 @@ public class WebAppDescriptorStopAndStartTestCase extends WebAppDescriptorTest {
             description = "Invoke web application before stopping",
             dependsOnMethods = "webApplicationDeploymentTest")
     public void testInvokeBeforeStop() throws AutomationFrameworkException {
-        invokeWebApp(true, true, true, true);
+        testForEnvironment(true,"Tomcat");
+        testForEnvironment(true,"Carbon");
+        testForEnvironment(true,"CXF");
+        testForEnvironment(true,"Spring");
     }
 
     @Test(groups = "wso2.as",
@@ -101,7 +105,10 @@ public class WebAppDescriptorStopAndStartTestCase extends WebAppDescriptorTest {
             description = "Invoke web application after stopping and starting",
             dependsOnMethods = "testWebApplicationStart")
     public void testInvokeWebApp() throws AutomationFrameworkException {
-        invokeWebApp(true, true, true, true);
+        testForEnvironment(true,"Tomcat");
+        testForEnvironment(true,"Carbon");
+        testForEnvironment(true,"CXF");
+        testForEnvironment(true,"Spring");
     }
 
     @AfterClass(alwaysRun = true)
