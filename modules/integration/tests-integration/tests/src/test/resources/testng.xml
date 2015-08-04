@@ -61,13 +61,13 @@
         </packages>
     </test>
 
-    <!-- ToDo: Causes other test cases to fail -->
+    <!-- ToDo: Causes other test cases to fail
     <test name="ciphertool-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.ciphertool"/>
         </packages>
     </test>
-    
+    -->
 
     <test name="jaggery-tests" preserve-order="true" parallel="false">
         <packages>
@@ -78,13 +78,13 @@
         </classes>
     </test>
 
-    <!-- ToDo: Causes other test cases to fail -->
+    <!-- ToDo: Causes other test cases to fail
     <test name="carbontool-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.carbontools"/>
         </packages>
     </test>
-    
+    -->
 
     <test name="spi-fly-tests" preserve-order="true" parallel="false">
         <packages>
@@ -168,6 +168,7 @@
             <package name="org.wso2.appserver.integration.tests.cahce"/>
         </packages>
     </test>
+
     <test name="multi-tenancy-tests" preserve-order="true" parallel="false">
         <packages>
             <package name="org.wso2.appserver.integration.tests.multitenancy"/>
