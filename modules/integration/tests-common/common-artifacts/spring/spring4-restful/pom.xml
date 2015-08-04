@@ -94,21 +94,4 @@
         <version.org.apache.maven-war-plugin>2.1.1</version.org.apache.maven-war-plugin>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </repository>
-        <repository>
-            <id>springframework-releases</id>
-            <url>http://maven.springframework.org/release/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </pluginRepository>
-    </pluginRepositories>
-
 </project>

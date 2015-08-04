@@ -23,8 +23,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>WSO2 AppServer Distribution with apache ldap server</name>
-    <artifactId>distribution-with-apache-ldap</artifactId>
+    <name>WSO2 AppServer Distribution having apache ldap server feature installed</name>
+    <artifactId>ldap-server-feature-installed-wso2as</artifactId>
     <build>
         <finalName>wso2as-${project.version}</finalName>
         <plugins>
