@@ -54,11 +54,11 @@ import static org.testng.Assert.assertTrue;
 public class MultiTenancyTestCase extends ASIntegrationTest {
 
 	private final String FIRST_TENANT_DOMAIN = "multitenancytest1.com";
-	private final String FIRST_TENANT_USER = "testuser1.MultiTenancyTestCase";
+	private final String FIRST_TENANT_USER = "testuser1";
 	private final String SECOND_TENANT_DOMAIN = "multitenancytest2.com";
-	private final String SECOND_TENANT_USER = "testuser2.MultiTenancyTestCase";
+	private final String SECOND_TENANT_USER = "testuser2";
 	private final String THIRD_TENANT_DOMAIN = "multitenancytest3.com";
-	private final String THIRD_TENANT_USER = "testuser3.MultiTenancyTestCase";
+	private final String THIRD_TENANT_USER = "testuser3";
 	private WebAppAdminClient webAppAdminClient;
 	private TenantManagementServiceClient tenantManagementServiceClient;
 	private TenantInfoBean tenantInfoBean;
@@ -113,8 +113,8 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 		assertEquals(keyStoreData.getKeyStoreName(), certificate, "Invalid tenant key store name");
 	}
 
-	@Test(groups = "wso2.as", description = "Test adding duplicate tenant",
-			dependsOnMethods = "testAddTenant", expectedExceptions = { TenantMgtAdminServiceExceptionException.class },
+	@Test(groups = "wso2.as", description = "Test adding duplicate tenant",	dependsOnMethods = "testTenantLogin",
+            expectedExceptions = { TenantMgtAdminServiceExceptionException.class },
 			expectedExceptionsMessageRegExp = "TenantMgtAdminServiceExceptionException")
 	public void testAddingDuplicateTenant() throws Exception {
 		Date date = new Date();
@@ -136,7 +136,7 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 	}
 
 	@Test(groups = "wso2.as", description = "Deactivate loaded tenant and attempt to log",
-			dependsOnMethods = "testTenantLogin", expectedExceptions = {
+			dependsOnMethods = "testAddingDuplicateTenant", expectedExceptions = {
 			AutomationUtilException.class }, expectedExceptionsMessageRegExp = "Error while login as " +
 			                                                                   FIRST_TENANT_USER + "@" +
 			                                                                   FIRST_TENANT_DOMAIN)
@@ -172,11 +172,12 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 
 	}
 
-	@Test(groups = "wso2.as", description = "Test Login after deactivating unloaded tenant", expectedExceptions = {
-			AutomationUtilException.class }, expectedExceptionsMessageRegExp = "Error while login as " +
-	                                                                           SECOND_TENANT_USER + "@" +
-	                                                                           SECOND_TENANT_DOMAIN)
-	public void testLoginToUnloadedDeactivatedTenant() throws Exception {
+	@Test(groups = "wso2.as", dependsOnMethods = "testTenantDeactivation",
+            description = "Test Login after deactivating unloaded tenant", expectedExceptions = {
+            AutomationUtilException.class }, expectedExceptionsMessageRegExp = "Error while login as " +
+                                                                               SECOND_TENANT_USER + "@" +
+                                                                               SECOND_TENANT_DOMAIN)
+    public void testLoginToUnloadedDeactivatedTenant() throws Exception {
 		tenantManagementServiceClient.addTenant(SECOND_TENANT_DOMAIN, "admin123", SECOND_TENANT_USER, "Demo");
 		//Deactivate unloaded Tenant
 		tenantManagementServiceClient.deactivateTenant(SECOND_TENANT_DOMAIN);
@@ -218,9 +219,9 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 		             "Tenant update email failed");
 	}
 
-	@Test(groups = "wso2.as", description = "Test adding new tenant from another tenant",
-			expectedExceptions = { RemoteException.class })
-	public void testAddingTenantFromDifferentTenant() throws Exception {
+	@Test(groups = "wso2.as", dependsOnMethods = "testUpdateTenant",
+            description = "Test adding new tenant from another tenant", expectedExceptions = { RemoteException.class })
+    public void testAddingTenantFromDifferentTenant() throws Exception {
 		tenantManagementServiceClient.addTenant(THIRD_TENANT_DOMAIN, "admin123", THIRD_TENANT_USER, "Demo");
 		sessionCookie = loginLogoutClient.login(THIRD_TENANT_USER + "@" + THIRD_TENANT_DOMAIN, "admin123",
 		                                        asServer.getInstance().getHosts().get("default"));
