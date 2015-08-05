@@ -718,7 +718,7 @@
 
         <carbon.deployment.version>4.4.2-SNAPSHOT</carbon.deployment.version>
         <carbon.kernel.version>4.4.1</carbon.kernel.version>
-        <carbon.commons.version>4.4.4-SNAPSHOT</carbon.commons.version>
+        <carbon.commons.version>4.4.4</carbon.commons.version>
         <carbon.registry.version>4.4.1</carbon.registry.version>
         <carbon.identity.version>4.5.2</carbon.identity.version>
         <carbon.multitenancy.version>4.4.1</carbon.multitenancy.version>
