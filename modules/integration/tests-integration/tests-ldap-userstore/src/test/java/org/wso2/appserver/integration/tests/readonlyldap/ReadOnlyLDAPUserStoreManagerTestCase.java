@@ -194,7 +194,7 @@ public class ReadOnlyLDAPUserStoreManagerTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "Check add remove users of role failure", expectedExceptions =
-            AxisFault.class, expectedExceptionsMessageRegExp = "Read-only user store.Roles cannot be added or modified")
+            AxisFault.class, expectedExceptionsMessageRegExp = "Read-only user store.Roles cannot be added or modfified")
     public void addRemoveUsersOfRoleTest() throws Exception {
 
         String[] newUsers = new String[]{asServer.getSuperTenant().getTenantAdmin().getUserName()};
