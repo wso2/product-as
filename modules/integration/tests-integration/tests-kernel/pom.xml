@@ -109,7 +109,7 @@
                             -Dcarbon.zip=${basedir}/../../../distribution/target/wso2as-${project.version}.zip
                         </argument>
                         <argument>
-                            -DsuiteXmlFile=${basedir}/target/testng-server-mgt.xml
+                            -DsuiteXmlFile=${basedir}/src/main/resources/testng-server-mgt.xml
                         </argument>
                         <argument>-Dframework.resource.location=${basedir}/target/
                         </argument>
