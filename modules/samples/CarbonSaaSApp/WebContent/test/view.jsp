@@ -166,20 +166,22 @@ for (Resource oResource : lResource) {  	// iterate over all the registry resour
 		// obtain the saved registry content as a string. will only work for text based content
  	Object oObjectR = oResource.getContent();							// resource content[script, image, string, policy]. could be binary
  	String stRegContent = null;
- 	if (oObjectR.getClass() == String.class )
-		stRegContent = (String)oObjectR;
-	else
-		stRegContent = new String((byte[])oObjectR);
-%>
-		<tr><td colspan=2  align='center'>Information stored for registry path <b><%=stPath %></b></td></tr>
-		<tr><td>registry resource description:</td>		<td><%=stResourceDesc %></td></tr>
-		<tr><td>registry resource type:</td>			<td><%=stMedia %></td></tr>
-		<tr><td>registry content</td>					<td><%=stRegContent %></td></tr>
-		<tr><td>registry resource created:</td>			<td><%=stCreated %></td></tr>
-		<tr><td>registry resource updated:</td>			<td><%=stLastModified %></td></tr>
-		<tr><td colspan=2  align='center'>Resource Properties</td></tr>
-		
-<% 
+	if(oObjectR!=null){
+		if (oObjectR.getClass() == String.class )
+			stRegContent = (String)oObjectR;
+		else
+			stRegContent = new String((byte[])oObjectR);
+	%>
+			<tr><td colspan=2  align='center'>Information stored for registry path <b><%=stPath %></b></td></tr>
+			<tr><td>registry resource description:</td>		<td><%=stResourceDesc %></td></tr>
+			<tr><td>registry resource type:</td>			<td><%=stMedia %></td></tr>
+			<tr><td>registry content</td>					<td><%=stRegContent %></td></tr>
+			<tr><td>registry resource created:</td>			<td><%=stCreated %></td></tr>
+			<tr><td>registry resource updated:</td>			<td><%=stLastModified %></td></tr>
+			<tr><td colspan=2  align='center'>Resource Properties</td></tr>
+
+	<%
+	}
  	// output properties associated with the resource
 	Properties oProperties = oResource.getProperties();
 	// Enumeration<?> eProp = (Enumeration<?>)oProperties.propertyNames();
