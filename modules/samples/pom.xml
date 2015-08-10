@@ -267,6 +267,11 @@
                 <version>${samples.appserver.hibernate.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derby</artifactId>
+                <version>${samples.appserver.derby.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>wsdl4j.wso2</groupId>
                 <artifactId>wsdl4j</artifactId>
                 <version>${samples.orbit.version.wsdl4j}</version>
@@ -501,6 +506,7 @@
         <samples.appserver.wss4j.version>1.5.11.wso2v3</samples.appserver.wss4j.version>
         <samples.appserver.rampart.version>1.6.1.wso2v10</samples.appserver.rampart.version>
         <samples.appserver.hibernate.version>3.2.5.ga-wso2v1</samples.appserver.hibernate.version>
+        <samples.appserver.derby.version>10.11.1.1</samples.appserver.derby.version>
         <samples.appserver.axis2.jibx.version>1.6.1.wso2v10</samples.appserver.axis2.jibx.version>
         <samples.orbit.version.wsdl4j>1.6.2.wso2v2</samples.orbit.version.wsdl4j>
         <samples.orbit.version.xmlschema>1.4.7.wso2v1</samples.orbit.version.xmlschema>
