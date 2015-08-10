@@ -104,6 +104,5 @@ public class WSAS1910CAppArtifactIdentificationTestCase extends ASIntegrationTes
     public void removeCApp() throws Exception {
         applicationAdminClient.deleteApplication(axis2CApp + "_" + appVersion);
         applicationAdminClient.deleteApplication(warCApp + "_" + appVersion);
-        log.info("Niranjan");
     }
 }
