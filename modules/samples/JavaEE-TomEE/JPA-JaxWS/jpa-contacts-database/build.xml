@@ -23,12 +23,12 @@
 
     <path id="compile.classpath">
         <fileset dir="${wso2carbon.home}/repository/components/plugins">
-            <include name="*.jar"/>	    
+            <include name="*.jar"/>
         </fileset>
     </path>
 
     <target name="clean">
-        <delete dir="${build.dir}" />
+        <delete dir="${build.dir}"/>
     </target>
 
     <target name="init" depends="clean">
@@ -37,12 +37,12 @@
         <antcall target="download.jars"/>
     </target>
 
-    <target name="compile" depends="init" >
+    <target name="compile" depends="init">
         <javac destdir="${build.dir}/classes" debug="true" srcdir="src">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>
-    
+
     <target name="war" depends="compile">
         <echo message="Creating webapp ${warName}."/>
         <war destfile="${build.dir}/${warName}" webxml="src/main/webapp/WEB-INF/web.xml">
@@ -50,19 +50,19 @@
             <classes dir="${build.dir}/classes"/>
         </war>
     </target>
-    
+
     <target name="build-all" depends="war">
         <echo message="Copying the created war file in to the deployment directory"/>
-	<antcall target="copy-webapp"/>       
+        <antcall target="copy-webapp"/>
     </target>
 
     <target name="copy-webapp">
         <copy file="${build.dir}/${warName}" toDir="${repo.location}/webapps"/>
-    </target> 
+    </target>
 
     <target name="download.jars">
         <get src="http://maven.wso2.org/nexus/content/groups/wso2-public//commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"
-             dest="src/main/webapp/WEB-INF/lib" verbose="true" skipexisting="true"/>     
+             dest="src/main/webapp/WEB-INF/lib" verbose="true" skipexisting="true"/>
     </target>
 
 </project>

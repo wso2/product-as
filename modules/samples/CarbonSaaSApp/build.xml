@@ -23,12 +23,12 @@
 
     <path id="compile.classpath">
         <fileset dir="${wso2carbon.home}/repository/components/plugins">
-            <include name="*.jar"/>	    
+            <include name="*.jar"/>
         </fileset>
     </path>
 
     <target name="clean">
-        <delete dir="${build.dir}" />
+        <delete dir="${build.dir}"/>
     </target>
 
     <target name="init" depends="clean">
@@ -37,12 +37,12 @@
         <antcall target="download.jars"/>
     </target>
 
-    <target name="compile" depends="init" >
+    <target name="compile" depends="init">
         <javac destdir="${build.dir}/classes" debug="true" srcdir="src">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>
-    
+
     <target name="war" depends="compile">
         <echo message="Creating webapp ${warName}."/>
         <war destfile="${build.dir}/${warName}" webxml="WebContent/WEB-INF/web.xml">
@@ -50,21 +50,22 @@
             <classes dir="${build.dir}/classes"/>
         </war>
     </target>
-    
+
     <target name="build-all" depends="war">
         <echo message="Copying the created war file in to the deployment directory"/>
-	<antcall target="copy-webapp"/>       
+        <antcall target="copy-webapp"/>
     </target>
 
     <target name="copy-webapp">
         <copy file="${build.dir}/${warName}" toDir="${repo.location}/webapps"/>
-    </target> 
+    </target>
 
     <!--We are not shipping Connector/J MySQL driver with the release. This target can be used to
     download those jars that are required to run this sample.-->
     <target name="download.jars">
         <echo message="Downloading Connector/J MySQL driver. "/>
         <get src="http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.18/mysql-connector-java-5.1.18.jar"
-             dest="WebContent/WEB-INF/lib/mysql-connector-java-5.1.18.jar" verbose="true" skipexisting="true"/>      
+             dest="WebContent/WEB-INF/lib/mysql-connector-java-5.1.18.jar" verbose="true" skipexisting="true"/>
     </target>
+
 </project>
