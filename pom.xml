@@ -643,7 +643,7 @@
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jaxrs-client-api-test-webapp</artifactId>
                 <type>war</type>
-                <version>1.0.0</version>
+                <version>${product.as.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
