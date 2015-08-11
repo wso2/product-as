@@ -45,8 +45,6 @@
         <module>JPA-Servlet/jpa-order-processor</module>
         <module>JPA-JaxRS/studentRegister</module>
         <module>JPA-JaxWS/jpa-contacts-database</module>
-        <module>JSF/jsf-custom-view-handler</module>
-        <module>JSF/jsf-webapp-w-custom-view-handler</module>
         <module>JSF-EJB/greeting</module>
         <module>JSF-BVAL/jsf-marks-calculator</module>
         <module>JTA-Servlet/jta-money-transfer</module>
