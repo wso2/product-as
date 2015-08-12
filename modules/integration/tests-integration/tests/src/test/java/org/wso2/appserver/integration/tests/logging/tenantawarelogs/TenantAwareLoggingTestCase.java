@@ -30,6 +30,9 @@ import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.testng.Assert.assertTrue;
 
@@ -95,6 +98,18 @@ public class TenantAwareLoggingTestCase extends ASIntegrationTest {
 		assertTrue(file.exists(), "Audit log file is not created in user mode " + userMode);
 		String fileContent = FileManager.readFile(file);
 		String[] logList = fileContent.split(System.getProperty("line.separator"));
+		String rolledLogFilecontent;
+		String[] rolledLogs = null;
+
+		//Load rolled audit log file
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+
+		File rolledLogfile = new File(
+				System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" + File.separator +
+				"logs" +
+				File.separator + "audit.log." + dateFormat.format(date));
+
 		boolean isLogInLogsRecorded = false;
 		boolean isUserAddingRecorded = false;
 
@@ -103,6 +118,17 @@ public class TenantAwareLoggingTestCase extends ASIntegrationTest {
 				if (logRecord.contains("'" + userInfo.getUserName() + "@carbon.super [-1234]' logged in at")) {
 					isLogInLogsRecorded = true;
 					break;
+				}
+			}
+			//Check in rolled log file if the log is not in audit.log
+			if (!isLogInLogsRecorded) {
+				rolledLogFilecontent = FileManager.readFile(rolledLogfile);
+				rolledLogs = rolledLogFilecontent.split(System.getProperty("line.separator"));
+				for (String logRecord : rolledLogs) {
+					if (logRecord.contains("'" + userInfo.getUserName() + "@carbon.super [-1234]' logged in at")) {
+						isLogInLogsRecorded = true;
+						break;
+					}
 				}
 			}
 
@@ -116,6 +142,24 @@ public class TenantAwareLoggingTestCase extends ASIntegrationTest {
 				if (logRecord.contains("'" + userInfo.getUserName() + " [1]' logged in at")) {
 					isLogInLogsRecorded = true;
 					break;
+				}
+			}
+
+			//Check in rolled log file if the log is not in audit.log
+			if (!isUserAddingRecorded) {
+				if (rolledLogs == null) {
+					rolledLogFilecontent = FileManager.readFile(rolledLogfile);
+					rolledLogs = rolledLogFilecontent.split(System.getProperty("line.separator"));
+				}
+				for (String logRecord : rolledLogs) {
+					if (logRecord.contains("Action : Add User | Target : " +
+					                       userName + " | Data : { Roles :admin, } | Result : Success  ")) {
+						isUserAddingRecorded = true;
+					}
+					if (logRecord.contains("'" + userInfo.getUserName() + " [1]' logged in at")) {
+						isLogInLogsRecorded = true;
+						break;
+					}
 				}
 			}
 			assertTrue(isUserAddingRecorded, "Adding new user from super tenant is not recorded in the audit log file");
