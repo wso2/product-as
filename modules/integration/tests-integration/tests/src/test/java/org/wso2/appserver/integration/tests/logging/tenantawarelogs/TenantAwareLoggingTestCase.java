@@ -32,6 +32,7 @@ import org.wso2.carbon.utils.ServerConstants;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.testng.Assert.assertTrue;
@@ -103,12 +104,13 @@ public class TenantAwareLoggingTestCase extends ASIntegrationTest {
 
 		//Load rolled audit log file
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, -1);
 
 		File rolledLogfile = new File(
 				System.getProperty(ServerConstants.CARBON_HOME) + File.separator + "repository" + File.separator +
 				"logs" +
-				File.separator + "audit.log." + dateFormat.format(date));
+				File.separator + "audit.log." + dateFormat.format(calendar.getTime()));
 
 		boolean isLogInLogsRecorded = false;
 		boolean isUserAddingRecorded = false;
