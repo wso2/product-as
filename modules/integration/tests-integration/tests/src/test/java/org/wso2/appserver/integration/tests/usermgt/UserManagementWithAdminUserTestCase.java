@@ -186,7 +186,8 @@ public class UserManagementWithAdminUserTestCase extends ASIntegrationTest {
 		}
 	}
 
-	@Test(groups = "wso2.as", description = "Change password of current user defined in automation.xml")
+        //TODO: Fix this test case - WSAS-2077
+	@Test(groups = "wso2.as", description = "Change password of current user defined in automation.xml", enabled = false)
 	public void testChangePasswordOfCurrentUser() throws Exception {
 		String oldPassword = userInfo.getPassword();
 		String newPassword = "admin123";
