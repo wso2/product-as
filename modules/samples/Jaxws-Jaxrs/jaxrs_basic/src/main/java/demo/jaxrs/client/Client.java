@@ -16,21 +16,20 @@
 
 package demo.jaxrs.client;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.FileRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.resource.URIResolver;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 public final class Client {
 
@@ -80,8 +79,11 @@ public final class Client {
         try {
             int result = httpclient.executeMethod(put);
             System.out.println("Response status code: " + result);
-            System.out.println("Response body: ");
-            System.out.println(put.getResponseBodyAsString());
+
+            String responseBody = put.getResponseBodyAsString();
+            if (responseBody != null) {
+                System.out.println("Response body: \n" + responseBody);
+            }
         } finally {
             // Release current connection to the connection pool once you are
             // done
@@ -96,7 +98,7 @@ public final class Client {
         input = new File(resolver.getURI());
         //PostMethod post = new PostMethod("http://localhost:9000/customerservice/customers");
         PostMethod post = new PostMethod(serviceURL + "/customers");
-        post.addRequestHeader("Accept" , "text/xml");
+        post.addRequestHeader("Accept", "text/xml");
         entity = new FileRequestEntity(input, "text/xml; charset=ISO-8859-1");
         post.setRequestEntity(entity);
         httpclient = new HttpClient();
@@ -116,7 +118,7 @@ public final class Client {
         System.out.println("\n");
         System.out.println("Sent HTTP POST request to get customer name");
         PostMethod post2 = new PostMethod(serviceURL + "/customers/name");
-        post2.addRequestHeader("Accept" , "text/plain");
+        post2.addRequestHeader("Accept", "text/plain");
         RequestEntity myEntity = new StringRequestEntity("123456", "text/plain", "ISO-8859-1");
         post2.setRequestEntity(myEntity);
         httpclient = new HttpClient();
