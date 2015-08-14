@@ -352,10 +352,6 @@
     <properties>
     </properties>
 
-    <modules>
-        <module>src/monitoring</module>
-    </modules>
-
     <!--<reporting>-->
     <!--<plugins>-->
     <!--<plugin>-->
