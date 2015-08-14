@@ -26,8 +26,6 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.appserver</groupId>
-    <version>1.0.0</version>
     <artifactId>security-check</artifactId>
     <name>JAX-RS Java security-check Manager testing web app</name>
     <description>JAX-RS Java security-check Manager testing web app</description>

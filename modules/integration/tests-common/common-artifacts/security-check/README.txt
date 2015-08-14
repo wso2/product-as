@@ -1,13 +1,12 @@
 --------------------------------------------------------------------
 	JAX-RS security-check 1.0.0 Service
-	Author : Sanjeewa Malalgoda
 --------------------------------------------------------------------
 
 Run Sample
 ==========
 
 01. Run mvn clean install in /security-check directory
-02. Then it will create security-check.war file. You need to deolpy it in application server.(cp target/security-check.war /home/sanjeewa/work/packs/wso2as-5.2.1/repository/deployment/server/webapps/security-check.war)
+02. Then it will create security-check.war file. You need to deolpy it in application server.(cp target/security-check.war $CARBON_HOME/repository/deployment/server/webapps/security-check.war)
 03. Create test case according to following request formats.
 04. Then run the script and check output in response.
 

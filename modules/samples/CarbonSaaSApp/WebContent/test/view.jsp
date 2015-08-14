@@ -21,34 +21,22 @@
 
 <%@ page import="org.wso2.appserver.samples.RegUtils" %>
 
-<%@ page import="org.wso2.carbon.utils.multitenancy.MultitenantUtils" %>
-
 <%@ page import="org.wso2.carbon.context.CarbonContext" %>
-<%@ page import="org.wso2.carbon.context.PrivilegedCarbonContext" %>
-
-<%@ page import="org.wso2.carbon.queuing.CarbonQueue" %>
 
 <%@ page import="org.wso2.carbon.context.RegistryType" %>
-<%@ page import="org.wso2.carbon.registry.core.RegistryConstants"%>
-<%@ page import="org.wso2.carbon.registry.core.exceptions.ResourceNotFoundException"%>
-
 <%@ page import="org.wso2.carbon.registry.api.Association" %>
+
 <%@ page import="org.wso2.carbon.registry.api.Registry" %>
-<%@ page import="org.wso2.carbon.registry.api.Collection" %>
+
 <%@ page import="org.wso2.carbon.registry.api.Resource" %>
-<%@ page import="org.wso2.carbon.registry.api.RegistryException" %>
-
-<%@ page import="java.util.Properties" %>
-<%@ page import="java.util.Enumeration"%>
-<%@ page import="java.util.Iterator"%>
-<%@ page import="java.util.Set"%>
-<%@ page import="java.util.Map"%>
-<%@ page import="java.util.HashMap"%>
-<%@ page import="java.util.List"%>
-
-<%@ page import="javax.cache.CacheManager"%>
-<%@ page import="javax.cache.Caching"%>
 <%@ page import="javax.cache.Cache"%>
+<%@ page import="javax.cache.CacheManager"%>
+
+<%@ page import="javax.cache.Caching" %>
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Properties" %>
 
 
 <%
@@ -165,11 +153,14 @@ for (Resource oResource : lResource) {  	// iterate over all the registry resour
 
 		// obtain the saved registry content as a string. will only work for text based content
  	Object oObjectR = oResource.getContent();							// resource content[script, image, string, policy]. could be binary
- 	String stRegContent = null;
- 	if (oObjectR.getClass() == String.class )
-		stRegContent = (String)oObjectR;
-	else
-		stRegContent = new String((byte[])oObjectR);
+ 	String stRegContent = "";
+	if (oObjectR != null) {
+		if (oObjectR.getClass() == String.class) {
+			stRegContent = (String) oObjectR;
+		} else {
+			stRegContent = new String((byte[]) oObjectR);
+		}
+	}
 %>
 		<tr><td colspan=2  align='center'>Information stored for registry path <b><%=stPath %></b></td></tr>
 		<tr><td>registry resource description:</td>		<td><%=stResourceDesc %></td></tr>
@@ -178,8 +169,7 @@ for (Resource oResource : lResource) {  	// iterate over all the registry resour
 		<tr><td>registry resource created:</td>			<td><%=stCreated %></td></tr>
 		<tr><td>registry resource updated:</td>			<td><%=stLastModified %></td></tr>
 		<tr><td colspan=2  align='center'>Resource Properties</td></tr>
-		
-<% 
+<%
  	// output properties associated with the resource
 	Properties oProperties = oResource.getProperties();
 	// Enumeration<?> eProp = (Enumeration<?>)oProperties.propertyNames();

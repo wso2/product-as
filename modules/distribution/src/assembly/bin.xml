@@ -138,6 +138,15 @@
                 <include>**/cloud-services-desc.xml</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>
+                ../p2-profile-gen/target/wso2carbon-core-${carbon.kernel.version}/repository/conf/multitenancy/
+            </directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <includes>
+                <include>**/tenant-mgt.xml</include>
+            </includes>
+        </fileSet>
 
         <fileSet>
             <directory>
@@ -383,7 +392,7 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>../samples/product/HelloWorld/target/repository/services</directory>
+            <directory>../samples/HelloWorld/target/repository/services</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services
             </outputDirectory>
             <includes>
@@ -434,7 +443,7 @@
             <fileMode>755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>../samples/product/Jaxws-Jaxrs/jaxrs_basic/target</directory>
+            <directory>../samples/Jaxws-Jaxrs/jaxrs_basic/target</directory>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps
             </outputDirectory>
             <includes>
