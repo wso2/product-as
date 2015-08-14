@@ -235,14 +235,6 @@
             </excludes>
         </fileSet>
 
-
-        <!-- AS HTTP Monitoring toolbox -->
-        <fileSet>
-            <directory>src/monitoring/target</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/monitoring</outputDirectory>
-        </fileSet>
-
-
         <!-- ################ Copy Samples - Start ################ -->
 
         <!--  copying jaggery samples-->
