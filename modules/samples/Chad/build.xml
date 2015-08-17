@@ -64,6 +64,7 @@
         <mkdir dir="${aar.dir}/META-INF"/>
         <mkdir dir="${aar.dir}/www/extensions/core"/>
         <mkdir dir="${aar.dir}/www/images"/>
+        <mkdir dir="${aar.dir}/lib"/>
         <copy file="conf/services.xml" tofile="${aar.dir}/META-INF/services.xml"/>
         <copy toDir="${aar.dir}">
             <fileset dir="${classes}">
@@ -72,6 +73,9 @@
             <fileset dir="conf/hibernate">
                 <include name="**/*"/>
             </fileset>
+        </copy>
+        <copy toDir="${aar.dir}/lib">
+            <fileset dir="lib"/>
         </copy>
         <copy toDir="${war.dir}/extensions/core">
             <fileset dir="www">
