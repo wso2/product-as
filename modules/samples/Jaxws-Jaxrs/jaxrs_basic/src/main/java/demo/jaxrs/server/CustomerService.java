@@ -40,9 +40,7 @@ public class CustomerService {
 
     @GET
     @Path("/customers/{id}/")
-    public Customer getCustomer(
-            @PathParam("id")
-            String id) {
+    public Customer getCustomer(@PathParam("id") String id) {
         System.out.println("----invoking getCustomer, Customer id is: " + id);
         long idNumber = Long.parseLong(id);
         Customer c = customers.get(idNumber);
