@@ -88,9 +88,7 @@ public class CustomerService {
 
     @DELETE
     @Path("/customers/{id}/")
-    public Response deleteCustomer(
-            @PathParam("id")
-            String id) {
+    public Response deleteCustomer(@PathParam("id") String id) {
         System.out.println("----invoking deleteCustomer, Customer id is: " + id);
         long idNumber = Long.parseLong(id);
         Customer c = customers.get(idNumber);
@@ -107,9 +105,7 @@ public class CustomerService {
     }
 
     @Path("/orders/{orderId}/")
-    public Order getOrder(
-            @PathParam("orderId")
-            String orderId) {
+    public Order getOrder(@PathParam("orderId") String orderId) {
         System.out.println("----invoking getOrder, Order id is: " + orderId);
         long idNumber = Long.parseLong(orderId);
         Order c = orders.get(idNumber);
