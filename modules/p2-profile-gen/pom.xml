@@ -333,55 +333,7 @@
                             <profile>worker</profile>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>creating-webapp-profile</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>materialize-product</goal>
-                        </goals>
-                        <configuration>
-                            <productConfigurationFile>${basedir}/carbon.product</productConfigurationFile>
-                            <metadataRepository>file:${basedir}/target/p2-repo</metadataRepository>
-                            <artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>
-                            <targetPath>
-                                file:${basedir}/target/wso2carbon-core-${carbon.kernel.version}/repository/components
-                            </targetPath>
-                            <profile>webapp</profile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>creating-axis2service-profile</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>materialize-product</goal>
-                        </goals>
-                        <configuration>
-                            <productConfigurationFile>${basedir}/carbon.product</productConfigurationFile>
-                            <metadataRepository>file:${basedir}/target/p2-repo</metadataRepository>
-                            <artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>
-                            <targetPath>
-                                file:${basedir}/target/wso2carbon-core-${carbon.kernel.version}/repository/components
-                            </targetPath>
-                            <profile>axis2service</profile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>creating-jaggery-profile</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>materialize-product</goal>
-                        </goals>
-                        <configuration>
-                            <productConfigurationFile>${basedir}/carbon.product</productConfigurationFile>
-                            <metadataRepository>file:${basedir}/target/p2-repo</metadataRepository>
-                            <artifactRepository>file:${basedir}/target/p2-repo</artifactRepository>
-                            <targetPath>
-                                file:${basedir}/target/wso2carbon-core-${carbon.kernel.version}/repository/components
-                            </targetPath>
-                            <profile>jaggery</profile>
-                        </configuration>
-                    </execution>
-
+                    
                     <execution>
                         <id>3-p2-profile-generation</id>
                         <phase>package</phase>
