@@ -33,7 +33,10 @@ import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
 import org.apache.commons.httpclient.Cookie;
 
 import java.io.File;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import static org.testng.Assert.assertTrue;
 
@@ -49,6 +52,11 @@ public class WSAS2060SessionPersistenceTestCase extends ASIntegrationTest {
     private int sessionCount = 0;
     private String endpoint;
     private HttpClient httpClient;
+    private static String CONTEXT_XML_PATH =
+            Paths.get(FrameworkPathUtil.getCarbonServerConfLocation(), "tomcat", "context.xml").toAbsolutePath()
+                 .toString();
+    private static String CARBON_XML_PATH =
+            Paths.get(FrameworkPathUtil.getCarbonServerConfLocation(), "carbon.xml").toAbsolutePath().toString();
 
     @Factory(dataProvider = "userModeProvider")
     public WSAS2060SessionPersistenceTestCase(TestUserMode userMode) {
@@ -70,18 +78,21 @@ public class WSAS2060SessionPersistenceTestCase extends ASIntegrationTest {
         serverConfigurationManager =
                 new ServerConfigurationManager(new AutomationContext("AS", TestUserMode.SUPER_TENANT_ADMIN));
 
+
         //Restart the Server only once
         if (isRestarted == 0) {
-            File contextXml =
+            File resourceContextXML =
                     Paths.get(TestConfigurationProvider.getResourceLocation(), "artifacts", "AS", "tomcat", "session",
                               "context.xml").toFile();
-            File contextTarget =
-                    Paths.get(FrameworkPathUtil.getCarbonServerConfLocation(), "tomcat", "context.xml").toFile();
-            serverConfigurationManager.applyConfiguration(contextXml, contextTarget, true, true);
+            serverConfigurationManager
+                    .applyConfiguration(resourceContextXML, Paths.get(CONTEXT_XML_PATH).toFile(), true, true);
             SERVER_URL = "http://" + asServer.getDefaultInstance().getHosts().get("default") + ":" +
                          asServer.getDefaultInstance().getPorts().get("http");
 
         }
+
+        Paths.get(TestConfigurationProvider.getResourceLocation(), "artifacts", "AS", "tomcat", "session",
+                  "context.xml").toAbsolutePath();
         ++isRestarted;
         sessionCookie = loginLogoutClient.login();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
@@ -104,7 +115,15 @@ public class WSAS2060SessionPersistenceTestCase extends ASIntegrationTest {
         //Revert and restart only once
         --isRestarted;
         if (isRestarted == 0) {
-            serverConfigurationManager.restoreToLastConfiguration();
+            if (Files.exists(Paths.get(CONTEXT_XML_PATH + ".backup"))) {
+                Files.move(Paths.get(CONTEXT_XML_PATH + ".backup"), Paths.get(CONTEXT_XML_PATH),
+                           new CopyOption[] { StandardCopyOption.REPLACE_EXISTING });
+            }
+            if (Files.exists(Paths.get(CARBON_XML_PATH + ".backup"))) {
+                Files.move(Paths.get(CARBON_XML_PATH + ".backup"), Paths.get(CARBON_XML_PATH),
+                           new CopyOption[] { StandardCopyOption.REPLACE_EXISTING });
+            }
+            serverConfigurationManager.restartGracefully();
         }
     }
 
@@ -189,8 +208,8 @@ public class WSAS2060SessionPersistenceTestCase extends ASIntegrationTest {
             File ghostEnabled =
                     Paths.get(TestConfigurationProvider.getResourceLocation(), "artifacts", "AS", "tomcat", "session",
                               "ghostenabled.xml").toFile();
-            File carbonXMLPath = Paths.get(FrameworkPathUtil.getCarbonServerConfLocation(), "carbon.xml").toFile();
-            serverConfigurationManager.applyConfiguration(ghostEnabled, carbonXMLPath, true, true);
+            serverConfigurationManager
+                    .applyConfiguration(ghostEnabled, Paths.get(CARBON_XML_PATH).toFile(), true, true);
         }
         ++isCarbonXMLApplied;
 
