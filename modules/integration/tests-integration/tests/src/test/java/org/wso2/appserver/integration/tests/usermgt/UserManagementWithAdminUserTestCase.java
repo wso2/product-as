@@ -186,17 +186,16 @@ public class UserManagementWithAdminUserTestCase extends ASIntegrationTest {
 		}
 	}
 
-        //TODO: Fix this test case - WSAS-2077
-	@Test(groups = "wso2.as", description = "Change password of current user defined in automation.xml", enabled = false)
+	@Test(groups = "wso2.as", description = "Change password of current user defined in automation.xml")
 	public void testChangePasswordOfCurrentUser() throws Exception {
 		String oldPassword = userInfo.getPassword();
 		String newPassword = "admin123";
 		String loggedInUsername = "admin";
-		userManagementClient.changePasswordByUser(oldPassword, newPassword);
 		// Try to login with new password
 		if (userMode == TestUserMode.TENANT_ADMIN) {
 			loggedInUsername += "@" + asServer.getContextTenant().getDomain();
 		}
+		userManagementClient.changePasswordByUser(loggedInUsername, oldPassword, newPassword);
 		loginLogoutClient = new LoginLogoutClient(asServer);
 		assertNotNull(loginLogoutClient
 				              .login(loggedInUsername, newPassword, asServer.getInstance().getHosts().get("default")),
@@ -216,7 +215,7 @@ public class UserManagementWithAdminUserTestCase extends ASIntegrationTest {
 		             "User able to login to system using old password");
 
 		//Revert back to old password
-		userManagementClient.changePasswordByUser(newPassword, oldPassword);
+		userManagementClient.changePasswordByUser(loggedInUsername, newPassword, oldPassword);
 		loginLogoutClient = new LoginLogoutClient(asServer);
 		assertNotNull(loginLogoutClient
 				              .login(loggedInUsername, oldPassword, asServer.getInstance().getHosts().get("default")),
