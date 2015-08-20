@@ -770,7 +770,6 @@
         <bcprov-jdk15.version>132</bcprov-jdk15.version>
         <rampart.version>1.6.1-wso2v14</rampart.version>
 
-        <stub.version>4.3.0-SNAPSHOT</stub.version>
         <xfer.version>3.3.0</xfer.version>
         
         <jacoco.agent.version>0.7.4.201502262128</jacoco.agent.version>
