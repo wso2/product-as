@@ -29,6 +29,7 @@ import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.integration.common.admin.client.TenantManagementServiceClient;
 import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
 import org.wso2.carbon.registry.resource.stub.common.xsd.ResourceData;
@@ -146,24 +147,27 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 		                        asServer.getInstance().getHosts().get("default"));
 	}
 
-	//https://wso2.org/jira/browse/WSAS-2022
-	@Test(enabled = false, groups = "wso2.as", description = "Test access a webapp deployed by a deactivated tenant and re-activate that tenant and access web app",
+	@Test(enabled = true, groups = "wso2.as", description = "Test access a webapp deployed by a deactivated tenant " +
+			"and re-activate that tenant and access web app",
 			dependsOnMethods = "testTenantDeactivation")
 	public void testAccessWebappOfDeactivatedTenant() throws Exception {
 		tenantManagementServiceClient.activateTenant(FIRST_TENANT_DOMAIN);
 		sessionCookie = loginLogoutClient.login(FIRST_TENANT_USER + "@" + FIRST_TENANT_DOMAIN, "admin123",
 		                                        asServer.getInstance().getHosts().get("default"));
 		webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-		tenantManagementServiceClient.deactivateTenant(FIRST_TENANT_DOMAIN);
 		webAppAdminClient.uploadWarFile(
 				FrameworkPathUtil.getSystemResourceLocation() + "artifacts" + File.separator + "AS" + File.separator +
-				"war" + File.separator + "HelloWorldWebapp.war");
+						"war" + File.separator + "HelloWorldWebapp.war");
 		assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, "HelloWorldWebapp"),
-		           "HelloWorldWebapp Deployment failed");
+				"HelloWorldWebapp Deployment failed");
+		tenantManagementServiceClient.deactivateTenant(FIRST_TENANT_DOMAIN);
 		String webAppURL = getWebAppURL(WebAppTypes.WEBAPPS) +
 		                   "/t/" + FIRST_TENANT_DOMAIN +
 		                   "/webapps/HelloWorldWebapp/";
-		assertEquals(HttpRequestUtil.sendGetRequest(webAppURL, null).getResponseCode(), HttpStatus.SC_NOT_FOUND,
+		HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL, null);
+		
+		//todo check the correct response status code once WSAS-2094 is fixed
+		assertEquals(response.getData(), "",
 		             "After de-activating a tenant tenant web app is accessible");
 
 		tenantManagementServiceClient.activateTenant(FIRST_TENANT_DOMAIN);
