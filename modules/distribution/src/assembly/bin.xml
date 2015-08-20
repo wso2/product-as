@@ -383,14 +383,6 @@
                 <exclude>STS/**</exclude>
             </excludes>
         </fileSet>
-        <fileSet>
-            <directory>../samples/HelloWorld/target/repository/services</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/axis2services
-            </outputDirectory>
-            <includes>
-                <include>**/**.aar</include>
-            </includes>
-        </fileSet>
 
         <!-- copying HelloWorldWebapp -->
         <fileSet>
