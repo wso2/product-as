@@ -277,6 +277,28 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <!-- This is to re order identity menu to config menu -->
+                        <id>moving-identity-menu</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <property name="tempdir" value="target/identity-ui"/>
+                                <mkdir dir="${tempdir}"/>
+                                <unzip src="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.identity.account.mgt.menu.ui_${carbon.identity.version}.jar"
+                                       dest="${tempdir}"/>
+                                <replace
+                                        file="${tempdir}/META-INF/component.xml"
+                                        token="&lt;parent-menu&gt;identity_menu&lt;/parent-menu&gt;"
+                                        value="&lt;parent-menu&gt;configure_menu&lt;/parent-menu&gt;"/>
+                                <zip destfile="target/wso2carbon-core-${carbon.kernel.version}/repository/components/plugins/org.wso2.carbon.identity.account.mgt.menu.ui_${carbon.identity.version}.jar"
+                                     basedir="${tempdir}"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
 
                     <execution>
                         <id>clean_target</id>
@@ -291,6 +313,7 @@
                                 <delete dir="target/sources"/>
                                 <delete dir="target/site"/>
                                 <delete dir="src/site"/>
+                                <delete dir="target/identity-ui"/>
                             </target>
                         </configuration>
                         <goals>

@@ -54,7 +54,7 @@ public class WebAppSeleniumTestCase extends ASIntegrationUITest {
         driver.get(webAppURL + "/example/servlets/");
 
         assertEquals(driver.getTitle(), "Servlet Examples");
-        driver.findElement(By.xpath("/html/body/p[5]/table/tbody/tr/td[2]/a[2]")).click();
+        driver.findElement(By.xpath("/html/body/p[5]/table/tbody/tr[1]/td[2]/a[2]")).click();
         assertEquals(driver.getCurrentUrl(), webAppURL +
                                              "/example/servlets/servlet/HelloWorldExample");
         assertTrue(driver.getPageSource().contains("Hello World!"));
