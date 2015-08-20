@@ -760,7 +760,7 @@
         <version.equinox.http.helper>1.1.0.wso2v1</version.equinox.http.helper>
         <version.log4j>1.2.13</version.log4j>
         <version.commons.logging>1.1.1</version.commons.logging>
-        <carbon.p2.plugin.version>1.5.4</carbon.p2.plugin.version>
+        <carbon.p2.plugin.version>1.5.6</carbon.p2.plugin.version>
 
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
         <previous.version>4.2.0</previous.version>
