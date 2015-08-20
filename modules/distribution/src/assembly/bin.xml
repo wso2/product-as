@@ -405,6 +405,14 @@
                 <exclude>STS/**</exclude>
             </excludes>
         </fileSet>
+        <!-- Copying ejb-examples to the server/webapps-->
+        <fileSet>
+            <directory>../samples/JavaEE-TomEE/javaee-examples/target</directory>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/deployment/server/webapps</outputDirectory>
+            <includes>
+                <include>**/**.war</include>
+            </includes>
+        </fileSet>
 
         <!--  copying JAX-WS/JAX-RS samples -->
         <fileSet>
