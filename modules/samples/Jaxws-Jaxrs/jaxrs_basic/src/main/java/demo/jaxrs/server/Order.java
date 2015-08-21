@@ -16,13 +16,12 @@
 
 package demo.jaxrs.server;
 
-import java.util.HashMap;
-import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.HashMap;
+import java.util.Map;
 
 @XmlRootElement(name = "Order")
 public class Order {
@@ -52,7 +51,9 @@ public class Order {
 
     @GET
     @Path("products/{productId}/")
-    public Product getProduct(@PathParam("productId")int productId) {
+    public Product getProduct(
+            @PathParam("productId")
+            int productId) {
         System.out.println("----invoking getProduct with id: " + productId);
         Product p = products.get(new Long(productId));
         return p;
