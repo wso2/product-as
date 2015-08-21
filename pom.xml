@@ -468,6 +468,11 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>ui-pages</artifactId>
+                <version>${product.as.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.xfer</groupId>
                 <artifactId>wso2xfer</artifactId>
                 <version>${xfer.version}</version>
