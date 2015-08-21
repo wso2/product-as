@@ -19,7 +19,6 @@ New Features
 * WS-Discovery support for CXF JAX-WS and JAX-RS services
 * OSGi ServiceLoader Mediator specification support via SPI-Fly
 
-* Removed the first class support provided for deploying Axis2 AAR Services
 * Removed the data services hosting support from AS. Users can use the WSO2 Data Services Server product to deploy data services.
 
 Key Features
@@ -195,7 +194,7 @@ By default mode, it would ask you to enter the master password
 > ciphertool -Dchange  (in UNIX)
 
 For more details see
-http://docs.wso2.org/wiki/display/Carbon440/WSO2+Carbon+Secure+Vault
+https://docs.wso2.com/display/Carbon441/Securing+Passwords+in+Configuration+Files
 
 Training
 --------
