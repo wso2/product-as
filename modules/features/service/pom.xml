@@ -36,7 +36,6 @@
         <module>org.wso2.stratos.appserver.styles.feature</module>
         <module>org.wso2.stratos.appserver.utils.feature</module>
      	<module>org.wso2.stratos.appserver.dashboard.ui.feature</module>
-        <module>org.wso2.stratos.appserver.sample.installer.ui.feature</module>
         <module>org.wso2.stratos.appserver.login.ui.feature</module>
     </modules>
 
