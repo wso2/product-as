@@ -49,6 +49,7 @@
         <classes>
             <!--Todo-->
             <class name="org.wso2.appserver.integration.tests.carbonappservice.WSAS1798CAppWarUndeployTest"/>
+            <class name="org.wso2.appserver.integration.tests.carbonappservice.WSAS1910CAppArtifactIdentificationTestCase" />
         </classes>
     </test>
 
