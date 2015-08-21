@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="sso-valve" default="executeChildBuild">
+
+    <target name="executeChildBuild">
+        <ant antfile="build.xml" dir="foo-app" target="build-all"/>
+        <ant antfile="build.xml" dir="bar-app" target="build-all"/>
+    </target>
+
+</project>
