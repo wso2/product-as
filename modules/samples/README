@@ -87,15 +87,16 @@ the samples which are integrated,
 9. jaggerySamples
     In this there are two simple sample that demonstrates the some functionality of the jaggery 
     deployed as jaggery applicatioins in WSO2 Web Service Application Server .
-	
-10. dataServiceSamples
-    This will illustrate the Data Services functiolity with WSO2 Application Server.
 
-11. CarbonSaaSApp
+10. CarbonSaaSApp
      This app will demonstrate the SaaS capabilities in the AS
 
-12. JavaEE-TomEE
-     Set of JavaEE apps that use, CDI, ejb, JSF, JaxRS, JaxWS
+11. JavaEE-TomEE
+     Set of JavaEE apps that use, CDI, EJB, JSF, JaxRS, JaxWS
+
+12. SSOValveSample
+     This sample show the Single Sign On capabilities of the AS
+
 
 Sample hierarchy under the 'samples' directory
 ==============================================
