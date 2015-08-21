@@ -273,6 +273,7 @@
                 <exclude>**/coffeeshop/**</exclude>
                 <exclude>**/shout/**</exclude>
                 <exclude>**/freshometer/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -284,6 +285,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
         <fileSet>
@@ -303,6 +305,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -314,6 +317,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -325,6 +329,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -336,6 +341,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
         <fileSet>
@@ -346,6 +352,7 @@
             </includes>
             <excludes>
                 <exclude>**/STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
             <fileMode>755</fileMode>
         </fileSet>
@@ -358,6 +365,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
         <fileSet>
@@ -368,6 +376,7 @@
             </includes>
             <excludes>
                 <exclude>**/STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
             <fileMode>755</fileMode>
         </fileSet>
@@ -381,6 +390,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -392,6 +402,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -403,6 +414,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
         <!-- Copying ejb-examples to the server/webapps-->
@@ -421,6 +433,7 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
         <fileSet>
@@ -431,6 +444,7 @@
             </includes>
             <excludes>
                 <exclude>**/STS/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
             <fileMode>755</fileMode>
         </fileSet>
@@ -450,6 +464,7 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -460,6 +475,7 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -470,6 +486,7 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -480,6 +497,7 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -490,6 +508,7 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -500,6 +519,7 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
@@ -512,6 +532,7 @@
                 <exclude>**/target/**</exclude>
                 <exclude>**/**.iml</exclude>
                 <exclude>**/.idea/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
 
