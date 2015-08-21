@@ -20,61 +20,19 @@ the samples which are integrated,
    This sample will create simple web service for voting and a web based client to use
    that web service.
 
-4. MTOM -
-   This sample demonstrates the usage of Message Transmission Optimization Mechanism.
-
-5. Mail -
-   This sample demonstrates how you can use the Mail transport in WSO2 AppServer to
-   invoke Web Services.
-
-6. STS -
-   In this sample we will demonstrate the usage of wso2carbon-sts service and its
-   applications.
-
-7. Trader -
-   This sample will illustrate the integration of QoS modules to web services.
-
-8. Commodity Quote -
-   This sample will illustrate the integration of QoS modules to web services.
-
-9. TinyURL -
+4. TinyURL -
    In this sample the capabilities of WSO2 Application Server to handle both SOAP and
    Representational State Transfer (REST) will be demonstrated.
 
-10. MEX -
-    This samples demonstrates how to enable a Metadata Exchange (MEX) request for an
-    arbitrary service.
-
-11. Xfer -
-    This samples demonstrates how to enable a WS-Transfer (xfer) support for an arbitrary
-    service.
-
-12. JSON -
-    This is a simple sample that demonstrates the functionality of the JSON Support in
-    WSO2 Application Server.
-
-13. ClientAPI -
-    This sample will show how WSO2 Application server supports different kinds of clients
-    to invoke Web Services.
-
-14. FlickrClient -
+5. FlickrClient -
     This sample will generate code for a WSDL 2.0 description and invoke a real world
     application RESTfully.
 
-15. EJB -
-    This sample will illustrate the EJB Services feature in WSO2 Application Server.
-
-16. JibX -
-    This sample demonstrates the usage of Jibx data binding that comes with Axis2.
-
-17. VirtualDirectoryListing -
+6. VirtualDirectoryListing -
     This sample is to demonstrate how to do virtual directory listing using a tomcat
     webapp.
 
-18. Axis2Module -
-    This is a simple sample which demonstrates how to write an Axis2 Module.
-
-19. TomcatWebApps -
+7. TomcatWebApps -
     a. GenericJavaBeanResource
        This is simple webapp sample to demonstrate JNDI DataSource look-ups in Embedded
        Tomcat for resources defined in webapp contextXml descriptor.
@@ -87,7 +45,7 @@ the samples which are integrated,
        This is simple webapp sample to demonstrate the JNDI look-ups of Carbon DataSources
        which are exposed as JNDI resources from carbon in WSO2 Application Server
 
-20. Jaxws-Jaxrs
+8. Jaxws-Jaxrs
     This contains series of samples to illustrate the use of Jaxws and Jaxrs in WSO2
     Application Server.
 
@@ -126,119 +84,70 @@ the samples which are integrated,
     k. sign_encrypt -
        This sample shows how WS-Security support in JAX-WS may be enabled.
 	   
-21. jaggerySamples
+9. jaggerySamples
     In this there are two simple sample that demonstrates the some functionality of the jaggery 
     deployed as jaggery applicatioins in WSO2 Web Service Application Server .
-	
-22. dataServiceSamples
-    This will illustrate the Data Services functiolity with WSO2 Application Server.
-	
-23. mashupSamples
-    Mashup samples demonstrate the functionality of the mashup server features.
-	
-    a. digit2image -
-       This mashup sample demonstrates the using of a flickr API.
 
-    c. exchangeRate -
-       This mashup sample demonstrate using web services for getting currency exchange rate. 
+10. CarbonSaaSApp
+     This app will demonstrate the SaaS capabilities in the AS
 
-    d. feedCache -
-       This mashup sample demonstrates feed cache setting feature of mashup server.
+11. JavaEE-TomEE
+     Set of JavaEE apps that use, CDI, EJB, JSF, JaxRS, JaxWS
 
-    e. formulaFlicks -
-       This mashup sample retrieves information from the formula1.com RSS feed.
+12. SSOValveSample
+     This sample show the Single Sign On capabilities of the AS
 
-    f. gmapsAPIKey -
-       This mashup sample service give Google Maps API key.
 
-    g. RESTsampele -
-       This sample demonstrates rest full verbs. such post, get, put and delete. 
-
-    h. storeXML -
-       This sample stores a blob of uniquely-named XML for later retrieval.
-
-    i. sudoku -
-       This mashup service generates sudoku puzzles, based on user options, and returns them in 
-       an XML format for user display.
-
-    j. tomatoTube -
-       This mashup sample services can be used to obtains the top rated movies in theaters and 
-       on DVD from rottentomatoes.com and embeds a YouTube trailer to the feed. 
-
-    k. TwitterMap -
-       This mashup services use twitter API. Requires Twitter authentication for 'Friends Only' 
-       mode.
-	
-    l. upgradeChecker -
-       This mashup service checks the running build of the mashup server against the current release 
-       and nightly build versions available.
-	
-    m. version -
-       This mashup sample demonstrates the reading XML file that contains about product details
-	
-    n. yahooGeoCode -
-       This mashup service wraps with the "http://developer.yahoo.com/maps/rest/V1/geocode.html" 
-       Yahoo! Maps Web Services - Geocoding API. 
-		
 Sample hierarchy under the 'samples' directory
 ==============================================
 
 samples
-  ├── HelloWorld
-  ├── FlickrClient
-  ├── JibX
-  ├── MTOM
-  ├── Mail
-  ├── STS
-  ├── Trader
-  ├── Commodity Quot
-  ├── TinyURL
-  ├── MEX
-  ├── Xfer
-  ├── JSON
-  ├── ClientAPI
-  ├── HelloWorldWebapp
-  ├── EJB
+  ├── ASVersionSamples
+  │   ├── ASVersionSample#1
+  │   ├── ASVersionSample#2
+  │   ├── ASVersionSample#3
+  ├── CarbonSaaSApp
   ├── Chad
+  ├── EntitlementFilter
+  ├── example
+  ├── FlickrClient
+  ├── HelloWorld
+  ├── HelloWorldWebapp
+  ├── jaggerySamples
+  ├── JavaEE-TomEE
+  │   ├── CDI-Servlet
+  │   ├── javaee-examples
+  │   ├── JPA-JaxRS
+  │   ├── JPA-JaxWS
+  │   ├── JPA-Servlet
+  │   ├── JSF-BVAL
+  │   ├── JSF-EJB
+  │   ├── JTA-Servlet
+  ├── Jaxws-Jaxrs
+  │   ├── async_jaxws
+  │   ├── handlers_jaxws
+  │   ├── java_first_jaxws
+  │   ├── jaxrs_basic
+  │   ├── jaxrs_content_negotiation
+  │   ├── jaxrs_starbucks_service
+  │   ├── mtom_jaxws
+  │   ├── wsdl_first_jaxws
+  │   └── ws_security
+  ├── SSOValveSample
+  │   ├── bar-app
+  │   ├── foo-app
+  ├── TinyURL
   ├── TomcatWebApps
+  │   ├── CarbonDataSourceAccessExample
   │   ├── GenericJavaBeanResource
   │   └── JDBCDataSource
-  │   └── CarbonDataSourceAccessExample
   ├── VirtualDirectoryListing
-  ├── Axis2Module
-  ├── jaggerySamples
-  ├── dataServiceSamples
-  ├── mashupSamples
-  │   ├── digit2image
-  │   ├── exchangeRate
-  │   ├── feedCache
-  │   ├── formulaFlicks
-  │   ├── gmapsAPIKey
-  │   ├── RESTsampele
-  │   ├── storeXML
-  │   ├── sudoku
-  │   ├── tomatoTube
-  │   ├── TwitterMap
-  │   ├── upgradeChecker
-  │   ├── version
-  │   └── yahooGeoCode    
-  └── Jaxws-Jaxrs
-      ├── jaxrs_basic
-      ├── jaxrs_sample_02
-      ├── jaxrs_content_negotiation
-      ├── async_jaxws
-      ├── java_first_jaxws
-      ├── wsdl_first_jaxws
-      ├── handlers_jaxws
-      ├── mtom_jaxws
-      └── ws_security
-          ├── sign_encrypt
-          └── ut
+  └── WebappVersioning
 
 Requirements
 =============
 
-1. JDK 1.6.0_23 or higher
+1. JDK 1.7 or higher
 2. Apache ANT 1.7 or higher
 3. Apache Maven 3.0.4 or higher
 4. A JavaScript compatible web browser

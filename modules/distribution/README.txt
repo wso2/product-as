@@ -19,7 +19,6 @@ New Features
 * WS-Discovery support for CXF JAX-WS and JAX-RS services
 * OSGi ServiceLoader Mediator specification support via SPI-Fly
 
-* Removed the first class support provided for deploying Axis2 AAR Services
 * Removed the data services hosting support from AS. Users can use the WSO2 Data Services Server product to deploy data services.
 
 Key Features
@@ -68,7 +67,7 @@ Known Issues in This Release
 Including External Dependencies
 --------------------------------
 For a complete guide on adding external dependencies to WSO2 Application Server & other carbon related products refer to the article:
-http://wso2.org/library/knowlegebase/add-external-jar-libraries-wso2-carbon-based-products
+http://wso2.com/library/knowledgebase/add-external-jar-libraries-wso2-carbon-based-products
 
 Application Server Binary Distribution Directory Structure
 --------------------------------------------
@@ -195,7 +194,7 @@ By default mode, it would ask you to enter the master password
 > ciphertool -Dchange  (in UNIX)
 
 For more details see
-http://docs.wso2.org/wiki/display/Carbon440/WSO2+Carbon+Secure+Vault
+https://docs.wso2.com/display/Carbon441/Securing+Passwords+in+Configuration+Files
 
 Training
 --------
