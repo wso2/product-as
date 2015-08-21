@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>org.wso2.stratos.appserver.sample.installer.ui</artifactId>
-            <version>${product.as.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

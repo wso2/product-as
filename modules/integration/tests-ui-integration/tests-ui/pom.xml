@@ -258,7 +258,6 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>org.wso2.appserver.integration.common.clients</artifactId>
-            <version>${product.as.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.wso2.carbon</groupId>
@@ -270,7 +269,6 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>org.wso2.appserver.integration.common.utils</artifactId>
-            <version>${product.as.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.wso2.carbon</groupId>
@@ -281,7 +279,6 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>ui-pages</artifactId>
-            <version>${product.as.version}</version>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
