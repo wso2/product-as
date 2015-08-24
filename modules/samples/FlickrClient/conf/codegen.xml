@@ -21,7 +21,7 @@
         <o>./target/generated</o>
         <p>org.wso2.appserver.sample.flickr.client</p>
         <d>adb</d>
-        <ns2p>http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl=org.wso2.www.types.flickr.client</ns2p>
+        <ns2p>http://svn.wso2.org/repos/wso2/people/jonathan/flickr.wsdl=org.wso2.www.types.flickr.client</ns2p>
         <wv>2</wv>
         <u/>
     </set>

@@ -22,16 +22,16 @@
         xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions"
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:fl="urn:flickr"
-        xmlns="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl"
-        xmlns:tns="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl"
-        targetNamespace="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl">
+        xmlns="http://svn.wso2.org/repos/wso2/people/jonathan/flickr.wsdl"
+        xmlns:tns="http://svn.wso2.org/repos/wso2/people/jonathan/flickr.wsdl"
+        targetNamespace="http://svn.wso2.org/repos/wso2/people/jonathan/flickr.wsdl">
     <wsdl:documentation>
         This service describes the flickr api.
         Currently it is a limited demonstration of WSDL 2.0, focusing on the
         flickr.peopple.* methods under the HTTP binding.
     </wsdl:documentation>
     <wsdl:types>
-        <xs:schema targetNamespace="http://wso2.org/repos/wso2/people/jonathan/flickr.wsdl">
+        <xs:schema targetNamespace="http://svn.wso2.org/repos/wso2/people/jonathan/flickr.wsdl">
 
             <xs:complexType name="flickrRequest">
                 <xs:sequence>
