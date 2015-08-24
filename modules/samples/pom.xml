@@ -514,7 +514,7 @@
         <samples.version.commons.logging>1.1.1</samples.version.commons.logging>
         <samples.rampart.osgi.version>1.6.1.wso2v9</samples.rampart.osgi.version>
         <samples.neethi.version>2.0.4-wso2v2</samples.neethi.version>
-        <samples.version.tomcat>7.0.34</samples.version.tomcat>
+        <samples.version.tomcat>7.0.59</samples.version.tomcat>
         <samples.javax.servlet.jsp.version>2.2.0.v201112011158</samples.javax.servlet.jsp.version>
         <samples.axis2.wso2.version.aar.plugin>1.6.2</samples.axis2.wso2.version.aar.plugin>
         <samples.previous.version>4.2.0</samples.previous.version>
