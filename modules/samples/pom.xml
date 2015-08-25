@@ -49,7 +49,6 @@
         <module>ASVersionSamples</module>
         <module>Chad</module>
         <module>TinyURL</module>
-        <module>FlickrClient</module>
         <module>Jaxws-Jaxrs</module>
         <module>JavaEE-TomEE</module>
         <module>HelloWorld</module>

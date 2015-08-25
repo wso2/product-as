@@ -357,31 +357,6 @@
             <fileMode>755</fileMode>
         </fileSet>
 
-        <!-- copying FlickrClient -->
-        <fileSet>
-            <directory>../samples/FlickrClient</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/FlickrClient</outputDirectory>
-            <excludes>
-                <exclude>**/**.sh</exclude>
-                <exclude>**/target/**</exclude>
-                <exclude>STS/**</exclude>
-                <exclude>**/pom.xml.releaseBackup</exclude>
-            </excludes>
-        </fileSet>
-        <fileSet>
-            <directory>../samples/FlickrClient</directory>
-            <outputDirectory>${pom.artifactId}-${pom.version}/samples/FlickrClient</outputDirectory>
-            <includes>
-                <include>**/**.sh</include>
-            </includes>
-            <excludes>
-                <exclude>**/STS/**</exclude>
-                <exclude>**/pom.xml.releaseBackup</exclude>
-            </excludes>
-            <fileMode>755</fileMode>
-        </fileSet>
-
-
         <!-- copying HelloWorld -->
         <fileSet>
             <directory>../samples/HelloWorld</directory>
