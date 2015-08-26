@@ -110,20 +110,13 @@ public class WSAS2060SessionPersistenceTestCase extends ASIntegrationTest {
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         if (userMode.equals(TestUserMode.TENANT_USER)) {
             webAppAdminClient.deleteWebAppFile(HELLOWORLD_WEBAPP_NAME + ".war",
-                                               asServer.getInstance().getHosts().get("default"));
+                    asServer.getInstance().getHosts().get("default"));
         }
+
         //Revert and restart only once
         --isRestarted;
         if (isRestarted == 0) {
-            if (Files.exists(Paths.get(CONTEXT_XML_PATH + ".backup"))) {
-                Files.move(Paths.get(CONTEXT_XML_PATH + ".backup"), Paths.get(CONTEXT_XML_PATH),
-                           new CopyOption[] { StandardCopyOption.REPLACE_EXISTING });
-            }
-            if (Files.exists(Paths.get(CARBON_XML_PATH + ".backup"))) {
-                Files.move(Paths.get(CARBON_XML_PATH + ".backup"), Paths.get(CARBON_XML_PATH),
-                           new CopyOption[] { StandardCopyOption.REPLACE_EXISTING });
-            }
-            serverConfigurationManager.restartGracefully();
+            serverConfigurationManager.restoreToLastConfiguration();
         }
     }
 
