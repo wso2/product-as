@@ -49,6 +49,10 @@ public class WebAppAdminClient {
     }
 
     public void uploadWarFile(String filePath) throws RemoteException {
+        uploadWarFile(filePath, null);
+    }
+
+    public void uploadWarFile(String filePath, String hostName) throws RemoteException {
         File file = new File(filePath);
         String fileName = file.getName();
         URL url = null;
@@ -61,6 +65,9 @@ public class WebAppAdminClient {
         WebappUploadData webApp;
         webApp = new WebappUploadData();
         webApp.setFileName(fileName);
+        if (hostName != null) {
+            webApp.setHostName(hostName);
+        }
         webApp.setDataHandler(dh);
 
         try {
@@ -72,16 +79,16 @@ public class WebAppAdminClient {
     }
 
     public void deleteWebAppFile(String fileName, String hostName) throws RemoteException {
-        webappAdminStub.deleteStartedWebapps(new String[]{hostName + ":" + fileName});
+        webappAdminStub.deleteStartedWebapps(new String[] { hostName + ":" + fileName });
     }
 
     public void deleteFaultyWebAppFile(String fileName, String hostName) throws RemoteException {
-        webappAdminStub.deleteFaultyWebapps(new String[]{hostName + ":" + fileName});
+        webappAdminStub.deleteFaultyWebapps(new String[] { hostName + ":" + fileName });
     }
 
     public void deleteStoppedWebapps(String fileName, String hostName) throws RemoteException {
 
-        webappAdminStub.deleteStoppedWebapps(new String[]{hostName + ":" + fileName});
+        webappAdminStub.deleteStoppedWebapps(new String[] { hostName + ":" + fileName });
     }
 
     public void deleteFaultyWebApps(String fileName, String hostName) throws RemoteException {
@@ -98,7 +105,7 @@ public class WebAppAdminClient {
     }
 
     public boolean stopWebApp(String fileName, String hostname) throws RemoteException {
-        webappAdminStub.stopWebapps(new String[]{fileName});
+        webappAdminStub.stopWebapps(new String[] { fileName });
         WebappMetadata webappMetadata = webappAdminStub.getStoppedWebapp(fileName,hostname);
         if (webappMetadata.getWebappFile().equals(fileName)) {
             return true;
@@ -107,8 +114,8 @@ public class WebAppAdminClient {
     }
 
     public boolean startWebApp(String fileName, String hostname) throws RemoteException {
-        webappAdminStub.startWebapps(new String[]{fileName});
-        WebappMetadata webappMetadata = webappAdminStub.getStartedWebapp(fileName,hostname);
+        webappAdminStub.startWebapps(new String[] { fileName });
+        WebappMetadata webappMetadata = webappAdminStub.getStartedWebapp(fileName, hostname);
         if (webappMetadata.getWebappFile().equals(fileName)) {
             return true;
         }
@@ -138,6 +145,10 @@ public class WebAppAdminClient {
     }
 
     public List<String> getWebApplist(String webAppNameSearchString) throws RemoteException {
+        return getWebApplist(webAppNameSearchString, null);
+    }
+
+    public List<String> getWebApplist(String webAppNameSearchString, String hostName) throws RemoteException {
         List<String> list = new ArrayList<String>();
         WebappsWrapper wrapper = getPagedWebappsSummary(webAppNameSearchString, "ALL", "ALL", 0);
         VersionedWebappMetadata[] webappGroups = wrapper.getWebapps();
@@ -145,7 +156,11 @@ public class WebAppAdminClient {
         if (webappGroups != null) {
             for (VersionedWebappMetadata webappGroup : webappGroups) {
                 for (WebappMetadata metaData : webappGroup.getVersionGroups()) {
-                    list.add(metaData.getWebappFile());
+                    if (hostName == null) {
+                        list.add(metaData.getWebappFile());
+                    } else if (hostName.equals(metaData.getHostName())) {
+                        list.add(metaData.getWebappFile());
+                    }
                 }
             }
         }
