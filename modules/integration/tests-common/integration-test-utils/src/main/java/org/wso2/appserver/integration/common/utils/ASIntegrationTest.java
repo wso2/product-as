@@ -171,7 +171,6 @@ public class ASIntegrationTest {
         NDataSourceAdminServiceClient dataSourceAdminService =
                 new NDataSourceAdminServiceClient(asServer.getContextUrls().getBackEndUrl(), sessionCookie);
         WSDataSourceMetaInfo dataSourceInfo;
-        String databaseName = sqlDataSource.getDatabaseName();
         WSDataSourceInfo wsDataSourceInfo = dataSourceAdminService.getDataSource(dataSourceName);
         if (wsDataSourceInfo != null && wsDataSourceInfo.getDsMetaInfo() != null) {
             dataSourceAdminService.deleteDataSource(dataSourceName);
