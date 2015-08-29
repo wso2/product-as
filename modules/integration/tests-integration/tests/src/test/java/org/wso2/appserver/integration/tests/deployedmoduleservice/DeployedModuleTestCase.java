@@ -68,10 +68,7 @@ public class DeployedModuleTestCase extends ASIntegrationTest {
 
         Assert.assertTrue(moduleDataSet.contains("rahas"), "rahas module not found");
         Assert.assertTrue(moduleDataSet.contains("rampart"), "rampart module not found");
-        Assert.assertTrue(moduleDataSet.contains("sandesha2"), "sandesha module not found");
-        Assert.assertTrue(moduleDataSet.contains("wso2caching"), "wso2caching module not found");
         Assert.assertTrue(moduleDataSet.contains("addressing"), "addressing module not found");
-        Assert.assertTrue(moduleDataSet.contains("wso2throttle"), "wso2throttle module not found");
 
         log.info("End of Deployed module test case");
     }
