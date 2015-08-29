@@ -61,7 +61,7 @@ public class ChadTestCase extends ASIntegrationTest {
         log.info("Chad service deleted");
     }
 
-    @Test(groups = "wso2.as", description = "Upload Chad.aar service and verify deployment")
+    @Test(groups = "wso2.as", description = "Upload Chad.aar service and verify deployment", enabled = false)
     public void chadServiceUpload() throws Exception {
         AARServiceUploaderClient aarServiceUploaderClient
                 = new AARServiceUploaderClient(backendURL,sessionCookie);
@@ -75,7 +75,7 @@ public class ChadTestCase extends ASIntegrationTest {
         log.info("Chad.aar service uploaded and deployed successfully");
     }
 
-    @Test(groups = "wso2.as", description = "Login authorization", dependsOnMethods = "chadServiceUpload")
+    @Test(groups = "wso2.as", description = "Login authorization", dependsOnMethods = "chadServiceUpload", enabled = false)
     public void login() throws AxisFault {
         OMElement response = axisServiceClient.sendReceive(createPayLoadForLoginAndAddAdmin("admin", "admin"),
                 endpoint, "login");
@@ -84,7 +84,7 @@ public class ChadTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "Add new admin user", dependsOnMethods = "login",
-            expectedExceptions = AxisFault.class)
+            expectedExceptions = AxisFault.class, enabled = false)
     public void addAdminUser() throws RemoteException {
         axisServiceClient.sendReceive(createPayLoadForLoginAndAddAdmin("Billy", "password"), endpoint,
                 "addAdminUser");
@@ -92,7 +92,7 @@ public class ChadTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "Check added admin user availability",
-            dependsOnMethods = "addAdminUser")
+            dependsOnMethods = "addAdminUser", enabled = false)
     public void listAdminUsers() throws RemoteException {
         OMElement responseAdminUserList = axisServiceClient.sendReceive(createPayLoadForResponseList(),
                 endpoint, "listAdminUsers");
@@ -100,7 +100,7 @@ public class ChadTestCase extends ASIntegrationTest {
         // This is to check whether the addAdminUser() produces the expected output
     }
 
-    @Test(groups = "wso2.as", description = "Creating a poll", dependsOnMethods = "listAdminUsers")
+    @Test(groups = "wso2.as", description = "Creating a poll", dependsOnMethods = "listAdminUsers", enabled = false)
     public void createPoll() throws AxisFault {
         axisServiceClient.sendReceive(createPayLoadForCreatePoll(), endpoint, "createPoll");
         OMElement responsePollList = axisServiceClient.sendReceive(createPayLoadForResponseList(),
