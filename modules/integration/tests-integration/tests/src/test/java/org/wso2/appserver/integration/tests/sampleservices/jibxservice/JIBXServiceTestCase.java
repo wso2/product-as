@@ -55,7 +55,7 @@ public class JIBXServiceTestCase extends ASIntegrationTest {
         log.info("LibraryService.aar deleted successfully");
     }
 
-    @Test(groups = "wso2.as", description = "Upload LibraryService.aar service and verify deployment")
+    @Test(groups = "wso2.as", description = "Upload LibraryService.aar service and verify deployment", enabled = false)
     public void LibraryServiceUpload() throws Exception {
         AARServiceUploaderClient aarServiceUploaderClient
                 = new AARServiceUploaderClient(backendURL,
@@ -71,7 +71,7 @@ public class JIBXServiceTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "Adding a book to library"
-            , dependsOnMethods = "LibraryServiceUpload")
+            , dependsOnMethods = "LibraryServiceUpload", enabled = false)
     public void addBookToLibrary() throws Exception {
 
         OMElement response = axisServiceClient.sendReceive(addBookPayLoad(), endpoint, "addBook");
@@ -86,7 +86,7 @@ public class JIBXServiceTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "Getting the book details"
-            , dependsOnMethods = "addBookToLibrary")
+            , dependsOnMethods = "addBookToLibrary", enabled = false)
     public void getBookDetails() throws Exception {
 
         OMElement response = axisServiceClient.sendReceive(getBookPayLoad(), endpoint, "getBook");
