@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.List;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
@@ -33,6 +36,13 @@ public class WebAppDeploymentUtil {
 
     public static boolean isWebApplicationDeployed(String backEndUrl, String sessionCookie,
                                                    String webAppName) throws Exception {
+        return isWebApplicationDeployed(backEndUrl, sessionCookie, webAppName, null);
+    }
+
+
+    //is webapp deployed in virtual host
+    public static boolean isWebApplicationDeployed(String backEndUrl, String sessionCookie,
+                                                   String webAppName, String hostName) throws Exception {
         log.info("waiting " + WEBAPP_DEPLOYMENT_DELAY + " millis for Service deployment " + webAppName);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backEndUrl, sessionCookie);
         List<String> webAppList;
@@ -68,6 +78,8 @@ public class WebAppDeploymentUtil {
         }
         return Boolean.FALSE;
     }
+
+
 
     public static boolean isWebApplicationUnDeployed(String backEndUrl, String sessionCookie,
                                                      String webAppName) throws Exception {
@@ -165,5 +177,31 @@ public class WebAppDeploymentUtil {
 
         }
         return Boolean.FALSE;
+    }
+
+    public static GetMethod invokeWebAppWithVirtualHost(String baseURL, String webappName, String vHostName) throws IOException {
+        String webappUrl = baseURL + "/" + webappName + "/";
+        HttpClient client = new HttpClient();
+        GetMethod getRequest = new GetMethod(webappUrl);
+        getRequest.setFollowRedirects(false);
+        if (vHostName != null) {
+            //set Host tag value of request header to vHostName
+            //(This avoids the requirement to add an entry to etc/hosts/ to pass this test case)
+            getRequest.getParams().setVirtualHost(vHostName);
+        }
+        Calendar startTime = Calendar.getInstance();
+        while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
+            client.executeMethod(getRequest);
+            if (!getRequest.getResponseBodyAsString().isEmpty()) {
+                return getRequest;
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignore) {
+            }
+        }
+
+        return getRequest;
     }
 }
