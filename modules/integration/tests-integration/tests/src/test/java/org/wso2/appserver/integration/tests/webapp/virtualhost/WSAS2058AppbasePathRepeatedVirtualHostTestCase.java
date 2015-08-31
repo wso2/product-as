@@ -73,7 +73,7 @@ public class WSAS2058AppbasePathRepeatedVirtualHostTestCase extends ASIntegratio
         };
     }
 
-    @BeforeClass(alwaysRun = true)
+    @BeforeClass(alwaysRun = true, enabled = false)
     public void setEnvironment() throws Exception {
         super.init(userMode);
         serverConfigurationManager =
@@ -104,7 +104,7 @@ public class WSAS2058AppbasePathRepeatedVirtualHostTestCase extends ASIntegratio
         ++isRestarted;
     }
 
-    @AfterClass(alwaysRun = true)
+    @AfterClass(alwaysRun = true, enabled = false)
     public void restoreConfig() throws Exception {
         sessionCookie = loginLogoutClient.login();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
@@ -121,7 +121,7 @@ public class WSAS2058AppbasePathRepeatedVirtualHostTestCase extends ASIntegratio
 
     }
 
-    @Test(groups = "wso2.as", description = "Upload Webapp to default host")
+    @Test(groups = "wso2.as", description = "Upload Webapp to default host", enabled = false)
     public void testUploadWebappDefaultHost() throws Exception {
         sessionCookie = loginLogoutClient.login();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
@@ -135,7 +135,7 @@ public class WSAS2058AppbasePathRepeatedVirtualHostTestCase extends ASIntegratio
     }
 
     @Test(groups = "wso2.as", description = "Upload Webapp to virtual host",
-            dependsOnMethods = "testUploadWebappDefaultHost")
+            dependsOnMethods = "testUploadWebappDefaultHost", enabled = false)
     public void testUploadWebappVirtualHost() throws Exception {
         sessionCookie = loginLogoutClient.login();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
