@@ -114,21 +114,12 @@
 
     <path id="full.class.path">
         <pathelement location="${lib}/${name}-test-client.jar"/>
-        <pathelement location="${lib}/emma-2.1.5320.jar"/>
         <path refid="axis2.class.path"/>
         <pathelement location="${classes}"/>
     </path>
 
     <target name="run.client" description="runs sample java class" depends="jar.client">
-
-        <copy todir="${lib}/">
-            <fileset dir="../../emma/">
-                <include name="**/*emma-*.jar"/>
-            </fileset>
-        </copy>
         <java classname="org.wso2.www.types.HelloServiceClient">
-            <sysproperty key="emma.rt.control" value="false"/>
-            <sysproperty key="-Demma.rt.control.port" value="47658"/>
             <classpath>
                 <path refid="full.class.path"/>
             </classpath>
