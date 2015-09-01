@@ -9,17 +9,17 @@
         <repository>
             <id>wso2-Nexus</id>
             <name>WSO2 Repository</name>
-            <url>http://dist.wso2.org/maven2/</url>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
         </repository>
     </repositories>
     <properties>
-        <axis2_version>1.6.1-wso2v10</axis2_version>
+        <axis2_version>1.6.1-wso2v14</axis2_version>
     </properties>
     <pluginRepositories>
         <pluginRepository>
             <id>wso2-Nexus</id>
             <name>WSO2 Repository</name>
-            <url>http://dist.wso2.org/maven2/</url>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
         </pluginRepository>
     </pluginRepositories>
     <build>
