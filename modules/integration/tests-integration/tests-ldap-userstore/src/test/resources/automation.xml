@@ -219,8 +219,8 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9763</port>
-                    <port type="https">9443</port>
+                    <port type="http">9863</port>
+                    <port type="https">9543</port>
                 </ports>
                 <properties>
                 </properties>
@@ -230,8 +230,8 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9764</port>
-                    <port type="https">9444</port>
+                    <port type="http">9864</port>
+                    <port type="https">9544</port>
                 </ports>
                 <properties>
                 </properties>
@@ -241,8 +241,8 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9765</port>
-                    <port type="https">9445</port>
+                    <port type="http">9865</port>
+                    <port type="https">9545</port>
                 </ports>
                 <properties>
                 </properties>
@@ -252,8 +252,8 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9763</port>
-                    <port type="https">9443</port>
+                    <port type="http">9863</port>
+                    <port type="https">9543</port>
                 </ports>
                 <properties>
                 </properties>
@@ -266,7 +266,7 @@
             <extentionClasses>
                 <class>
                     <name>org.wso2.appserver.integration.tests.extension.CarbonServerWithReadWriteLdapUSerStoreExtension</name>
-                    <!--<parameter name="-DportOffset" value="0" />-->
+                    <parameter name="-DportOffset" value="100" />
                     <!--<parameter name="cmdArg" value="debug 8000" />-->
                 </class>
                 <class>
