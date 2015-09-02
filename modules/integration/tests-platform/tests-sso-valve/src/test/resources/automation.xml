@@ -216,8 +216,8 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9864</port>
-                    <port type="https">9544</port>
+                    <port type="http">9764</port>
+                    <port type="https">9444</port>
                 </ports>
                 <properties>
                 </properties>
