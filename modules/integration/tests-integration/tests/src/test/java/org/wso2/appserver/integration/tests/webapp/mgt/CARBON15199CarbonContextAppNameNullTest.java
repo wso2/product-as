@@ -18,6 +18,9 @@
 
 package org.wso2.appserver.integration.tests.webapp.mgt;
 
+import java.io.File;
+import java.io.IOException;
+import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
@@ -26,25 +29,26 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
+import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.TestServerManager;
 import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.TenantManagementServiceClient;
-import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
-import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
+import org.wso2.carbon.integration.common.extensions.exceptions.AutomationExtensionException;
+import org.wso2.carbon.integration.common.extensions.usermgt.UserPopulator;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
 import org.wso2.carbon.utils.ServerConstants;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -71,10 +75,12 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     private final String tenantDomainKey = "wso2.com";
     private final String tenantUserKey = "user1";
 
-    private HashMap<String, String> startupParameterMap = new HashMap<String, String>();
     private MultipleServersManager manager = new MultipleServersManager();
     private WebAppAdminClient superTenantWebAppAdminClient;
     private WebAppAdminClient tenantWebAppAdminClient;
+    private TestServerManager testServerManager;
+    private AutomationContext automationContext;
+
     private String superTenantSession;
     private String superTenantServerBackEndUrl;
     private String superTenantServerWebAppUrl;
@@ -82,32 +88,41 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     private String tenantServerBackEndUrl;
     private String tenantServerWebAppUrl;
 
-    //ToDo: Enable Test case - https://wso2.org/jira/browse/WSAS-2009
+    private int portOffset = 1;
 
-    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })
-    @BeforeClass(alwaysRun = true, enabled = false)
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
+    @BeforeClass(alwaysRun = true, enabled = true)
     public void init() throws Exception {
         super.init();
-        startupParameterMap.put("-DportOffset", "1");
-        startupParameterMap.put("-Dwebapp.idle.time", "1");
-        startupParameterMap.put("-Dtenant.idle.time", "2");
+        AutomationContext autoCtx = new AutomationContext();
 
-        // There is a port setting issue in automation framework which it doesn't
-        // correctly set the port offset, as a workaround need to create with a dummy context.
-        AutomationContext newServerContext = new AutomationContext(productGroupName, instanceName,
-                superTenantDomainKey, userKey);
-        CarbonTestServerManager server = new CarbonTestServerManager(newServerContext, System.getProperty("carbon.zip"),
-                startupParameterMap);
+        testServerManager = new TestServerManager(autoCtx, portOffset) {
+            public void configureServer() throws AutomationFrameworkException {
+                try {
+                    testServerManager.startServer();
+                    UserPopulator userPopulator = new UserPopulator(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                            ASIntegrationConstants.AS_INSTANCE_0002);
+                    userPopulator.populateUsers();
+                    testServerManager.stopServer();
+                    carbonHome = testServerManager.getCarbonHome();
+//                    String commandDirectory = carbonHome + File.separator + "bin";
+//                    String[] cmdArray;
 
-        // Starting the server, because need to get the new server's CARBON_HOME
-        manager.startServers(server);
+                } catch (IOException | XPathExpressionException e) {
+                    throw new AutomationFrameworkException("Error when starting the carbon server", e);
+                } catch (AutomationExtensionException e) {
+                    throw new AutomationFrameworkException("Error when populating users", e);
+                }
+            }
+        };
+        testServerManager.startServer();
 
         // This context will be used when restarting the server with new configuration
-        AutomationContext context = new AutomationContext(productGroupName, "appServerInstance0002",
-                superTenantDomainKey, userKey);
+        AutomationContext context = new AutomationContext(productGroupName,
+                ASIntegrationConstants.AS_INSTANCE_0002, superTenantDomainKey, userKey);
         // This Context will be used when doing tenant related activities.
-        AutomationContext tenantContext = new AutomationContext(productGroupName, "appServerInstance0002",
-                tenantDomainKey, tenantUserKey);
+        AutomationContext tenantContext = new AutomationContext(productGroupName,
+                ASIntegrationConstants.AS_INSTANCE_0002, tenantDomainKey, tenantUserKey);
 
         ServerConfigurationManager serverManager = new ServerConfigurationManager(context);
 
@@ -141,15 +156,15 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
         tenantWebAppAdminClient = new WebAppAdminClient(tenantServerBackEndUrl, tenantSession);
     }
 
-    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })
-    @Test(groups = "wso2.as", description = "Deploying web application", enabled = false)
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
+    @Test(groups = "wso2.as", description = "Deploying web application", enabled = true)
     public void testWebApplicationDeployment() throws Exception {
 
         String applicationNameReceiverWebAppUrl = FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName;
         superTenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession,
-                                                                 webAppName), "Web Application Deployment failed");
+                webAppName), "Web Application Deployment failed");
 
         tenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(tenantServerBackEndUrl, tenantSession, webAppName),
@@ -160,14 +175,14 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator
                 + ghostInfoWebAppFileName);
         assertTrue(WebAppDeploymentUtil
-                .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, ghostInfoWebAppName),
+                        .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, ghostInfoWebAppName),
                 "Web Application Deployment failed");
 
     }
 
-    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "Invoke web application", dependsOnMethods = "testWebApplicationDeployment",
-            enabled = false)
+            enabled = true)
     public void testApplicationNameInResponse() throws Exception {
         checkWebAppAutoUnloadingToGhostState();
         // Testing the application name when web app is unloaded.
@@ -181,17 +196,17 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
         assertEquals(tenantResponse.getData(), webAppName, "Application name not set in the first request");
     }
 
-    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @Test(groups = "wso2.as", description = "UnDeploying web application",
-            dependsOnMethods = "testWebApplicationDeployment", enabled = false)
+            dependsOnMethods = "testWebApplicationDeployment", enabled = true)
     public void testDeleteWebApplication() throws Exception {
         superTenantWebAppAdminClient.deleteWebAppFile(webAppFileName, "localhost");
         superTenantWebAppAdminClient.deleteWebAppFile(ghostInfoWebAppFileName, "localhost");
         tenantWebAppAdminClient.deleteWebAppFile(ghostInfoWebAppFileName, "localhost");
     }
 
-    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })
-    @AfterClass(alwaysRun = true, enabled = false)
+    @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
+    @AfterClass(alwaysRun = true, enabled = true)
     public void clean() throws Exception {
         manager.stopAllServers();
     }
@@ -199,7 +214,6 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     /**
      * Check the web app is whether unloaded or not by sleeping web app idle time and some additional time,
      * because actual time taken to unloaded will vary
-     *
      */
     private void checkWebAppAutoUnloadingToGhostState() throws Exception {
         boolean isWebAppInGhostState = false;
@@ -248,7 +262,7 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
 
         String requestUrl =
                 superTenantServerWebAppUrl + "/" + ghostInfoWebAppName + "/webapp-status/" + tenantDomain + "/" +
-                webAppName;
+                        webAppName;
         boolean isWebAppGhost = false;
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
