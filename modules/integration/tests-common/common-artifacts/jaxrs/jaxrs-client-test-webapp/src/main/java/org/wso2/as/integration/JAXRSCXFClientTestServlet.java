@@ -50,6 +50,12 @@ public class JAXRSCXFClientTestServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String hostIp = request.getParameter("Host");
+        String port = request.getParameter("Port");
+        if (hostIp != null && port != null) {
+            host = "http://" + hostIp + ":" +port + "/";
+        }
+
         WebClient client = WebClient.create(host);
         String method = request.getParameter("HTTPMethod");
         if ("GET".equals(method)) {
@@ -60,12 +66,6 @@ public class JAXRSCXFClientTestServlet extends HttpServlet {
             testPUTMethodWithJAXRSClientApi(request, response);
         } else if ("DELETE".equals(method)) {
             testDELETEMethodWithJAXRSClientApi(request, response);
-        }
-
-        String hostIp = request.getParameter("Host");
-        String port = request.getParameter("Port");
-        if (hostIp != null && port != null) {
-            host = "http://" + hostIp + ":" +port + "/";
         }
     }
 
