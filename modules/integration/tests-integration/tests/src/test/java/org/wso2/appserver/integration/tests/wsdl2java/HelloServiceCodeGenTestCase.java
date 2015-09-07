@@ -306,7 +306,7 @@ public class HelloServiceCodeGenTestCase extends ASIntegrationTest {
 
 
     public boolean waitForMessage(ServerLogReader inputStreamHandler, String message) {
-        long time = System.currentTimeMillis() + 60 * 1000;
+        long time = System.currentTimeMillis() + 120 * 1000;
         while (System.currentTimeMillis() < time) {
             if (inputStreamHandler.getOutput().contains(message)) {
                 return true;
