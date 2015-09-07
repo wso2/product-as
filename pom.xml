@@ -722,8 +722,8 @@
         <carbon.deployment.version>4.5.2</carbon.deployment.version>
         <carbon.kernel.version>4.4.1</carbon.kernel.version>
         <carbon.commons.version>4.4.7</carbon.commons.version>
-        <carbon.registry.version>4.4.8</carbon.registry.version>
-        <carbon.identity.version>4.5.5</carbon.identity.version>
+        <carbon.registry.version>4.4.5</carbon.registry.version>
+        <carbon.identity.version>4.5.4</carbon.identity.version>
         <carbon.multitenancy.version>4.4.3</carbon.multitenancy.version>
         <jaggery.version>0.11.0</jaggery.version>
         <test.framework.version>4.4.0</test.framework.version>
