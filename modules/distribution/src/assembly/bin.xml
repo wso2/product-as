@@ -47,6 +47,7 @@
                 <exclude>**/lib/org.wso2.carbon.server-4.2.0.jar</exclude>
                 <exclude>**/repository/conf/security/cipher-text.properties</exclude>
                 <exclude>**/repository/conf/security/cipher-tool.properties</exclude>
+                <exclude>**/repository/conf/etc/logging-bridge.properties</exclude>
                 <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
             </excludes>
         </fileSet>
@@ -725,6 +726,9 @@
             <source>./repository/conf/security/cipher-tool.properties</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/security</outputDirectory>
         </file>
-
+        <file>
+            <source>./repository/conf/etc/logging-bridge.properties</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/etc</outputDirectory>
+        </file>
     </files>
 </assembly>
