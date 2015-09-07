@@ -64,7 +64,7 @@ public class XMLHTTPRequestObjectTestCase extends ASIntegrationTest {
     public void testXMLHTTPRequestExist() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/xmlhttprequest.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/xmlhttprequest.jag?port=9863");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 
@@ -108,7 +108,7 @@ public class XMLHTTPRequestObjectTestCase extends ASIntegrationTest {
     public void testXMLHTTPRequest() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/xmlhttprequest.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/xmlhttprequest.jag?port=9863");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 
@@ -131,7 +131,7 @@ public class XMLHTTPRequestObjectTestCase extends ASIntegrationTest {
 
         String response = "";
         URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/xmlhttprequest.jag?action" +
-                "=operations");
+                "=operations&port=9863");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 
@@ -155,7 +155,7 @@ public class XMLHTTPRequestObjectTestCase extends ASIntegrationTest {
 
         String response = null;
         URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/xmlhttprequest.jag?" +
-                "action=asyncoperations");
+                "action=asyncoperations&port=9863");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 
