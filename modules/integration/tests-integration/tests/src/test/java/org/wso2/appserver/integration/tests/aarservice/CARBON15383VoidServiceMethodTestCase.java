@@ -45,13 +45,14 @@ public class CARBON15383VoidServiceMethodTestCase extends ASIntegrationTest {
     private ServerConfigurationManager serverManager;
     private TestUserMode userMode;
 
-    @Factory(dataProvider = "userModeProvider") public CARBON15383VoidServiceMethodTestCase(TestUserMode userMode) {
+    @Factory(dataProvider = "userModeProvider")
+    public CARBON15383VoidServiceMethodTestCase(TestUserMode userMode) {
         this.userMode = userMode;
     }
 
-    @DataProvider private static TestUserMode[][] userModeProvider() {
-        return new TestUserMode[][] { new TestUserMode[] { TestUserMode.SUPER_TENANT_ADMIN },
-        };
+    @DataProvider
+    private static TestUserMode[][] userModeProvider() {
+        return new TestUserMode[][] { new TestUserMode[] { TestUserMode.SUPER_TENANT_ADMIN } };
     }
 
     @BeforeClass(alwaysRun = true)
@@ -69,8 +70,7 @@ public class CARBON15383VoidServiceMethodTestCase extends ASIntegrationTest {
     }
 
     @Test(groups = "wso2.as", description = "Upload aar service and verify deployment")
-    public void testAarServiceUpload()
-            throws Exception {
+    public void testAarServiceUpload() throws Exception {
         AARServiceUploaderClient aarServiceUploaderClient = new AARServiceUploaderClient(backendURL, sessionCookie);
         aarServiceUploaderClient
                 .uploadAARFile(SERVICE_ARCHIVE, FrameworkPathUtil.getSystemResourceLocation() + "artifacts" +
@@ -93,17 +93,18 @@ public class CARBON15383VoidServiceMethodTestCase extends ASIntegrationTest {
                 + "\" xmlns:typ=\"http://www.wso2.org/types\">\n" + "   <soapenv:Header/>" + "<soapenv:Body>"
                 + "      <typ:getVoid/>\n" + "   </soapenv:Body>\n" + "</soapenv:Envelope>";
 
-        HttpResponse response = simpleHttpClient.doPost(getServiceUrl("HelloServiceTest"), headers, payload, "text/xml");
+        HttpResponse response = simpleHttpClient
+                .doPost(getServiceUrl("HelloServiceTest"), headers, payload, "text/xml");
         assertEquals(response.getStatusLine().getStatusCode(), HttpStatus.SC_OK,
                 "Wrong http status code has been recieved in " + userMode);
     }
 
-    @AfterClass(alwaysRun = true) public void restoreServer() throws Exception {
+    @AfterClass(alwaysRun = true)
+    public void restoreServer() throws Exception {
         String carbonHome = System.getProperty("carbon.home");
         FileManager.deleteFile(carbonHome + File.separator + "repository" + File.separator +
                 "deployment" + File.separator + "server" + File.separator + "axis2services" + SERVICE_ARCHIVE);
         serverManager.restoreToLastConfiguration();
-
     }
 
 }
