@@ -54,14 +54,13 @@
     </test>
 
     <test name="services-tests" preserve-order="true" parallel="false">
-    <packages>
-    <!--Todo-->
-    <package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>
-
-    <!-- ToDo: https://wso2.org/jira/browse/WSAS-2008 -->
-    <!-- <package name="org.wso2.appserver.integration.tests.jndi"/> -->
-    </packages>
-</test>
+        <packages>
+            <!--Todo-->
+            <package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>
+            <!-- ToDo: https://wso2.org/jira/browse/WSAS-2008 -->
+            <!-- <package name="org.wso2.appserver.integration.tests.jndi"/> -->
+        </packages>
+    </test>
 
     <!-- ToDo: Causes other test cases to fail
     <test name="ciphertool-tests" preserve-order="true" parallel="false">
