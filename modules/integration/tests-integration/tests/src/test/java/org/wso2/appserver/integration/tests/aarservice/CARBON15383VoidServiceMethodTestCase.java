@@ -61,8 +61,8 @@ public class CARBON15383VoidServiceMethodTestCase extends ASIntegrationTest {
         serverManager = new ServerConfigurationManager(asServer);
         // load the custom axis2 config
         String axis2configFileLocation =
-                TestConfigurationProvider.getResourceLocation() + File.separator + "axis2config" + File.separator
-                        + "axis2.xml";
+                TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
+                        "AS"+File.separator+"axismepconfig"+File.separator+"axis2.xml";
         File axis2Config = new File(axis2configFileLocation);
 
         serverManager.applyConfiguration(axis2Config);
