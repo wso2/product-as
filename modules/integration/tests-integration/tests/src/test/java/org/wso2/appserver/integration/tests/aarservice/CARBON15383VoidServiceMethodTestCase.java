@@ -30,6 +30,8 @@ import org.wso2.carbon.integration.common.utils.FileManager;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,10 +62,9 @@ public class CARBON15383VoidServiceMethodTestCase extends ASIntegrationTest {
         super.init(userMode);
         serverManager = new ServerConfigurationManager(asServer);
         // load the custom axis2 config
-        String axis2configFileLocation =
-                TestConfigurationProvider.getResourceLocation() + File.separator + "artifacts" + File.separator +
-                        "AS"+File.separator+"axismepconfig"+File.separator+"axis2.xml";
-        File axis2Config = new File(axis2configFileLocation);
+        Path axis2configFileLocation = Paths
+                .get(TestConfigurationProvider.getResourceLocation(), "artifacts", "AS", "axismepconfig", "axis2.xml");
+        File axis2Config = new File(axis2configFileLocation.toString());
 
         serverManager.applyConfiguration(axis2Config);
         super.init(userMode);
@@ -72,17 +73,17 @@ public class CARBON15383VoidServiceMethodTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Upload aar service and verify deployment")
     public void testAarServiceUpload() throws Exception {
         AARServiceUploaderClient aarServiceUploaderClient = new AARServiceUploaderClient(backendURL, sessionCookie);
-        aarServiceUploaderClient
-                .uploadAARFile(SERVICE_ARCHIVE, FrameworkPathUtil.getSystemResourceLocation() + "artifacts" +
-                        File.separator + "AS" + File.separator + "aar" + File.separator +
-                        SERVICE_ARCHIVE, "");
+        aarServiceUploaderClient.uploadAARFile(SERVICE_ARCHIVE,
+                Paths.get(FrameworkPathUtil.getSystemResourceLocation(), "artifacts", "AS", "aar", SERVICE_ARCHIVE)
+                        .toString(), "");
 
         assertTrue(isServiceDeployed("HelloServiceTest"), "Axis service is not uploaded successfully");
     }
 
     @Test(groups = { "wso2.as" },
             description = "Send a request to an axis service method which has void as "
-                    + "the return type and check the response http status code", dependsOnMethods = "testAarServiceUpload")
+                    + "the return type and check the response http status code",
+            dependsOnMethods = "testAarServiceUpload")
     public void testServiceMethodReturnTypeVoid() throws Exception {
 
         Map<String, String> headers = new HashMap<String, String>();
@@ -102,8 +103,9 @@ public class CARBON15383VoidServiceMethodTestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void restoreServer() throws Exception {
         String carbonHome = System.getProperty("carbon.home");
-        FileManager.deleteFile(carbonHome + File.separator + "repository" + File.separator +
-                "deployment" + File.separator + "server" + File.separator + "axis2services" + SERVICE_ARCHIVE);
+        FileManager.deleteFile(
+                Paths.get(carbonHome, "repository", "axis2services", "deployment", "server", SERVICE_ARCHIVE)
+                        .toString());
         serverManager.restoreToLastConfiguration();
     }
 
