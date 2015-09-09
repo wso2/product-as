@@ -13,7 +13,9 @@
     <test name="Test-Java-Security-Manager" preserve-order="true" verbose="2" parallel="false">
         <classes>
             <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerTestCase"/>
-            tetes<class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerPolicyTestCase"/>
+            <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerPolicyTestCase"/>
+            <!-- Once Kernel 4.4.2 is released comment out this Integration Test. -->
+            <!--<class name="org.wso2.carbon.appserver.integration.test.server.security.manager.CARBON3340JavaSecurityManager"/>-->
         </classes>
     </test>
 
