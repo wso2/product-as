@@ -15,7 +15,7 @@
             <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerTestCase"/>
             <class name="org.wso2.carbon.appserver.integration.test.server.security.manager.JavaSecurityManagerPolicyTestCase"/>
             <!-- Once Kernel 4.4.2 is released comment out this Integration Test. -->
-            <!--<class name="org.wso2.carbon.appserver.integration.test.server.security.manager.CARBON3340JavaSecurityManager"/>-->
+            <!--<class name="org.wso2.carbon.appserver.integration.test.server.security.manager.Carbon3340TestCase"/>-->
         </classes>
     </test>
 

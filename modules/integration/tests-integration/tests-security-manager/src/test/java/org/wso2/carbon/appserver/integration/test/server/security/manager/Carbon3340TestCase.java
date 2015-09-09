@@ -35,10 +35,10 @@ import static org.testng.Assert.assertTrue;
  * webapps when java security manager is enabled.
  */
 
-public class CARBON3340JavaSecurityManager extends ASIntegrationTest {
+public class Carbon3340TestCase extends ASIntegrationTest {
 
 
-    private static final Log log = LogFactory.getLog(CARBON3340JavaSecurityManager.class);
+    private static final Log log = LogFactory.getLog(Carbon3340TestCase.class);
 
     private WebAppAdminClient webAppAdminClient;
     private String webAppUrl;
@@ -52,7 +52,7 @@ public class CARBON3340JavaSecurityManager extends ASIntegrationTest {
     private TestUserMode userMode;
 
     @Factory(dataProvider = "userModeDataProvider")
-    public CARBON3340JavaSecurityManager(TestUserMode userMode) {
+    public Carbon3340TestCase(TestUserMode userMode) {
         this.userMode = userMode;
     }
 
