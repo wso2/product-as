@@ -44,6 +44,7 @@
                 <exclude>**/dbscripts/**</exclude>
                 <exclude>**/catalina-server.xml</exclude>
                 <exclude>**/conf/tomcat/carbon/**</exclude>
+                <exclude>**/registry.xml</exclude>
                 <!-- Changes related to Carbon kernel 4.2.0 patches -->
                 <exclude>**/lib/org.wso2.carbon.server-4.2.0.jar</exclude>
                 <exclude>**/repository/conf/security/cipher-text.properties</exclude>
@@ -122,6 +123,7 @@
             </includes>
             <excludes>
                 <exclude>**/catalina-server.xml</exclude>
+                <exclude>**/registry.xml</exclude>
                 <!-- Changes related to Carbon kernel 4.2.0 patches -->
                 <exclude>**/axis2/*</exclude>
                 <!-- End - Changes related to Carbon kernel 4.2.0 patches -->
@@ -700,6 +702,13 @@
         <file>
             <source>src/resources/tomcat/catalina-server.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+        <!-- Copying registry.xml with indexing configuration -->
+        <file>
+            <source>src/resources/conf/registry.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
