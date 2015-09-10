@@ -21,7 +21,7 @@
     <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver-parent</artifactId>
     <packaging>pom</packaging>
-    <version>5.3.0</version>
+    <version>5.3.1-SNAPSHOT</version>
     <name>WSO2 AppServer - Parent</name>
     <url>http://wso2.org/projects/appserver/java</url>
     <description>WSO2 AppServer</description>
@@ -637,7 +637,7 @@
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>hibernate-example</artifactId>
                 <type>war</type>
-                <version>1.0.1</version>
+                <version>1.0.2-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
 
@@ -656,7 +656,7 @@
         <url>https://github.com/wso2/product-as.git</url>
         <developerConnection>scm:git:https://github.com/wso2/product-as.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/product-as.git</connection>
-        <tag>v5.3.0-rc2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <profiles>
@@ -712,7 +712,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <product.as.version>5.3.0</product.as.version>
+        <product.as.version>5.3.1-SNAPSHOT</product.as.version>
         <appserver.version>${product.as.version}</appserver.version>
 
 <!--
