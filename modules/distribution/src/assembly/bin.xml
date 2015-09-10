@@ -703,7 +703,8 @@
             <fileMode>644</fileMode>
         </file>
 
-        <!-- Copying context.xml and web.xml for carbon webapp-->
+        <!-- Copying context.xml and web.xml for carbon webapp
+        //todo remove these files from AS source when the required security configs are added into kernel-->
         <file>
             <source>src/resources/tomcat/carbon/META-INF/context.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat/carbon</outputDirectory>
