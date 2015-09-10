@@ -713,7 +713,7 @@
         </file>
 
         <file>
-            <source>src/resources/tomcat/carbon/carbon/WEB-INF/web.xml</source>
+            <source>src/resources/tomcat/carbon/WEB-INF/web.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat/carbon</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
