@@ -40,11 +40,24 @@ import static org.testng.Assert.assertTrue;
 public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
     private HashMap<String, String> serverPropertyMap = new HashMap<String, String>();
+    private AutomationContext context;
+    private AutomationContext contextUser;
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
+
+        context = new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                ASIntegrationConstants.AS_INSTANCE_0002,
+                ContextXpathConstants.SUPER_TENANT,
+                ContextXpathConstants.ADMIN);
+
+        contextUser = new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                ASIntegrationConstants.AS_INSTANCE_0002,
+                ContextXpathConstants.SUPER_TENANT,
+                "userKey1");
         // to start the server from a different port offset
-        int portOffset = 1;
+        /*int portOffset = 1;*/
+        int portOffset = Integer.parseInt(context.getInstance().getProperty("portOffset"));
         int idleTime = 1;
         serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
         serverPropertyMap.put("-Dtenant.idle.time", Integer.toString(idleTime));
@@ -59,20 +72,20 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Clean tenants after idle time")
     public void testTenantIdleTime() throws Exception {
 
-        AutomationContext context =
+       /* AutomationContext context =
                 new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
                                       ASIntegrationConstants.AS_INSTANCE_0002,
                                       ContextXpathConstants.SUPER_TENANT,
                                       ContextXpathConstants.ADMIN);
-
+*/
         LoginLogoutClient loginLogoutClient = new LoginLogoutClient(context);
         String sessionCookie = loginLogoutClient.login();
 
-        AutomationContext contextUser =
+        /*AutomationContext contextUser =
                 new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
                                       ASIntegrationConstants.AS_INSTANCE_0002,
                                       ContextXpathConstants.SUPER_TENANT,
-                                      "userKey1");
+                                      "userKey1");*/
 
         LoginLogoutClient loginLogoutClientUser = new LoginLogoutClient(contextUser);
         loginLogoutClientUser.login();

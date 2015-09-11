@@ -88,7 +88,6 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     @BeforeClass(alwaysRun = true, enabled = false)
     public void init() throws Exception {
         super.init();
-        startupParameterMap.put("-DportOffset", "1");
         startupParameterMap.put("-Dwebapp.idle.time", "1");
         startupParameterMap.put("-Dtenant.idle.time", "2");
 
@@ -96,6 +95,9 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
         // correctly set the port offset, as a workaround need to create with a dummy context.
         AutomationContext newServerContext = new AutomationContext(productGroupName, instanceName,
                 superTenantDomainKey, userKey);
+
+        startupParameterMap.put("-DportOffset", newServerContext.getInstance().getProperty("portOffset"));
+
         CarbonTestServerManager server = new CarbonTestServerManager(newServerContext, System.getProperty("carbon.zip"),
                 startupParameterMap);
 
@@ -149,7 +151,7 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator + webAppFileName;
         superTenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession,
-                                                                 webAppName), "Web Application Deployment failed");
+                webAppName), "Web Application Deployment failed");
 
         tenantWebAppAdminClient.uploadWarFile(applicationNameReceiverWebAppUrl);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(tenantServerBackEndUrl, tenantSession, webAppName),
@@ -160,7 +162,7 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
                 "artifacts" + File.separator + "AS" + File.separator + "war" + File.separator
                 + ghostInfoWebAppFileName);
         assertTrue(WebAppDeploymentUtil
-                .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, ghostInfoWebAppName),
+                        .isWebApplicationDeployed(superTenantServerBackEndUrl, superTenantSession, ghostInfoWebAppName),
                 "Web Application Deployment failed");
 
     }
@@ -248,7 +250,7 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
 
         String requestUrl =
                 superTenantServerWebAppUrl + "/" + ghostInfoWebAppName + "/webapp-status/" + tenantDomain + "/" +
-                webAppName;
+                        webAppName;
         boolean isWebAppGhost = false;
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
