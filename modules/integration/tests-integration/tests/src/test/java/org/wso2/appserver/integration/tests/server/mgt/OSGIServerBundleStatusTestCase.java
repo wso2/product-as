@@ -18,8 +18,30 @@
 
 package org.wso2.appserver.integration.tests.server.mgt;
 
+import org.testng.annotations.BeforeClass;
+import org.wso2.carbon.automation.engine.context.AutomationContext;
+import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
+import org.wso2.carbon.automation.extensions.servers.carbonserver.TestServerManager;
+import org.wso2.carbon.integration.common.tests.CarbonTestServerManager;
 import org.wso2.carbon.integration.common.tests.OSGIServerBundleStatusTest;
+
+import javax.xml.xpath.XPathExpressionException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OSGIServerBundleStatusTestCase extends OSGIServerBundleStatusTest {
 
+    private HashMap<String, String> serverPropertyMap = new HashMap();
+    private MultipleServersManager manager = new MultipleServersManager();
+    private static int telnetPort = 2000;
+
+    @BeforeClass(alwaysRun = true)
+    public void init() throws XPathExpressionException, AutomationFrameworkException {
+        this.serverPropertyMap.put("-DportOffset", "101");
+        this.serverPropertyMap.put("-DosgiConsole", Integer.toString(telnetPort));
+        AutomationContext autoCtx = new AutomationContext();
+        CarbonTestServerManager server = new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), this.serverPropertyMap);
+        this.manager.startServers(new TestServerManager[]{server});
+    }
 }

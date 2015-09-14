@@ -70,6 +70,8 @@ public class ChangeUserPasswordMySQLDBTestCase extends ASIntegrationTest {
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
 
         dataSourceBean = CarbonCommandToolsUtil.getDataSourceInformation("MySQL");
+
+        portOffset = Integer.parseInt(context.getInstance().getProperty("portOffset"));
     }
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.PLATFORM})

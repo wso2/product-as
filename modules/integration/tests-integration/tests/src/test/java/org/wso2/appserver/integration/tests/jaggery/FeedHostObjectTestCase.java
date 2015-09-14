@@ -90,7 +90,7 @@ public class FeedHostObjectTestCase extends ASIntegrationTest {
     public void testFeedMembers() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL("http://localhost:9763/testapp/feed.jag?action=members");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/feed.jag?action=members");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -111,7 +111,8 @@ public class FeedHostObjectTestCase extends ASIntegrationTest {
     public void testFeedXML() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL("http://localhost:9763/testapp/feed.jag?action=xml");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/feed.jag?action=xml");
+
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));
@@ -131,7 +132,7 @@ public class FeedHostObjectTestCase extends ASIntegrationTest {
     public void testFeedToString() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL("http://localhost:9763/testapp/feed.jag?action=string");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/feed.jag?action=string");
         URLConnection jaggeryServerConnection = jaggeryURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 jaggeryServerConnection.getInputStream()));

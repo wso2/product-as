@@ -169,7 +169,7 @@
                 <admin>
                     <user key="admin">
                         <userName>admin</userName>
-                            <password>admin</password>
+                        <password>admin</password>
                     </user>
                 </admin>
                 <users>
@@ -255,10 +255,11 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9763</port>
-                    <port type="https">9443</port>
+                    <port type="http">9863</port>
+                    <port type="https">9543</port>
                 </ports>
                 <properties>
+                    <property name="portOffset">100</property>
                 </properties>
             </instance>
             <instance name="appServerInstance0002" type="standalone" nonBlockingTransportEnabled="false">
@@ -266,10 +267,11 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9764</port>
-                    <port type="https">9444</port>
+                    <port type="http">9864</port>
+                    <port type="https">9544</port>
                 </ports>
                 <properties>
+                    <property name="portOffset">101</property>
                 </properties>
             </instance>
             <instance name="appServerInstance0003" type="standalone" nonBlockingTransportEnabled="false">
@@ -277,10 +279,11 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9765</port>
-                    <port type="https">9445</port>
+                    <port type="http">9865</port>
+                    <port type="https">9545</port>
                 </ports>
                 <properties>
+                    <property name="portOffset">102</property>
                 </properties>
             </instance>
             <instance name="appServerDummy" type="standalone" nonBlockingTransportEnabled="false">
@@ -288,10 +291,11 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9763</port>
-                    <port type="https">9443</port>
+                    <port type="http">9866</port>
+                    <port type="https">9546</port>
                 </ports>
                 <properties>
+                    <property name="portOffset">103</property>
                 </properties>
             </instance>
         </productGroup>
@@ -302,7 +306,7 @@
             <extentionClasses>
                 <class>
                     <name>org.wso2.carbon.automation.extensions.servers.carbonserver.CarbonServerExtension</name>
-                    <!--<parameter name="-DportOffset" value="0" />-->
+                    <parameter name="-DportOffset" value="100" />
                     <!--<parameter name="cmdArg" value="debug 8000" />-->
                 </class>
                 <class>
