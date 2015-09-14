@@ -88,7 +88,7 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     private String tenantServerBackEndUrl;
     private String tenantServerWebAppUrl;
 
-    private int portOffset = 1;
+    private int portOffset = 101;
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @BeforeClass(alwaysRun = true, enabled = true)
