@@ -105,8 +105,8 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
                     userPopulator.populateUsers();
                     testServerManager.stopServer();
                     carbonHome = testServerManager.getCarbonHome();
-                    //                    String commandDirectory = carbonHome + File.separator + "bin";
-                    //                    String[] cmdArray;
+                    //String commandDirectory = carbonHome + File.separator + "bin";
+                    //String[] cmdArray;
 
                 } catch (IOException | XPathExpressionException e) {
                     throw new AutomationFrameworkException("Error when starting the carbon server", e);
