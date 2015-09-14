@@ -19,6 +19,7 @@
 package org.wso2.as.integration;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,7 +54,7 @@ public class JAXRSCXFClientTestServlet extends HttpServlet {
         String hostIp = request.getParameter("Host");
         String port = request.getParameter("Port");
         if (hostIp != null && port != null) {
-            host = "http://" + hostIp + ":" +port + "/";
+            host = "http://" + hostIp + ":" + port + "/";
         }
 
         WebClient client = WebClient.create(host);
