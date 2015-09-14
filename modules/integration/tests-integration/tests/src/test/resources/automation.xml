@@ -313,9 +313,9 @@
                     <name>org.wso2.carbon.integration.common.extensions.usermgt.UserPopulateExtension</name>
                 </class>
                 <!--<class>-->
-                <!--<name>org.wso2.carbon.automation.extensions.servers.coverageServer.RemoteCoverageServerExtension</name>-->
-                <!--<parameter name="coverageServerPort" value="6331" />-->
-                <!--<parameter name="coverageDumpFilePath" value="/Users/krishantha/Desktop/jacoco" />-->
+                    <!--<name>org.wso2.carbon.automation.extensions.servers.coverageServer.RemoteCoverageServerExtension</name>-->
+                    <!--<parameter name="coverageServerPort" value="6331" />-->
+                    <!--<parameter name="coverageDumpFilePath" value="/Users/krishantha/Desktop/jacoco" />-->
                 <!--</class>-->
             </extentionClasses>
         </platformExecutionManager>
