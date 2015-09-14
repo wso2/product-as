@@ -46,13 +46,6 @@
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2-jaxbri</artifactId>
         </dependency>
-
-        <!--TODO: https://wso2.org/jira/browse/WSAS-2042 Needs to be removed -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.2.4</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -81,10 +74,6 @@
                                 <bundleDef>asm.wso2:asm</bundleDef>
                                 <bundleDef>cglib.wso2:cglib</bundleDef>
                                 <bundleDef>org.apache.axis2.wso2:axis2-jaxbri</bundleDef>
-
-                                <!--TODO: https://wso2.org/jira/browse/WSAS-2042 Needs to be removed -->
-                                <bundleDef>com.google.code.gson:gson</bundleDef>
-
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
