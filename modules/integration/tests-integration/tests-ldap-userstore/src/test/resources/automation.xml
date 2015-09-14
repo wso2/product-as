@@ -223,7 +223,7 @@
                     <port type="https">9543</port>
                 </ports>
                 <properties>
-                    <property name="portOffset" value="100"/>
+                    <property name="portOffset">100</property>
                 </properties>
             </instance>
             <instance name="appServerInstance0002" type="standalone" nonBlockingTransportEnabled="false">
@@ -235,7 +235,7 @@
                     <port type="https">9844</port>
                 </ports>
                 <properties>
-                    <property name="portOffset" value="101"/>
+                    <property name="portOffset">101</property>
                 </properties>
             </instance>
             <instance name="appServerInstance0003" type="standalone" nonBlockingTransportEnabled="false">
@@ -247,7 +247,7 @@
                     <port type="https">9545</port>
                 </ports>
                 <properties>
-                    <property name="portOffset" value="102"/>
+                    <property name="portOffset">102</property>
                 </properties>
             </instance>
             <instance name="appServerDummy" type="standalone" nonBlockingTransportEnabled="false">
@@ -259,7 +259,7 @@
                     <port type="https">9543</port>
                 </ports>
                 <properties>
-                    <property name="portOffset" value="100"/>
+                    <property name="portOffset">100</property>
                 </properties>
             </instance>
         </productGroup>
