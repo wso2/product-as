@@ -191,40 +191,40 @@
                 </users>
             </tenant>
             <!--<tenant domain="abc.com" key="abcDomainKey">-->
-            <!--<admin>-->
-            <!--<user key="admin">-->
-            <!--<userName>admin</userName>-->
-            <!--<password>admin</password>-->
-            <!--</user>-->
-            <!--</admin>-->
-            <!--<users>-->
-            <!--<user key="user1">-->
-            <!--<userName>testuser11</userName>-->
-            <!--<password>testuser11</password>-->
-            <!--</user>-->
-            <!--<user key="user2">-->
-            <!--<userName>testuser21</userName>-->
-            <!--<password>testuser21</password>-->
-            <!--</user>-->
-            <!--</users>-->
+                <!--<admin>-->
+                    <!--<user key="admin">-->
+                        <!--<userName>admin</userName>-->
+                        <!--<password>admin</password>-->
+                    <!--</user>-->
+                <!--</admin>-->
+                <!--<users>-->
+                    <!--<user key="user1">-->
+                        <!--<userName>testuser11</userName>-->
+                        <!--<password>testuser11</password>-->
+                    <!--</user>-->
+                    <!--<user key="user2">-->
+                        <!--<userName>testuser21</userName>-->
+                        <!--<password>testuser21</password>-->
+                    <!--</user>-->
+                <!--</users>-->
             <!--</tenant>-->
             <!--<tenant domain="malintha.com" key="malinthaDomainKey">-->
-            <!--<admin>-->
-            <!--<user key="admin">-->
-            <!--<userName>admin</userName>-->
-            <!--<password>admin</password>-->
-            <!--</user>-->
-            <!--</admin>-->
-            <!--<users>-->
-            <!--<user key="userm1">-->
-            <!--<userName>testuse11</userName>-->
-            <!--<password>testuse11</password>-->
-            <!--</user>-->
-            <!--<user key="userm2">-->
-            <!--<userName>testuse21</userName>-->
-            <!--<password>testuse21</password>-->
-            <!--</user>-->
-            <!--</users>-->
+                <!--<admin>-->
+                    <!--<user key="admin">-->
+                        <!--<userName>admin</userName>-->
+                        <!--<password>admin</password>-->
+                    <!--</user>-->
+                <!--</admin>-->
+                <!--<users>-->
+                    <!--<user key="userm1">-->
+                        <!--<userName>testuse11</userName>-->
+                        <!--<password>testuse11</password>-->
+                    <!--</user>-->
+                    <!--<user key="userm2">-->
+                        <!--<userName>testuse21</userName>-->
+                        <!--<password>testuse21</password>-->
+                    <!--</user>-->
+                <!--</users>-->
             <!--</tenant>-->
         </tenants>
         <roles>
