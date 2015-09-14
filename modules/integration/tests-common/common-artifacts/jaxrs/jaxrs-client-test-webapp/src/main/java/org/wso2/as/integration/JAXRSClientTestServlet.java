@@ -18,8 +18,6 @@
 
 package org.wso2.as.integration;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +29,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Servlet implementation class JAXRSTestServlet
@@ -58,7 +58,7 @@ public class JAXRSClientTestServlet extends HttpServlet {
         String hostIp = request.getParameter("Host");
         String port = request.getParameter("Port");
         if (hostIp != null && port != null) {
-            host = "http://" + hostIp + ":" +port + "/";
+            host = "http://" + hostIp + ":" + port + "/";
             endPointURL = host + serviceEndPoint;
         }
 
