@@ -32,7 +32,7 @@ import java.util.HashMap;
 
 public class OSGIServerBundleStatusTestCase extends OSGIServerBundleStatusTest {
 
-    /*private HashMap<String, String> serverPropertyMap = new HashMap();
+    private HashMap<String, String> serverPropertyMap = new HashMap();
     private MultipleServersManager manager = new MultipleServersManager();
     private static int telnetPort = 2000;
 
@@ -43,5 +43,5 @@ public class OSGIServerBundleStatusTestCase extends OSGIServerBundleStatusTest {
         AutomationContext autoCtx = new AutomationContext();
         CarbonTestServerManager server = new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), this.serverPropertyMap);
         this.manager.startServers(new TestServerManager[]{server});
-    }*/
+    }
 }
