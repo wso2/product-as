@@ -65,7 +65,7 @@ public class WSRequestHostObjectTestCase extends ASIntegrationTest {
     public void testWSRequestExist() throws Exception {
 
         String response = null;
-        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/wsrequest.jag");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/wsrequest.jag?port=9863");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 
@@ -92,7 +92,7 @@ public class WSRequestHostObjectTestCase extends ASIntegrationTest {
     public void testWSRequestOperations() throws Exception {
 
         String response = "";
-        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/wsrequest.jag?action=state");
+        URL jaggeryURL = new URL(getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/wsrequest.jag?action=state&port=9863");
         URLConnection jaggeryServerConnection = JaggeryTestUtil.openConnection(jaggeryURL);
         assertNotNull(jaggeryServerConnection, "Connection establishment failure");
 

@@ -107,8 +107,8 @@ public class RequestObjectTestCase extends ASIntegrationTest {
         assertTrue(response.contains("Protocol : HTTP/1.1"));
         assertTrue(response.contains("QueryString : test=hi"));
         assertTrue(response.contains("URI : /testapp/request.jag"));
-        assertTrue(response.contains("URL : http://localhost:9763/testapp/request.jag"));
-        assertTrue(response.contains("LocalPort : 9763"));
+        assertTrue(response.contains("URL : " + getWebAppURL(WebAppTypes.JAGGERY) + "/testapp/request.jag"));
+        assertTrue(response.contains("LocalPort : 9863"));
         assertTrue(response.contains("ContentLength : -1"));
         assertTrue(response.contains("ContextPath : /testapp"));
     }

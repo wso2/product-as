@@ -70,6 +70,8 @@ public class ChangeUserPasswordWithSpecialCharacterH2DBTestCase extends ASIntegr
                                         ContextXpathConstants.SUPER_ADMIN);
         authenticatorClient = new AuthenticatorClient(context.getContextUrls().getBackEndUrl());
         dataSourceBean = CarbonCommandToolsUtil.getDataSourceInformation("default");
+
+        portOffset = Integer.parseInt(context.getInstance().getProperty("portOffset"));
     }
 
     @Test(groups = "wso2.as", description = "H2DB Password changing script run test")

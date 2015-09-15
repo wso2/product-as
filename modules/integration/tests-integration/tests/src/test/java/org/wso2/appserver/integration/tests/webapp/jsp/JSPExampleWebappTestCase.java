@@ -54,7 +54,7 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
         } catch (IOException e) {
             // this is the expected behavior
             String errorMessage = "Server returned HTTP response code: 500 for URL:" +
-                    " http://localhost:9763/example/jsp/error/err.jsp?name=audi";
+                    " http://localhost:9863/example/jsp/error/err.jsp?name=audi";
             assertEquals(e.getMessage(), errorMessage, "Error HTTP status code 500 did not return for url - " + url);
         }
         response = HttpRequestUtil.sendGetRequest(url, "name=integra");

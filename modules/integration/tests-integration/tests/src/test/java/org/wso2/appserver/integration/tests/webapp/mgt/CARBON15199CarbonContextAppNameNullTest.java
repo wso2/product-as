@@ -88,7 +88,7 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
     private String tenantServerBackEndUrl;
     private String tenantServerWebAppUrl;
 
-    private int portOffset = 1;
+    private int portOffset = 101;
 
     @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
     @BeforeClass(alwaysRun = true, enabled = true)
@@ -105,8 +105,8 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
                     userPopulator.populateUsers();
                     testServerManager.stopServer();
                     carbonHome = testServerManager.getCarbonHome();
-//                    String commandDirectory = carbonHome + File.separator + "bin";
-//                    String[] cmdArray;
+                    //String commandDirectory = carbonHome + File.separator + "bin";
+                    //String[] cmdArray;
 
                 } catch (IOException | XPathExpressionException e) {
                     throw new AutomationFrameworkException("Error when starting the carbon server", e);

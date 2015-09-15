@@ -67,7 +67,14 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        serverPropertyMap.put("-DportOffset", Integer.toString(portOffset));
+        context = new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
+                                        ASIntegrationConstants.AS_INSTANCE_0002,
+                                        ContextXpathConstants.SUPER_TENANT,
+                                        ContextXpathConstants.ADMIN);
+
+        String offsetString = context.getInstance().getProperty("portOffset");
+        portOffset = Integer.parseInt(offsetString);
+        serverPropertyMap.put("-DportOffset", offsetString);
 
         if (CarbonTestServerManager.isServerRunning()) {
             carbonHome = CarbonTestServerManager.getCarbonHome();
@@ -78,10 +85,6 @@ public class CleanRegistryCommandTestCase extends ASIntegrationTest {
 
         }
 
-        context = new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
-                                        ASIntegrationConstants.AS_INSTANCE_0002,
-                                        ContextXpathConstants.SUPER_TENANT,
-                                        ContextXpathConstants.ADMIN);
         initEnvironment();
 
         resourceAdminServiceClient =

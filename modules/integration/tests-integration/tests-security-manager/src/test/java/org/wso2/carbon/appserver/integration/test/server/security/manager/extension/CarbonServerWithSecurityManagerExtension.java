@@ -113,7 +113,8 @@ public class CarbonServerWithSecurityManagerExtension extends ExecutionListenerE
         if (!System.getProperty(FrameworkConstants.SYSTEM_PROPERTY_OS_NAME).toLowerCase()
                 .contains(OperatingSystems.WINDOWS.toString().toLowerCase())) {
             try {
-                testServerWithSecurityManager.startServer();
+                String carbonHome = testServerWithSecurityManager.startServer();
+                System.setProperty(ExtensionConstants.CARBON_HOME, carbonHome);
             } catch (IOException e) {
                 throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
             } catch (XPathExpressionException e) {

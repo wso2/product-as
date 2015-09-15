@@ -247,8 +247,8 @@
                     <host type="default">localhost</host>
                 </hosts>
                 <ports>
-                    <port type="http">9763</port>
-                    <port type="https">9443</port>
+                    <port type="http">9863</port>
+                    <port type="https">9543</port>
                 </ports>
                 <properties>
                 </properties>
@@ -261,7 +261,7 @@
             <extentionClasses>
                 <class>
                     <name>org.wso2.carbon.automation.extensions.servers.carbonserver.CarbonServerExtension</name>
-                    <!--<parameter name="-DportOffset" value="0" />-->
+                    <parameter name="-DportOffset" value="100" />
                     <!--<parameter name="cmdArg" value="debug 5005" />-->
                         <parameter name="-Dwebapp.idle.time" value="1"/>
                         <parameter name="-Dtenant.idle.time" value="2"/>
