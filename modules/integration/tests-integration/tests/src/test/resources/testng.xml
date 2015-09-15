@@ -3,6 +3,12 @@
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
 
+    <test name="wsdl2java-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
+        </packages>
+    </test>
+
     <test name="logviewer-tests" parallel="false">
         <!--todo-->
         <packages>
@@ -118,11 +124,7 @@
           </packages>
       </test>-->
 
-    <test name="wsdl2java-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
-        </packages>
-    </test>
+
     <test name="carbon-app-tests-service-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
