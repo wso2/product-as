@@ -37,5 +37,6 @@
         <module>handlers_jaxws</module>
         <module>mtom_jaxws</module>
         <module>ws_security</module>
+        <module>carbon_jaxrs_sample</module>
     </modules>
 </project>
