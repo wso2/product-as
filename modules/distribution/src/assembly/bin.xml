@@ -43,6 +43,7 @@
                 <!--exclude>**/axis2/axis2.xml</exclude-->
                 <exclude>**/dbscripts/**</exclude>
                 <exclude>**/catalina-server.xml</exclude>
+                <exclude>**/conf/tomcat/carbon/**</exclude>
                 <exclude>**/registry.xml</exclude>
                 <!-- Changes related to Carbon kernel 4.2.0 patches -->
                 <exclude>**/lib/org.wso2.carbon.server-4.2.0.jar</exclude>
@@ -708,6 +709,22 @@
         <file>
             <source>src/resources/conf/registry.xml</source>
             <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+        <!-- Copying context.xml and web.xml for carbon webapp
+        //todo remove these files from AS source when the required security configs are added into kernel-->
+        <file>
+            <source>src/resources/tomcat/carbon/META-INF/context.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat/carbon/META-INF</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>644</fileMode>
+        </file>
+
+        <file>
+            <source>src/resources/tomcat/carbon/WEB-INF/web.xml</source>
+            <outputDirectory>${pom.artifactId}-${pom.version}/repository/conf/tomcat/carbon/WEB-INF</outputDirectory>
             <filtered>true</filtered>
             <fileMode>644</fileMode>
         </file>
