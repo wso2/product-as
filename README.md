@@ -1,7 +1,7 @@
 WSO2 Application Server
 ---------------
 
-Latest Released Version 5.2.1.
+Latest Released Version 5.3.0.
 
 Welcome to the WSO2 Application Server.
 
