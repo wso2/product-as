@@ -1,7 +1,16 @@
 WSO2 Application Server
 ---------------
 
-Latest Released Version 5.2.1.
+---
+
+| Branch | Build Status |
+| :------------ |:-------------
+| master | [![Build Status](https://wso2.org/jenkins/job/product-as/badge/icon)](https://wso2.org/jenkins/job/product-as) |
+
+
+---
+
+Latest Released Version 5.3.0.
 
 Welcome to the WSO2 Application Server.
 
