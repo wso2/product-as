@@ -204,17 +204,17 @@
                                     org.wso2.carbon.commons:org.wso2.carbon.soaptracer.feature:${carbon.commons.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.databridge.datapublisher.feature:${carbon.commons.version}
-                                </featureArtifactDef>
+                                    org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.datapublisher.feature:${carbon.analytics-common.version}
+                                </featureArtifactDef>+
                                 <featureArtifactDef>
                                     org.wso2.carbon.commons:org.wso2.carbon.message.flows.feature:${carbon.commons.version}
                                 </featureArtifactDef>
-                                <featureArtifactDef>
+                                <!--<featureArtifactDef>
                                     org.wso2.carbon.deployment:org.wso2.carbon.bam.webapp.agent.feature:${carbon.deployment.version}
                                 </featureArtifactDef>
                                 <featureArtifactDef>
                                     org.wso2.carbon.deployment:org.wso2.carbon.bam.service.agent.feature:${carbon.deployment.version}
-                                </featureArtifactDef>
+                                </featureArtifactDef>-->
 
                                 <!-- Multi-Tenancy Nested Category -->
                                 <featureArtifactDef>
@@ -399,7 +399,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.databridge.datapublisher.feature.group</id>
-                                    <version>${carbon.commons.version}</version>
+                                    <version>${carbon.analytics-common.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.wsdl.tools.feature.group</id>
@@ -539,14 +539,14 @@
                                     <id>org.wso2.stratos.appserver.dashboard.ui.feature.group</id>
                                     <version>${project.version}</version>
                                 </feature>
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.bam.service.agent.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
-                                </feature>
+                                </feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.application.deployer.webapp.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
@@ -677,7 +677,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.databridge.datapublisher.feature.group</id>
-                                    <version>${carbon.commons.version}</version>
+                                    <version>${carbon.analytics-common.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.wsdl.tools.server.feature.group</id>
@@ -800,14 +800,14 @@
                                     <id>org.wso2.stratos.appserver.dashboard.ui.feature.group</id>
                                     <version>${project.version}</version>
                                 </feature>
-                                <feature>
+                               <!-- <feature>
                                     <id>org.wso2.carbon.bam.service.agent.server.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.server.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
-                                </feature>
+                                </feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.application.deployer.webapp.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
@@ -923,7 +923,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.databridge.datapublisher.feature.group</id>
-                                    <version>${carbon.commons.version}</version>
+                                    <version>${carbon.analytics-common.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.wsdl.tools.feature.group</id>
@@ -1015,10 +1015,10 @@
                                     <id>org.wso2.carbon.transaction.manager.feature.group</id>
                                     <version>${carbon.commons.version}</version>
                                 </feature>
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
-                                </feature>
+                                </feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.application.deployer.webapp.feature.group
                                     </id>
@@ -1084,7 +1084,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.databridge.datapublisher.feature.group</id>
-                                    <version>${carbon.commons.version}</version>
+                                    <version>${carbon.analytics-common.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.wsdl.tools.feature.group</id>
@@ -1195,14 +1195,14 @@
                                     <id>org.wso2.carbon.transaction.manager.feature.group</id>
                                     <version>${carbon.commons.version}</version>
                                 </feature>
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.bam.service.agent.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.server.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
-                                </feature>
+                                </feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.identity.xacml.filter.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
@@ -1252,7 +1252,7 @@
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.databridge.datapublisher.feature.group</id>
-                                    <version>${carbon.commons.version}</version>
+                                    <version>${carbon.analytics-common.version}</version>
                                 </feature>
                                 <feature>
                                     <id>org.wso2.carbon.system.statistics.feature.group</id>
@@ -1323,10 +1323,10 @@
                                     <id>org.wso2.carbon.transaction.manager.feature.group</id>
                                     <version>${carbon.commons.version}</version>
                                 </feature>
-                                <feature>
+                                <!--<feature>
                                     <id>org.wso2.carbon.bam.webapp.agent.server.feature.group</id>
                                     <version>${carbon.deployment.version}</version>
-                                </feature>
+                                </feature>-->
                                 <feature>
                                     <id>org.wso2.carbon.application.deployer.webapp.feature.group
                                     </id>
