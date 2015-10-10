@@ -83,7 +83,7 @@ public class JsfEjbTestCase extends ASIntegrationTest {
                 "Web Application Deployment failed");
     }
 
-    @Test(groups = "wso2.as", description = "test JSF Bean Validation")
+    @Test(groups = "wso2.as", description = "test JSF Bean Validation", enabled = false)
     public void testJsfEjb() throws Exception {
         String CalculatorEndpoint = webAppURL + "/index.jsf";
 
