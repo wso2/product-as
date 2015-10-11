@@ -83,7 +83,7 @@ public class JsfEjbTestCase extends ASIntegrationTest {
                 "Web Application Deployment failed");
     }
 
-    @Test(groups = "wso2.as", description = "test JSF Bean Validation", enabled = false)
+    @Test(groups = "wso2.as", description = "test JSF Bean Validation")
     public void testJsfEjb() throws Exception {
         String CalculatorEndpoint = webAppURL + "/index.jsf";
 
@@ -121,7 +121,7 @@ public class JsfEjbTestCase extends ASIntegrationTest {
         log.info("postResponse - " + postResponse);
 
         assertTrue(postResponse.contains("Welcome John Doe"), "Response doesn't contain expected data");
-        assertTrue(postResponse.contains("Distinct characters in the name: d, e, n, o, j, h"),
+        assertTrue(postResponse.contains("Distinct characters in the name: j, o, h, n, d, e"),
                 "Response doesn't contain expected data");
     }
 
