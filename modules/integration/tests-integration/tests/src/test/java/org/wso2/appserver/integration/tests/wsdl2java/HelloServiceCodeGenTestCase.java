@@ -35,14 +35,20 @@ import org.wso2.carbon.automation.engine.frameworkutils.filters.CustomFileFilter
 import org.wso2.carbon.automation.engine.frameworkutils.filters.SuffixFilter;
 import org.wso2.carbon.automation.engine.frameworkutils.filters.TypeFilter;
 import org.wso2.carbon.automation.extensions.servers.utils.ArchiveExtractor;
-import org.wso2.carbon.automation.extensions.servers.utils.ServerLogReader;
 import org.wso2.carbon.utils.FileManipulator;
 import org.wso2.carbon.utils.ServerConstants;
 
 import javax.activation.DataHandler;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
@@ -121,8 +127,6 @@ public class HelloServiceCodeGenTestCase extends ASIntegrationTest {
 
         log.info("Generated code path " + codeGenPath);
         File codeGenFile = new File(codeGenPath);
-        ServerLogReader inputStreamHandler;
-        ServerLogReader errorStreamHandler;
         Process tempProcess = null;
         String[] cmdArray;
         try {
@@ -136,17 +140,8 @@ public class HelloServiceCodeGenTestCase extends ASIntegrationTest {
                 tempProcess = Runtime.getRuntime().exec(cmdArray, null, codeGenFile);
             }
 
-
-            errorStreamHandler =
-                    new ServerLogReader("errorStream", tempProcess.getErrorStream());
-            inputStreamHandler = new ServerLogReader("inputStream", tempProcess.getInputStream());
-
-            // start the stream readers
-            inputStreamHandler.start();
-            errorStreamHandler.start();
-
-            boolean buildStatus = waitForMessage(inputStreamHandler, "BUILD SUCCESS");
-            assertTrue(buildStatus, "code generation successful");
+            boolean buildStatus = waitForMessage(tempProcess.getInputStream(), "BUILD SUCCESS");
+            assertTrue(buildStatus, "code generation was not successful");
 
             boolean status = false;
             if (new File(codeGenPath).exists()) {
@@ -190,8 +185,6 @@ public class HelloServiceCodeGenTestCase extends ASIntegrationTest {
         Process tempProcessAnt = null;
         try {
             if (new File(generatedJavaFileLocation).exists()) {
-                ServerLogReader inputStreamHandler;
-
                 String[] cmdArray;
                 if (System.getProperty("os.name").toLowerCase().contains("windows")) {
 
@@ -206,17 +199,7 @@ public class HelloServiceCodeGenTestCase extends ASIntegrationTest {
                             new File(codeGenPath + File.separator + "generated-sources"));
                 }
 
-
-                ServerLogReader errorStreamHandler =
-                        new ServerLogReader("errorStream", tempProcessAnt.getErrorStream());
-                inputStreamHandler = new ServerLogReader("inputStream", tempProcessAnt.getInputStream());
-
-                // start the stream readers
-                inputStreamHandler.start();
-                errorStreamHandler.start();
-
-
-                boolean status = waitForMessage(inputStreamHandler, "Hello World, Krishantha");
+                boolean status = waitForMessage(tempProcessAnt.getInputStream(), "Hello World, Krishantha");
                 assertTrue(status, "Invocation successful");
 
             }
@@ -304,14 +287,24 @@ public class HelloServiceCodeGenTestCase extends ASIntegrationTest {
         }
     }
 
-
-    public boolean waitForMessage(ServerLogReader inputStreamHandler, String message) {
-        long time = System.currentTimeMillis() + 120 * 1000;
-        while (System.currentTimeMillis() < time) {
-            if (inputStreamHandler.getOutput().contains(message)) {
-                return true;
+    /**
+     * This method logs the input stream and checks whether the specified message is there in the stream.
+     *
+     * @param inputStream input streams are from the external processes (maven/ant)
+     * @param message     string to test whether contained in the input stream
+     * @return whether the message is contained in the input stream
+     * @throws IOException
+     */
+    public boolean waitForMessage(InputStream inputStream, String message) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        boolean status = false;
+        while ((line = br.readLine()) != null) {
+            log.info(line);
+            if (!status && line.contains(message)) {
+                status = true;
             }
         }
-        return false;
+        return status;
     }
 }
