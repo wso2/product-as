@@ -73,7 +73,8 @@ public class CarbonServerWithReadWriteLdapUSerStoreExtension extends ExecutionLi
     @Override
     public void onExecutionStart() throws AutomationFrameworkException {
         try {
-            asServerWithApacheLdap.startServer();
+            String carbonHome = asServerWithApacheLdap.startServer();
+            System.setProperty(ExtensionConstants.CARBON_HOME, carbonHome);
         } catch (IOException e) {
             throw new AutomationFrameworkException("Error while starting server " + e.getMessage(), e);
         } catch (XPathExpressionException e) {

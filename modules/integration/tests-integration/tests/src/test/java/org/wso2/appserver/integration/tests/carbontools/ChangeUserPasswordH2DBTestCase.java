@@ -69,6 +69,8 @@ public class ChangeUserPasswordH2DBTestCase extends ASIntegrationTest {
         authenticatorClient = new AuthenticatorClient(automationContext.getContextUrls().getBackEndUrl());
 
         dataSourceBean = CarbonCommandToolsUtil.getDataSourceInformation("default");
+
+        portOffset = Integer.parseInt(automationContext.getInstance().getProperty("portOffset"));
     }
 
     @Test(groups = "wso2.as", description = "H2DB Password changing script run test")

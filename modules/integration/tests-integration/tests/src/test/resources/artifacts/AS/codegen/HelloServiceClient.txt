@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 public class HelloServiceClient {
 
     public static void main(String[] args) throws RemoteException {
-        HelloServiceStub stub = new HelloServiceStub("http://localhost:9763/services/HelloService");
+        HelloServiceStub stub = new HelloServiceStub("http://localhost:9863/services/HelloService");
         HelloServiceStub.Greet greet = new HelloServiceStub.Greet();
         greet.setName("Krishantha");
         HelloServiceStub.GreetResponse response =  stub.greet(greet);

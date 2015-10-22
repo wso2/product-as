@@ -3,6 +3,12 @@
 <suite name="APPServer-features-test-suite">
     <parameter name="useDefaultListeners" value="false"/>
 
+    <!--test name="wsdl2java-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
+        </packages>
+    </test-->
+
     <test name="logviewer-tests" parallel="false">
         <!--todo-->
         <packages>
@@ -57,7 +63,6 @@
         <packages>
             <!--Todo-->
             <package name="org.wso2.appserver.integration.tests.jaxrssampleservice"/>
-
             <!-- ToDo: https://wso2.org/jira/browse/WSAS-2008 -->
             <!-- <package name="org.wso2.appserver.integration.tests.jndi"/> -->
         </packages>
@@ -108,7 +113,9 @@
 
     <test name="sample-service-tests" preserve-order="true" parallel="false">
         <packages>
-            <package name="org.wso2.appserver.integration.tests.sampleservices.*"/>
+            <package name="org.wso2.appserver.integration.tests.sampleservices.*">
+                <exclude name="org.wso2.appserver.integration.tests.sampleservices.traderservice"/>
+            </package>
         </packages>
     </test>
     <!--  <test name="rest-tests" preserve-order="true" parallel="false">
@@ -117,11 +124,7 @@
           </packages>
       </test>-->
 
-    <test name="wsdl2java-tests" preserve-order="true" parallel="false">
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.wsdl2java"/>
-        </packages>
-    </test>
+
     <test name="carbon-app-tests-service-mgt" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.appserver.integration.tests.carbonappservice.CarbonAppTestCase"/>
