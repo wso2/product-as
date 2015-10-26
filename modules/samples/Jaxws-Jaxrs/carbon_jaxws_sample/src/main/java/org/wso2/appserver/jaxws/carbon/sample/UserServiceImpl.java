@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     public String[] getRolesOfUser(String userName) throws UserStoreException {
         CarbonContext carbonContext = CarbonContext.getThreadLocalCarbonContext();
         UserRealm realm = carbonContext.getUserRealm();
-        if(realm.getUserStoreManager().isExistingUser(userName)){
+        if (realm.getUserStoreManager().isExistingUser(userName)) {
             return realm.getUserStoreManager().getRoleListOfUser(userName);
         }
         return new String[0];
