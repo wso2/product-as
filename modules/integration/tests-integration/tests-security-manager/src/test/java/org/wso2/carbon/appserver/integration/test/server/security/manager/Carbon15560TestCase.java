@@ -1,5 +1,22 @@
-package org.wso2.carbon.appserver.integration.test.server.security.manager;
+/*
+*  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*
+*  WSO2 Inc. licenses this file to you under the Apache License,
+*  Version 2.0 (the "License"); you may not use this file except
+*  in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*  http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing,
+*  software distributed under the License is distributed on an
+*  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+*  KIND, either express or implied.  See the License for the
+*  specific language governing permissions and limitations
+*  under the License.
+*/
 
+package org.wso2.carbon.appserver.integration.test.server.security.manager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,12 +39,14 @@ import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
 import org.wso2.carbon.integration.common.admin.client.UserManagementClient;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -35,10 +54,9 @@ import static org.testng.Assert.assertTrue;
  * webapps when java security manager is enabled.
  */
 
-public class Carbon3340TestCase extends ASIntegrationTest {
+public class Carbon15560TestCase extends ASIntegrationTest {
 
-
-    private static final Log log = LogFactory.getLog(Carbon3340TestCase.class);
+    private static final Log log = LogFactory.getLog(Carbon15560TestCase.class);
 
     private WebAppAdminClient webAppAdminClient;
     private String webAppUrl;
@@ -52,7 +70,7 @@ public class Carbon3340TestCase extends ASIntegrationTest {
     private TestUserMode userMode;
 
     @Factory(dataProvider = "userModeDataProvider")
-    public Carbon3340TestCase(TestUserMode userMode) {
+    public Carbon15560TestCase(TestUserMode userMode) {
         this.userMode = userMode;
     }
 
@@ -71,12 +89,10 @@ public class Carbon3340TestCase extends ASIntegrationTest {
         }
         super.init(userMode);
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        webAppAdminClient.uploadWarFile(TestConfigurationProvider.getResourceLocation("AS")
-                + File.separator + "security"
-                + File.separator + "manager" + File.separator + "webapp"
-                + File.separator + webAppFileName);
-        //let webapp to deploy
-        Thread.sleep(2000);
+        Path webAppFilePath = Paths.get(TestConfigurationProvider.getResourceLocation()
+                , "artifacts", "AS", "security", "manager", "webapp", webAppFileName);
+        webAppAdminClient.uploadWarFile(webAppFilePath.toString());
+
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName)
                 , webAppName + " Web Application Deployment failed");
         webAppUrl = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName;
@@ -121,7 +137,7 @@ public class Carbon3340TestCase extends ASIntegrationTest {
         for (int i = 0; i < arr.length(); i++) {
             stringArray.add(arr.getString(i));
         }
-        assertTrue(!(stringArray.contains("Java Security Manager Exception")),
+        assertFalse(stringArray.contains("Java Security Manager Exception"),
                 "User Store Operations Cannot be Invoked with Java Security Manager");
     }
 
@@ -132,8 +148,6 @@ public class Carbon3340TestCase extends ASIntegrationTest {
             throw new SkipException("Skipping this test case in windows");
         }
         webAppAdminClient.deleteWebAppFile(webAppFileName, hostName);
-        //let webapp to undeploy
-        Thread.sleep(2000);
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(backendURL, sessionCookie, webAppName),
                 webAppName + " Web Application unDeployment failed");
     }
