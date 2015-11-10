@@ -41,7 +41,10 @@ import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+
+import static org.testng.Assert.assertTrue;
 
 /**
  * Base class to hold the common variables and utility methods of Lazy Loading (Ghost deployment) Test cases.
@@ -169,6 +172,9 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
     protected TenantStatusBean getTenantStatus(String tenantDomain) throws LazyLoadingTestException {
         TenantStatusBean tenantStatus;
         String requestUrl = supperTenantWebAppURL + "/" + IS_TENANT_LOADED_METHOD_URL + "/" + tenantDomain;
+
+        assertTrue(isLazyLoadingInfoWebappReady(), TENANT_INFO_SERVICE + " webapp is not yet ready, hence unable to server " + requestUrl);
+        
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
             JSONObject tenantStatusJSON = new JSONObject(response.getData());
@@ -201,6 +207,9 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      */
     protected WebAppStatusBean getWebAppStatus(String tenantDomain, String webAppName) throws LazyLoadingTestException {
         String requestUrl = supperTenantWebAppURL + "/" + IS_WEB_APP_LOADED_METHOD_URL + "/" + tenantDomain + "/" + webAppName;
+
+        assertTrue(isLazyLoadingInfoWebappReady(), TENANT_INFO_SERVICE + " webapp is not yet ready, hence unable to server " + requestUrl);
+
         WebAppStatusBean webAppStatus;
         try {
             HttpResponse response = HttpURLConnectionClient.sendGetRequest(requestUrl, null);
@@ -445,5 +454,31 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
         return isTenantInGhostState;
     }
 
+    /**
+     * Check whether the lazy-loading-info webapp is ready to server requests.
+     * This method makes GET requests to lazy-loading-info webapp until it responses with "Hi!". The loop waits for 
+     * a maximum of 90 seconds and if there is no response, return with a false.
+     *
+     * @return true if lazy-loading-info webapp is deployed
+     */
+    private boolean isLazyLoadingInfoWebappReady() {
+        long webappDeploymentDelay = 90 * 1000;
+        Calendar startTime = Calendar.getInstance();
+        String url = supperTenantWebAppURL + "/" + TENANT_INFO_SERVICE + "/ping";
+        long time;
+        while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < webappDeploymentDelay) {
+            try {
+                HttpResponse response = HttpURLConnectionClient.sendGetRequest(url, null);
+                if ("Hi!".equals(response.getData())) {
+                    return true;
+                }
+                Thread.sleep(500);
+            } catch (InterruptedException | IOException ignored) {
+                // IOException is ignored since the GET request will be retried in the loop
+            }
+        }
+
+        return false;
+    }
 
 }

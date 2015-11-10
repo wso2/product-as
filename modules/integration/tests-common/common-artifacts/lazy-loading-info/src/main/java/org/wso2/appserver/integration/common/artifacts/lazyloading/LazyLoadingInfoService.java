@@ -64,6 +64,13 @@ public class LazyLoadingInfoService {
         }
         return webAppStatus;
     }
+    
+    @Path("ping")
+    @GET
+    @Produces("text/plain")
+    public String ping(){
+        return "Hi!";
+    }
 
 
 }
