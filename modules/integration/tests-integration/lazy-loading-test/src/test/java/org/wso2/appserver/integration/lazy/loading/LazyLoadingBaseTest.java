@@ -41,7 +41,6 @@ import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import static org.testng.Assert.assertTrue;
@@ -463,10 +462,9 @@ public abstract class LazyLoadingBaseTest extends ASIntegrationTest {
      */
     private boolean isLazyLoadingInfoWebappReady() {
         long webappDeploymentDelay = 90 * 1000;
-        Calendar startTime = Calendar.getInstance();
+        long startTime = System.currentTimeMillis();
         String url = supperTenantWebAppURL + "/" + TENANT_INFO_SERVICE + "/ping";
-        long time;
-        while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < webappDeploymentDelay) {
+        while ((System.currentTimeMillis() - startTime) < webappDeploymentDelay) {
             try {
                 HttpResponse response = HttpURLConnectionClient.sendGetRequest(url, null);
                 if ("Hi!".equals(response.getData())) {
