@@ -158,8 +158,8 @@ public class RegistryResourceUsageTestCase extends ASIntegrationTest {
 	@AfterClass(alwaysRun = true)
 	public void testDeleteWebApplication() throws Exception {
 		if (userMode == TestUserMode.TENANT_USER) {
-			webAppAdminClient
-					.deleteWebAppFile(WEBAPP_FILENAME, asServer.getDefaultInstance().getHosts().get("default"));
+			webAppAdminClient.deleteWebAppFile(WEBAPP_FILENAME,
+											   asServer.getDefaultInstance().getHosts().get("default"));
 		}
 	}
 }

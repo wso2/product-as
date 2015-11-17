@@ -35,7 +35,7 @@
 <a name="line12">12</a>     try {
 <a name="line13">13</a>         CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
 <a name="line14">14</a>         UserRealm realm = context.getUserRealm();
-<a name="line15">15</a>         if(role == null){
+<a name="line15">15</a>         if (role == null) {
 <a name="line16">16</a>             if (username != null &amp;&amp; username.trim().length() &gt; 0) {
 <a name="line17">17</a>                 status = realm.getUserStoreManager().authenticate(username, password);
 <a name="line18">18</a>             }
@@ -51,7 +51,7 @@
 <a name="line28">28</a>     if (status) {
 <a name="line29">29</a>         session.setAttribute(&quot;logged-in&quot;, &quot;true&quot;);
 <a name="line30">30</a>         session.setAttribute(&quot;username&quot;, username);
-<a name="line31">31</a>         if(role != null){
+<a name="line31">31</a>         if (role != null) {
 <a name="line32">32</a>             session.setAttribute(&quot;logged-in-with-role&quot;, &quot;true&quot;);
 <a name="line33">33</a>         }
 <a name="line34">34</a>         response.sendRedirect(&quot;index.jsp&quot;);

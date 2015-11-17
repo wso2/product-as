@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This servlet is use to retrieve the CarbonTomcatService OSGi service name for CarbonContext test cases
+ */
 public class OSGiServiceServlet extends HttpServlet {
     private static final String CARBON_CONTEXT = "cc";
     private static final String PRIVILEGE_CARBON_CONTEXT = "pcc";
@@ -41,15 +44,15 @@ public class OSGiServiceServlet extends HttpServlet {
 
     private void doProcess(HttpServletRequest request, HttpServletResponse response) {
         String action = request.getParameter("action");
-        Object osGiService = null;
+        Object osgiService = null;
         if (CARBON_CONTEXT.equalsIgnoreCase(action)) {
-            osGiService = CarbonContext.getThreadLocalCarbonContext().getOSGiService(CarbonTomcatService.class, null);
+            osgiService = CarbonContext.getThreadLocalCarbonContext().getOSGiService(CarbonTomcatService.class, null);
         } else if (PRIVILEGE_CARBON_CONTEXT.equalsIgnoreCase(action)) {
-            osGiService = PrivilegedCarbonContext.getThreadLocalCarbonContext()
+            osgiService = PrivilegedCarbonContext.getThreadLocalCarbonContext()
                                                  .getOSGiService(CarbonTomcatService.class, null);
         }
-        if (osGiService != null && osGiService instanceof CarbonTomcatService) {
-            CarbonTomcatService carbonTomcatService = (CarbonTomcatService) osGiService;
+        if (osgiService != null && osgiService instanceof CarbonTomcatService) {
+            CarbonTomcatService carbonTomcatService = (CarbonTomcatService) osgiService;
             response.addHeader("tomcat-service-name", carbonTomcatService.getTomcat().getService().getName());
         }
     }

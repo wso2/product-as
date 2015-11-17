@@ -23,7 +23,7 @@
 <h2>WSO2 Carbon User Manage Usage Demo</h2>
 
 <%
-    if(request.getParameter("add") != null){
+    if (request.getParameter("add") != null) {
         String username = request.getParameter("username");
         String pass = request.getParameter("password");
         if (username != null && username.trim().length() > 0) {
@@ -35,9 +35,9 @@
 %> <p><b>The user <%=username%> already exists</b></p> <%
             }
         }
-    } else if(request.getParameter("delete") != null){
+    } else if (request.getParameter("delete") != null) {
         String username = request.getParameter("username");
-        if(username != null && !username.trim().isEmpty()){
+        if (username != null && !username.trim().isEmpty()) {
             CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
             UserRealm realm = context.getUserRealm();
             if (realm.getUserStoreManager().isExistingUser(username)) {

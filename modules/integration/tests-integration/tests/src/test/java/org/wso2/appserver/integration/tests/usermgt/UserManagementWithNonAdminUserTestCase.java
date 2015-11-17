@@ -1,6 +1,6 @@
 package org.wso2.appserver.integration.tests.usermgt;
 /*
-* Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+* Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 *mi
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ public class UserManagementWithNonAdminUserTestCase extends ASIntegrationTest {
 	public void setEnvironment() throws Exception {
 		//Since if we don't impose roles in the automation.xml all the users have admin privileges created 2 new users and a role and use that for TENANT and SUPER_TENANT users
 		if (userMode == TestUserMode.SUPER_TENANT_USER) {
-
 			super.init("superTenant", "userKey4");
 		} else if (userMode == TestUserMode.TENANT_USER) {
 			super.init("wso2.com", "user3");
@@ -246,15 +245,6 @@ public class UserManagementWithNonAdminUserTestCase extends ASIntegrationTest {
 		userManagementClient.getAllSharedRoleNames("*", 10);
 		fail("Non admin user able to get all shared roles");
 	}
-
-	//users who have login permission is able to execute this.
-	// After the clarification assert should be changed
-	/*@Test(groups = "wso2.as", description = "Check if multiple users stores available",
-			expectedExceptions = RemoteException.class, expectedExceptionsMessageRegExp = NON_ADMIN_EXCEPTION_MESSAGE)
-	public void testHasMultipleUserStores() throws Exception {
-		userManagementClient.hasMultipleUserStores();
-		fail("Non admin user able to check if multiple user stores available");
-	}*/
 
 	@Test(groups = "wso2.as", description = "Check if multiple users stores available",
 			expectedExceptions = RemoteException.class, expectedExceptionsMessageRegExp = NON_ADMIN_EXCEPTION_MESSAGE)

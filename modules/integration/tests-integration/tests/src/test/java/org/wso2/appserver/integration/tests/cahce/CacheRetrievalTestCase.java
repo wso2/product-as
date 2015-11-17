@@ -29,7 +29,8 @@ import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -55,19 +56,17 @@ public class CacheRetrievalTestCase extends ASIntegrationTest {
     public void init() throws Exception {
         super.init(userMode);
         WebAppAdminClient webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
-        String path = System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                      File.separator + "artifacts" + File.separator + "AS" + File.separator + "war" +
-                      File.separator + WEBAPP_FILENAME;
-        webAppAdminClient.uploadWarFile(path);
+        Path path = Paths.get(System.getProperty("basedir", "."), "target", "resources", "artifacts", "AS", "war",
+                              WEBAPP_FILENAME);
+        webAppAdminClient.uploadWarFile(path.toString());
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, APP_NAME),
                    "Web Application Deployment failed");
 
         //Deploy example webapp in tenant mode since we need it to access cache
         if (userMode == TestUserMode.TENANT_USER) {
-            path = System.getProperty("basedir", ".") + File.separator + "target" + File.separator + "resources" +
-                   File.separator + "artifacts" + File.separator + "AS" + File.separator + "war" +
-                   File.separator + "example.war";
-            webAppAdminClient.uploadWarFile(path);
+            path = Paths.get(System.getProperty("basedir", "."), "target", "resources", "artifacts", "AS", "war",
+                             "example.war");
+            webAppAdminClient.uploadWarFile(path.toString());
             assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, "example"),
                        "Web Application Deployment failed");
         }
