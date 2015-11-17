@@ -30,6 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This servlet is used to handle tenant flows
+ */
 public class TenantServlet extends HttpServlet {
     private static Log log = LogFactory.getLog(TenantServlet.class);
     private static final String RESOLVE_TENANT_ID = "resolveTenantId";

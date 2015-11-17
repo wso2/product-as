@@ -1,23 +1,24 @@
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
+* Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package websocket.drawboard;
 
-import java.io.IOException;
-import java.util.LinkedList;
+import websocket.drawboard.wsmessages.AbstractWebsocketMessage;
+import websocket.drawboard.wsmessages.BinaryWebsocketMessage;
+import websocket.drawboard.wsmessages.CloseWebsocketMessage;
+import websocket.drawboard.wsmessages.StringWebsocketMessage;
 
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
@@ -25,11 +26,8 @@ import javax.websocket.RemoteEndpoint.Async;
 import javax.websocket.SendHandler;
 import javax.websocket.SendResult;
 import javax.websocket.Session;
-
-import websocket.drawboard.wsmessages.AbstractWebsocketMessage;
-import websocket.drawboard.wsmessages.BinaryWebsocketMessage;
-import websocket.drawboard.wsmessages.CloseWebsocketMessage;
-import websocket.drawboard.wsmessages.StringWebsocketMessage;
+import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * Represents a client with methods to send messages asynchronously.
@@ -43,8 +41,7 @@ public class Client {
      * Contains the messages wich are buffered until the previous
      * send operation has finished.
      */
-    private final LinkedList<AbstractWebsocketMessage> messagesToSend =
-            new LinkedList<>();
+    private final LinkedList<AbstractWebsocketMessage> messagesToSend = new LinkedList<>();
     /**
      * If this client is currently sending a messages asynchronously.
      */
@@ -78,8 +75,9 @@ public class Client {
      * Sends the given message asynchronously to the client.
      * If there is already a async sending in progress, then the message
      * will be buffered and sent when possible.<br><br>
-     *
+     * <p/>
      * This method can be called from multiple threads.
+     *
      * @param msg
      */
     public void sendMessage(AbstractWebsocketMessage msg) {
@@ -96,14 +94,11 @@ public class Client {
                     // to prevent DoS.
                     // In this case we check if there are >= 1000 messages
                     // or length(of all messages) >= 1000000 bytes.
-                    if (messagesToSend.size() >= 1000
-                            || messagesToSendLength >= 1000000) {
+                    if (messagesToSend.size() >= 1000 || messagesToSendLength >= 1000000) {
                         isClosing = true;
 
                         // Discard the new message and close the session immediately.
-                        CloseReason cr = new CloseReason(
-                                CloseCodes.VIOLATED_POLICY,
-                                "Send Buffer exceeded");
+                        CloseReason cr = new CloseReason(CloseCodes.VIOLATED_POLICY, "Send Buffer exceeded");
                         try {
                             // TODO: close() may block if the remote endpoint doesn't read the data
                             // (eventually there will be a TimeoutException). However, this method
@@ -126,17 +121,14 @@ public class Client {
                         // Check if the last message and the new message are
                         // String messages - in that case we concatenate them
                         // to reduce TCP overhead (using ";" as separator).
-                        if (msg instanceof StringWebsocketMessage
-                                && !messagesToSend.isEmpty()
-                                && messagesToSend.getLast()
-                                instanceof StringWebsocketMessage) {
+                        if (msg instanceof StringWebsocketMessage && !messagesToSend.isEmpty() &&
+                            messagesToSend.getLast() instanceof StringWebsocketMessage) {
 
-                            StringWebsocketMessage ms =
-                                    (StringWebsocketMessage) messagesToSend.removeLast();
+                            StringWebsocketMessage ms = (StringWebsocketMessage) messagesToSend.removeLast();
                             messagesToSendLength -= calculateMessageLength(ms);
 
                             String concatenated = ms.getString() + ";" +
-                                    ((StringWebsocketMessage) msg).getString();
+                                                  ((StringWebsocketMessage) msg).getString();
                             msg = new StringWebsocketMessage(concatenated);
                         }
 
@@ -164,6 +156,7 @@ public class Client {
 
     /**
      * Internally sends the messages asynchronously.
+     *
      * @param msg
      */
     private void internalSendMessageAsync(AbstractWebsocketMessage msg) {
@@ -180,14 +173,12 @@ public class Client {
                 // Close the session.
                 session.close();
             }
-        } catch (IllegalStateException|IOException ex) {
+        } catch (IllegalStateException | IOException ex) {
             // Trying to write to the client when the session has
             // already been closed.
             // Ignore
         }
     }
-
-
 
     /**
      * SendHandler that will continue to send buffered messages.

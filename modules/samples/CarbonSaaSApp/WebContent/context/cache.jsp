@@ -28,20 +28,20 @@
 	String cacheKey = request.getParameter("cachekey");
 	String action = request.getParameter("action");
 
-	CacheManager cacheManager =   Caching.getCacheManagerFactory().getCacheManager("tsampleCacheManager");
+	CacheManager cacheManager = Caching.getCacheManagerFactory().getCacheManager("tsampleCacheManager");
     Cache<String,String> cache = cacheManager.getCache("sampleCache");	
 	 
-	if(action != null && action.equals("add")){
+	if (action != null && action.equals("add")) {
 		String cacheValue = request.getParameter("cachevalue");
 	
-		if(cacheKey != null && cacheValue != null){
+		if (cacheKey != null && cacheValue != null) {
 		    cache.put(cacheKey, cacheValue);
 %>
 <p>
 	Added entry:<%=cacheKey%>
 </p>
 <%
-	}
+	    }
 	}
 %>
 
@@ -94,26 +94,26 @@
 	<%
 		if (action != null && action.equals("view")) {
 			String content = cache.get(cacheKey);
-			if(content != null){
+			if (content != null) {
 			    response.addHeader("cache-value", content);
 	%>
 		<p>
 			Value of entry	<strong><%=cacheKey%></strong> : <%=content%>
 		</p>
 	<%
-		}else{
+		    } else {
 	%>
 		<p>
 			Unable to find an entry by the given key :<strong><%=cacheKey%></strong>
 			
 		</p>
 	<%
-		}
+		    }
 		}			
 	%>
 
 	<br/><br/>
-	 <h2>Available Actions</h2> 
+	    <h2>Available Actions</h2>
 	<ul>
 		<li><a href="./cache.jsp">Set Tenant Specific Cache Values</a></li>
 		<li><a href="./registry.jsp">Set Tenant Specific Registry Values</a></li>
@@ -124,5 +124,5 @@
 	</ul>
 
 	</body>
-	</html>
+</html>
 	
