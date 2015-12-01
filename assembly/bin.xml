@@ -1,0 +1,21 @@
+<assembly>
+    <id>binary</id>
+    <baseDirectory>/</baseDirectory>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>tomcat/${tomcat.extractDirectory.name}/</directory>
+            <outputDirectory>/application-server-6.0.0/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>extensions/webapps/</directory>
+            <outputDirectory>/application-server-6.0.0/webapps</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>extensions/lib/</directory>
+            <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
