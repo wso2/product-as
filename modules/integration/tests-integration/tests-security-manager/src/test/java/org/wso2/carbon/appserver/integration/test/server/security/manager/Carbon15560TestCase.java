@@ -45,6 +45,7 @@ import java.net.URLConnection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -68,7 +69,7 @@ public class Carbon15560TestCase extends ASIntegrationTest {
     private String user1Password = "passWord1@";
     private String user2 = "UserStoreTestUser2";
     private String user2Password = "passWord12@";
-    
+
     private String role1 = "umRole1";
     private String role2 = "umRole2";
     private String loginPermission = "login";
@@ -139,7 +140,7 @@ public class Carbon15560TestCase extends ASIntegrationTest {
 
         JSONArray arr = new JSONArray(new String(value));
 
-        ArrayList<String> stringArray = new ArrayList<String>();
+        List<String> stringArray = new ArrayList<String>();
         for (int i = 0; i < arr.length(); i++) {
             stringArray.add(arr.getString(i));
         }
