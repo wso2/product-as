@@ -64,8 +64,14 @@ public class Carbon15560TestCase extends ASIntegrationTest {
     private final String webAppFileName = "carboncontext-test-app.war";
     private final String webAppName = "carboncontext-test-app";
 
-    private String user1 = "UserStoreTestUser1";
+    private String defaultProfileName = "default"; private String user1 = "UserStoreTestUser1";
+    private String user1Password = "passWord1@";
     private String user2 = "UserStoreTestUser2";
+    private String user2Password = "passWord12@";
+    
+    private String role1 = "umRole1";
+    private String role2 = "umRole2";
+    private String loginPermission = "login";
 
     private TestUserMode userMode;
 
@@ -109,11 +115,11 @@ public class Carbon15560TestCase extends ASIntegrationTest {
     public void testWebAppUserStoreOperations() throws Exception {
 
         UserManagementClient userMgtClient = new UserManagementClient(backendURL, sessionCookie);
-        userMgtClient.addUser(user1, "passWord1@", null, "default");
-        userMgtClient.addUser(user2, "passWord2@", null, "default");
+        userMgtClient.addUser(user1, user1Password, null, defaultProfileName);
+        userMgtClient.addUser(user2, user2Password, null, defaultProfileName);
 
-        userMgtClient.addRole("umRole1", new String[]{user1, user2}, new String[]{"login"}, false);
-        userMgtClient.addRole("umRole2", new String[]{user1}, new String[]{"login"}, false);
+        userMgtClient.addRole(role1, new String[]{user1, user2}, new String[]{loginPermission}, false);
+        userMgtClient.addRole(role2, new String[]{user1}, new String[]{loginPermission}, false);
 
         log.info("Users and Roles Added Successfully ");
         String webAppContext = "/TenantServlet?user=UserStoreTestUser1";
