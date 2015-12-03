@@ -728,7 +728,7 @@
         <jaggery.version>0.11.0</jaggery.version>
         <test.framework.version>4.4.3-SNAPSHOT</test.framework.version>
         <carbon.automationutils.version>4.4.2</carbon.automationutils.version>
-        <carbon.automation.version>4.4.2</carbon.automation.version>
+        <carbon.automation.version>4.4.3-SNAPSHOT</carbon.automation.version>
         
         <orbit.version.axis2>1.6.1.wso2v14</orbit.version.axis2>
         <orbit.version.axiom>1.2.11.wso2v6</orbit.version.axiom>
