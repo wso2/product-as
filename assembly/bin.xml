@@ -6,7 +6,7 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>tomcat/${tomcat.extractDirectory.name}/</directory>
+            <directory>target/tomcat/${tomcat.extractDirectory.name}/</directory>
             <outputDirectory>/application-server-6.0.0/</outputDirectory>
         </fileSet>
         <fileSet>
@@ -16,6 +16,10 @@
         <fileSet>
             <directory>extensions/lib/</directory>
             <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>extensions/conf/</directory>
+            <outputDirectory>/application-server-6.0.0/conf/app-server/</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
