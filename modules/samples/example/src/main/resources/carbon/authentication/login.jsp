@@ -1,5 +1,5 @@
 <!--
-~ Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 ~
 ~ WSO2 Inc. licenses this file to you under the Apache License,
 ~ Version 2.0 (the "License"); you may not use this file except
@@ -29,7 +29,7 @@
     try {
         CarbonContext context = CarbonContext.getThreadLocalCarbonContext();
         UserRealm realm = context.getUserRealm();
-        if (role == null) {
+        if(role == null){
             if (username != null && username.trim().length() > 0) {
                 status = realm.getUserStoreManager().authenticate(username, password);
             }
@@ -45,7 +45,7 @@
     if (status) {
         session.setAttribute("logged-in", "true");
         session.setAttribute("username", username);
-        if (role != null) {
+        if(role != null){
             session.setAttribute("logged-in-with-role", "true");
         }
         response.sendRedirect("index.jsp");

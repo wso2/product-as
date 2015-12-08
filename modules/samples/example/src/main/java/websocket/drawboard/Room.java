@@ -1,25 +1,24 @@
 /*
-* Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package websocket.drawboard;
 
-import websocket.drawboard.wsmessages.BinaryWebsocketMessage;
-import websocket.drawboard.wsmessages.StringWebsocketMessage;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,10 +29,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.imageio.ImageIO;
+
+import websocket.drawboard.wsmessages.BinaryWebsocketMessage;
+import websocket.drawboard.wsmessages.StringWebsocketMessage;
+
 /**
  * A Room represents a drawboard where a number of
  * users participate.<br><br>
- * <p/>
+ *
  * Note: Instance methods should only be invoked by calling
  * {@link #invokeAndWait(Runnable)} to ensure access is correctly synchronized.
  */
@@ -43,7 +47,7 @@ public final class Room {
      * Specifies the type of a room message that is sent to a client.<br>
      * Note: Currently we are sending simple string messages - for production
      * apps, a JSON lib should be used for object-level messages.<br><br>
-     * <p/>
+     *
      * The number (single char) will be prefixed to the string when sending
      * the message.
      */
@@ -54,21 +58,21 @@ public final class Room {
         ERROR('0'),
         /**
          * '1': DrawMesssage: contains serialized DrawMessage(s) prefixed
-         * with the current Player's {@link Player#lastReceivedMessageId}
-         * and ",".<br>
-         * Multiple draw messages are concatenated with "|" as separator.
+         *      with the current Player's {@link Player#lastReceivedMessageId}
+         *      and ",".<br>
+         *      Multiple draw messages are concatenated with "|" as separator.
          */
         DRAW_MESSAGE('1'),
         /**
          * '2': ImageMessage: Contains number of current players in this room.
-         * After this message a Binary Websocket message will follow,
-         * containing the current Room image as PNG.<br>
-         * This is the first message that a Room sends to a new Player.
+         *      After this message a Binary Websocket message will follow,
+         *      containing the current Room image as PNG.<br>
+         *      This is the first message that a Room sends to a new Player.
          */
         IMAGE_MESSAGE('2'),
         /**
          * '3': PlayerChanged: contains "+" or "-" which indicate a player
-         * was added or removed to this Room.
+         *      was added or removed to this Room.
          */
         PLAYER_CHANGED('3');
 
@@ -79,6 +83,7 @@ public final class Room {
         }
 
     }
+
 
     /**
      * The lock used to synchronize access to this Room.
@@ -113,12 +118,15 @@ public final class Room {
      */
     private TimerTask activeBroadcastTimerTask;
 
+
     /**
      * The current image of the room drawboard. DrawMessages that are
      * received from Players will be drawn onto this image.
      */
-    private final BufferedImage roomImage = new BufferedImage(900, 600, BufferedImage.TYPE_INT_RGB);
+    private final BufferedImage roomImage =
+            new BufferedImage(900, 600, BufferedImage.TYPE_INT_RGB);
     private final Graphics2D roomGraphics = roomImage.createGraphics();
+
 
     /**
      * The maximum number of players that can join this room.
@@ -130,12 +138,16 @@ public final class Room {
      */
     private final List<Player> players = new ArrayList<>();
 
+
+
     public Room() {
-        roomGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        roomGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Clear the image with white background.
         roomGraphics.setBackground(Color.WHITE);
-        roomGraphics.clearRect(0, 0, roomImage.getWidth(), roomImage.getHeight());
+        roomGraphics.clearRect(0, 0, roomImage.getWidth(),
+                roomImage.getHeight());
     }
 
     private TimerTask createBroadcastTimerTask() {
@@ -154,12 +166,12 @@ public final class Room {
 
     /**
      * Creates a Player from the given Client and adds it to this room.
-     *
      * @param client the client
      */
     public Player createAndAddPlayer(Client client) {
         if (players.size() >= MAX_PLAYER_COUNT) {
-            throw new IllegalStateException("Maximum player count (" + MAX_PLAYER_COUNT + ") has been reached.");
+            throw new IllegalStateException("Maximum player count ("
+                    + MAX_PLAYER_COUNT + ") has been reached.");
         }
 
         Player p = new Player(this, client);
@@ -173,7 +185,8 @@ public final class Room {
         // If currently no Broacast Timer Task is scheduled, then we need to create one.
         if (activeBroadcastTimerTask == null) {
             activeBroadcastTimerTask = createBroadcastTimerTask();
-            drawmessageBroadcastTimer.schedule(activeBroadcastTimerTask, TIMER_DELAY, TIMER_DELAY);
+            drawmessageBroadcastTimer.schedule(activeBroadcastTimerTask,
+                    TIMER_DELAY, TIMER_DELAY);
         }
 
         // Send him the current number of players and the current room image.
@@ -186,8 +199,10 @@ public final class Room {
             ImageIO.write(roomImage, "PNG", bout);
         } catch (IOException e) { /* Should never happen */ }
 
+
         // Send the image as binary message.
-        BinaryWebsocketMessage msg = new BinaryWebsocketMessage(ByteBuffer.wrap(bout.toByteArray()));
+        BinaryWebsocketMessage msg = new BinaryWebsocketMessage(
+                ByteBuffer.wrap(bout.toByteArray()));
         p.getClient().sendMessage(msg);
 
         return p;
@@ -195,8 +210,8 @@ public final class Room {
     }
 
     /**
-     * @param p
      * @see Player#removeFromRoom()
+     * @param p
      */
     private void internalRemovePlayer(Player p) {
         boolean removed = players.remove(p);
@@ -219,12 +234,13 @@ public final class Room {
     }
 
     /**
+     * @see Player#handleDrawMessage(DrawMessage, long)
      * @param p
      * @param msg
      * @param msgId
-     * @see Player#handleDrawMessage(DrawMessage, long)
      */
-    private void internalHandleDrawMessage(Player p, DrawMessage msg, long msgId) {
+    private void internalHandleDrawMessage(Player p, DrawMessage msg,
+            long msgId) {
         p.setLastReceivedMessageId(msgId);
 
         // Draw the RoomMessage onto our Room Image.
@@ -234,13 +250,13 @@ public final class Room {
         broadcastDrawMessage(msg);
     }
 
+
     /**
      * Broadcasts the given drawboard message to all connected players.<br>
      * Note: For DrawMessages, please use
      * {@link #broadcastDrawMessage(DrawMessage)}
      * as this method will buffer them and prefix them with the correct
      * last received Message ID.
-     *
      * @param type
      * @param content
      */
@@ -250,12 +266,12 @@ public final class Room {
         }
     }
 
+
     /**
      * Broadcast the given DrawMessage. This will buffer the message
      * and the {@link #drawmessageBroadcastTimer} will broadcast them
      * at a regular interval, prefixing them with the player's current
      * {@link Player#lastReceivedMessageId}.
-     *
      * @param msg
      */
     private void broadcastDrawMessage(DrawMessage msg) {
@@ -263,7 +279,8 @@ public final class Room {
             String msgStr = msg.toString();
 
             for (Player p : players) {
-                String s = String.valueOf(p.getLastReceivedMessageId()) + "," + msgStr;
+                String s = String.valueOf(p.getLastReceivedMessageId())
+                        + "," + msgStr;
                 p.sendRoomMessage(MessageType.DRAW_MESSAGE, s);
             }
         } else {
@@ -272,6 +289,7 @@ public final class Room {
             }
         }
     }
+
 
     /**
      * Tick handler for the broadcastTimer.
@@ -291,7 +309,8 @@ public final class Room {
                 for (int i = 0; i < drawMessages.size(); i++) {
                     DrawMessage msg = drawMessages.get(i);
 
-                    String s = String.valueOf(p.getLastReceivedMessageId()) + "," + msg.toString();
+                    String s = String.valueOf(p.getLastReceivedMessageId())
+                            + "," + msg.toString();
                     if (i > 0)
                         sb.append("|");
 
@@ -319,10 +338,9 @@ public final class Room {
      * runnable on this Room, it will not be executed recursively, but instead
      * cached until the original runnable is finished, to keep the behavior of
      * using a Executor.
-     *
      * @param task
      */
-    public void invokeAndWait(Runnable task) {
+    public void invokeAndWait(Runnable task)  {
 
         // Check if the current thread already holds a lock on this room.
         // If yes, then we must not directly execute the Runnable but instead
@@ -378,10 +396,11 @@ public final class Room {
         });
     }
 
+
     /**
      * A Player participates in a Room. It is the interface between the
      * {@link Room} and the {@link Client}.<br><br>
-     * <p/>
+     *
      * Note: This means a player object is actually a join between Room and
      * Client.
      */
@@ -403,7 +422,8 @@ public final class Room {
         /**
          * Buffered DrawMessages that will be sent by a Timer.
          */
-        private final List<DrawMessage> bufferedDrawMessages = new ArrayList<>();
+        private final List<DrawMessage> bufferedDrawMessages =
+                new ArrayList<>();
 
         private List<DrawMessage> getBufferedDrawMessages() {
             return bufferedDrawMessages;
@@ -433,18 +453,18 @@ public final class Room {
             }
         }
 
+
         private long getLastReceivedMessageId() {
             return lastReceivedMessageId;
         }
-
         private void setLastReceivedMessageId(long value) {
             lastReceivedMessageId = value;
         }
 
+
         /**
          * Handles the given DrawMessage by drawing it onto this Room's
          * image and by broadcasting it to the connected players.
-         *
          * @param msg
          * @param msgId
          */
@@ -452,9 +472,9 @@ public final class Room {
             room.internalHandleDrawMessage(this, msg, msgId);
         }
 
+
         /**
          * Sends the given room message.
-         *
          * @param type
          * @param content
          */

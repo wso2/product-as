@@ -38,15 +38,15 @@
 <a name="line14"> 14</a>     UserRealm realm = context.getUserRealm();
 <a name="line15"> 15</a>     String username = request.getParameter(&quot;username&quot;);
 <a name="line16"> 16</a>
-<a name="line17"> 17</a>     if (request.getParameter(&quot;add&quot;) != null || request.getParameter(&quot;remove&quot;) != null) {
+<a name="line17"> 17</a>     if(request.getParameter(&quot;add&quot;) != null || request.getParameter(&quot;remove&quot;) != null){
 <a name="line18"> 18</a>         String role = request.getParameter(&quot;role&quot;);
 <a name="line19"> 19</a>         if (username != null &amp;&amp; username.trim().length() &gt; 0) {
 <a name="line20"> 20</a>             if (realm.getUserStoreManager().isExistingUser(username) &amp;&amp; realm.getUserStoreManager().isExistingRole(role)) {
 <a name="line21"> 21</a>                 List&lt;String&gt; rolesList = new ArrayList&lt;String&gt;(Arrays.asList(realm.getUserStoreManager().getRoleListOfUser(username)));
-<a name="line22"> 22</a>                 if (request.getParameter(&quot;add&quot;) != null) {
-<a name="line23"> 23</a>                     if (!rolesList.contains(role)) {
+<a name="line22"> 22</a>                 if(request.getParameter(&quot;add&quot;) != null){
+<a name="line23"> 23</a>                     if(!rolesList.contains(role)){
 <a name="line24"> 24</a>                         realm.getUserStoreManager().updateRoleListOfUser(username, new String[]{}, new String[]{role});
-<a name="line25"> 25</a>                     } else {
+<a name="line25"> 25</a>                     } else{
 <a name="line26"> 26</a> %&gt; &lt;p&gt;&lt;b&gt;The user &lt;%=username%&gt; already have &lt;%=role%&gt; &lt;/b&gt;&lt;/p&gt; &lt;%
 <a name="line27"> 27</a>                     }
 <a name="line28"> 28</a>                 } else {
@@ -60,10 +60,10 @@
 <a name="line36"> 36</a> %&gt; &lt;p&gt;&lt;b&gt;The user &lt;%=username%&gt; or &lt;%=role%&gt; does not exist&lt;/b&gt;&lt;/p&gt; &lt;%
 <a name="line37"> 37</a>             }
 <a name="line38"> 38</a>         }
-<a name="line39"> 39</a>     } else if (request.getParameter(&quot;view&quot;) != null) {
+<a name="line39"> 39</a>     } else if(request.getParameter(&quot;view&quot;) != null){
 <a name="line40"> 40</a>         String[] rolesList = realm.getUserStoreManager().getRoleListOfUser(username);
 <a name="line41"> 41</a> %&gt;&lt;b&gt;Roles of &lt;%=username%&gt;&lt;/b&gt;&lt;ul&gt;&lt;%
-<a name="line42"> 42</a>         for (String role : rolesList) {
+<a name="line42"> 42</a>         for(String role : rolesList){
 <a name="line43"> 43</a> %&gt;&lt;li&gt;&lt;%=role%&gt;&lt;/li&gt;&lt;%
 <a name="line44"> 44</a>         }
 <a name="line45"> 45</a>     }

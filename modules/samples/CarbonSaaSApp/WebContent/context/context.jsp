@@ -45,25 +45,25 @@
 
 <%
 
-    CarbonContext cCtx = CarbonContext.getThreadLocalCarbonContext();
-    int tenantId = cCtx.getTenantId() ;
-    String tenantDomain = cCtx.getTenantDomain() ;
+CarbonContext cCtx = CarbonContext.getThreadLocalCarbonContext(); 
+int tenantId = cCtx.getTenantId() ;
+String tenantDomain = cCtx.getTenantDomain() ;
 
-    // the root collection for SaaSTest registry entries . appended to registry root
-    String stRegistryStore = "/SaaSTest/";
-    String stResourceFullName = stRegistryStore + request.getParameter("regResourceName");
-    String stSaveResource = request.getParameter("regResourceName");
+// the root collection for SaaSTest registry entries . appended to registry root 
+String stRegistryStore = "/SaaSTest/";
+String stResourceFullName = stRegistryStore + request.getParameter("regResourceName");
+String stSaveResource = request.getParameter("regResourceName");
 
 	// default assignments for keys and values
-    String stRegType = null;
-    String resourcePath = null;
-    String stRegContent = null;
-    String stResourcePropertyKey = null;
-    String stResourcePropertyValue = tenantDomain;
-    String stResourceDesc = null;
-    String stResourceMediaType = null;
-    String stCacheKey = null;
-    String stCacheValue =  null;
+String stRegType = null;
+String resourcePath = null; 
+String stRegContent = null;
+String stResourcePropertyKey = null;
+String stResourcePropertyValue = tenantDomain;
+String stResourceDesc = null;
+String stResourceMediaType = null;
+String stCacheKey = null;
+String stCacheValue =  null;
 
 	// get the user defined keys and user defined values to store in the context
 
@@ -82,17 +82,15 @@
 	stCacheKey = request.getParameter("cachekey");
 	if (stCacheKey != null) {
 		stCacheKey = stCacheKey.trim();
-		if (stCacheKey.length() == 0) {
+		if (stCacheKey.length() == 0)
 			stCacheKey = null;
-	    }
 	}
 	
 	stCacheValue = request.getParameter("cachevalue");
 	if (stCacheValue != null) {
 		stCacheValue = stCacheValue.trim();
-		if (stCacheValue.length() == 0) {
+		if (stCacheValue.length() == 0)
 			stCacheValue = null;
-		}
 	}
 
 	
@@ -102,10 +100,10 @@ if (stSaveResource != null) {
 		// RegistryType.SYSTEM_CONFIGURATION,  RegistryType.SYSTEM_GOVERNANCE, USER_CONFIGURATION, USER_GOVERNANCE, LOCAL_REPOSITORY
 		Registry registry = cCtx.getRegistry(RegistryType.valueOf(stRegType)); 
 		 
-		// create a new resource instance
+			// create a new resource instance
 		Resource resource = registry.newResource();
 			
-		// initialize resource description, content, and media type
+			// initialize resource description, content, and media type
 		resource.setDescription(stResourceDesc);
 		resource.setMediaType(stResourceMediaType);
 		resource.setContent(stRegContent); 
@@ -128,36 +126,34 @@ if (stSaveResource != null) {
 } // end if save action
 
 if (stCacheKey != null) {	
-    // set Cache value in tenant context
-    cCtx = CarbonContext.getThreadLocalCarbonContext();
-    //cCtx.getCache().put(stCacheKey, stCacheValue);
+		// set Cache value in tenant context
+		cCtx = CarbonContext.getThreadLocalCarbonContext(); 
+		//cCtx.getCache().put(stCacheKey, stCacheValue);
 	%>
 	<%="<br>Saved cache pair "+stCacheKey+"="+stCacheValue %>
-<%
-}
-%>
+	<% }   %>
 
 
 <% 
 // set values not set, initialize default values
 if (stRegType == null)
-    stRegType = RegistryType.LOCAL_REPOSITORY.toString();
+ stRegType = RegistryType.LOCAL_REPOSITORY.toString();
 if (resourcePath == null)
-    resourcePath = "/resource_fullPathFromRoot/defaultName";
+	resourcePath = "/resource_fullPathFromRoot/defaultName";
 if (stRegContent == null)
-    stRegContent = "{tenantID: "+ Integer.toString(tenantId) + "}";
+ stRegContent = "{tenantID: "+ Integer.toString(tenantId) + "}";
 if (stResourcePropertyKey == null)
-    stResourcePropertyKey = "SaaSTestPropertyKey";
+ stResourcePropertyKey = "SaaSTestPropertyKey";
 if (stResourcePropertyValue == null)
-    stResourcePropertyValue = tenantDomain;
+ stResourcePropertyValue = tenantDomain;
 if (stResourceDesc == null)
-    stResourceDesc = "default resource description";
+ stResourceDesc = "default resource description";
 if (stResourceMediaType == null)
-    stResourceMediaType = "application/json";
+ stResourceMediaType = "application/json";
 if (stCacheKey == null)
-    stCacheKey = "tenantCache";
+ stCacheKey = "tenantCache";
 if (stCacheValue == null)
-    stCacheValue =  tenantDomain + ":" + tenantId;
+ stCacheValue =  tenantDomain + ":" + tenantId;
 %>
 
 <h1>Initialize Tenant Specific Objects</h1>

@@ -31,21 +31,19 @@
     UserRealm realm = context.getUserRealm();
     String username = request.getParameter("username");
 
-    if (request.getParameter("add") != null || request.getParameter("remove") != null) {
+    if(request.getParameter("add") != null || request.getParameter("remove") != null){
         String role = request.getParameter("role");
         if (username != null && username.trim().length() > 0) {
-            if (realm.getUserStoreManager().isExistingUser(username)
-                      && realm.getUserStoreManager().isExistingRole(role)) {
-                List<String> rolesList =
-                         new ArrayList<String>(Arrays.asList(realm.getUserStoreManager().getRoleListOfUser(username)));
-                if (request.getParameter("add") != null) {
-                    if (!rolesList.contains(role)) {
+            if (realm.getUserStoreManager().isExistingUser(username) && realm.getUserStoreManager().isExistingRole(role)) {
+                List<String> rolesList = new ArrayList<String>(Arrays.asList(realm.getUserStoreManager().getRoleListOfUser(username)));
+                if(request.getParameter("add") != null){
+                    if(!rolesList.contains(role)){
                         realm.getUserStoreManager().updateRoleListOfUser(username, new String[]{}, new String[]{role});
-                    } else {
+                    } else{
 %> <p><b>The user <%=username%> already have <%=role%> </b></p> <%
                     }
                 } else {
-                    if (rolesList.contains(role)) {
+                    if(rolesList.contains(role)){
                         realm.getUserStoreManager().updateRoleListOfUser(username, new String[]{role}, new String[]{});
                     } else {
 %> <p><b>The user <%=username%> does not have <%=role%> </b></p> <%
@@ -55,10 +53,10 @@
 %> <p><b>The user <%=username%> or <%=role%> does not exist</b></p> <%
             }
         }
-    } else if (request.getParameter("view") != null) {
+    } else if(request.getParameter("view") != null){
         String[] rolesList = realm.getUserStoreManager().getRoleListOfUser(username);
 %><b>Roles of <%=username%></b><ul><%
-        for (String role : rolesList) {
+        for(String role : rolesList){
 %><li><%=role%></li><%
         }
     }

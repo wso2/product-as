@@ -50,42 +50,36 @@
 		String resourcePath = null;
 		
 		//set values not set, initialize default values
-		if (resourcePath == null) {
+		if (resourcePath == null)
 			resourcePath = "/resource_fullPathFromRoot/defaultName";
-		}
-		if (stResourceMediaType == null) {
+		if (stResourceMediaType == null)
 			stResourceMediaType = "application/json";
-		}
-		if (stResourceDesc == null) {
+		if (stResourceDesc == null)
 			stResourceDesc = "default resource description";
-		}
-		if (stRegContent == null) {
+		if (stRegContent == null)
 			stRegContent = "{tenantID: " + Integer.toString(tenantId) + "}";
-		}
-		if (stResourcePropertyKey == null) {
+		if (stResourcePropertyKey == null)
 			stResourcePropertyKey = "SaaSTestPropertyKey";
-		}
-		if (stResourcePropertyValue == null) {
+		if (stResourcePropertyValue == null)
 			stResourcePropertyValue = tenantDomain;
-		}
-
+		
 		String action = request.getParameter("action");
-		if (action != null && action.equals("add")) {
-		    try {
-			    // registry trees as types
-			    // RegistryType.SYSTEM_CONFIGURATION,  RegistryType.SYSTEM_GOVERNANCE, USER_CONFIGURATION, USER_GOVERNANCE, LOCAL_REPOSITORY
-			    Registry registry = cCtx.getRegistry(RegistryType.valueOf(stRegType));
-			    // create a new resource instance
-			    Resource resource = registry.newResource();
-			    resource.setMediaType(stResourceMediaType);
-			    resource.setDescription(stResourceDesc);
-			    resource.setContent(stRegContent);
+		if(action != null && action.equals("add")){
+		try {
+			// registry trees as types
+			// RegistryType.SYSTEM_CONFIGURATION,  RegistryType.SYSTEM_GOVERNANCE, USER_CONFIGURATION, USER_GOVERNANCE, LOCAL_REPOSITORY
+			Registry registry = cCtx.getRegistry(RegistryType.valueOf(stRegType));
+			// create a new resource instance
+			Resource resource = registry.newResource();
+			resource.setMediaType(stResourceMediaType);
+			resource.setDescription(stResourceDesc);
+			resource.setContent(stRegContent);
 			
-			    // Resource Properties are used as query parameters
-			    resource.setProperty(stResourcePropertyKey,stResourcePropertyValue);
+			// Resource Properties are used as query parameters 
+			resource.setProperty(stResourcePropertyKey,stResourcePropertyValue);
 			
-			    // store the resource in the registry at resourcePath
-			    registry.put(stResourceFullName, resource);
+			// store the resource in the registry at resourcePath
+			registry.put(stResourceFullName, resource);
 		
 	%>
 
@@ -93,13 +87,13 @@
 
 	<%
 	
-		    } catch ( org.wso2.carbon.registry.core.exceptions.ResourceNotFoundException e) {
-			    e.printStackTrace();
+		}catch ( org.wso2.carbon.registry.core.exceptions.ResourceNotFoundException e) {
+			e.printStackTrace();
 	%>
 		Error: Failure to save resource at <%=stResourceFullName %>
 	<% 
-		    }
-        }
+		}
+		}
 	%>
 	<form action="registry.jsp" method="POST">
 		<div class="instructions">Specify context values</div>
