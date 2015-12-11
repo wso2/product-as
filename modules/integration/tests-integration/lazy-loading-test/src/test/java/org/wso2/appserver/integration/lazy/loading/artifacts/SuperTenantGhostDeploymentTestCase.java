@@ -18,7 +18,6 @@
 
 package org.wso2.appserver.integration.lazy.loading.artifacts;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.AfterClass;
@@ -39,7 +38,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Test the ghost deployment of web application in Super  tenant (carbon.super). For this  two  web applications
@@ -133,35 +134,52 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 " is not in ghost mode before invoking the other web-app of in Supper Tenant");
     }
 
-    @Test(groups = "wso2.as.lazy.loading", description = "Send a Get request after a web app is auto unload  and reload" +
+    @Test(groups = "wso2.as.lazy.loading",
+            description = "Send a Get request after a web app is auto unload  and reload" +
             " in to Ghost form. After access web app, it should be in fully load form  the Ghost form",
             dependsOnMethods = "testInvokeWebAppInGhostDeploymentOnSuperTenant")
     public void testWebAppAutoUnLoadAndInvokeInGhostDeploymentOnSuperTenant() throws LazyLoadingTestException {
         assertTrue(checkWebAppAutoUnloadingToGhostState(superTenantDomain, WEB_APP_FILE_NAME1),
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass in super tenant " +
                         "Web_app Name: " + WEB_APP_FILE_NAME1);
-        HttpResponse httpResponse;
-        try {
-            httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
-        } catch (IOException ioException) {
-            String customErrorMessage = "IOException Exception when  send a GET request to" + webApp1URL + "\n" + ioException.getMessage();
-            log.error(customErrorMessage);
-            throw new LazyLoadingTestException(customErrorMessage, ioException);
+        HttpResponse httpResponse = null;
+        long startingTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startingTime < 90 * 1000) {
+            try {
+                httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
+                if (httpResponse.getResponseCode() == 200) {
+                    break;
+                }
+            } catch (IOException ioException) {
+                //Ignore IOExceptions as this is simply checking the availability of the given webapp continuously
+                //until a positive response is received within a time limit. An IOException could occur during the
+                //connection establishment but failures in connection establishment shouldn't affect the busy waiting
+                //for a positive response and it doesn't need to be specifically handled
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+                //Here sleep is used just to reduce the frequency of the while loop since time gap between a
+                //web service's undeployed and deployed status is higher than the time for one cycle in while loop.
+                //Therefore an interruption is not a concern hence ignored
+            }
         }
-        assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail. Web App in Ghost mode:" +
-                getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1).isWebAppGhost() + "Web App Started:" +
-                getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1).isWebAppStarted());
-        WebAppStatusBean webAppStatusWebApp1 = getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1);
-        assertTrue(webAppStatusWebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is not started in  Supper Tenant");
-        assertFalse(webAppStatusWebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is  in ghost mode after invoking in Supper Tenant");
+        WebAppStatusBean webAppStatusBean = getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1);
+
+        int responseCode = httpResponse.getResponseCode();
+        assertEquals(responseCode, 200, "Response code is " + responseCode);
+        assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app:" + WEB_APP_FILE_NAME1 + "invocation failed");
+        assertTrue(webAppStatusBean.isWebAppStarted(),
+                "Web App:" + WEB_APP_FILE_NAME1 + "is not started in Super Tenant");
+        assertFalse(webAppStatusBean.isWebAppGhost(),
+                "Web App:" + WEB_APP_FILE_NAME1 + "is in ghost mode after invocation");
     }
 
 
-    @Test(groups = "wso2.as.lazy.loading", description = "Test web application auto unload  and reload in Ghost" +
-            " format. After access web app, it should be in fully load form  but after configured web app idle time pass" +
-            " it should get auto unload ne reload in Ghost form.",
+    @Test(groups = "wso2.as.lazy.loading",
+            description = "Test web application auto unload  and reload in Ghost format." +
+          " After access web app, it should be in fully load form  but after configured web app idle time pass" +
+          " it should get auto unload ne reload in Ghost form.",
             dependsOnMethods = "testWebAppAutoUnLoadAndInvokeInGhostDeploymentOnSuperTenant")
     public void testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant() throws Exception {
         serverManager.restartGracefully();
@@ -177,11 +195,13 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         "Web_app Name: " + WEB_APP_FILE_NAME1);
     }
 
-
     @Test(groups = "wso2.as.lazy.loading",
-            description = "Send concurrent requests  when Web-App is in Ghost form. " + "All request should  get expected output",
-            dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant", enabled = false)
-    public void testConcurrentWebAPPInvocationsWhenWebAppIsInGhostFormInGhostDeploymentOnSuperTenant() throws Exception {
+            description = "Send concurrent requests  when Web-App is in Ghost form. "
+                    + "All request should  get expected output",
+            dependsOnMethods = "testWebAppAutoUnLoadAndReloadInGhostFormInGhostDeploymentOnSuperTenant",
+            enabled = false)
+    public void testConcurrentWebAPPInvocationsWhenWebAppIsInGhostFormInGhostDeploymentOnSuperTenant()
+            throws Exception {
         //This test method case disable because of CARBON-15271
         serverManager.restartGracefully();
         HttpResponse httpResponseApp2 = HttpURLConnectionClient.sendGetRequest(webApp2URL, null);
@@ -214,12 +234,14 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
                         String responseDetailedInfo;
                         String responseData;
                         if (httpResponse != null) {
-                            responseDetailedInfo = "Request ID " + requestId + " Response Data :" + httpResponse.getData() +
-                                    "\tResponse Code:" + httpResponse.getResponseCode();
+                            responseDetailedInfo =
+                                    "Request ID " + requestId + " Response Data :" + httpResponse.getData() +
+                                            "\tResponse Code:" + httpResponse.getResponseCode();
                             responseData = httpResponse.getData();
                         } else {
-                            responseDetailedInfo = "Request ID " + requestId + " Response Data : NULL Object return from" +
-                                    " HttpURLConnectionClient";
+                            responseDetailedInfo =
+                                    "Request ID " + requestId + " Response Data : NULL Object return from" +
+                                            " HttpURLConnectionClient";
                             responseData = "NULL Object return";
                         }
                         responseDataList.add(responseData);
@@ -251,8 +273,8 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
                 " is not started in Tenant:" + superTenantDomain);
         assertFalse(webAppStatusTenant1WebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 +
                 " is in ghost mode after invoking in Tenant:" + superTenantDomain);
-        assertEquals(correctResponseCount, CONCURRENT_THREAD_COUNT, allDetailResponse +
-                "All the concurrent requests not get correct response.");
+        assertEquals(correctResponseCount, CONCURRENT_THREAD_COUNT,
+                allDetailResponse + "All the concurrent requests not get correct response.");
     }
 
     @AfterClass(alwaysRun = true)
