@@ -140,24 +140,38 @@ public class SuperTenantGhostDeploymentTestCase extends LazyLoadingBaseTest {
         assertTrue(checkWebAppAutoUnloadingToGhostState(superTenantDomain, WEB_APP_FILE_NAME1),
                 "Web-app is not un-loaded ane re-deployed in Ghost form after idle time pass in super tenant " +
                         "Web_app Name: " + WEB_APP_FILE_NAME1);
-        HttpResponse httpResponse;
-        try {
-            httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
-        } catch (IOException ioException) {
-            String customErrorMessage = "IOException Exception when  send a GET request to" + webApp1URL + "\n" + ioException.getMessage();
-            log.error(customErrorMessage);
-            throw new LazyLoadingTestException(customErrorMessage, ioException);
+        HttpResponse httpResponse = null;
+        long startingTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startingTime < 90 * 1000) {
+            try {
+                httpResponse = HttpURLConnectionClient.sendGetRequest(webApp1URL, null);
+                if (httpResponse.getResponseCode() == 200) {
+                    break;
+                }
+            } catch (IOException ioException) {
+                //Ignore IOExceptions as this is simply checking the availability of the given webapp continuously
+                //until a positive response is received within a time limit. An IOException could occur during the
+                //connection establishment but failures in connection establishment shouldn't affect the busy waiting
+                //for a positive response and it doesn't need to be specifically handled
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+                //Here sleep is used just to reduce the frequency of the while loop since time gap between a
+                //web service's undeployed and deployed status is higher than the time for one cycle in while loop.
+                //Therefore an interruption is not a concern hence ignored
+            }
         }
-        assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app invocation fail. Web App in Ghost mode:" +
-                getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1).isWebAppGhost() + "Web App Started:" +
-                getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1).isWebAppStarted());
-        WebAppStatusBean webAppStatusWebApp1 = getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1);
-        assertTrue(webAppStatusWebApp1.isWebAppStarted(), "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is not started in  Supper Tenant");
-        assertFalse(webAppStatusWebApp1.isWebAppGhost(), "Web-App: " + WEB_APP_FILE_NAME1 +
-                " is  in ghost mode after invoking in Supper Tenant");
-    }
+        WebAppStatusBean webAppStatusBean = getWebAppStatus(superTenantDomain, WEB_APP_FILE_NAME1);
 
+        int responseCode = httpResponse.getResponseCode();
+        assertEquals(responseCode, 200, "Response code is " + responseCode);
+        assertEquals(httpResponse.getData(), WEB_APP1_RESPONSE, "Web app:" + WEB_APP_FILE_NAME1 + "invocation failed");
+        assertTrue(webAppStatusBean.isWebAppStarted(),
+                "Web App:" + WEB_APP_FILE_NAME1 + "is not started in Super Tenant");
+        assertFalse(webAppStatusBean.isWebAppGhost(),
+                "Web App:" + WEB_APP_FILE_NAME1 + "is in ghost mode after invocation");
+    }
 
     @Test(groups = "wso2.as.lazy.loading", description = "Test web application auto unload  and reload in Ghost" +
             " format. After access web app, it should be in fully load form  but after configured web app idle time pass" +

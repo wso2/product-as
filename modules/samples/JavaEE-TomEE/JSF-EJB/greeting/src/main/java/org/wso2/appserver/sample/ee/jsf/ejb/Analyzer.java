@@ -18,16 +18,16 @@
 
 package org.wso2.appserver.sample.ee.jsf.ejb;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.ejb.Stateless;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Stateless
 public class Analyzer {
 
     public String analyzeName(String originalText) {
 
-        Set<Character> set = new HashSet<Character>();
+        Set<Character> set = new LinkedHashSet<Character>();
 
         for (char c : originalText.toLowerCase().toCharArray()) {
             if (c == ' ')
