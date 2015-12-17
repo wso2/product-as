@@ -99,6 +99,10 @@
             <artifactId>org.wso2.carbon.registry.properties.stub</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity</groupId>
+            <artifactId>org.wso2.carbon.um.ws.api.stub</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
+import org.wso2.appserver.integration.common.clients.RemoteAuthorizationManagerServiceClient;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
@@ -116,6 +117,8 @@ public class Carbon15560TestCase extends ASIntegrationTest {
     public void testWebAppUserStoreOperations() throws Exception {
 
         UserManagementClient userMgtClient = new UserManagementClient(backendURL, sessionCookie);
+        RemoteAuthorizationManagerServiceClient authorizationClient = new RemoteAuthorizationManagerServiceClient
+                (backendURL, sessionCookie);
         userMgtClient.addUser(user1, user1Password, null, defaultProfileName);
         userMgtClient.addUser(user2, user2Password, null, defaultProfileName);
 
@@ -123,6 +126,10 @@ public class Carbon15560TestCase extends ASIntegrationTest {
         userMgtClient.addRole(role2, new String[]{user1}, new String[]{loginPermission}, false);
 
         log.info("Users and Roles Added Successfully ");
+
+        assertTrue(authorizationClient.isUserAuthorized(user1, loginPermission, "ui.execute"),"Security Enabled " +
+                "Authorization Failed");
+
         String webAppContext = "/TenantServlet?user=UserStoreTestUser1";
         String finalURL = webAppUrl + webAppContext;
 
