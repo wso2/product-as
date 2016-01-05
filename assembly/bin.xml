@@ -1,0 +1,25 @@
+<assembly>
+    <id>dist</id>
+    <baseDirectory>/</baseDirectory>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
+            <outputDirectory>/application-server-6.0.0/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>distribution/webapps/</directory>
+            <outputDirectory>/application-server-6.0.0/webapps</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>distribution/lib/</directory>
+            <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>distribution/conf/</directory>
+            <outputDirectory>/application-server-6.0.0/conf/app-server/</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
