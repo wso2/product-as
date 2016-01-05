@@ -1,24 +1,24 @@
 <assembly>
-    <id>binary</id>
+    <id>dist</id>
     <baseDirectory>/</baseDirectory>
     <formats>
         <format>zip</format>
     </formats>
     <fileSets>
         <fileSet>
-            <directory>target/tomcat/${tomcat.extractDirectory.name}/</directory>
+            <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
             <outputDirectory>/application-server-6.0.0/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>extensions/webapps/</directory>
+            <directory>distribution/webapps/</directory>
             <outputDirectory>/application-server-6.0.0/webapps</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>extensions/lib/</directory>
+            <directory>distribution/lib/</directory>
             <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>extensions/conf/</directory>
+            <directory>distribution/conf/</directory>
             <outputDirectory>/application-server-6.0.0/conf/app-server/</outputDirectory>
         </fileSet>
     </fileSets>
