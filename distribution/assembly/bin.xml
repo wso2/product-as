@@ -22,4 +22,13 @@
             <outputDirectory>/application-server-6.0.0/conf/app-server/</outputDirectory>
         </fileSet>
     </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
+            <includes>
+                <include>org.wso2.appserver:sample-module:jar</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
 </assembly>
