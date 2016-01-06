@@ -10,15 +10,15 @@
             <outputDirectory>/application-server-6.0.0/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>distribution/webapps/</directory>
+            <directory>contents/webapps/</directory>
             <outputDirectory>/application-server-6.0.0/webapps</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>distribution/lib/</directory>
+            <directory>contents/lib/</directory>
             <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>distribution/conf/</directory>
+            <directory>contents/conf/</directory>
             <outputDirectory>/application-server-6.0.0/conf/app-server/</outputDirectory>
         </fileSet>
     </fileSets>

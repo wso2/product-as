@@ -7,80 +7,24 @@
 
     <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver</artifactId>
+    <packaging>pom</packaging>
     <version>6.0.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--<tomcat.download.url>file:///home/miraj/Downloads/apache-tomcat-8.0.28.tar.gz</tomcat.download.url>-->
-        <!--<tomcat.extractDirectory.name>apache-tomcat-8.0.28</tomcat.extractDirectory.name> &lt;!&ndash; Rename to exctract diretory name &ndash;&gt;-->
-        <!--<tomcat.download.hash>4b7ba7a5af0a5c395c0740fc011b59d1</tomcat.download.hash> &lt;!&ndash; Leave empty if hash check is not required &ndash;&gt;-->
-        <plugins.assembly.descriptor>assembly/bin.xml</plugins.assembly.descriptor>
-        <tomcat.version>8.0.28</tomcat.version>
     </properties>
 
  <!--add destibution .application server home. / remove binary from url-->
 
 <!--change the dir stucture modules,distbution,samples,test-->
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>${plugins.assembly.descriptor}</descriptor>
-                    </descriptors>
-                    <finalName>application-server-${project.version}</finalName>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeGroupIds>org.apache.tomcat</includeGroupIds>
-                            <includeArtifactIds>tomcat</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/tomcat-dist/</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat</artifactId>
-            <version>${tomcat.version}</version>
-            <type>zip</type>
-        </dependency>
-    </dependencies>
+
+    <modules>
+        <module>modules</module>
+        <module>distribution</module>
+        <module>samples</module>
+        <module>integration-tests</module>
+    </modules>
+
+
 </project>
