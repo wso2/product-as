@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>sample-module</module>
+        <module>webapp-loader</module>
     </modules>
 
     <artifactId>modules</artifactId>
