@@ -14,15 +14,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
- <!--add destibution .application server home. / remove binary from url-->
-
-<!--change the dir stucture modules,distbution,samples,test-->
-
-
     <modules>
         <module>modules</module>
-        <module>distribution</module>
         <module>samples</module>
+        <module>distribution</module>
         <module>integration-tests</module>
     </modules>
 
