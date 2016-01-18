@@ -32,6 +32,7 @@
                 <include>org.wso2.appserver:sample-module:jar</include>
                 <include>org.wso2.appserver:webapp-loader:jar</include>
             </includes>
+            <useProjectArtifact>false</useProjectArtifact>
         </dependencySet>
     </dependencySets>
 </assembly>
