@@ -25,6 +25,9 @@ import org.apache.tomcat.util.ExceptionUtils;
 import org.wso2.appserver.webapp.loader.conf.EnvironmentConfiguration;
 import org.wso2.appserver.webapp.loader.conf.WebAppConfigurationData;
 import org.wso2.appserver.webapp.loader.exceptions.ApplicationServerException;
+import org.wso2.appserver.webapp.loader.exceptions.ApplicationServerStartupException;
+import org.wso2.appserver.webapp.loader.exceptions.ClassLoaderConfigurationException;
+import org.wso2.appserver.webapp.loader.exceptions.ClassLoaderEnvironmentException;
 import org.wso2.appserver.webapp.loader.util.Utils;
 import org.wso2.appserver.webapp.loader.util.XMLUtils;
 
@@ -49,29 +52,20 @@ import javax.xml.bind.JAXBException;
 public class ClassLoaderContextBuilder {
 
     private static final Log log = LogFactory.getLog(ClassLoaderContextBuilder.class);
-    private static ClassLoaderContextBuilder instance = null;
 
-    private ClassLoaderConfiguration classLoaderConfig;
+    private static ClassLoaderConfiguration classLoaderConfig;
+    private static boolean isSuccessful = false;
 
-    private ClassLoaderContextBuilder() {
+    public static void initialize() {
         try {
-            this.buildSystemConfig();
-        } catch (ApplicationServerException | FileNotFoundException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
-    }
-
-    public static ClassLoaderContextBuilder getInstance() {
-
-        if (instance == null) {
-            synchronized (ClassLoaderContextBuilder.class) {
-                if (instance == null) {
-                    instance = new ClassLoaderContextBuilder();
-                }
+            if (!isSuccessful) {
+                buildSystemConfig();
             }
+        } catch (ApplicationServerException | FileNotFoundException ex) {
+            isSuccessful = false;
+            log.error(ex.getMessage(), ex);
+            throw new ApplicationServerStartupException(ex.getMessage(), ex);
         }
-        return instance;
     }
 
     /**
@@ -81,7 +75,7 @@ public class ClassLoaderContextBuilder {
      * @throws ApplicationServerException If the configuration file contains invalid information or structure
      * @throws FileNotFoundException      If the global configuration files does not exist
      */
-    public synchronized void buildSystemConfig() throws ApplicationServerException, FileNotFoundException {
+    public static synchronized void buildSystemConfig() throws ApplicationServerException, FileNotFoundException {
 
         classLoaderConfig = new ClassLoaderConfiguration();
 
@@ -94,10 +88,9 @@ public class ClassLoaderContextBuilder {
         File environmentConfigFile = new File(defaultEnvironmentConfigPath);
         if (!environmentConfigFile.exists()) {
             String errorMessage = "Failed to load environment configuration file: " + defaultEnvironmentConfigPath;
-            log.error(errorMessage);
             throw new FileNotFoundException(errorMessage);
         }
-        this.populateEnvironments(environmentConfigFile);
+        populateEnvironments(environmentConfigFile);
 
         String defaultClassloaderConfigPath = System.getProperty("catalina.home")
                 + File.separator + "conf"
@@ -109,30 +102,29 @@ public class ClassLoaderContextBuilder {
         if (!classLoaderConfigFile.exists()) {
             String errorMessage = "Failed to load default classloader configuration file: "
                     + defaultEnvironmentConfigPath;
-            log.error(errorMessage);
             throw new FileNotFoundException(errorMessage);
         }
-        this.loadClassLoaderPolicy(classLoaderConfigFile);
+        loadClassLoaderPolicy(classLoaderConfigFile);
 
+        isSuccessful = true;
     }
 
     //TODO Validate the schema.. works for the best case.
-    private void populateEnvironments(File environmentConfigFile) throws ApplicationServerException {
+    private static void populateEnvironments(File environmentConfigFile) throws ClassLoaderEnvironmentException {
 
         try {
-            EnvironmentConfiguration environmentConfiguration = XMLUtils.JAXBUnmarshal(environmentConfigFile,
+            EnvironmentConfiguration environmentConfiguration = XMLUtils.unmarshalJAXB(environmentConfigFile,
                     EnvironmentConfiguration.class);
             populateDelegatedEnvironments(environmentConfiguration);
             populateExclusiveEnvironments(environmentConfiguration);
         } catch (JAXBException ex) {
             String errorMessage = "Failed to parse environment configurations from " + environmentConfigFile;
-            log.error(errorMessage, ex);
-            throw new ApplicationServerException(errorMessage, ex);
+            throw new ClassLoaderEnvironmentException(errorMessage, ex);
         }
 
     }
 
-    private void populateDelegatedEnvironments(EnvironmentConfiguration environmentConfiguration) {
+    private static void populateDelegatedEnvironments(EnvironmentConfiguration environmentConfiguration) {
 
         environmentConfiguration.getDelegatedEnvironments().getDelegatedEnvironment()
                 .forEach((delegatedEnvironment) -> {
@@ -148,7 +140,7 @@ public class ClassLoaderContextBuilder {
 
     }
 
-    private void populateExclusiveEnvironments(EnvironmentConfiguration environmentConfiguration) {
+    private static void populateExclusiveEnvironments(EnvironmentConfiguration environmentConfiguration) {
 
         environmentConfiguration.getExclusiveEnvironments().getExclusiveEnvironment()
                 .forEach((exclusiveEnvironment) -> {
@@ -167,10 +159,10 @@ public class ClassLoaderContextBuilder {
     }
 
     //TODO Validate the schema.. works for the best case. Improve error handling
-    private void loadClassLoaderPolicy(File classLoaderConfigFile) throws ApplicationServerException {
+    private static void loadClassLoaderPolicy(File classLoaderConfigFile) throws ClassLoaderConfigurationException {
 
         try {
-            WebAppConfigurationData defaultWebAppConfigurationData = XMLUtils.JAXBUnmarshal(classLoaderConfigFile,
+            WebAppConfigurationData defaultWebAppConfigurationData = XMLUtils.unmarshalJAXB(classLoaderConfigFile,
                     WebAppConfigurationData.class);
             boolean parentFirst = defaultWebAppConfigurationData.getClassloading().isParentFirst();
             classLoaderConfig.setParentFirstBehaviour(parentFirst);
@@ -178,8 +170,7 @@ public class ClassLoaderContextBuilder {
                     .getClassloading().getEnvironments().getEnvironment());
         } catch (JAXBException ex) {
             String errorMessage = "Failed to parse classloader default configurations from " + classLoaderConfigFile;
-            log.error(errorMessage, ex);
-            throw new ApplicationServerException(errorMessage, ex);
+            throw new ClassLoaderConfigurationException(errorMessage, ex);
         }
     }
 
@@ -190,25 +181,26 @@ public class ClassLoaderContextBuilder {
      * @return an WebappClassLoaderContext for the webapp
      * @throws ApplicationServerException If the configuring fails
      */
-    public WebappClassLoaderContext buildClassLoaderContext(String webappFilePath) throws ApplicationServerException {
+    public static WebappClassLoaderContext buildClassLoaderContext(String webappFilePath)
+            throws ApplicationServerException {
 
         WebappClassLoaderContext webappClassLoaderContext = new WebappClassLoaderContext();
 
-        Optional<URL> appCLConfigFileURL = Optional.ofNullable(this.getClassLoaderConfigFileURL(webappFilePath));
+        Optional<URL> appCLConfigFileURL = Optional.ofNullable(getClassLoaderConfigFileURL(webappFilePath));
 
         if (!appCLConfigFileURL.isPresent()) {
 
             //Webapp is not specified a custom custom classloader behaviour, hence defaults to the system values.
-            return this.buildDefaultBehaviour(webappClassLoaderContext);
+            return buildDefaultBehaviour(webappClassLoaderContext);
 
         } else {
 
             //Webapp contains custom classloader specification.
-            return this.buildSpecificBehaviour(webappClassLoaderContext, appCLConfigFileURL.get());
+            return buildSpecificBehaviour(webappClassLoaderContext, appCLConfigFileURL.get());
         }
     }
 
-    private WebappClassLoaderContext buildDefaultBehaviour(WebappClassLoaderContext webappClassLoaderContext) {
+    private static WebappClassLoaderContext buildDefaultBehaviour(WebappClassLoaderContext webappClassLoaderContext) {
 
         webappClassLoaderContext.setParentFirst(classLoaderConfig.isParentFirst());
         ClassLoaderEnvironment defaultEnvironment = classLoaderConfig.getEnvironment(LoaderConstants.TOMCAT_ENV);
@@ -279,7 +271,7 @@ public class ClassLoaderContextBuilder {
         return webappClassLoaderContext;
     }
 
-    private WebappClassLoaderContext buildSpecificBehaviour(WebappClassLoaderContext webappClassLoaderContext
+    private static WebappClassLoaderContext buildSpecificBehaviour(WebappClassLoaderContext webappClassLoaderContext
             , URL webappConfigFileURL) throws ApplicationServerException {
 
         //TODO: boolean null return if not specified
@@ -287,7 +279,7 @@ public class ClassLoaderContextBuilder {
         try {
 
             WebAppConfigurationData webAppConfigurationData = XMLUtils
-                    .JAXBUnmarshal(webappConfigFileURL.openStream(), WebAppConfigurationData.class);
+                    .unmarshalJAXB(webappConfigFileURL.openStream(), WebAppConfigurationData.class);
 
             if (webAppConfigurationData.getClassloading().isParentFirst() != null) {
                 webappClassLoaderContext.setParentFirst(webAppConfigurationData.getClassloading().isParentFirst());
@@ -345,11 +337,11 @@ public class ClassLoaderContextBuilder {
         return webappClassLoaderContext;
     }
 
-    private void addWepAppDefaultExternalRepositories(List<String> repositories) {
+    private static void addWepAppDefaultExternalRepositories(List<String> repositories) {
         repositories.addAll(Utils.generateClasspath(LoaderConstants.DEFAULT_EXT_DIR));
     }
 
-    private URL getClassLoaderConfigFileURL(String webappFilePath) throws ApplicationServerException {
+    private static URL getClassLoaderConfigFileURL(String webappFilePath) throws ApplicationServerException {
 
         File webappFile = new File(webappFilePath);
         URL configFileURL = null;
@@ -400,7 +392,7 @@ public class ClassLoaderContextBuilder {
      * 1. specified environments list does not contains 'Tomcat'
      * 2. specified environments list does not contains 'Carbon', Carbon includes Tomcat
      */
-    private void addSystemEnvironment(List<String> environments) {
+    private static void addSystemEnvironment(List<String> environments) {
 
         if (!(environments.contains(LoaderConstants.TOMCAT_ENV))) {
             environments.add(LoaderConstants.TOMCAT_ENV);
