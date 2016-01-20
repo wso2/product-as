@@ -18,7 +18,10 @@
 
 package org.wso2.appserver.webapp.loader.exceptions;
 
-public class ClassLoaderConfigurationException extends ApplicationServerException{
+/**
+ * Thrown when the class loader failed to build the configurations.
+ */
+public class ClassLoaderConfigurationException extends ApplicationServerException {
     public ClassLoaderConfigurationException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -18,6 +18,9 @@
 
 package org.wso2.appserver.webapp.loader.exceptions;
 
+/**
+ * Thrown when the application server startup process has failed.
+ */
 public class ApplicationServerStartupException extends RuntimeException {
     public ApplicationServerStartupException(String message, Throwable cause) {
         super(message, cause);

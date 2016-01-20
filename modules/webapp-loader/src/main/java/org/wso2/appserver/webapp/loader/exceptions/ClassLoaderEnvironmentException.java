@@ -18,7 +18,10 @@
 
 package org.wso2.appserver.webapp.loader.exceptions;
 
-public class ClassLoaderEnvironmentException extends ApplicationServerException{
+/**
+ * Thrown when the class loader failed to read the environment configurations.
+ */
+public class ClassLoaderEnvironmentException extends ApplicationServerException {
     public ClassLoaderEnvironmentException(String message, Throwable cause) {
         super(message, cause);
     }
