@@ -66,7 +66,7 @@ public class WSAS2185HibernateJNDITestCase extends ASIntegrationTest {
                    "Web Application Deployment failed");
     }
 
-    @Test(groups = "wso2.as", description = "Set tenant ID without resolving domain and check if domain is null")
+    @Test(groups = "wso2.as", description = "Try to persist a Employee obj through the Sessionfactory")
     public void testAddingEmployeeWithJNDI() throws Exception {
         String url = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + APP_NAME + "/EmployeeManager?empName=WSO2";
 
