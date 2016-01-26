@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/HibernateJNDITestApp">
+
+      <Resource name="jdbc/MyLocalDB"
+                global="jdbc/MyLocalDB"
+                auth="Container"
+                type="javax.sql.DataSource"
+                driverClassName="org.h2.Driver"
+                url="jdbc:h2:mem:testdbforjndi;DB_CLOSE_ON_EXIT=TRUE;LOCK_TIMEOUT=60000"
+                username="sa"
+                password=""
+
+                maxActive="100"
+                maxIdle="20"
+                minIdle="5"
+                maxWait="10000"/>
+</Context>
