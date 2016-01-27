@@ -20,8 +20,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationConstants;
@@ -29,8 +27,13 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
+import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
+import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
+import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -44,21 +47,24 @@ public class WSAS2185HibernateJNDITestCase extends ASIntegrationTest {
     private static final java.lang.String APP_NAME = "hibernate-jndi-sample";
     private TestUserMode userMode;
     private WebAppAdminClient webAppAdminClient;
+    private ServerConfigurationManager serverManager;
     private HttpClient httpClient = new HttpClient();
-
-    @Factory(dataProvider = "userModeDataProvider")
-    public WSAS2185HibernateJNDITestCase(TestUserMode userMode) {
-        this.userMode = userMode;
-    }
-
-    @DataProvider
-    private static TestUserMode[][] userModeDataProvider() {
-        return new TestUserMode[][] { { TestUserMode.SUPER_TENANT_ADMIN }, { TestUserMode.TENANT_USER } };
-    }
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        super.init(userMode);
+        super.init();
+        //Restart the server with changed carbon.xml
+        Path sourcePath =
+                Paths.get(TestConfigurationProvider.getResourceLocation(), "artifacts", "AS", "hibernate-jndi",
+                          "carbon.xml");
+        Path targetPath =
+                Paths.get(System.getProperty(ServerConstants.CARBON_HOME), "repository", "conf", "carbon.xml");
+
+        serverManager = new ServerConfigurationManager(asServer);
+        serverManager.applyConfigurationWithoutRestart(sourcePath.toFile(), targetPath.toFile(), true);
+        serverManager.restartForcefully();
+
+        super.init();
         webAppAdminClient = new WebAppAdminClient(backendURL, sessionCookie);
         String path = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "war" + File.separator + WEBAPP_FILENAME;
         webAppAdminClient.uploadWarFile(path);
@@ -80,5 +86,7 @@ public class WSAS2185HibernateJNDITestCase extends ASIntegrationTest {
     @AfterClass(alwaysRun = true)
     public void testDeleteWebApplication() throws Exception {
         webAppAdminClient.deleteWebAppFile(WEBAPP_FILENAME, asServer.getDefaultInstance().getHosts().get("default"));
+        //revert the carbon.xml change
+        serverManager.restoreToLastConfiguration();
     }
 }
