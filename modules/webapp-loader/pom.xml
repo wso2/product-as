@@ -45,6 +45,7 @@
                 <version>2.5</version>
                 <configuration>
                     <outputDirectory>/home/miraj/WSO2/Apache Tomcat 8/apache-tomcat-8.0.28/lib/</outputDirectory>
+                    <!--todo remove custom jar location-->
                 </configuration>
             </plugin>
             <plugin>
@@ -56,51 +57,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>validate</id>-->
-                        <!--<phase>validate</phase>-->
-                        <!--<configuration>-->
-                            <!--<configLocation>-->
-                                <!--https://raw.githubusercontent.com/wso2/code-quality-tools/master/checkstyle/checkstyle.xml-->
-                            <!--</configLocation>-->
-                            <!--<suppressionsLocation>-->
-                                <!--https://raw.githubusercontent.com/wso2/code-quality-tools/master/checkstyle/suppressions.xml-->
-                            <!--</suppressionsLocation>-->
-                            <!--<encoding>UTF-8</encoding>-->
-                            <!--<consoleOutput>true</consoleOutput>-->
-                            <!--<failsOnError>true</failsOnError>-->
-                            <!--<includeTestSourceDirectory>true</includeTestSourceDirectory>-->
-                        <!--</configuration>-->
-                        <!--<goals>-->
-                            <!--<goal>check</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>findbugs-maven-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<effort>Max</effort>-->
-                    <!--<threshold>Low</threshold>-->
-                    <!--<xmlOutput>true</xmlOutput>-->
-                    <!--<findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>analyze-compile</id>-->
-                        <!--<phase>compile</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>check</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 </project>

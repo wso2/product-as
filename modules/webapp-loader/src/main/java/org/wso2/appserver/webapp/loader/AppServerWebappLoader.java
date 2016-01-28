@@ -51,9 +51,9 @@ public class AppServerWebappLoader extends WebappLoader {
 
         WebappClassLoaderContext webappClassLoaderContext;
         try {
+            ClassLoaderContextBuilder.initialize();
             // build the specific webapp context using configurations
-            webappClassLoaderContext = ClassLoaderContextBuilder.getInstance()
-                    .buildClassLoaderContext(this.getWebappFilePath());
+            webappClassLoaderContext = ClassLoaderContextBuilder.buildClassLoaderContext(this.getWebappFilePath());
         } catch (ApplicationServerException ex) {
             log.error(ex.getMessage(), ex);
             throw new LifecycleException(ex.getMessage(), ex);

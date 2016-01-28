@@ -18,9 +18,6 @@
  */
 package org.wso2.appserver.webapp.loader;
 
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +28,6 @@ import java.util.stream.Collectors;
  */
 public class WebappClassLoaderContext {
 
-    private static final Log log = LogFactory.getLog(WebappClassLoaderContext.class); // TODO: ASK log requirement
 
     private boolean parentFirst = false;
 

@@ -18,51 +18,26 @@
 
 package org.wso2.appserver.webapp.loader.util;
 
-import org.xml.sax.SAXException;
-
+import java.io.File;
+import java.io.InputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 /**
- * Contains XML utility methods based on DOM.
+ * Contains XML utility methods based on JAXB.
  */
 public class XMLUtils {
 
 
     /**
-     * Build a XML Document from a file
-     *
-     * @param xmlFile file
-     * @return a Document object
-     * @throws IOException,ParserConfigurationException,SAXException if an error occurs
+     *  Build a XML binding from a file.
+     * @param xmlFile file object of the xml
+     * @param bindingClass class to be bound
+     * @param <T> type of the binding class
+     * @return bound object (Type T) of the xml
+     * @throws JAXBException if the binding fails
      */
-//    public static Document buildDocumentFromFile(File xmlFile) throws ParserConfigurationException, IOException, SAXException {
-//
-//        Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlFile);
-//        xmlDoc.getDocumentElement().normalize();
-//        return xmlDoc;
-//
-//    }
-
-    /**
-     * Build a XML Document from a InputStream.
-     *
-     * @param // InputStream
-     * @return a Document object
-     * @throws IOException,ParserConfigurationException,SAXException if an error occurs
-     */
-//    public static Document buildDocumentFromInputStream(InputStream is) throws ParserConfigurationException, IOException, SAXException {
-//        Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-//        xmlDoc.getDocumentElement().normalize();
-//        return xmlDoc;
-//    }
-
-
-    public static <T> T JAXBUnmarshal(File xmlFile, Class<T> bindingClass) throws JAXBException {
+    public static <T> T unmarshalJAXB(File xmlFile, Class<T> bindingClass) throws JAXBException {
 
         JAXBContext jaxbContext = JAXBContext.newInstance(bindingClass);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -71,7 +46,15 @@ public class XMLUtils {
 
     }
 
-    public static <T> T JAXBUnmarshal(InputStream is, Class<T> bindingClass) throws JAXBException {
+    /**
+     * Build a XML binding from input stream.
+     * @param is input stream of the xml
+     * @param bindingClass class to be bound
+     * @param <T> type of the binding class
+     * @return bound object (Type T) of the xml
+     * @throws JAXBException if the binding fails
+     */
+    public static <T> T unmarshalJAXB(InputStream is, Class<T> bindingClass) throws JAXBException {
 
         JAXBContext jaxbContext = JAXBContext.newInstance(bindingClass);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

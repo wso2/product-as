@@ -94,6 +94,9 @@ public class WebAppConfigurationData {
         getClassloading().setParentFirst(parentFirst);
     }
 
+    /**
+     * .
+     */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
             "parentFirst",
@@ -123,6 +126,9 @@ public class WebAppConfigurationData {
             environments = new Environments();
         }
 
+        /**
+         * stores class loader environment details.
+         */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
                 "environment"
@@ -147,7 +153,9 @@ public class WebAppConfigurationData {
 
     }
 
-
+    /**
+     *
+     */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
             "isManagedApi"
@@ -167,7 +175,9 @@ public class WebAppConfigurationData {
 
     }
 
-
+    /**
+     *
+     */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
             "enabled",

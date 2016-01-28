@@ -6,7 +6,7 @@
 
     <groupId>org.wso2.appserver.webapp.mgt.loader.test</groupId>
     <artifactId>classloader-test-web</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <packaging>war</packaging>
 
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.wso2.appserver.webapp.mgt.loader.test</groupId>
             <artifactId>cl-test</artifactId>
-            <version>3.0-SNAPSHOT</version>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

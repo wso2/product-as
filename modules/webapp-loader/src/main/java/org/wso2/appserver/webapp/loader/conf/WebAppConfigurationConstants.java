@@ -24,24 +24,7 @@ package org.wso2.appserver.webapp.loader.conf;
  * This class keeps some constants related to web app configuration.
  */
 public class WebAppConfigurationConstants {
-//    public static final String WSO2_WEB_XML = "WEB-INF" + File.separator + "sample1.xml";
-//    public static final String DEFAULT_WSO2_WEB_XML =
-//            System.getProperty("carbon.home") + File.separator + "repository" + File.separator + "conf"
-// + File.separator
-//                    + "tomcat" + File.separator + "sample1.xml";
-//    public static final String WSO2_WEB_XML_SCHEMA =
-//            System.getProperty("carbon.home") + File.separator + "repository" + File.separator + "conf"
-// + File.separator
-//                    + "tomcat" + File.separator + "WSO2-web-schema.xsd";
+
     public static final String NAMESPACE = "http://wso2as-web-config/xsd";
 
-//    public final static String ENV_CONFIG_FILE = "webapp-classloading-environments.xml";
-//    public final static String CL_CONFIG_FILE = "webapp-classloading.xml";
-//    public final static String APP_CL_CONFIG_FILE = "META-INF/" + CL_CONFIG_FILE;
-//    public final static String DEFAULT_EXT_DIR = "${carbon.home}/lib/runtimes/ext/";
-//
-//    public final static String SYSTEM_ENV = "Carbon";
-//    public final static String TOMCAT_ENV = "Tomcat";
-//    public final static String CXF_ENV = "CXF";
-//    public final static String JAVAEE_ENV = "Javaee";
 }

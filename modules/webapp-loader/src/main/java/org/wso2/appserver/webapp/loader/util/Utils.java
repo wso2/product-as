@@ -27,7 +27,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * util class for class loader module.
+ */
 public class Utils {
+
 
     public static List<String> generateClasspath(String classPath) {
 

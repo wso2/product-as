@@ -85,7 +85,9 @@ public class EnvironmentConfiguration {
         this.exclusiveEnvironments = value;
     }
 
-
+    /**
+     * Stores delegated environment details.
+     */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
             "delegatedEnvironment"
@@ -122,7 +124,9 @@ public class EnvironmentConfiguration {
             return this.delegatedEnvironment;
         }
 
-
+        /**
+         * store specific delegated environment data.
+         */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
                 "name",
@@ -206,6 +210,9 @@ public class EnvironmentConfiguration {
                 this.delegatedResources = value;
             }
 
+            /**
+             * stores delegated package details.
+             */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
                     "delegatedPackage"
@@ -244,6 +251,9 @@ public class EnvironmentConfiguration {
 
             }
 
+            /**
+             * stores delegated resource details.
+             */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
                     "delegatedResource"
@@ -286,6 +296,9 @@ public class EnvironmentConfiguration {
 
     }
 
+    /**
+     * stores exclusive environment details.
+     */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
             "exclusiveEnvironment"
@@ -322,6 +335,9 @@ public class EnvironmentConfiguration {
             return this.exclusiveEnvironment;
         }
 
+        /**
+         * stores specific exclusive environment details.
+         */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
                 "name",
@@ -375,7 +391,9 @@ public class EnvironmentConfiguration {
                 this.classPaths = value;
             }
 
-
+            /**
+             * stores exclusive environment's class paths.
+             */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
                     "classPath"

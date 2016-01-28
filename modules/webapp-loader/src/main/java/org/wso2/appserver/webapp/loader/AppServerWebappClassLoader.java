@@ -22,7 +22,6 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.loader.WebappClassLoaderBase;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import sun.misc.CompoundEnumeration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,14 +51,6 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
     public void setWebappClassLoaderContext(WebappClassLoaderContext classLoaderContext) {
         this.webappClassLoaderContext = classLoaderContext;
     }
-
-    /*
-    url mappings
-      this -> webbapp libs
-      this.parent -> tomcat lib
-      this.parent.parent -> tomcat bin jars
-      this.parent.parent.parent -> jre external jars (similar to getJ2SE classloader)
-    */
 
     @Override
     public synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
@@ -232,7 +223,6 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         The logic to access BootstrapClassPath is JDK vendor dependent hence
         we can't call it from here. Ensure 'parentCL != null', to find resources
         from BootstrapClassPath.
-
          */
         if (parent != null) {
             boolean delegatedRes = webappClassLoaderContext.isDelegatedResource(name);

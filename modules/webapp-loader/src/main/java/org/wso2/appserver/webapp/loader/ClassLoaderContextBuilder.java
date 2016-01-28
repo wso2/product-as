@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,26 +81,22 @@ public class ClassLoaderContextBuilder {
 
         classLoaderConfig = new ClassLoaderConfiguration();
 
-        String defaultEnvironmentConfigPath = System.getProperty("catalina.home")
-                + File.separator + "conf"
-                + File.separator + "wso2"
-                + File.separator + LoaderConstants.ENVIRONMENT_CONFIG_FILE;
+        Path defaultEnvironmentConfigPath = Paths
+                .get(System.getProperty("catalina.home"),"conf","wso2",LoaderConstants.ENVIRONMENT_CONFIG_FILE);
 
         //Loading specified environment from the environment config file.
-        File environmentConfigFile = new File(defaultEnvironmentConfigPath);
+        File environmentConfigFile = defaultEnvironmentConfigPath.toFile();
         if (!environmentConfigFile.exists()) {
             String errorMessage = "Failed to load environment configuration file: " + defaultEnvironmentConfigPath;
             throw new FileNotFoundException(errorMessage);
         }
         populateEnvironments(environmentConfigFile);
 
-        String defaultClassloaderConfigPath = System.getProperty("catalina.home")
-                + File.separator + "conf"
-                + File.separator + "wso2"
-                + File.separator + LoaderConstants.CLASSLOADER_CONFIG_FILE;
+        Path defaultClassloaderConfigPath = Paths
+                .get(System.getProperty("catalina.home"),"conf","wso2",LoaderConstants.CLASSLOADER_CONFIG_FILE);
 
         //Loading class loading policy form the classloader config file.
-        File classLoaderConfigFile = new File(defaultClassloaderConfigPath);
+        File classLoaderConfigFile = defaultClassloaderConfigPath.toFile();
         if (!classLoaderConfigFile.exists()) {
             String errorMessage = "Failed to load default classloader configuration file: "
                     + defaultEnvironmentConfigPath;
@@ -185,16 +183,13 @@ public class ClassLoaderContextBuilder {
             throws ApplicationServerException {
 
         WebappClassLoaderContext webappClassLoaderContext = new WebappClassLoaderContext();
-
         Optional<URL> appCLConfigFileURL = Optional.ofNullable(getClassLoaderConfigFileURL(webappFilePath));
 
         if (!appCLConfigFileURL.isPresent()) {
-
             //Webapp is not specified a custom custom classloader behaviour, hence defaults to the system values.
             return buildDefaultBehaviour(webappClassLoaderContext);
 
         } else {
-
             //Webapp contains custom classloader specification.
             return buildSpecificBehaviour(webappClassLoaderContext, appCLConfigFileURL.get());
         }
@@ -220,18 +215,12 @@ public class ClassLoaderContextBuilder {
                         ClassLoaderEnvironment environment = classLoaderConfig.getEnvironment(environmentName);
 
                         Optional.ofNullable(environment).ifPresent((env) -> {
-
                             defaultEnvironmentNames.add(env.getEnvironmentName());
-
                             if (env.getEnvironmentType() == EnvironmentType.DELEGATED) {
-
                                 delegatedPackageList.addAll(env.getPackageList());
                                 delegatedResourceList.addAll(env.getResourcesList());
-
                             } else if (env.getEnvironmentType() == EnvironmentType.EXCLUSIVE) {
-
                                 providedRepositories.addAll(env.getPackageList());
-
                             }
                         });
 
@@ -345,11 +334,11 @@ public class ClassLoaderContextBuilder {
 
         File webappFile = new File(webappFilePath);
         URL configFileURL = null;
-        String webappClassloaderConfigPath = "META-INF" + File.separator + LoaderConstants.CLASSLOADER_CONFIG_FILE;
+        Path webappClassloaderConfigPath = Paths.get("META-INF" ,LoaderConstants.CLASSLOADER_CONFIG_FILE);
 
         if (webappFile.isDirectory()) {
 
-            File configFile = new File(webappFilePath + File.separator + webappClassloaderConfigPath);
+            File configFile = Paths.get(webappFilePath,"META-INF" ,LoaderConstants.CLASSLOADER_CONFIG_FILE).toFile();
             if (configFile.exists()) {
                 try {
                     configFileURL = configFile.toURI().toURL();
@@ -364,7 +353,7 @@ public class ClassLoaderContextBuilder {
             JarFile webappJarFile = null;
             try {
                 webappJarFile = new JarFile(webappFilePath);
-                if (Optional.ofNullable(webappJarFile.getJarEntry(webappClassloaderConfigPath)).isPresent()) {
+                if (Optional.ofNullable(webappJarFile.getJarEntry(webappClassloaderConfigPath.toString())).isPresent()) {
                     configFileURL = new URL("jar:file:" + URLEncoder.encode(webappFilePath, "UTF-8")
                             .replace("+", "%20") + "!/" + webappClassloaderConfigPath);
                 }

@@ -108,7 +108,7 @@
         <ExclusiveEnvironment>
             <Name>CXF</Name>
             <ClassPaths>
-                <ClassPath>${user.dir}/lib/runtimes/cxf/</ClassPath>
+                <ClassPath>${catalina.home}/lib/runtimes/cxf/</ClassPath>
             </ClassPaths>
         </ExclusiveEnvironment>
 
