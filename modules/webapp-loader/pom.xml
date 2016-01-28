@@ -41,15 +41,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <outputDirectory>/home/miraj/WSO2/Apache Tomcat 8/apache-tomcat-8.0.28/lib/</outputDirectory>
-                    <!--todo remove custom jar location-->
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
