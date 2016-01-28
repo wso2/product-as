@@ -261,6 +261,20 @@
                             <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>copy-HibernateJNDI-webapp</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources/artifacts/AS/war</outputDirectory>
+                            <includeTypes>war</includeTypes>
+                            <includeArtifactIds>hibernate-jndi-sample</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -597,6 +611,15 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>carbon-cache</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Hibernate JNDI Test Artifact -->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>hibernate-jndi-sample</artifactId>
             <version>${project.parent.version}</version>
             <type>war</type>
             <scope>test</scope>

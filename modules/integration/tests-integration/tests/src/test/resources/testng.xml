@@ -174,4 +174,11 @@
             <package name="org.wso2.appserver.integration.tests.multitenancy"/>
         </packages>
     </test>
+
+    <!--TODO WSAS-2185 Enable this test when the kernel version of WSO2 AS is changed to 4.4.4 or later-->
+    <!--<test name="jndi-hibernate-test" preserve-order="true" parallel="false">
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.jndi.WSAS2185HibernateJNDITestCase"/>
+        </classes>
+    </test>-->
 </suite>

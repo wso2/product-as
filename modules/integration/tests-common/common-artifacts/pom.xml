@@ -43,6 +43,7 @@
         <module>logging</module>
         <module>carbon-context</module>
         <module>carbon-cache</module>
+        <module>hibernate-jndi-sample</module>
     </modules>
 
 </project>
