@@ -18,6 +18,8 @@
  */
 package org.wso2.appserver.webapp.loader;
 
+import java.io.File;
+
 /**
  * Constants for the wso2 class loader.
  */
@@ -26,7 +28,7 @@ public final class LoaderConstants {
     public static final String ENVIRONMENT_CONFIG_FILE = "webapp-classloader-environments.xml";
     public static final String CLASSLOADER_CONFIG_FILE = "wso2as-web.xml";
 
-    public static final String DEFAULT_EXT_DIR = "${catalina.home}/lib/ext/";
+    public static final String DEFAULT_EXT_DIR = "${catalina.home}" + File.separator + "lib" + File.separator + "ext";
 
     public static final String TOMCAT_ENV = "Tomcat";
 

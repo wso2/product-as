@@ -82,7 +82,7 @@ public class ClassLoaderContextBuilder {
         classLoaderConfig = new ClassLoaderConfiguration();
 
         Path defaultEnvironmentConfigPath = Paths
-                .get(System.getProperty("catalina.home"),"conf","wso2",LoaderConstants.ENVIRONMENT_CONFIG_FILE);
+                .get(System.getProperty("catalina.home"), "conf", "wso2", LoaderConstants.ENVIRONMENT_CONFIG_FILE);
 
         //Loading specified environment from the environment config file.
         File environmentConfigFile = defaultEnvironmentConfigPath.toFile();
@@ -93,7 +93,7 @@ public class ClassLoaderContextBuilder {
         populateEnvironments(environmentConfigFile);
 
         Path defaultClassloaderConfigPath = Paths
-                .get(System.getProperty("catalina.home"),"conf","wso2",LoaderConstants.CLASSLOADER_CONFIG_FILE);
+                .get(System.getProperty("catalina.home"), "conf", "wso2", LoaderConstants.CLASSLOADER_CONFIG_FILE);
 
         //Loading class loading policy form the classloader config file.
         File classLoaderConfigFile = defaultClassloaderConfigPath.toFile();
@@ -334,11 +334,11 @@ public class ClassLoaderContextBuilder {
 
         File webappFile = new File(webappFilePath);
         URL configFileURL = null;
-        Path webappClassloaderConfigPath = Paths.get("META-INF" ,LoaderConstants.CLASSLOADER_CONFIG_FILE);
+        Path webappClassloaderConfigPath = Paths.get("META-INF", LoaderConstants.CLASSLOADER_CONFIG_FILE);
 
         if (webappFile.isDirectory()) {
 
-            File configFile = Paths.get(webappFilePath,"META-INF" ,LoaderConstants.CLASSLOADER_CONFIG_FILE).toFile();
+            File configFile = Paths.get(webappFilePath, "META-INF", LoaderConstants.CLASSLOADER_CONFIG_FILE).toFile();
             if (configFile.exists()) {
                 try {
                     configFileURL = configFile.toURI().toURL();
@@ -353,7 +353,8 @@ public class ClassLoaderContextBuilder {
             JarFile webappJarFile = null;
             try {
                 webappJarFile = new JarFile(webappFilePath);
-                if (Optional.ofNullable(webappJarFile.getJarEntry(webappClassloaderConfigPath.toString())).isPresent()) {
+                if (Optional.ofNullable(webappJarFile.getJarEntry(webappClassloaderConfigPath.toString()))
+                        .isPresent()) {
                     configFileURL = new URL("jar:file:" + URLEncoder.encode(webappFilePath, "UTF-8")
                             .replace("+", "%20") + "!/" + webappClassloaderConfigPath);
                 }
