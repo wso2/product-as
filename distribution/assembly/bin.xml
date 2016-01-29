@@ -8,26 +8,26 @@
 
         <fileSet>
             <directory>contents/webapps/</directory>
-            <outputDirectory>/application-server-6.0.0/webapps</outputDirectory>
+            <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>contents/lib/</directory>
-            <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
+            <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>contents/conf/</directory>
-            <outputDirectory>/application-server-6.0.0/conf/</outputDirectory>
+            <outputDirectory>/${distribution.file.name}/conf/</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
-            <outputDirectory>/application-server-6.0.0/</outputDirectory>
+            <outputDirectory>/${distribution.file.name}/</outputDirectory>
         </fileSet>
 
     </fileSets>
 
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
+            <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:sample-module:jar</include>
                 <include>org.wso2.appserver:webapp-loader:jar</include>

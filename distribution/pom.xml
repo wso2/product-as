@@ -14,7 +14,7 @@
 
     <properties>
         <plugins.assembly.descriptor>assembly/bin.xml</plugins.assembly.descriptor>
-        <tomcat.version>8.0.28</tomcat.version>
+        <distribution.file.name>wso2as-${project.version}</distribution.file.name>
     </properties>
 
     <build>
@@ -22,7 +22,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
                 <executions>
                     <execution>
                         <id>default-jar</id>
@@ -33,13 +32,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.1</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
                         <descriptor>${plugins.assembly.descriptor}</descriptor>
                     </descriptors>
-                    <finalName>application-server-${project.version}</finalName>
+                    <finalName>${distribution.file.name}</finalName>
                 </configuration>
                 <executions>
                     <execution>
@@ -53,7 +51,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
                 <executions>
                     <execution>
                         <id>unpack</id>
@@ -77,21 +74,15 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
-            <version>${tomcat.version}</version>
             <type>zip</type>
         </dependency>
-
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>sample-module</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>webapp-loader</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 </project>
