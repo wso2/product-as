@@ -17,6 +17,7 @@
 
     <artifactId>modules</artifactId>
     <version>6.0.0-SNAPSHOT</version>
+    <name>WSO2 Application Server 6.0.0 - Modules</name>
 
 
 </project>
