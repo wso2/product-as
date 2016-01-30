@@ -19,6 +19,14 @@
             <outputDirectory>/${distribution.file.name}/conf/</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}/bin</directory>
+            <outputDirectory>/${distribution.file.name}/bin</outputDirectory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
             <outputDirectory>/${distribution.file.name}/</outputDirectory>
         </fileSet>
