@@ -15,5 +15,8 @@
     <version>6.0.0-SNAPSHOT</version>
     <name>WSO2 Application Server 6.0.0 - Samples</name>
 
+    <modules>
+        <module>hello-world</module>
+    </modules>
 
 </project>
