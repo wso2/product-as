@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>modules</artifactId>
+        <groupId>org.wso2.appserver</groupId>
+        <version>6.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>http-statistics-monitoring</artifactId>
+
+    <repositories>
+        <repository>
+            <id>wso2-nexus</id>
+            <name>WSO2 internal Repository</name>
+            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.goldin</groupId>
+                <artifactId>copy-maven-plugin</artifactId>
+                <version>0.2.5</version>
+                <executions>
+                    <execution>
+                        <id>deploy-to-local-directory</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <skipIdentical>false</skipIdentical>
+                            <failIfNotFound>false</failIfNotFound>
+                            <resources>
+                                <resource>
+                                    <description>Copy artifact to another directory</description>
+                                    <targetPath>/opt/tomcat/apache-tomcat-8.0.28/lib/</targetPath>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>*.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>8.0.28</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+            <version>5.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
+            <version>5.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
+            <version>5.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.commons</groupId>
+            <artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
+            <version>4.4.8</version>
+        </dependency>
+        <dependency>
+            <groupId>by.stub</groupId>
+            <artifactId>stubby4j</artifactId>
+            <version>1.0.17</version>
+        </dependency>
+        <dependency>
+            <groupId>ua.parser.wso2</groupId>
+            <artifactId>ua-parser</artifactId>
+            <version>1.3.0.wso2v1</version>
+        </dependency>
+
+
+    </dependencies>
+
+
+</project>
