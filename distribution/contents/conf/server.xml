@@ -135,6 +135,8 @@
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log" suffix=".txt"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+        <Valve className="org.wso2.appserver.monitoring.collector.http.HttpStatValve"
+               username="admin" password="admin" host="127.0.0.1" configFileFolder="conf/Security"/>
         <!-- <Valve className="org.wso2.mirage.test.CustomValve"/> -->
 
       </Host>
