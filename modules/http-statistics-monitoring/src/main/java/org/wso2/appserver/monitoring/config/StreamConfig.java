@@ -13,10 +13,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * Created by nathasha on 12/15/15.
- */
-
-/**
  * Parse XML document to retrieve Event Stream name and version defined in Data Analytics Server.
  */
 public class StreamConfig {
@@ -28,8 +24,6 @@ public class StreamConfig {
     /**
      *
      * @throws InvalidXMLConfiguration
-     * @throws IOException
-     * @throws SAXException
      */
     public StreamConfig() throws InvalidXMLConfiguration {
         /*exit the current directory*/
@@ -39,7 +33,7 @@ public class StreamConfig {
 
         File xmlFile = new File(parentDir + "/conf/valveConfig.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = null;
+        DocumentBuilder dBuilder ;
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         }  catch (ParserConfigurationException e) {
@@ -48,9 +42,7 @@ public class StreamConfig {
 
         try {
             doc = dBuilder.parse(xmlFile);
-        } catch (SAXException e) {
-            throw new InvalidXMLConfiguration("Parsing failed", e);
-        } catch (IOException e) {
+        } catch (SAXException | IOException e) {
             throw new InvalidXMLConfiguration("Parsing failed", e);
         }
 
@@ -61,9 +53,6 @@ public class StreamConfig {
      * Parse Event Stream name from XML document.
      *
      * @return the name of the Event Stream
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
      */
     public String getStreamName() {
 
@@ -86,9 +75,6 @@ public class StreamConfig {
      * Parse Event Stream version from XML document.
      *
      * @return the version of the Event Stream
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
      */
     public String getStreamVersion() {
 

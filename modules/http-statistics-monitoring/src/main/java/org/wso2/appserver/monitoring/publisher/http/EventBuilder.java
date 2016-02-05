@@ -9,22 +9,19 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import ua_parser.Client;
 import ua_parser.Parser;
 
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 
-/**
- * Created by nathasha on 12/7/15.
- */
 
 /**
  * Build an Event using WebappMonitoringEvent.
  */
 public class EventBuilder  {
 
-
+    private Parser uaParser = null;
 
     /**
      * Build an Event using a WebappMonitoringEvent.
@@ -71,19 +68,140 @@ public class EventBuilder  {
         payload.add(mapNull(monitoringEvent.getLanguage()));
         payload.add(mapNull(monitoringEvent.getDeviceCategory()));
 
-
         List<Object> metaData = new ArrayList<Object>();
         metaData.add(mapNull(monitoringEvent.getServerAddress()));
         metaData.add(mapNull(monitoringEvent.getServerName()));
         metaData.add(mapNull(monitoringEvent.getClusterDomain()));
         metaData.add(mapNull(monitoringEvent.getClusterSubDomain()));
 
-
         Event event = new Event(streamId, System.currentTimeMillis(), metaData.toArray(), null, payload.toArray());
         return event;
 
     }
 
+    public WebappMonitoringEvent setStatData(Request request, Response response, long responseTime) {
+
+        String BACKSLASH = "/";
+        WebappMonitoringEvent webappMonitoringEvent = new WebappMonitoringEvent();
+        String requestedURI = request.getRequestURI();
+
+        /*
+        * Checks requested url null
+        */
+        if (Optional.ofNullable(requestedURI).isPresent()) {
+
+            requestedURI = requestedURI.trim();
+            String[] requestedUriParts = requestedURI.split(BACKSLASH);
+           /*
+            * If url start with /t/, the request comes to a tenant web app
+            */
+            if (requestedURI.startsWith("/t/")) {
+                if (requestedUriParts.length >= 4) {
+                    webappMonitoringEvent.setWebappName(requestedUriParts[4]);
+                    webappMonitoringEvent.setWebappOwnerTenant(requestedUriParts[2]);
+                }
+            } else {
+                webappMonitoringEvent.setWebappOwnerTenant(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+                if (!BACKSLASH.equals(requestedURI)) {
+                    webappMonitoringEvent.setWebappName(requestedUriParts[1]);
+                } else {
+                    webappMonitoringEvent.setWebappName(BACKSLASH);
+                }
+            }
+
+            String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
+                    + request.getContext().getEffectiveMinorVersion();
+            webappMonitoringEvent.setWebappVersion(webappServletVersion);
+            String consumerName = extractUsername(request);
+            webappMonitoringEvent.setUserId(consumerName);
+            webappMonitoringEvent.setResourcePath(request.getPathInfo());
+            webappMonitoringEvent.setRequestUri(request.getRequestURI());
+            webappMonitoringEvent.setHttpMethod(request.getMethod());
+            webappMonitoringEvent.setContentType(request.getContentType());
+            webappMonitoringEvent.setResponseContentType(response.getContentType());
+            webappMonitoringEvent.setResponseHttpStatusCode(response.getStatus());
+            webappMonitoringEvent.setRemoteAddress(getClientIpAddress(request));
+            webappMonitoringEvent.setReferrer(request.getHeader(WebappMonitoringPublisherConstants.REFERRER));
+            webappMonitoringEvent.setRemoteUser(request.getRemoteUser());
+            webappMonitoringEvent.setAuthType(request.getAuthType());
+            webappMonitoringEvent.setCountry("-");
+            webappMonitoringEvent.setResponseTime(responseTime);
+            webappMonitoringEvent.setLanguage(request.getLocale().getLanguage());
+            webappMonitoringEvent.setCountry(request.getLocale().getCountry());
+            webappMonitoringEvent.setSessionId(extractSessionId(request));
+            webappMonitoringEvent.setWebappDisplayName(request.getContext().getDisplayName());
+            webappMonitoringEvent.setWebappContext(requestedURI);
+            webappMonitoringEvent.setWebappType("webapp");
+            webappMonitoringEvent.setServerAddress(request.getServerName());
+            webappMonitoringEvent.setServerName(request.getLocalName());
+            webappMonitoringEvent.setRequestSizeBytes(request.getContentLength());
+            webappMonitoringEvent.setResponseSizeBytes(response.getContentLength());
+            parserUserAgent(request, webappMonitoringEvent);
+
+        }
+        return webappMonitoringEvent;
+    }
+
+    private String extractSessionId(Request request) {
+        final HttpSession session = request.getSession(false);
+        // CXF web services does not have a session id, because they are stateless
+        return (session != null && session.getId() != null) ? session.getId() : "-";
+
+    }
+
+    private String extractUsername(Request request) {
+        String consumerName;
+        Principal principal = request.getUserPrincipal();
+        if (Optional.ofNullable(principal).isPresent()) {
+            consumerName = principal.getName();
+        } else {
+            consumerName = WebappMonitoringPublisherConstants.ANONYMOUS_USER;
+        }
+        return consumerName;
+    }
+
+    private void parserUserAgent(Request request, WebappMonitoringEvent webappMonitoringEvent) {
+        String userAgent = request.getHeader(WebappMonitoringPublisherConstants.USER_AGENT);
+        if (Optional.ofNullable(uaParser).isPresent()) {
+            Client readableUserAgent = uaParser.parse(userAgent);
+
+            webappMonitoringEvent.setUserAgentFamily(readableUserAgent.userAgent.family);
+            webappMonitoringEvent.setUserAgentVersion(readableUserAgent.userAgent.major);
+            webappMonitoringEvent.setOperatingSystem(readableUserAgent.os.family);
+            webappMonitoringEvent.setOperatingSystemVersion(readableUserAgent.os.major);
+            webappMonitoringEvent.setDeviceCategory(readableUserAgent.device.family);
+        }
+    }
+
+    /*
+    * Checks the remote address of the request. Server could be hiding behind a proxy or load balancer.
+    * if we get only request.getRemoteAddr() will give only the proxy pr load balancer address.
+    * For that we are checking the request forwarded address in the header of the request.
+    */
+    private String getClientIpAddress(Request request) {
+        String ip = request.getHeader(WebappMonitoringPublisherConstants.X_FORWARDED_FOR);
+        ip = tryNextHeaderIfIpNull(request, ip, WebappMonitoringPublisherConstants.PROXY_CLIENT_IP);
+        ip = tryNextHeaderIfIpNull(request, ip, WebappMonitoringPublisherConstants.WL_PROXY_CLIENT_IP);
+        ip = tryNextHeaderIfIpNull(request, ip, WebappMonitoringPublisherConstants.HTTP_CLIENT_IP);
+        ip = tryNextHeaderIfIpNull(request, ip, WebappMonitoringPublisherConstants.HTTP_X_FORWARDED_FOR);
+
+        if (ip == null || ip.length() == 0 || WebappMonitoringPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
+            // Failed. remoteAddr is the only option
+            ip = request.getRemoteAddr();
+        }
+
+        return ip;
+    }
+
+    // If the input param ip is invalid, it will return the value of the next header
+    // as the output
+    private String tryNextHeaderIfIpNull(Request request, String ip, String nextHeader) {
+        if (!Optional.ofNullable(ip).isPresent() || ip.length() == 0 ||
+                WebappMonitoringPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
+            return request.getHeader(nextHeader);
+        }
+        return null;
+    }
 
 
     /**
