@@ -13,6 +13,7 @@
     <modules>
         <module>sample-module</module>
         <module>webapp-loader</module>
+        <module>webapp-management</module>
     </modules>
 
     <artifactId>modules</artifactId>
