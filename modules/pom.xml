@@ -27,7 +27,7 @@
 
     <modules>
         <module>sample-module</module>
-        <module>webapp-loader</module>
+        <!--<module>webapp-loader</module>-->
     </modules>
 
 </project>
