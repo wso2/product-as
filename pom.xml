@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<!--
+ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
@@ -13,14 +25,14 @@
     <artifactId>wso2appserver</artifactId>
     <packaging>pom</packaging>
     <version>6.0.0-SNAPSHOT</version>
+
     <name>WSO2 Application Server 6.0.0 - Parent</name>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tomcat.version>8.0.28</tomcat.version>
-    </properties>
+    <description>WSO2 Application Server Parent Pom</description>
+    <url>http://wso2.com</url>
+
 
     <modules>
         <module>modules</module>
@@ -28,49 +40,6 @@
         <module>distribution</module>
         <module>integration-tests</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat</artifactId>
-                <version>${tomcat.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-catalina</artifactId>
-                <version>8.0.28</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>sample-module</artifactId>
-                <version>6.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>webapp-loader</artifactId>
-                <version>6.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>hello-world</artifactId>
-                <version>6.0.0-SNAPSHOT</version>
-                <type>war</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 
     <build>
         <pluginManagement>
@@ -95,6 +64,31 @@
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>2.10</version>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>docs</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>javadoc</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -103,11 +97,80 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <source>${wso2.appserver.maven.compiler.source}</source>
+                    <target>${wso2.appserver.maven.compiler.target}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyleplugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${maven.findbugsplugin.version}</version>
             </plugin>
         </plugins>
     </build>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat</artifactId>
+                <version>${tomcat.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-catalina</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>hello-world</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>sample-module</artifactId>
+                <version>${appserver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>webapp-loader</artifactId>
+                <version>${appserver.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- WSO2 Application Server version -->
+        <appserver.version>6.0.0-SNAPSHOT</appserver.version>
+
+        <wso2.appserver.maven.compiler.source>1.8</wso2.appserver.maven.compiler.source>
+        <wso2.appserver.maven.compiler.target>1.8</wso2.appserver.maven.compiler.target>
+
+        <!-- plugin version properties -->
+        <maven.checkstyleplugin.version>2.17</maven.checkstyleplugin.version>
+        <maven.findbugsplugin.version>3.0.3</maven.findbugsplugin.version>
+
+        <!-- dependency version properties -->
+        <tomcat.version>8.0.28</tomcat.version>
+    </properties>
 </project>
