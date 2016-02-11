@@ -19,7 +19,7 @@
 package org.wso2.appserver.monitoring.publisher;
 
 /**
- * This exception is thrown when the MonitoringPublisher fails to publish the event.
+ * This config is thrown when the MonitoringPublisher fails to publish the event.
  */
 public class MonitoringPublisherException extends Exception {
 

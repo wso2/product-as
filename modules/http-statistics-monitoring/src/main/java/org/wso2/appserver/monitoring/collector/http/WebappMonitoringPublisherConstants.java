@@ -29,8 +29,6 @@ public class WebappMonitoringPublisherConstants {
     public static final String HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
     public static final String HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR";
     public static final String USER_AGENT = "user-agent";
-
-    // 'Referer' is not a spelling mistake. Don't try to fix it please
     public static final String REFERRER = "Referer";
     public static final String ANONYMOUS_USER = "anonymous.user";
 

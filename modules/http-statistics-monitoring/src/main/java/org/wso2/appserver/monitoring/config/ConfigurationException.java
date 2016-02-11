@@ -1,5 +1,8 @@
 package org.wso2.appserver.monitoring.config;
 
+/**
+ * Thrown when the Data Endpoint Agent configuration fails.
+ */
 public class ConfigurationException extends Exception {
 
     public ConfigurationException() {

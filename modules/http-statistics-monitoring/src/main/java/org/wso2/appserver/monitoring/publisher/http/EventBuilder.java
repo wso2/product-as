@@ -5,29 +5,27 @@ import org.apache.catalina.connector.Response;
 import org.wso2.appserver.monitoring.collector.http.WebappMonitoringPublisherConstants;
 import org.wso2.appserver.monitoring.publisher.MonitoringPublisherException;
 import org.wso2.carbon.databridge.commons.Event;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import ua_parser.Client;
 import ua_parser.Parser;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 
 /**
- * Build an Event using WebappMonitoringEvent.
+ * Build an Event using a WebappMonitoringEvent.
  */
 public class EventBuilder  {
 
     private Parser uaParser = null;
 
     /**
-     * Build an Event using a WebappMonitoringEvent.
+     * Set required payload and metadata statistics of an Event.
      *
      * @param streamId Unique ID of the Event Stream
-     * @param monitoringEvent A WebappMonitoringEvent that holds all server statistics data
+     * @param monitoringEvent A WebappMonitoringEvent that holds all statistics data
      * @throws MonitoringPublisherException
      */
     public Event prepareEvent(String streamId, WebappMonitoringEvent monitoringEvent)
@@ -79,19 +77,25 @@ public class EventBuilder  {
 
     }
 
-    public WebappMonitoringEvent setStatData(Request request, Response response, long responseTime) {
+    /**
+     *
+     * @param request HTTP request
+     * @param response HTTP response
+     * @param responseTime time taken to return the response
+     * @return a WebappMonitoringEvent with all statistics
+     */
+    public WebappMonitoringEvent setStatData(Request request, Response response, long startTime, long responseTime) {
 
-        String BACKSLASH = "/";
+        final String backslash = "/";
         WebappMonitoringEvent webappMonitoringEvent = new WebappMonitoringEvent();
+
+        webappMonitoringEvent.setTimestamp(startTime);
         String requestedURI = request.getRequestURI();
 
-        /*
-        * Checks requested url null
-        */
-        if (Optional.ofNullable(requestedURI).isPresent()) {
+        if (requestedURI != null) {
 
             requestedURI = requestedURI.trim();
-            String[] requestedUriParts = requestedURI.split(BACKSLASH);
+            String[] requestedUriParts = requestedURI.split(backslash);
            /*
             * If url start with /t/, the request comes to a tenant web app
             */
@@ -101,11 +105,11 @@ public class EventBuilder  {
                     webappMonitoringEvent.setWebappOwnerTenant(requestedUriParts[2]);
                 }
             } else {
-                webappMonitoringEvent.setWebappOwnerTenant(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-                if (!BACKSLASH.equals(requestedURI)) {
+//                webappMonitoringEvent.setWebappOwnerTenant(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+                if (!backslash.equals(requestedURI)) {
                     webappMonitoringEvent.setWebappName(requestedUriParts[1]);
                 } else {
-                    webappMonitoringEvent.setWebappName(BACKSLASH);
+                    webappMonitoringEvent.setWebappName(backslash);
                 }
             }
 
@@ -142,6 +146,7 @@ public class EventBuilder  {
         return webappMonitoringEvent;
     }
 
+    //extracts the Id of the current session associated with the request
     private String extractSessionId(Request request) {
         final HttpSession session = request.getSession(false);
         // CXF web services does not have a session id, because they are stateless
@@ -149,10 +154,11 @@ public class EventBuilder  {
 
     }
 
+    //extracts the name of the current authenticated user for the request
     private String extractUsername(Request request) {
         String consumerName;
         Principal principal = request.getUserPrincipal();
-        if (Optional.ofNullable(principal).isPresent()) {
+        if (principal != null) {
             consumerName = principal.getName();
         } else {
             consumerName = WebappMonitoringPublisherConstants.ANONYMOUS_USER;
@@ -160,9 +166,10 @@ public class EventBuilder  {
         return consumerName;
     }
 
+    //parse statistics of User Agent and set them in the WebappMonitoringEvent
     private void parserUserAgent(Request request, WebappMonitoringEvent webappMonitoringEvent) {
         String userAgent = request.getHeader(WebappMonitoringPublisherConstants.USER_AGENT);
-        if (Optional.ofNullable(uaParser).isPresent()) {
+        if (uaParser != null) {
             Client readableUserAgent = uaParser.parse(userAgent);
 
             webappMonitoringEvent.setUserAgentFamily(readableUserAgent.userAgent.family);
@@ -193,16 +200,13 @@ public class EventBuilder  {
         return ip;
     }
 
-    // If the input param ip is invalid, it will return the value of the next header
-    // as the output
+    // If the input param ip is invalid, it will return the value of the next header as the output
     private String tryNextHeaderIfIpNull(Request request, String ip, String nextHeader) {
-        if (!Optional.ofNullable(ip).isPresent() || ip.length() == 0 ||
-                WebappMonitoringPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 ||  WebappMonitoringPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
             return request.getHeader(nextHeader);
         }
         return null;
     }
-
 
     /**
      * Maps null Integers to zero.
