@@ -15,7 +15,6 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationExcep
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
-import org.wso2.appserver.monitoring.ConfigurationConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,11 +28,11 @@ import javax.servlet.ServletException;
 public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
-    private String username = ConfigurationConstants.USERNAME;
-    private String password = ConfigurationConstants.PASSWORD ;
-    private String configFileFolder = ConfigurationConstants.CONFIG_FILE_FOLDER;
-    private String url = ConfigurationConstants.URL;
-    private String streamId = ConfigurationConstants.STREAM_ID;
+    private String username = DefaultConfigurationConstants.USERNAME;
+    private String password = DefaultConfigurationConstants.PASSWORD ;
+    private String configFileFolder = DefaultConfigurationConstants.CONFIG_FILE_FOLDER;
+    private String url = DefaultConfigurationConstants.URL;
+    private String streamId = DefaultConfigurationConstants.STREAM_ID;
     private DataPublisher dataPublisher = null;
     private String appServerHome;
 

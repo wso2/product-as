@@ -3,7 +3,7 @@ package org.wso2.appserver.monitoring;
 /**
  * The default values used for authentication and configurations of the valve.
  */
-public class ConfigurationConstants {
+public class DefaultConfigurationConstants {
 
     public static final String USERNAME = "";
     public static final String PASSWORD = "";
@@ -14,7 +14,8 @@ public class ConfigurationConstants {
     /**
      * instantiating is not needed for this class. private constructor to block that.
      */
-    private ConfigurationConstants(){
+    private DefaultConfigurationConstants(){
 
     }
 }
+
