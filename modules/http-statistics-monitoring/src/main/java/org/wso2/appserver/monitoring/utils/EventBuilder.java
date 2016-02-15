@@ -44,8 +44,8 @@ public class EventBuilder {
 
         metaData.add(mapNull(request.getServerName()));
         metaData.add(mapNull(request.getLocalName()));
-        metaData.add(mapNull("-"));
-        metaData.add(mapNull("-"));
+//        metaData.add(mapNull("-"));
+//        metaData.add(mapNull("-"));
 
         return metaData;
     }
