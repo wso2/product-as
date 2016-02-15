@@ -15,12 +15,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.appserver.monitoring.collector.http;
+package org.wso2.appserver.monitoring;
 
 /**
  * The Constants used within this package.
  */
-public class WebappMonitoringPublisherConstants {
+public class EventPublisherConstants {
 
     public static final String X_FORWARDED_FOR = "X-Forwarded-For";
     public static final String UNKNOWN = "unknown";
@@ -35,7 +35,7 @@ public class WebappMonitoringPublisherConstants {
     /**
      * instantiating is not needed for this class. private constructor to block that.
      */
-    private WebappMonitoringPublisherConstants() {
+    private EventPublisherConstants() {
 
     }
 

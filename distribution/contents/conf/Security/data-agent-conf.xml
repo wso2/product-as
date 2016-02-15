@@ -60,5 +60,6 @@
         <SecureEvictionTimePeriod>5500</SecureEvictionTimePeriod>
         <SecureMinIdleTimeInPool>5000</SecureMinIdleTimeInPool>
     </Agent>
+
 </DataAgentsConfiguration>
 

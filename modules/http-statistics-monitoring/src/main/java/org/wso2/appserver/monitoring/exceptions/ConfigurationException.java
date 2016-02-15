@@ -1,4 +1,4 @@
-package org.wso2.appserver.monitoring.config;
+package org.wso2.appserver.monitoring.exceptions;
 
 /**
  * Thrown when the Data Endpoint Agent configuration fails.

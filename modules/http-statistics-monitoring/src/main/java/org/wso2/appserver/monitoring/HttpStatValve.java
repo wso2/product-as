@@ -1,14 +1,12 @@
-package org.wso2.appserver.monitoring.collector.http;
+package org.wso2.appserver.monitoring;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.wso2.appserver.monitoring.config.ConfigurationException;
-import org.wso2.appserver.monitoring.publisher.MonitoringPublisherException;
-import org.wso2.appserver.monitoring.publisher.http.EventBuilder;
-import org.wso2.appserver.monitoring.publisher.http.WebappMonitoringEvent;
+import org.wso2.appserver.monitoring.exceptions.ConfigurationException;
+import org.wso2.appserver.monitoring.utils.EventBuilder;
 import org.wso2.carbon.databridge.agent.AgentHolder;
 import org.wso2.carbon.databridge.agent.DataPublisher;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
@@ -17,6 +15,7 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationExcep
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
+import org.wso2.appserver.monitoring.ConfigurationConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,31 +29,32 @@ import javax.servlet.ServletException;
 public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
-    protected String username = "admin";
-    protected String password = "admin";
-    protected String configFileFolder = "conf/Security";
-    protected String url = "tcp://127.0.0.1:7611";
-    protected String streamId = "org.wso2.sample.http.stats:1.0.0";
+    private String username = ConfigurationConstants.USERNAME;
+    private String password = ConfigurationConstants.PASSWORD ;
+    private String configFileFolder = ConfigurationConstants.CONFIG_FILE_FOLDER;
+    private String url = ConfigurationConstants.URL;
+    private String streamId = ConfigurationConstants.STREAM_ID;
     private DataPublisher dataPublisher = null;
     private String appServerHome;
 
     public HttpStatValve()  {
 
         LOG.debug("The HttpStatValve initialized.");
-        File userDir = new File(System.getProperty("catalina.home"));
+        File userDir = new File(System.getProperty("catalina.base"));
         appServerHome = userDir.getAbsolutePath();
 
-        try {
-            if (dataPublisher == null) {
-                dataPublisher = getDataPublisher();
-            }
-        } catch (ConfigurationException e) {
-            LOG.error("Failed at configurations: " + e);
-        }
     }
 
     @Override
     public void invoke(Request request, Response response)  {
+
+        if(dataPublisher == null){
+            try {
+                dataPublisher = getDataPublisher();
+            } catch (ConfigurationException e) {
+                LOG.error("Failed at setting configurations: " + e);
+            }
+        }
 
         Long startTime = System.currentTimeMillis();
         try {
@@ -64,35 +64,24 @@ public class HttpStatValve extends ValveBase {
         }
         long responseTime = System.currentTimeMillis() - startTime;
 
-        EventBuilder eventbuilder = new EventBuilder();
-        WebappMonitoringEvent webappMonitoringEvent = eventbuilder.setStatData(request, response,
-                startTime, responseTime);
+        Event event = EventBuilder.buildEvent(getStreamId(),request, response, startTime, responseTime);
+        dataPublisher.publish(event);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("publishing the HTTP Stat : " + webappMonitoringEvent);
-        }
-        try {
-            Event event = eventbuilder.prepareEvent(getStreamId(), webappMonitoringEvent);
-            dataPublisher.publish(event);
-        } catch (MonitoringPublisherException e) {
-            e.printStackTrace();
-        }
     }
 
-    /**
-     * @return file path to the file containing Data Agent configuration and properties
-     */
-    public String getDataAgentConfigPath() {
+    //get file path to the file containing Data Agent configuration and properties
+    private String getDataAgentConfigPath() {
         Path path = Paths.get(appServerHome, getConfigFileFolder(), "data-agent-conf.xml");
         return path.toString();
     }
 
-    //instantiating a data publisher to be used to publish data to DAS
+    //instantiate a data publisher to be used to publish data to DAS
     private DataPublisher getDataPublisher() throws ConfigurationException {
 
         AgentHolder.setConfigPath(getDataAgentConfigPath());
         String url = getUrl();
         DataPublisher dataPublisher;
+
         try {
             dataPublisher = new DataPublisher(url, getUsername(), getPassword());
         } catch (DataEndpointAgentConfigurationException | DataEndpointException | DataEndpointConfigurationException |
