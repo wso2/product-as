@@ -13,9 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.model;
-
-import org.wso2.appserver.utils.Constants;
+package org.wso2.appserver.utils.configuration.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,13 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = Constants.WEBAPP_DESCRIPTOR_XML_ROOT_ELEMENT, namespace = Constants.WSO2_NAMESPACE)
+@XmlRootElement(name = ConfigurationConstants.WEBAPP_DESCRIPTOR_XML_ROOT_ELEMENT, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
 public class Configuration {
-    @XmlElement(name = Constants.SSOConfigurationConstants.SINGLE_SIGN_ON, namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(name = ConfigurationConstants.SSOConfigurationConstants.SINGLE_SIGN_ON, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SSOConfiguration singleSignOnConfiguration;
-    @XmlElement(name = Constants.ClassLoadingConfigurationConstants.CLASSLOADING, namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(name = ConfigurationConstants.ClassLoadingConfigurationConstants.CLASSLOADING, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private ClassLoadingConfiguration classLoadingConfiguration;
-    @XmlElement(name = "restWebServices", namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(name = "restWebServices", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private RestWebServicesConfiguration restWebServicesConfiguration;
 
     public SSOConfiguration getSingleSignOnConfiguration() {
@@ -66,8 +64,8 @@ public class Configuration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class RestWebServicesConfiguration {
-        @XmlElement(name = Constants.RestWebServicesConfigurationConstants.ISMANAGEDAPI,
-                namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(name = ConfigurationConstants.RestWebServicesConfigurationConstants.ISMANAGEDAPI,
+                namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean isManagedAPI;
 
         public Boolean isManagedAPI() {

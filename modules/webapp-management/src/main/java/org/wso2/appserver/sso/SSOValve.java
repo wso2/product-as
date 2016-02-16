@@ -5,9 +5,9 @@ import org.apache.catalina.authenticator.SingleSignOn;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.wso2.appserver.utils.AppServerException;
-import org.wso2.appserver.utils.loaders.ContextConfigurationLoader;
-import org.wso2.appserver.utils.loaders.GlobalConfigurationLoader;
-import org.wso2.appserver.utils.model.Configuration;
+import org.wso2.appserver.utils.configuration.loaders.ContextConfigurationLoader;
+import org.wso2.appserver.utils.configuration.loaders.GlobalConfigurationLoader;
+import org.wso2.appserver.utils.configuration.model.Configuration;
 
 import javax.servlet.ServletException;
 import java.io.IOException;

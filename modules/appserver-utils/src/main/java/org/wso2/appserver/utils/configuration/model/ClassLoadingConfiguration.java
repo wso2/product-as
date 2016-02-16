@@ -13,9 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.model;
-
-import org.wso2.appserver.utils.Constants;
+package org.wso2.appserver.utils.configuration.model;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -27,8 +25,8 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ClassLoadingConfiguration {
-    @XmlElement(name = Constants.ClassLoadingConfigurationConstants.ENVIRONMENTS,
-            namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(name = ConfigurationConstants.ClassLoadingConfigurationConstants.ENVIRONMENTS,
+            namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private Environments environments;
 
     public Environments getEnvironments() {
@@ -40,8 +38,8 @@ public class ClassLoadingConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Environments {
-        @XmlElement(name = Constants.ClassLoadingConfigurationConstants.ENVIRONMENT,
-                namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(name = ConfigurationConstants.ClassLoadingConfigurationConstants.ENVIRONMENT,
+                namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private List<Environment> environments;
 
         public List<Environment> getEnvironments() {
@@ -54,10 +52,10 @@ public class ClassLoadingConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Environment {
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String name;
-        @XmlElement(name = Constants.ClassLoadingConfigurationConstants.CLASSPATH,
-                namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(name = ConfigurationConstants.ClassLoadingConfigurationConstants.CLASSPATH,
+                namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private List<String> classpaths;
 
         public String getName() {

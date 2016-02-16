@@ -13,9 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.model;
-
-import org.wso2.appserver.utils.Constants;
+package org.wso2.appserver.utils.configuration.model;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,15 +27,15 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SSOConfiguration {
-    @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SkipURIs skipURIs;
-    @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private String applicationServerURL;
-    @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private Boolean handleConsumerURLAfterSLO;
-    @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private String loginURL;
-    @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SAML saml;
 
     public SkipURIs getSkipURIs() {
@@ -81,7 +79,7 @@ public class SSOConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class SkipURIs {
-        @XmlElement(name = Constants.SSOConfigurationConstants.SKIP_URI, namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(name = ConfigurationConstants.SSOConfigurationConstants.SKIP_URI, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private List<String> skipURIs;
     }
 
@@ -90,53 +88,53 @@ public class SSOConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class SAML {
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean enableSAMLSSO;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String idpURL;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String idpEntityId;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String issuerId;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String consumerURL;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String httpBinding;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String attributeConsumingServiceIndex;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean enableSLO;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String consumerURLPostFix;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String requestURLPostFix;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String sloURLPostFix;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean enableResponseSigning;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean enableAssertionSigning;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean enableAssertionEncryption;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean enableRequestSigning;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String signatureValidatorImplClass;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String additionalRequestParams;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean isForceAuthn;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean isPassiveAuthn;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String keystorePath;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String keystorePassword;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String idpCertificateAlias;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String privateKeyAlias;
-        @XmlElement(namespace = Constants.WSO2_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String privateKeyPassword;
 
         public Boolean isSAMLSSOEnabled() {
