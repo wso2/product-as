@@ -22,7 +22,7 @@ package org.wso2.appserver.utils;
  */
 public class Constants {
     /**
-     * Prevents initiating the Constants class.
+     * Prevents instantiating the Constants class.
      */
     private Constants() {
     }
@@ -30,14 +30,15 @@ public class Constants {
     //  Environmental variable property name constant
     public static final String CATALINA_BASE = "catalina.base";
     //  File path related constants
-    public static final String TOMCAT_CONFIGURATION_FOLDER_NAME = "conf";
-    public static final String WSO2_CONFIGURATION_FOLDER_NAME = "wso2";
-    public static final String WSO2AS_CONFIG_FILE_NAME = "wso2as-web.xml";
-    public static final String WSO2_CONFIG_XML_SCHEMA_FILE_NAME = "wso2as-web.xsd";
+    public static final String TOMCAT_CONFIGURATION_HOME = "conf";
+    public static final String WSO2_CONFIGURATION_HOME = "wso2";
+    public static final String WEBAPP_RESOURCE_FOLDER = "WEB-INF";
+    public static final String WEBAPP_DESCRIPTOR = "wso2as-web.xml";
+    public static final String WEBAPP_DESCRIPTOR_SCHEMA = "wso2as-web.xsd";
     //  Namespace for wso2as-web.xml file XML content
     public static final String WSO2_NAMESPACE = "http://wso2.org/2016/wso2as-web";
     //  wso2as-web.xml file root element tag name
-    public static final String WSO2_CONFIG_XML_ROOT_ELEMENT = "wso2asWeb";
+    public static final String WEBAPP_DESCRIPTOR_XML_ROOT_ELEMENT = "wso2asWeb";
 
     /**
      * A nested class which defines constants for Application Server single-sign-on (SSO).
@@ -49,7 +50,7 @@ public class Constants {
         public static final String LOGIN_URL_DEFAULT = "loginURL";
 
         /**
-         * Prevents initiating the SSOConfigurationConstants nested class.
+         * Prevents instantiating the SSOConfigurationConstants nested class.
          */
         private SSOConfigurationConstants() {
         }
@@ -61,15 +62,16 @@ public class Constants {
             public static final String IDP_URL_DEFAULT = "https://localhost:9443/samlsso";
             public static final String IDP_ENTITY_ID_DEFAULT = "localhost";
             public static final String BINDING_TYPE_DEFAULT = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
-            public static final String ATT_CONSUMING_SERVICE_INDEX_DEFAULT = "1701087467";
+            public static final String ATTR_CONSUMING_SERVICE_INDEX_DEFAULT = "1701087467";
             public static final String CONSUMER_URL_POSTFIX_DEFAULT = "/acs";
             public static final String REQUEST_URL_POSTFIX_DEFAULT = "samlsso";
             public static final String SLO_URL_POSTFIX_DEFAULT = "logout";
-            public static final String SIGNATURE_VALIDATOR_IMPL_CLASS_DEFAULT = "org.wso2.appserver.webapp.security.sso.saml.signature.SAMLSignatureValidatorImplementation";
+            public static final String SIGNATURE_VALIDATOR_IMPL_CLASS_DEFAULT =
+                    "org.wso2.appserver.webapp.security.sso.saml.signature.SAMLSignatureValidatorImplementation";
             public static final String ADDITIONAL_REQUEST_PARAMETERS_DEFAULT = "&forceAuth=true";
 
             /**
-             * Prevents initiating the SAMLConstants nested class.
+             * Prevents instantiating the SAMLConstants nested class.
              */
             private SAMLConstants() {
             }
@@ -86,7 +88,7 @@ public class Constants {
         public static final String CLASSPATH = "classpath";
 
         /**
-         * Prevents initiating the ClassLoadingConfigurationConstants nested class.
+         * Prevents instantiating the ClassLoadingConfigurationConstants nested class.
          */
         private ClassLoadingConfigurationConstants() {
         }
@@ -99,7 +101,7 @@ public class Constants {
         public static final String ISMANAGEDAPI = "isManagedAPI";
 
         /**
-         * Prevents initiating the RestWebServicesConfigurationConstants nested class.
+         * Prevents instantiating the RestWebServicesConfigurationConstants nested class.
          */
         private RestWebServicesConfigurationConstants() {
         }

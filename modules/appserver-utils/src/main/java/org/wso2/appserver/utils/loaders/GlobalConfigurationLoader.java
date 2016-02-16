@@ -16,7 +16,8 @@
 package org.wso2.appserver.utils.loaders;
 
 import org.wso2.appserver.utils.AppServerException;
-import org.wso2.appserver.utils.PathUtils;
+import org.wso2.appserver.utils.GenericUtils;
+import org.wso2.appserver.utils.paths.PathUtils;
 import org.wso2.appserver.utils.model.Configuration;
 
 import java.nio.file.Path;
@@ -43,11 +44,11 @@ public class GlobalConfigurationLoader {
     }
 
     private static synchronized void setGlobalConfiguration() throws AppServerException {
-        Optional<Path> schemaPath = Optional.of(PathUtils.getWSO2GlobalConfigurationSchemaFile());
-        Unmarshaller unmarshaller = Utils.getXMLUnmarshaller(schemaPath, Configuration.class);
+        Optional<Path> schemaPath = Optional.of(PathUtils.getWSO2WebAppDescriptorSchema());
+        Unmarshaller unmarshaller = GenericUtils.getXMLUnmarshaller(schemaPath, Configuration.class);
         try {
             globalConfiguration = (Configuration) unmarshaller.
-                    unmarshal(PathUtils.getWSO2GlobalConfigurationFile().toFile());
+                    unmarshal(PathUtils.getGlobalWSO2WebAppDescriptor().toFile());
         } catch (JAXBException e) {
             throw new AppServerException("An error has occurred during unmarshalling XML data", e);
         }

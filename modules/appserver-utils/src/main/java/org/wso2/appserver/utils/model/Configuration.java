@@ -28,25 +28,37 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = Constants.WSO2_CONFIG_XML_ROOT_ELEMENT, namespace = Constants.WSO2_NAMESPACE)
+@XmlRootElement(name = Constants.WEBAPP_DESCRIPTOR_XML_ROOT_ELEMENT, namespace = Constants.WSO2_NAMESPACE)
 public class Configuration {
     @XmlElement(name = Constants.SSOConfigurationConstants.SINGLE_SIGN_ON, namespace = Constants.WSO2_NAMESPACE)
-    private SingleSignOnConfiguration singleSignOnConfiguration;
+    private SSOConfiguration singleSignOnConfiguration;
     @XmlElement(name = Constants.ClassLoadingConfigurationConstants.CLASSLOADING, namespace = Constants.WSO2_NAMESPACE)
     private ClassLoadingConfiguration classLoadingConfiguration;
     @XmlElement(name = "restWebServices", namespace = Constants.WSO2_NAMESPACE)
     private RestWebServicesConfiguration restWebServicesConfiguration;
 
-    public SingleSignOnConfiguration getSingleSignOnConfiguration() {
+    public SSOConfiguration getSingleSignOnConfiguration() {
         return singleSignOnConfiguration;
+    }
+
+    public void setSingleSignOnConfiguration(SSOConfiguration singleSignOnConfiguration) {
+        this.singleSignOnConfiguration = singleSignOnConfiguration;
     }
 
     public ClassLoadingConfiguration getClassLoadingConfiguration() {
         return classLoadingConfiguration;
     }
 
+    public void setClassLoadingConfiguration(ClassLoadingConfiguration classLoadingConfiguration) {
+        this.classLoadingConfiguration = classLoadingConfiguration;
+    }
+
     public RestWebServicesConfiguration getRestWebServicesConfiguration() {
         return restWebServicesConfiguration;
+    }
+
+    public void setRestWebServicesConfiguration(RestWebServicesConfiguration restWebServicesConfiguration) {
+        this.restWebServicesConfiguration = restWebServicesConfiguration;
     }
 
     /**

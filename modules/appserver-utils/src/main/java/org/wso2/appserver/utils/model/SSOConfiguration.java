@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SingleSignOnConfiguration {
+public class SSOConfiguration {
     @XmlElement(namespace = Constants.WSO2_NAMESPACE)
     private SkipURIs skipURIs;
     @XmlElement(namespace = Constants.WSO2_NAMESPACE)
