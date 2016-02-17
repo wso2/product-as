@@ -102,7 +102,8 @@ public class PathUtils {
     public static Path getWSO2WebAppDescriptorForContext(Context context) throws AppServerException {
         if (context != null) {
             Path contextRoot = PathUtils.getContextRoot(context);
-            return Paths.get(contextRoot.toString(), PathConstants.WEBAPP_RESOURCE_FOLDER, PathConstants.WEBAPP_DESCRIPTOR);
+            return Paths.
+                    get(contextRoot.toString(), PathConstants.WEBAPP_RESOURCE_FOLDER, PathConstants.WEBAPP_DESCRIPTOR);
         } else {
             throw new AppServerException("Context cannot be null");
         }

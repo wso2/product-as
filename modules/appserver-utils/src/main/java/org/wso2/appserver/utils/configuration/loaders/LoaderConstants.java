@@ -45,7 +45,8 @@ public class LoaderConstants {
             protected static final String CONSUMER_URL_POSTFIX_DEFAULT = "/acs";
             protected static final String REQUEST_URL_POSTFIX_DEFAULT = "samlsso";
             protected static final String SLO_URL_POSTFIX_DEFAULT = "logout";
-            protected static final String SIGNATURE_VALIDATOR_IMPL_CLASS_DEFAULT = "org.wso2.appserver.webapp.security.sso.saml.signature.SAMLSignatureValidatorImplementation";
+            protected static final String SIGNATURE_VALIDATOR_IMPL_CLASS_DEFAULT =
+                    "org.wso2.appserver.webapp.security.sso.saml.signature.SAMLSignatureValidatorImplementation";
             protected static final String ADDITIONAL_REQUEST_PARAMETERS_DEFAULT = "&forceAuth=true";
 
             /**

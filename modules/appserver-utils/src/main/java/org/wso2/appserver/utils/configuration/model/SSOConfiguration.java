@@ -79,8 +79,13 @@ public class SSOConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class SkipURIs {
-        @XmlElement(name = ConfigurationConstants.SSOConfigurationConstants.SKIP_URI, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = ConfigurationConstants.SSOConfigurationConstants.SKIP_URI,
+                namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private List<String> skipURIs;
+
+        public List<String> getSkipURIs() {
+            return skipURIs;
+        }
     }
 
     /**
@@ -273,32 +278,60 @@ public class SSOConfiguration {
             this.additionalRequestParams = additionalRequestParams;
         }
 
-        public Boolean getIsForceAuthn() {
+        public Boolean isForceAuthn() {
             return isForceAuthn;
         }
 
-        public Boolean getIsPassiveAuthn() {
+        public void setIsForceAuthn(Boolean isForceAuthn) {
+            this.isForceAuthn = isForceAuthn;
+        }
+
+        public Boolean isPassiveAuthn() {
             return isPassiveAuthn;
+        }
+
+        public void setIsPassiveAuthn(Boolean isPassiveAuthn) {
+            this.isPassiveAuthn = isPassiveAuthn;
         }
 
         public String getKeystorePath() {
             return keystorePath;
         }
 
+        public void setKeystorePath(String keystorePath) {
+            this.keystorePath = keystorePath;
+        }
+
         public String getKeystorePassword() {
             return keystorePassword;
+        }
+
+        public void setKeystorePassword(String keystorePassword) {
+            this.keystorePassword = keystorePassword;
         }
 
         public String getIdpCertificateAlias() {
             return idpCertificateAlias;
         }
 
+        public void setIdpCertificateAlias(String idpCertificateAlias) {
+            this.idpCertificateAlias = idpCertificateAlias;
+        }
+
         public String getPrivateKeyAlias() {
             return privateKeyAlias;
         }
 
+        public void setPrivateKeyAlias(String privateKeyAlias) {
+            this.privateKeyAlias = privateKeyAlias;
+        }
+
         public String getPrivateKeyPassword() {
             return privateKeyPassword;
+        }
+
+        public void setPrivateKeyPassword(String privateKeyPassword) {
+            this.privateKeyPassword = privateKeyPassword;
         }
     }
 }

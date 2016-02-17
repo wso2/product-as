@@ -26,11 +26,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = ConfigurationConstants.WEBAPP_DESCRIPTOR_XML_ROOT_ELEMENT, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+@XmlRootElement(name = ConfigurationConstants.WEBAPP_DESCRIPTOR_XML_ROOT_ELEMENT,
+        namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
 public class Configuration {
-    @XmlElement(name = ConfigurationConstants.SSOConfigurationConstants.SINGLE_SIGN_ON, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(name = ConfigurationConstants.SSOConfigurationConstants.SINGLE_SIGN_ON,
+            namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SSOConfiguration singleSignOnConfiguration;
-    @XmlElement(name = ConfigurationConstants.ClassLoadingConfigurationConstants.CLASSLOADING, namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(name = ConfigurationConstants.ClassLoadingConfigurationConstants.CLASSLOADING,
+            namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private ClassLoadingConfiguration classLoadingConfiguration;
     @XmlElement(name = "restWebServices", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private RestWebServicesConfiguration restWebServicesConfiguration;

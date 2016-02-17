@@ -27,10 +27,13 @@ import java.util.Optional;
  * @since 6.0.0
  */
 public class PriorityUtils {
-
-    //  todo: write comments
-    //  todo: add the other configuration methods
-
+    /**
+     * Merges the global and context level configurations generating a final, effective set of configurations.
+     *
+     * @param globalConfiguration the global configurations
+     * @param localConfiguration  the context-level configurations
+     * @return the resultant group of configurations
+     */
     protected static Configuration merge(Configuration globalConfiguration,
             Optional<Configuration> localConfiguration) {
         //  Create the final, effective configuration set
@@ -46,487 +49,361 @@ public class PriorityUtils {
             SSOConfiguration localSSOConfiguration = localConfiguration.get().getSingleSignOnConfiguration();
             SSOConfiguration effectiveSSOConfiguration = effectiveConfiguration.getSingleSignOnConfiguration();
 
-            prioritizeSkipURIs(globalSSOConfiguration, localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeConsumerURLHandlingAfterSLO(globalSSOConfiguration, localSSOConfiguration,
-                    effectiveSSOConfiguration);
-            prioritizeApplicationServerURL(globalSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeEnablingSAMLSSO(globalSSOConfiguration, localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeIdPURL(globalSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeIdPEntityId(globalSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeSAMLBinding(globalSSOConfiguration, localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeIssuerId(localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeConsumerURL(localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeAttributeConsumerServiceIndex(globalSSOConfiguration, localSSOConfiguration,
+            prioritizeGloballyEditableSSOConfigurations(globalSSOConfiguration, effectiveSSOConfiguration);
+            prioritizeLocallyEditableSSOConfigurations(localSSOConfiguration, effectiveSSOConfiguration);
+            prioritizeLocallyOverridableSSOConfigurations(globalSSOConfiguration, localSSOConfiguration,
                     effectiveSSOConfiguration);
         } else if (globalConfiguration != null) {
             //  single-sign-on configurations
             SSOConfiguration globalSSOConfiguration = globalConfiguration.getSingleSignOnConfiguration();
             SSOConfiguration effectiveSSOConfiguration = effectiveConfiguration.getSingleSignOnConfiguration();
 
-            prioritizeSkipURIs(globalSSOConfiguration, null, effectiveSSOConfiguration);
-            prioritizeConsumerURLHandlingAfterSLO(globalSSOConfiguration, null, effectiveSSOConfiguration);
-            prioritizeApplicationServerURL(globalSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeEnablingSAMLSSO(globalSSOConfiguration, null, effectiveSSOConfiguration);
-            prioritizeIdPURL(globalSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeIdPEntityId(globalSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeSAMLBinding(globalSSOConfiguration, null, effectiveSSOConfiguration);
-            prioritizeIssuerId(null, effectiveSSOConfiguration);
-            prioritizeConsumerURL(null, effectiveSSOConfiguration);
-            prioritizeAttributeConsumerServiceIndex(globalSSOConfiguration, null, effectiveSSOConfiguration);
-        } else {
+            prioritizeGloballyEditableSSOConfigurations(globalSSOConfiguration, effectiveSSOConfiguration);
+            prioritizeLocallyOverridableSSOConfigurations(globalSSOConfiguration, null, effectiveSSOConfiguration);
+        } else if (localConfiguration.isPresent()) {
             //  single-sign-on configurations
             SSOConfiguration localSSOConfiguration = localConfiguration.get().getSingleSignOnConfiguration();
             SSOConfiguration effectiveSSOConfiguration = effectiveConfiguration.getSingleSignOnConfiguration();
 
-            prioritizeSkipURIs(null, localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeConsumerURLHandlingAfterSLO(null, localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeApplicationServerURL(null, effectiveSSOConfiguration);
-            prioritizeEnablingSAMLSSO(null, localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeIdPURL(null, effectiveSSOConfiguration);
-            prioritizeIdPEntityId(null, effectiveSSOConfiguration);
-            prioritizeSAMLBinding(null, localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeIssuerId(localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeConsumerURL(localSSOConfiguration, effectiveSSOConfiguration);
-            prioritizeAttributeConsumerServiceIndex(null, localSSOConfiguration, effectiveSSOConfiguration);
+            prioritizeGloballyEditableSSOConfigurations(null, effectiveSSOConfiguration);
+            prioritizeLocallyEditableSSOConfigurations(localSSOConfiguration, effectiveSSOConfiguration);
+            prioritizeLocallyOverridableSSOConfigurations(null, localSSOConfiguration, effectiveSSOConfiguration);
+        } else {
+            SSOConfiguration effectiveSSOConfiguration = effectiveConfiguration.getSingleSignOnConfiguration();
+            setSSOPropertyDefaults(effectiveSSOConfiguration);
         }
 
         return effectiveConfiguration;
     }
 
     /**
-     * Prioritizes the URIs to be skipped by considering the global and local configurations.
+     * Prioritizes the final, effective configurations of single-sign-on properties which are only locally editable.
      *
-     * @param global                 the global configurations
-     * @param local                  the context configurations
-     * @param effectiveConfiguration the resultant group of configurations
+     * @param local     the context configurations
+     * @param effective the resultant group of SSO configurations
      */
-    protected static void prioritizeSkipURIs(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        //  Process URIs to skip
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if (local.getSkipURIs() != null) {
-                    effectiveConfiguration.setSkipURIs(local.getSkipURIs());
-                } else {
-                    effectiveConfiguration.setSkipURIs(global.getSkipURIs());
-                }
-            } else if (global != null) {
-                effectiveConfiguration.setSkipURIs(global.getSkipURIs());
-            } else if (local != null) {
-                effectiveConfiguration.setSkipURIs(local.getSkipURIs());
+    protected static void prioritizeLocallyEditableSSOConfigurations(SSOConfiguration local,
+            SSOConfiguration effective) {
+        if (effective != null) {
+            if ((local != null) && (local.getSAML() != null) && (local.getSAML().getIssuerId() != null)) {
+                effective.getSAML().setIssuerId(local.getSAML().getIssuerId());
+            }
+
+            if ((local != null) && (local.getSAML() != null) && (local.getSAML().getConsumerURL() != null)) {
+                effective.getSAML().setConsumerURL(local.getSAML().getConsumerURL());
             }
         }
     }
 
     /**
-     * Prioritizes the handling of consumer URL after SLO by considering the global and local configurations.
+     * Prioritizes the final, effective configurations of single-sign-on properties which are only globally editable.
      *
-     * @param global                 the global configurations
-     * @param local                  the context configurations
-     * @param effectiveConfiguration the resultant configuration
+     * @param global    the global configurations
+     * @param effective the resultant group of SSO configurations
      */
-    protected static void prioritizeConsumerURLHandlingAfterSLO(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        //  Handle consumer URL after single-logout
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if (local.handleConsumerURLAfterSLO() != null) {
-                    effectiveConfiguration.setHandleConsumerURLAfterSLO(local.handleConsumerURLAfterSLO());
-                } else {
-                    effectiveConfiguration.setHandleConsumerURLAfterSLO(global.handleConsumerURLAfterSLO());
-                }
-            } else if (global != null) {
-                effectiveConfiguration.setHandleConsumerURLAfterSLO(global.handleConsumerURLAfterSLO());
-            } else if (local != null) {
-                effectiveConfiguration.setHandleConsumerURLAfterSLO(local.handleConsumerURLAfterSLO());
-            } else {
-                effectiveConfiguration.setHandleConsumerURLAfterSLO(true);
-            }
-        }
-    }
-
-    /**
-     * Prioritizes the application server URL to be added to final configurations.
-     *
-     * @param global                 the global configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeApplicationServerURL(SSOConfiguration global,
-            SSOConfiguration effectiveConfiguration) {
-        //  Process the Application Server URL
-        if (effectiveConfiguration != null) {
+    protected static void prioritizeGloballyEditableSSOConfigurations(SSOConfiguration global,
+            SSOConfiguration effective) {
+        if (effective != null) {
             if ((global != null) && (global.getApplicationServerURL() != null)) {
-                effectiveConfiguration.setApplicationServerURL(global.getApplicationServerURL());
+                effective.setApplicationServerURL(global.getApplicationServerURL());
             } else {
-                effectiveConfiguration.
-                        setApplicationServerURL(
-                                LoaderConstants.SSOConfigurationConstants.APPLICATION_SERVER_URL_DEFAULT);
+                effective.setApplicationServerURL(
+                        LoaderConstants.SSOConfigurationConstants.APPLICATION_SERVER_URL_DEFAULT);
             }
-        }
-    }
 
-    /**
-     * Prioritizes the enabling of SAML based single-sign-on by considering the global and local configurations.
-     *
-     * @param global                 the global configurations
-     * @param local                  the context configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeEnablingSAMLSSO(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        //  Enable SAML based SSO
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().isSAMLSSOEnabled() != null)) {
-                    effectiveConfiguration.getSAML().setEnableSAMLSSO(local.getSAML().isSAMLSSOEnabled());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(
-                            saml -> effectiveConfiguration.getSAML().setEnableSAMLSSO(saml.isSAMLSSOEnabled()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).
-                        ifPresent(saml -> effectiveConfiguration.getSAML().setEnableSAMLSSO(saml.isSAMLSSOEnabled()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).
-                        ifPresent(saml -> effectiveConfiguration.getSAML().setEnableSAMLSSO(saml.isSAMLSSOEnabled()));
-            }
-            if (effectiveConfiguration.getSAML().isSAMLSSOEnabled() == null) {
-                effectiveConfiguration.getSAML().setEnableSAMLSSO(true);
-            }
-        }
-    }
-
-    /**
-     * Prioritizes the identity provider URL to be added to the final configurations.
-     *
-     * @param global                 the global configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeIdPURL(SSOConfiguration global, SSOConfiguration effectiveConfiguration) {
-        //  Process the IdP URL
-        if (effectiveConfiguration != null) {
             if ((global != null) && (global.getSAML() != null) && (global.getSAML().getIdpURL() != null)) {
-                effectiveConfiguration.getSAML().setIdpURL(global.getSAML().getIdpURL());
+                effective.getSAML().setIdpURL(global.getSAML().getIdpURL());
             } else {
-                effectiveConfiguration.
-                        getSAML().setIdpURL(LoaderConstants.SSOConfigurationConstants.SAMLConstants.IDP_URL_DEFAULT);
+                effective.getSAML().setIdpURL(LoaderConstants.SSOConfigurationConstants.SAMLConstants.IDP_URL_DEFAULT);
             }
-        }
-    }
 
-    /**
-     * Prioritizes the identity provider entity ID to be added to the final configurations.
-     *
-     * @param global                 the global configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeIdPEntityId(SSOConfiguration global, SSOConfiguration effectiveConfiguration) {
-        //  Process the IdP entity id
-        if (effectiveConfiguration != null) {
             if ((global != null) && (global.getSAML() != null) && (global.getSAML().getIdpEntityId() != null)) {
-                effectiveConfiguration.getSAML().setIdpEntityId(global.getSAML().getIdpEntityId());
+                effective.getSAML().setIdpEntityId(global.getSAML().getIdpEntityId());
             } else {
-                effectiveConfiguration.getSAML().
+                effective.getSAML().
                         setIdpEntityId(LoaderConstants.SSOConfigurationConstants.SAMLConstants.IDP_ENTITY_ID_DEFAULT);
             }
-        }
-    }
 
-    /**
-     * Prioritizes the SAML binding type to be used by considering the global and local configurations.
-     *
-     * @param global                 the global configurations
-     * @param local                  the context configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeSAMLBinding(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().getHttpBinding() != null)) {
-                    effectiveConfiguration.getSAML().setHttpBinding(local.getSAML().getHttpBinding());
-                } else {
-                    Optional.ofNullable(global.getSAML()).
-                            ifPresent(saml -> effectiveConfiguration.getSAML().setHttpBinding(saml.getHttpBinding()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).
-                        ifPresent(saml -> effectiveConfiguration.getSAML().setHttpBinding(saml.getHttpBinding()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).
-                        ifPresent(saml -> effectiveConfiguration.getSAML().setHttpBinding(saml.getHttpBinding()));
-            }
-            if (effectiveConfiguration.getSAML().getHttpBinding() == null) {
-                effectiveConfiguration.getSAML().
-                        setHttpBinding(LoaderConstants.SSOConfigurationConstants.SAMLConstants.BINDING_TYPE_DEFAULT);
-            }
-        }
-    }
-
-    /**
-     * Sets the issuer id to be used if set under context level configurations.
-     *
-     * @param local                  the context configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeIssuerId(SSOConfiguration local, SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((local != null) && (local.getSAML() != null) && (local.getSAML().getIssuerId() != null)) {
-                effectiveConfiguration.getSAML().setIssuerId(local.getSAML().getIssuerId());
-            }
-        }
-    }
-
-    /**
-     * Sets the consumer URL of the assertion consumer service if set under context level configurations.
-     *
-     * @param local                  the context configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeConsumerURL(SSOConfiguration local, SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((local != null) && (local.getSAML() != null) && (local.getSAML().getConsumerURL() != null)) {
-                effectiveConfiguration.getSAML().setConsumerURL(local.getSAML().getConsumerURL());
-            }
-        }
-    }
-
-    /**
-     * Prioritizes the attribute consumer service index to be used by considering the global and local configurations.
-     *
-     * @param global                 the global configurations
-     * @param local                  the context configurations
-     * @param effectiveConfiguration the resultant configuration
-     */
-    protected static void prioritizeAttributeConsumerServiceIndex(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().getHttpBinding() != null)) {
-                    effectiveConfiguration.getSAML().
-                            setAttributeConsumingServiceIndex(local.getSAML().getAttributeConsumingServiceIndex());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                            setAttributeConsumingServiceIndex(saml.getAttributeConsumingServiceIndex()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setAttributeConsumingServiceIndex(saml.getAttributeConsumingServiceIndex()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setAttributeConsumingServiceIndex(saml.getAttributeConsumingServiceIndex()));
-            }
-            if (effectiveConfiguration.getSAML().getAttributeConsumingServiceIndex() == null) {
-                effectiveConfiguration.getSAML().setAttributeConsumingServiceIndex(
-                        LoaderConstants.SSOConfigurationConstants.SAMLConstants.ATTR_CONSUMING_SERVICE_INDEX_DEFAULT);
-            }
-        }
-    }
-
-    //  todo: write comments
-
-    protected static void prioritizeEnablingSLO(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().isSLOEnabled() != null)) {
-                    effectiveConfiguration.getSAML().setEnableSLO(local.getSAML().isSLOEnabled());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                            setEnableSLO(saml.isSLOEnabled()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableSLO(saml.isSLOEnabled()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableSLO(saml.isSLOEnabled()));
-            }
-            if (effectiveConfiguration.getSAML().isSLOEnabled() == null) {
-                effectiveConfiguration.getSAML().setEnableSLO(true);
-            }
-        }
-    }
-
-    protected static void prioritizeConsumerURLPostFix(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().isSLOEnabled() != null)) {
-                    effectiveConfiguration.getSAML().setConsumerURLPostFix(local.getSAML().getConsumerURLPostFix());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                            setConsumerURLPostFix(saml.getConsumerURLPostFix()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setConsumerURLPostFix(saml.getConsumerURLPostFix()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setConsumerURLPostFix(saml.getConsumerURLPostFix()));
-            }
-            if (effectiveConfiguration.getSAML().getConsumerURLPostFix() == null) {
-                effectiveConfiguration.getSAML().setConsumerURLPostFix(
-                        LoaderConstants.SSOConfigurationConstants.SAMLConstants.CONSUMER_URL_POSTFIX_DEFAULT);
-            }
-        }
-    }
-
-    protected static void prioritizeRequestURLPostFix(SSOConfiguration global,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
             if ((global != null) && (global.getSAML() != null) && (global.getSAML().getRequestURLPostFix() != null)) {
-                effectiveConfiguration.getSAML().setRequestURLPostFix(global.getSAML().getRequestURLPostFix());
+                effective.getSAML().setRequestURLPostFix(global.getSAML().getRequestURLPostFix());
             } else {
-                effectiveConfiguration.getSAML().setRequestURLPostFix(
+                effective.getSAML().setRequestURLPostFix(
                         LoaderConstants.SSOConfigurationConstants.SAMLConstants.REQUEST_URL_POSTFIX_DEFAULT);
             }
-        }
-    }
 
-    protected static void prioritizeSLOURLPostFix(SSOConfiguration global, SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
             if ((global != null) && (global.getSAML() != null) && (global.getSAML().getSLOURLPostFix() != null)) {
-                effectiveConfiguration.getSAML().setSLOURLPostFix(global.getSAML().getSLOURLPostFix());
+                effective.getSAML().setSLOURLPostFix(global.getSAML().getSLOURLPostFix());
             } else {
-                effectiveConfiguration.getSAML().setSLOURLPostFix(
+                effective.getSAML().setSLOURLPostFix(
                         LoaderConstants.SSOConfigurationConstants.SAMLConstants.SLO_URL_POSTFIX_DEFAULT);
             }
-        }
-    }
 
-    protected static void prioritizeEnablingAssertionEncryption(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().isAssertionEncryptionEnabled() != null)) {
-                    effectiveConfiguration.getSAML().
-                            setEnableAssertionEncryption(local.getSAML().isAssertionEncryptionEnabled());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                            setEnableAssertionEncryption(saml.isAssertionEncryptionEnabled()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableAssertionEncryption(saml.isAssertionEncryptionEnabled()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableAssertionEncryption(saml.isAssertionEncryptionEnabled()));
-            }
-            if (effectiveConfiguration.getSAML().isAssertionEncryptionEnabled() == null) {
-                effectiveConfiguration.getSAML().setEnableAssertionEncryption(false);
-            }
-        }
-    }
-
-    protected static void prioritizeEnablingAssertionSigning(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().isAssertionSigningEnabled() != null)) {
-                    effectiveConfiguration.getSAML().
-                            setEnableAssertionSigning(local.getSAML().isAssertionSigningEnabled());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                            setEnableAssertionSigning(saml.isAssertionSigningEnabled()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableAssertionSigning(saml.isAssertionSigningEnabled()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableAssertionSigning(saml.isAssertionSigningEnabled()));
-            }
-            if (effectiveConfiguration.getSAML().isAssertionSigningEnabled() == null) {
-                effectiveConfiguration.getSAML().setEnableAssertionSigning(true);
-            }
-        }
-    }
-
-    protected static void prioritizeEnablingRequestSigning(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().isRequestSigningEnabled() != null)) {
-                    effectiveConfiguration.getSAML().
-                            setEnableRequestSigning(local.getSAML().isRequestSigningEnabled());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                            setEnableRequestSigning(saml.isRequestSigningEnabled()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableRequestSigning(saml.isRequestSigningEnabled()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableRequestSigning(saml.isRequestSigningEnabled()));
-            }
-            if (effectiveConfiguration.getSAML().isRequestSigningEnabled() == null) {
-                effectiveConfiguration.getSAML().setEnableRequestSigning(true);
-            }
-        }
-    }
-
-    protected static void prioritizeEnablingResponseSigning(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
-            if ((global != null) && (local != null)) {
-                if ((local.getSAML() != null) && (local.getSAML().isResponseSigningEnabled() != null)) {
-                    effectiveConfiguration.getSAML().
-                            setEnableResponseSigning(local.getSAML().isResponseSigningEnabled());
-                } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                            setEnableResponseSigning(saml.isResponseSigningEnabled()));
-                }
-            } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableResponseSigning(saml.isResponseSigningEnabled()));
-            } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
-                        setEnableResponseSigning(saml.isResponseSigningEnabled()));
-            }
-            if (effectiveConfiguration.getSAML().isResponseSigningEnabled() == null) {
-                effectiveConfiguration.getSAML().setEnableResponseSigning(true);
-            }
-        }
-    }
-
-    protected static void prioritizeSignatureValidatorImplClass(SSOConfiguration global,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
             if ((global != null) && (global.getSAML() != null) && (global.getSAML().getSignatureValidatorImplClass()
                     != null)) {
-                effectiveConfiguration.getSAML().
+                effective.getSAML().
                         setSignatureValidatorImplClass(global.getSAML().getSignatureValidatorImplClass());
             } else {
-                effectiveConfiguration.getSAML().setSignatureValidatorImplClass(
+                effective.getSAML().setSignatureValidatorImplClass(
                         LoaderConstants.SSOConfigurationConstants.SAMLConstants.SIGNATURE_VALIDATOR_IMPL_CLASS_DEFAULT);
+            }
+
+            if ((global != null) && (global.getSAML() != null) && (global.getSAML().isForceAuthn() != null)) {
+                effective.getSAML().setIsForceAuthn(global.getSAML().isForceAuthn());
+            } else {
+                effective.getSAML().setIsForceAuthn(false);
+            }
+
+            if ((global != null) && (global.getSAML() != null) && (global.getSAML().isPassiveAuthn() != null)) {
+                effective.getSAML().setIsPassiveAuthn(global.getSAML().isPassiveAuthn());
+            } else {
+                effective.getSAML().setIsPassiveAuthn(false);
+            }
+
+            if ((global != null) && (global.getSAML() != null) && (global.getSAML().getKeystorePath() != null)) {
+                effective.getSAML().setKeystorePath(global.getSAML().getKeystorePath());
+            }
+
+            if ((global != null) && (global.getSAML() != null) && (global.getSAML().getKeystorePassword() != null)) {
+                effective.getSAML().setKeystorePassword(global.getSAML().getKeystorePassword());
+            }
+
+            if ((global != null) && (global.getSAML() != null) && (global.getSAML().getIdpCertificateAlias() != null)) {
+                effective.getSAML().setIdpCertificateAlias(global.getSAML().getIdpCertificateAlias());
+            }
+
+            if ((global != null) && (global.getSAML() != null) && (global.getSAML().getPrivateKeyAlias() != null)) {
+                effective.getSAML().setPrivateKeyAlias(global.getSAML().getPrivateKeyAlias());
+            }
+
+            if ((global != null) && (global.getSAML() != null) && (global.getSAML().getPrivateKeyPassword() != null)) {
+                effective.getSAML().setPrivateKeyPassword(global.getSAML().getKeystorePassword());
             }
         }
     }
 
-    protected static void prioritizeAdditionalRequestParams(SSOConfiguration global, SSOConfiguration local,
-            SSOConfiguration effectiveConfiguration) {
-        if (effectiveConfiguration != null) {
+    /**
+     * Prioritizes the final, effective configurations of both globally editable and locally overridable for
+     * single-sign-on properties.
+     *
+     * @param global    the global configurations
+     * @param local     the context configurations
+     * @param effective the resultant group of SSO configurations
+     */
+    protected static void prioritizeLocallyOverridableSSOConfigurations(SSOConfiguration global, SSOConfiguration local,
+            SSOConfiguration effective) {
+        if (effective != null) {
             if ((global != null) && (local != null)) {
+                if (local.getSkipURIs() != null) {
+                    effective.setSkipURIs(local.getSkipURIs());
+                } else {
+                    effective.setSkipURIs(global.getSkipURIs());
+                }
+
+                if (local.handleConsumerURLAfterSLO() != null) {
+                    effective.setHandleConsumerURLAfterSLO(local.handleConsumerURLAfterSLO());
+                } else {
+                    effective.setHandleConsumerURLAfterSLO(global.handleConsumerURLAfterSLO());
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().isSAMLSSOEnabled() != null)) {
+                    effective.getSAML().setEnableSAMLSSO(local.getSAML().isSAMLSSOEnabled());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setEnableSAMLSSO(saml.isSAMLSSOEnabled()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().getHttpBinding() != null)) {
+                    effective.getSAML().setHttpBinding(local.getSAML().getHttpBinding());
+                } else {
+                    Optional.ofNullable(global.getSAML()).
+                            ifPresent(saml -> effective.getSAML().setHttpBinding(saml.getHttpBinding()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().getHttpBinding() != null)) {
+                    effective.getSAML().
+                            setAttributeConsumingServiceIndex(local.getSAML().getAttributeConsumingServiceIndex());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setAttributeConsumingServiceIndex(saml.getAttributeConsumingServiceIndex()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().isSLOEnabled() != null)) {
+                    effective.getSAML().setEnableSLO(local.getSAML().isSLOEnabled());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setEnableSLO(saml.isSLOEnabled()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().isSLOEnabled() != null)) {
+                    effective.getSAML().setConsumerURLPostFix(local.getSAML().getConsumerURLPostFix());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setConsumerURLPostFix(saml.getConsumerURLPostFix()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().isAssertionEncryptionEnabled() != null)) {
+                    effective.getSAML().
+                            setEnableAssertionEncryption(local.getSAML().isAssertionEncryptionEnabled());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setEnableAssertionEncryption(saml.isAssertionEncryptionEnabled()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().isAssertionSigningEnabled() != null)) {
+                    effective.getSAML().
+                            setEnableAssertionSigning(local.getSAML().isAssertionSigningEnabled());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setEnableAssertionSigning(saml.isAssertionSigningEnabled()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().isRequestSigningEnabled() != null)) {
+                    effective.getSAML().
+                            setEnableRequestSigning(local.getSAML().isRequestSigningEnabled());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setEnableRequestSigning(saml.isRequestSigningEnabled()));
+                }
+
+                if ((local.getSAML() != null) && (local.getSAML().isResponseSigningEnabled() != null)) {
+                    effective.getSAML().
+                            setEnableResponseSigning(local.getSAML().isResponseSigningEnabled());
+                } else {
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                            setEnableResponseSigning(saml.isResponseSigningEnabled()));
+                }
+
                 if ((local.getSAML() != null) && (local.getSAML().getAdditionalRequestParams() != null)) {
-                    effectiveConfiguration.getSAML().
+                    effective.getSAML().
                             setAdditionalRequestParams(local.getSAML().getAdditionalRequestParams());
                 } else {
-                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
+                    Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
                             setAdditionalRequestParams(saml.getAdditionalRequestParams()));
                 }
             } else if (global != null) {
-                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
+                effective.setSkipURIs(global.getSkipURIs());
+                effective.setHandleConsumerURLAfterSLO(global.handleConsumerURLAfterSLO());
+
+                Optional.ofNullable(global.getSAML()).
+                        ifPresent(saml -> effective.getSAML().setEnableSAMLSSO(saml.isSAMLSSOEnabled()));
+                Optional.ofNullable(global.getSAML()).
+                        ifPresent(saml -> effective.getSAML().setHttpBinding(saml.getHttpBinding()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setAttributeConsumingServiceIndex(saml.getAttributeConsumingServiceIndex()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableSLO(saml.isSLOEnabled()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setConsumerURLPostFix(saml.getConsumerURLPostFix()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableAssertionEncryption(saml.isAssertionEncryptionEnabled()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableAssertionSigning(saml.isAssertionSigningEnabled()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableRequestSigning(saml.isRequestSigningEnabled()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableResponseSigning(saml.isResponseSigningEnabled()));
+                Optional.ofNullable(global.getSAML()).ifPresent(saml -> effective.getSAML().
                         setAdditionalRequestParams(saml.getAdditionalRequestParams()));
             } else if (local != null) {
-                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effectiveConfiguration.getSAML().
+                effective.setSkipURIs(local.getSkipURIs());
+                effective.setHandleConsumerURLAfterSLO(local.handleConsumerURLAfterSLO());
+
+                Optional.ofNullable(local.getSAML()).
+                        ifPresent(saml -> effective.getSAML().setEnableSAMLSSO(saml.isSAMLSSOEnabled()));
+                Optional.ofNullable(local.getSAML()).
+                        ifPresent(saml -> effective.getSAML().setHttpBinding(saml.getHttpBinding()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setAttributeConsumingServiceIndex(saml.getAttributeConsumingServiceIndex()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableSLO(saml.isSLOEnabled()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setConsumerURLPostFix(saml.getConsumerURLPostFix()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableAssertionEncryption(saml.isAssertionEncryptionEnabled()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableAssertionSigning(saml.isAssertionSigningEnabled()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableRequestSigning(saml.isRequestSigningEnabled()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
+                        setEnableResponseSigning(saml.isResponseSigningEnabled()));
+                Optional.ofNullable(local.getSAML()).ifPresent(saml -> effective.getSAML().
                         setAdditionalRequestParams(saml.getAdditionalRequestParams()));
+            } else {
+                effective.setHandleConsumerURLAfterSLO(true);
             }
-            if (effectiveConfiguration.getSAML().getAdditionalRequestParams() == null) {
-                effectiveConfiguration.getSAML().setAdditionalRequestParams(
+
+            //  Set default values if no values are already set
+            if (effective.getSAML().isSAMLSSOEnabled() == null) {
+                effective.getSAML().setEnableSAMLSSO(true);
+            }
+            if (effective.getSAML().getHttpBinding() == null) {
+                effective.getSAML().
+                        setHttpBinding(LoaderConstants.SSOConfigurationConstants.SAMLConstants.BINDING_TYPE_DEFAULT);
+            }
+            if (effective.getSAML().getAttributeConsumingServiceIndex() == null) {
+                effective.getSAML().setAttributeConsumingServiceIndex(
+                        LoaderConstants.SSOConfigurationConstants.SAMLConstants.ATTR_CONSUMING_SERVICE_INDEX_DEFAULT);
+            }
+            if (effective.getSAML().isSLOEnabled() == null) {
+                effective.getSAML().setEnableSLO(true);
+            }
+            if (effective.getSAML().getConsumerURLPostFix() == null) {
+                effective.getSAML().setConsumerURLPostFix(
+                        LoaderConstants.SSOConfigurationConstants.SAMLConstants.CONSUMER_URL_POSTFIX_DEFAULT);
+            }
+            if (effective.getSAML().isAssertionEncryptionEnabled() == null) {
+                effective.getSAML().setEnableAssertionEncryption(false);
+            }
+            if (effective.getSAML().isAssertionSigningEnabled() == null) {
+                effective.getSAML().setEnableAssertionSigning(true);
+            }
+            if (effective.getSAML().isRequestSigningEnabled() == null) {
+                effective.getSAML().setEnableRequestSigning(true);
+            }
+            if (effective.getSAML().isResponseSigningEnabled() == null) {
+                effective.getSAML().setEnableResponseSigning(true);
+            }
+            if (effective.getSAML().getAdditionalRequestParams() == null) {
+                effective.getSAML().setAdditionalRequestParams(
                         LoaderConstants.SSOConfigurationConstants.SAMLConstants.ADDITIONAL_REQUEST_PARAMETERS_DEFAULT);
             }
+        }
+    }
+
+    /**
+     * Sets default values if neither global nor context-level configurations are defined.
+     *
+     * @param effective the resultant group of SSO configurations
+     */
+    protected static void setSSOPropertyDefaults(SSOConfiguration effective) {
+        if (effective != null) {
+            effective.setHandleConsumerURLAfterSLO(true);
+            effective.setApplicationServerURL(LoaderConstants.SSOConfigurationConstants.APPLICATION_SERVER_URL_DEFAULT);
+            effective.getSAML().setEnableSAMLSSO(true);
+            effective.getSAML().setIdpURL(LoaderConstants.SSOConfigurationConstants.SAMLConstants.IDP_URL_DEFAULT);
+            effective.getSAML().
+                    setIdpEntityId(LoaderConstants.SSOConfigurationConstants.SAMLConstants.IDP_ENTITY_ID_DEFAULT);
+            effective.getSAML().
+                    setHttpBinding(LoaderConstants.SSOConfigurationConstants.SAMLConstants.BINDING_TYPE_DEFAULT);
+            effective.getSAML().setAttributeConsumingServiceIndex(
+                    LoaderConstants.SSOConfigurationConstants.SAMLConstants.ATTR_CONSUMING_SERVICE_INDEX_DEFAULT);
+            effective.getSAML().setEnableSLO(true);
+            effective.getSAML().setConsumerURLPostFix(
+                    LoaderConstants.SSOConfigurationConstants.SAMLConstants.CONSUMER_URL_POSTFIX_DEFAULT);
+            effective.getSAML().setRequestURLPostFix(
+                    LoaderConstants.SSOConfigurationConstants.SAMLConstants.REQUEST_URL_POSTFIX_DEFAULT);
+            effective.getSAML().
+                    setSLOURLPostFix(LoaderConstants.SSOConfigurationConstants.SAMLConstants.SLO_URL_POSTFIX_DEFAULT);
+            effective.getSAML().setEnableAssertionEncryption(false);
+            effective.getSAML().setEnableAssertionSigning(true);
+            effective.getSAML().setEnableRequestSigning(true);
+            effective.getSAML().setEnableResponseSigning(true);
+            effective.getSAML().setSignatureValidatorImplClass(
+                    LoaderConstants.SSOConfigurationConstants.SAMLConstants.SIGNATURE_VALIDATOR_IMPL_CLASS_DEFAULT);
+            effective.getSAML().setAdditionalRequestParams(
+                    LoaderConstants.SSOConfigurationConstants.SAMLConstants.ADDITIONAL_REQUEST_PARAMETERS_DEFAULT);
+            effective.getSAML().setIsForceAuthn(false);
+            effective.getSAML().setIsPassiveAuthn(false);
         }
     }
 }
