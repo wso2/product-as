@@ -88,6 +88,10 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
             <artifactId>sample-module</artifactId>
         </dependency>
         <dependency>
