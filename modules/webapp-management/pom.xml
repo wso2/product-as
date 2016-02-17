@@ -15,21 +15,19 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wso2appserver</artifactId>
+        <artifactId>modules</artifactId>
         <groupId>org.wso2.appserver</groupId>
         <version>6.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <artifactId>webapp-management</artifactId>
     <packaging>pom</packaging>
-    <artifactId>modules</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
-
+    <name>WSO2 AppServer - Web Application Management Parent Module</name>
+    <description>WSO2 Application Server web application management</description>
+    <url>http://wso2.org</url>
     <modules>
-        <module>appserver-utils</module>
-        <module>sample-module</module>
-        <module>webapp-management</module>
-        <!--<module>webapp-loader</module>-->
+        <module>org.wso2.appserver.webapp.security</module>
     </modules>
 
 </project>

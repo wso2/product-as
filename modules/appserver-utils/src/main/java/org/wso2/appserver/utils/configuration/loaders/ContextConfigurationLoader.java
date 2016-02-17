@@ -43,10 +43,6 @@ public class ContextConfigurationLoader implements LifecycleListener {
     private static final Logger logger = Logger.getLogger(ContextConfigurationLoader.class.getName());
     private static final Map<Context, Configuration> contextToConfigurationMap = new HashMap<>();
 
-    public static Map<Context, Configuration> getContextToConfigurationMap() {
-        return contextToConfigurationMap;
-    }
-
     /**
      * Processes {@code Context}s before their start event to retrieve an final set of WSO2 specific
      * configurations.
@@ -71,6 +67,17 @@ public class ContextConfigurationLoader implements LifecycleListener {
                 }
             }
         }
+    }
+
+    /**
+     * Retrieves the {@code Configuration} matching the specified context.
+     *
+     * @param context the context of which the matching {@link Configuration} is to be returned
+     * @return the {@code Configuration} matching the specified context
+     */
+    public static Optional<Configuration> retrieveContextConfiguration(Context context) {
+        Configuration configuration = contextToConfigurationMap.get(context);
+        return Optional.ofNullable(configuration);
     }
 
     /**

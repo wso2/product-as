@@ -40,6 +40,42 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-instrument</id>
+                            <goals>
+                                <goal>instrument</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-restore-instrumented-classes</id>
+                            <goals>
+                                <goal>restore-instrumented-classes</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-check</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <executions>
@@ -54,6 +90,11 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${maven.shade.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <executions>
                         <execution>
@@ -64,6 +105,15 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+                        </systemPropertyVariables>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -93,6 +143,16 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${com.google.code.gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${org.joda.time.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat</artifactId>
                 <version>${tomcat.version}</version>
@@ -101,6 +161,22 @@
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-core</artifactId>
                 <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>org.jacoco.agent</artifactId>
+                <classifier>runtime</classifier>
+                <version>${jacoco.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml</artifactId>
+                <version>${org.opensaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${org.sl4j.api.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
@@ -117,6 +193,11 @@
                 <artifactId>webapp-loader</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -132,8 +213,15 @@
         <!-- plugin version properties -->
         <maven.checkstyleplugin.version>2.17</maven.checkstyleplugin.version>
         <maven.findbugsplugin.version>3.0.3</maven.findbugsplugin.version>
+        <maven.shade.plugin.version>2.4.2</maven.shade.plugin.version>
 
         <!-- dependency version properties -->
+        <com.google.code.gson.version>2.5</com.google.code.gson.version>
+        <jacoco.version>0.7.5.201505241946</jacoco.version>
+        <org.joda.time.version>2.9.1</org.joda.time.version>
+        <org.opensaml.version>2.6.4</org.opensaml.version>
+        <org.sl4j.api.version>1.7.13</org.sl4j.api.version>
+        <testng.version>6.9.10</testng.version>
         <tomcat.version>8.0.24</tomcat.version>
     </properties>
 </project>
