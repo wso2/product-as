@@ -15,14 +15,18 @@
  */
 package org.wso2.appserver.webapp.security.sso.saml.signature;
 
+import org.wso2.appserver.utils.configuration.model.Configuration;
 import org.wso2.appserver.webapp.security.sso.saml.SAMLSSOUtils;
-import org.wso2.appserver.webapp.security.sso.util.SSOConstants;
 import org.wso2.appserver.webapp.security.sso.util.SSOException;
 
-import java.security.*;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
-import java.util.Properties;
 
 /**
  * This class represents an entity credential associated with X.509 Public Key Infrastructure.
@@ -34,8 +38,8 @@ public class SSOX509Credential {
     private PrivateKey privateKey;
     private X509Certificate entityCertificate;
 
-    public SSOX509Credential(Properties keyStoreConfigurationProperties) throws SSOException {
-        readX509Credentials(keyStoreConfigurationProperties);
+    public SSOX509Credential(Configuration keyStoreConfiguration) throws SSOException {
+        readX509Credentials(keyStoreConfiguration);
     }
 
     public PrivateKey getPrivateKey() {
@@ -53,15 +57,15 @@ public class SSOX509Credential {
     /**
      * Reads the appropriate X.509 certificate credentials using the keystore configuration properties specified.
      *
-     * @param keyStoreConfigurationProperties the keystore configuration properties
+     * @param keyStoreConfiguration the keystore configuration properties
      * @throws SSOException if an error occurred while reading credentials
      */
-    private void readX509Credentials(Properties keyStoreConfigurationProperties) throws SSOException {
-        Optional generatedKeyStore = SAMLSSOUtils.generateKeyStore(keyStoreConfigurationProperties);
+    private void readX509Credentials(Configuration keyStoreConfiguration) throws SSOException {
+        Optional generatedKeyStore = SAMLSSOUtils.generateKeyStore(keyStoreConfiguration);
         if (generatedKeyStore.isPresent()) {
             KeyStore keyStore = (KeyStore) generatedKeyStore.get();
-            String certificateAlias = keyStoreConfigurationProperties.
-                    getProperty(SSOConstants.SSOAgentConfiguration.SAML2.IDP_PUBLIC_CERTIFICATE_ALIAS);
+            String certificateAlias = keyStoreConfiguration.getSingleSignOnConfiguration().
+                    getSAML().getIdpCertificateAlias();
             try {
                 if (certificateAlias != null) {
                     entityCertificate = (X509Certificate) keyStore.getCertificate(certificateAlias);
@@ -71,10 +75,10 @@ public class SSOX509Credential {
                         "Error occurred while retrieving public certificate with certificateAlias " + certificateAlias);
             }
 
-            String privateKeyAlias = keyStoreConfigurationProperties.
-                    getProperty(SSOConstants.SSOAgentConfiguration.SAML2.SP_PRIVATE_KEY_ALIAS);
-            String privateKeyPassword = keyStoreConfigurationProperties.
-                    getProperty(SSOConstants.SSOAgentConfiguration.SAML2.SP_PRIVATE_KEY_PASSWORD);
+            String privateKeyAlias = keyStoreConfiguration.getSingleSignOnConfiguration().getSAML().
+                    getPrivateKeyAlias();
+            String privateKeyPassword = keyStoreConfiguration.getSingleSignOnConfiguration().getSAML().
+                    getPrivateKeyPassword();
             try {
                 if ((privateKeyAlias != null) && (privateKeyPassword != null)) {
                     privateKey = (PrivateKey) keyStore.getKey(privateKeyAlias, privateKeyPassword.toCharArray());

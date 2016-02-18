@@ -23,16 +23,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.appserver.webapp.security</artifactId>
     <packaging>jar</packaging>
-    <name>WSO2 AppServer - Web Application Security</name>
+    <name>WSO2 Application Server - Web Application Security</name>
     <description>WSO2 Application Server web application security component</description>
     <url>http://wso2.org</url>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -68,15 +64,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <inherited>false</inherited>
-                <configuration>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -94,12 +81,6 @@
             <artifactId>tomcat-embed-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.agent</artifactId>
-            <classifier>runtime</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.opensaml</groupId>
             <artifactId>opensaml</artifactId>
         </dependency>
@@ -108,14 +89,8 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-utils</artifactId>
         </dependency>
     </dependencies>
-
 </project>

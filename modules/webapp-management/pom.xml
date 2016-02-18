@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>webapp-management</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 AppServer - Web Application Management Parent Module</name>
+    <name>WSO2 Application Server - Web Application Management Parent Module</name>
     <description>WSO2 Application Server web application management</description>
     <url>http://wso2.org</url>
     <modules>

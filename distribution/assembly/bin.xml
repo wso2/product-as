@@ -29,7 +29,8 @@
         <dependencySet>
             <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
             <includes>
-                <include>org.wso2.appserver:appserver-utils</include>
+                <include>org.wso2.appserver:appserver-utils:jar</include>
+                <include>org.wso2.appserver:org.wso2.appserver.webapp.security:jar</include>
                 <include>org.wso2.appserver:sample-module:jar</include>
                 <include>org.wso2.appserver:webapp-loader:jar</include>
             </includes>

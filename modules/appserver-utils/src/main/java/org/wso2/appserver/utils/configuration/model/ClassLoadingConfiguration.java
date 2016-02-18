@@ -25,8 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ClassLoadingConfiguration {
-    @XmlElement(name = ConfigurationConstants.ClassLoadingConfigurationConstants.ENVIRONMENTS,
-            namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private Environments environments;
 
     public Environments getEnvironments() {

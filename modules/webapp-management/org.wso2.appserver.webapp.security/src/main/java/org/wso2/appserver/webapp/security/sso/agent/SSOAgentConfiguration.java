@@ -20,10 +20,18 @@ import org.wso2.appserver.utils.configuration.model.SSOConfiguration;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.sso.util.SSOConstants;
 import org.wso2.appserver.webapp.security.sso.util.SSOException;
+import org.wso2.appserver.webapp.security.sso.util.SSOUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * This class defines the configuration aspects of the single-sign-on (SSO) agent.
@@ -33,14 +41,14 @@ import java.util.logging.Logger;
 public class SSOAgentConfiguration {
     private static final Logger logger = Logger.getLogger(SSOAgentConfiguration.class.getName());
 
-    private Boolean isSAML2SSOLoginEnabled;
+    private Boolean isSAMLSSOLoginEnabled;
     private String requestURLPostFix;
     private Set<String> skipURIs;
     private Map<String, String[]> queryParameters;
     private SAML2 saml2;
 
     public Boolean isSAML2SSOLoginEnabled() {
-        return isSAML2SSOLoginEnabled;
+        return isSAMLSSOLoginEnabled;
     }
 
     public String getRequestURLPostFix() {
@@ -74,11 +82,10 @@ public class SSOAgentConfiguration {
     public void initConfig(Configuration configuration) {
         Optional.ofNullable(configuration).ifPresent(configProperties -> {
             SSOConfiguration ssoConfiguration = configProperties.getSingleSignOnConfiguration();
-
             Optional.ofNullable(ssoConfiguration).ifPresent(effectiveConfiguration -> {
-                isSAML2SSOLoginEnabled = effectiveConfiguration.getSAML().isSAMLSSOEnabled();
-                if (isSAML2SSOLoginEnabled == null) {
-                    isSAML2SSOLoginEnabled = false;
+                isSAMLSSOLoginEnabled = effectiveConfiguration.getSAML().isSAMLSSOEnabled();
+                if (isSAMLSSOLoginEnabled == null) {
+                    isSAMLSSOLoginEnabled = false;
                 }
 
                 requestURLPostFix = effectiveConfiguration.getSAML().getRequestURLPostFix();
@@ -86,9 +93,31 @@ public class SSOAgentConfiguration {
                     requestURLPostFix = SSOConstants.SSOAgentConfiguration.SAML2.REQUEST_URL_POSTFIX_DEFAULT;
                 }
 
-                effectiveConfiguration.getSkipURIs().getSkipURIs().stream().forEach(skipURIs::add);
+                if (effectiveConfiguration.getSkipURIs() != null) {
+                    effectiveConfiguration.getSkipURIs().getSkipURIs().stream().forEach(skipURIs::add);
+                }
 
-                //  todo: consider the addition of query parameters
+                String queryParameterString = effectiveConfiguration.getQueryParams();
+                if (!SSOUtils.isBlank(queryParameterString)) {
+                    Map<String, List<String>> queryParameterMap = new HashMap<>();
+
+                    Stream.of(queryParameterString.split("&")).
+                            map(queryParameter -> queryParameter.split("=")).forEach(splitParameters -> {
+                        if (splitParameters.length == 2) {
+                            if (queryParameterMap.get(splitParameters[0]) != null) {
+                                queryParameterMap.get(splitParameters[0]).add(splitParameters[1]);
+                            } else {
+                                List<String> newList = new ArrayList<>();
+                                newList.add(splitParameters[1]);
+                                queryParameterMap.put(splitParameters[0], newList);
+                            }
+                        }
+                        queryParameterMap.entrySet().stream().forEach(entry -> {
+                            String[] values = entry.getValue().toArray(new String[entry.getValue().size()]);
+                            queryParameters.put(entry.getKey(), values);
+                        });
+                    });
+                }
 
                 saml2.httpBinding = effectiveConfiguration.getSAML().getHttpBinding();
                 if (saml2.httpBinding == null) {
@@ -108,15 +137,12 @@ public class SSOAgentConfiguration {
                 }
                 saml2.attributeConsumingServiceIndex = effectiveConfiguration.getSAML().
                         getAttributeConsumingServiceIndex();
-                if (saml2.attributeConsumingServiceIndex == null) {
-                    saml2.attributeConsumingServiceIndex = SSOConstants.SSOAgentConfiguration.
-                            SAML2.ATTR_CONSUMING_SERVICE_INDEX_DEFAULT;
-                }
 
                 saml2.isSLOEnabled = effectiveConfiguration.getSAML().isSLOEnabled();
                 if (saml2.isSLOEnabled == null) {
                     saml2.isSLOEnabled = false;
                 }
+
                 saml2.sloURLPostFix = effectiveConfiguration.getSAML().getSLOURLPostFix();
                 if (saml2.sloURLPostFix == null) {
                     saml2.sloURLPostFix = SSOConstants.SSOAgentConfiguration.SAML2.SLO_URL_POSTFIX_DEFAULT;
@@ -159,36 +185,11 @@ public class SSOAgentConfiguration {
                 if (saml2.isForceAuthenticationEnabled == null) {
                     saml2.isForceAuthenticationEnabled = false;
                 }
+
+                saml2.postBindingRequestHTMLPayload = effectiveConfiguration.getSAML().
+                        getPostBindingRequestHTMLPayload();
             });
         });
-
-        /*Optional.ofNullable(properties).ifPresent(configProperties -> {
-            String queryParameterString = configProperties.getProperty(SSOConstants.SSOAgentConfiguration.QUERY_PARAMS);
-            if (!SSOUtils.isBlank(queryParameterString)) {
-                Map<String, List<String>> queryParameterMap = new HashMap<>();
-
-                Stream.of(queryParameterString.split("&")).
-                        map(queryParameter -> queryParameter.split("=")).forEach(splitParameters -> {
-                    if (splitParameters.length == 2) {
-                        if (queryParameterMap.get(splitParameters[0]) != null) {
-                            queryParameterMap.get(splitParameters[0]).add(splitParameters[1]);
-                        } else {
-                            List<String> newList = new ArrayList<>();
-                            newList.add(splitParameters[1]);
-                            queryParameterMap.put(splitParameters[0], newList);
-                        }
-                    }
-                    queryParameterMap.entrySet().stream().forEach(entry -> {
-                        String[] values = entry.getValue().toArray(new String[entry.getValue().size()]);
-                        queryParameters.put(entry.getKey(), values);
-                    });
-                });
-            }
-
-            saml2.relayState = configProperties.getProperty(SSOConstants.SSOAgentConfiguration.SAML2.RELAY_STATE);
-            saml2.postBindingRequestHTMLPayload = configProperties.
-                    getProperty(SSOConstants.SSOAgentConfiguration.SAML2.POST_BINDING_REQUEST_HTML_PAYLOAD);
-        });*/
     }
 
     /**
@@ -199,47 +200,47 @@ public class SSOAgentConfiguration {
      *                      SSOAgentConfiguration instance
      */
     public void verifyConfig() throws SSOException {
-        if (isSAML2SSOLoginEnabled && (requestURLPostFix == null)) {
+        if (isSAMLSSOLoginEnabled && (requestURLPostFix == null)) {
             throw new SSOException("SAML Request URL post-fix not configured");
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.spEntityId == null)) {
+        if (isSAMLSSOLoginEnabled && (saml2.spEntityId == null)) {
             throw new SSOException("SAML Request issuer id not configured");
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.acsURL == null)) {
+        if (isSAMLSSOLoginEnabled && (saml2.acsURL == null)) {
             throw new SSOException("SAML Consumer URL post-fix not configured");
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.idPEntityId == null)) {
+        if (isSAMLSSOLoginEnabled && (saml2.idPEntityId == null)) {
             throw new SSOException("Identity provider entity id not configured");
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.idPURL == null)) {
+        if (isSAMLSSOLoginEnabled && (saml2.idPURL == null)) {
             throw new SSOException("Identity provider URL not configured");
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.attributeConsumingServiceIndex == null)) {
+        if (isSAMLSSOLoginEnabled && (saml2.attributeConsumingServiceIndex == null)) {
             logger.log(Level.FINE, "SAML attribute consuming index not configured. "
                     + "No attributes of the Subject will be requested");
         }
 
-        if (isSAML2SSOLoginEnabled && saml2.isSLOEnabled && saml2.sloURLPostFix == null) {
+        if (isSAMLSSOLoginEnabled && saml2.isSLOEnabled && saml2.sloURLPostFix == null) {
             throw new SSOException("Single Logout enabled, but SLO URL not configured");
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.isAssertionSigned || saml2.isAssertionEncrypted ||
+        if (isSAMLSSOLoginEnabled && (saml2.isAssertionSigned || saml2.isAssertionEncrypted ||
                 saml2.isResponseSigned || saml2.isRequestSigned) && (saml2.ssoX509Credential == null)) {
             logger.log(Level.FINE,
                     "\'SSOX509Credential\' not configured, defaulting to " + SSOX509Credential.class.getName());
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.isAssertionSigned || saml2.isResponseSigned) &&
+        if (isSAMLSSOLoginEnabled && (saml2.isAssertionSigned || saml2.isResponseSigned) &&
                 (saml2.ssoX509Credential.getEntityCertificate() == null)) {
             throw new SSOException("Public certificate of IdP not configured");
         }
 
-        if (isSAML2SSOLoginEnabled && (saml2.isRequestSigned || saml2.isAssertionEncrypted) &&
+        if (isSAMLSSOLoginEnabled && (saml2.isRequestSigned || saml2.isAssertionEncrypted) &&
                 (saml2.ssoX509Credential.getPrivateKey() == null)) {
             throw new SSOException("Private key of SP not configured");
         }
@@ -271,7 +272,7 @@ public class SSOAgentConfiguration {
          * This should be in valid HTML syntax, with following section within the
          * auto-submit form.
          * "&lt;!--$saml_params--&gt;"
-         * This section will be replaced by the SAML2 parameters.
+         * This section will be replaced by the SAML parameters.
          * <p>
          * If the parameter value is empty, null or doesn't have the above
          * section, the default page will be shown

@@ -67,8 +67,7 @@ public class Configuration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class RestWebServicesConfiguration {
-        @XmlElement(name = ConfigurationConstants.RestWebServicesConfigurationConstants.ISMANAGEDAPI,
-                namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean isManagedAPI;
 
         public Boolean isManagedAPI() {

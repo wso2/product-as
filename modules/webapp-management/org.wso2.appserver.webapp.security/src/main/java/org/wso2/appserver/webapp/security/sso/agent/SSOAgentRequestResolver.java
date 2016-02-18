@@ -57,7 +57,7 @@ public class SSOAgentRequestResolver {
      */
     public boolean isSAML2SSOResponse() {
         return (ssoAgentConfiguration.isSAML2SSOLoginEnabled()) && (request.
-                getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_RESPONSE) != null);
+                getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE) != null);
     }
 
     /**

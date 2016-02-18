@@ -30,9 +30,13 @@ public class SSOConfiguration {
     @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SkipURIs skipURIs;
     @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    private String queryParams;
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private String applicationServerURL;
     @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private Boolean handleConsumerURLAfterSLO;
+    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    private String redirectPathAfterSLO;
     @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private String loginURL;
     @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
@@ -44,6 +48,14 @@ public class SSOConfiguration {
 
     public void setSkipURIs(SkipURIs skipURIs) {
         this.skipURIs = skipURIs;
+    }
+
+    public String getQueryParams() {
+        return queryParams;
+    }
+
+    public void setQueryParams(String queryParams) {
+        this.queryParams = queryParams;
     }
 
     public String getApplicationServerURL() {
@@ -62,8 +74,8 @@ public class SSOConfiguration {
         this.handleConsumerURLAfterSLO = handleConsumerURLAfterSLO;
     }
 
-    public String getLoginURL() {
-        return loginURL;
+    public String getRedirectPathAfterSLO() {
+        return redirectPathAfterSLO;
     }
 
     public SAML getSAML() {
@@ -132,6 +144,8 @@ public class SSOConfiguration {
         @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean isPassiveAuthn;
         @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        private String postBindingRequestHTMLPayload;
+        @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String keystorePath;
         @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private String keystorePassword;
@@ -146,7 +160,7 @@ public class SSOConfiguration {
             return enableSAMLSSO;
         }
 
-        public void setEnableSAMLSSO(Boolean enableSAMLSSO) {
+        public void enableSAMLSSO(Boolean enableSAMLSSO) {
             this.enableSAMLSSO = enableSAMLSSO;
         }
 
@@ -202,7 +216,7 @@ public class SSOConfiguration {
             return enableSLO;
         }
 
-        public void setEnableSLO(Boolean enableSLO) {
+        public void enableSLO(Boolean enableSLO) {
             this.enableSLO = enableSLO;
         }
 
@@ -234,7 +248,7 @@ public class SSOConfiguration {
             return enableResponseSigning;
         }
 
-        public void setEnableResponseSigning(Boolean enableResponseSigning) {
+        public void enableResponseSigning(Boolean enableResponseSigning) {
             this.enableResponseSigning = enableResponseSigning;
         }
 
@@ -242,7 +256,7 @@ public class SSOConfiguration {
             return enableAssertionSigning;
         }
 
-        public void setEnableAssertionSigning(Boolean enableAssertionSigning) {
+        public void enableAssertionSigning(Boolean enableAssertionSigning) {
             this.enableAssertionSigning = enableAssertionSigning;
         }
 
@@ -250,7 +264,7 @@ public class SSOConfiguration {
             return enableAssertionEncryption;
         }
 
-        public void setEnableAssertionEncryption(Boolean enableAssertionEncryption) {
+        public void enableAssertionEncryption(Boolean enableAssertionEncryption) {
             this.enableAssertionEncryption = enableAssertionEncryption;
         }
 
@@ -258,7 +272,7 @@ public class SSOConfiguration {
             return enableRequestSigning;
         }
 
-        public void setEnableRequestSigning(Boolean enableRequestSigning) {
+        public void enableRequestSigning(Boolean enableRequestSigning) {
             this.enableRequestSigning = enableRequestSigning;
         }
 
@@ -282,7 +296,7 @@ public class SSOConfiguration {
             return isForceAuthn;
         }
 
-        public void setIsForceAuthn(Boolean isForceAuthn) {
+        public void setForceAuthn(Boolean isForceAuthn) {
             this.isForceAuthn = isForceAuthn;
         }
 
@@ -290,8 +304,12 @@ public class SSOConfiguration {
             return isPassiveAuthn;
         }
 
-        public void setIsPassiveAuthn(Boolean isPassiveAuthn) {
+        public void setPassiveAuthn(Boolean isPassiveAuthn) {
             this.isPassiveAuthn = isPassiveAuthn;
+        }
+
+        public String getPostBindingRequestHTMLPayload() {
+            return postBindingRequestHTMLPayload;
         }
 
         public String getKeystorePath() {

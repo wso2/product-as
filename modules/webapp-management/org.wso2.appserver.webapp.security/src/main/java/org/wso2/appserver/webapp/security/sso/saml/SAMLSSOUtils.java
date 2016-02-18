@@ -21,20 +21,35 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.xml.SAMLConstants;
-import org.opensaml.saml2.core.*;
+import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml2.core.AttributeStatement;
+import org.opensaml.saml2.core.AuthnRequest;
+import org.opensaml.saml2.core.EncryptedAssertion;
+import org.opensaml.saml2.core.LogoutRequest;
+import org.opensaml.saml2.core.RequestAbstractType;
 import org.opensaml.saml2.encryption.Decrypter;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.XMLObjectBuilder;
 import org.opensaml.xml.encryption.DecryptionException;
 import org.opensaml.xml.encryption.EncryptedKey;
-import org.opensaml.xml.io.*;
+import org.opensaml.xml.io.Marshaller;
+import org.opensaml.xml.io.MarshallerFactory;
+import org.opensaml.xml.io.MarshallingException;
+import org.opensaml.xml.io.Unmarshaller;
+import org.opensaml.xml.io.UnmarshallerFactory;
+import org.opensaml.xml.io.UnmarshallingException;
 import org.opensaml.xml.security.SecurityHelper;
 import org.opensaml.xml.security.credential.Credential;
 import org.opensaml.xml.security.keyinfo.KeyInfoCredentialResolver;
 import org.opensaml.xml.security.keyinfo.StaticKeyInfoCredentialResolver;
 import org.opensaml.xml.security.x509.X509Credential;
-import org.opensaml.xml.signature.*;
+import org.opensaml.xml.signature.KeyInfo;
+import org.opensaml.xml.signature.Signature;
+import org.opensaml.xml.signature.SignatureException;
+import org.opensaml.xml.signature.Signer;
+import org.opensaml.xml.signature.X509Certificate;
+import org.opensaml.xml.signature.X509Data;
 import org.opensaml.xml.util.Base64;
 import org.opensaml.xml.util.XMLHelper;
 import org.w3c.dom.Document;
@@ -45,16 +60,18 @@ import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.sso.saml.signature.X509CredentialImplementation;
-import org.wso2.appserver.webapp.security.sso.util.SSOConstants;
 import org.wso2.appserver.webapp.security.sso.util.SSOException;
 import org.wso2.appserver.webapp.security.sso.util.SSOUtils;
 import org.wso2.appserver.webapp.security.sso.util.XMLEntityResolver;
 import org.xml.sax.SAXException;
 
-import javax.crypto.SecretKey;
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -66,12 +83,19 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
+import javax.crypto.SecretKey;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
 
 /**
  * This class defines the implementation of utility functions associated with SAML 2.0 based
@@ -122,16 +146,15 @@ public class SAMLSSOUtils {
      * <p>
      * An {@code Optional String} URL is returned based on the context path and configuration properties provided.
      *
-     * @param contextPath           the context path of the service provider application
-     * @param ssoSPConfigProperties the global single-sign-on configuration properties
+     * @param contextPath   the context path of the service provider application
+     * @param configuration the global single-sign-on configuration properties
      * @return a SAML Assertion Consumer URL based on service provider application context path
      */
-    protected static Optional generateConsumerUrl(String contextPath, Properties ssoSPConfigProperties) {
-        if ((Optional.ofNullable(contextPath).isPresent()) && (Optional.ofNullable(ssoSPConfigProperties).
-                isPresent())) {
-            return Optional.of(ssoSPConfigProperties.getProperty(SSOConstants.SAMLSSOValveConstants.APP_SERVER_URL) +
-                    contextPath + ssoSPConfigProperties.
-                    getProperty(SSOConstants.SSOAgentConfiguration.SAML2.CONSUMER_URL_POSTFIX));
+    protected static Optional generateConsumerUrl(String contextPath,
+            org.wso2.appserver.utils.configuration.model.Configuration configuration) {
+        if ((contextPath != null) && (configuration != null)) {
+            return Optional.of(configuration.getSingleSignOnConfiguration().getApplicationServerURL() + contextPath +
+                    configuration.getSingleSignOnConfiguration().getSAML().getConsumerURLPostFix());
         } else {
             return Optional.empty();
         }
@@ -192,8 +215,8 @@ public class SAMLSSOUtils {
             //  Marshall this element, and its children, and root them in a newly created Document
             authDOM = marshaller.marshall(requestMessage);
         } catch (MarshallingException e) {
-            throw new SSOException("Error occurred while encoding SAML request, failed to marshall the SAML 2.0. " +
-                    "Request element XMLObject to its corresponding W3C DOM element", e);
+            throw new SSOException("Error occurred while encoding SAML request, failed to marshall the SAML 2.0. "
+                    + "Request element XMLObject to its corresponding W3C DOM element", e);
         }
 
         StringWriter writer = new StringWriter();
@@ -312,25 +335,24 @@ public class SAMLSSOUtils {
     /**
      * Returns a {@code KeyStore} based on keystore properties specified.
      *
-     * @param keyStoreConfigurationProperties the keystore properties
+     * @param configuration the keystore properties
      * @return the {@link KeyStore} instance generated
      * @throws SSOException if an error occurs while generating the {@link KeyStore} instance
      */
-    public static Optional generateKeyStore(Properties keyStoreConfigurationProperties) throws SSOException {
-        if (keyStoreConfigurationProperties == null) {
+    public static Optional generateKeyStore(org.wso2.appserver.utils.configuration.model.Configuration configuration)
+            throws SSOException {
+        if (configuration == null) {
             return Optional.empty();
         }
 
-        String keyStorePathString = keyStoreConfigurationProperties.
-                getProperty(SSOConstants.SSOAgentConfiguration.SAML2.KEYSTORE_PATH);
-        String keyStorePasswordString = keyStoreConfigurationProperties.
-                getProperty(SSOConstants.SSOAgentConfiguration.SAML2.KEYSTORE_PASSWORD);
+        String keyStorePathString = configuration.getSingleSignOnConfiguration().getSAML().getKeystorePath();
+        String keyStorePasswordString = configuration.getSingleSignOnConfiguration().getSAML().getKeystorePassword();
 
         if ((keyStorePasswordString == null) || (keyStorePathString == null)) {
             return Optional.empty();
         }
 
-        Path keyStorePath = Paths.get(keyStorePathString);
+        Path keyStorePath = Paths.get(URI.create(keyStorePathString).getPath());
         if (Files.exists(keyStorePath)) {
             try (InputStream keystoreInputStream = Files.newInputStream(keyStorePath)) {
                 String keyStoreType = "JKS";
@@ -341,8 +363,7 @@ public class SAMLSSOUtils {
                 throw new SSOException("Error while loading key store", e);
             }
         } else {
-            throw new SSOException("File path specified under " +
-                    SSOConstants.SSOAgentConfiguration.SAML2.KEYSTORE_PATH + " does not exist");
+            throw new SSOException("File path specified under \'keystorePath\' does not exist");
         }
     }
 

@@ -30,7 +30,6 @@ import org.wso2.appserver.webapp.security.sso.util.SSOUtils;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -45,10 +44,8 @@ import javax.servlet.ServletException;
 public class SAMLSSOValve extends SingleSignOn {
     private static final Logger logger = Logger.getLogger(SAMLSSOValve.class.getName());
 
-    private Properties ssoSPConfigProperties;
-
     public SAMLSSOValve() throws SSOException {
-        logger.log(Level.INFO, "Initializing SAMLSSOValve...");
+        logger.log(Level.INFO, "Initializing SAML based Single-Sign-On Valve...");
     }
 
     /**
@@ -78,13 +75,14 @@ public class SAMLSSOValve extends SingleSignOn {
         }
 
         //  Checks if single-sign-on feature is enabled
-        //  todo: the filter to check root context has been removed. to be tested
         if (!configuration.getSingleSignOnConfiguration().getSAML().isSAMLSSOEnabled()) {
-            logger.log(Level.FINE, "SAML2 SSO not enabled in webapp " + request.getContext().getName());
+            logger.log(Level.FINE, "SAML Single-Sign-On not enabled in webapp " + request.getContext().getName());
             //  Moves onto the next valve, if single-sign-on is not enabled
             getNext().invoke(request, response);
             return;
         }
+
+        setupDefaultConfiguration(configuration);
 
         SSOAgentConfiguration ssoAgentConfiguration = (SSOAgentConfiguration) (request.getSessionInternal().
                 getNote(SSOConstants.SAMLSSOValveConstants.SSO_AGENT_CONFIG));
@@ -94,19 +92,17 @@ public class SAMLSSOValve extends SingleSignOn {
                 ssoAgentConfiguration = new SSOAgentConfiguration();
                 ssoAgentConfiguration.initConfig(configuration);
 
-                ssoAgentConfiguration.getSAML2().
-                        setSSOAgentX509Credential(new SSOX509Credential(ssoSPConfigProperties));
-                if(ssoAgentConfiguration.getSAML2().getSPEntityId() == null) {
+                ssoAgentConfiguration.getSAML2().setSSOAgentX509Credential(new SSOX509Credential(configuration));
+                if (ssoAgentConfiguration.getSAML2().getSPEntityId() == null) {
                     ssoAgentConfiguration.getSAML2().
                             setSPEntityId((String) SAMLSSOUtils.generateIssuerID(request.getContextPath()).get());
                 }
-                if(ssoAgentConfiguration.getSAML2().getACSURL() == null) {
+                if (ssoAgentConfiguration.getSAML2().getACSURL() == null) {
                     ssoAgentConfiguration.getSAML2().setACSURL(
-                            (String) SAMLSSOUtils.generateConsumerUrl(request.getContextPath(), ssoSPConfigProperties).
-                                    get());
+                            (String) SAMLSSOUtils.generateConsumerUrl(request.getContextPath(), configuration).get());
                 }
-                ssoAgentConfiguration.verifyConfig();
 
+                ssoAgentConfiguration.verifyConfig();
                 request.getSessionInternal().
                         setNote(SSOConstants.SAMLSSOValveConstants.SSO_AGENT_CONFIG, ssoAgentConfiguration);
             } catch (SSOException e) {
@@ -138,9 +134,8 @@ public class SAMLSSOValve extends SingleSignOn {
 
                 //  Reads the redirect path. This has to read before the session get invalidated as it first
                 //  tries to read the redirect path from the session attribute
-                String redirectPath = samlssoManager.
-                        readAndForgetRedirectPathAfterSLO(request, ssoSPConfigProperties.
-                                getProperty(SSOConstants.SAMLSSOValveConstants.REDIRECT_PATH_AFTER_SLO));
+                String redirectPath = samlssoManager.readAndForgetRedirectPathAfterSLO(request,
+                        configuration.getSingleSignOnConfiguration().getRedirectPathAfterSLO());
 
                 samlssoManager.processResponse(request);
                 //  Redirect according to relay state attribute
@@ -156,14 +151,12 @@ public class SAMLSSOValve extends SingleSignOn {
                                 setAttribute(SSOConstants.SAMLSSOValveConstants.REQUEST_PARAM_MAP, queryParameters));
                         response.sendRedirect(requestedURI.toString());
                     } else {
-                        response.sendRedirect(
-                                ssoSPConfigProperties.getProperty(SSOConstants.SAMLSSOValveConstants.APP_SERVER_URL)
-                                        + request.getContextPath());
+                        response.sendRedirect(configuration.getSingleSignOnConfiguration().getApplicationServerURL() +
+                                request.getContextPath());
                     }
-                } else if (request.getRequestURI().endsWith(ssoSPConfigProperties.
-                        getProperty(SSOConstants.SSOAgentConfiguration.SAML2.CONSUMER_URL_POSTFIX)) && Boolean.
-                        parseBoolean(ssoSPConfigProperties.
-                                getProperty(SSOConstants.SAMLSSOValveConstants.HANDLE_CONSUMER_URL_AFTER_SLO))) {
+                } else if (request.getRequestURI().
+                        endsWith(configuration.getSingleSignOnConfiguration().getSAML().getConsumerURLPostFix())
+                        && configuration.getSingleSignOnConfiguration().handleConsumerURLAfterSLO()) {
                     //  Handling redirect from acs page after SLO response. This will be done if
                     //  SAMLSSOValveConstants.HANDLE_CONSUMER_URL_AFTER_SLO is defined
                     //  SAMLSSOValveConstants.REDIRECT_PATH_AFTER_SLO value is used determine the redirect path
@@ -223,5 +216,28 @@ public class SAMLSSOValve extends SingleSignOn {
 
         //  Moves onto the next valve
         getNext().invoke(request, response);
+    }
+
+    /**
+     * Set up default values if the particular configurations are not specified by the user.
+     *
+     * @param configuration the set of user specified configurations
+     */
+    private static void setupDefaultConfiguration(Configuration configuration) {
+        if (configuration.getSingleSignOnConfiguration().getApplicationServerURL() == null) {
+            configuration.getSingleSignOnConfiguration().
+                    setApplicationServerURL(SSOConstants.SSOAgentConfiguration.APPLICATION_SERVER_URL_DEFAULT);
+        }
+        if (configuration.getSingleSignOnConfiguration().handleConsumerURLAfterSLO() == null) {
+            configuration.getSingleSignOnConfiguration().setHandleConsumerURLAfterSLO(true);
+        }
+        if (configuration.getSingleSignOnConfiguration().getSAML().getConsumerURLPostFix() == null) {
+            configuration.getSingleSignOnConfiguration().getSAML().
+                    setConsumerURLPostFix(SSOConstants.SSOAgentConfiguration.SAML2.CONSUMER_URL_POSTFIX_DEFAULT);
+        }
+        if (configuration.getSingleSignOnConfiguration().getSAML().getAdditionalRequestParams() == null) {
+            configuration.getSingleSignOnConfiguration().getSAML().setAdditionalRequestParams(
+                    SSOConstants.SSOAgentConfiguration.SAML2.ADDITIONAL_REQUEST_PARAMETERS_DEFAULT);
+        }
     }
 }

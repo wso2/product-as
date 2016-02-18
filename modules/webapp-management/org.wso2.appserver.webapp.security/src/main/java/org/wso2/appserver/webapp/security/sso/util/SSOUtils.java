@@ -15,28 +15,15 @@
  */
 package org.wso2.appserver.webapp.security.sso.util;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.IntStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * This class contains general utility functions used within the single-sign-on (SSO) implementation.
@@ -44,60 +31,12 @@ import java.util.stream.IntStream;
  * @since 6.0.0
  */
 public class SSOUtils {
-    private static final Logger logger = Logger.getLogger(SSOUtils.class.getName());
     private static final SecureRandom random = new SecureRandom();
 
     /**
      * Prevents instantiating the SSOUtils utility class.
      */
     private SSOUtils() {
-    }
-
-    /**
-     * Returns a {@code Path} instance representing the base of Apache Tomcat instances.
-     *
-     * @return a {@link Path} instance representing the base of Apache Tomcat instances
-     * @throws SSOException if CATALINA_BASE environmental variable has not been set
-     */
-    public static Path getCatalinaBase() throws SSOException {
-        String envVariable = System.getProperty(SSOConstants.SAMLSSOValveConstants.CATALINA_BASE);
-        if (envVariable != null) {
-            return Paths.get(envVariable);
-        } else {
-            throw new SSOException("CATALINA_BASE environmental variable has not been set");
-        }
-    }
-
-    /**
-     * Returns a {@code Path} instance representing the Apache Tomcat configuration home CATALINA_BASE/conf.
-     *
-     * @return a {@link Path} instance representing the Apache Tomcat configuration home CATALINA_BASE/conf
-     * @throws SSOException if CATALINA_BASE environmental variable has not been set
-     */
-    public static Path getCatalinaConfigurationHome() throws SSOException {
-        return Paths.
-                get(getCatalinaBase().toString(), SSOConstants.SAMLSSOValveConstants.TOMCAT_CONFIGURATION_FOLDER_NAME);
-    }
-
-    /**
-     * Loads the property content defined in the specified file to the specified {@code Properties} data structure.
-     *
-     * @param properties the {@link Properties} structure to which the file content is to be loaded
-     * @param filePath   the {@link Path} to the file from which properties are to be loaded
-     * @throws SSOException if an error occurs during the loading of the file content or if the specified file cannot
-     *                      be found
-     */
-    public static void loadPropertiesFromFile(Properties properties, Path filePath) throws SSOException {
-        if ((properties != null) && (filePath != null)) {
-            try (InputStream fileInputStream = Files.newInputStream(filePath)) {
-                properties.load(fileInputStream);
-                logger.log(Level.INFO, "Successfully loaded the properties from the file");
-            } catch (IOException e) {
-                throw new SSOException("Error when loading properties from the specified file " + filePath);
-            }
-        } else {
-            throw new SSOException("Specified properties table structure and file path cannot be null");
-        }
     }
 
     /**

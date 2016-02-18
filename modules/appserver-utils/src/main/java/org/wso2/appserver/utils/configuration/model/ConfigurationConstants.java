@@ -61,17 +61,4 @@ public class ConfigurationConstants {
         private ClassLoadingConfigurationConstants() {
         }
     }
-
-    /**
-     * A nested class which defines configuration constants for Application Server REST Web Services.
-     */
-    public static class RestWebServicesConfigurationConstants {
-        protected static final String ISMANAGEDAPI = "isManagedAPI";
-
-        /**
-         * Prevents instantiating the RestWebServicesConfigurationConstants nested class.
-         */
-        private RestWebServicesConfigurationConstants() {
-        }
-    }
 }

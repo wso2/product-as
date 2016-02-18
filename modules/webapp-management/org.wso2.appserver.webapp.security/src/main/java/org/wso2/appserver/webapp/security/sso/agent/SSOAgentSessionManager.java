@@ -18,8 +18,12 @@ package org.wso2.appserver.webapp.security.sso.agent;
 import org.wso2.appserver.webapp.security.sso.bean.LoggedInSession;
 import org.wso2.appserver.webapp.security.sso.util.SSOConstants;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import javax.servlet.http.HttpSession;
-import java.util.*;
 
 /**
  * A class which manages authenticated sessions of a service provider.
@@ -32,7 +36,7 @@ public class SSOAgentSessionManager {
      * (SLO) request can be handled by invalidating the service provider session mapped to identity provider session
      * index.
      */
-    private static final Map<String, Set<HttpSession>> sso_sessions_map = new HashMap<>();
+    private static final Map<String, Set<HttpSession>> ssoSessionsMap = new HashMap<>();
 
     /**
      * Prevents initiating the SSOAgentSessionManager class.
@@ -53,7 +57,7 @@ public class SSOAgentSessionManager {
         if ((sessionBean != null) && (sessionBean.getSAML2SSO() != null)) {
             String sessionIndex = sessionBean.getSAML2SSO().getSessionIndex();
             if (sessionIndex != null) {
-                sessions = sso_sessions_map.remove(sessionIndex);
+                sessions = ssoSessionsMap.remove(sessionIndex);
             }
         }
         sessions = Optional.ofNullable(sessions).orElse(new HashSet<>());
@@ -68,7 +72,7 @@ public class SSOAgentSessionManager {
      * @return set of sessions associated with the session index
      */
     public static Set<HttpSession> invalidateAllSessions(String sessionIndex) {
-        Set<HttpSession> sessions = sso_sessions_map.remove(sessionIndex);
+        Set<HttpSession> sessions = ssoSessionsMap.remove(sessionIndex);
         sessions = Optional.ofNullable(sessions).orElse(new HashSet<>());
         return sessions;
     }
@@ -81,12 +85,12 @@ public class SSOAgentSessionManager {
     public static void addAuthenticatedSession(HttpSession session) {
         String sessionIndex = ((LoggedInSession) session.getAttribute(SSOConstants.SESSION_BEAN_NAME)).getSAML2SSO().
                 getSessionIndex();
-        if (sso_sessions_map.get(sessionIndex) != null) {
-            sso_sessions_map.get(sessionIndex).add(session);
+        if (ssoSessionsMap.get(sessionIndex) != null) {
+            ssoSessionsMap.get(sessionIndex).add(session);
         } else {
             Set<HttpSession> sessions = new HashSet<>();
             sessions.add(session);
-            sso_sessions_map.put(sessionIndex, sessions);
+            ssoSessionsMap.put(sessionIndex, sessions);
         }
     }
 }

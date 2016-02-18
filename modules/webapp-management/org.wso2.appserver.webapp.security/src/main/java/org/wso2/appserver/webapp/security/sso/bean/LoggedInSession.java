@@ -22,10 +22,10 @@ import org.opensaml.saml2.core.Response;
 import org.wso2.appserver.webapp.security.sso.saml.SAMLSSOUtils;
 import org.wso2.appserver.webapp.security.sso.util.SSOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  * A Java bean class which represents a user logged-in session.

@@ -21,8 +21,31 @@ import org.joda.time.DateTime;
 import org.opensaml.common.SAMLVersion;
 import org.opensaml.common.xml.SAMLConstants;
 import org.opensaml.saml2.common.Extensions;
-import org.opensaml.saml2.core.*;
-import org.opensaml.saml2.core.impl.*;
+import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml2.core.AudienceRestriction;
+import org.opensaml.saml2.core.AuthnContextClassRef;
+import org.opensaml.saml2.core.AuthnContextComparisonTypeEnumeration;
+import org.opensaml.saml2.core.AuthnRequest;
+import org.opensaml.saml2.core.Conditions;
+import org.opensaml.saml2.core.EncryptedAssertion;
+import org.opensaml.saml2.core.Issuer;
+import org.opensaml.saml2.core.LogoutRequest;
+import org.opensaml.saml2.core.LogoutResponse;
+import org.opensaml.saml2.core.NameID;
+import org.opensaml.saml2.core.NameIDPolicy;
+import org.opensaml.saml2.core.RequestAbstractType;
+import org.opensaml.saml2.core.RequestedAuthnContext;
+import org.opensaml.saml2.core.Response;
+import org.opensaml.saml2.core.SessionIndex;
+import org.opensaml.saml2.core.StatusCode;
+import org.opensaml.saml2.core.impl.AuthnContextClassRefBuilder;
+import org.opensaml.saml2.core.impl.AuthnRequestBuilder;
+import org.opensaml.saml2.core.impl.IssuerBuilder;
+import org.opensaml.saml2.core.impl.LogoutRequestBuilder;
+import org.opensaml.saml2.core.impl.NameIDBuilder;
+import org.opensaml.saml2.core.impl.NameIDPolicyBuilder;
+import org.opensaml.saml2.core.impl.RequestedAuthnContextBuilder;
+import org.opensaml.saml2.core.impl.SessionIndexBuilder;
 import org.opensaml.saml2.ecp.RelayState;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.util.Base64;
@@ -37,18 +60,22 @@ import org.wso2.appserver.webapp.security.sso.util.SSOConstants;
 import org.wso2.appserver.webapp.security.sso.util.SSOException;
 import org.wso2.appserver.webapp.security.sso.util.SSOUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * This class manages the generation of varied request and response types that are utilized
@@ -144,7 +171,7 @@ public class SAMLSSOManager {
 
         Map<String, String[]> parameters = new HashMap<>();
         parameters.
-                put(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_REQUEST, new String[] { encodedRequestMessage });
+                put(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST, new String[] { encodedRequestMessage });
         if (ssoAgentConfiguration.getSAML2().getRelayState() != null) {
             parameters.put(RelayState.DEFAULT_ELEMENT_LOCAL_NAME,
                     new String[] { ssoAgentConfiguration.getSAML2().getRelayState() });
@@ -189,6 +216,7 @@ public class SAMLSSOManager {
 
     /**
      * Handles a SAML Authentication Request (AuthnRequest) for SAML HTTP Redirect binding.
+     *
      * @param request the HTTP servlet request with SAML message
      * @return the Identity Provider URL with the query string appended based on the SAML Request and configurations
      * @throws SSOException if an error occurs when handling AuthnRequest
@@ -200,6 +228,7 @@ public class SAMLSSOManager {
 
     /**
      * Handles a SAML Logout Request (LogoutRequest) for SAML HTTP Redirect binding.
+     *
      * @param request the HTTP servlet request with SAML message
      * @return the Identity Provider URL with the query string appended based on the SAML Request and configurations
      * @throws SSOException if an error occurs when handling LogoutRequest
@@ -231,7 +260,7 @@ public class SAMLSSOManager {
         //  is not specified, perform Base64 encoding and then URL encoding
         String encodedRequestMessage = SAMLSSOUtils.
                 encodeRequestMessage(rawRequestMessage, SAMLConstants.SAML2_REDIRECT_BINDING_URI);
-        StringBuilder httpQueryString = new StringBuilder(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_REQUEST +
+        StringBuilder httpQueryString = new StringBuilder(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST +
                 "=" + encodedRequestMessage);
 
         //  Arrange the query string if any RelayState data is to accompany the SAML protocol message
@@ -404,7 +433,7 @@ public class SAMLSSOManager {
      * the Session, Context and Config, respectively.
      *
      * @param request            the HTTP servlet request
-     * @param configRedirectPath the redirect path specified under redirectPathAfterSLO property of global
+     * @param configRedirectPath the redirect path specified under redirectPathAfterSLO property of
      *                           single-sign-on (SSO) configurations
      * @return redirect path relative to the current application path
      */
@@ -442,7 +471,7 @@ public class SAMLSSOManager {
      * @throws SSOException if SAML response is null
      */
     protected void processResponse(HttpServletRequest request) throws SSOException {
-        String saml2SSOResponse = request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_RESPONSE);
+        String saml2SSOResponse = request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE);
 
         if (saml2SSOResponse != null) {
             String decodedResponse = new String(Base64.decode(saml2SSOResponse), Charset.forName("UTF-8"));
@@ -475,7 +504,7 @@ public class SAMLSSOManager {
         session.setSAML2SSO(new LoggedInSession.SAML2SSO());
 
         String saml2ResponseString = new String(
-                Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_RESPONSE)),
+                Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE)),
                 Charset.forName("UTF-8"));
         Response saml2Response = (Response) SAMLSSOUtils.unmarshall(saml2ResponseString);
         session.getSAML2SSO().setResponseString(saml2ResponseString);
@@ -488,8 +517,9 @@ public class SAMLSSOManager {
             if (!SSOUtils.isCollectionEmpty(encryptedAssertions)) {
                 encryptedAssertion = encryptedAssertions.stream().findFirst().get();
                 try {
-                    assertion = SAMLSSOUtils.decryptAssertion(
-                            ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential(), encryptedAssertion);
+                    assertion = SAMLSSOUtils
+                            .decryptAssertion(ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential(),
+                                    encryptedAssertion);
                 } catch (Exception e) {
                     logger.log(Level.FINE, "Assertion decryption failure : ", e);
                     throw new SSOException("Unable to decrypt the SAML Assertion");
@@ -620,8 +650,8 @@ public class SAMLSSOManager {
             //  If custom implementation not found, execute the default implementation
             if (ssoAgentConfiguration.getSAML2().isResponseSigned()) {
                 if (response.getSignature() == null) {
-                    throw new SSOException("SAML2 Response signing is enabled, but signature element not " +
-                            "found in SAML Response element.");
+                    throw new SSOException("SAML2 Response signing is enabled, but signature element not "
+                            + "found in SAML Response element.");
                 } else {
                     try {
                         org.opensaml.xml.signature.SignatureValidator validator =
@@ -636,8 +666,8 @@ public class SAMLSSOManager {
             }
             if (ssoAgentConfiguration.getSAML2().isAssertionSigned()) {
                 if (assertion.getSignature() == null) {
-                    throw new SSOException("SAML Assertion signing is enabled, but signature element not " +
-                            "found in SAML Assertion element.");
+                    throw new SSOException("SAML Assertion signing is enabled, but signature element not "
+                            + "found in SAML Assertion element.");
                 } else {
                     try {
                         org.opensaml.xml.signature.SignatureValidator validator =
@@ -662,14 +692,14 @@ public class SAMLSSOManager {
     protected void performSingleLogout(HttpServletRequest request) throws SSOException {
         XMLObject saml2Object = null;
 
-        if (request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_REQUEST) != null) {
+        if (request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST) != null) {
             saml2Object = SAMLSSOUtils.unmarshall(
-                    new String(Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_REQUEST)),
+                    new String(Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST)),
                             Charset.forName("UTF-8")));
         }
         if (saml2Object == null) {
             saml2Object = SAMLSSOUtils.unmarshall(new String(
-                    Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML2_RESPONSE)),
+                    Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE)),
                     Charset.forName("UTF-8")));
         }
         if (saml2Object instanceof LogoutRequest) {

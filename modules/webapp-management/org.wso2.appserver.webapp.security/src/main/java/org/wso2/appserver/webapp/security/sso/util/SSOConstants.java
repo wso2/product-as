@@ -34,8 +34,8 @@ public class SSOConstants {
      */
     public static class SAML2SSO {
         //  SAML 2.0 single-sign-on (SSO) parameter name constants
-        public static final String HTTP_POST_PARAM_SAML2_REQUEST = "SAMLRequest";
-        public static final String HTTP_POST_PARAM_SAML2_RESPONSE = "SAMLResponse";
+        public static final String HTTP_POST_PARAM_SAML_REQUEST = "SAMLRequest";
+        public static final String HTTP_POST_PARAM_SAML_RESPONSE = "SAMLResponse";
 
         /**
          * Prevents instantiating the SAML2SSO nested class.
@@ -48,8 +48,7 @@ public class SSOConstants {
      * This class defines the single-sign-on (SSO) agent configuration property name constants.
      */
     public static class SSOAgentConfiguration {
-        public static final String SKIP_URIS = "SkipURIs";
-        public static final String QUERY_PARAMS = "QueryParams";
+        public static final String APPLICATION_SERVER_URL_DEFAULT = "https://localhost:8443";
 
         /**
          * Prevents instantiating the SSOAgentConfiguration nested class.
@@ -67,15 +66,8 @@ public class SSOConstants {
             public static final String IDP_ENTITY_ID_DEFAULT = "localhost";
             public static final String ATTR_CONSUMING_SERVICE_INDEX_DEFAULT = "1701087467";
             public static final String SLO_URL_POSTFIX_DEFAULT = "logout";
-
-            public static final String CONSUMER_URL_POSTFIX = "SAML.ConsumerUrlPostFix";
-
-            //  Digital signature configuration properties
-            public static final String KEYSTORE_PATH = "SAML.KeyStorePath";
-            public static final String KEYSTORE_PASSWORD = "SAML.KeyStorePassword";
-            public static final String IDP_PUBLIC_CERTIFICATE_ALIAS = "SAML.IdPCertAlias";
-            public static final String SP_PRIVATE_KEY_ALIAS = "SAML.PrivateKeyAlias";
-            public static final String SP_PRIVATE_KEY_PASSWORD = "SAML.PrivateKeyPassword";
+            public static final String CONSUMER_URL_POSTFIX_DEFAULT = "/acs";
+            public static final String ADDITIONAL_REQUEST_PARAMETERS_DEFAULT = "&forceAuth=true";
 
             /**
              * Prevents instantiating the SAML2 nested class.
@@ -89,21 +81,9 @@ public class SSOConstants {
      * This class defines constants used in the implementation of the SAML single-sign-on (SSO) valve.
      */
     public static class SAMLSSOValveConstants {
-        //  Environmental variable property name constant
-        public static final String CATALINA_BASE = "catalina.base";
-        //  SSO configuration XML element tag name
-        public static final String SINGLE_SIGN_ON_CONFIG_TAG_NAME = "wwc:single-sign-on";
-        //  File path related constants
-        public static final String TOMCAT_CONFIGURATION_FOLDER_NAME = "conf";
-        public static final String WSO2_CONFIGURATION_FOLDER_NAME = "wso2";
-        public static final String WSO2AS_CONFIG_FILE_NAME = "wso2as-web.xml";
-        public static final String SSO_CONFIG_FILE_NAME = "sso-sp-config.properties";
         //  HTTP servlet request session notes' property name and attribute name constants
         public static final String SSO_AGENT_CONFIG = "SSOAgentConfig";
         public static final String REQUEST_PARAM_MAP = "REQUEST_PARAM_MAP";
-        //  SSO configuration property name constants
-        public static final String APP_SERVER_URL = "ApplicationServerURL";
-        public static final String HANDLE_CONSUMER_URL_AFTER_SLO = "handleConsumerURLAfterSLO";
 
         public static final String REDIRECT_PATH_AFTER_SLO = "redirectPathAfterSLO";
 
