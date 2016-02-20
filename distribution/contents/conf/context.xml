@@ -18,6 +18,7 @@
 <!-- The contents of this file will be loaded for each web application -->
 <Context>
 
+    <Listener className="org.wso2.appserver.utils.configuration.loaders.ContextConfigurationLoader"/>
     <!-- Default set of monitored resources. If one of these changes, the    -->
     <!-- web application will be reloaded.                                   -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
@@ -34,5 +35,5 @@
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
     <!-- <Loader className="org.wso2.mirage.webapploader.CustomLoader" delegate="false" reloadable="false"/> -->
-    <Loader className="org.wso2.appserver.webapp.loader.AppServerWebappLoader" loaderClass="org.wso2.appserver.webapp.loader.AppServerWebappClassLoader"/>
+    <!--<Loader className="org.wso2.appserver.webapp.loader.AppServerWebappLoader" loaderClass="org.wso2.appserver.webapp.loader.AppServerWebappClassLoader"/>-->
 </Context>

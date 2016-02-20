@@ -82,11 +82,8 @@ public class PriorityUtils {
     protected static void prioritizeLocallyEditableSSOConfigurations(SSOConfiguration local,
             SSOConfiguration effective) {
         if (effective != null) {
-            if ((local != null) && (local.getSAML() != null) && (local.getSAML().getIssuerId() != null)) {
+            if ((local != null) && (local.getSAML() != null)) {
                 effective.getSAML().setIssuerId(local.getSAML().getIssuerId());
-            }
-
-            if ((local != null) && (local.getSAML() != null) && (local.getSAML().getConsumerURL() != null)) {
                 effective.getSAML().setConsumerURL(local.getSAML().getConsumerURL());
             }
         }

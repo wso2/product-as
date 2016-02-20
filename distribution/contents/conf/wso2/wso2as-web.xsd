@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" elementFormDefault="qualified"
+           xmlns="http://wso2.org/2016/wso2as-web" targetNamespace="http://wso2.org/2016/wso2as-web">
+    <xs:element name="wso2asWeb">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="singleSignOn" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <!-- Defines a complex type which can be used to define the URI(s) to skip during single-sign-on (SSO). -->
+                            <!-- Can be overridden at the web-app level. -->
+                            <xs:element name="skipURIs" minOccurs="0" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="skipURI" type="xs:anyURI" minOccurs="1"
+                                                    maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="queryParams" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+                            <!-- Enable this if needed to automatically redirect from acs page after SLO. Can be overriden at the web-app 					level. -->
+                            <xs:element name="handleConsumerURLAfterSLO" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="redirectPathAfterSLO" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+
+                            <!-- Application Server URL to be used during SSO. -->
+                            <xs:element name="applicationServerURL" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+
+                            <!-- This is the URL of the page that is used to choose the login scheme, such as SAML SSO or OpenID. This Url 					will not be processed by the SSOAgentFilter or SAMLSSOValve. -->
+                            <!--<xs:element name="loginURL" type="xs:string" minOccurs="0" maxOccurs="1" />-->
+
+                            <xs:element name="saml">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <!-- This property configuration enables SAML SSO. Can be overridden at the web-app level. -->
+                                        <xs:element name="enableSAMLSSO" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+                                        <!-- The URL of the SAML Identity Provider. -->
+                                        <xs:element name="idpURL" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+                                        <!-- SAML Identity Provider Entity ID -->
+                                        <xs:element name="idpEntityId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                                        <!-- The type of SAML based binding to be used for SSO. Can be overriden at the web-app level. -->
+                                        <xs:element name="httpBinding" minOccurs="0" maxOccurs="1">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration
+                                                            value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+                                                    <xs:enumeration
+                                                            value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <!-- A unique identifier for this SAML Service Provider application. Can be set only at the web-app 							level.  -->
+                                        <xs:element name="issuerId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                                        <!-- The URL of the SAML Assertion Consumer Service. Can be set only at the web-app level. -->
+                                        <xs:element name="consumerURL" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                                        <!-- Identifier given for the Service Provider for SAML attributes exchange. Can be overriden at the 							web-app level. -->
+                                        <xs:element name="attributeConsumingServiceIndex" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- Enable single-logout (SLO) -->
+                                        <xs:element name="enableSLO" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+                                        <!-- The post-fix to be appended to the URL path of the SAML Assertion Consumer Service. -->
+                                        <xs:element name="consumerURLPostFix" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- The post-fix to be appended to the URL path of a SAML AuthnRequest. -->
+                                        <xs:element name="requestURLPostFix" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- The post-fix to be appended to the URL path of a SAML LogoutRequest. -->
+                                        <xs:element name="sloURLPostFix" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                                        <!-- Enable the encryption to SAML Assertions. -->
+                                        <xs:element name="enableAssertionEncryption" type="xs:boolean" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- Enable the application of digital signature to SAML Assertions. -->
+                                        <xs:element name="enableAssertionSigning" type="xs:boolean" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- Enable the application of digital signature to SAML Requests. -->
+                                        <xs:element name="enableRequestSigning" type="xs:boolean" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- Enable the application of digital signature to SAML Responses. -->
+                                        <xs:element name="enableResponseSigning" type="xs:boolean" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- Specify the Signature Validator Implementation class -->
+                                        <xs:element name="signatureValidatorImplClass" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <!-- Additional request parameters. Can be overridden at the web-app level. -->
+                                        <xs:element name="additionalRequestParams" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <xs:element name="postBindingRequestHTMLPayload" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <xs:element name="isForceAuthn" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+                                        <xs:element name="isPassiveAuthn" type="xs:boolean" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <xs:element name="keystorePath" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+                                        <xs:element name="keystorePassword" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <xs:element name="idpCertificateAlias" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <xs:element name="privateKeyAlias" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                        <xs:element name="privateKeyPassword" type="xs:string" minOccurs="0"
+                                                    maxOccurs="1"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="statisticsPublisher" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="enabled" type="xs:boolean"/>
+                            <xs:element name="streamId" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="classloading" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="environments">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="environment" minOccurs="1" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="name" type="xs:string"/>
+                                                    <xs:element name="classpath" type="xs:anyURI" minOccurs="1"
+                                                                maxOccurs="unbounded"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <!--<xs:element name="webServiceDiscovery" type="xs:boolean" minOccurs="0" maxOccurs="1" />-->
+                <xs:element name="restWebServices" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="isManagedAPI" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

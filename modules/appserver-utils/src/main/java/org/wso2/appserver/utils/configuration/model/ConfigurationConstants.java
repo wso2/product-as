@@ -51,7 +51,6 @@ public class ConfigurationConstants {
      */
     public static class ClassLoadingConfigurationConstants {
         protected static final String CLASSLOADING = "classloading";
-        protected static final String ENVIRONMENTS = "environments";
         protected static final String ENVIRONMENT = "environment";
         protected static final String CLASSPATH = "classpath";
 

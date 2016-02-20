@@ -22,8 +22,15 @@
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
             <outputDirectory>/application-server-6.0.0/</outputDirectory>
         </fileSet>
-
     </fileSets>
+    <files>
+        <file>
+            <source>
+                ../modules/webapp-management/org.wso2.appserver.webapp.security/target/org.wso2.appserver.webapp.security.dependencies.jar
+            </source>
+            <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
+        </file>
+    </files>
 
     <dependencySets>
         <dependencySet>

@@ -221,8 +221,8 @@ public class SSOAgentConfiguration {
         }
 
         if (isSAMLSSOLoginEnabled && (saml2.attributeConsumingServiceIndex == null)) {
-            logger.log(Level.FINE, "SAML attribute consuming index not configured. "
-                    + "No attributes of the Subject will be requested");
+            logger.log(Level.FINE, "SAML attribute consuming index not configured. " +
+                    "No attributes of the Subject will be requested");
         }
 
         if (isSAMLSSOLoginEnabled && saml2.isSLOEnabled && saml2.sloURLPostFix == null) {
