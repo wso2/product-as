@@ -28,7 +28,6 @@
     <modules>
         <module>appserver-utils</module>
         <module>sample-module</module>
-        <module>webapp-management</module>
         <!--<module>webapp-loader</module>-->
     </modules>
 
