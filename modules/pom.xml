@@ -28,6 +28,7 @@
     <modules>
         <module>appserver-utils</module>
         <module>sample-module</module>
+        <module>sample-valve</module>
         <!--<module>webapp-loader</module>-->
     </modules>
 

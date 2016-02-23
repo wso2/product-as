@@ -1,88 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
-  ~
-  ~ WSO2 Inc. licenses this file to you under the Apache License,
-  ~ Version 2.0 (the "License"); you may not use this file except
-  ~ in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing,
-  ~ software distributed under the License is distributed on an
-  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  ~ KIND, either express or implied. See the License for the
-  ~ specific language governing permissions and limitations
-  ~ under the License.
-  ~
-  -->
-<wso2asWeb xmlns="http://wso2.org/2016/wso2as-web">
-    <singleSignOn>
-        <!--<skipURIs>
-          <skipURI>http://www.xsd2xml.com</skipURI>
-        </skipURIs>-->
-        <!--<queryParams>str1234</queryParams>-->
-        <handleConsumerURLAfterSLO>true</handleConsumerURLAfterSLO>
-        <!--<redirectPathAfterSLO>http://www.xsd2xml.com</redirectPathAfterSLO>-->
-        <applicationServerURL>https://localhost:8443</applicationServerURL>
+ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
+    <single-sign-on>
+        <skip-uris>
+            <skip-uri>http://www.xsd2xml.com</skip-uri>
+            <skip-uri>http://www.xsd3xml.com</skip-uri>
+        </skip-uris>
+        <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
+        <query-params>tenant=admin&amp;dialect=SAML</query-params>
+        <application-server-url>http://localhost:8443</application-server-url>
+        <property key="key1">value1</property>
+        <property key="key2">value2</property>
+        <property key="key3">value3</property>
         <saml>
-            <enableSAMLSSO>true</enableSAMLSSO>
-            <idpURL>https://localhost:9443/samlsso</idpURL>
-            <idpEntityId>localhost</idpEntityId>
-            <httpBinding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</httpBinding>
-            <!--<issuerId>str1234</issuerId>
-            <consumerURL>str1234</consumerURL>-->
-            <!--<attributeConsumingServiceIndex>str1234</attributeConsumingServiceIndex>-->
-            <enableSLO>true</enableSLO>
-            <consumerURLPostFix>/acs</consumerURLPostFix>
-            <requestURLPostFix>samlsso</requestURLPostFix>
-            <sloURLPostFix>logout</sloURLPostFix>
-            <enableAssertionEncryption>false</enableAssertionEncryption>
-            <enableAssertionSigning>false</enableAssertionSigning>
-            <enableRequestSigning>false</enableRequestSigning>
-            <enableResponseSigning>false</enableResponseSigning>
-            <signatureValidatorImplClass>
-                org.wso2.appserver.webapp.security.sso.saml.signature.SAMLSignatureValidatorImplementation
-            </signatureValidatorImplClass>
-            <!--<additionalRequestParams>str1234</additionalRequestParams>-->
-            <!--<postBindingRequestHTMLPayload>str1234</postBindingRequestHTMLPayload>-->
-            <isForceAuthn>false</isForceAuthn>
-            <isPassiveAuthn>false</isPassiveAuthn>
-            <keystorePath>
-                file:///home/chiranga/wso2-packs/wso2-carbon/wso2carbon-4.4.0/repository/resources/security/wso2carbon.jks
-            </keystorePath>
-            <keystorePassword>wso2carbon</keystorePassword>
-            <idpCertificateAlias>wso2carbon</idpCertificateAlias>
-            <privateKeyAlias>wso2carbon</privateKeyAlias>
-            <privateKeyPassword>wso2carbon</privateKeyPassword>
+            <enable-sso>false</enable-sso>
+            <request-url-postfix>samlsso</request-url-postfix>
+            <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
+            <consumer-url-postfix>/acs</consumer-url-postfix>
+            <attribute-consuming-service-index>1784849</attribute-consuming-service-index>
+            <enable-slo>false</enable-slo>
+            <slo-url-postfix>logout</slo-url-postfix>
+            <enable-assertion-encryption>false</enable-assertion-encryption>
+            <enable-assertion-signing>false</enable-assertion-signing>
+            <enable-request-signing>false</enable-request-signing>
+            <enable-response-signing>false</enable-response-signing>
+            <is-force-authn>false</is-force-authn>
+            <is-passive-authn>false</is-passive-authn>
+            <saml-property key="additionalparams">version=6.0.0</saml-property>
         </saml>
-    </singleSignOn>
-    <!--<statisticsPublisher>
-        <enabled>true</enabled>
-        <streamId>str1234</streamId>
-    </statisticsPublisher>
-    <classloading>
-        <environments>
-            <environment>
-                <name>str1234</name>
-                <classpath>http://www.xsd2xml.com</classpath>
-                <classpath>http://www.xsd3xml.com</classpath>
-                <classpath>http://www.xsd3xml.com</classpath>
-                <classpath>http://www.xsd6xml.com</classpath>
-                <classpath>http://www.xsd10xml.com</classpath>
-            </environment>
-            <environment>
-                <name>str5678</name>
-                <classpath>http://www.xsd5xml.com</classpath>
-            </environment>
-            <environment>
-                <name>str5678</name>
-                <classpath>http://www.xsd5xml.com</classpath>
-            </environment>
-        </environments>
-    </classloading>
-    <restWebServices>
-        <isManagedAPI>true</isManagedAPI>
-    </restWebServices>-->
-</wso2asWeb>
+    </single-sign-on>
+</wso2as-web>

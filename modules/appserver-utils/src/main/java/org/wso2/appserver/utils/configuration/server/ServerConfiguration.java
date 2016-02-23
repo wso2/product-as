@@ -44,23 +44,11 @@ public class ServerConfiguration {
         return classloadingConfiguration;
     }
 
-    public void setClassloadingConfiguration(ClassloadingConfiguration classloadingConfiguration) {
-        this.classloadingConfiguration = classloadingConfiguration;
-    }
-
     public SSOConfiguration getSingleSignOnConfiguration() {
         return singleSignOnConfiguration;
     }
 
-    public void setSingleSignOnConfiguration(SSOConfiguration singleSignOnConfiguration) {
-        this.singleSignOnConfiguration = singleSignOnConfiguration;
-    }
-
     public StatsPublisherConfiguration getStatsPublisherConfiguration() {
         return statsPublisherConfiguration;
-    }
-
-    public void setStatsPublisherConfiguration(StatsPublisherConfiguration statsPublisherConfiguration) {
-        this.statsPublisherConfiguration = statsPublisherConfiguration;
     }
 }

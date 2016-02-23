@@ -19,8 +19,8 @@ import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Server;
-import org.wso2.appserver.utils.common.exceptions.AppServerException;
 import org.wso2.appserver.utils.common.GenericUtils;
+import org.wso2.appserver.utils.common.exceptions.AppServerException;
 import org.wso2.appserver.utils.common.paths.PathUtils;
 import org.wso2.appserver.utils.configuration.server.ServerConfiguration;
 

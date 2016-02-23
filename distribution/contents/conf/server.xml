@@ -30,6 +30,7 @@
     <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
     <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+    <Listener className="org.wso2.appserver.utils.configuration.listeners.ServerConfigurationLoader"/>
 
     <!-- Global JNDI resources
          Documentation at /docs/jndi-resources-howto.html
@@ -128,7 +129,8 @@
                 <!--
                 <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
                 -->
-                <Valve className="org.wso2.appserver.webapp.security.sso.saml.SAMLSSOValve"/>
+                <!--<Valve className="org.wso2.appserver.webapp.security.sso.saml.SAMLSSOValve"/>-->
+                <Valve className="org.wso2.appserver.sample.SSOValve"/>
 
                 <!-- Access log processes all example.
                      Documentation at: /docs/config/valve.html

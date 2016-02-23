@@ -20,21 +20,26 @@ import org.wso2.appserver.utils.configuration.ConfigurationConstants;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A Java class which models a holder for webapp level single-sign-on (SSO) configurations.
+ * A Java class which models a holder for context level single-sign-on (SSO) configurations.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
 public class SSOConfiguration {
     @XmlElement(name = "skip-uris", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SkipURIs skipURIs;
+    @XmlElement(name = "handle-consumer-url-after-slo", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    private Boolean handleConsumerURLAfterSLO;
     @XmlElement(name = "query-params", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private String queryParams;
     @XmlElement(name = "application-server-url", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private String applicationServerURL;
+    @XmlElement(name = "property", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    private List<Property> properties;
     @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SAML saml;
 
@@ -44,6 +49,14 @@ public class SSOConfiguration {
 
     public void setSkipURIs(SkipURIs skipURIs) {
         this.skipURIs = skipURIs;
+    }
+
+    public Boolean handleConsumerURLAfterSLO() {
+        return handleConsumerURLAfterSLO;
+    }
+
+    public void enableHandlingConsumerURLAfterSLO(Boolean handleConsumerURLAfterSLO) {
+        this.handleConsumerURLAfterSLO = handleConsumerURLAfterSLO;
     }
 
     public String getQueryParams() {
@@ -70,6 +83,14 @@ public class SSOConfiguration {
         this.saml = saml;
     }
 
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
+
     /**
      * A nested class which models a collection of URIs to skip during single-sign-on (SSO).
      */
@@ -84,6 +105,23 @@ public class SSOConfiguration {
 
         public void setSkipURIs(List<String> skipURIs) {
             this.skipURIs = skipURIs;
+        }
+    }
+
+    /**
+     * A nested class which defines an additional configuration property for SSO.
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class Property {
+        @XmlAttribute(name = "key", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        private String key;
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
         }
     }
 
@@ -120,6 +158,12 @@ public class SSOConfiguration {
         private Boolean enableAssertionEncryption;
         @XmlElement(name = "enable-request-signing", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
         private Boolean enableRequestSigning;
+        @XmlElement(name = "is-force-authn", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        private Boolean enableForceAuthn;
+        @XmlElement(name = "is-passive-authn", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        private Boolean enablePassiveAuthn;
+        @XmlElement(name = "saml-property", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        private List<SAMLProperty> properties;
 
         public Boolean isSSOEnabled() {
             return enableSSO;
@@ -217,12 +261,53 @@ public class SSOConfiguration {
             this.enableAssertionEncryption = enableAssertionEncryption;
         }
 
+        public Boolean isForceAuthnEnabled() {
+            return enableForceAuthn;
+        }
+
+        public void enableForceAuthn(Boolean enableForceAuthn) {
+            this.enableForceAuthn = enableForceAuthn;
+        }
+
+        public Boolean isPassiveAuthnEnabled() {
+            return enablePassiveAuthn;
+        }
+
+        public void enablePassiveAuthn(Boolean enablePassiveAuthn) {
+            this.enablePassiveAuthn = enablePassiveAuthn;
+        }
+
         public Boolean isRequestSigningEnabled() {
             return enableRequestSigning;
         }
 
         public void enableRequestSigning(Boolean enableRequestSigning) {
             this.enableRequestSigning = enableRequestSigning;
+        }
+
+        public List<SAMLProperty> getProperties() {
+            return properties;
+        }
+
+        public void setProperties(List<SAMLProperty> properties) {
+            this.properties = properties;
+        }
+
+        /**
+         * A nested Java class which defines a SAML specific additional configuration property.
+         */
+        @XmlAccessorType(XmlAccessType.FIELD)
+        public static class SAMLProperty {
+            @XmlAttribute(name = "key", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+            private String key;
+
+            public void setKey(String key) {
+                this.key = key;
+            }
+
+            public String getKey() {
+                return key;
+            }
         }
     }
 }

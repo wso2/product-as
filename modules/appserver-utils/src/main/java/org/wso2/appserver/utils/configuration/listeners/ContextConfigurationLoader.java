@@ -19,8 +19,8 @@ import org.apache.catalina.Context;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
-import org.wso2.appserver.utils.common.exceptions.AppServerException;
 import org.wso2.appserver.utils.common.GenericUtils;
+import org.wso2.appserver.utils.common.exceptions.AppServerException;
 import org.wso2.appserver.utils.common.paths.PathUtils;
 import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
 
@@ -44,7 +44,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
     /**
      * Retrieves the {@code ContextConfiguration} matching the specified context.
      *
-     * @param context the context of which the matching {@link ContextConfiguration} is to be returned
+     * @param context the context for which the matching {@link ContextConfiguration} is to be returned
      * @return the {@code ContextConfiguration} matching the specified context
      */
     public static Optional<ContextConfiguration> retrieveContextConfiguration(Context context) {
@@ -71,8 +71,8 @@ public class ContextConfigurationLoader implements LifecycleListener {
                     ContextConfiguration effectiveConfiguration = retrieveEffectiveConfiguration(context);
                     contextToConfigurationMap.put(context, effectiveConfiguration);
                 } catch (AppServerException e) {
-                    logger.log(Level.SEVERE,
-                            "An error occurred when retrieving the effective configuration for the context", e);
+                    logger.log(Level.SEVERE, "An error occurred when retrieving the effective " +
+                            "configuration for the context " + context, e);
                 }
             }
         }
@@ -83,7 +83,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
      * <p>
      * For this purpose, the context level configurations defined globally will be merged with context level
      * configurations overridden at the context level (if any).
-     * If no configurations are overridden at context level,the global configurations will prevail.
+     * If no configurations are overridden at context level, the global configurations will prevail.
      *
      * @param context the {@link Context} for which the final set of context level configurations are generated
      * @return the final set of context level configurations for the specified {@link Context}
@@ -99,7 +99,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
                 ContextConfiguration global = (ContextConfiguration) GenericUtils.
                         getUnmarshalledObject(globalWebAppDescriptor, schema, ContextConfiguration.class);
                 ContextConfiguration local = (ContextConfiguration) GenericUtils.
-                        getUnmarshalledObject(globalWebAppDescriptor, schema, ContextConfiguration.class);
+                        getUnmarshalledObject(contextWebAppDescriptor, schema, ContextConfiguration.class);
                 return Utils.merge(global, local);
             } else if (Files.exists(globalWebAppDescriptor)) {
                 ContextConfiguration global = (ContextConfiguration) GenericUtils.

@@ -15,8 +15,6 @@
  */
 package org.wso2.appserver.utils.configuration.server.components;
 
-import org.wso2.appserver.utils.configuration.ConfigurationConstants;
-
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,9 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+@XmlRootElement
 public class ClassloadingConfiguration {
-    @XmlElement(name = "Environments", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+    @XmlElement(name = "Environments")
     private Environments environments;
 
     public Environments getEnvironments() {
@@ -43,7 +41,7 @@ public class ClassloadingConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Environments {
-        @XmlElement(name = "Environment", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "Environment")
         private List<Environment> environments;
 
         public List<Environment> getEnvironments() {
@@ -56,9 +54,9 @@ public class ClassloadingConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Environment {
-        @XmlElement(name = "Name", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "Name")
         private String name;
-        @XmlElement(name = "Classpath", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "Classpath")
         private String classpath;
 
         public String getName() {

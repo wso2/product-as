@@ -15,12 +15,13 @@
  */
 package org.wso2.appserver.utils.configuration.server.components;
 
-import org.wso2.appserver.utils.configuration.ConfigurationConstants;
-
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * A Java class which models a holder for server level single-sign-on (SSO) configurations.
@@ -28,17 +29,41 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+@XmlRootElement
 public class SSOConfiguration {
-    @XmlElement(name = "SAML", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+    @XmlElement(name = "Property")
+    private List<Property> properties;
+    @XmlElement(name = "SAML")
     private SAML saml;
+
+    public List<Property> getProperties() {
+        return properties;
+    }
 
     public SAML getSAML() {
         return saml;
     }
 
-    public void setSAML(SAML saml) {
-        this.saml = saml;
+    /**
+     * A nested class which defines an additional configuration property for SSO.
+     * <p>
+     * The ability to add these key-value pair configuration properties have been added to
+     * enable the introduction of new configuration properties with less hassle, in the future.
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class Property {
+        @XmlAttribute(name = "Key")
+        private String key;
+        @XmlValue
+        private String value;
+
+        public String getKey() {
+            return key;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 
     /**
@@ -46,86 +71,81 @@ public class SSOConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class SAML {
-        @XmlElement(name = "IdPURL", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "IdPURL")
         private String idpURL;
-        @XmlElement(name = "IdPEntityId", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "IdPEntityId")
         private String idpEntityId;
-        @XmlElement(name = "SignatureValidatorImplClass",
-                namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "SignatureValidatorImplClass")
         private String signatureValidatorImplClass;
-        @XmlElement(name = "KeystorePath", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "KeystorePath")
         private String keystorePath;
-        @XmlElement(name = "KeystorePassword", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "KeystorePassword")
         private String keystorePassword;
-        @XmlElement(name = "IdPCertificateAlias", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "IdPCertificateAlias")
         private String idpCertificateAlias;
-        @XmlElement(name = "PrivateKeyAlias", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "PrivateKeyAlias")
         private String privateKeyAlias;
-        @XmlElement(name = "PrivateKeyPassword", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+        @XmlElement(name = "PrivateKeyPassword")
         private String privateKeyPassword;
+        @XmlElement(name = "SAMLProperty")
+        private List<SAMLProperty> properties;
 
         public String getIdpURL() {
             return idpURL;
-        }
-
-        public void setIdpURL(String idpURL) {
-            this.idpURL = idpURL;
         }
 
         public String getIdpEntityId() {
             return idpEntityId;
         }
 
-        public void setIdpEntityId(String idpEntityId) {
-            this.idpEntityId = idpEntityId;
-        }
-
         public String getSignatureValidatorImplClass() {
             return signatureValidatorImplClass;
-        }
-
-        public void setSignatureValidatorImplClass(String signatureValidatorImplClass) {
-            this.signatureValidatorImplClass = signatureValidatorImplClass;
         }
 
         public String getKeystorePath() {
             return keystorePath;
         }
 
-        public void setKeystorePath(String keystorePath) {
-            this.keystorePath = keystorePath;
-        }
-
         public String getKeystorePassword() {
             return keystorePassword;
-        }
-
-        public void setKeystorePassword(String keystorePassword) {
-            this.keystorePassword = keystorePassword;
         }
 
         public String getIdpCertificateAlias() {
             return idpCertificateAlias;
         }
 
-        public void setIdpCertificateAlias(String idpCertificateAlias) {
-            this.idpCertificateAlias = idpCertificateAlias;
-        }
-
         public String getPrivateKeyAlias() {
             return privateKeyAlias;
-        }
-
-        public void setPrivateKeyAlias(String privateKeyAlias) {
-            this.privateKeyAlias = privateKeyAlias;
         }
 
         public String getPrivateKeyPassword() {
             return privateKeyPassword;
         }
 
-        public void setPrivateKeyPassword(String privateKeyPassword) {
-            this.privateKeyPassword = privateKeyPassword;
+        public List<SAMLProperty> getProperties() {
+            return properties;
+        }
+
+        /**
+         * A nested Java class which defines a SAML specific additional configuration property.
+         * <p>
+         * The ability to add these key-value pair configuration properties have been added to
+         * enable the introduction of new configuration properties with less hassle, in the future.
+         */
+        @XmlAccessorType(XmlAccessType.FIELD)
+        public static class SAMLProperty {
+            @XmlAttribute(name = "Key")
+            private String key;
+            @XmlValue
+            private String value;
+
+            public String getKey() {
+                return key;
+            }
+
+            public String getValue() {
+                return value;
+            }
         }
     }
 }

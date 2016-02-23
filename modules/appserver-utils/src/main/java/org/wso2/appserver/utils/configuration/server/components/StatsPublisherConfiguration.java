@@ -15,8 +15,6 @@
  */
 package org.wso2.appserver.utils.configuration.server.components;
 
-import org.wso2.appserver.utils.configuration.ConfigurationConstants;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -28,46 +26,30 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+@XmlRootElement
 public class StatsPublisherConfiguration {
-    @XmlElement(name = "Username", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+    @XmlElement(name = "Username")
     private String username;
-    @XmlElement(name = "Password", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+    @XmlElement(name = "Password")
     private String password;
-    @XmlElement(name = "URL", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+    @XmlElement(name = "URL")
     private String url;
-    @XmlElement(name = "StreamId", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+    @XmlElement(name = "StreamId")
     private String streamId;
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getStreamId() {
         return streamId;
-    }
-
-    public void setStreamId(String streamId) {
-        this.streamId = streamId;
     }
 }

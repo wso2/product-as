@@ -23,23 +23,15 @@
             <outputDirectory>/application-server-6.0.0/</outputDirectory>
         </fileSet>
     </fileSets>
-    <files>
-        <file>
-            <source>
-                ../modules/webapp-management/org.wso2.appserver.webapp.security/target/org.wso2.appserver.webapp.security.dependencies.jar
-            </source>
-            <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
-        </file>
-    </files>
 
     <dependencySets>
         <dependencySet>
             <outputDirectory>/application-server-6.0.0/lib</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:appserver-utils:jar</include>
-                <include>org.wso2.appserver:org.wso2.appserver.webapp.security:jar</include>
                 <include>org.wso2.appserver:sample-module:jar</include>
                 <include>org.wso2.appserver:webapp-loader:jar</include>
+                <include>org.wso2.appserver:sample-valve:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
         </dependencySet>

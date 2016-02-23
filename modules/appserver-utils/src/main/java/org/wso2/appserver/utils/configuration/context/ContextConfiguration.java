@@ -16,7 +16,6 @@
 package org.wso2.appserver.utils.configuration.context;
 
 import org.wso2.appserver.utils.configuration.ConfigurationConstants;
-import org.wso2.appserver.utils.configuration.context.components.ClassloadingConfiguration;
 import org.wso2.appserver.utils.configuration.context.components.SSOConfiguration;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -32,18 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "wso2as-web", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
 public class ContextConfiguration {
-    @XmlElement(name = "classloading", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
-    private ClassloadingConfiguration classloadingConfiguration;
     @XmlElement(name = "single-sign-on", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
     private SSOConfiguration singleSignOnConfiguration;
-
-    public ClassloadingConfiguration getClassloadingConfiguration() {
-        return classloadingConfiguration;
-    }
-
-    public void setClassloadingConfiguration(ClassloadingConfiguration classloadingConfiguration) {
-        this.classloadingConfiguration = classloadingConfiguration;
-    }
 
     public SSOConfiguration getSingleSignOnConfiguration() {
         return singleSignOnConfiguration;

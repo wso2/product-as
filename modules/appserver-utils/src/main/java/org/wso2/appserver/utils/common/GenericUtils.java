@@ -39,7 +39,7 @@ public class GenericUtils {
     private static final Logger logger = Logger.getLogger(GenericUtils.class.getName());
 
     /**
-     * JAXB utility function
+     * JAXB utility functions
      */
 
     /**
