@@ -22,54 +22,57 @@ package org.wso2.appserver.monitoring.utils;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.wso2.appserver.monitoring.EventPublisherConstants;
+import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
 import org.wso2.carbon.databridge.commons.Event;
 import ua_parser.CachingParser;
 import ua_parser.Client;
 import ua_parser.Parser;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 
+/**
+ * Utility class to create an Event to published by the DataPublisher.
+ */
 public class EventBuilder {
-    private static Parser uaParser = null ;
+    private static Parser uaParser = null;
     private static String userAgentVersion;
     private static String userAgentFamily;
     private static String osVersion;
     private static String osFamily;
     private static String deviceCategory;
 
-    public static Event buildEvent(String streamId, Request request, Response response, long startTime, long responseTime){
-
+    public static Event buildEvent(String streamId, Request request, Response response, long startTime,
+                                   long responseTime) throws EventBuilderException {
         try {
             uaParser = new CachingParser();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new EventBuilderException("Creating Parser object failed: ", e);
         }
 
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
-        List<Object> metaData = buildMetaData(request, response, startTime, responseTime);
+        List<Object> metaData = buildMetaData(request);
 
         Event event = new Event(streamId, System.currentTimeMillis(), metaData.toArray(), null, payload.toArray());
         return event;
 
     }
 
-    private static List<Object> buildMetaData(Request request, Response response, long startTime, long responseTime) {
+    private static List<Object> buildMetaData(Request request) {
 
         List<Object> metaData = new ArrayList<Object>();
 
         metaData.add(mapNull(request.getServerName()));
         metaData.add(mapNull(request.getLocalName()));
-//        metaData.add(mapNull("-"));
-//        metaData.add(mapNull("-"));
 
         return metaData;
     }
 
-    private static List<Object> buildPayloadData(Request request, Response response, long startTime, long responseTime) {
+    private static List<Object> buildPayloadData(Request request, Response response, long startTime,
+                                                 long responseTime) {
 
         List<Object> payload = new ArrayList<Object>();
         final String backslash = "/";
@@ -194,7 +197,8 @@ public class EventBuilder {
      * @return
      */
     protected Integer mapNull(Integer value) {
-        return (value == null) ? 0 : value;
+        Integer zero = Integer.valueOf(0);
+        return (value == null) ? zero : value;
     }
 
     /**
@@ -204,7 +208,8 @@ public class EventBuilder {
      * @return the value if not null, otherwise 0
      */
     protected static Long mapNull(Long value) {
-        return (value == null) ? 0L : value;
+        Long zero = Long.valueOf(0);
+        return (value == null) ? zero : value;
     }
 
     /**

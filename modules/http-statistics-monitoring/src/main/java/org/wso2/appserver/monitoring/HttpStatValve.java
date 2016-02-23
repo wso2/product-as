@@ -24,6 +24,7 @@ import org.apache.catalina.valves.ValveBase;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.monitoring.exceptions.ConfigurationException;
+import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
 import org.wso2.carbon.databridge.agent.AgentHolder;
 import org.wso2.carbon.databridge.agent.DataPublisher;
@@ -47,25 +48,24 @@ public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
     private String username = DefaultConfigurationConstants.USERNAME;
-    private String password = DefaultConfigurationConstants.PASSWORD ;
+    private String password = DefaultConfigurationConstants.PASSWORD;
     private String configFileFolder = DefaultConfigurationConstants.CONFIG_FILE_FOLDER;
     private String url = DefaultConfigurationConstants.URL;
     private String streamId = DefaultConfigurationConstants.STREAM_ID;
     private DataPublisher dataPublisher = null;
     private String appServerHome;
 
-    public HttpStatValve()  {
-
+    @Override
+    protected void initInternal() {
         LOG.debug("The HttpStatValve initialized.");
         File userDir = new File(System.getProperty("catalina.base"));
         appServerHome = userDir.getAbsolutePath();
-
     }
 
     @Override
     public void invoke(Request request, Response response)  {
 
-        if(dataPublisher == null){
+        if (dataPublisher == null) {
             try {
                 dataPublisher = getDataPublisher();
             } catch (ConfigurationException e) {
@@ -81,7 +81,12 @@ public class HttpStatValve extends ValveBase {
         }
         long responseTime = System.currentTimeMillis() - startTime;
 
-        Event event = EventBuilder.buildEvent(getStreamId(),request, response, startTime, responseTime);
+        Event event = null;
+        try {
+            event = EventBuilder.buildEvent(getStreamId(), request, response, startTime, responseTime);
+        } catch (EventBuilderException e) {
+            LOG.error("Creating the Event failed: " + e);
+        }
         dataPublisher.publish(event);
 
     }
