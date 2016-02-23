@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<streams>
-	<stream>
-		<streamName>org.wso2.sample.http.stats</streamName>
-		<version>1.0.0</version>
-	</stream>
-</streams>
