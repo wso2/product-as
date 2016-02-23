@@ -10,7 +10,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>webapp-loader</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
     <name>WSO2 Application Server 6.0.0 - Module Webapp Loader</name>
 
     <properties>

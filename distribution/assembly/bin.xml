@@ -8,19 +8,19 @@
 
         <fileSet>
             <directory>contents/webapps/</directory>
-            <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
+            <outputDirectory>${distribution.file.name}/webapps</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>contents/lib/</directory>
-            <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
+            <outputDirectory>${distribution.file.name}/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>contents/conf/</directory>
-            <outputDirectory>/${distribution.file.name}/conf/</outputDirectory>
+            <outputDirectory>${distribution.file.name}/conf/</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}/bin</directory>
-            <outputDirectory>/${distribution.file.name}/bin</outputDirectory>
+            <outputDirectory>${distribution.file.name}/bin</outputDirectory>
             <includes>
                 <include>*.sh</include>
             </includes>
@@ -28,12 +28,13 @@
         </fileSet>
         <fileSet>
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
-            <outputDirectory>/${distribution.file.name}/</outputDirectory>
+            <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
 
     </fileSets>
 
     <dependencySets>
+        <!--Include application server modules here-->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
@@ -42,6 +43,18 @@
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
         </dependencySet>
+
+        <!--Include extra libs here-->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib/ext</outputDirectory>
+            <includes>
+                <include>commons-io:commons-io:jar</include>
+                <include>org.apache.commons:commons-lang3:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+        </dependencySet>
+
+        <!--Include sample web apps here-->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
