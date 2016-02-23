@@ -125,5 +125,10 @@
 
         <!-- dependency version properties -->
         <tomcat.version>8.0.28</tomcat.version>
+        <carbon.logging.version>4.4.3</carbon.logging.version>
+        <carbon.analyticscommon.version>5.0.6</carbon.analyticscommon.version>
+        <commons.pool.version>1.6</commons.pool.version>
+        <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
+        <uaparser.version>1.3.0.wso2v1</uaparser.version>
     </properties>
 </project>

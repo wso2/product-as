@@ -74,10 +74,13 @@ public class HttpStatValve extends ValveBase {
         }
 
         Long startTime = System.currentTimeMillis();
+
         try {
             getNext().invoke(request, response);
-        } catch (IOException | ServletException e) {
-            LOG.error("Invoke failed:" + e);
+        } catch (IOException e) {
+            LOG.error("IO error occurred:" + e);
+        } catch (ServletException e) {
+            LOG.error("Servlet error occurred" + e);
         }
         long responseTime = System.currentTimeMillis() - startTime;
 
@@ -102,14 +105,22 @@ public class HttpStatValve extends ValveBase {
 
         AgentHolder.setConfigPath(getDataAgentConfigPath());
         String url = getUrl();
-        DataPublisher dataPublisher;
+        DataPublisher dataPublisher = null;
 
         try {
             dataPublisher = new DataPublisher(url, getUsername(), getPassword());
-        } catch (DataEndpointAgentConfigurationException | DataEndpointException | DataEndpointConfigurationException |
-                DataEndpointAuthenticationException | TransportException e) {
-            throw new ConfigurationException("Configuring Data Endpoint Agent failed", e);
+        } catch (DataEndpointAgentConfigurationException e) {
+            LOG.error("Data Endpoint Agent configuration failed: " + e);
+        } catch (DataEndpointException e) {
+            LOG.error("Communication with Data Endpoint failed: " + e);
+        } catch (DataEndpointConfigurationException e) {
+            LOG.error("Parsing Data Endpoint configurations failed: " + e);
+        } catch (DataEndpointAuthenticationException e) {
+            LOG.error("Connection to Data Endpoint failed during authentication: " + e);
+        } catch (TransportException e) {
+            LOG.error("Connection failed: " + e);
         }
+
         return dataPublisher;
     }
 
