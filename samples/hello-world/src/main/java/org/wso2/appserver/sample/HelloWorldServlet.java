@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class HelloWorldServlet extends HttpServlet {
 
+    private static final long serialVersionUID = -6580705829559379240L;
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         PrintWriter out = response.getWriter();
