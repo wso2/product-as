@@ -13,15 +13,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@XmlSchema(
-        namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE,
-        elementFormDefault = XmlNsForm.QUALIFIED,
-        xmlns = {
-                @XmlNs(prefix = "", namespaceURI = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE) })
-package org.wso2.appserver.utils.configuration.context;
+package org.wso2.appserver.exceptions;
 
-import org.wso2.appserver.utils.configuration.ConfigurationConstants;
+/**
+ * This class defines a custom exception type specified for WSO2 Application Server.
+ *
+ * @since 6.0.0
+ */
+public class AppServerException extends Exception {
+    public AppServerException(String message) {
+        super(message);
+    }
 
-import javax.xml.bind.annotation.XmlNs;
-import javax.xml.bind.annotation.XmlNsForm;
-import javax.xml.bind.annotation.XmlSchema;
+    public AppServerException(String message, Throwable rootCause) {
+        super(message, rootCause);
+    }
+}

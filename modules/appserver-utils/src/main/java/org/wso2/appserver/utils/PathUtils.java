@@ -13,11 +13,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.common.paths;
+package org.wso2.appserver.utils;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.Host;
-import org.wso2.appserver.utils.common.exceptions.AppServerException;
+import org.wso2.appserver.Constants;
+import org.wso2.appserver.exceptions.AppServerException;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +42,7 @@ public class PathUtils {
      * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
     public static Path getCatalinaBase() throws AppServerException {
-        String envVariable = System.getProperty(PathConstants.CATALINA_BASE);
+        String envVariable = System.getProperty(Constants.CATALINA_BASE);
         if (envVariable != null) {
             return Paths.get(envVariable);
         } else {
@@ -56,7 +57,7 @@ public class PathUtils {
      * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
     public static Path getCatalinaConfigurationHome() throws AppServerException {
-        return Paths.get(getCatalinaBase().toString(), PathConstants.TOMCAT_CONFIGURATION_HOME);
+        return Paths.get(getCatalinaBase().toString(), Constants.TOMCAT_CONFIGURATION_HOME);
     }
 
     /**
@@ -66,7 +67,7 @@ public class PathUtils {
      * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
     public static Path getWSO2ConfigurationHome() throws AppServerException {
-        return Paths.get(getCatalinaConfigurationHome().toString(), PathConstants.WSO2_CONFIGURATION_HOME);
+        return Paths.get(getCatalinaConfigurationHome().toString(), Constants.WSO2_CONFIGURATION_HOME);
     }
 
     /**
@@ -77,7 +78,7 @@ public class PathUtils {
      * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
     public static Path getWSO2AppServerDescriptor() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), PathConstants.SERVER_DESCRIPTOR);
+        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.SERVER_DESCRIPTOR);
     }
 
     /**
@@ -89,7 +90,7 @@ public class PathUtils {
      * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
     public static Path getWSO2AppServerDescriptorSchema() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), PathConstants.SERVER_DESCRIPTOR_SCHEMA);
+        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.SERVER_DESCRIPTOR_SCHEMA);
     }
 
     /**
@@ -101,7 +102,7 @@ public class PathUtils {
      * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
     public static Path getGlobalWSO2WebAppDescriptor() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), PathConstants.WEBAPP_DESCRIPTOR);
+        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR);
     }
 
     /**
@@ -113,7 +114,7 @@ public class PathUtils {
      * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
     public static Path getWSO2WebAppDescriptorSchema() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), PathConstants.WEBAPP_DESCRIPTOR_SCHEMA);
+        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
     }
 
     /**
@@ -127,7 +128,7 @@ public class PathUtils {
         if (context != null) {
             Path contextRoot = PathUtils.getContextRoot(context);
             return Paths.
-                    get(contextRoot.toString(), PathConstants.WEBAPP_RESOURCE_FOLDER, PathConstants.WEBAPP_DESCRIPTOR);
+                    get(contextRoot.toString(), Constants.WEBAPP_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
         } else {
             throw new AppServerException("Context cannot be null");
         }

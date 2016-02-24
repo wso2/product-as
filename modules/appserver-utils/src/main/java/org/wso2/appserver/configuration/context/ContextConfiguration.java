@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.configuration.server;
+package org.wso2.appserver.configuration.context;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -21,35 +21,21 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A Java class which models a holder for server level statistics publisher configurations.
+ * A Java class which models a holder for context level WSO2 specific configurations.
  *
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement
-public class StatsPublisherConfiguration {
-    @XmlElement(name = "Username")
-    private String username;
-    @XmlElement(name = "Password")
-    private String password;
-    @XmlElement(name = "URL")
-    private String url;
-    @XmlElement(name = "StreamId")
-    private String streamId;
+@XmlRootElement(name = "wso2as-web")
+public class ContextConfiguration {
+    @XmlElement(name = "single-sign-on")
+    private SSOConfiguration singleSignOnConfiguration;
 
-    public String getUsername() {
-        return username;
+    public SSOConfiguration getSingleSignOnConfiguration() {
+        return singleSignOnConfiguration;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getStreamId() {
-        return streamId;
+    public void setSingleSignOnConfiguration(SSOConfiguration singleSignOnConfiguration) {
+        this.singleSignOnConfiguration = singleSignOnConfiguration;
     }
 }

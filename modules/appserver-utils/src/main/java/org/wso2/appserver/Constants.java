@@ -13,29 +13,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.common.paths;
+package org.wso2.appserver;
 
 /**
- * This class defines the constants used within {@code PathUtils}.
+ * A Java class which defines the constants associated with WSO2 Application Server appserver-utils module.
  *
  * @since 6.0.0
  */
-public class PathConstants {
+public class Constants {
+    //  Namespace for wso2as.xml file XML content
+    public static final String SERVER_CONFIGURATION_NAMESPACE = "http://wso2.org/2016/wso2as-server";
+    //  Namespace for wso2as-web.xml file XML content
+    public static final String WEBAPP_DESCRIPTOR_NAMESPACE = "http://wso2.org/2016/wso2as-web";
     //  Environmental variable property name constant
     public static final String CATALINA_BASE = "catalina.base";
-
     //  File path related constants
     public static final String SERVER_DESCRIPTOR = "wso2as.xml";
     public static final String SERVER_DESCRIPTOR_SCHEMA = "wso2as.xsd";
     public static final String WEBAPP_DESCRIPTOR = "wso2as-web.xml";
     public static final String WEBAPP_DESCRIPTOR_SCHEMA = "wso2as-web.xsd";
-    protected static final String TOMCAT_CONFIGURATION_HOME = "conf";
-    protected static final String WSO2_CONFIGURATION_HOME = "wso2";
-    protected static final String WEBAPP_RESOURCE_FOLDER = "WEB-INF";
+    public static final String TOMCAT_CONFIGURATION_HOME = "conf";
+    public static final String WSO2_CONFIGURATION_HOME = "wso2";
+    public static final String WEBAPP_RESOURCE_FOLDER = "WEB-INF";
 
     /**
-     * Prevents instantiating the PathConstants class.
+     * Prevents instantiating this class.
      */
-    private PathConstants() {
+    private Constants() {
     }
 }

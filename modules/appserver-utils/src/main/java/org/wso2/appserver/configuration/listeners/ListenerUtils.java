@@ -13,10 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.configuration.listeners;
+package org.wso2.appserver.configuration.listeners;
 
-import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
-import org.wso2.appserver.utils.configuration.context.SSOConfiguration;
+import org.wso2.appserver.configuration.context.ContextConfiguration;
+import org.wso2.appserver.configuration.context.SSOConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;

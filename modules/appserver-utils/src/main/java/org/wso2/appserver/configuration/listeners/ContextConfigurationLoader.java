@@ -13,16 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.configuration.listeners;
+package org.wso2.appserver.configuration.listeners;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
-import org.wso2.appserver.utils.common.exceptions.AppServerException;
-import org.wso2.appserver.utils.common.miscellaneous.XMLUtils;
-import org.wso2.appserver.utils.common.paths.PathUtils;
-import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
+import org.wso2.appserver.utils.XMLUtils;
+import org.wso2.appserver.utils.PathUtils;
+import org.wso2.appserver.configuration.context.ContextConfiguration;
+import org.wso2.appserver.exceptions.AppServerException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

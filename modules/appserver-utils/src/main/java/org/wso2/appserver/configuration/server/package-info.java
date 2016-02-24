@@ -13,22 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.configuration;
+@XmlSchema(
+        namespace = Constants.SERVER_CONFIGURATION_NAMESPACE,
+        elementFormDefault = XmlNsForm.QUALIFIED,
+        xmlns = {
+                @XmlNs(prefix = "", namespaceURI = Constants.SERVER_CONFIGURATION_NAMESPACE) })
+package org.wso2.appserver.configuration.server;
 
-/**
- * A Java class which defines constants associated with WSO2 Application Server configurations.
- *
- * @since 6.0.0
- */
-public class ConfigurationConstants {
-    //  Namespace for wso2as.xml file XML content
-    public static final String SERVER_CONFIGURATION_NAMESPACE = "http://wso2.org/2016/wso2as-server";
-    //  Namespace for wso2as-web.xml file XML content
-    public static final String WEBAPP_DESCRIPTOR_NAMESPACE = "http://wso2.org/2016/wso2as-web";
+import org.wso2.appserver.Constants;
 
-    /**
-     * Prevents instantiating this class.
-     */
-    private ConfigurationConstants() {
-    }
-}
+import javax.xml.bind.annotation.XmlNs;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlSchema;

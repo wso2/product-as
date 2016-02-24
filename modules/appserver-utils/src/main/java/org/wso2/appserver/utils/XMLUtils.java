@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.common.miscellaneous;
+package org.wso2.appserver.utils;
 
-import org.wso2.appserver.utils.common.exceptions.AppServerException;
+import org.wso2.appserver.exceptions.AppServerException;
 import org.xml.sax.SAXException;
 
 import java.io.InputStream;

@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.configuration.server;
+package org.wso2.appserver.configuration.server;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -21,29 +21,35 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A Java class which models a holder for server level WSO2 specific configurations.
+ * A Java class which models a holder for server level statistics publisher configurations.
  *
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "AppServer")
-public class ServerConfiguration {
-    @XmlElement(name = "Classloading")
-    private ClassloadingConfiguration classloadingConfiguration;
-    @XmlElement(name = "SingleSignOn")
-    private SSOConfiguration singleSignOnConfiguration;
-    @XmlElement(name = "StatisticsPublisher")
-    private StatsPublisherConfiguration statsPublisherConfiguration;
+@XmlRootElement
+public class StatsPublisherConfiguration {
+    @XmlElement(name = "Username")
+    private String username;
+    @XmlElement(name = "Password")
+    private String password;
+    @XmlElement(name = "URL")
+    private String url;
+    @XmlElement(name = "StreamId")
+    private String streamId;
 
-    public ClassloadingConfiguration getClassloadingConfiguration() {
-        return classloadingConfiguration;
+    public String getUsername() {
+        return username;
     }
 
-    public SSOConfiguration getSingleSignOnConfiguration() {
-        return singleSignOnConfiguration;
+    public String getPassword() {
+        return password;
     }
 
-    public StatsPublisherConfiguration getStatsPublisherConfiguration() {
-        return statsPublisherConfiguration;
+    public String getUrl() {
+        return url;
+    }
+
+    public String getStreamId() {
+        return streamId;
     }
 }
