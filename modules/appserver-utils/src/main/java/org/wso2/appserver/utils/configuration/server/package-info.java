@@ -18,7 +18,7 @@
         elementFormDefault = XmlNsForm.QUALIFIED,
         xmlns = {
                 @XmlNs(prefix = "", namespaceURI = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE) })
-package org.wso2.appserver.utils.configuration.server.components;
+package org.wso2.appserver.utils.configuration.server;
 
 import org.wso2.appserver.utils.configuration.ConfigurationConstants;
 

@@ -15,15 +15,19 @@
  */
 package org.wso2.appserver.utils.configuration.listeners;
 
-import org.wso2.appserver.utils.configuration.context.components.ContextConfiguration;
-import org.wso2.appserver.utils.configuration.context.components.SSOConfiguration;
+import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
+import org.wso2.appserver.utils.configuration.context.SSOConfiguration;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A Java class which defines the utility methods for merging the context level configurations.
  *
  * @since 6.0.0
  */
-public class Utils {
+public class ListenerUtils {
     /**
      * Merges the globally defined context level configurations and context level configurations overridden at
      * context level.
@@ -83,7 +87,13 @@ public class Utils {
                 effective.setApplicationServerURL(global.getApplicationServerURL());
             }
 
-            //  TODO: add support for properties
+            List<SSOConfiguration.Property> properties = prioritizeProperties(global.getProperties(),
+                    local.getProperties());
+            if (properties.isEmpty()) {
+                effective.setProperties(null);
+            } else {
+                effective.setProperties(properties);
+            }
 
             if ((global.getSAML() != null) && (local.getSAML() != null)) {
                 effective.setSAML(new SSOConfiguration.SAML());
@@ -184,7 +194,14 @@ public class Utils {
                 } else if (globalSAML.isPassiveAuthnEnabled() != null) {
                     effective.getSAML().enablePassiveAuthn(localSAML.isPassiveAuthnEnabled());
                 }
-                //  TODO: ADD FURTHER PROPERTIES, CONSIDER IGNORED PROPERTIES
+
+                List<SSOConfiguration.SAML.SAMLProperty> samlProperties = prioritizeSAMLProperties(
+                        globalSAML.getProperties(), localSAML.getProperties());
+                if (samlProperties.isEmpty()) {
+                    effective.getSAML().setProperties(null);
+                } else {
+                    effective.getSAML().setProperties(samlProperties);
+                }
             } else if (global.getSAML() != null) {
                 effective.setSAML(global.getSAML());
             }
@@ -194,4 +211,92 @@ public class Utils {
         return effective;
     }
 
+    /**
+     * Prioritizes the additional webapp descriptor properties.
+     *
+     * @param global the globally defined set of additional SSO properties
+     * @param local  the set of additional SSO properties defined at context level
+     * @return the final, effective set of webapp descriptor additional SSO properties
+     */
+    private static List<SSOConfiguration.Property> prioritizeProperties(List<SSOConfiguration.Property> global,
+            List<SSOConfiguration.Property> local) {
+        List<SSOConfiguration.Property> effective = new ArrayList<>();
+        if ((global != null) && (local != null)) {
+            global.stream().forEach(property -> {
+                Optional<SSOConfiguration.Property> matching = getProperty(property.getKey(), local);
+                if (matching.isPresent()) {
+                    effective.add(matching.get());
+                } else {
+                    effective.add(property);
+                }
+            });
+        } else if (global != null) {
+            global.stream().forEach(effective::add);
+        }
+        return effective;
+    }
+
+    /**
+     * Prioritizes the additional SAML specific webapp descriptor properties.
+     *
+     * @param global the globally defined set of additional SAML SSO properties
+     * @param local  the set of additional SAML SSO properties defined at context level
+     * @return the final, effective set of webapp descriptor additional SAML SSO properties
+     */
+    private static List<SSOConfiguration.SAML.SAMLProperty> prioritizeSAMLProperties(
+            List<SSOConfiguration.SAML.SAMLProperty> global, List<SSOConfiguration.SAML.SAMLProperty> local) {
+        List<SSOConfiguration.SAML.SAMLProperty> effective = new ArrayList<>();
+        if ((global != null) && (local != null)) {
+            global.stream().forEach(property -> {
+                Optional<SSOConfiguration.SAML.SAMLProperty> matching = getSAMLProperty(property.getKey(), local);
+                if (matching.isPresent()) {
+                    effective.add(matching.get());
+                } else {
+                    effective.add(property);
+                }
+            });
+        } else if (global != null) {
+            global.stream().forEach(effective::add);
+        }
+        return effective;
+    }
+
+    /**
+     * Returns an additional {@code Property} if exists in the list of properties.
+     *
+     * @param key  the key of the property to be checked
+     * @param list the list of properties
+     * @return the SSO property if exists
+     */
+    private static Optional<SSOConfiguration.Property> getProperty(String key, List<SSOConfiguration.Property> list) {
+        if (key == null) {
+            return Optional.empty();
+        }
+        if (list != null) {
+            return list.stream().
+                    filter(property -> property.getKey().equals(key)).findFirst();
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Returns an additional {@code SAMLProperty} if exists in the list of properties.
+     *
+     * @param key  the key of the property to be checked
+     * @param list the list of properties
+     * @return the SAML SSO property if exists
+     */
+    private static Optional<SSOConfiguration.SAML.SAMLProperty> getSAMLProperty(String key,
+            List<SSOConfiguration.SAML.SAMLProperty> list) {
+        if (key == null) {
+            return Optional.empty();
+        }
+        if (list != null) {
+            return list.stream().
+                    filter(property -> property.getKey().equals(key)).findFirst();
+        } else {
+            return Optional.empty();
+        }
+    }
 }

@@ -13,11 +13,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.common;
+package org.wso2.appserver.utils.common.miscellaneous;
 
 import org.wso2.appserver.utils.common.exceptions.AppServerException;
 import org.xml.sax.SAXException;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -35,8 +36,8 @@ import javax.xml.validation.SchemaFactory;
  *
  * @since 6.0.0
  */
-public class GenericUtils {
-    private static final Logger logger = Logger.getLogger(GenericUtils.class.getName());
+public class XMLUtils {
+    private static final Logger logger = Logger.getLogger(XMLUtils.class.getName());
 
     /**
      * JAXB utility functions
@@ -75,20 +76,44 @@ public class GenericUtils {
     }
 
     /**
-     * Returns an {@code Object} unmarshalled from the XML source file specified.
+     * Builds an XML binding from the XML source file specified.
      *
-     * @param source  the XML source file
-     * @param schema  an optional file path representation of an XML schema file against which the source XML is to be
-     *                validated
-     * @param classes the list of classes to be recognized by the {@link JAXBContext}
-     * @return the unmarshalled {@link Object}
+     * @param source       the XML source file path representation
+     * @param schema       an optional file path representation of an XML schema file against which the source XML
+     *                     is to be validated
+     * @param bindingClass the class to be recognized by the {@link JAXBContext}
+     * @param <T>          the type of the class to be bound
+     * @return bound object (Type T) of XML
      * @throws AppServerException if an error occurred when creating the unmarshaller or unmarshalling the XML source
      */
-    public static Object getUnmarshalledObject(Path source, Optional<Path> schema, Class... classes)
+    public static <T> T getUnmarshalledObject(Path source, Optional<Path> schema, Class<T> bindingClass)
             throws AppServerException {
         try {
-            Unmarshaller unmarshaller = getXMLUnmarshaller(schema, classes);
-            return unmarshaller.unmarshal(source.toFile());
+            Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
+            Object unmarshalled = unmarshaller.unmarshal(source.toFile());
+            return bindingClass.cast(unmarshalled);
+        } catch (JAXBException e) {
+            throw new AppServerException("Error when unmarshalling the XML source", e);
+        }
+    }
+
+    /**
+     * Builds an XML binding from the {@code InputStream} specified.
+     *
+     * @param inputStream  the {@link InputStream} to unmarshall XML data from
+     * @param schema       an optional file path representation of an XML schema file against which the source XML
+     *                     is to be validated
+     * @param bindingClass the class to be recognized by the {@link JAXBContext}
+     * @param <T>          the type of the class to be bound
+     * @return bound object (Type T) of XML
+     * @throws AppServerException if an error occurred when creating the unmarshaller or unmarshalling the XML source
+     */
+    public static <T> T getUnmarshalledObject(InputStream inputStream, Optional<Path> schema, Class<T> bindingClass)
+            throws AppServerException {
+        try {
+            Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
+            Object unmarshalled = unmarshaller.unmarshal(inputStream);
+            return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
             throw new AppServerException("Error when unmarshalling the XML source", e);
         }

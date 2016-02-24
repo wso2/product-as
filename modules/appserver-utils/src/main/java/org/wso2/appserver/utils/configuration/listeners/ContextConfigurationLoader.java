@@ -19,10 +19,10 @@ import org.apache.catalina.Context;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
-import org.wso2.appserver.utils.common.GenericUtils;
 import org.wso2.appserver.utils.common.exceptions.AppServerException;
+import org.wso2.appserver.utils.common.miscellaneous.XMLUtils;
 import org.wso2.appserver.utils.common.paths.PathUtils;
-import org.wso2.appserver.utils.configuration.context.components.ContextConfiguration;
+import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -96,15 +96,15 @@ public class ContextConfigurationLoader implements LifecycleListener {
             Optional<Path> schema = Optional.of(PathUtils.getWSO2WebAppDescriptorSchema());
 
             if ((Files.exists(globalWebAppDescriptor)) && (Files.exists(contextWebAppDescriptor))) {
-                ContextConfiguration global = (ContextConfiguration) GenericUtils.
+                ContextConfiguration global = XMLUtils.
                         getUnmarshalledObject(globalWebAppDescriptor, schema, ContextConfiguration.class);
-                ContextConfiguration local = (ContextConfiguration) GenericUtils.
+                ContextConfiguration local = XMLUtils.
                         getUnmarshalledObject(contextWebAppDescriptor, schema, ContextConfiguration.class);
-                return Utils.merge(global, local);
+                return ListenerUtils.merge(global, local);
             } else if (Files.exists(globalWebAppDescriptor)) {
-                ContextConfiguration global = (ContextConfiguration) GenericUtils.
+                ContextConfiguration global = XMLUtils.
                         getUnmarshalledObject(globalWebAppDescriptor, schema, ContextConfiguration.class);
-                return Utils.merge(global, null);
+                return ListenerUtils.merge(global, null);
             } else {
                 throw new AppServerException("The " + globalWebAppDescriptor.toString() + " does not exist");
             }

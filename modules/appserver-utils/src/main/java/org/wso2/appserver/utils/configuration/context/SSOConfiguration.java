@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils.configuration.context.components;
+package org.wso2.appserver.utils.configuration.context;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;

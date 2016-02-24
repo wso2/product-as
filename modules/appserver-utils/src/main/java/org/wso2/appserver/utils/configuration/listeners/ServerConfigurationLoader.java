@@ -19,10 +19,10 @@ import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Server;
-import org.wso2.appserver.utils.common.GenericUtils;
 import org.wso2.appserver.utils.common.exceptions.AppServerException;
+import org.wso2.appserver.utils.common.miscellaneous.XMLUtils;
 import org.wso2.appserver.utils.common.paths.PathUtils;
-import org.wso2.appserver.utils.configuration.server.components.ServerConfiguration;
+import org.wso2.appserver.utils.configuration.server.ServerConfiguration;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -68,8 +68,8 @@ public class ServerConfigurationLoader implements LifecycleListener {
     private static synchronized void setGlobalConfiguration() throws AppServerException {
         Optional<Path> schemaPath = Optional.of(PathUtils.getWSO2AppServerDescriptorSchema());
         if (serverConfiguration == null) {
-            serverConfiguration = (ServerConfiguration) GenericUtils.getUnmarshalledObject(
-                    PathUtils.getWSO2AppServerDescriptor(), schemaPath, ServerConfiguration.class);
+            serverConfiguration = XMLUtils.getUnmarshalledObject(PathUtils.getWSO2AppServerDescriptor(), schemaPath,
+                    ServerConfiguration.class);
         }
     }
 }
