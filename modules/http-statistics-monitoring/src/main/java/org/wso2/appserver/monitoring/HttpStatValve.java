@@ -96,7 +96,7 @@ public class HttpStatValve extends ValveBase {
 
     //get file path to the file containing Data Agent configuration and properties
     private String getDataAgentConfigPath() {
-        Path path = Paths.get(appServerHome, getConfigFileFolder(), "data-agent-conf.xml");
+        Path path = Paths.get(appServerHome, getConfigFileFolder(), DefaultConfigurationConstants.DATA_AGENT_CONF);
         return path.toString();
     }
 
@@ -105,20 +105,25 @@ public class HttpStatValve extends ValveBase {
 
         AgentHolder.setConfigPath(getDataAgentConfigPath());
         String url = getUrl();
-        DataPublisher dataPublisher = null;
+        DataPublisher dataPublisher;
 
         try {
             dataPublisher = new DataPublisher(url, getUsername(), getPassword());
         } catch (DataEndpointAgentConfigurationException e) {
             LOG.error("Data Endpoint Agent configuration failed: " + e);
+            throw new ConfigurationException("Data Endpoint Agent configuration failed: ", e);
         } catch (DataEndpointException e) {
             LOG.error("Communication with Data Endpoint failed: " + e);
+            throw new ConfigurationException("Communication with Data Endpoint failed: ", e);
         } catch (DataEndpointConfigurationException e) {
             LOG.error("Parsing Data Endpoint configurations failed: " + e);
+            throw new ConfigurationException("Parsing Data Endpoint configurations failed: ", e);
         } catch (DataEndpointAuthenticationException e) {
             LOG.error("Connection to Data Endpoint failed during authentication: " + e);
+            throw new ConfigurationException("Connection to Data Endpoint failed during authentication: ", e);
         } catch (TransportException e) {
             LOG.error("Connection failed: " + e);
+            throw new ConfigurationException("Connection failed: ", e);
         }
 
         return dataPublisher;

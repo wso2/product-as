@@ -29,6 +29,7 @@ public class DefaultConfigurationConstants {
     public static final String CONFIG_FILE_FOLDER = "conf/wso2/Webapp_Statistics_Monitoring";
     public static final String URL = "tcp://127.0.0.1:7611";
     public static final String STREAM_ID = "org.wso2.http.stats:1.0.0";
+    public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
 
     /**
      * instantiating is not needed for this class. private constructor to block that.
