@@ -22,7 +22,7 @@ import org.apache.catalina.Server;
 import org.wso2.appserver.utils.common.GenericUtils;
 import org.wso2.appserver.utils.common.exceptions.AppServerException;
 import org.wso2.appserver.utils.common.paths.PathUtils;
-import org.wso2.appserver.utils.configuration.server.ServerConfiguration;
+import org.wso2.appserver.utils.configuration.server.components.ServerConfiguration;
 
 import java.nio.file.Path;
 import java.util.Optional;

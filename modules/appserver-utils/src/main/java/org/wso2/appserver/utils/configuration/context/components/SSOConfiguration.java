@@ -15,32 +15,31 @@
  */
 package org.wso2.appserver.utils.configuration.context.components;
 
-import org.wso2.appserver.utils.configuration.ConfigurationConstants;
-
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * A Java class which models a holder for context level single-sign-on (SSO) configurations.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+@XmlRootElement
 public class SSOConfiguration {
-    @XmlElement(name = "skip-uris", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(name = "skip-uris")
     private SkipURIs skipURIs;
-    @XmlElement(name = "handle-consumer-url-after-slo", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(name = "handle-consumer-url-after-slo")
     private Boolean handleConsumerURLAfterSLO;
-    @XmlElement(name = "query-params", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(name = "query-params")
     private String queryParams;
-    @XmlElement(name = "application-server-url", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(name = "application-server-url")
     private String applicationServerURL;
-    @XmlElement(name = "property", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement(name = "property")
     private List<Property> properties;
-    @XmlElement(namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+    @XmlElement
     private SAML saml;
 
     public SkipURIs getSkipURIs() {
@@ -96,7 +95,7 @@ public class SSOConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class SkipURIs {
-        @XmlElement(name = "skip-uri", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "skip-uri")
         private List<String> skipURIs;
 
         public List<String> getSkipURIs() {
@@ -113,15 +112,17 @@ public class SSOConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Property {
-        @XmlAttribute(name = "key", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlAttribute(name = "key")
         private String key;
-
-        public void setKey(String key) {
-            this.key = key;
-        }
+        @XmlValue
+        private String value;
 
         public String getKey() {
             return key;
+        }
+
+        public String getValue() {
+            return value;
         }
     }
 
@@ -130,39 +131,37 @@ public class SSOConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class SAML {
-        @XmlElement(name = "enable-sso", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "enable-sso")
         private Boolean enableSSO;
-        @XmlElement(name = "request-url-postfix", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "request-url-postfix")
         private String requestURLPostFix;
-        @XmlElement(name = "http-binding", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "http-binding")
         private String httpBinding;
-        @XmlElement(name = "issuer-id", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "issuer-id")
         private String issuerId;
-        @XmlElement(name = "consumer-url", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "consumer-url")
         private String consumerURL;
-        @XmlElement(name = "consumer-url-postfix", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "consumer-url-postfix")
         private String consumerURLPostFix;
-        @XmlElement(name = "attribute-consuming-service-index",
-                namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "attribute-consuming-service-index")
         private String attributeConsumingServiceIndex;
-        @XmlElement(name = "enable-slo", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "enable-slo")
         private Boolean enableSLO;
-        @XmlElement(name = "slo-url-postfix", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "slo-url-postfix")
         private String sloURLPostFix;
-        @XmlElement(name = "enable-response-signing", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "enable-response-signing")
         private Boolean enableResponseSigning;
-        @XmlElement(name = "enable-assertion-signing", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "enable-assertion-signing")
         private Boolean enableAssertionSigning;
-        @XmlElement(name = "enable-assertion-encryption",
-                namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "enable-assertion-encryption")
         private Boolean enableAssertionEncryption;
-        @XmlElement(name = "enable-request-signing", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "enable-request-signing")
         private Boolean enableRequestSigning;
-        @XmlElement(name = "is-force-authn", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "is-force-authn")
         private Boolean enableForceAuthn;
-        @XmlElement(name = "is-passive-authn", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "is-passive-authn")
         private Boolean enablePassiveAuthn;
-        @XmlElement(name = "saml-property", namespace = ConfigurationConstants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        @XmlElement(name = "saml-property")
         private List<SAMLProperty> properties;
 
         public Boolean isSSOEnabled() {
@@ -295,18 +294,23 @@ public class SSOConfiguration {
 
         /**
          * A nested Java class which defines a SAML specific additional configuration property.
+         * <p>
+         * The ability to add these key-value pair configuration properties have been added to
+         * enable the introduction of new configuration properties with less hassle, in the future.
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         public static class SAMLProperty {
-            @XmlAttribute(name = "key", namespace = ConfigurationConstants.SERVER_CONFIGURATION_NAMESPACE)
+            @XmlAttribute(name = "key")
             private String key;
-
-            public void setKey(String key) {
-                this.key = key;
-            }
+            @XmlValue
+            private String value;
 
             public String getKey() {
                 return key;
+            }
+
+            public String getValue() {
+                return value;
             }
         }
     }

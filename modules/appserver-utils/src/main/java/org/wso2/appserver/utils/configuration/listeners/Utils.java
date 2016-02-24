@@ -15,7 +15,7 @@
  */
 package org.wso2.appserver.utils.configuration.listeners;
 
-import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
+import org.wso2.appserver.utils.configuration.context.components.ContextConfiguration;
 import org.wso2.appserver.utils.configuration.context.components.SSOConfiguration;
 
 /**

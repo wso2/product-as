@@ -20,10 +20,10 @@ import org.apache.catalina.authenticator.SingleSignOn;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.wso2.appserver.utils.common.exceptions.AppServerException;
-import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
+import org.wso2.appserver.utils.configuration.context.components.ContextConfiguration;
 import org.wso2.appserver.utils.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.utils.configuration.listeners.ServerConfigurationLoader;
-import org.wso2.appserver.utils.configuration.server.ServerConfiguration;
+import org.wso2.appserver.utils.configuration.server.components.ServerConfiguration;
 
 import java.io.IOException;
 import java.util.logging.Level;

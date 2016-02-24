@@ -22,7 +22,7 @@ import org.apache.catalina.LifecycleListener;
 import org.wso2.appserver.utils.common.GenericUtils;
 import org.wso2.appserver.utils.common.exceptions.AppServerException;
 import org.wso2.appserver.utils.common.paths.PathUtils;
-import org.wso2.appserver.utils.configuration.context.ContextConfiguration;
+import org.wso2.appserver.utils.configuration.context.components.ContextConfiguration;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
