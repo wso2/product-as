@@ -16,7 +16,15 @@
     <xs:element name="wso2as-web">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="single-sign-on" minOccurs="0" maxOccurs="1">
+                <xs:element name="classloading" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="parent-first" type="xs:boolean"/>
+                            <xs:element name="environments" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="saml2-single-sign-on" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="skip-uris" minOccurs="0" maxOccurs="1">
@@ -31,6 +39,43 @@
                                         maxOccurs="1"/>
                             <xs:element name="query-params" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="application-server-url" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="enable-sso" type="xs:boolean" minOccurs="0"
+                                        maxOccurs="1" default="false"/>
+                            <xs:element name="request-url-postfix" type="xs:string" minOccurs="0"
+                                        maxOccurs="1" default="samlsso"/>
+                            <xs:element name="http-binding" minOccurs="0" maxOccurs="1"
+                                        default="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration
+                                                value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+                                        <xs:enumeration
+                                                value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="issuer-id" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="consumer-url" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="consumer-url-postfix" type="xs:string" minOccurs="0"
+                                        maxOccurs="1" default="/acs"/>
+                            <xs:element name="attribute-consuming-service-index" type="xs:string"
+                                        minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="enable-slo" type="xs:boolean" minOccurs="0" maxOccurs="1"
+                                        default="false"/>
+                            <xs:element name="slo-url-postfix" type="xs:string" minOccurs="0"
+                                        maxOccurs="1" default="logout"/>
+                            <xs:element name="enable-assertion-encryption" type="xs:boolean" minOccurs="0"
+                                        maxOccurs="1" default="false"/>
+                            <xs:element name="enable-assertion-signing" type="xs:boolean" minOccurs="0"
+                                        maxOccurs="1" default="true"/>
+                            <xs:element name="enable-request-signing" type="xs:boolean" minOccurs="0"
+                                        maxOccurs="1" default="true"/>
+                            <xs:element name="enable-response-signing" type="xs:boolean" minOccurs="0"
+                                        maxOccurs="1" default="true"/>
+                            <xs:element name="is-force-authn" type="xs:boolean" minOccurs="0"
+                                        maxOccurs="1" default="false"/>
+                            <xs:element name="is-passive-authn" type="xs:boolean" minOccurs="0"
+                                        maxOccurs="1" default="false"/>
                             <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>
@@ -38,58 +83,6 @@
                                             <xs:attribute name="key" type="xs:string" use="required"/>
                                         </xs:extension>
                                     </xs:simpleContent>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element name="saml">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="enable-sso" type="xs:boolean" minOccurs="0"
-                                                    maxOccurs="1" default="false"/>
-                                        <xs:element name="request-url-postfix" type="xs:string" minOccurs="0"
-                                                    maxOccurs="1" default="samlsso"/>
-                                        <xs:element name="http-binding" minOccurs="0" maxOccurs="1"
-                                                    default="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST">
-                                            <xs:simpleType>
-                                                <xs:restriction base="xs:string">
-                                                    <xs:enumeration
-                                                            value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
-                                                    <xs:enumeration
-                                                            value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
-                                                </xs:restriction>
-                                            </xs:simpleType>
-                                        </xs:element>
-                                        <xs:element name="issuer-id" type="xs:string" minOccurs="0" maxOccurs="1"/>
-                                        <xs:element name="consumer-url" type="xs:string" minOccurs="0" maxOccurs="1"/>
-                                        <xs:element name="consumer-url-postfix" type="xs:string" minOccurs="0"
-                                                    maxOccurs="1" default="/acs"/>
-                                        <xs:element name="attribute-consuming-service-index" type="xs:string"
-                                                    minOccurs="0" maxOccurs="1"/>
-                                        <xs:element name="enable-slo" type="xs:boolean" minOccurs="0" maxOccurs="1"
-                                                    default="false"/>
-                                        <xs:element name="slo-url-postfix" type="xs:string" minOccurs="0"
-                                                    maxOccurs="1" default="logout"/>
-                                        <xs:element name="enable-assertion-encryption" type="xs:boolean" minOccurs="0"
-                                                    maxOccurs="1" default="false"/>
-                                        <xs:element name="enable-assertion-signing" type="xs:boolean" minOccurs="0"
-                                                    maxOccurs="1" default="true"/>
-                                        <xs:element name="enable-request-signing" type="xs:boolean" minOccurs="0"
-                                                    maxOccurs="1" default="true"/>
-                                        <xs:element name="enable-response-signing" type="xs:boolean" minOccurs="0"
-                                                    maxOccurs="1" default="true"/>
-                                        <xs:element name="is-force-authn" type="xs:boolean" minOccurs="0"
-                                                    maxOccurs="1" default="false"/>
-                                        <xs:element name="is-passive-authn" type="xs:boolean" minOccurs="0"
-                                                    maxOccurs="1" default="false"/>
-                                        <xs:element name="saml-property" minOccurs="0" maxOccurs="unbounded">
-                                            <xs:complexType>
-                                                <xs:simpleContent>
-                                                    <xs:extension base="xs:string">
-                                                        <xs:attribute name="key" type="xs:string" use="required"/>
-                                                    </xs:extension>
-                                                </xs:simpleContent>
-                                            </xs:complexType>
-                                        </xs:element>
-                                    </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>

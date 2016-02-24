@@ -32,8 +32,10 @@ public class StatsPublisherConfiguration {
     private String username;
     @XmlElement(name = "Password")
     private String password;
-    @XmlElement(name = "URL")
-    private String url;
+    @XmlElement(name = "AuthenticationURL")
+    private String authenticationURL;
+    @XmlElement(name = "PublisherURL")
+    private String publisherURL;
     @XmlElement(name = "StreamId")
     private String streamId;
 
@@ -45,8 +47,12 @@ public class StatsPublisherConfiguration {
         return password;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAuthenticationURL() {
+        return authenticationURL;
+    }
+
+    public String getPublisherURL() {
+        return publisherURL;
     }
 
     public String getStreamId() {

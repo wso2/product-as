@@ -37,10 +37,38 @@ public class SSOConfiguration {
     private String queryParams;
     @XmlElement(name = "application-server-url")
     private String applicationServerURL;
+    @XmlElement(name = "enable-sso")
+    private Boolean enableSSO;
+    @XmlElement(name = "request-url-postfix")
+    private String requestURLPostFix;
+    @XmlElement(name = "http-binding")
+    private String httpBinding;
+    @XmlElement(name = "issuer-id")
+    private String issuerId;
+    @XmlElement(name = "consumer-url")
+    private String consumerURL;
+    @XmlElement(name = "consumer-url-postfix")
+    private String consumerURLPostFix;
+    @XmlElement(name = "attribute-consuming-service-index")
+    private String attributeConsumingServiceIndex;
+    @XmlElement(name = "enable-slo")
+    private Boolean enableSLO;
+    @XmlElement(name = "slo-url-postfix")
+    private String sloURLPostFix;
+    @XmlElement(name = "enable-response-signing")
+    private Boolean enableResponseSigning;
+    @XmlElement(name = "enable-assertion-signing")
+    private Boolean enableAssertionSigning;
+    @XmlElement(name = "enable-assertion-encryption")
+    private Boolean enableAssertionEncryption;
+    @XmlElement(name = "enable-request-signing")
+    private Boolean enableRequestSigning;
+    @XmlElement(name = "is-force-authn")
+    private Boolean enableForceAuthn;
+    @XmlElement(name = "is-passive-authn")
+    private Boolean enablePassiveAuthn;
     @XmlElement(name = "property")
     private List<Property> properties;
-    @XmlElement
-    private SAML saml;
 
     public SkipURIs getSkipURIs() {
         return skipURIs;
@@ -74,12 +102,124 @@ public class SSOConfiguration {
         this.applicationServerURL = applicationServerURL;
     }
 
-    public SAML getSAML() {
-        return saml;
+    public Boolean isSSOEnabled() {
+        return enableSSO;
     }
 
-    public void setSAML(SAML saml) {
-        this.saml = saml;
+    public void enableSSO(Boolean enableSSO) {
+        this.enableSSO = enableSSO;
+    }
+
+    public String getRequestURLPostFix() {
+        return requestURLPostFix;
+    }
+
+    public void setRequestURLPostFix(String requestURLPostFix) {
+        this.requestURLPostFix = requestURLPostFix;
+    }
+
+    public String getHttpBinding() {
+        return httpBinding;
+    }
+
+    public void setHttpBinding(String httpBinding) {
+        this.httpBinding = httpBinding;
+    }
+
+    public String getIssuerId() {
+        return issuerId;
+    }
+
+    public void setIssuerId(String issuerId) {
+        this.issuerId = issuerId;
+    }
+
+    public String getConsumerURL() {
+        return consumerURL;
+    }
+
+    public void setConsumerURL(String consumerURL) {
+        this.consumerURL = consumerURL;
+    }
+
+    public String getConsumerURLPostFix() {
+        return consumerURLPostFix;
+    }
+
+    public void setConsumerURLPostFix(String consumerURLPostFix) {
+        this.consumerURLPostFix = consumerURLPostFix;
+    }
+
+    public String getAttributeConsumingServiceIndex() {
+        return attributeConsumingServiceIndex;
+    }
+
+    public void setAttributeConsumingServiceIndex(String attributeConsumingServiceIndex) {
+        this.attributeConsumingServiceIndex = attributeConsumingServiceIndex;
+    }
+
+    public Boolean isSLOEnabled() {
+        return enableSLO;
+    }
+
+    public void enableSLO(Boolean enableSLO) {
+        this.enableSLO = enableSLO;
+    }
+
+    public String getSLOURLPostFix() {
+        return sloURLPostFix;
+    }
+
+    public void setSLOURLPostFix(String sloURLPostFix) {
+        this.sloURLPostFix = sloURLPostFix;
+    }
+
+    public Boolean isResponseSigningEnabled() {
+        return enableResponseSigning;
+    }
+
+    public void enableResponseSigning(Boolean enableResponseSigning) {
+        this.enableResponseSigning = enableResponseSigning;
+    }
+
+    public Boolean isAssertionSigningEnabled() {
+        return enableAssertionSigning;
+    }
+
+    public void enableAssertionSigning(Boolean enableAssertionSigning) {
+        this.enableAssertionSigning = enableAssertionSigning;
+    }
+
+    public Boolean isAssertionEncryptionEnabled() {
+        return enableAssertionEncryption;
+    }
+
+    public void enableAssertionEncryption(Boolean enableAssertionEncryption) {
+        this.enableAssertionEncryption = enableAssertionEncryption;
+    }
+
+    public Boolean isForceAuthnEnabled() {
+        return enableForceAuthn;
+    }
+
+    public void enableForceAuthn(Boolean enableForceAuthn) {
+        this.enableForceAuthn = enableForceAuthn;
+    }
+
+    public Boolean isPassiveAuthnEnabled() {
+        return enablePassiveAuthn;
+    }
+
+    public void enablePassiveAuthn(Boolean enablePassiveAuthn) {
+        this.enablePassiveAuthn = enablePassiveAuthn;
+    }
+
+    public Boolean isRequestSigningEnabled() {
+        return enableRequestSigning;
+    }
+
+    public void enableRequestSigning(Boolean enableRequestSigning) {
+        this.enableRequestSigning = enableRequestSigning;
     }
 
     public List<Property> getProperties() {
@@ -123,195 +263,6 @@ public class SSOConfiguration {
 
         public String getValue() {
             return value;
-        }
-    }
-
-    /**
-     * A nested class which defines the SAML specific single-sign-on (SSO) configurations.
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class SAML {
-        @XmlElement(name = "enable-sso")
-        private Boolean enableSSO;
-        @XmlElement(name = "request-url-postfix")
-        private String requestURLPostFix;
-        @XmlElement(name = "http-binding")
-        private String httpBinding;
-        @XmlElement(name = "issuer-id")
-        private String issuerId;
-        @XmlElement(name = "consumer-url")
-        private String consumerURL;
-        @XmlElement(name = "consumer-url-postfix")
-        private String consumerURLPostFix;
-        @XmlElement(name = "attribute-consuming-service-index")
-        private String attributeConsumingServiceIndex;
-        @XmlElement(name = "enable-slo")
-        private Boolean enableSLO;
-        @XmlElement(name = "slo-url-postfix")
-        private String sloURLPostFix;
-        @XmlElement(name = "enable-response-signing")
-        private Boolean enableResponseSigning;
-        @XmlElement(name = "enable-assertion-signing")
-        private Boolean enableAssertionSigning;
-        @XmlElement(name = "enable-assertion-encryption")
-        private Boolean enableAssertionEncryption;
-        @XmlElement(name = "enable-request-signing")
-        private Boolean enableRequestSigning;
-        @XmlElement(name = "is-force-authn")
-        private Boolean enableForceAuthn;
-        @XmlElement(name = "is-passive-authn")
-        private Boolean enablePassiveAuthn;
-        @XmlElement(name = "saml-property")
-        private List<SAMLProperty> properties;
-
-        public Boolean isSSOEnabled() {
-            return enableSSO;
-        }
-
-        public void enableSSO(Boolean enableSSO) {
-            this.enableSSO = enableSSO;
-        }
-
-        public String getRequestURLPostFix() {
-            return requestURLPostFix;
-        }
-
-        public void setRequestURLPostFix(String requestURLPostFix) {
-            this.requestURLPostFix = requestURLPostFix;
-        }
-
-        public String getHttpBinding() {
-            return httpBinding;
-        }
-
-        public void setHttpBinding(String httpBinding) {
-            this.httpBinding = httpBinding;
-        }
-
-        public String getIssuerId() {
-            return issuerId;
-        }
-
-        public void setIssuerId(String issuerId) {
-            this.issuerId = issuerId;
-        }
-
-        public String getConsumerURL() {
-            return consumerURL;
-        }
-
-        public void setConsumerURL(String consumerURL) {
-            this.consumerURL = consumerURL;
-        }
-
-        public String getConsumerURLPostFix() {
-            return consumerURLPostFix;
-        }
-
-        public void setConsumerURLPostFix(String consumerURLPostFix) {
-            this.consumerURLPostFix = consumerURLPostFix;
-        }
-
-        public String getAttributeConsumingServiceIndex() {
-            return attributeConsumingServiceIndex;
-        }
-
-        public void setAttributeConsumingServiceIndex(String attributeConsumingServiceIndex) {
-            this.attributeConsumingServiceIndex = attributeConsumingServiceIndex;
-        }
-
-        public Boolean isSLOEnabled() {
-            return enableSLO;
-        }
-
-        public void enableSLO(Boolean enableSLO) {
-            this.enableSLO = enableSLO;
-        }
-
-        public String getSLOURLPostFix() {
-            return sloURLPostFix;
-        }
-
-        public void setSLOURLPostFix(String sloURLPostFix) {
-            this.sloURLPostFix = sloURLPostFix;
-        }
-
-        public Boolean isResponseSigningEnabled() {
-            return enableResponseSigning;
-        }
-
-        public void enableResponseSigning(Boolean enableResponseSigning) {
-            this.enableResponseSigning = enableResponseSigning;
-        }
-
-        public Boolean isAssertionSigningEnabled() {
-            return enableAssertionSigning;
-        }
-
-        public void enableAssertionSigning(Boolean enableAssertionSigning) {
-            this.enableAssertionSigning = enableAssertionSigning;
-        }
-
-        public Boolean isAssertionEncryptionEnabled() {
-            return enableAssertionEncryption;
-        }
-
-        public void enableAssertionEncryption(Boolean enableAssertionEncryption) {
-            this.enableAssertionEncryption = enableAssertionEncryption;
-        }
-
-        public Boolean isForceAuthnEnabled() {
-            return enableForceAuthn;
-        }
-
-        public void enableForceAuthn(Boolean enableForceAuthn) {
-            this.enableForceAuthn = enableForceAuthn;
-        }
-
-        public Boolean isPassiveAuthnEnabled() {
-            return enablePassiveAuthn;
-        }
-
-        public void enablePassiveAuthn(Boolean enablePassiveAuthn) {
-            this.enablePassiveAuthn = enablePassiveAuthn;
-        }
-
-        public Boolean isRequestSigningEnabled() {
-            return enableRequestSigning;
-        }
-
-        public void enableRequestSigning(Boolean enableRequestSigning) {
-            this.enableRequestSigning = enableRequestSigning;
-        }
-
-        public List<SAMLProperty> getProperties() {
-            return properties;
-        }
-
-        public void setProperties(List<SAMLProperty> properties) {
-            this.properties = properties;
-        }
-
-        /**
-         * A nested Java class which defines a SAML specific additional configuration property.
-         * <p>
-         * The ability to add these key-value pair configuration properties have been added to
-         * enable the introduction of new configuration properties with less hassle, in the future.
-         */
-        @XmlAccessorType(XmlAccessType.FIELD)
-        public static class SAMLProperty {
-            @XmlAttribute(name = "key")
-            private String key;
-            @XmlValue
-            private String value;
-
-            public String getKey() {
-                return key;
-            }
-
-            public String getValue() {
-                return value;
-            }
         }
     }
 }

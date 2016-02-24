@@ -53,7 +53,7 @@ public class ServerConfigurationLoader implements LifecycleListener {
             Object source = lifecycleEvent.getSource();
             if (source instanceof Server) {
                 try {
-                    setGlobalConfiguration();
+                    buildGlobalConfiguration();
                 } catch (AppServerException e) {
                     logger.log(Level.SEVERE, "An error has occurred when retrieving the server level configurations");
                 }
@@ -65,7 +65,7 @@ public class ServerConfigurationLoader implements LifecycleListener {
         return serverConfiguration;
     }
 
-    private static synchronized void setGlobalConfiguration() throws AppServerException {
+    private static synchronized void buildGlobalConfiguration() throws AppServerException {
         Optional<Path> schemaPath = Optional.of(PathUtils.getWSO2AppServerDescriptorSchema());
         if (serverConfiguration == null) {
             serverConfiguration = XMLUtils.getUnmarshalledObject(PathUtils.getWSO2AppServerDescriptor(), schemaPath,

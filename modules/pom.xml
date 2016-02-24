@@ -29,7 +29,6 @@
         <module>appserver-utils</module>
         <module>http-statistics-monitoring</module>
         <module>sample-module</module>
-        <module>sample-valve</module>
         <module>webapp-loader</module>
     </modules>
 </project>

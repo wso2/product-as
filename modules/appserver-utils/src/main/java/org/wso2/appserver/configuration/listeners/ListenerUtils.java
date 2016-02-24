@@ -40,14 +40,50 @@ public class ListenerUtils {
             ContextConfiguration localConfiguration) {
         //  Prepare the effective final context configuration
         ContextConfiguration effective = new ContextConfiguration();
+        ContextConfiguration.ClassloadingConfiguration classloading = null;
         SSOConfiguration ssoConfiguration = null;
         if ((globalConfiguration != null) && (localConfiguration != null)) {
+            classloading = mergeClassloading(globalConfiguration.getClassloadingConfiguration(),
+                    localConfiguration.getClassloadingConfiguration());
             ssoConfiguration = mergeSSOConfigurations(globalConfiguration.getSingleSignOnConfiguration(),
                     localConfiguration.getSingleSignOnConfiguration());
         } else if (globalConfiguration != null) {
+            classloading = mergeClassloading(globalConfiguration.getClassloadingConfiguration(), null);
             ssoConfiguration = mergeSSOConfigurations(globalConfiguration.getSingleSignOnConfiguration(), null);
         }
+        effective.setClassloadingConfiguration(classloading);
         effective.setSingleSignOnConfiguration(ssoConfiguration);
+        return effective;
+    }
+
+    /**
+     * Merges the context level classloading configurations defined globally and overridden at
+     * context level (if any).
+     *
+     * @param global the globally defined classloading configurations
+     * @param local  the classloading configurations defined at context level
+     * @return the merged effective group of classloading configurations
+     */
+    private static ContextConfiguration.ClassloadingConfiguration mergeClassloading(
+            ContextConfiguration.ClassloadingConfiguration global,
+            ContextConfiguration.ClassloadingConfiguration local) {
+        ContextConfiguration.ClassloadingConfiguration effective = new ContextConfiguration.ClassloadingConfiguration();
+
+        if ((global != null) && (local != null)) {
+            if ((global.getIsParentFirst() != null) && (local.getIsParentFirst() != null)) {
+                effective.setIsParentFirst(local.getIsParentFirst());
+            } else if (global.getIsParentFirst() != null) {
+                effective.setIsParentFirst(global.getIsParentFirst());
+            }
+
+            if ((global.getEnvironments() != null) && (local.getEnvironments() != null)) {
+                effective.setEnvironments(local.getEnvironments());
+            } else if (global.getEnvironments() != null) {
+                effective.setEnvironments(global.getEnvironments());
+            }
+        } else if (global != null) {
+            effective = global;
+        }
         return effective;
     }
 
@@ -87,6 +123,49 @@ public class ListenerUtils {
                 effective.setApplicationServerURL(global.getApplicationServerURL());
             }
 
+            if ((global.isSSOEnabled() != null) && (local.isSSOEnabled() != null)) {
+                effective.enableSSO(local.isSSOEnabled());
+            } else if (global.isSSOEnabled() != null) {
+                effective.enableSSO(global.isSSOEnabled());
+            }
+
+            if ((global.getRequestURLPostFix() != null) && (local.getRequestURLPostFix() != null)) {
+                effective.setRequestURLPostFix(local.getRequestURLPostFix());
+            } else if (global.getRequestURLPostFix() != null) {
+                effective.setRequestURLPostFix(global.getRequestURLPostFix());
+            }
+
+            if ((global.getHttpBinding() != null) && (local.getHttpBinding() != null)) {
+                effective.setHttpBinding(local.getHttpBinding());
+            } else if (global.getHttpBinding() != null) {
+                effective.setHttpBinding(global.getHttpBinding());
+            }
+
+            if ((global.getIssuerId() != null) && (local.getIssuerId() != null)) {
+                effective.setIssuerId(local.getIssuerId());
+            } else if (local.getIssuerId() != null) {
+                effective.setIssuerId(local.getIssuerId());
+            }
+
+            if ((global.getConsumerURL() != null) && (local.getConsumerURL() != null)) {
+                effective.setConsumerURL(local.getConsumerURL());
+            } else if (local.getConsumerURL() != null) {
+                effective.setConsumerURL(local.getConsumerURL());
+            }
+
+            if ((global.getConsumerURLPostFix() != null) && (local.getConsumerURLPostFix() != null)) {
+                effective.setConsumerURLPostFix(local.getConsumerURLPostFix());
+            } else if (global.getConsumerURLPostFix() != null) {
+                effective.setConsumerURLPostFix(global.getConsumerURLPostFix());
+            }
+
+            if ((global.getAttributeConsumingServiceIndex() != null) && (local.getAttributeConsumingServiceIndex()
+                    != null)) {
+                effective.setAttributeConsumingServiceIndex(local.getAttributeConsumingServiceIndex());
+            } else if (global.getAttributeConsumingServiceIndex() != null) {
+                effective.setAttributeConsumingServiceIndex(global.getAttributeConsumingServiceIndex());
+            }
+
             List<SSOConfiguration.Property> properties = prioritizeProperties(global.getProperties(),
                     local.getProperties());
             if (properties.isEmpty()) {
@@ -95,115 +174,52 @@ public class ListenerUtils {
                 effective.setProperties(properties);
             }
 
-            if ((global.getSAML() != null) && (local.getSAML() != null)) {
-                effective.setSAML(new SSOConfiguration.SAML());
-                SSOConfiguration.SAML globalSAML = global.getSAML();
-                SSOConfiguration.SAML localSAML = local.getSAML();
+            if ((global.isSLOEnabled() != null) && (local.isSLOEnabled() != null)) {
+                effective.enableSLO(local.isSLOEnabled());
+            } else if (global.isSLOEnabled() != null) {
+                effective.enableSLO(global.isSLOEnabled());
+            }
 
-                if ((globalSAML.isSSOEnabled() != null) && (localSAML.isSSOEnabled() != null)) {
-                    effective.getSAML().enableSSO(localSAML.isSSOEnabled());
-                } else if (globalSAML.isSSOEnabled() != null) {
-                    effective.getSAML().enableSSO(globalSAML.isSSOEnabled());
-                }
+            if ((global.getSLOURLPostFix() != null) && (local.getSLOURLPostFix() != null)) {
+                effective.setSLOURLPostFix(local.getSLOURLPostFix());
+            } else if (global.getSLOURLPostFix() != null) {
+                effective.setSLOURLPostFix(global.getSLOURLPostFix());
+            }
 
-                if ((globalSAML.getRequestURLPostFix() != null) && (localSAML.getRequestURLPostFix() != null)) {
-                    effective.getSAML().setRequestURLPostFix(localSAML.getRequestURLPostFix());
-                } else if (globalSAML.getRequestURLPostFix() != null) {
-                    effective.getSAML().setRequestURLPostFix(globalSAML.getRequestURLPostFix());
-                }
+            if ((global.isAssertionEncryptionEnabled() != null) && (local.isAssertionEncryptionEnabled() != null)) {
+                effective.enableAssertionEncryption(local.isAssertionEncryptionEnabled());
+            } else if (global.isAssertionEncryptionEnabled() != null) {
+                effective.enableAssertionEncryption(global.isAssertionEncryptionEnabled());
+            }
 
-                if ((globalSAML.getHttpBinding() != null) && (localSAML.getHttpBinding() != null)) {
-                    effective.getSAML().setHttpBinding(localSAML.getHttpBinding());
-                } else if (globalSAML.getHttpBinding() != null) {
-                    effective.getSAML().setHttpBinding(globalSAML.getHttpBinding());
-                }
+            if ((global.isAssertionSigningEnabled() != null) && (local.isAssertionSigningEnabled() != null)) {
+                effective.enableAssertionSigning(local.isAssertionSigningEnabled());
+            } else if (global.isAssertionSigningEnabled() != null) {
+                effective.enableAssertionSigning(global.isAssertionSigningEnabled());
+            }
 
-                if ((globalSAML.getIssuerId() != null) && (localSAML.getIssuerId() != null)) {
-                    effective.getSAML().setIssuerId(localSAML.getIssuerId());
-                } else if (localSAML.getIssuerId() != null) {
-                    effective.getSAML().setIssuerId(localSAML.getIssuerId());
-                }
+            if ((global.isRequestSigningEnabled() != null) && (local.isRequestSigningEnabled() != null)) {
+                effective.enableRequestSigning(local.isRequestSigningEnabled());
+            } else if (global.isRequestSigningEnabled() != null) {
+                effective.enableRequestSigning(global.isRequestSigningEnabled());
+            }
 
-                if ((globalSAML.getConsumerURL() != null) && (localSAML.getConsumerURL() != null)) {
-                    effective.getSAML().setConsumerURL(localSAML.getConsumerURL());
-                } else if (localSAML.getConsumerURL() != null) {
-                    effective.getSAML().setConsumerURL(localSAML.getConsumerURL());
-                }
+            if ((global.isResponseSigningEnabled() != null) && (local.isResponseSigningEnabled() != null)) {
+                effective.enableResponseSigning(local.isResponseSigningEnabled());
+            } else if (global.isResponseSigningEnabled() != null) {
+                effective.enableResponseSigning(global.isResponseSigningEnabled());
+            }
 
-                if ((globalSAML.getConsumerURLPostFix() != null) && (localSAML.getConsumerURLPostFix() != null)) {
-                    effective.getSAML().setConsumerURLPostFix(localSAML.getConsumerURLPostFix());
-                } else if (globalSAML.getConsumerURLPostFix() != null) {
-                    effective.getSAML().setConsumerURLPostFix(globalSAML.getConsumerURLPostFix());
-                }
+            if ((global.isForceAuthnEnabled() != null) && (local.isForceAuthnEnabled() != null)) {
+                effective.enableForceAuthn(local.isForceAuthnEnabled());
+            } else if (global.isForceAuthnEnabled() != null) {
+                effective.enableForceAuthn(global.isForceAuthnEnabled());
+            }
 
-                if ((globalSAML.getAttributeConsumingServiceIndex() != null) && (
-                        localSAML.getAttributeConsumingServiceIndex() != null)) {
-                    effective.getSAML().
-                            setAttributeConsumingServiceIndex(localSAML.getAttributeConsumingServiceIndex());
-                } else if (globalSAML.getAttributeConsumingServiceIndex() != null) {
-                    effective.getSAML().
-                            setAttributeConsumingServiceIndex(globalSAML.getAttributeConsumingServiceIndex());
-                }
-
-                if ((globalSAML.isSLOEnabled() != null) && (localSAML.isSLOEnabled() != null)) {
-                    effective.getSAML().enableSLO(localSAML.isSLOEnabled());
-                } else if (globalSAML.isSLOEnabled() != null) {
-                    effective.getSAML().enableSLO(globalSAML.isSLOEnabled());
-                }
-
-                if ((globalSAML.getSLOURLPostFix() != null) && (localSAML.getSLOURLPostFix() != null)) {
-                    effective.getSAML().setSLOURLPostFix(localSAML.getSLOURLPostFix());
-                } else if (globalSAML.getSLOURLPostFix() != null) {
-                    effective.getSAML().setSLOURLPostFix(globalSAML.getSLOURLPostFix());
-                }
-
-                if ((globalSAML.isAssertionEncryptionEnabled() != null) && (localSAML.isAssertionEncryptionEnabled()
-                        != null)) {
-                    effective.getSAML().enableAssertionEncryption(localSAML.isAssertionEncryptionEnabled());
-                } else if (globalSAML.isAssertionEncryptionEnabled() != null) {
-                    effective.getSAML().enableAssertionEncryption(globalSAML.isAssertionEncryptionEnabled());
-                }
-
-                if ((globalSAML.isAssertionSigningEnabled() != null) && (localSAML.isAssertionSigningEnabled()
-                        != null)) {
-                    effective.getSAML().enableAssertionSigning(localSAML.isAssertionSigningEnabled());
-                } else if (globalSAML.isAssertionSigningEnabled() != null) {
-                    effective.getSAML().enableAssertionSigning(globalSAML.isAssertionSigningEnabled());
-                }
-
-                if ((globalSAML.isRequestSigningEnabled() != null) && (localSAML.isRequestSigningEnabled() != null)) {
-                    effective.getSAML().enableRequestSigning(localSAML.isRequestSigningEnabled());
-                } else if (globalSAML.isRequestSigningEnabled() != null) {
-                    effective.getSAML().enableRequestSigning(globalSAML.isRequestSigningEnabled());
-                }
-
-                if ((globalSAML.isResponseSigningEnabled() != null) && (localSAML.isResponseSigningEnabled() != null)) {
-                    effective.getSAML().enableResponseSigning(localSAML.isResponseSigningEnabled());
-                } else if (globalSAML.isResponseSigningEnabled() != null) {
-                    effective.getSAML().enableResponseSigning(globalSAML.isResponseSigningEnabled());
-                }
-
-                if ((globalSAML.isForceAuthnEnabled() != null) && (localSAML.isForceAuthnEnabled() != null)) {
-                    effective.getSAML().enableForceAuthn(localSAML.isForceAuthnEnabled());
-                } else if (globalSAML.isForceAuthnEnabled() != null) {
-                    effective.getSAML().enableForceAuthn(globalSAML.isForceAuthnEnabled());
-                }
-
-                if ((globalSAML.isPassiveAuthnEnabled() != null) && (localSAML.isPassiveAuthnEnabled() != null)) {
-                    effective.getSAML().enablePassiveAuthn(localSAML.isPassiveAuthnEnabled());
-                } else if (globalSAML.isPassiveAuthnEnabled() != null) {
-                    effective.getSAML().enablePassiveAuthn(localSAML.isPassiveAuthnEnabled());
-                }
-
-                List<SSOConfiguration.SAML.SAMLProperty> samlProperties = prioritizeSAMLProperties(
-                        globalSAML.getProperties(), localSAML.getProperties());
-                if (samlProperties.isEmpty()) {
-                    effective.getSAML().setProperties(null);
-                } else {
-                    effective.getSAML().setProperties(samlProperties);
-                }
-            } else if (global.getSAML() != null) {
-                effective.setSAML(global.getSAML());
+            if ((global.isPassiveAuthnEnabled() != null) && (local.isPassiveAuthnEnabled() != null)) {
+                effective.enablePassiveAuthn(local.isPassiveAuthnEnabled());
+            } else if (global.isPassiveAuthnEnabled() != null) {
+                effective.enablePassiveAuthn(local.isPassiveAuthnEnabled());
             }
         } else if (global != null) {
             effective = global;
@@ -237,31 +253,6 @@ public class ListenerUtils {
     }
 
     /**
-     * Prioritizes the additional SAML specific webapp descriptor properties.
-     *
-     * @param global the globally defined set of additional SAML SSO properties
-     * @param local  the set of additional SAML SSO properties defined at context level
-     * @return the final, effective set of webapp descriptor additional SAML SSO properties
-     */
-    private static List<SSOConfiguration.SAML.SAMLProperty> prioritizeSAMLProperties(
-            List<SSOConfiguration.SAML.SAMLProperty> global, List<SSOConfiguration.SAML.SAMLProperty> local) {
-        List<SSOConfiguration.SAML.SAMLProperty> effective = new ArrayList<>();
-        if ((global != null) && (local != null)) {
-            global.stream().forEach(property -> {
-                Optional<SSOConfiguration.SAML.SAMLProperty> matching = getSAMLProperty(property.getKey(), local);
-                if (matching.isPresent()) {
-                    effective.add(matching.get());
-                } else {
-                    effective.add(property);
-                }
-            });
-        } else if (global != null) {
-            global.stream().forEach(effective::add);
-        }
-        return effective;
-    }
-
-    /**
      * Returns an additional {@code Property} if exists in the list of properties.
      *
      * @param key  the key of the property to be checked
@@ -280,23 +271,4 @@ public class ListenerUtils {
         }
     }
 
-    /**
-     * Returns an additional {@code SAMLProperty} if exists in the list of properties.
-     *
-     * @param key  the key of the property to be checked
-     * @param list the list of properties
-     * @return the SAML SSO property if exists
-     */
-    private static Optional<SSOConfiguration.SAML.SAMLProperty> getSAMLProperty(String key,
-            List<SSOConfiguration.SAML.SAMLProperty> list) {
-        if (key == null) {
-            return Optional.empty();
-        }
-        if (list != null) {
-            return list.stream().
-                    filter(property -> property.getKey().equals(key)).findFirst();
-        } else {
-            return Optional.empty();
-        }
-    }
 }

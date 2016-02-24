@@ -12,32 +12,29 @@
  limitations under the License.
 -->
 <wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
-    <single-sign-on>
-        <skip-uris>
-            <skip-uri>http://www.xsd2xml.com</skip-uri>
-            <skip-uri>http://www.xsd3xml.com</skip-uri>
-        </skip-uris>
+    <classloading>
+        <parent-first>true</parent-first>
+        <environments>CXF</environments>
+    </classloading>
+    <saml2-single-sign-on>
+        <!--<skip-uris>
+            <skip-uri>http://www.example.com</skip-uri>
+        </skip-uris>-->
         <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
         <query-params>tenant=admin&amp;dialect=SAML</query-params>
         <application-server-url>http://localhost:8443</application-server-url>
-        <property key="key1">value1</property>
-        <property key="key2">value2</property>
-        <property key="key3">value3</property>
-        <saml>
-            <enable-sso>false</enable-sso>
-            <request-url-postfix>samlsso</request-url-postfix>
-            <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
-            <consumer-url-postfix>/acs</consumer-url-postfix>
-            <attribute-consuming-service-index>1784849</attribute-consuming-service-index>
-            <enable-slo>false</enable-slo>
-            <slo-url-postfix>logout</slo-url-postfix>
-            <enable-assertion-encryption>false</enable-assertion-encryption>
-            <enable-assertion-signing>false</enable-assertion-signing>
-            <enable-request-signing>false</enable-request-signing>
-            <enable-response-signing>false</enable-response-signing>
-            <is-force-authn>false</is-force-authn>
-            <is-passive-authn>false</is-passive-authn>
-            <saml-property key="additionalparams">version=6.0.0</saml-property>
-        </saml>
-    </single-sign-on>
+        <enable-sso>false</enable-sso>
+        <request-url-postfix>samlsso</request-url-postfix>
+        <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
+        <consumer-url-postfix>/acs</consumer-url-postfix>
+        <attribute-consuming-service-index>1784849</attribute-consuming-service-index>
+        <enable-slo>false</enable-slo>
+        <slo-url-postfix>logout</slo-url-postfix>
+        <enable-assertion-encryption>false</enable-assertion-encryption>
+        <enable-assertion-signing>false</enable-assertion-signing>
+        <enable-request-signing>false</enable-request-signing>
+        <enable-response-signing>false</enable-response-signing>
+        <is-force-authn>false</is-force-authn>
+        <is-passive-authn>false</is-passive-authn>
+    </saml2-single-sign-on>
 </wso2as-web>

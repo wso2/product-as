@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ServerConfiguration {
     @XmlElement(name = "Classloading")
     private ClassloadingConfiguration classloadingConfiguration;
-    @XmlElement(name = "SingleSignOn")
+    @XmlElement(name = "SAML2SingleSignOn")
     private SSOConfiguration singleSignOnConfiguration;
     @XmlElement(name = "StatisticsPublisher")
     private StatsPublisherConfiguration statsPublisherConfiguration;
