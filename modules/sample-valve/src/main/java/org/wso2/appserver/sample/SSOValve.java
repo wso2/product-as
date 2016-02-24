@@ -19,11 +19,11 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.authenticator.SingleSignOn;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
-import org.wso2.appserver.exceptions.AppServerException;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
+import org.wso2.appserver.exceptions.AppServerException;
 
 import java.io.IOException;
 import java.util.logging.Level;

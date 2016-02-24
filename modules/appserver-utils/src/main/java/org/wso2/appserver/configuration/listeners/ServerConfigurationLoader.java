@@ -19,10 +19,10 @@ import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Server;
-import org.wso2.appserver.utils.XMLUtils;
-import org.wso2.appserver.utils.PathUtils;
-import org.wso2.appserver.exceptions.AppServerException;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
+import org.wso2.appserver.exceptions.AppServerException;
+import org.wso2.appserver.utils.PathUtils;
+import org.wso2.appserver.utils.XMLUtils;
 
 import java.nio.file.Path;
 import java.util.Optional;
