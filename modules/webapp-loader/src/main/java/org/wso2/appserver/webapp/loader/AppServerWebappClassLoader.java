@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -48,7 +50,7 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         super(parent);
     }
 
-    public void setWebappClassLoaderContext(WebappClassLoaderContext classLoaderContext) {
+    public synchronized void setWebappClassLoaderContext(WebappClassLoaderContext classLoaderContext) {
         this.webappClassLoaderContext = classLoaderContext;
     }
 
@@ -180,7 +182,6 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
     }
 
 
-
     protected Class<?> findLocalClass(String name, boolean resolve) throws ClassNotFoundException {
         Class<?> clazz = null;
         log.debug("  Searching local repositories");
@@ -225,10 +226,12 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         from BootstrapClassPath.
          */
         if (parent != null) {
-            boolean delegatedRes = webappClassLoaderContext.isDelegatedResource(name);
-            boolean excludedRes = webappClassLoaderContext.isExcludedResources(name);
-            if (delegatedRes && !excludedRes) {
-                tmp[0] = parent.getResources(name);
+            synchronized (this) {
+                boolean delegatedRes = webappClassLoaderContext.isDelegatedResource(name);
+                boolean excludedRes = webappClassLoaderContext.isExcludedResources(name);
+                if (delegatedRes && !excludedRes) {
+                    tmp[0] = parent.getResources(name);
+                }
             }
 
         }
@@ -239,7 +242,12 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
 
 
     public ClassLoader copyWithoutTransformers() {
-        AppServerWebappClassLoader result = new AppServerWebappClassLoader(this.getParent());
+
+        ClassLoader parent = this.getParent();
+        AppServerWebappClassLoader result = AccessController.doPrivileged(
+                (PrivilegedAction<AppServerWebappClassLoader>) () -> new AppServerWebappClassLoader(parent)
+        );
+
         super.copyStateWithoutTransformers(result);
 
         try {

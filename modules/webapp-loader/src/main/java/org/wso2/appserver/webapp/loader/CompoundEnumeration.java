@@ -19,6 +19,7 @@
 
 package org.wso2.appserver.webapp.loader;
 
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
@@ -30,7 +31,7 @@ public class CompoundEnumeration<E> implements Enumeration<E> {
     private int index = 0;
 
     public CompoundEnumeration(Enumeration<E>[] var1) {
-        this.enums = var1;
+        this.enums = Arrays.copyOf(var1, var1.length);
     }
 
     private boolean next() {

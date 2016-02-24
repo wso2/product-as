@@ -33,6 +33,6 @@
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
     -->
-    <!-- <Loader className="org.wso2.mirage.webapploader.CustomLoader" delegate="false" reloadable="false"/> -->
-    <!--<Loader className="org.wso2.appserver.webapp.loader.AppServerWebappLoader" loaderClass="org.wso2.appserver.webapp.loader.AppServerWebappClassLoader"/>-->
+
+    <Loader className="org.wso2.appserver.webapp.loader.AppServerWebappLoader" loaderClass="org.wso2.appserver.webapp.loader.AppServerWebappClassLoader"/>
 </Context>

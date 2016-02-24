@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>http-statistics-monitoring</artifactId>
+    <name>WSO2 Application Server 6.0.0 - Module Http Statistics Monitoring</name>
+
 
     <repositories>
         <repository>

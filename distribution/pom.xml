@@ -21,15 +21,15 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+
     <artifactId>distribution</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <name>WSO2 Application Server 6.0.0 - Distribution</name>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
                 <executions>
                     <execution>
                         <id>default-jar</id>
@@ -40,13 +40,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.1</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
                         <descriptor>${plugins.assembly.descriptor}</descriptor>
                     </descriptors>
-                    <finalName>application-server-${project.version}</finalName>
+                    <finalName>${distribution.file.name}</finalName>
                 </configuration>
                 <executions>
                     <execution>
@@ -60,7 +59,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
                 <executions>
                     <execution>
                         <id>unpack</id>
@@ -83,7 +81,6 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
-            <version>${tomcat.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
@@ -92,18 +89,31 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
+            <artifactId>webapp-loader</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>hello-world</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
             <artifactId>http-statistics-monitoring</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.wso2.appserver</groupId>-->
-            <!--<artifactId>webapp-loader</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 
     <properties>
         <plugins.assembly.descriptor>assembly/bin.xml</plugins.assembly.descriptor>
+        <distribution.file.name>wso2as-${project.version}</distribution.file.name>
     </properties>
 
 </project>
