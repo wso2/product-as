@@ -181,4 +181,11 @@
             <class name="org.wso2.appserver.integration.tests.jndi.WSAS2185HibernateJNDITestCase"/>
         </classes>
     </test>-->
+
+    <test name="config-tests" preserve-order="true" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.config"/>
+        </packages>
+    </test>
+
 </suite>
