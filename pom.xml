@@ -87,11 +87,11 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven.checkstyleplugin.version}</version>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>findbugs-maven-plugin</artifactId>-->
-                <!--<version>${maven.findbugsplugin.version}</version>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${maven.findbugsplugin.version}</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -145,6 +145,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- WSO2 Application Server version -->
         <appserver.version>6.0.0-SNAPSHOT</appserver.version>
