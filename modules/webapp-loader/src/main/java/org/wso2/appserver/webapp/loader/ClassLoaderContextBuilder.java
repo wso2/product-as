@@ -205,7 +205,7 @@ public class ClassLoaderContextBuilder {
         List<String> delegatedResourceList = new ArrayList<>();
         List<String> providedRepositories = new ArrayList<>();
 
-        addWepAppDefaultExternalRepositories(providedRepositories);
+//        addWepAppDefaultExternalRepositories(providedRepositories);
 
         if (classLoaderConfig.getDefaultEnvironmentNames().size() > 0) {
 
@@ -281,7 +281,7 @@ public class ClassLoaderContextBuilder {
             List<String> delegatedResourceList = new ArrayList<>();
             List<String> providedRepositories = new ArrayList<>();
 
-            addWepAppDefaultExternalRepositories(providedRepositories);
+//            addWepAppDefaultExternalRepositories(providedRepositories);
 
             if (webAppConfigurationData.getClassloading().getEnvironments() != null) {
 
@@ -326,9 +326,9 @@ public class ClassLoaderContextBuilder {
         return webappClassLoaderContext;
     }
 
-    private static void addWepAppDefaultExternalRepositories(List<String> repositories) {
-        repositories.addAll(Utils.generateClasspath(LoaderConstants.DEFAULT_EXT_DIR));
-    }
+//    private static void addWepAppDefaultExternalRepositories(List<String> repositories) {
+//        repositories.addAll(Utils.generateClasspath(LoaderConstants.DEFAULT_EXT_DIR));
+//    }
 
     private static URL getClassLoaderConfigFileURL(String webappFilePath) throws ApplicationServerException {
 

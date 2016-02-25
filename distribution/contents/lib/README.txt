@@ -1,1 +1,1 @@
-Add pre-compiled tomcat server related jars here.
+This folder contains tomcat server related jars.
