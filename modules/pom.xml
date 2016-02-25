@@ -28,6 +28,7 @@
     <modules>
         <module>sample-module</module>
         <module>webapp-loader</module>
+        <module>http-statistics-monitoring</module>
     </modules>
 
 </project>
