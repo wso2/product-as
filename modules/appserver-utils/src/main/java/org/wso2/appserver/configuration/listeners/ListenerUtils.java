@@ -57,8 +57,8 @@ public class ListenerUtils {
     }
 
     /**
-     * Merges the context level classloading configurations defined globally and overridden at
-     * context level (if any).
+     * Merges the context level classloading configurations defined globally and overridden at context level
+     * (if any).
      *
      * @param global the globally defined classloading configurations
      * @param local  the classloading configurations defined at context level
@@ -70,17 +70,8 @@ public class ListenerUtils {
         ContextConfiguration.ClassloadingConfiguration effective = new ContextConfiguration.ClassloadingConfiguration();
 
         if ((global != null) && (local != null)) {
-            if ((global.getIsParentFirst() != null) && (local.getIsParentFirst() != null)) {
-                effective.setIsParentFirst(local.getIsParentFirst());
-            } else if (global.getIsParentFirst() != null) {
-                effective.setIsParentFirst(global.getIsParentFirst());
-            }
-
-            if ((global.getEnvironments() != null) && (local.getEnvironments() != null)) {
-                effective.setEnvironments(local.getEnvironments());
-            } else if (global.getEnvironments() != null) {
-                effective.setEnvironments(global.getEnvironments());
-            }
+            effective.enableParentFirst(Optional.ofNullable(local.isParentFirst()).orElse(global.isParentFirst()));
+            effective.setEnvironments(Optional.ofNullable(local.getEnvironments()).orElse(global.getEnvironments()));
         } else if (global != null) {
             effective = global;
         }
@@ -88,8 +79,8 @@ public class ListenerUtils {
     }
 
     /**
-     * Merges the context level single-sign-on (SSO) configurations defined globally and overridden at
-     * context level (if any).
+     * Merges the context level single-sign-on (SSO) configurations defined globally and overridden at context level
+     * (if any).
      *
      * @param global the globally defined SSO configurations
      * @param local  the SSO configurations defined at context level
@@ -99,73 +90,36 @@ public class ListenerUtils {
         SSOConfiguration effective = new SSOConfiguration();
 
         if ((global != null) && (local != null)) {
-            if ((global.getSkipURIs() != null) && (local.getSkipURIs() != null)) {
-                effective.setSkipURIs(local.getSkipURIs());
-            } else if (global.getSkipURIs() != null) {
-                effective.setSkipURIs(global.getSkipURIs());
-            }
-
-            if ((global.handleConsumerURLAfterSLO() != null) && (local.handleConsumerURLAfterSLO() != null)) {
-                effective.enableHandlingConsumerURLAfterSLO(local.handleConsumerURLAfterSLO());
-            } else if (global.handleConsumerURLAfterSLO() != null) {
-                effective.enableHandlingConsumerURLAfterSLO(global.handleConsumerURLAfterSLO());
-            }
-
-            if ((global.getQueryParams() != null) && (local.getQueryParams() != null)) {
-                effective.setQueryParams(local.getQueryParams());
-            } else if (global.getQueryParams() != null) {
-                effective.setQueryParams(global.getQueryParams());
-            }
-
-            if ((global.getApplicationServerURL() != null) && (local.getApplicationServerURL() != null)) {
-                effective.setApplicationServerURL(local.getApplicationServerURL());
-            } else if (global.getApplicationServerURL() != null) {
-                effective.setApplicationServerURL(global.getApplicationServerURL());
-            }
-
-            if ((global.isSSOEnabled() != null) && (local.isSSOEnabled() != null)) {
-                effective.enableSSO(local.isSSOEnabled());
-            } else if (global.isSSOEnabled() != null) {
-                effective.enableSSO(global.isSSOEnabled());
-            }
-
-            if ((global.getRequestURLPostFix() != null) && (local.getRequestURLPostFix() != null)) {
-                effective.setRequestURLPostFix(local.getRequestURLPostFix());
-            } else if (global.getRequestURLPostFix() != null) {
-                effective.setRequestURLPostFix(global.getRequestURLPostFix());
-            }
-
-            if ((global.getHttpBinding() != null) && (local.getHttpBinding() != null)) {
-                effective.setHttpBinding(local.getHttpBinding());
-            } else if (global.getHttpBinding() != null) {
-                effective.setHttpBinding(global.getHttpBinding());
-            }
-
-            if ((global.getIssuerId() != null) && (local.getIssuerId() != null)) {
-                effective.setIssuerId(local.getIssuerId());
-            } else if (local.getIssuerId() != null) {
-                effective.setIssuerId(local.getIssuerId());
-            }
-
-            if ((global.getConsumerURL() != null) && (local.getConsumerURL() != null)) {
-                effective.setConsumerURL(local.getConsumerURL());
-            } else if (local.getConsumerURL() != null) {
-                effective.setConsumerURL(local.getConsumerURL());
-            }
-
-            if ((global.getConsumerURLPostFix() != null) && (local.getConsumerURLPostFix() != null)) {
-                effective.setConsumerURLPostFix(local.getConsumerURLPostFix());
-            } else if (global.getConsumerURLPostFix() != null) {
-                effective.setConsumerURLPostFix(global.getConsumerURLPostFix());
-            }
-
-            if ((global.getAttributeConsumingServiceIndex() != null) && (local.getAttributeConsumingServiceIndex()
-                    != null)) {
-                effective.setAttributeConsumingServiceIndex(local.getAttributeConsumingServiceIndex());
-            } else if (global.getAttributeConsumingServiceIndex() != null) {
-                effective.setAttributeConsumingServiceIndex(global.getAttributeConsumingServiceIndex());
-            }
-
+            effective.setSkipURIs(Optional.ofNullable(local.getSkipURIs()).orElse(global.getSkipURIs()));
+            effective.enableHandlingConsumerURLAfterSLO(Optional.ofNullable(local.handleConsumerURLAfterSLO()).
+                    orElse(global.handleConsumerURLAfterSLO()));
+            effective.setQueryParams(Optional.ofNullable(local.getQueryParams()).orElse(global.getQueryParams()));
+            effective.setApplicationServerURL(
+                    Optional.ofNullable(local.getApplicationServerURL()).orElse(global.getApplicationServerURL()));
+            effective.enableSSO(Optional.ofNullable(local.isSSOEnabled()).orElse(global.isSSOEnabled()));
+            effective.setRequestURLPostFix(
+                    Optional.ofNullable(local.getRequestURLPostFix()).orElse(global.getRequestURLPostFix()));
+            effective.setHttpBinding(Optional.ofNullable(local.getHttpBinding()).orElse(global.getHttpBinding()));
+            effective.setIssuerId(local.getIssuerId());
+            effective.setConsumerURL(local.getConsumerURL());
+            effective.setConsumerURLPostFix(
+                    Optional.ofNullable(local.getConsumerURLPostFix()).orElse(global.getConsumerURLPostFix()));
+            effective.setAttributeConsumingServiceIndex(Optional.ofNullable(local.getAttributeConsumingServiceIndex()).
+                    orElse(global.getAttributeConsumingServiceIndex()));
+            effective.enableSLO(Optional.ofNullable(local.isSLOEnabled()).orElse(global.isSLOEnabled()));
+            effective.setSLOURLPostFix(Optional.ofNullable(local.getSLOURLPostFix()).orElse(global.getSLOURLPostFix()));
+            effective.enableAssertionEncryption(Optional.ofNullable(local.isAssertionEncryptionEnabled()).
+                    orElse(global.isAssertionEncryptionEnabled()));
+            effective.enableAssertionSigning(Optional.ofNullable(local.isAssertionSigningEnabled()).
+                    orElse(global.isAssertionSigningEnabled()));
+            effective.enableRequestSigning(
+                    Optional.ofNullable(local.isRequestSigningEnabled()).orElse(global.isRequestSigningEnabled()));
+            effective.enableResponseSigning(
+                    Optional.ofNullable(local.isResponseSigningEnabled()).orElse(global.isResponseSigningEnabled()));
+            effective.enableForceAuthn(
+                    Optional.ofNullable(local.isForceAuthnEnabled()).orElse(global.isForceAuthnEnabled()));
+            effective.enablePassiveAuthn(
+                    Optional.ofNullable(local.isPassiveAuthnEnabled()).orElse(global.isPassiveAuthnEnabled()));
             List<SSOConfiguration.Property> properties = prioritizeProperties(global.getProperties(),
                     local.getProperties());
             if (properties.isEmpty()) {
@@ -173,56 +127,16 @@ public class ListenerUtils {
             } else {
                 effective.setProperties(properties);
             }
-
-            if ((global.isSLOEnabled() != null) && (local.isSLOEnabled() != null)) {
-                effective.enableSLO(local.isSLOEnabled());
-            } else if (global.isSLOEnabled() != null) {
-                effective.enableSLO(global.isSLOEnabled());
-            }
-
-            if ((global.getSLOURLPostFix() != null) && (local.getSLOURLPostFix() != null)) {
-                effective.setSLOURLPostFix(local.getSLOURLPostFix());
-            } else if (global.getSLOURLPostFix() != null) {
-                effective.setSLOURLPostFix(global.getSLOURLPostFix());
-            }
-
-            if ((global.isAssertionEncryptionEnabled() != null) && (local.isAssertionEncryptionEnabled() != null)) {
-                effective.enableAssertionEncryption(local.isAssertionEncryptionEnabled());
-            } else if (global.isAssertionEncryptionEnabled() != null) {
-                effective.enableAssertionEncryption(global.isAssertionEncryptionEnabled());
-            }
-
-            if ((global.isAssertionSigningEnabled() != null) && (local.isAssertionSigningEnabled() != null)) {
-                effective.enableAssertionSigning(local.isAssertionSigningEnabled());
-            } else if (global.isAssertionSigningEnabled() != null) {
-                effective.enableAssertionSigning(global.isAssertionSigningEnabled());
-            }
-
-            if ((global.isRequestSigningEnabled() != null) && (local.isRequestSigningEnabled() != null)) {
-                effective.enableRequestSigning(local.isRequestSigningEnabled());
-            } else if (global.isRequestSigningEnabled() != null) {
-                effective.enableRequestSigning(global.isRequestSigningEnabled());
-            }
-
-            if ((global.isResponseSigningEnabled() != null) && (local.isResponseSigningEnabled() != null)) {
-                effective.enableResponseSigning(local.isResponseSigningEnabled());
-            } else if (global.isResponseSigningEnabled() != null) {
-                effective.enableResponseSigning(global.isResponseSigningEnabled());
-            }
-
-            if ((global.isForceAuthnEnabled() != null) && (local.isForceAuthnEnabled() != null)) {
-                effective.enableForceAuthn(local.isForceAuthnEnabled());
-            } else if (global.isForceAuthnEnabled() != null) {
-                effective.enableForceAuthn(global.isForceAuthnEnabled());
-            }
-
-            if ((global.isPassiveAuthnEnabled() != null) && (local.isPassiveAuthnEnabled() != null)) {
-                effective.enablePassiveAuthn(local.isPassiveAuthnEnabled());
-            } else if (global.isPassiveAuthnEnabled() != null) {
-                effective.enablePassiveAuthn(local.isPassiveAuthnEnabled());
-            }
         } else if (global != null) {
             effective = global;
+            effective.setIssuerId(null);
+            effective.setConsumerURL(null);
+            List<SSOConfiguration.Property> properties = prioritizeProperties(global.getProperties(), null);
+            if (properties.isEmpty()) {
+                effective.setProperties(null);
+            } else {
+                effective.setProperties(properties);
+            }
         }
         return effective;
     }
@@ -248,6 +162,8 @@ public class ListenerUtils {
             });
         } else if (global != null) {
             global.stream().forEach(effective::add);
+        } else if (local != null) {
+            local.stream().forEach(effective::add);
         }
         return effective;
     }
@@ -264,11 +180,9 @@ public class ListenerUtils {
             return Optional.empty();
         }
         if (list != null) {
-            return list.stream().
-                    filter(property -> property.getKey().equals(key)).findFirst();
+            return list.stream().filter(property -> property.getKey().equals(key)).findFirst();
         } else {
             return Optional.empty();
         }
     }
-
 }

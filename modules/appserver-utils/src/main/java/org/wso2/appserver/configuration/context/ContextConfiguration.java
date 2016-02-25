@@ -59,11 +59,11 @@ public class ContextConfiguration {
         @XmlElement
         private String environments;
 
-        public Boolean getIsParentFirst() {
+        public Boolean isParentFirst() {
             return isParentFirst;
         }
 
-        public void setIsParentFirst(Boolean isParentFirst) {
+        public void enableParentFirst(Boolean isParentFirst) {
             this.isParentFirst = isParentFirst;
         }
 
