@@ -25,6 +25,7 @@ import org.apache.catalina.loader.WebappLoader;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.webapp.loader.exceptions.ApplicationServerException;
+import org.wso2.appserver.webapp.loader.util.WebappClassLoaderContext2;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,11 +50,14 @@ public class AppServerWebappLoader extends WebappLoader {
     @Override
     protected void startInternal() throws LifecycleException {
 
-        WebappClassLoaderContext webappClassLoaderContext;
+        WebappClassLoaderContext2 webappClassLoaderContext;
         try {
-            ClassLoaderContextBuilder.initialize();
+//            ClassLoaderContextBuilder.initialize();
             // build the specific webapp context using configurations
-            webappClassLoaderContext = ClassLoaderContextBuilder.buildClassLoaderContext(this.getWebappFilePath());
+//            webappClassLoaderContext = ClassLoaderContextBuilder.buildClassLoaderContext(this.getWebappFilePath());
+
+            webappClassLoaderContext = new WebappClassLoaderContext2(getContext());
+
         } catch (ApplicationServerException ex) {
             log.error(ex.getMessage(), ex);
             throw new LifecycleException(ex.getMessage(), ex);

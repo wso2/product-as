@@ -16,11 +16,11 @@
     <xs:element name="wso2as-web">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="classloading" minOccurs="0" maxOccurs="1">
+                <xs:element name="class-loader" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="parent-first" type="xs:boolean"/>
-                            <xs:element name="environments" type="xs:string"/>
+                            <xs:element name="parent-first" type="xs:boolean" minOccurs="0" maxOccurs="1" default="false"/>
+                            <xs:element name="environments" type="xs:string" minOccurs="0" maxOccurs="1"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>

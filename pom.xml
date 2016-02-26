@@ -39,19 +39,19 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>docs</id>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>javadoc</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+                <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+                    <!--<executions>-->
+                        <!--<execution>-->
+                            <!--<id>docs</id>-->
+                            <!--<phase>compile</phase>-->
+                            <!--<goals>-->
+                                <!--<goal>javadoc</goal>-->
+                            <!--</goals>-->
+                        <!--</execution>-->
+                    <!--</executions>-->
+                <!--</plugin>-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
@@ -82,16 +82,16 @@
                     <target>${wso2.appserver.maven.compiler.target}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven.checkstyleplugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>${maven.findbugsplugin.version}</version>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
+                <!--<version>${maven.checkstyleplugin.version}</version>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>findbugs-maven-plugin</artifactId>-->
+                <!--<version>${maven.findbugsplugin.version}</version>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 
@@ -124,16 +124,20 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>appserver-utils</artifactId>
-                <version>${appserver.version}</version>
-            </dependency>
+
+            <!--WSO2 Application Server Sample Webapps-->
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>hello-world</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+            </dependency>
+
+            <!--WSO2 Application Server Modules-->
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>appserver-utils</artifactId>
+                <version>${appserver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>

@@ -88,6 +88,10 @@
         <!--WSO2 Application Server Modules-->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
             <artifactId>http-statistics-monitoring</artifactId>
         </dependency>
         <dependency>

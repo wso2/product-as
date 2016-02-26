@@ -12,10 +12,10 @@
  limitations under the License.
 -->
 <wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
-    <classloading>
-        <parent-first>true</parent-first>
+    <class-loader>
+        <parent-first>false</parent-first>
         <environments>CXF</environments>
-    </classloading>
+    </class-loader>
     <saml2-single-sign-on>
         <!--<skip-uris>
             <skip-uri>http://www.example.com</skip-uri>

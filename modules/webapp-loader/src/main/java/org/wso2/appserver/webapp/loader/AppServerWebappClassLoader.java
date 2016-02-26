@@ -22,6 +22,7 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.loader.WebappClassLoaderBase;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.wso2.appserver.webapp.loader.util.WebappClassLoaderContext2;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +43,7 @@ import java.util.List;
 public class AppServerWebappClassLoader extends WebappClassLoaderBase {
     private static final Log log = LogFactory.getLog(AppServerWebappClassLoader.class);
 
-    private WebappClassLoaderContext webappClassLoaderContext;
+    private WebappClassLoaderContext2 webappClassLoaderContext;
 
     List<URL> urls = new ArrayList<>();
 
@@ -50,7 +51,7 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         super(parent);
     }
 
-    public synchronized void setWebappClassLoaderContext(WebappClassLoaderContext classLoaderContext) {
+    public synchronized void setWebappClassLoaderContext(WebappClassLoaderContext2 classLoaderContext) {
         this.webappClassLoaderContext = classLoaderContext;
     }
 
@@ -217,28 +218,28 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         return null;
     }
 
-    public Enumeration<URL> getResources(String name) throws IOException {
-        @SuppressWarnings("unchecked")
-        Enumeration<URL>[] tmp = (Enumeration<URL>[]) new Enumeration<?>[2];
-        /*
-        The logic to access BootstrapClassPath is JDK vendor dependent hence
-        we can't call it from here. Ensure 'parentCL != null', to find resources
-        from BootstrapClassPath.
-         */
-        if (parent != null) {
-            synchronized (this) {
-                boolean delegatedRes = webappClassLoaderContext.isDelegatedResource(name);
-                boolean excludedRes = webappClassLoaderContext.isExcludedResources(name);
-                if (delegatedRes && !excludedRes) {
-                    tmp[0] = parent.getResources(name);
-                }
-            }
-
-        }
-        tmp[1] = findResources(name);
-
-        return new CompoundEnumeration<>(tmp);
-    }
+//    public Enumeration<URL> getResources(String name) throws IOException {
+//        @SuppressWarnings("unchecked")
+//        Enumeration<URL>[] tmp = (Enumeration<URL>[]) new Enumeration<?>[2];
+//        /*
+//        The logic to access BootstrapClassPath is JDK vendor dependent hence
+//        we can't call it from here. Ensure 'parentCL != null', to find resources
+//        from BootstrapClassPath.
+//         */
+//        if (parent != null) {
+//            synchronized (this) {
+//                boolean delegatedRes = webappClassLoaderContext.isDelegatedResource(name);
+//                boolean excludedRes = webappClassLoaderContext.isExcludedResources(name);
+//                if (delegatedRes && !excludedRes) {
+//                    tmp[0] = parent.getResources(name);
+//                }
+//            }
+//
+//        }
+//        tmp[1] = findResources(name);
+//
+//        return new CompoundEnumeration<>(tmp);
+//    }
 
 
     public ClassLoader copyWithoutTransformers() {
