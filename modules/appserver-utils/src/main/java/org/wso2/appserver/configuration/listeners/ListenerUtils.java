@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.configuration.listeners;
 
+import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
 
@@ -36,22 +37,22 @@ public class ListenerUtils {
      * @param localConfiguration  the locally overridden context level configurations
      * @return the merged context level configurations
      */
-    protected static ContextConfiguration merge(ContextConfiguration globalConfiguration,
+    public static ContextConfiguration merge(ContextConfiguration globalConfiguration,
             ContextConfiguration localConfiguration) {
         //  Prepare the effective final context configuration
         ContextConfiguration effective = new ContextConfiguration();
-        ContextConfiguration.ClassloadingConfiguration classloading = null;
+        ClassLoaderConfiguration classloading = null;
         SSOConfiguration ssoConfiguration = null;
         if ((globalConfiguration != null) && (localConfiguration != null)) {
-            classloading = mergeClassloading(globalConfiguration.getClassloadingConfiguration(),
-                    localConfiguration.getClassloadingConfiguration());
+            classloading = mergeClassloading(globalConfiguration.getClassLoaderConfiguration(),
+                    localConfiguration.getClassLoaderConfiguration());
             ssoConfiguration = mergeSSOConfigurations(globalConfiguration.getSingleSignOnConfiguration(),
                     localConfiguration.getSingleSignOnConfiguration());
         } else if (globalConfiguration != null) {
-            classloading = mergeClassloading(globalConfiguration.getClassloadingConfiguration(), null);
+            classloading = mergeClassloading(globalConfiguration.getClassLoaderConfiguration(), null);
             ssoConfiguration = mergeSSOConfigurations(globalConfiguration.getSingleSignOnConfiguration(), null);
         }
-        effective.setClassloadingConfiguration(classloading);
+        effective.setClassLoaderConfiguration(classloading);
         effective.setSingleSignOnConfiguration(ssoConfiguration);
         return effective;
     }
@@ -64,10 +65,10 @@ public class ListenerUtils {
      * @param local  the classloading configurations defined at context level
      * @return the merged effective group of classloading configurations
      */
-    private static ContextConfiguration.ClassloadingConfiguration mergeClassloading(
-            ContextConfiguration.ClassloadingConfiguration global,
-            ContextConfiguration.ClassloadingConfiguration local) {
-        ContextConfiguration.ClassloadingConfiguration effective = new ContextConfiguration.ClassloadingConfiguration();
+    private static ClassLoaderConfiguration mergeClassloading(
+            ClassLoaderConfiguration global,
+            ClassLoaderConfiguration local) {
+        ClassLoaderConfiguration effective = new ClassLoaderConfiguration();
 
         if ((global != null) && (local != null)) {
             effective.enableParentFirst(Optional.ofNullable(local.isParentFirst()).orElse(global.isParentFirst()));
