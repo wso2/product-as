@@ -22,12 +22,10 @@
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-
     <artifactId>samples</artifactId>
-    <name>WSO2 Application Server 6.0.0 - Samples</name>
+    <name>WSO2 Application Server - Samples</name>
 
     <modules>
         <module>hello-world</module>
     </modules>
-
 </project>
