@@ -16,6 +16,7 @@
 package org.wso2.appserver.utils;
 
 import org.wso2.appserver.exceptions.AppServerException;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 
 import java.io.InputStream;
@@ -28,6 +29,9 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -117,5 +121,40 @@ public class XMLUtils {
         } catch (JAXBException e) {
             throw new AppServerException("Error when unmarshalling the XML source", e);
         }
+    }
+
+    /**
+     * JAXP utility functions
+     */
+
+    /**
+     * Generates a {@code javax.xml.parsers.DocumentBuilder} instance based on the specified configurations.
+     *
+     * @param expandEntityReferences true if the parser is to expand entity reference nodes, else false
+     * @param namespaceAware         true if the parser provides support for XML namespaces, else false
+     * @param entityResolver         the {@link EntityResolver} to be used within the parser, if {@code entityResolver}
+     *                               is set to null default implementation is used
+     * @return the generated {@link DocumentBuilder} instance
+     * @throws AppServerException if an error occurs when generating the new DocumentBuilder
+     */
+    public static DocumentBuilder getDocumentBuilder(boolean expandEntityReferences, boolean namespaceAware,
+            Optional<EntityResolver> entityResolver) throws AppServerException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        if (!expandEntityReferences) {
+            documentBuilderFactory.setExpandEntityReferences(false);
+        }
+        if (namespaceAware) {
+            documentBuilderFactory.setNamespaceAware(true);
+        }
+
+        DocumentBuilder docBuilder;
+        try {
+            docBuilder = documentBuilderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new AppServerException("Error when generating the new DocumentBuilder", e);
+        }
+        entityResolver.ifPresent(docBuilder::setEntityResolver);
+
+        return docBuilder;
     }
 }

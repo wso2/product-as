@@ -241,10 +241,6 @@ public class SSOConfiguration {
         public List<String> getSkipURIs() {
             return skipURIs;
         }
-
-        public void setSkipURIs(List<String> skipURIs) {
-            this.skipURIs = skipURIs;
-        }
     }
 
     /**
