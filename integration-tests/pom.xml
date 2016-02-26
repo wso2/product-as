@@ -22,16 +22,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>integration-tests</artifactId>
-    <name>WSO2 Application Server 6.0.0 - Integration Tests</name>
-
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <name>WSO2 Application Server - Integration Tests</name>
 
     <build>
         <plugins>
@@ -107,4 +98,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
