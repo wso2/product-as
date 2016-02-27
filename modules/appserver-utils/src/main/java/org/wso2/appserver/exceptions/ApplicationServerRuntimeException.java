@@ -14,17 +14,19 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
-package org.wso2.appserver.webapp.loader.conf;
-
+package org.wso2.appserver.exceptions;
 
 /**
- * This class keeps some constants related to web app configuration.
+ * Thrown when the application server startup process has failed.
  */
-public class WebAppConfigurationConstants {
+public class ApplicationServerRuntimeException extends RuntimeException {
+    public ApplicationServerRuntimeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-    public static final String NAMESPACE = "http://wso2as-web-config/xsd";
-
+    public ApplicationServerRuntimeException(String message) {
+        super(message);
+    }
 }
