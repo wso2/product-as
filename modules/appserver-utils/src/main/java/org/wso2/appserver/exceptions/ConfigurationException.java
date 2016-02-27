@@ -19,9 +19,13 @@
 package org.wso2.appserver.exceptions;
 
 /**
- * Thrown when the class loader failed to build the configurations.
+ * Thrown when the application server failed to build the configurations.
+ *
+ * @since 6.0.0
  */
 public class ConfigurationException extends ApplicationServerException {
+    private static final long serialVersionUID = -3620848532234792303L;
+
     public ConfigurationException(String message, Throwable cause) {
         super(message, cause);
     }

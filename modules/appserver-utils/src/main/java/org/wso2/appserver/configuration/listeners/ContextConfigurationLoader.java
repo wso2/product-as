@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.configuration.listeners;
 
+
 import org.apache.catalina.Context;
 import org.apache.catalina.Host;
 import org.apache.catalina.Lifecycle;
@@ -23,7 +24,6 @@ import org.apache.catalina.LifecycleListener;
 import org.wso2.appserver.Constants;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
-import org.wso2.appserver.utils.PathUtils;
 import org.wso2.appserver.utils.XMLUtils;
 
 import java.io.File;
@@ -31,9 +31,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  */
 public class ContextConfigurationLoader implements LifecycleListener {
     private static final Logger logger = Logger.getLogger(ContextConfigurationLoader.class.getName());
-    private static final Map<Context, ContextConfiguration> contextToConfigurationMap = new HashMap<>();
+    private static final Map<Context, ContextConfiguration> contextToConfigurationMap = new ConcurrentHashMap<>();
 
     /**
      * Retrieves the {@code ContextConfiguration} matching the specified context.
@@ -52,7 +52,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
      * @param context the context for which the matching {@link ContextConfiguration} is to be returned
      * @return the {@code ContextConfiguration} matching the specified context
      */
-    public static Optional<ContextConfiguration> retrieveContextConfiguration(Context context) {
+    public static Optional<ContextConfiguration> getContextConfiguration(Context context) {
         ContextConfiguration configuration = contextToConfigurationMap.get(context);
         return Optional.ofNullable(configuration);
     }
@@ -73,7 +73,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
             if (source instanceof Context) {
                 Context context = (Context) source;
                 try {
-                    ContextConfiguration effectiveConfiguration = retrieveEffectiveConfiguration(context);
+                    ContextConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
                     contextToConfigurationMap.put(context, effectiveConfiguration);
                 } catch (ApplicationServerException e) {
                     logger.log(Level.SEVERE, "An error occurred when retrieving the effective " +
@@ -94,14 +94,16 @@ public class ContextConfigurationLoader implements LifecycleListener {
      * @return the final set of context level configurations for the specified {@link Context}
      * @throws ApplicationServerException if the specified {@link Context} is null
      */
-    private static ContextConfiguration retrieveEffectiveConfiguration(Context context) throws ApplicationServerException {
+    private static ContextConfiguration getEffectiveConfiguration(Context context) throws ApplicationServerException {
         if (context != null) {
             Path schemaPath = Paths.get(Constants.CATALINA_BASE_PATH, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
                     Constants.WSO2_CONFIGURATION_DIRECTORY, Constants.WEBAPP_DESCRIPTOR_SCHEMA);
-            Path defaultWebAppDescriptor = Paths.get(Constants.CATALINA_BASE_PATH, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                    Constants.WSO2_CONFIGURATION_DIRECTORY, Constants.WEBAPP_DESCRIPTOR);
-            ;
-            Path contextWebAppDescriptor = Paths.get(getWebappFilePath(context).toString(), Constants.WEBAPP_RESOURCE_FOLDER,
+
+            Path defaultWebAppDescriptor = Paths.get(Constants.CATALINA_BASE_PATH,
+                    Constants.TOMCAT_CONFIGURATION_DIRECTORY, Constants.WSO2_CONFIGURATION_DIRECTORY,
+                    Constants.WEBAPP_DESCRIPTOR);
+
+            Path contextWebAppDescriptor = Paths.get(getWebappFilePath(context), Constants.WEBAPP_RESOURCE_FOLDER,
                     Constants.WEBAPP_DESCRIPTOR);
 
             if (!Files.exists(defaultWebAppDescriptor)) {
@@ -124,7 +126,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
     }
 
     // generate the web app file path if exist
-    private static Path getWebappFilePath(Context context) throws ApplicationServerException {
+    private static String getWebappFilePath(Context context) throws ApplicationServerException {
         String webappFilePath = null;
 
         //Value of the following variable depends on various conditions. Sometimes you get just the webapp directory
@@ -138,8 +140,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
                 if (canonicalAppBase.isAbsolute()) {
                     canonicalAppBase = canonicalAppBase.getCanonicalFile();
                 } else {
-//todo refdactor pths api
-                    canonicalAppBase = new File(System.getProperty("catalina.home"), appBase).getCanonicalFile();
+                    canonicalAppBase = new File(Constants.CATALINA_BASE_PATH, appBase).getCanonicalFile();
                 }
 
                 File webappFile = new File(docBase);
@@ -154,6 +155,6 @@ public class ContextConfigurationLoader implements LifecycleListener {
             throw new ApplicationServerException("Error while generating webapp file path", ex);
         }
 
-        return Paths.get(webappFilePath);
+        return webappFilePath;
     }
 }

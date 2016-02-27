@@ -13,6 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+/**
+ * package information for server configuration namespace.
+ */
 @XmlSchema(
         namespace = Constants.SERVER_CONFIGURATION_NAMESPACE,
         elementFormDefault = XmlNsForm.QUALIFIED,
@@ -23,7 +27,6 @@
 package org.wso2.appserver.configuration.server;
 
 import org.wso2.appserver.Constants;
-
 import javax.xml.bind.annotation.XmlNs;
 import javax.xml.bind.annotation.XmlNsForm;
 import javax.xml.bind.annotation.XmlSchema;

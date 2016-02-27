@@ -15,14 +15,12 @@
  */
 package org.wso2.appserver.utils;
 
-import org.wso2.appserver.exceptions.ApplicationServerException;
+import org.wso2.appserver.exceptions.ConfigurationException;
 import org.xml.sax.SAXException;
 
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -30,14 +28,13 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+
 /**
  * A Java class which defines XML utilities used within the Application Server Utils.
  *
  * @since 6.0.0
  */
 public class XMLUtils {
-    private static final Logger logger = Logger.getLogger(XMLUtils.class.getName());
-
     /**
      * JAXB utility functions
      */
@@ -49,9 +46,9 @@ public class XMLUtils {
      *                   validated
      * @param classes    the list of classes to be recognized by the {@link JAXBContext}
      * @return an XML unmarshaller for the defined Java classes
-     * @throws ApplicationServerException if an error occurs when creating the XML unmarshaller
+     * @throws ConfigurationException if an error occurs when creating the XML unmarshaller
      */
-    public static Unmarshaller getXMLUnmarshaller(Path schemaPath, Class... classes) throws ApplicationServerException {
+    public static Unmarshaller getXMLUnmarshaller(Path schemaPath, Class... classes) throws ConfigurationException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(classes);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -61,17 +58,13 @@ public class XMLUtils {
                 Schema xmlSchema = schemaFactory.newSchema(schemaPath.toFile());
                 unmarshaller.setSchema(xmlSchema);
             } else {
-                // TODO: 2/26/16 thew exce[tipn
+                throw new ConfigurationException("Configuration schema not found: " + schemaPath.toString());
             }
             return unmarshaller;
 
-        } catch (JAXBException e) {
-            throw new ApplicationServerException("Error when creating the XML unmarshaller", e);
-        } catch (SAXException e) {
-            logger.log(Level.WARNING, "An error has occurred during parsing", e);
-            throw new ApplicationServerException("Error when creating the XML unmarshaller", e);
+        } catch (JAXBException | SAXException ex) {
+            throw new ConfigurationException("Error when creating the XML unmarshaller", ex);
         }
-        //// TODO: 2/26/16 edit exception message
     }
 
     /**
@@ -83,16 +76,17 @@ public class XMLUtils {
      * @param bindingClass the class to be recognized by the {@link JAXBContext}
      * @param <T>          the type of the class to be bound
      * @return bound object (Type T) of XML
-     * @throws ApplicationServerException if an error occurred when creating the unmarshaller or unmarshalling the XML source
+     * @throws ConfigurationException if an error occurred when creating the unmarshaller or
+     *                                unmarshalling the XML source
      */
     public static <T> T getUnmarshalledObject(Path source, Path schema, Class<T> bindingClass)
-            throws ApplicationServerException {
+            throws ConfigurationException {
         try {
             Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
             Object unmarshalled = unmarshaller.unmarshal(source.toFile());
             return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
-            throw new ApplicationServerException("Error when unmarshalling the XML source", e);
+            throw new ConfigurationException("Error when unmarshalling the XML configuration", e);
         }
     }
 
@@ -105,16 +99,17 @@ public class XMLUtils {
      * @param bindingClass the class to be recognized by the {@link JAXBContext}
      * @param <T>          the type of the class to be bound
      * @return bound object (Type T) of XML
-     * @throws ApplicationServerException if an error occurred when creating the unmarshaller or unmarshalling the XML source
+     * @throws ConfigurationException if an error occurred when creating the unmarshaller or
+     *                                unmarshalling the XML source
      */
     public static <T> T getUnmarshalledObject(InputStream inputStream, Path schema, Class<T> bindingClass)
-            throws ApplicationServerException {
+            throws ConfigurationException {
         try {
             Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
             Object unmarshalled = unmarshaller.unmarshal(inputStream);
             return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
-            throw new ApplicationServerException("Error when unmarshalling the XML source", e);
+            throw new ConfigurationException("Error when unmarshalling the XML configuration.", e);
         }
     }
 }

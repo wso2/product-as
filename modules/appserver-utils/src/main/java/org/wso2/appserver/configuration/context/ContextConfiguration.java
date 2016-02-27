@@ -15,13 +15,15 @@
  */
 package org.wso2.appserver.configuration.context;
 
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
 
 /**
  * A Java class which models a holder for context level WSO2 specific configurations.
@@ -57,18 +59,16 @@ public class ContextConfiguration {
      * Merges the globally defined context level configurations and context level configurations overridden at
      * context level.
      *
-     * @param globalConfiguration the globally defined context level configurations
-     * @param localConfiguration  the locally overridden context level configurations
-     * @return the merged context level configurations
+     * @param newContextConfiguration the locally overridden context level configurations
+     * @return true if the configurations are merged, otherwise false.
      */
-    public boolean merge(ContextConfiguration localConfiguration) {
-        //  Prepare the effective final context configuration
-        ClassLoaderConfiguration classloading = null;
-        SSOConfiguration ssoConfiguration = null;
-        if (localConfiguration != null) {
-            mergeClassLoaderConfiguration(localConfiguration.getClassLoaderConfiguration());
+    public boolean merge(ContextConfiguration newContextConfiguration) {
+
+        SSOConfiguration ssoConfiguration;
+        if (newContextConfiguration != null) {
+            mergeClassLoaderConfiguration(newContextConfiguration.getClassLoaderConfiguration());
             ssoConfiguration = mergeSSOConfigurations(this.getSingleSignOnConfiguration(),
-                    localConfiguration.getSingleSignOnConfiguration());
+                    newContextConfiguration.getSingleSignOnConfiguration());
             this.setSingleSignOnConfiguration(ssoConfiguration);
             return true;
         }
@@ -79,19 +79,17 @@ public class ContextConfiguration {
      * Merges the context level classloading configurations defined globally and overridden at context level
      * (if any).
      *
-     * @param global the globally defined classloading configurations
-     * @param local  the classloading configurations defined at context level
-     * @return the merged effective group of classloading configurations
+     * @param newContextConfiguration the classloading configurations defined at context level
      */
-    private void mergeClassLoaderConfiguration(ClassLoaderConfiguration local) {
-        ClassLoaderConfiguration effective = this.getClassLoaderConfiguration();
+    private void mergeClassLoaderConfiguration(ClassLoaderConfiguration newContextConfiguration) {
+        ClassLoaderConfiguration currentClassLoaderConfiguration = this.getClassLoaderConfiguration();
 
-        if (local != null) {
-            if (local.isParentFirst() != null) {
-                effective.enableParentFirst(local.isParentFirst());
+        if (newContextConfiguration != null) {
+            if (newContextConfiguration.isParentFirst() != null) {
+                currentClassLoaderConfiguration.enableParentFirst(newContextConfiguration.isParentFirst());
             }
-            if (local.getEnvironments() != null) {
-                effective.setEnvironments(local.getEnvironments());
+            if (newContextConfiguration.getEnvironments() != null) {
+                currentClassLoaderConfiguration.setEnvironments(newContextConfiguration.getEnvironments());
             }
         }
     }

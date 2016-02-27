@@ -17,7 +17,6 @@ package org.wso2.appserver;
 
 import org.apache.catalina.Globals;
 
-import java.nio.file.Paths;
 
 /**
  * A Java class which defines the constants associated with WSO2 Application Server appserver-utils module.
@@ -31,7 +30,7 @@ public final class Constants {
     public static final String WEBAPP_DESCRIPTOR_NAMESPACE = "http://wso2.org/2016/wso2as-web";
     //  Environmental variable property name constant
     public static final String CATALINA_BASE_PATH = System.getProperty(Globals.CATALINA_BASE_PROP);
-    ;
+
     //  File path related constants
     public static final String SERVER_DESCRIPTOR = "wso2as.xml";
     public static final String SERVER_DESCRIPTOR_SCHEMA = "wso2as.xsd";

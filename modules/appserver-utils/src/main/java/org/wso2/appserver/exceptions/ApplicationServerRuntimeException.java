@@ -20,8 +20,12 @@ package org.wso2.appserver.exceptions;
 
 /**
  * Thrown when the application server startup process has failed.
+ *
+ * @since 6.0.0
  */
 public class ApplicationServerRuntimeException extends RuntimeException {
+    private static final long serialVersionUID = -4784960949688248802L;
+
     public ApplicationServerRuntimeException(String message, Throwable cause) {
         super(message, cause);
     }
