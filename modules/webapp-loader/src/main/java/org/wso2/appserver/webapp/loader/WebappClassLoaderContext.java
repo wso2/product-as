@@ -20,66 +20,116 @@
 package org.wso2.appserver.webapp.loader;
 
 import org.apache.catalina.Context;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
-import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
-import org.wso2.appserver.exceptions.ApplicationServerException;
-import org.wso2.appserver.webapp.loader.util.Utils;
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
+import org.wso2.appserver.webapp.loader.exceptions.ClasspathNotFoundException;
+import org.wso2.appserver.webapp.loader.exceptions.UndefinedEnvironmentException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Build and stores the class loading context of a webapp which defines in the classloading configurations.
+ *
+ * @since 6.0.0
+ *
+ */
 public class WebappClassLoaderContext {
 
     private static Map<String, List<String>> definedEnvironments = new ConcurrentHashMap<>();
+    private static final Log log = LogFactory.getLog(AppServerWebappLoader.class);
 
     private boolean isParentFirst = false;
-    private Map<String, List<String>> environments = new ConcurrentHashMap<>();
+    private Map<String, List<String>> selectedEnvironments = new ConcurrentHashMap<>();
 
     static {
-        List<ClassLoaderEnvironments.Environment> defEnvs = ServerConfigurationLoader.getServerConfiguration()
+        List<ClassLoaderEnvironments.Environment> environments = ServerConfigurationLoader.getServerConfiguration()
                 .getClassLoaderEnvironments().getEnvironments().getEnvironments();
-        for(ClassLoaderEnvironments.Environment defEnv : defEnvs){
-            if(!definedEnvironments.containsKey(defEnv.getName())){
+
+        environments.forEach((environment) -> {
+            if (!definedEnvironments.containsKey(environment.getName())) {
                 List<String> repositories = new ArrayList<>();
-                repositories.addAll(Utils.generateClasspath(defEnv.getClasspath()));
-                definedEnvironments.put(defEnv.getName(),repositories);
+                try {
+                    repositories.addAll(generateClasspath(environment.getClasspath()));
+                    definedEnvironments.put(environment.getName(), repositories);
+                } catch (ClasspathNotFoundException ex) {
+                    String message = "Environment configuration of: " + environment.getName() + " is wrong.";
+                    log.error(message, ex);
+                    throw new ApplicationServerRuntimeException(message, ex);
+                }
+            } else {
+                log.warn("Duplicated environment: " + environment.getName()
+                        + ", skipping classpath: " + environment.getClasspath());
             }
-        }
+        });
     }
 
-    public WebappClassLoaderContext(Context context) throws ApplicationServerException{
+    public WebappClassLoaderContext(Context context) {
 
+        ContextConfigurationLoader.getContextConfiguration(context)
+                .ifPresent(configuration -> {
+                    ClassLoaderConfiguration classLoaderConfiguration = configuration.getClassLoaderConfiguration();
+                    this.isParentFirst = classLoaderConfiguration.isParentFirst();
+                    List<String> environmentNames = Arrays
+                            .asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
 
-        Optional<ContextConfiguration> cc = ContextConfigurationLoader.retrieveContextConfiguration(context);
-        ClassLoaderConfiguration clf = cc.get().getClassLoaderConfiguration();
-        this.isParentFirst = clf.isParentFirst();
+                    environmentNames.forEach(environmentName -> {
+                        if (definedEnvironments.containsKey(environmentName)) {
+                            selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
+                        } else {
+                            String message = "Undefined environment: " + environmentName + " in " + context.getPath();
+                            log.error(message);
+                            throw new UndefinedEnvironmentException(message);
+                        }
+                    });
 
-        List<String> environmentNames = Arrays.asList(clf.getEnvironments().split("\\s*,\\s*"));
-        for(String environmentName : environmentNames){
-            if(definedEnvironments.containsKey(environmentName)){
-                environments.put(environmentName,definedEnvironments.get(environmentName));
-            }
-        }
+                });
     }
 
 
     public List<String> getProvidedRepositories() {
-        List<String> repositroies = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : environments.entrySet()) {
-            repositroies.addAll(entry.getValue());
+        List<String> repositories = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : selectedEnvironments.entrySet()) {
+            repositories.addAll(entry.getValue());
         }
-        return repositroies;
+        return repositories;
     }
 
     public boolean isParentFirst() {
         return isParentFirst;
     }
+
+    private static List<String> generateClasspath(String classPath) throws ClasspathNotFoundException {
+
+        List<String> urlStr = new ArrayList<>();
+        String realClassPath = StrSubstitutor.replaceSystemProperties(classPath);
+        File classPathUrl = new File(realClassPath);
+
+        if (!classPathUrl.exists()) {
+            throw new ClasspathNotFoundException("The classpath: " + realClassPath + " does not exist.");
+        }
+
+        if (classPathUrl.isFile()) {
+            urlStr.add(classPathUrl.toURI().toString());
+            return urlStr;
+        }
+
+        FileUtils.listFiles(classPathUrl, new String[]{"jar"}, false)
+                .forEach((file) -> urlStr.add(file.toURI().toString()));
+
+        return urlStr;
+    }
+
 
 }

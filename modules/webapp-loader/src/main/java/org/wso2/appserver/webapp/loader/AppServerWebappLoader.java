@@ -18,31 +18,22 @@
  */
 package org.wso2.appserver.webapp.loader;
 
-import org.apache.catalina.Context;
-import org.apache.catalina.Host;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.loader.WebappLoader;
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
-import org.wso2.appserver.webapp.loader.exceptions.ApplicationServerException;
-import org.wso2.appserver.webapp.loader.util.WebappClassLoaderContext2;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
- * Customized WebappLoader for Application Server.
+ * Customized {@link WebappLoader} for Application Server.
  *
  * @since 6.0.0
  */
 public class AppServerWebappLoader extends WebappLoader {
 
-    private static final Log log = LogFactory.getLog(AppServerWebappLoader.class);
-
+    @SuppressWarnings("unused")
     public AppServerWebappLoader() {
         super();
     }
 
+    @SuppressWarnings("unused")
     public AppServerWebappLoader(ClassLoader parent) {
         super(parent);
     }
@@ -50,65 +41,12 @@ public class AppServerWebappLoader extends WebappLoader {
     @Override
     protected void startInternal() throws LifecycleException {
 
-        WebappClassLoaderContext2 webappClassLoaderContext;
-        try {
-//            ClassLoaderContextBuilder.initialize();
-            // build the specific webapp context using configurations
-//            webappClassLoaderContext = ClassLoaderContextBuilder.buildClassLoaderContext(this.getWebappFilePath());
-
-            webappClassLoaderContext = new WebappClassLoaderContext2(getContext());
-
-        } catch (ApplicationServerException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new LifecycleException(ex.getMessage(), ex);
-        }
-
+        // build the class loading context for the webapp
+        WebappClassLoaderContext webappClassLoaderContext = new WebappClassLoaderContext(getContext());
         super.startInternal();
+        ((AppServerWebappClassLoader) getClassLoader()).setWebappClassLoaderContext(webappClassLoaderContext);
 
-        AppServerWebappClassLoader loader = ((AppServerWebappClassLoader) getClassLoader());
-        //Adding provided classpath entries, if any
-        for (String repository : webappClassLoaderContext.getProvidedRepositories()) {
-            loader.addRepository(repository);
-        }
 
-        //Adding the WebappClassLoaderContext to the WebappClassloader
-        loader.setWebappClassLoaderContext(webappClassLoaderContext);
-
-    }
-
-    // generate the web app file path if exist
-    private String getWebappFilePath() throws ApplicationServerException {
-        String webappFilePath = null;
-        Context context = this.getContext();
-
-        //Value of the following variable depends on various conditions. Sometimes you get just the webapp directory
-        //name. Sometime you get absolute path the webapp directory or war file.
-        try {
-            if (context != null) {
-                String docBase = context.getDocBase();
-                Host host = (Host) context.getParent();
-                String appBase = host.getAppBase();
-                File canonicalAppBase = new File(appBase);
-                if (canonicalAppBase.isAbsolute()) {
-                    canonicalAppBase = canonicalAppBase.getCanonicalFile();
-                } else {
-
-                    canonicalAppBase = new File(System.getProperty("catalina.home"), appBase).getCanonicalFile();
-                }
-
-                File webappFile = new File(docBase);
-                if (webappFile.isAbsolute()) {
-                    webappFilePath = webappFile.getCanonicalPath();
-                } else {
-                    webappFilePath = (new File(canonicalAppBase, docBase)).getPath();
-                }
-            }
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new ApplicationServerException("Error while generating webapp file path", ex);
-        }
-
-        return webappFilePath;
     }
 
 }

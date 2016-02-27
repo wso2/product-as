@@ -19,10 +19,16 @@
 
 package org.wso2.appserver.webapp.loader.exceptions;
 
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
+
 /**
- * Thrown when the undefined environment was found .
+ * Thrown when the undefined environment was found in the configuration.
+ *
+ * @since 6.0.0
  */
-public class UndefinedEnvironmentException extends ApplicationServerException {
+public class UndefinedEnvironmentException extends ApplicationServerRuntimeException {
+
+    private static final long serialVersionUID = -8990486000212420137L;
 
     public UndefinedEnvironmentException(String message, Throwable cause) {
         super(message, cause);
