@@ -15,8 +15,12 @@
  */
 package org.wso2.appserver.webapp.security.sso.utils;
 
+import org.wso2.appserver.configuration.context.SSOConfiguration;
+
 import java.security.SecureRandom;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -73,5 +77,21 @@ public class SSOUtils {
      */
     public static boolean isCollectionEmpty(Collection collection) {
         return ((collection == null) || (collection.isEmpty()));
+    }
+
+    /**
+     * Returns a {@code Property} which matches the {@code key} specified.
+     *
+     * @param properties the list of properties
+     * @param key        the {@link String} representation of the key
+     * @return the optional {@link org.wso2.appserver.configuration.context.SSOConfiguration.Property}
+     */
+    public static Optional<SSOConfiguration.Property> getContextPropertyValue(
+            List<SSOConfiguration.Property> properties, String key) {
+        if (properties != null) {
+            return properties.stream().filter(property -> property.getValue().equals(key)).findFirst();
+        } else {
+            return Optional.empty();
+        }
     }
 }

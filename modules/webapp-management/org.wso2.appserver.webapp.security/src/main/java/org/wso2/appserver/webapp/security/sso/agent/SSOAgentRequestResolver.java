@@ -37,15 +37,15 @@ public class SSOAgentRequestResolver {
     }
 
     /**
-     * Returns true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) authentication
-     * request(s), else false.
+     * Returns true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) a Authentication
+     * Request, else false.
      *
-     * @return true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) authentication
-     * request(s), else false
+     * @return true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) a Authentication
+     * Request, else false
      */
     public boolean isSAML2SSOURL() {
         return (ssoAgentConfiguration.isSAML2SSOLoginEnabled()) && (request.getRequestURI().
-                endsWith(ssoAgentConfiguration.getRequestURLPostFix()));
+                endsWith(ssoAgentConfiguration.getRequestURLPostfix()));
     }
 
     /**

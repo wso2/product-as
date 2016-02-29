@@ -21,8 +21,6 @@ package org.wso2.appserver.webapp.security.sso.utils;
  * @since 6.0.0
  */
 public class SSOConstants {
-    public static final String SESSION_BEAN_NAME = "org.wso2.appserver.webapp.security.LoggedInSession";
-
     /**
      * Prevents instantiating the SSOConstants class.
      */
@@ -45,7 +43,7 @@ public class SSOConstants {
     }
 
     /**
-     * This class defines the single-sign-on (SSO) agent configuration property name constants.
+     * This class defines the single-sign-on (SSO) agent configuration property default values.
      */
     public static class SSOAgentConfiguration {
         public static final String APPLICATION_SERVER_URL_DEFAULT = "https://localhost:8443";
@@ -55,7 +53,6 @@ public class SSOConstants {
         public static final String IDP_ENTITY_ID_DEFAULT = "localhost";
         public static final String SLO_URL_POSTFIX_DEFAULT = "logout";
         public static final String CONSUMER_URL_POSTFIX_DEFAULT = "/acs";
-        public static final String ADDITIONAL_REQUEST_PARAMETERS_DEFAULT = "&forceAuth=true";
 
         /**
          * Prevents instantiating the SSOAgentConfiguration nested class.
@@ -73,6 +70,7 @@ public class SSOConstants {
         public static final String REQUEST_PARAM_MAP = "REQUEST_PARAM_MAP";
 
         public static final String REDIRECT_PATH_AFTER_SLO = "redirectPathAfterSLO";
+        public static final String SESSION_BEAN = "org.wso2.appserver.webapp.security.sso.bean.LoggedInSession";
 
         /**
          * Prevents instantiating the SAMLSSOValveConstants nested class.

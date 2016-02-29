@@ -51,7 +51,7 @@ public class SSOAgentSessionManager {
      * @return set of sessions associated with the session index
      */
     public static Set<HttpSession> invalidateAllSessions(HttpSession session) {
-        LoggedInSession sessionBean = (LoggedInSession) session.getAttribute(SSOConstants.SESSION_BEAN_NAME);
+        LoggedInSession sessionBean = (LoggedInSession) session.getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN);
         Set<HttpSession> sessions = new HashSet<>();
         if ((sessionBean != null) && (sessionBean.getSAML2SSO() != null)) {
             String sessionIndex = sessionBean.getSAML2SSO().getSessionIndex();
@@ -82,7 +82,7 @@ public class SSOAgentSessionManager {
      * @param session the authenticated session to be added to the session map
      */
     public static void addAuthenticatedSession(HttpSession session) {
-        String sessionIndex = ((LoggedInSession) session.getAttribute(SSOConstants.SESSION_BEAN_NAME)).getSAML2SSO().
+        String sessionIndex = ((LoggedInSession) session.getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN)).getSAML2SSO().
                 getSessionIndex();
         if (ssoSessionsMap.get(sessionIndex) != null) {
             ssoSessionsMap.get(sessionIndex).add(session);

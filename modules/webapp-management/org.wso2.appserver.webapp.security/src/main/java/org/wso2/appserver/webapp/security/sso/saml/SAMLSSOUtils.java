@@ -58,11 +58,13 @@ import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
+import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
 import org.wso2.appserver.exceptions.AppServerException;
 import org.wso2.appserver.utils.XMLUtils;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.sso.saml.signature.X509CredentialImplementation;
+import org.wso2.appserver.webapp.security.sso.utils.SSOConstants;
 import org.wso2.appserver.webapp.security.sso.utils.SSOException;
 import org.wso2.appserver.webapp.security.sso.utils.XMLEntityResolver;
 import org.xml.sax.SAXException;
@@ -159,6 +161,27 @@ public class SAMLSSOUtils {
         } else {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Sets default values to configurations if not set in configuration files.
+     * <p>
+     * These configurations are not defined within the
+     * {@link org.wso2.appserver.webapp.security.sso.agent.SSOAgentConfiguration}.
+     *
+     * @param configuration the context level set of configurations
+     */
+    protected static void setDefaultConfigurations(ContextConfiguration configuration) {
+        Optional.ofNullable(configuration).ifPresent(contextConfiguration -> {
+            SSOConfiguration ssoConfiguration = contextConfiguration.getSingleSignOnConfiguration();
+
+            ssoConfiguration.setApplicationServerURL(Optional.ofNullable(ssoConfiguration.getApplicationServerURL()).
+                    orElse(SSOConstants.SSOAgentConfiguration.APPLICATION_SERVER_URL_DEFAULT));
+            ssoConfiguration.enableHandlingConsumerURLAfterSLO(
+                    Optional.ofNullable(ssoConfiguration.handleConsumerURLAfterSLO()).orElse(false));
+            ssoConfiguration.setConsumerURLPostFix(Optional.ofNullable(ssoConfiguration.getConsumerURLPostFix()).
+                    orElse(SSOConstants.SSOAgentConfiguration.CONSUMER_URL_POSTFIX_DEFAULT));
+        });
     }
 
     /**

@@ -43,7 +43,7 @@ public class SSOAgentConfiguration {
     private static final Logger logger = Logger.getLogger(SSOAgentConfiguration.class.getName());
 
     private Boolean isSAMLSSOLoginEnabled;
-    private String requestURLPostFix;
+    private String requestURLPostfix;
     private Set<String> skipURIs;
     private Map<String, String[]> queryParameters;
     private SAML2 saml2;
@@ -52,8 +52,8 @@ public class SSOAgentConfiguration {
         return isSAMLSSOLoginEnabled;
     }
 
-    public String getRequestURLPostFix() {
-        return requestURLPostFix;
+    public String getRequestURLPostfix() {
+        return requestURLPostfix;
     }
 
     public Set<String> getSkipURIs() {
@@ -110,7 +110,7 @@ public class SSOAgentConfiguration {
             }
 
             isSAMLSSOLoginEnabled = Optional.ofNullable(contextSSO.isSSOEnabled()).orElse(false);
-            requestURLPostFix = Optional.ofNullable(contextSSO.getRequestURLPostFix()).
+            requestURLPostfix = Optional.ofNullable(contextSSO.getRequestURLPostFix()).
                     orElse(SSOConstants.SSOAgentConfiguration.REQUEST_URL_POSTFIX_DEFAULT);
             saml2.httpBinding = Optional.ofNullable(contextSSO.getHttpBinding()).
                     orElse(SSOConstants.SSOAgentConfiguration.BINDING_TYPE_DEFAULT);
@@ -118,7 +118,7 @@ public class SSOAgentConfiguration {
             saml2.acsURL = contextSSO.getConsumerURL();
             saml2.attributeConsumingServiceIndex = contextSSO.getAttributeConsumingServiceIndex();
             saml2.isSLOEnabled = Optional.ofNullable(contextSSO.isSLOEnabled()).orElse(false);
-            saml2.sloURLPostFix = Optional.ofNullable(contextSSO.getSLOURLPostFix()).
+            saml2.sloURLPostfix = Optional.ofNullable(contextSSO.getSLOURLPostFix()).
                     orElse(SSOConstants.SSOAgentConfiguration.SLO_URL_POSTFIX_DEFAULT);
             saml2.isResponseSigned = Optional.ofNullable(contextSSO.isResponseSigningEnabled()).orElse(false);
             saml2.isRequestSigned = Optional.ofNullable(contextSSO.isRequestSigningEnabled()).orElse(false);
@@ -144,8 +144,6 @@ public class SSOAgentConfiguration {
                 }
             }
         });
-
-        // TODO: html payload not considered
     }
 
     /**
@@ -157,7 +155,7 @@ public class SSOAgentConfiguration {
      */
     public void verifyConfig() throws SSOException {
         if (isSAMLSSOLoginEnabled) {
-            if (requestURLPostFix == null) {
+            if (requestURLPostfix == null) {
                 throw new SSOException("SAML Request URL post-fix not configured");
             }
 
@@ -182,7 +180,7 @@ public class SSOAgentConfiguration {
                         "No attributes of the Subject will be requested");
             }
 
-            if (saml2.isSLOEnabled && saml2.sloURLPostFix == null) {
+            if (saml2.isSLOEnabled && saml2.sloURLPostfix == null) {
                 throw new SSOException("Single Logout enabled, but SLO URL not configured");
             }
 
@@ -214,7 +212,7 @@ public class SSOAgentConfiguration {
         private String idPEntityId;
         private String idPURL;
         private Boolean isSLOEnabled;
-        private String sloURLPostFix;
+        private String sloURLPostfix;
         private String attributeConsumingServiceIndex;
         private SSOX509Credential ssoX509Credential;
         private Boolean isAssertionSigned;
@@ -225,17 +223,6 @@ public class SSOAgentConfiguration {
         private Boolean isForceAuthenticationEnabled;
         private String relayState;
         private String signatureValidatorImplClass;
-        /**
-         * The html page that will auto-submit the SAML2 to the IdP.
-         * This should be in valid HTML syntax, with following section within the
-         * auto-submit form.
-         * "&lt;!--$saml_params--&gt;"
-         * This section will be replaced by the SAML parameters.
-         * <p>
-         * If the parameter value is empty, null or doesn't have the above
-         * section, the default page will be shown
-         */
-        private String postBindingRequestHTMLPayload;
 
         public String getHttpBinding() {
             return httpBinding;
@@ -270,7 +257,7 @@ public class SSOAgentConfiguration {
         }
 
         public String getSLOURL() {
-            return sloURLPostFix;
+            return sloURLPostfix;
         }
 
         public String getAttributeConsumingServiceIndex() {
@@ -319,10 +306,6 @@ public class SSOAgentConfiguration {
 
         public void setRelayState(String relayState) {
             this.relayState = relayState;
-        }
-
-        public String getPostBindingRequestHTMLPayload() {
-            return postBindingRequestHTMLPayload;
         }
 
         public String getSignatureValidatorImplClass() {

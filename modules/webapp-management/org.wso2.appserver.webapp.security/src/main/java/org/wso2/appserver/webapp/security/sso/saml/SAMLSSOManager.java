@@ -15,7 +15,6 @@
  */
 package org.wso2.appserver.webapp.security.sso.saml;
 
-import org.apache.catalina.connector.Request;
 import org.apache.xml.security.signature.XMLSignature;
 import org.joda.time.DateTime;
 import org.opensaml.common.SAMLVersion;
@@ -138,7 +137,7 @@ public class SAMLSSOManager {
      */
     protected String handleLogoutRequestForPOSTBinding(HttpServletRequest request) throws SSOException {
         LoggedInSession session = (LoggedInSession) request.getSession(false).
-                getAttribute(SSOConstants.SESSION_BEAN_NAME);
+                getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
             requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
@@ -191,27 +190,21 @@ public class SAMLSSOManager {
                         forEach(parameter -> htmlParameters.append("<input type='hidden' name='").
                                 append(filteredEntry.getKey()).append("' value='").append(parameter).append("'>\n")));
 
-        String htmlPayload = ssoAgentConfiguration.getSAML2().getPostBindingRequestHTMLPayload();
-        if ((htmlPayload == null) || (!htmlPayload.contains("<!--$saml_params-->"))) {
-            htmlPayload = "<html>\n" +
-                    "<body>\n" +
-                    "<p>You are now redirected back to " + ssoAgentConfiguration.getSAML2().getIdPURL() + " \n" +
-                    "If the redirection fails, please click the post button.</p>\n" +
-                    "<form method='post' action='" + ssoAgentConfiguration.getSAML2().getIdPURL() + "'>\n" +
-                    "<p>\n" +
-                    htmlParameters.toString() +
-                    "<button type='submit'>POST</button>\n" +
-                    "</p>\n" +
-                    "</form>\n" +
-                    "<script type='text/javascript'>\n" +
-                    "document.forms[0].submit();\n" +
-                    "</script>\n" +
-                    "</body>\n" +
-                    "</html>";
-        } else {
-            htmlPayload = htmlPayload.replace("<!--$saml_params-->", htmlParameters.toString());
-        }
-        return htmlPayload;
+        return "<html>\n" +
+                "<body>\n" +
+                "<p>You are now redirected back to " + ssoAgentConfiguration.getSAML2().getIdPURL() + " \n" +
+                "If the redirection fails, please click the post button.</p>\n" +
+                "<form method='post' action='" + ssoAgentConfiguration.getSAML2().getIdPURL() + "'>\n" +
+                "<p>\n" +
+                htmlParameters.toString() +
+                "<button type='submit'>POST</button>\n" +
+                "</p>\n" +
+                "</form>\n" +
+                "<script type='text/javascript'>\n" +
+                "document.forms[0].submit();\n" +
+                "</script>\n" +
+                "</body>\n" +
+                "</html>";
     }
 
     /**
@@ -235,7 +228,7 @@ public class SAMLSSOManager {
      */
     protected String handleLogoutRequestForRedirectBinding(HttpServletRequest request) throws SSOException {
         LoggedInSession session = (LoggedInSession) request.getSession(false).
-                getAttribute(SSOConstants.SESSION_BEAN_NAME);
+                getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
             requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
@@ -427,43 +420,6 @@ public class SAMLSSOManager {
     }
 
     /**
-     * Returns the redirect path after single-logout (SLO), read from the {@code request}.
-     * <p>
-     * If the redirect path is read from session then it is removed. Priority order of reading the redirect path is from
-     * the Session, Context and Config, respectively.
-     *
-     * @param request            the HTTP servlet request
-     * @param configRedirectPath the redirect path specified under redirectPathAfterSLO property of
-     *                           single-sign-on (SSO) configurations
-     * @return redirect path relative to the current application path
-     */
-    protected String readAndForgetRedirectPathAfterSLO(Request request, String configRedirectPath) {
-        String redirectPath = null;
-
-        if (request.getSession(false) != null) {
-            redirectPath = (String) request.getSession(false).
-                    getAttribute(SSOConstants.SAMLSSOValveConstants.REDIRECT_PATH_AFTER_SLO);
-            request.getSession(false).removeAttribute(SSOConstants.SAMLSSOValveConstants.REDIRECT_PATH_AFTER_SLO);
-        }
-        if (redirectPath == null) {
-            redirectPath = request.getContext().
-                    findParameter(SSOConstants.SAMLSSOValveConstants.REDIRECT_PATH_AFTER_SLO);
-        }
-        if (redirectPath == null) {
-            redirectPath = configRedirectPath;
-        }
-        if ((redirectPath != null) && (!redirectPath.isEmpty())) {
-            redirectPath = request.getContext().getPath().concat(redirectPath);
-        } else {
-            redirectPath = request.getContext().getPath();
-        }
-
-        logger.log(Level.FINE, "Redirect path = " + redirectPath);
-
-        return redirectPath;
-    }
-
-    /**
      * Processes a SAML 2.0 response depending on its type, either a SAML 2.0 Response for a single-sign-on (SSO)
      * SAML 2.0 Request by the client application or a SAML 2.0 Response for a single-logout (SLO) SAML 2.0 Request
      * from a service provider.
@@ -560,7 +516,7 @@ public class SAMLSSOManager {
 
         //  Sets the subject in the session bean
         session.getSAML2SSO().setSubjectId(subject);
-        request.getSession().setAttribute(SSOConstants.SESSION_BEAN_NAME, session);
+        request.getSession().setAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN, session);
 
         //  Validates the audience restriction
         validateAudienceRestriction(assertion);
@@ -571,7 +527,8 @@ public class SAMLSSOManager {
         //  Marshalling SAML2 assertion after signature validation due to a weird issue in OpenSAML
         session.getSAML2SSO().setAssertionString(SAMLSSOUtils.marshall(assertion));
 
-        ((LoggedInSession) request.getSession().getAttribute(SSOConstants.SESSION_BEAN_NAME)).getSAML2SSO().
+        ((LoggedInSession) request.getSession().getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN))
+                .getSAML2SSO().
                 setSubjectAttributes(SAMLSSOUtils.getAssertionStatements(assertion));
 
         //  For removing the session when the single-logout request made by the service provider itself
@@ -581,11 +538,12 @@ public class SAMLSSOManager {
                 throw new SSOException("Single Logout is enabled but IdP Session ID not found in SAML Assertion");
             }
             ((LoggedInSession) request.getSession().
-                    getAttribute(SSOConstants.SESSION_BEAN_NAME)).getSAML2SSO().setSessionIndex(sessionId);
+                    getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN)).getSAML2SSO()
+                    .setSessionIndex(sessionId);
             SSOAgentSessionManager.addAuthenticatedSession(request.getSession(false));
         }
 
-        request.getSession().setAttribute(SSOConstants.SESSION_BEAN_NAME, session);
+        request.getSession().setAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN, session);
     }
 
     /**
@@ -651,12 +609,12 @@ public class SAMLSSOManager {
             //  If custom implementation not found, execute the default implementation
             if (ssoAgentConfiguration.getSAML2().isResponseSigned()) {
                 if (response.getSignature() == null) {
-                    throw new SSOException("SAML 2.0 Response signing is enabled, but signature element not " +
-                            "found in SAML 2.0 Response element.");
+                    throw new SSOException("SAML 2.0 Response signing is enabled, but signature element not "
+                            + "found in SAML 2.0 Response element.");
                 } else {
                     try {
-                        org.opensaml.xml.signature.SignatureValidator validator =
-                                new org.opensaml.xml.signature.SignatureValidator(new X509CredentialImplementation(
+                        org.opensaml.xml.signature.SignatureValidator validator = new org.opensaml.xml.signature.SignatureValidator(
+                                new X509CredentialImplementation(
                                         ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential()));
                         validator.validate(response.getSignature());
                     } catch (ValidationException e) {
@@ -667,8 +625,8 @@ public class SAMLSSOManager {
             }
             if (ssoAgentConfiguration.getSAML2().isAssertionSigned()) {
                 if (assertion.getSignature() == null) {
-                    throw new SSOException("SAML 2.0 Assertion signing is enabled, but signature element not " +
-                            "found in SAML 2.0 Assertion element.");
+                    throw new SSOException("SAML 2.0 Assertion signing is enabled, but signature element not "
+                            + "found in SAML 2.0 Assertion element.");
                 } else {
                     try {
                         org.opensaml.xml.signature.SignatureValidator validator = new org.opensaml.xml.signature.SignatureValidator(

@@ -82,11 +82,11 @@
                     <target>${wso2.appserver.maven.compiler.target}</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven.checkstyleplugin.version}</version>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
@@ -173,6 +173,11 @@
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>webapp-loader</artifactId>
+                <version>${appserver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>org.wso2.appserver.webapp.security</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
         </dependencies>

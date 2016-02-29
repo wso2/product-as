@@ -22,7 +22,7 @@
         </skip-uris>-->
         <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
         <query-params>tenant=admin&amp;dialect=SAML</query-params>
-        <application-server-url>http://localhost:8443</application-server-url>
+        <application-server-url>https://localhost:8443</application-server-url>
         <enable-sso>false</enable-sso>
         <request-url-postfix>samlsso</request-url-postfix>
         <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
