@@ -90,8 +90,8 @@
                                 <exec executable="bin/startup.sh"
                                       dir="${project.build.directory}/wso2as-6.0.0-SNAPSHOT/">
                                 </exec>
-                                <echo message="Waiting 5 seconds until the server started" level="info"/>
-                                <sleep seconds="5"/>
+                                <echo message="Waiting 20 seconds until the server started" level="info"/>
+                                <sleep seconds="20"/>
                             </target>
                         </configuration>
                         <goals>
