@@ -19,7 +19,7 @@ import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Response;
 import org.opensaml.xml.validation.ValidationException;
 import org.wso2.appserver.webapp.security.sso.agent.SSOAgentConfiguration;
-import org.wso2.appserver.webapp.security.sso.utils.SSOException;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 
 /**
  * This is a class which implements the XML Signature validator interface {@code SignatureValidator}.

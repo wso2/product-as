@@ -16,7 +16,7 @@
 package org.wso2.appserver.webapp.security.sso.agent;
 
 import org.wso2.appserver.webapp.security.sso.bean.LoggedInSession;
-import org.wso2.appserver.webapp.security.sso.utils.SSOConstants;
+import org.wso2.appserver.webapp.security.sso.Constants;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public class SSOAgentSessionManager {
      * @return set of sessions associated with the session index
      */
     public static Set<HttpSession> invalidateAllSessions(HttpSession session) {
-        LoggedInSession sessionBean = (LoggedInSession) session.getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN);
+        LoggedInSession sessionBean = (LoggedInSession) session.getAttribute(Constants.SESSION_BEAN);
         Set<HttpSession> sessions = new HashSet<>();
         if ((sessionBean != null) && (sessionBean.getSAML2SSO() != null)) {
             String sessionIndex = sessionBean.getSAML2SSO().getSessionIndex();
@@ -82,7 +82,7 @@ public class SSOAgentSessionManager {
      * @param session the authenticated session to be added to the session map
      */
     public static void addAuthenticatedSession(HttpSession session) {
-        String sessionIndex = ((LoggedInSession) session.getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN)).getSAML2SSO().
+        String sessionIndex = ((LoggedInSession) session.getAttribute(Constants.SESSION_BEAN)).getSAML2SSO().
                 getSessionIndex();
         if (ssoSessionsMap.get(sessionIndex) != null) {
             ssoSessionsMap.get(sessionIndex).add(session);

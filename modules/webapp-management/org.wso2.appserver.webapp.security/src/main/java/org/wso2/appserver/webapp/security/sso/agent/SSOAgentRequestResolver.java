@@ -17,13 +17,13 @@ package org.wso2.appserver.webapp.security.sso.agent;
 
 import org.opensaml.common.xml.SAMLConstants;
 import org.opensaml.saml2.core.AuthnRequest;
-import org.wso2.appserver.webapp.security.sso.utils.SSOConstants;
+import org.wso2.appserver.webapp.security.sso.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides an implementation for resolving the type of an intercepted HTTP servlet request by analyzing
- * the single-sign-on (SSO) agent configuration data and HTTP servlet request.
+ * the single-sign-on (SSO) agent configurations and HTTP servlet request.
  *
  * @since 6.0.0
  */
@@ -37,10 +37,10 @@ public class SSOAgentRequestResolver {
     }
 
     /**
-     * Returns true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) a Authentication
+     * Returns true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) an Authentication
      * Request, else false.
      *
-     * @return true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) a Authentication
+     * @return true if request URI matches the configured URL to send SAML 2.0 single-sign-on (SSO) an Authentication
      * Request, else false
      */
     public boolean isSAML2SSOURL() {
@@ -59,7 +59,7 @@ public class SSOAgentRequestResolver {
      */
     public boolean isSAML2SSOResponse() {
         return (ssoAgentConfiguration.isSAML2SSOLoginEnabled()) && (request.
-                getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE) != null);
+                getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE) != null);
     }
 
     /**

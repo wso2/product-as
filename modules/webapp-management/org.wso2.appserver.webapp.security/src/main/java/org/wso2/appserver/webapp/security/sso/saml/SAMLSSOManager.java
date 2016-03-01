@@ -54,9 +54,9 @@ import org.wso2.appserver.webapp.security.sso.agent.SSOAgentSessionManager;
 import org.wso2.appserver.webapp.security.sso.bean.LoggedInSession;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SignatureValidator;
 import org.wso2.appserver.webapp.security.sso.saml.signature.X509CredentialImplementation;
+import org.wso2.appserver.webapp.security.sso.Constants;
 import org.wso2.appserver.webapp.security.sso.utils.SSOAgentDataHolder;
-import org.wso2.appserver.webapp.security.sso.utils.SSOConstants;
-import org.wso2.appserver.webapp.security.sso.utils.SSOException;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 import org.wso2.appserver.webapp.security.sso.utils.SSOUtils;
 
 import java.io.IOException;
@@ -137,7 +137,7 @@ public class SAMLSSOManager {
      */
     protected String handleLogoutRequestForPOSTBinding(HttpServletRequest request) throws SSOException {
         LoggedInSession session = (LoggedInSession) request.getSession(false).
-                getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN);
+                getAttribute(Constants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
             requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
@@ -170,7 +170,7 @@ public class SAMLSSOManager {
 
         Map<String, String[]> parameters = new HashMap<>();
         parameters.
-                put(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST, new String[] { encodedRequestMessage });
+                put(Constants.HTTP_POST_PARAM_SAML_REQUEST, new String[] { encodedRequestMessage });
         if (ssoAgentConfiguration.getSAML2().getRelayState() != null) {
             parameters.put(RelayState.DEFAULT_ELEMENT_LOCAL_NAME,
                     new String[] { ssoAgentConfiguration.getSAML2().getRelayState() });
@@ -228,7 +228,7 @@ public class SAMLSSOManager {
      */
     protected String handleLogoutRequestForRedirectBinding(HttpServletRequest request) throws SSOException {
         LoggedInSession session = (LoggedInSession) request.getSession(false).
-                getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN);
+                getAttribute(Constants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
             requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
@@ -253,7 +253,7 @@ public class SAMLSSOManager {
         //  is not specified, perform Base64 encoding and then URL encoding
         String encodedRequestMessage = SAMLSSOUtils.
                 encodeRequestMessage(rawRequestMessage, SAMLConstants.SAML2_REDIRECT_BINDING_URI);
-        StringBuilder httpQueryString = new StringBuilder(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST +
+        StringBuilder httpQueryString = new StringBuilder(Constants.HTTP_POST_PARAM_SAML_REQUEST +
                 "=" + encodedRequestMessage);
 
         //  Arrange the query string if any RelayState data is to accompany the SAML protocol message
@@ -428,7 +428,7 @@ public class SAMLSSOManager {
      * @throws SSOException if SAML 2.0 response is null
      */
     protected void processResponse(HttpServletRequest request) throws SSOException {
-        String saml2SSOResponse = request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE);
+        String saml2SSOResponse = request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE);
 
         if (saml2SSOResponse != null) {
             String decodedResponse = new String(Base64.decode(saml2SSOResponse), Charset.forName("UTF-8"));
@@ -461,7 +461,7 @@ public class SAMLSSOManager {
         session.setSAML2SSO(new LoggedInSession.SAML2SSO());
 
         String saml2ResponseString = new String(
-                Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE)),
+                Base64.decode(request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE)),
                 Charset.forName("UTF-8"));
         Response saml2Response = (Response) SAMLSSOUtils.unmarshall(saml2ResponseString);
         session.getSAML2SSO().setResponseString(saml2ResponseString);
@@ -516,7 +516,7 @@ public class SAMLSSOManager {
 
         //  Sets the subject in the session bean
         session.getSAML2SSO().setSubjectId(subject);
-        request.getSession().setAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN, session);
+        request.getSession().setAttribute(Constants.SESSION_BEAN, session);
 
         //  Validates the audience restriction
         validateAudienceRestriction(assertion);
@@ -527,7 +527,7 @@ public class SAMLSSOManager {
         //  Marshalling SAML2 assertion after signature validation due to a weird issue in OpenSAML
         session.getSAML2SSO().setAssertionString(SAMLSSOUtils.marshall(assertion));
 
-        ((LoggedInSession) request.getSession().getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN))
+        ((LoggedInSession) request.getSession().getAttribute(Constants.SESSION_BEAN))
                 .getSAML2SSO().
                 setSubjectAttributes(SAMLSSOUtils.getAssertionStatements(assertion));
 
@@ -538,12 +538,12 @@ public class SAMLSSOManager {
                 throw new SSOException("Single Logout is enabled but IdP Session ID not found in SAML Assertion");
             }
             ((LoggedInSession) request.getSession().
-                    getAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN)).getSAML2SSO()
+                    getAttribute(Constants.SESSION_BEAN)).getSAML2SSO()
                     .setSessionIndex(sessionId);
             SSOAgentSessionManager.addAuthenticatedSession(request.getSession(false));
         }
 
-        request.getSession().setAttribute(SSOConstants.SAMLSSOValveConstants.SESSION_BEAN, session);
+        request.getSession().setAttribute(Constants.SESSION_BEAN, session);
     }
 
     /**
@@ -651,14 +651,14 @@ public class SAMLSSOManager {
     protected void performSingleLogout(HttpServletRequest request) throws SSOException {
         XMLObject saml2Object = null;
 
-        if (request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST) != null) {
+        if (request.getParameter(Constants.HTTP_POST_PARAM_SAML_REQUEST) != null) {
             saml2Object = SAMLSSOUtils.unmarshall(
-                    new String(Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_REQUEST)),
+                    new String(Base64.decode(request.getParameter(Constants.HTTP_POST_PARAM_SAML_REQUEST)),
                             Charset.forName("UTF-8")));
         }
         if (saml2Object == null) {
             saml2Object = SAMLSSOUtils.unmarshall(
-                    new String(Base64.decode(request.getParameter(SSOConstants.SAML2SSO.HTTP_POST_PARAM_SAML_RESPONSE)),
+                    new String(Base64.decode(request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE)),
                             Charset.forName("UTF-8")));
         }
         if (saml2Object instanceof LogoutRequest) {

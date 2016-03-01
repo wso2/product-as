@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.webapp.security.sso.saml;
 
+import org.apache.catalina.connector.Request;
 import org.apache.xml.security.Init;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignature;
@@ -62,10 +63,11 @@ import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
 import org.wso2.appserver.exceptions.AppServerException;
 import org.wso2.appserver.utils.XMLUtils;
+import org.wso2.appserver.webapp.security.sso.bean.RelayState;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.sso.saml.signature.X509CredentialImplementation;
-import org.wso2.appserver.webapp.security.sso.utils.SSOConstants;
-import org.wso2.appserver.webapp.security.sso.utils.SSOException;
+import org.wso2.appserver.webapp.security.sso.Constants;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 import org.wso2.appserver.webapp.security.sso.utils.XMLEntityResolver;
 import org.xml.sax.SAXException;
 
@@ -176,12 +178,27 @@ public class SAMLSSOUtils {
             SSOConfiguration ssoConfiguration = contextConfiguration.getSingleSignOnConfiguration();
 
             ssoConfiguration.setApplicationServerURL(Optional.ofNullable(ssoConfiguration.getApplicationServerURL()).
-                    orElse(SSOConstants.SSOAgentConfiguration.APPLICATION_SERVER_URL_DEFAULT));
+                    orElse(Constants.APPLICATION_SERVER_URL_DEFAULT));
             ssoConfiguration.enableHandlingConsumerURLAfterSLO(
                     Optional.ofNullable(ssoConfiguration.handleConsumerURLAfterSLO()).orElse(false));
             ssoConfiguration.setConsumerURLPostFix(Optional.ofNullable(ssoConfiguration.getConsumerURLPostFix()).
-                    orElse(SSOConstants.SSOAgentConfiguration.CONSUMER_URL_POSTFIX_DEFAULT));
+                    orElse(Constants.CONSUMER_URL_POSTFIX_DEFAULT));
         });
+    }
+
+    /**
+     * Generates a {@code RelayState} based on the {@code Request}.
+     *
+     * @param request the {@link Request} instance
+     * @return the created {@link RelayState} instance
+     */
+    protected static RelayState generateRelayState(Request request) {
+        RelayState relayState = new RelayState();
+        relayState.setRequestedURL(request.getRequestURI());
+        relayState.setRequestQueryString(request.getQueryString());
+        relayState.setRequestParameters(request.getParameterMap());
+
+        return relayState;
     }
 
     /**
@@ -239,8 +256,8 @@ public class SAMLSSOUtils {
             //  Marshall this element, and its children, and root them in a newly created Document
             authDOM = marshaller.marshall(requestMessage);
         } catch (MarshallingException e) {
-            throw new SSOException("Error occurred while encoding SAML request, failed to marshall the SAML 2.0. "
-                    + "Request element XMLObject to its corresponding W3C DOM element", e);
+            throw new SSOException("Error occurred while encoding SAML request, failed to marshall the SAML 2.0. " +
+                    "Request element XMLObject to its corresponding W3C DOM element", e);
         }
 
         StringWriter writer = new StringWriter();
@@ -420,7 +437,7 @@ public class SAMLSSOUtils {
             Signer.signObjects(signatureList);
             return authnRequest;
         } catch (MarshallingException | SignatureException e) {
-            throw new SSOException("Error while signing the SAML AuthnRequest message", e);
+            throw new SSOException("Error while signing the SAML 2.0 AuthnRequest message", e);
         }
     }
 
@@ -526,7 +543,7 @@ public class SAMLSSOUtils {
                     append(URLEncoder.encode(signatureBase64encodedString, "UTF-8").trim());
         } catch (NoSuchAlgorithmException | InvalidKeyException |
                 java.security.SignatureException | UnsupportedEncodingException e) {
-            throw new SSOException("Error applying SAML Redirect Binding signature", e);
+            throw new SSOException("Error applying SAML 2.0 Redirect Binding signature", e);
         }
     }
 }

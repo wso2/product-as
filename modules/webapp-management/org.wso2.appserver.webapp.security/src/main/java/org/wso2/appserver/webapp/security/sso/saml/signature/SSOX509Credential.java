@@ -17,7 +17,7 @@ package org.wso2.appserver.webapp.security.sso.saml.signature;
 
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.webapp.security.sso.saml.SAMLSSOUtils;
-import org.wso2.appserver.webapp.security.sso.utils.SSOException;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;

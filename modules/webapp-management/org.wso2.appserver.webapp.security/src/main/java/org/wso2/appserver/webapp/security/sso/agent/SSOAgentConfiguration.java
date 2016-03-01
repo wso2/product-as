@@ -19,8 +19,8 @@ import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
-import org.wso2.appserver.webapp.security.sso.utils.SSOConstants;
-import org.wso2.appserver.webapp.security.sso.utils.SSOException;
+import org.wso2.appserver.webapp.security.sso.Constants;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 import org.wso2.appserver.webapp.security.sso.utils.SSOUtils;
 
 import java.util.ArrayList;
@@ -111,15 +111,15 @@ public class SSOAgentConfiguration {
 
             isSAMLSSOLoginEnabled = Optional.ofNullable(contextSSO.isSSOEnabled()).orElse(false);
             requestURLPostfix = Optional.ofNullable(contextSSO.getRequestURLPostFix()).
-                    orElse(SSOConstants.SSOAgentConfiguration.REQUEST_URL_POSTFIX_DEFAULT);
+                    orElse(Constants.REQUEST_URL_POSTFIX_DEFAULT);
             saml2.httpBinding = Optional.ofNullable(contextSSO.getHttpBinding()).
-                    orElse(SSOConstants.SSOAgentConfiguration.BINDING_TYPE_DEFAULT);
+                    orElse(Constants.BINDING_TYPE_DEFAULT);
             saml2.spEntityId = contextSSO.getIssuerId();
             saml2.acsURL = contextSSO.getConsumerURL();
             saml2.attributeConsumingServiceIndex = contextSSO.getAttributeConsumingServiceIndex();
             saml2.isSLOEnabled = Optional.ofNullable(contextSSO.isSLOEnabled()).orElse(false);
             saml2.sloURLPostfix = Optional.ofNullable(contextSSO.getSLOURLPostFix()).
-                    orElse(SSOConstants.SSOAgentConfiguration.SLO_URL_POSTFIX_DEFAULT);
+                    orElse(Constants.SLO_URL_POSTFIX_DEFAULT);
             saml2.isResponseSigned = Optional.ofNullable(contextSSO.isResponseSigningEnabled()).orElse(false);
             saml2.isRequestSigned = Optional.ofNullable(contextSSO.isRequestSigningEnabled()).orElse(false);
             saml2.isAssertionEncrypted = Optional.ofNullable(contextSSO.isAssertionEncryptionEnabled()).orElse(false);
@@ -133,9 +133,9 @@ public class SSOAgentConfiguration {
             SSOConfiguration serverSSO = configProperties.getSingleSignOnConfiguration();
 
             saml2.idPURL = Optional.ofNullable(serverSSO.getIdpURL()).
-                    orElse(SSOConstants.SSOAgentConfiguration.IDP_URL_DEFAULT);
+                    orElse(Constants.IDP_URL_DEFAULT);
             saml2.idPEntityId = Optional.ofNullable(serverSSO.getIdpEntityId()).
-                    orElse(SSOConstants.SSOAgentConfiguration.IDP_ENTITY_ID_DEFAULT);
+                    orElse(Constants.IDP_ENTITY_ID_DEFAULT);
 
             if (saml2.isResponseSigned()) {
                 saml2.signatureValidatorImplClass = serverSSO.getSignatureValidatorImplClass();
