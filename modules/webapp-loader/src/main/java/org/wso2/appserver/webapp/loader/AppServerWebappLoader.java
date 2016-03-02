@@ -40,13 +40,10 @@ public class AppServerWebappLoader extends WebappLoader {
 
     @Override
     protected void startInternal() throws LifecycleException {
-
         // build the class loading context for the webapp
         WebappClassLoaderContext webappClassLoaderContext = new WebappClassLoaderContext(getContext());
         super.startInternal();
         ((AppServerWebappClassLoader) getClassLoader()).setWebappClassLoaderContext(webappClassLoaderContext);
-
-
     }
 
 }

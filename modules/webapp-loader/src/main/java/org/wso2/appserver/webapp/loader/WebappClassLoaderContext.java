@@ -40,10 +40,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Build and stores the class loading context of a webapp which defines in the classloading configurations.
+ * Build and stores the class loading context of a webapp which defines in the classloader configurations.
  *
  * @since 6.0.0
- *
  */
 public class WebappClassLoaderContext {
 
@@ -57,6 +56,7 @@ public class WebappClassLoaderContext {
         List<ClassLoaderEnvironments.Environment> environments = ServerConfigurationLoader.getServerConfiguration()
                 .getClassLoaderEnvironments().getEnvironments().getEnvironments();
 
+        // populate the classpath defines in each environment
         environments.forEach((environment) -> {
             if (!definedEnvironments.containsKey(environment.getName())) {
                 List<String> repositories = new ArrayList<>();
@@ -75,6 +75,10 @@ public class WebappClassLoaderContext {
         });
     }
 
+    /**
+     * Construct web application specific classloader behaviour
+     * @param context the context of the web application
+     */
     public WebappClassLoaderContext(Context context) {
 
         ContextConfigurationLoader.getContextConfiguration(context)
@@ -97,19 +101,28 @@ public class WebappClassLoaderContext {
                 });
     }
 
-
+    /**
+     * Get the all jar library urls specified by the each environment for this web application
+     * @return A list containing the jar library urls as strings
+     */
     public List<String> getProvidedRepositories() {
         List<String> repositories = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : selectedEnvironments.entrySet()) {
-            repositories.addAll(entry.getValue());
-        }
+        selectedEnvironments.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .forEach(repositories::addAll);
         return repositories;
     }
 
+    /**
+     * Returns the classloader's parent first behaviour of this web application.
+     * @return true of the configuration specified paren first classloader behaviour.otherwise false.
+     */
     public boolean isParentFirst() {
         return isParentFirst;
     }
 
+    // returns a list of jar url's for the given path
     private static List<String> generateClasspath(String classPath) throws ClasspathNotFoundException {
 
         List<String> urlStr = new ArrayList<>();

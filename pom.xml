@@ -160,6 +160,8 @@
                 <artifactId>webapp-loader</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
+
+            <!--Test-->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>

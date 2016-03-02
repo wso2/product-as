@@ -34,6 +34,8 @@ import java.security.PrivilegedAction;
  * on wso2as-web.xml file. The default behaviour is specified in the container level configuration file.
  * But webapp has the ability to override that behaviour by adding the customised  wso2as-web.xml file into
  * the webapp.
+ *
+ * @since 6.0.0
  */
 public class AppServerWebappClassLoader extends WebappClassLoaderBase {
     private static final Log log = LogFactory.getLog(AppServerWebappClassLoader.class);
@@ -44,16 +46,25 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         super(parent);
     }
 
+    /**
+     * Sets the {@link WebappClassLoaderContext} associated with this classloader
+     * @param classLoaderContext the web application specific classloader context.
+     */
     public synchronized void setWebappClassLoaderContext(WebappClassLoaderContext classLoaderContext) {
-        this.webappClassLoaderContext = classLoaderContext;
+        webappClassLoaderContext = classLoaderContext;
         webappClassLoaderContext.getProvidedRepositories().forEach(this::addRepository);
     }
 
+    /**
+     * Customized loadClass method which uses {@link WebappClassLoaderContext} to find the classes.
+     * @see ClassLoader#loadClass(String, boolean)
+     */
     @Override
     public synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 
-        log.debug("loadClass(" + name + ", " + resolve + ")");
-
+        if (log.isDebugEnabled()) {
+            log.debug("loadClass(" + name + ", " + resolve + ")");
+        }
 
         Class<?> clazz;
 
@@ -149,7 +160,8 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         throw new ClassNotFoundException(name);
     }
 
-    protected Class<?> findClassFromParent(String name, boolean resolve) throws ClassNotFoundException {
+    // try to find and return the class from parent class loader
+    private Class<?> findClassFromParent(String name, boolean resolve) throws ClassNotFoundException {
         Class<?> clazz = null;
         if (log.isDebugEnabled()) {
             log.debug("  Delegating to parent classloader " + parent);
@@ -174,8 +186,8 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         return (clazz);
     }
 
-
-    protected Class<?> findLocalClass(String name, boolean resolve) throws ClassNotFoundException {
+    // try to find and return the class from web application's class loader
+    private Class<?> findLocalClass(String name, boolean resolve) throws ClassNotFoundException {
         Class<?> clazz = null;
         if (log.isDebugEnabled()) {
             log.debug("  Searching local repositories");
@@ -196,6 +208,9 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         return (clazz);
     }
 
+    /**
+     * @see ClassLoader#getResourceAsStream(String)
+     */
     @Override
     public InputStream getResourceAsStream(String name) {
         InputStream stream = super.getResourceAsStream(name);
@@ -216,6 +231,10 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         return null;
     }
 
+    /**
+     * Returns a new classloader without any class file transforms.
+     * @return copy of this classloader without any class file transformers.
+     */
     public ClassLoader copyWithoutTransformers() {
 
         ClassLoader parent = this.getParent();
@@ -233,6 +252,7 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
         }
     }
 
+    // adds the jar url to this class loader
     private void addRepository(String repository) {
 
         URL url;
