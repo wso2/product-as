@@ -25,13 +25,13 @@ import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
 import org.wso2.appserver.exceptions.AppServerException;
+import org.wso2.appserver.webapp.security.sso.Constants;
 import org.wso2.appserver.webapp.security.sso.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.sso.agent.SSOAgentRequestResolver;
 import org.wso2.appserver.webapp.security.sso.bean.RelayState;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
-import org.wso2.appserver.webapp.security.sso.Constants;
-import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 import org.wso2.appserver.webapp.security.sso.utils.SSOUtils;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -51,7 +51,7 @@ public class SAMLSSOValve extends SingleSignOn {
 
     private ServerConfiguration serverConfiguration;
     private ContextConfiguration contextConfiguration;
-    private SSOAgentConfiguration ssoAgentConfiguration;
+    private SSOAgentConfiguration agentConfiguration;
     private SSOAgentRequestResolver requestResolver;
 
     public SAMLSSOValve() throws SSOException {
@@ -107,16 +107,14 @@ public class SAMLSSOValve extends SingleSignOn {
             return;
         }
 
-        SAMLSSOUtils.setDefaultConfigurations(contextConfiguration);
+        SSOUtils.setDefaultConfigurations(contextConfiguration);
 
-        ssoAgentConfiguration = (SSOAgentConfiguration) (request.getSessionInternal().
-                getNote(Constants.SSO_AGENT_CONFIG));
-        if (ssoAgentConfiguration == null) {
+        agentConfiguration = (SSOAgentConfiguration) (request.getSessionInternal().getNote(Constants.SSO_AGENT_CONFIG));
+        if (agentConfiguration == null) {
             try {
-                //  Constructs a new SSOAgentConfiguration instance
-                ssoAgentConfiguration = createSSOAgentConfiguration(request.getContextPath());
-                request.getSessionInternal().
-                        setNote(Constants.SSO_AGENT_CONFIG, ssoAgentConfiguration);
+                //  Construct a new SSOAgentConfiguration instance
+                agentConfiguration = createSSOAgentConfiguration(request.getContextPath());
+                request.getSessionInternal().setNote(Constants.SSO_AGENT_CONFIG, agentConfiguration);
             } catch (SSOException e) {
                 logger.log(Level.SEVERE, "Error on initializing SAML 2.0 SSO Manager", e);
                 return;
@@ -124,7 +122,7 @@ public class SAMLSSOValve extends SingleSignOn {
         }
 
         try {
-            requestResolver = new SSOAgentRequestResolver(request, ssoAgentConfiguration);
+            requestResolver = new SSOAgentRequestResolver(request, agentConfiguration);
 
             //  If the request URL matches one of the URL(s) to skip, moves on to the next valve
             if (requestResolver.isURLToSkip()) {
@@ -135,7 +133,7 @@ public class SAMLSSOValve extends SingleSignOn {
             if (requestResolver.isSAML2SLORequest()) {
                 //  Handles single logout request from the identity provider
                 logger.log(Level.FINE, "Processing Single Logout Request...");
-                SAMLSSOManager manager = new SAMLSSOManager(ssoAgentConfiguration);
+                SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
                 manager.performSingleLogout(request);
             } else if (requestResolver.isSAML2SSOResponse()) {
                 //  Handles single-sign-on responses during the process
@@ -173,14 +171,14 @@ public class SAMLSSOValve extends SingleSignOn {
      * @throws SSOException if an error occurs when handling an unauthenticated request
      */
     private void handleUnauthenticatedRequest(Request request, Response response) throws SSOException {
-        SAMLSSOManager manager = new SAMLSSOManager(ssoAgentConfiguration);
+        SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
         String relayStateId = SSOUtils.createID();
-        RelayState relayState = SAMLSSOUtils.generateRelayState(request);
-        ssoAgentConfiguration.getSAML2().setRelayState(relayStateId);
+        RelayState relayState = SSOUtils.generateRelayState(request);
+        agentConfiguration.getSAML2().setRelayState(relayStateId);
         Optional.ofNullable(request.getSession(false)).
                 ifPresent(httpSession -> httpSession.setAttribute(relayStateId, relayState));
 
-        ssoAgentConfiguration.getSAML2().setPassiveAuthn(false);
+        agentConfiguration.getSAML2().setPassiveAuthn(false);
         if (requestResolver.isHttpPostBinding()) {
             String htmlPayload = manager.handleAuthnRequestForPOSTBinding(request);
             manager.sendCharacterData(response, htmlPayload);
@@ -201,11 +199,11 @@ public class SAMLSSOValve extends SingleSignOn {
      * @throws SSOException if an error occurs when handling a logout request
      */
     private void handleLogoutRequest(Request request, Response response) throws SSOException {
-        SAMLSSOManager manager = new SAMLSSOManager(ssoAgentConfiguration);
+        SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
         try {
             if (requestResolver.isHttpPostBinding()) {
                 if (request.getSession(false).getAttribute(Constants.SESSION_BEAN) != null) {
-                    ssoAgentConfiguration.getSAML2().setPassiveAuthn(false);
+                    agentConfiguration.getSAML2().setPassiveAuthn(false);
                     String htmlPayload = manager.handleLogoutRequestForPOSTBinding(request);
                     manager.sendCharacterData(response, htmlPayload);
                 } else {
@@ -213,7 +211,7 @@ public class SAMLSSOValve extends SingleSignOn {
                     response.sendRedirect(request.getContext().getPath());
                 }
             } else {
-                ssoAgentConfiguration.getSAML2().setPassiveAuthn(false);
+                agentConfiguration.getSAML2().setPassiveAuthn(false);
                 response.sendRedirect(manager.handleLogoutRequestForRedirectBinding(request));
             }
         } catch (IOException e) {
@@ -229,7 +227,7 @@ public class SAMLSSOValve extends SingleSignOn {
      * @throws SSOException if an error occurs when handling a response
      */
     private void handleResponse(Request request, Response response) throws SSOException {
-        SAMLSSOManager manager = new SAMLSSOManager(ssoAgentConfiguration);
+        SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
         String redirectPath = readAndForgetRedirectPathAfterSLO(request);
         manager.processResponse(request);
         redirectAfterProcessingResponse(request, response, redirectPath);
@@ -251,9 +249,9 @@ public class SAMLSSOValve extends SingleSignOn {
 
         ssoAgentConfiguration.getSAML2().
                 setSPEntityId(Optional.ofNullable(ssoAgentConfiguration.getSAML2().getSPEntityId()).
-                        orElse((String) SAMLSSOUtils.generateIssuerID(contextPath).get()));
+                        orElse(SSOUtils.generateIssuerID(contextPath).get()));
         ssoAgentConfiguration.getSAML2().
-                setACSURL(Optional.ofNullable(ssoAgentConfiguration.getSAML2().getACSURL()).orElse(SAMLSSOUtils.
+                setACSURL(Optional.ofNullable(ssoAgentConfiguration.getSAML2().getACSURL()).orElse(SSOUtils.
                         generateConsumerURL(contextPath, contextConfiguration.getSingleSignOnConfiguration()).get()));
 
         ssoAgentConfiguration.verifyConfig();
@@ -312,7 +310,7 @@ public class SAMLSSOValve extends SingleSignOn {
             throws SSOException {
         //  Redirect according to relay state attribute
         try {
-            String relayStateId = ssoAgentConfiguration.getSAML2().getRelayState();
+            String relayStateId = agentConfiguration.getSAML2().getRelayState();
             if ((relayStateId != null) && (request.getSession(false) != null)) {
                 RelayState relayState = (RelayState) request.getSession(false).getAttribute(relayStateId);
                 if (relayState != null) {

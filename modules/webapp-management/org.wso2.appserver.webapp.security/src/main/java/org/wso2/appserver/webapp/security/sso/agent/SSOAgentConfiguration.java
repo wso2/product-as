@@ -18,10 +18,10 @@ package org.wso2.appserver.webapp.security.sso.agent;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
-import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.sso.Constants;
-import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
+import org.wso2.appserver.webapp.security.sso.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.sso.utils.SSOUtils;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

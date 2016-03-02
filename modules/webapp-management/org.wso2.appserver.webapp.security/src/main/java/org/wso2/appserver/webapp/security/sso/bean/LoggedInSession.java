@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Response;
-import org.wso2.appserver.webapp.security.sso.saml.SAMLSSOUtils;
+import org.wso2.appserver.webapp.security.sso.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 
 import java.io.IOException;
@@ -188,12 +188,12 @@ public class LoggedInSession implements Serializable {
 
             responseString = (String) stream.readObject();
             if ((responseString != null) && (!emptyString.equals(responseString))) {
-                response = (Response) SAMLSSOUtils.unmarshall(responseString);
+                response = (Response) SSOUtils.unmarshall(responseString);
             }
 
             setAssertionString((String) stream.readObject());
             if ((responseString != null) && (!emptyString.equals(assertionString))) {
-                assertion = (Assertion) SAMLSSOUtils.unmarshall(assertionString);
+                assertion = (Assertion) SSOUtils.unmarshall(assertionString);
             }
 
             sessionIndex = (String) stream.readObject();

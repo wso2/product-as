@@ -15,8 +15,8 @@
  */
 package org.wso2.appserver.webapp.security.sso.agent;
 
-import org.wso2.appserver.webapp.security.sso.bean.LoggedInSession;
 import org.wso2.appserver.webapp.security.sso.Constants;
+import org.wso2.appserver.webapp.security.sso.bean.LoggedInSession;
 
 import java.util.HashMap;
 import java.util.HashSet;

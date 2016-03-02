@@ -16,7 +16,7 @@
 package org.wso2.appserver.webapp.security.sso.saml.signature;
 
 import org.wso2.appserver.configuration.server.SSOConfiguration;
-import org.wso2.appserver.webapp.security.sso.saml.SAMLSSOUtils;
+import org.wso2.appserver.webapp.security.sso.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 
 import java.security.KeyStore;
@@ -61,7 +61,7 @@ public class SSOX509Credential {
      * @throws SSOException if an error occurred while reading credentials
      */
     private void readX509Credentials(SSOConfiguration keyStoreConfiguration) throws SSOException {
-        Optional generatedKeyStore = SAMLSSOUtils.generateKeyStore(keyStoreConfiguration);
+        Optional generatedKeyStore = SSOUtils.generateKeyStore(keyStoreConfiguration);
         if (generatedKeyStore.isPresent()) {
             KeyStore keyStore = (KeyStore) generatedKeyStore.get();
             String certificateAlias = keyStoreConfiguration.getIdpCertificateAlias();

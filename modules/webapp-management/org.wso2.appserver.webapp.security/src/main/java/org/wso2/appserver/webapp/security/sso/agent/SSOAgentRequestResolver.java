@@ -16,7 +16,6 @@
 package org.wso2.appserver.webapp.security.sso.agent;
 
 import org.opensaml.common.xml.SAMLConstants;
-import org.opensaml.saml2.core.AuthnRequest;
 import org.wso2.appserver.webapp.security.sso.Constants;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +68,7 @@ public class SSOAgentRequestResolver {
      */
     public boolean isSAML2SLORequest() {
         return (ssoAgentConfiguration.isSAML2SSOLoginEnabled()) && (request.
-                getParameter(AuthnRequest.DEFAULT_ELEMENT_LOCAL_NAME) != null);
+                getParameter(Constants.HTTP_POST_PARAM_SAML_REQUEST) != null);
     }
 
     /**

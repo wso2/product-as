@@ -49,15 +49,15 @@ import org.opensaml.saml2.ecp.RelayState;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.util.Base64;
 import org.opensaml.xml.validation.ValidationException;
+import org.wso2.appserver.webapp.security.sso.Constants;
 import org.wso2.appserver.webapp.security.sso.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.sso.agent.SSOAgentSessionManager;
 import org.wso2.appserver.webapp.security.sso.bean.LoggedInSession;
 import org.wso2.appserver.webapp.security.sso.saml.signature.SignatureValidator;
 import org.wso2.appserver.webapp.security.sso.saml.signature.X509CredentialImplementation;
-import org.wso2.appserver.webapp.security.sso.Constants;
 import org.wso2.appserver.webapp.security.sso.utils.SSOAgentDataHolder;
-import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 import org.wso2.appserver.webapp.security.sso.utils.SSOUtils;
+import org.wso2.appserver.webapp.security.sso.utils.exception.SSOException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -90,7 +90,7 @@ public class SAMLSSOManager {
     public SAMLSSOManager(SSOAgentConfiguration ssoAgentConfiguration) throws SSOException {
         this.ssoAgentConfiguration = ssoAgentConfiguration;
         loadCustomSignatureValidatorClass();
-        SAMLSSOUtils.doBootstrap();
+        SSOUtils.doBootstrap();
     }
 
     /**
@@ -119,7 +119,7 @@ public class SAMLSSOManager {
     protected String handleAuthnRequestForPOSTBinding(HttpServletRequest request) throws SSOException {
         RequestAbstractType requestMessage = buildAuthnRequest(request);
         if (ssoAgentConfiguration.getSAML2().isRequestSigned()) {
-            requestMessage = SAMLSSOUtils.
+            requestMessage = SSOUtils.
                     setSignature((AuthnRequest) requestMessage, XMLSignature.ALGO_ID_SIGNATURE_RSA,
                             new X509CredentialImplementation(
                                     ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential()));
@@ -143,7 +143,7 @@ public class SAMLSSOManager {
             requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
                     session.getSAML2SSO().getSessionIndex());
             if (ssoAgentConfiguration.getSAML2().isRequestSigned()) {
-                requestMessage = SAMLSSOUtils.
+                requestMessage = SSOUtils.
                         setSignature((LogoutRequest) requestMessage, XMLSignature.ALGO_ID_SIGNATURE_RSA,
                                 new X509CredentialImplementation(
                                         ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential()));
@@ -165,7 +165,7 @@ public class SAMLSSOManager {
      * @throws SSOException if an error occurs when encoding the request message
      */
     private String preparePOSTRequest(RequestAbstractType rawRequestMessage) throws SSOException {
-        String encodedRequestMessage = SAMLSSOUtils.
+        String encodedRequestMessage = SSOUtils.
                 encodeRequestMessage(rawRequestMessage, SAMLConstants.SAML2_POST_BINDING_URI);
 
         Map<String, String[]> parameters = new HashMap<>();
@@ -251,7 +251,7 @@ public class SAMLSSOManager {
     private String prepareRedirectRequest(RequestAbstractType rawRequestMessage) throws SSOException {
         //  Compress the message using default DEFLATE encoding since SAMLEncoding query string parameter
         //  is not specified, perform Base64 encoding and then URL encoding
-        String encodedRequestMessage = SAMLSSOUtils.
+        String encodedRequestMessage = SSOUtils.
                 encodeRequestMessage(rawRequestMessage, SAMLConstants.SAML2_REDIRECT_BINDING_URI);
         StringBuilder httpQueryString = new StringBuilder(Constants.HTTP_POST_PARAM_SAML_REQUEST +
                 "=" + encodedRequestMessage);
@@ -281,7 +281,7 @@ public class SAMLSSOManager {
         }
 
         if (ssoAgentConfiguration.getSAML2().isRequestSigned()) {
-            SAMLSSOUtils.addDeflateSignatureToHTTPQueryString(httpQueryString,
+            SSOUtils.addDeflateSignatureToHTTPQueryString(httpQueryString,
                     new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential()));
         }
 
@@ -432,7 +432,7 @@ public class SAMLSSOManager {
 
         if (saml2SSOResponse != null) {
             String decodedResponse = new String(Base64.decode(saml2SSOResponse), Charset.forName("UTF-8"));
-            XMLObject samlObject = SAMLSSOUtils.unmarshall(decodedResponse);
+            XMLObject samlObject = SSOUtils.unmarshall(decodedResponse);
             if (samlObject instanceof LogoutResponse) {
                 //  This is a SAML response for a single logout request from the service provider
                 performSingleLogout(request);
@@ -463,7 +463,7 @@ public class SAMLSSOManager {
         String saml2ResponseString = new String(
                 Base64.decode(request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE)),
                 Charset.forName("UTF-8"));
-        Response saml2Response = (Response) SAMLSSOUtils.unmarshall(saml2ResponseString);
+        Response saml2Response = (Response) SSOUtils.unmarshall(saml2ResponseString);
         session.getSAML2SSO().setResponseString(saml2ResponseString);
         session.getSAML2SSO().setSAMLResponse(saml2Response);
 
@@ -474,7 +474,7 @@ public class SAMLSSOManager {
             if (!SSOUtils.isCollectionEmpty(encryptedAssertions)) {
                 encryptedAssertion = encryptedAssertions.stream().findFirst().get();
                 try {
-                    assertion = SAMLSSOUtils
+                    assertion = SSOUtils
                             .decryptAssertion(ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential(),
                                     encryptedAssertion);
                 } catch (Exception e) {
@@ -525,11 +525,11 @@ public class SAMLSSOManager {
         validateSignature(saml2Response, assertion);
 
         //  Marshalling SAML2 assertion after signature validation due to a weird issue in OpenSAML
-        session.getSAML2SSO().setAssertionString(SAMLSSOUtils.marshall(assertion));
+        session.getSAML2SSO().setAssertionString(SSOUtils.marshall(assertion));
 
         ((LoggedInSession) request.getSession().getAttribute(Constants.SESSION_BEAN))
                 .getSAML2SSO().
-                setSubjectAttributes(SAMLSSOUtils.getAssertionStatements(assertion));
+                setSubjectAttributes(SSOUtils.getAssertionStatements(assertion));
 
         //  For removing the session when the single-logout request made by the service provider itself
         if (ssoAgentConfiguration.getSAML2().isSLOEnabled()) {
@@ -613,8 +613,8 @@ public class SAMLSSOManager {
                             + "found in SAML 2.0 Response element.");
                 } else {
                     try {
-                        org.opensaml.xml.signature.SignatureValidator validator = new org.opensaml.xml.signature.SignatureValidator(
-                                new X509CredentialImplementation(
+                        org.opensaml.xml.signature.SignatureValidator validator =
+                                new org.opensaml.xml.signature.SignatureValidator(new X509CredentialImplementation(
                                         ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential()));
                         validator.validate(response.getSignature());
                     } catch (ValidationException e) {
@@ -629,8 +629,8 @@ public class SAMLSSOManager {
                             + "found in SAML 2.0 Assertion element.");
                 } else {
                     try {
-                        org.opensaml.xml.signature.SignatureValidator validator = new org.opensaml.xml.signature.SignatureValidator(
-                                new X509CredentialImplementation(
+                        org.opensaml.xml.signature.SignatureValidator validator =
+                                new org.opensaml.xml.signature.SignatureValidator(new X509CredentialImplementation(
                                         ssoAgentConfiguration.getSAML2().getSSOAgentX509Credential()));
                         validator.validate(assertion.getSignature());
                     } catch (ValidationException e) {
@@ -652,12 +652,12 @@ public class SAMLSSOManager {
         XMLObject saml2Object = null;
 
         if (request.getParameter(Constants.HTTP_POST_PARAM_SAML_REQUEST) != null) {
-            saml2Object = SAMLSSOUtils.unmarshall(
+            saml2Object = SSOUtils.unmarshall(
                     new String(Base64.decode(request.getParameter(Constants.HTTP_POST_PARAM_SAML_REQUEST)),
                             Charset.forName("UTF-8")));
         }
         if (saml2Object == null) {
-            saml2Object = SAMLSSOUtils.unmarshall(
+            saml2Object = SSOUtils.unmarshall(
                     new String(Base64.decode(request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE)),
                             Charset.forName("UTF-8")));
         }
