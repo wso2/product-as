@@ -49,4 +49,16 @@ public class ClassLoaderConfiguration {
     public void setEnvironments(String environments) {
         this.environments = environments;
     }
+
+    public void merge(ClassLoaderConfiguration newClassLoaderConfiguration) {
+
+        if (newClassLoaderConfiguration != null) {
+            if (newClassLoaderConfiguration.isParentFirst() != null) {
+                this.enableParentFirst(newClassLoaderConfiguration.isParentFirst());
+            }
+            if (newClassLoaderConfiguration.getEnvironments() != null) {
+                this.setEnvironments(newClassLoaderConfiguration.getEnvironments());
+            }
+        }
+    }
 }

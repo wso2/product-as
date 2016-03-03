@@ -24,6 +24,7 @@ import org.apache.catalina.LifecycleListener;
 import org.wso2.appserver.Constants;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
+import org.wso2.appserver.utils.PathUtils;
 import org.wso2.appserver.utils.XMLUtils;
 
 import java.io.File;
@@ -96,15 +97,14 @@ public class ContextConfigurationLoader implements LifecycleListener {
      */
     private static ContextConfiguration getEffectiveConfiguration(Context context) throws ApplicationServerException {
         if (context != null) {
-            Path schemaPath = Paths.get(Constants.CATALINA_BASE_PATH, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                    Constants.WSO2_CONFIGURATION_DIRECTORY, Constants.WEBAPP_DESCRIPTOR_SCHEMA);
+            Path schemaPath = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
+                    Constants.WEBAPP_DESCRIPTOR_SCHEMA);
 
-            Path defaultWebAppDescriptor = Paths.get(Constants.CATALINA_BASE_PATH,
-                    Constants.TOMCAT_CONFIGURATION_DIRECTORY, Constants.WSO2_CONFIGURATION_DIRECTORY,
+            Path defaultWebAppDescriptor = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
                     Constants.WEBAPP_DESCRIPTOR);
 
-            Path contextWebAppDescriptor = Paths.get(getWebappFilePath(context), Constants.WEBAPP_RESOURCE_FOLDER,
-                    Constants.WEBAPP_DESCRIPTOR);
+            Path contextWebAppDescriptor = Paths.get(PathUtils.getWebAppPath(context).toString(),
+                    Constants.WEBAPP_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
 
             if (!Files.exists(defaultWebAppDescriptor)) {
                 throw new ApplicationServerException("The " + defaultWebAppDescriptor.toString() + " does not exist");
@@ -125,36 +125,4 @@ public class ContextConfigurationLoader implements LifecycleListener {
         }
     }
 
-    // generate the web app file path if exist
-    private static String getWebappFilePath(Context context) throws ApplicationServerException {
-        String webappFilePath = null;
-
-        //Value of the following variable depends on various conditions. Sometimes you get just the webapp directory
-        //name. Sometime you get absolute path the webapp directory or war file.
-        try {
-            if (context != null) {
-                String docBase = context.getDocBase();
-                Host host = (Host) context.getParent();
-                String appBase = host.getAppBase();
-                File canonicalAppBase = new File(appBase);
-                if (canonicalAppBase.isAbsolute()) {
-                    canonicalAppBase = canonicalAppBase.getCanonicalFile();
-                } else {
-                    canonicalAppBase = new File(Constants.CATALINA_BASE_PATH, appBase).getCanonicalFile();
-                }
-
-                File webappFile = new File(docBase);
-                if (webappFile.isAbsolute()) {
-                    webappFilePath = webappFile.getCanonicalPath();
-                } else {
-                    webappFilePath = (new File(canonicalAppBase, docBase)).getPath();
-                }
-            }
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
-            throw new ApplicationServerException("Error while generating webapp file path", ex);
-        }
-
-        return webappFilePath;
-    }
 }
