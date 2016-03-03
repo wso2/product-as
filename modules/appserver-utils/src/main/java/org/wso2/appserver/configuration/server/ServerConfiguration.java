@@ -28,15 +28,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "AppServer")
 public class ServerConfiguration {
-    @XmlElement(name = "Classloading")
-    private ClassloadingConfiguration classloadingConfiguration;
+    @XmlElement(name = "ClassLoader")
+    private ClassLoaderEnvironments classLoaderEnvironments;
     @XmlElement(name = "SAML2SingleSignOn")
     private SSOConfiguration singleSignOnConfiguration;
     @XmlElement(name = "StatisticsPublisher")
     private StatsPublisherConfiguration statsPublisherConfiguration;
 
-    public ClassloadingConfiguration getClassloadingConfiguration() {
-        return classloadingConfiguration;
+    public ClassLoaderEnvironments getClassLoaderEnvironments() {
+        return classLoaderEnvironments;
     }
 
     public SSOConfiguration getSingleSignOnConfiguration() {
