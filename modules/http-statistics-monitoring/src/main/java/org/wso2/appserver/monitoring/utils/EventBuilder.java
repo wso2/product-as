@@ -25,8 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.wso2.appserver.monitoring.EventPublisherConstants;
 import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
 import org.wso2.carbon.databridge.commons.Event;
-import ua_parser.Client;
-import ua_parser.Parser;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -48,15 +46,14 @@ public class EventBuilder {
      * @param response The Response object of client
      * @param startTime The time at which the valve is invoked
      * @param responseTime The time that is taken for the client to receive a response
-     * @param uaParser The Parser object that will be used to extract user agent information
      * @return an Event object populated with data to be published.
      * @throws EventBuilderException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
-                                   long responseTime, Parser uaParser) throws EventBuilderException {
+                                   long responseTime) throws EventBuilderException {
 
 
-        List<Object> payload = buildPayloadData(request, response, startTime, responseTime, uaParser);
+        List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
 
         return new Event(streamId, startTime,
                 new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray() ,
@@ -71,11 +68,10 @@ public class EventBuilder {
      * @param response The Response object of client
      * @param startTime The time at which the valve is invoked
      * @param responseTime The time that is taken for the client to receive a response
-     * @param uaParser The Parser object that will be used to extract user agent information
      * @return A list containing all payload data that were extracted from the request and response
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
-                                                 long responseTime, Parser uaParser)  {
+                                                 long responseTime)  {
 
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";
@@ -101,7 +97,7 @@ public class EventBuilder {
         payload.add((request.getRequestURI()));
         payload.add((startTime));
         payload.add((request.getPathInfo()));
-        parserUserAgent(request, uaParser, payload);
+//        parserUserAgent(request, uaParser, payload);
         payload.add((EventPublisherConstants.APP_TYPE));
         payload.add((request.getContext().getDisplayName()));
         payload.add((extractSessionId(request)));
@@ -189,26 +185,26 @@ public class EventBuilder {
 
     //parse information about User Agent
 
-    /**
-     *
-     * @param request The Request object of client
-     * @param uaParser The Parser object that will be used to extract user agent information
-     * @param payload The list containing all payload information
-     */
-    private static void parserUserAgent(Request request, Parser uaParser, List<Object> payload) {
-
-        String userAgent = request.getHeader(EventPublisherConstants.USER_AGENT);
-        if (uaParser != null) {
-            Client readableUserAgent = uaParser.parse(userAgent);
-
-            payload.add((readableUserAgent.userAgent.family));
-            payload.add((readableUserAgent.userAgent.major));
-            payload.add((readableUserAgent.os.family));
-            payload.add((readableUserAgent.os.major));
-            payload.add((readableUserAgent.device.family));
-        }
-
-    }
+//    /**
+//     *
+//     * @param request The Request object of client
+//     * @param uaParser The Parser object that will be used to extract user agent information
+//     * @param payload The list containing all payload information
+//     */
+//    private static void parserUserAgent(Request request, Parser uaParser, List<Object> payload) {
+//
+//        String userAgent = request.getHeader(EventPublisherConstants.USER_AGENT);
+//        if (uaParser != null) {
+//            Client readableUserAgent = uaParser.parse(userAgent);
+//
+//            payload.add((readableUserAgent.userAgent.family));
+//            payload.add((readableUserAgent.userAgent.major));
+//            payload.add((readableUserAgent.os.family));
+//            payload.add((readableUserAgent.os.major));
+//            payload.add((readableUserAgent.device.family));
+//        }
+//
+//    }
 
     /*
     * Checks the remote address of the request. Server could be hiding behind a proxy or load balancer.

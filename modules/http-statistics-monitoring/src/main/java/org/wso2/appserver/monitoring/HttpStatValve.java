@@ -38,8 +38,6 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationExcep
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
-import ua_parser.CachingParser;
-import ua_parser.Parser;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -53,7 +51,7 @@ public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
     private DataPublisher dataPublisher = null;
-    private Parser uaParser = null;
+//    private Parser uaParser = null;
     StatsPublisherConfiguration statsPublisherConfiguration;
     Path path;
 
@@ -67,12 +65,12 @@ public class HttpStatValve extends ValveBase {
                 getStatsPublisherConfiguration();
         path = PathUtils.getWSO2ConfigurationHome();
 
-        try {
-            uaParser = new CachingParser();
-        } catch (IOException e) {
-            LOG.error("Initializing caching parser object failed:" + e);
-            throw new RuntimeException("Initializing caching parser object failed:", e);
-        }
+//        try {
+//            uaParser = new CachingParser();
+//        } catch (IOException e) {
+//            LOG.error("Initializing caching parser object failed:" + e);
+//            throw new RuntimeException("Initializing caching parser object failed:", e);
+//        }
 
         try {
             dataPublisher = getDataPublisher();
@@ -98,7 +96,7 @@ public class HttpStatValve extends ValveBase {
             Event event = null;
             try {
                 event = EventBuilder.buildEvent(statsPublisherConfiguration.getStreamId(), request, response, startTime,
-                        responseTime, uaParser);
+                        responseTime);
             } catch (EventBuilderException e) {
                 LOG.error("Creating the Event failed: " + e);
             }

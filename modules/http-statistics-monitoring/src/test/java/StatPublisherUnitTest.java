@@ -27,8 +27,6 @@ import org.wso2.appserver.monitoring.EventPublisherConstants;
 import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
 import org.wso2.carbon.databridge.commons.Event;
-import ua_parser.CachingParser;
-import ua_parser.Parser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,7 +46,7 @@ public class StatPublisherUnitTest {
 
     private Request request;
     private Response response;
-    Parser uaParser;
+//    Parser uaParser;
 
     /**
      * This method mocks Request and Response objects and sets up all necessary information.
@@ -58,7 +56,7 @@ public class StatPublisherUnitTest {
     @Before
     public void setUp() throws Exception {
 
-        uaParser = new CachingParser();
+//        uaParser = new CachingParser();
 
         request = mock(Request.class);
         response = mock(Response.class);
@@ -93,8 +91,8 @@ public class StatPublisherUnitTest {
         when(request.getContext()).thenReturn(standardContext);
         when(request.getUserPrincipal()).thenReturn(null);
         when(request.getPathInfo()).thenReturn("/");
-        when(request.getHeader("user-agent")).thenReturn("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) " +
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36");
+//        when(request.getHeader("user-agent")).thenReturn("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) " +
+//                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36");
         when(request.getLocale()).thenReturn(locale);
         when(request.getSession(false)).thenReturn(null);
         when(request.getSession(false)).thenReturn(null);
@@ -130,11 +128,11 @@ public class StatPublisherUnitTest {
         payload.add("/");
         payload.add(startTime);
         payload.add("/");
-        payload.add("Chrome");
-        payload.add("41");
-        payload.add("Mac OS X");
-        payload.add("10");
-        payload.add("Other");
+//        payload.add("Chrome");
+//        payload.add("41");
+//        payload.add("Mac OS X");
+//        payload.add("10");
+//        payload.add("Other");
         payload.add("webapp");
         payload.add("Test Display Name");
         payload.add("-");
@@ -159,7 +157,7 @@ public class StatPublisherUnitTest {
                 null, payload.toArray());
         Event event = null;
         try {
-            event = EventBuilder.buildEvent("org.wso2.http.stats:1.0.0", request, response, startTime, 0, uaParser);
+            event = EventBuilder.buildEvent("org.wso2.http.stats:1.0.0", request, response, startTime, 0);
         } catch (EventBuilderException e) {
             Assert.fail("Building event failed.");
         }
