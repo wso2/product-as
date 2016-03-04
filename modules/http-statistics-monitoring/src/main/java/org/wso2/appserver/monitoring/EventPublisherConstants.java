@@ -19,7 +19,7 @@
 package org.wso2.appserver.monitoring;
 
 /**
- * The Constants used within this package.
+ * The Constants used within this package in setting the statistics.
  */
 public class EventPublisherConstants {
 
@@ -32,6 +32,7 @@ public class EventPublisherConstants {
     public static final String USER_AGENT = "user-agent";
     public static final String REFERRER = "Referer";
     public static final String ANONYMOUS_USER = "anonymous.user";
+    public static final String APP_TYPE = "webapp";
 
     /**
      * instantiating is not needed for this class. private constructor to block that.

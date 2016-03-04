@@ -18,6 +18,7 @@
  */
 package org.wso2.appserver.monitoring;
 
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
@@ -34,6 +35,8 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationExcep
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
+import ua_parser.CachingParser;
+import ua_parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,48 +53,57 @@ public class HttpStatValve extends ValveBase {
     private String username = DefaultConfigurationConstants.USERNAME;
     private String password = DefaultConfigurationConstants.PASSWORD;
     private String configFileFolder = DefaultConfigurationConstants.CONFIG_FILE_FOLDER;
-    private String url = DefaultConfigurationConstants.URL;
+    private String type = DefaultConfigurationConstants.TYPE;
+    private String publisherUrl = DefaultConfigurationConstants.PUBLISHER_URL;
+    private String authenticationUrl = DefaultConfigurationConstants.AUTHENTICATION_URL;
     private String streamId = DefaultConfigurationConstants.STREAM_ID;
     private DataPublisher dataPublisher = null;
     private String appServerHome;
+    private Parser uaParser = null;
 
     @Override
-    protected void initInternal() {
+    protected void initInternal() throws LifecycleException {
+        super.initInternal();
+
         LOG.debug("The HttpStatValve initialized.");
         File userDir = new File(System.getProperty("catalina.base"));
         appServerHome = userDir.getAbsolutePath();
+
+        try {
+            uaParser = new CachingParser();
+        } catch (IOException e) {
+            LOG.error("Creating caching parser object failed:" + e);
+            throw new RuntimeException("Creating caching parser object failed:", e);
+        }
+
+        try {
+            dataPublisher = getDataPublisher();
+        } catch (ConfigurationException e) {
+            LOG.error("Creating DataPublisher failed:", e);
+            throw new LifecycleException("Creating DataPublisher failed", e);
+        }
+//
+//        //why is this necessary
+//        if (dataPublisher == null) {
+//            throw new LifecycleException("DataPublisher was not created.");
+//        }
     }
 
     @Override
-    public void invoke(Request request, Response response)  {
-
-        if (dataPublisher == null) {
-            try {
-                dataPublisher = getDataPublisher();
-            } catch (ConfigurationException e) {
-                LOG.error("Failed at setting configurations: " + e);
-            }
-        }
+    public void invoke(Request request, Response response) throws IOException, ServletException {
 
         Long startTime = System.currentTimeMillis();
-
-        try {
-            getNext().invoke(request, response);
-        } catch (IOException e) {
-            LOG.error("IO error occurred:" + e);
-        } catch (ServletException e) {
-            LOG.error("Servlet error occurred" + e);
-        }
+        getNext().invoke(request, response);
         long responseTime = System.currentTimeMillis() - startTime;
 
         Event event = null;
         try {
-            event = EventBuilder.buildEvent(getStreamId(), request, response, startTime, responseTime);
+            event = EventBuilder.buildEvent(getStreamId(), request, response, startTime, responseTime, uaParser);
         } catch (EventBuilderException e) {
             LOG.error("Creating the Event failed: " + e);
         }
-        dataPublisher.publish(event);
 
+        dataPublisher.publish(event);
     }
 
     //get file path to the file containing Data Agent configuration and properties
@@ -103,12 +115,16 @@ public class HttpStatValve extends ValveBase {
     //instantiate a data publisher to be used to publish data to DAS
     private DataPublisher getDataPublisher() throws ConfigurationException {
 
+        Path path = Paths.get(appServerHome, getConfigFileFolder(), DefaultConfigurationConstants.CLIENT_TRUSTSTORE);
+        System.setProperty("javax.net.ssl.trustStore", path.toString());
+        System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
+
         AgentHolder.setConfigPath(getDataAgentConfigPath());
-        String url = getUrl();
         DataPublisher dataPublisher;
 
         try {
-            dataPublisher = new DataPublisher(url, getUsername(), getPassword());
+            dataPublisher = new DataPublisher(getType(), getPublisherUrl(), getAuthenticationUrl(),
+                    getUsername(), getPassword());
         } catch (DataEndpointAgentConfigurationException e) {
             LOG.error("Data Endpoint Agent configuration failed: " + e);
             throw new ConfigurationException("Data Endpoint Agent configuration failed: ", e);
@@ -179,17 +195,47 @@ public class HttpStatValve extends ValveBase {
 
     /**
      *
-     * @param url DAS url
+     * @param type Data Agent type for publishing
      */
-    public void setUrl(String url) {
-        this.url = url; }
+    public void setType(String type) {
+        this.type = type; }
 
     /**
      *
-     * @return DAS url
+     * @return Data Agent type for publishing
      */
-    public String getUrl() {
-        return url;
+    public String getType() {
+        return type;
+    }
+
+    /**
+     *
+     * @param publisherUrl DAS url for publishing data
+     */
+    public void setPublisherUrl(String publisherUrl) {
+        this.publisherUrl = publisherUrl; }
+
+    /**
+     *
+     * @return DAS url for publishing data
+     */
+    public String getPublisherUrl() {
+        return publisherUrl;
+    }
+
+    /**
+     *
+     * @param authenticationUrl DAS url for authentication
+     */
+    public void setAuthenticationUrl(String authenticationUrl) {
+        this.authenticationUrl = authenticationUrl; }
+
+    /**
+     *
+     * @return DAS url for authentication
+     */
+    public String getAuthenticationUrl() {
+        return authenticationUrl;
     }
 
     /**
