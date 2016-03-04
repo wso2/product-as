@@ -21,21 +21,38 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>webapp-loader</artifactId>
-    <name>WSO2 Application Server - Webapp Loader</name>
+    <artifactId>appserver-utils</artifactId>
+    <version>6.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>WSO2 Application Server - Module - Utils</name>
+    <description>WSO2 Application Server Utils</description>
+    <url>http://wso2.com</url>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 </project>

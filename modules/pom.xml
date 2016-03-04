@@ -23,12 +23,12 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>modules</artifactId>
-    <name>WSO2 Application Server 6.0.0 - Modules</name>
+    <name>WSO2 Application Server - Modules</name>
 
     <modules>
+        <module>appserver-utils</module>
+        <module>http-statistics-monitoring</module>
         <module>sample-module</module>
         <module>webapp-loader</module>
-        <module>http-statistics-monitoring</module>
     </modules>
-
 </project>

@@ -24,9 +24,12 @@ import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
+import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
 import org.wso2.appserver.monitoring.exceptions.ConfigurationException;
 import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
+import org.wso2.appserver.utils.PathUtils;
 import org.wso2.carbon.databridge.agent.AgentHolder;
 import org.wso2.carbon.databridge.agent.DataPublisher;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
@@ -38,7 +41,6 @@ import org.wso2.carbon.databridge.commons.exception.TransportException;
 import ua_parser.CachingParser;
 import ua_parser.Parser;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,24 +52,30 @@ import javax.servlet.ServletException;
 public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
-    private String username = DefaultConfigurationConstants.USERNAME;
-    private String password = DefaultConfigurationConstants.PASSWORD;
-    private String configFileFolder = DefaultConfigurationConstants.CONFIG_FILE_FOLDER;
-    private String type = DefaultConfigurationConstants.TYPE;
-    private String publisherUrl = DefaultConfigurationConstants.PUBLISHER_URL;
-    private String authenticationUrl = DefaultConfigurationConstants.AUTHENTICATION_URL;
-    private String streamId = DefaultConfigurationConstants.STREAM_ID;
+//    private String username = DefaultConfigurationConstants.USERNAME;
+//    private String password = DefaultConfigurationConstants.PASSWORD;
+//    private String configFileFolder = DefaultConfigurationConstants.CONFIG_FILE_FOLDER;
+//    private String type = DefaultConfigurationConstants.TYPE;
+//    private String publisherUrl = DefaultConfigurationConstants.PUBLISHER_URL;
+//    private String authenticationUrl = DefaultConfigurationConstants.AUTHENTICATION_URL;
+//    private String streamId = DefaultConfigurationConstants.STREAM_ID;
     private DataPublisher dataPublisher = null;
     private String appServerHome;
     private Parser uaParser = null;
+    StatsPublisherConfiguration statsPublisherConfiguration;
+    Path path;
 
     @Override
     protected void initInternal() throws LifecycleException {
         super.initInternal();
 
         LOG.debug("The HttpStatValve initialized.");
-        File userDir = new File(System.getProperty("catalina.base"));
-        appServerHome = userDir.getAbsolutePath();
+
+        statsPublisherConfiguration = ServerConfigurationLoader.getServerConfiguration().
+                getStatsPublisherConfiguration();
+        path = PathUtils.getWSO2ConfigurationHome();
+//        File userDir = new File(System.getProperty("catalina.base"));
+//        appServerHome = userDir.getAbsolutePath();
 
         try {
             uaParser = new CachingParser();
@@ -98,7 +106,8 @@ public class HttpStatValve extends ValveBase {
 
         Event event = null;
         try {
-            event = EventBuilder.buildEvent(getStreamId(), request, response, startTime, responseTime, uaParser);
+            event = EventBuilder.buildEvent(statsPublisherConfiguration.getStreamId(), request, response, startTime,
+                    responseTime, uaParser);
         } catch (EventBuilderException e) {
             LOG.error("Creating the Event failed: " + e);
         }
@@ -108,14 +117,16 @@ public class HttpStatValve extends ValveBase {
 
     //get file path to the file containing Data Agent configuration and properties
     private String getDataAgentConfigPath() {
-        Path path = Paths.get(appServerHome, getConfigFileFolder(), DefaultConfigurationConstants.DATA_AGENT_CONF);
+        Path path = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(), "Webapp_Statistics_Monitoring",
+                DefaultConfigurationConstants.DATA_AGENT_CONF);
         return path.toString();
     }
 
     //instantiate a data publisher to be used to publish data to DAS
     private DataPublisher getDataPublisher() throws ConfigurationException {
 
-        Path path = Paths.get(appServerHome, getConfigFileFolder(), DefaultConfigurationConstants.CLIENT_TRUSTSTORE);
+        Path path = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(), "Webapp_Statistics_Monitoring",
+                DefaultConfigurationConstants.CLIENT_TRUSTSTORE);
         System.setProperty("javax.net.ssl.trustStore", path.toString());
         System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
 
@@ -123,8 +134,13 @@ public class HttpStatValve extends ValveBase {
         DataPublisher dataPublisher;
 
         try {
-            dataPublisher = new DataPublisher(getType(), getPublisherUrl(), getAuthenticationUrl(),
-                    getUsername(), getPassword());
+//            dataPublisher = new DataPublisher(getType(), getPublisherUrl(), getAuthenticationUrl(),
+//                    getUsername(), getPassword());
+            dataPublisher = new DataPublisher("Thrift",
+                    statsPublisherConfiguration.getPublisherURL(),
+                    statsPublisherConfiguration.getAuthenticationURL(),
+                    statsPublisherConfiguration.getUsername(),
+                    statsPublisherConfiguration.getPassword());
         } catch (DataEndpointAgentConfigurationException e) {
             LOG.error("Data Endpoint Agent configuration failed: " + e);
             throw new ConfigurationException("Data Endpoint Agent configuration failed: ", e);
@@ -145,112 +161,112 @@ public class HttpStatValve extends ValveBase {
         return dataPublisher;
     }
 
-    /**
-     *
-     * @param password login password for DAS
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     *
-     * @return login password for DAS
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     *
-     * @param username login username for DAS
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     *
-     * @return login username for DAS
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     *
-     * @param configFileFolder relative path to the folder containing transport configuration files
-     */
-    public void setConfigFileFolder(String configFileFolder) {
-        this.configFileFolder = configFileFolder;
-    }
-
-    /**
-     *
-     * @return relative path to the folder containing transport configuration files
-     */
-    public String getConfigFileFolder() {
-        return configFileFolder;
-    }
-
-    /**
-     *
-     * @param type Data Agent type for publishing
-     */
-    public void setType(String type) {
-        this.type = type; }
-
-    /**
-     *
-     * @return Data Agent type for publishing
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     *
-     * @param publisherUrl DAS url for publishing data
-     */
-    public void setPublisherUrl(String publisherUrl) {
-        this.publisherUrl = publisherUrl; }
-
-    /**
-     *
-     * @return DAS url for publishing data
-     */
-    public String getPublisherUrl() {
-        return publisherUrl;
-    }
-
-    /**
-     *
-     * @param authenticationUrl DAS url for authentication
-     */
-    public void setAuthenticationUrl(String authenticationUrl) {
-        this.authenticationUrl = authenticationUrl; }
-
-    /**
-     *
-     * @return DAS url for authentication
-     */
-    public String getAuthenticationUrl() {
-        return authenticationUrl;
-    }
-
-    /**
-     *
-     * @param streamId Unique ID of the Event Stream from which data is published to DAS
-     */
-    public void setStreamId(String streamId) {
-        this.streamId = streamId;
-    }
-
-    /**
-     *
-     * @return Unique ID of the Event Stream from which data is published to DAS
-     */
-    public String getStreamId() {
-        return streamId;
-    }
+//    /**
+//     *
+//     * @param password login password for DAS
+//     */
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    /**
+//     *
+//     * @return login password for DAS
+//     */
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    /**
+//     *
+//     * @param username login username for DAS
+//     */
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//    /**
+//     *
+//     * @return login username for DAS
+//     */
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    /**
+//     *
+//     * @param configFileFolder relative path to the folder containing transport configuration files
+//     */
+//    public void setConfigFileFolder(String configFileFolder) {
+//        this.configFileFolder = configFileFolder;
+//    }
+//
+//    /**
+//     *
+//     * @return relative path to the folder containing transport configuration files
+//     */
+//    public String getConfigFileFolder() {
+//        return configFileFolder;
+//    }
+//
+//    /**
+//     *
+//     * @param type Data Agent type for publishing
+//     */
+//    public void setType(String type) {
+//        this.type = type; }
+//
+//    /**
+//     *
+//     * @return Data Agent type for publishing
+//     */
+//    public String getType() {
+//        return type;
+//    }
+//
+//    /**
+//     *
+//     * @param publisherUrl DAS url for publishing data
+//     */
+//    public void setPublisherUrl(String publisherUrl) {
+//        this.publisherUrl = publisherUrl; }
+//
+//    /**
+//     *
+//     * @return DAS url for publishing data
+//     */
+//    public String getPublisherUrl() {
+//        return publisherUrl;
+//    }
+//
+//    /**
+//     *
+//     * @param authenticationUrl DAS url for authentication
+//     */
+//    public void setAuthenticationUrl(String authenticationUrl) {
+//        this.authenticationUrl = authenticationUrl; }
+//
+//    /**
+//     *
+//     * @return DAS url for authentication
+//     */
+//    public String getAuthenticationUrl() {
+//        return authenticationUrl;
+//    }
+//
+//    /**
+//     *
+//     * @param streamId Unique ID of the Event Stream from which data is published to DAS
+//     */
+//    public void setStreamId(String streamId) {
+//        this.streamId = streamId;
+//    }
+//
+//    /**
+//     *
+//     * @return Unique ID of the Event Stream from which data is published to DAS
+//     */
+//    public String getStreamId() {
+//        return streamId;
+//    }
 }
