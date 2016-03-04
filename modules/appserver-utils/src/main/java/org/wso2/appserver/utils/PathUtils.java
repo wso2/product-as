@@ -16,10 +16,13 @@
 package org.wso2.appserver.utils;
 
 import org.apache.catalina.Context;
+import org.apache.catalina.Globals;
 import org.apache.catalina.Host;
 import org.wso2.appserver.Constants;
-import org.wso2.appserver.exceptions.AppServerException;
+import org.wso2.appserver.exceptions.ApplicationServerException;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -28,7 +31,19 @@ import java.nio.file.Paths;
  *
  * @since 6.0.0
  */
-public class PathUtils {
+public final class PathUtils {
+    private static final Path PATH_CATALINA_BASE;
+    private static final Path PATH_CATALINA_CONFIG_HOME;
+    private static final Path PATH_WSO2_CONFIG_HOME;
+
+    static {
+        String catalinaBase = System.getProperty(Globals.CATALINA_BASE_PROP);
+        PATH_CATALINA_BASE = Paths.get(catalinaBase);
+        PATH_CATALINA_CONFIG_HOME = Paths.get(catalinaBase, Constants.TOMCAT_CONFIGURATION_DIRECTORY);
+        PATH_WSO2_CONFIG_HOME = Paths.
+                get(catalinaBase, Constants.TOMCAT_CONFIGURATION_DIRECTORY, Constants.WSO2_CONFIGURATION_DIRECTORY);
+    }
+
     /**
      * Prevents instantiating the {@code PathUtils} class.
      */
@@ -39,99 +54,49 @@ public class PathUtils {
      * Returns a file path representation of the base of Apache Tomcat instances.
      *
      * @return a {@link Path} instance representing the base of Apache Tomcat instances
-     * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
-    public static Path getCatalinaBase() throws AppServerException {
-        String envVariable = System.getProperty(Constants.CATALINA_BASE);
-        if (envVariable != null) {
-            return Paths.get(envVariable);
-        } else {
-            throw new AppServerException("Neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set");
-        }
+    public static Path getCatalinaBase() {
+        return PATH_CATALINA_BASE;
     }
 
     /**
      * Returns a file path representation of the Apache Tomcat configuration home.
      *
      * @return a {@link Path} instance representing the Apache Tomcat configuration home
-     * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
-    public static Path getCatalinaConfigurationHome() throws AppServerException {
-        return Paths.get(getCatalinaBase().toString(), Constants.TOMCAT_CONFIGURATION_HOME);
+    public static Path getCatalinaConfigurationHome() {
+        return PATH_CATALINA_CONFIG_HOME;
+    }
+
+    /**
+     * Returns a file path representation of the specified configuration file within the Apache Tomcat
+     * configuration home.
+     *
+     * @param fileName the name of the file
+     * @return a {@link Path} representation of the specified configuration file within the Apache Tomcat
+     * configuration home
+     */
+    public static Path getCatalinaConfigurationFile(String fileName) {
+        return Paths.get(PATH_CATALINA_CONFIG_HOME.toString(), fileName);
     }
 
     /**
      * Returns a file path representation of the Application Server's WSO2-specific configuration home.
      *
      * @return a {@link Path} instance representing the WSO2 Application Server's WSO2-specific configuration home
-     * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
      */
-    public static Path getWSO2ConfigurationHome() throws AppServerException {
-        return Paths.get(getCatalinaConfigurationHome().toString(), Constants.WSO2_CONFIGURATION_HOME);
+    public static Path getWSO2ConfigurationHome() {
+        return PATH_WSO2_CONFIG_HOME;
     }
 
     /**
-     * Returns a file path representation of the Application Server's WSO2 specific server level configurations file.
+     * Returns a file path representation of the specified configuration file within the WSO2 configuration home.
      *
-     * @return a {@link Path} instance representing the Application Server's WSO2 specific server level configurations
-     * file
-     * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
+     * @param fileName the name of the file
+     * @return a {@link Path} representation of the specified configuration file within the WSO2 configuration home
      */
-    public static Path getWSO2AppServerDescriptor() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.SERVER_DESCRIPTOR);
-    }
-
-    /**
-     * Returns a file path representation of the XML schema file for Application Server's WSO2 specific server level
-     * configurations file.
-     *
-     * @return a {@link Path} instance representing the XML schema file for Application Server's WSO2 specific server
-     * level configurations file
-     * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
-     */
-    public static Path getWSO2AppServerDescriptorSchema() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.SERVER_DESCRIPTOR_SCHEMA);
-    }
-
-    /**
-     * Returns a file path representation of the Application Server's WSO2-specific global context configurations
-     * descriptor file.
-     *
-     * @return a {@link Path} instance representing the Application Server's WSO2-specific global context configurations
-     * descriptor file
-     * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
-     */
-    public static Path getGlobalWSO2WebAppDescriptor() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR);
-    }
-
-    /**
-     * Returns a file path representation of the XML schema file for Application Server's WSO2-specific context level
-     * configurations descriptor file.
-     *
-     * @return a {@link Path} instance representing the XML schema file for Application Server's WSO2-specific context
-     * level configurations descriptor file
-     * @throws AppServerException if neither CATALINA_BASE nor CATALINA_HOME environmental variable has been set
-     */
-    public static Path getWSO2WebAppDescriptorSchema() throws AppServerException {
-        return Paths.get(getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
-    }
-
-    /**
-     * Returns an absolute file path representation of the webapp descriptor file of the specified context.
-     *
-     * @param context the webapp of which the local webapp descriptor path is to be returned
-     * @return the absolute file path representation of the webapp descriptor file of the specified context
-     * @throws AppServerException if the context is null
-     */
-    public static Path getWSO2WebAppDescriptorForContext(Context context) throws AppServerException {
-        if (context != null) {
-            Path contextRoot = PathUtils.getContextRoot(context);
-            return Paths.
-                    get(contextRoot.toString(), Constants.WEBAPP_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
-        } else {
-            throw new AppServerException("Context cannot be null");
-        }
+    public static Path getWSO2ConfigurationFile(String fileName) {
+        return Paths.get(PATH_WSO2_CONFIG_HOME.toString(), fileName);
     }
 
     /**
@@ -139,26 +104,35 @@ public class PathUtils {
      *
      * @param context the webapp of which the context root is to be returned
      * @return the absolute file path representation of the webapp context root specified
-     * @throws AppServerException if the context is null
+     * @throws ApplicationServerException if the context is null
      */
-    protected static Path getContextRoot(Context context) throws AppServerException {
-        if (context != null) {
-            Host host = (Host) context.getParent();
-            String appBase = host.getAppBase();
-            Path canonicalAppBase = Paths.get(appBase);
+    public static Path getWebAppPath(Context context) throws ApplicationServerException {
+        String webappFilePath = "";
 
-            if (!canonicalAppBase.isAbsolute()) {
-                canonicalAppBase = Paths.get(getCatalinaBase().toString(), appBase);
-            }
+        //  Value of the following variable depends on various conditions. Sometimes you get just the webapp directory
+        //  name. Sometime you get absolute path the webapp directory or war file.
+        try {
+            if (context != null) {
+                String docBase = context.getDocBase();
+                Host host = (Host) context.getParent();
+                String appBase = host.getAppBase();
+                File canonicalAppBase = new File(appBase);
+                if (canonicalAppBase.isAbsolute()) {
+                    canonicalAppBase = canonicalAppBase.getCanonicalFile();
+                } else {
+                    canonicalAppBase = new File(PathUtils.getCatalinaBase().toString(), appBase).getCanonicalFile();
+                }
 
-            String docBase = context.getDocBase();
-            Path webappFilePath = Paths.get(docBase);
-            if (!webappFilePath.isAbsolute()) {
-                webappFilePath = Paths.get(canonicalAppBase.toString(), docBase);
+                File webappFile = new File(docBase);
+                if (webappFile.isAbsolute()) {
+                    webappFilePath = webappFile.getCanonicalPath();
+                } else {
+                    webappFilePath = (new File(canonicalAppBase, docBase)).getPath();
+                }
             }
-            return webappFilePath;
-        } else {
-            throw new AppServerException("Context cannot be null");
+        } catch (IOException ex) {
+            throw new ApplicationServerException("Error while generating webapp file path", ex);
         }
+        return Paths.get(webappFilePath);
     }
 }

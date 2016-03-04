@@ -15,7 +15,8 @@
  */
 package org.wso2.appserver.utils;
 
-import org.wso2.appserver.exceptions.AppServerException;
+import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
+import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 
@@ -23,8 +24,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -41,41 +40,35 @@ import javax.xml.validation.SchemaFactory;
  * @since 6.0.0
  */
 public class XMLUtils {
-    private static final Logger logger = Logger.getLogger(XMLUtils.class.getName());
-
     /**
-     * JAXB utility functions
+     * JAXB utility functions.
      */
 
     /**
      * Returns an XML unmarshaller for the defined Java classes.
      *
-     * @param schema  an optional file path representation of an XML schema file against which the source XML is to be
-     *                validated
-     * @param classes the list of classes to be recognized by the {@link JAXBContext}
+     * @param schemaPath file path of the XML schema file against which the source XML is to be
+     *                   validated
+     * @param classes    the list of classes to be recognized by the {@link JAXBContext}
      * @return an XML unmarshaller for the defined Java classes
-     * @throws AppServerException if an error occurs when creating the XML unmarshaller
+     * @throws ApplicationServerException if an error occurs when creating the XML unmarshaller
      */
-    public static Unmarshaller getXMLUnmarshaller(Optional<Path> schema, Class... classes) throws AppServerException {
+    public static Unmarshaller getXMLUnmarshaller(Path schemaPath, Class... classes) throws ApplicationServerException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(classes);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            schema.ifPresent(schemaPath -> {
-                if (Files.exists(schemaPath)) {
-                    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                    Schema xmlSchema;
-                    try {
-                        xmlSchema = schemaFactory.newSchema(schemaPath.toFile());
-                    } catch (SAXException e) {
-                        logger.log(Level.WARNING, "An error has occurred during parsing", e);
-                        xmlSchema = null;
-                    }
-                    Optional.ofNullable(xmlSchema).ifPresent(unmarshaller::setSchema);
-                }
-            });
+
+            if (Files.exists(schemaPath)) {
+                SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                Schema xmlSchema = schemaFactory.newSchema(schemaPath.toFile());
+                unmarshaller.setSchema(xmlSchema);
+            } else {
+                throw new ApplicationServerException(
+                        "Configuration schema not found in the file path: " + schemaPath.toString());
+            }
             return unmarshaller;
-        } catch (JAXBException e) {
-            throw new AppServerException("Error when creating the XML unmarshaller", e);
+        } catch (JAXBException | SAXException e) {
+            throw new ApplicationServerException("Error when creating the XML unmarshaller", e);
         }
     }
 
@@ -88,16 +81,17 @@ public class XMLUtils {
      * @param bindingClass the class to be recognized by the {@link JAXBContext}
      * @param <T>          the type of the class to be bound
      * @return bound object (Type T) of XML
-     * @throws AppServerException if an error occurred when creating the unmarshaller or unmarshalling the XML source
+     * @throws ApplicationServerException if an error occurred when creating the unmarshaller or
+     *                                    unmarshalling the XML source
      */
-    public static <T> T getUnmarshalledObject(Path source, Optional<Path> schema, Class<T> bindingClass)
-            throws AppServerException {
+    public static <T> T getUnmarshalledObject(Path source, Path schema, Class<T> bindingClass)
+            throws ApplicationServerException {
         try {
             Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
             Object unmarshalled = unmarshaller.unmarshal(source.toFile());
             return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
-            throw new AppServerException("Error when unmarshalling the XML source", e);
+            throw new ApplicationServerException("Error when unmarshalling the XML configuration", e);
         }
     }
 
@@ -110,21 +104,22 @@ public class XMLUtils {
      * @param bindingClass the class to be recognized by the {@link JAXBContext}
      * @param <T>          the type of the class to be bound
      * @return bound object (Type T) of XML
-     * @throws AppServerException if an error occurred when creating the unmarshaller or unmarshalling the XML source
+     * @throws ApplicationServerException if an error occurred when creating the unmarshaller or
+     *                                    unmarshalling the XML source
      */
-    public static <T> T getUnmarshalledObject(InputStream inputStream, Optional<Path> schema, Class<T> bindingClass)
-            throws AppServerException {
+    public static <T> T getUnmarshalledObject(InputStream inputStream, Path schema, Class<T> bindingClass)
+            throws ApplicationServerException {
         try {
             Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
             Object unmarshalled = unmarshaller.unmarshal(inputStream);
             return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
-            throw new AppServerException("Error when unmarshalling the XML source", e);
+            throw new ApplicationServerConfigurationException("Error when unmarshalling the XML configuration", e);
         }
     }
 
     /**
-     * JAXP utility functions
+     * JAXP utility function
      */
 
     /**
@@ -135,10 +130,10 @@ public class XMLUtils {
      * @param entityResolver         the {@link EntityResolver} to be used within the parser, if {@code entityResolver}
      *                               is set to null default implementation is used
      * @return the generated {@link DocumentBuilder} instance
-     * @throws AppServerException if an error occurs when generating the new DocumentBuilder
+     * @throws ApplicationServerException if an error occurs when generating the new DocumentBuilder
      */
     public static DocumentBuilder getDocumentBuilder(boolean expandEntityReferences, boolean namespaceAware,
-            Optional<EntityResolver> entityResolver) throws AppServerException {
+            Optional<EntityResolver> entityResolver) throws ApplicationServerException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         if (!expandEntityReferences) {
             documentBuilderFactory.setExpandEntityReferences(false);
@@ -151,7 +146,7 @@ public class XMLUtils {
         try {
             docBuilder = documentBuilderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            throw new AppServerException("Error when generating the new DocumentBuilder", e);
+            throw new ApplicationServerException("Error when generating the new DocumentBuilder", e);
         }
         entityResolver.ifPresent(docBuilder::setEntityResolver);
 

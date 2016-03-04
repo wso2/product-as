@@ -61,7 +61,7 @@ import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
-import org.wso2.appserver.exceptions.AppServerException;
+import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.utils.XMLUtils;
 import org.wso2.appserver.webapp.security.sso.Constants;
 import org.wso2.appserver.webapp.security.sso.bean.RelayState;
@@ -409,7 +409,7 @@ public class SSOUtils {
             UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
             return unmarshaller.unmarshall(element);
-        } catch (AppServerException | UnmarshallingException | SAXException | IOException e) {
+        } catch (ApplicationServerException | UnmarshallingException | SAXException | IOException e) {
             throw new SSOException("Error in unmarshalling the XML string representation", e);
         }
     }

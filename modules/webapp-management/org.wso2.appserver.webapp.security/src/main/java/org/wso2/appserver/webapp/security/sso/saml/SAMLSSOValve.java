@@ -24,7 +24,6 @@ import org.wso2.appserver.configuration.context.SSOConfiguration;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
-import org.wso2.appserver.exceptions.AppServerException;
 import org.wso2.appserver.webapp.security.sso.Constants;
 import org.wso2.appserver.webapp.security.sso.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.sso.agent.SSOAgentRequestResolver;
@@ -66,11 +65,7 @@ public class SAMLSSOValve extends SingleSignOn {
     protected void initInternal() throws LifecycleException {
         super.initInternal();
         //  Load the global server level configurations
-        try {
-            serverConfiguration = ServerConfigurationLoader.getGlobalConfiguration();
-        } catch (AppServerException e) {
-            throw new LifecycleException("Failed to load the server level configurations", e);
-        }
+        serverConfiguration = ServerConfigurationLoader.getServerConfiguration();
     }
 
     /**
@@ -89,7 +84,7 @@ public class SAMLSSOValve extends SingleSignOn {
 
         //  Load the effective context level configurations
         Optional<ContextConfiguration> configuration = ContextConfigurationLoader.
-                retrieveContextConfiguration(request.getContext());
+                getContextConfiguration(request.getContext());
         if (configuration.isPresent()) {
             //  Retrieve the configuration instance if exists
             contextConfiguration = configuration.get();

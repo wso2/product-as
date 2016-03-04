@@ -15,7 +15,9 @@
  */
 package org.wso2.appserver.configuration.context;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -74,10 +76,6 @@ public class SSOConfiguration {
         return skipURIs;
     }
 
-    public void setSkipURIs(SkipURIs skipURIs) {
-        this.skipURIs = skipURIs;
-    }
-
     public Boolean handleConsumerURLAfterSLO() {
         return handleConsumerURLAfterSLO;
     }
@@ -88,10 +86,6 @@ public class SSOConfiguration {
 
     public String getQueryParams() {
         return queryParams;
-    }
-
-    public void setQueryParams(String queryParams) {
-        this.queryParams = queryParams;
     }
 
     public String getApplicationServerURL() {
@@ -106,40 +100,20 @@ public class SSOConfiguration {
         return enableSSO;
     }
 
-    public void enableSSO(Boolean enableSSO) {
-        this.enableSSO = enableSSO;
-    }
-
     public String getRequestURLPostFix() {
         return requestURLPostFix;
-    }
-
-    public void setRequestURLPostFix(String requestURLPostFix) {
-        this.requestURLPostFix = requestURLPostFix;
     }
 
     public String getHttpBinding() {
         return httpBinding;
     }
 
-    public void setHttpBinding(String httpBinding) {
-        this.httpBinding = httpBinding;
-    }
-
     public String getIssuerId() {
         return issuerId;
     }
 
-    public void setIssuerId(String issuerId) {
-        this.issuerId = issuerId;
-    }
-
     public String getConsumerURL() {
         return consumerURL;
-    }
-
-    public void setConsumerURL(String consumerURL) {
-        this.consumerURL = consumerURL;
     }
 
     public String getConsumerURLPostFix() {
@@ -154,72 +128,36 @@ public class SSOConfiguration {
         return attributeConsumingServiceIndex;
     }
 
-    public void setAttributeConsumingServiceIndex(String attributeConsumingServiceIndex) {
-        this.attributeConsumingServiceIndex = attributeConsumingServiceIndex;
-    }
-
     public Boolean isSLOEnabled() {
         return enableSLO;
-    }
-
-    public void enableSLO(Boolean enableSLO) {
-        this.enableSLO = enableSLO;
     }
 
     public String getSLOURLPostFix() {
         return sloURLPostFix;
     }
 
-    public void setSLOURLPostFix(String sloURLPostFix) {
-        this.sloURLPostFix = sloURLPostFix;
-    }
-
     public Boolean isResponseSigningEnabled() {
         return enableResponseSigning;
-    }
-
-    public void enableResponseSigning(Boolean enableResponseSigning) {
-        this.enableResponseSigning = enableResponseSigning;
     }
 
     public Boolean isAssertionSigningEnabled() {
         return enableAssertionSigning;
     }
 
-    public void enableAssertionSigning(Boolean enableAssertionSigning) {
-        this.enableAssertionSigning = enableAssertionSigning;
-    }
-
     public Boolean isAssertionEncryptionEnabled() {
         return enableAssertionEncryption;
-    }
-
-    public void enableAssertionEncryption(Boolean enableAssertionEncryption) {
-        this.enableAssertionEncryption = enableAssertionEncryption;
     }
 
     public Boolean isForceAuthnEnabled() {
         return enableForceAuthn;
     }
 
-    public void enableForceAuthn(Boolean enableForceAuthn) {
-        this.enableForceAuthn = enableForceAuthn;
-    }
-
     public Boolean isPassiveAuthnEnabled() {
         return enablePassiveAuthn;
     }
 
-    public void enablePassiveAuthn(Boolean enablePassiveAuthn) {
-        this.enablePassiveAuthn = enablePassiveAuthn;
-    }
-
     public Boolean isRequestSigningEnabled() {
         return enableRequestSigning;
-    }
-
-    public void enableRequestSigning(Boolean enableRequestSigning) {
-        this.enableRequestSigning = enableRequestSigning;
     }
 
     public List<Property> getProperties() {
@@ -259,6 +197,91 @@ public class SSOConfiguration {
 
         public String getValue() {
             return value;
+        }
+    }
+
+    /**
+     * Merges the context level single-sign-on (SSO) configurations defined globally and overridden at context level
+     * (if any).
+     *
+     * @param configurations the local, context level group of SSO configurations to be merged with
+     */
+    protected void merge(SSOConfiguration configurations) {
+        Optional.ofNullable(configurations).ifPresent(configs -> {
+            skipURIs = Optional.ofNullable(configs.skipURIs).orElse(skipURIs);
+            handleConsumerURLAfterSLO = Optional.ofNullable(configs.handleConsumerURLAfterSLO).
+                    orElse(handleConsumerURLAfterSLO);
+            queryParams = Optional.ofNullable(configs.queryParams).orElse(queryParams);
+            applicationServerURL = Optional.ofNullable(configs.applicationServerURL).orElse(applicationServerURL);
+            enableSSO = Optional.ofNullable(configs.enableSSO).orElse(enableSSO);
+            requestURLPostFix = Optional.ofNullable(configs.requestURLPostFix).orElse(requestURLPostFix);
+            httpBinding = Optional.ofNullable(configs.httpBinding).orElse(httpBinding);
+            issuerId = configs.issuerId;
+            consumerURL = configs.consumerURL;
+            consumerURLPostFix = Optional.ofNullable(configs.consumerURLPostFix).orElse(consumerURLPostFix);
+            attributeConsumingServiceIndex = Optional.ofNullable(configs.attributeConsumingServiceIndex).
+                    orElse(attributeConsumingServiceIndex);
+            enableSLO = Optional.ofNullable(configs.enableSLO).orElse(enableSLO);
+            sloURLPostFix = Optional.ofNullable(configs.sloURLPostFix).orElse(sloURLPostFix);
+            enableAssertionEncryption = Optional.ofNullable(configs.enableAssertionEncryption).
+                    orElse(enableAssertionEncryption);
+            enableAssertionSigning = Optional.ofNullable(configs.enableAssertionSigning).orElse(enableAssertionSigning);
+            enableRequestSigning = Optional.ofNullable(configs.enableRequestSigning).orElse(enableRequestSigning);
+            enableResponseSigning = Optional.ofNullable(configs.enableResponseSigning).orElse(enableResponseSigning);
+            enableForceAuthn = Optional.ofNullable(configs.enableForceAuthn).orElse(enableForceAuthn);
+            enablePassiveAuthn = Optional.ofNullable(configs.enablePassiveAuthn).orElse(enablePassiveAuthn);
+            List<SSOConfiguration.Property> properties = prioritizeProperties(this.getProperties(),
+                    configs.getProperties());
+            if (properties.isEmpty()) {
+                this.setProperties(null);
+            } else {
+                this.setProperties(properties);
+            }
+        });
+    }
+
+    /**
+     * Prioritizes the additional webapp descriptor properties.
+     *
+     * @param global the globally defined set of additional SSO properties
+     * @param local  the set of additional SSO properties defined at context level
+     * @return the final, effective set of webapp descriptor additional SSO properties
+     */
+    private static List<SSOConfiguration.Property> prioritizeProperties(List<SSOConfiguration.Property> global,
+            List<SSOConfiguration.Property> local) {
+        List<SSOConfiguration.Property> effective = new ArrayList<>();
+        if ((global != null) && (local != null)) {
+            global.stream().forEach(property -> {
+                Optional<SSOConfiguration.Property> matching = getProperty(property.getKey(), local);
+                if (matching.isPresent()) {
+                    effective.add(matching.get());
+                } else {
+                    effective.add(property);
+                }
+            });
+        } else if (global != null) {
+            global.stream().forEach(effective::add);
+        } else if (local != null) {
+            local.stream().forEach(effective::add);
+        }
+        return effective;
+    }
+
+    /**
+     * Returns an additional {@code Property} if exists in the list of properties.
+     *
+     * @param key  the key of the property to be checked
+     * @param list the list of properties
+     * @return the SSO property if exists
+     */
+    private static Optional<SSOConfiguration.Property> getProperty(String key, List<SSOConfiguration.Property> list) {
+        if (key == null) {
+            return Optional.empty();
+        }
+        if (list != null) {
+            return list.stream().filter(property -> property.getKey().equals(key)).findFirst();
+        } else {
+            return Optional.empty();
         }
     }
 }

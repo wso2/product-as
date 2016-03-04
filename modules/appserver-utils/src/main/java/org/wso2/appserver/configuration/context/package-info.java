@@ -13,11 +13,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+/**
+ * package information for context configuration namespace.
+ */
 @XmlSchema(
         namespace = Constants.WEBAPP_DESCRIPTOR_NAMESPACE,
         elementFormDefault = XmlNsForm.QUALIFIED,
         xmlns = {
-                @XmlNs(prefix = "", namespaceURI = Constants.WEBAPP_DESCRIPTOR_NAMESPACE) })
+                @XmlNs(prefix = "", namespaceURI = Constants.WEBAPP_DESCRIPTOR_NAMESPACE)
+        }
+)
 package org.wso2.appserver.configuration.context;
 
 import org.wso2.appserver.Constants;

@@ -16,16 +16,18 @@
 package org.wso2.appserver.exceptions;
 
 /**
- * This class defines a custom exception type specified for WSO2 Application Server.
+ * This class defines a custom checked exception type specific to WSO2 Application Server.
  *
  * @since 6.0.0
  */
-public class AppServerException extends Exception {
-    public AppServerException(String message) {
+public class ApplicationServerException extends Exception {
+    private static final long serialVersionUID = -2311546694551512249L;
+
+    public ApplicationServerException(String message) {
         super(message);
     }
 
-    public AppServerException(String message, Throwable rootCause) {
+    public ApplicationServerException(String message, Throwable rootCause) {
         super(message, rootCause);
     }
 }
