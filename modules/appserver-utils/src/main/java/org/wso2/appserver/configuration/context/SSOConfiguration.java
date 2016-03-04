@@ -15,9 +15,7 @@
  */
 package org.wso2.appserver.configuration.context;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -293,10 +291,12 @@ public class SSOConfiguration {
 //            effective.setConsumerURL(local.getConsumerURL());
 //            effective.setConsumerURLPostFix(
 //                    Optional.ofNullable(local.getConsumerURLPostFix()).orElse(global.getConsumerURLPostFix()));
-//            effective.setAttributeConsumingServiceIndex(Optional.ofNullable(local.getAttributeConsumingServiceIndex()).
+//            effective.setAttributeConsumingServiceIndex(Optional.ofNullable(local.
+// getAttributeConsumingServiceIndex()).
 //                    orElse(global.getAttributeConsumingServiceIndex()));
 //            effective.enableSLO(Optional.ofNullable(local.isSLOEnabled()).orElse(global.isSLOEnabled()));
-//            effective.setSLOURLPostFix(Optional.ofNullable(local.getSLOURLPostFix()).orElse(global.getSLOURLPostFix()));
+//            effective.setSLOURLPostFix(Optional.ofNullable(local.getSLOURLPostFix()).orElse(global.
+// getSLOURLPostFix()));
 //            effective.enableAssertionEncryption(Optional.ofNullable(local.isAssertionEncryptionEnabled()).
 //                    orElse(global.isAssertionEncryptionEnabled()));
 //            effective.enableAssertionSigning(Optional.ofNullable(local.isAssertionSigningEnabled()).
@@ -338,25 +338,25 @@ public class SSOConfiguration {
      * @param local  the set of additional SSO properties defined at context level
      * @return the final, effective set of webapp descriptor additional SSO properties
      */
-    private static List<SSOConfiguration.Property> prioritizeProperties(List<SSOConfiguration.Property> global,
-                                                                        List<SSOConfiguration.Property> local) {
-        List<SSOConfiguration.Property> effective = new ArrayList<>();
-        if ((global != null) && (local != null)) {
-            global.stream().forEach(property -> {
-                Optional<SSOConfiguration.Property> matching = getProperty(property.getKey(), local);
-                if (matching.isPresent()) {
-                    effective.add(matching.get());
-                } else {
-                    effective.add(property);
-                }
-            });
-        } else if (global != null) {
-            global.stream().forEach(effective::add);
-        } else if (local != null) {
-            local.stream().forEach(effective::add);
-        }
-        return effective;
-    }
+//    private static List<SSOConfiguration.Property> prioritizeProperties(List<SSOConfiguration.Property> global,
+//                                                                        List<SSOConfiguration.Property> local) {
+//        List<SSOConfiguration.Property> effective = new ArrayList<>();
+//        if ((global != null) && (local != null)) {
+//            global.stream().forEach(property -> {
+//                Optional<SSOConfiguration.Property> matching = getProperty(property.getKey(), local);
+//                if (matching.isPresent()) {
+//                    effective.add(matching.get());
+//                } else {
+//                    effective.add(property);
+//                }
+//            });
+//        } else if (global != null) {
+//            global.stream().forEach(effective::add);
+//        } else if (local != null) {
+//            local.stream().forEach(effective::add);
+//        }
+//        return effective;
+//    }
 
     /**
      * Returns an additional {@code Property} if exists in the list of properties.
@@ -365,14 +365,14 @@ public class SSOConfiguration {
      * @param list the list of properties
      * @return the SSO property if exists
      */
-    private static Optional<SSOConfiguration.Property> getProperty(String key, List<SSOConfiguration.Property> list) {
-        if (key == null) {
-            return Optional.empty();
-        }
-        if (list != null) {
-            return list.stream().filter(property -> property.getKey().equals(key)).findFirst();
-        } else {
-            return Optional.empty();
-        }
-    }
+//    private static Optional<SSOConfiguration.Property> getProperty(String key, List<SSOConfiguration.Property> list) {
+//        if (key == null) {
+//            return Optional.empty();
+//        }
+//        if (list != null) {
+//            return list.stream().filter(property -> property.getKey().equals(key)).findFirst();
+//        } else {
+//            return Optional.empty();
+//        }
+//    }
 }

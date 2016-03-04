@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Level;
 
 /**
  * This class defines an API of file path related utility functions specific to WSO2 Application Server.
@@ -39,10 +38,10 @@ public final class PathUtils {
     private static final Path PATH_WSO2_CONFIG;
 
     static {
-        final String CATALINA_BASE = System.getProperty(Globals.CATALINA_BASE_PROP);
-        PATH_CATALINA_BASE = Paths.get(CATALINA_BASE);
-        PATH_CATALINA_CONFIG = Paths.get(CATALINA_BASE, Constants.TOMCAT_CONFIGURATION_DIRECTORY);
-        PATH_WSO2_CONFIG = Paths.get(CATALINA_BASE, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
+        final String catalinaBase = System.getProperty(Globals.CATALINA_BASE_PROP);
+        PATH_CATALINA_BASE = Paths.get(catalinaBase);
+        PATH_CATALINA_CONFIG = Paths.get(catalinaBase, Constants.TOMCAT_CONFIGURATION_DIRECTORY);
+        PATH_WSO2_CONFIG = Paths.get(catalinaBase, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
                 Constants.WSO2_CONFIGURATION_DIRECTORY);
 
 

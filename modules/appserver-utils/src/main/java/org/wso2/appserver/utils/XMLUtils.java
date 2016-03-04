@@ -23,8 +23,6 @@ import org.xml.sax.SAXException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -40,7 +38,7 @@ import javax.xml.validation.SchemaFactory;
  */
 public class XMLUtils {
     /**
-     * JAXB utility functions
+     * JAXB utility functions.
      */
     private static final Log log = LogFactory.getLog(XMLUtils.class.getName());
 
@@ -53,7 +51,8 @@ public class XMLUtils {
      * @return an XML unmarshaller for the defined Java classes
      * @throws ApplicationServerConfigurationException if an error occurs when creating the XML unmarshaller
      */
-    public static Unmarshaller getXMLUnmarshaller(Path schemaPath, Class... classes) throws ApplicationServerConfigurationException {
+    public static Unmarshaller getXMLUnmarshaller(Path schemaPath, Class... classes)
+            throws ApplicationServerConfigurationException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(classes);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

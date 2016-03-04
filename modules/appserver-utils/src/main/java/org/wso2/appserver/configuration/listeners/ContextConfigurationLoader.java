@@ -17,7 +17,6 @@ package org.wso2.appserver.configuration.listeners;
 
 
 import org.apache.catalina.Context;
-import org.apache.catalina.Host;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
@@ -27,8 +26,6 @@ import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.utils.PathUtils;
 import org.wso2.appserver.utils.XMLUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
