@@ -32,6 +32,8 @@ public class StatsPublisherConfiguration {
     private String username;
     @XmlElement(name = "Password")
     private String password;
+    @XmlElement(name = "DataAgentType")
+    private String dataAgentType;
     @XmlElement(name = "AuthenticationURL")
     private String authenticationURL;
     @XmlElement(name = "PublisherURL")
@@ -45,6 +47,10 @@ public class StatsPublisherConfiguration {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getDataAgentType() {
+        return dataAgentType;
     }
 
     public String getAuthenticationURL() {

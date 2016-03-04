@@ -83,7 +83,6 @@ public class EventBuilder {
         payload.add(mapNull(startTime));
         payload.add(mapNull(request.getPathInfo()));
         parserUserAgent(request, uaParser, payload);
-
         payload.add(mapNull(request.getLocale().getCountry()));
         payload.add(mapNull(EventPublisherConstants.APP_TYPE));
         payload.add(mapNull(request.getContext().getDisplayName()));
@@ -156,8 +155,8 @@ public class EventBuilder {
         if (uaParser != null) {
             Client readableUserAgent = uaParser.parse(userAgent);
 
-            payload.add(mapNull(readableUserAgent.userAgent.family));
             payload.add(mapNull(readableUserAgent.userAgent.major));
+            payload.add(mapNull(readableUserAgent.userAgent.family));
             payload.add(mapNull(readableUserAgent.os.family));
             payload.add(mapNull(readableUserAgent.os.major));
             payload.add(mapNull(readableUserAgent.device.family));

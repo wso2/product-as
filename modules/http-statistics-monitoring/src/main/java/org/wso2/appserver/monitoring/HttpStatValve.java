@@ -136,7 +136,7 @@ public class HttpStatValve extends ValveBase {
         try {
 //            dataPublisher = new DataPublisher(getType(), getPublisherUrl(), getAuthenticationUrl(),
 //                    getUsername(), getPassword());
-            dataPublisher = new DataPublisher("Thrift",
+            dataPublisher = new DataPublisher(statsPublisherConfiguration.getDataAgentType(),
                     statsPublisherConfiguration.getPublisherURL(),
                     statsPublisherConfiguration.getAuthenticationURL(),
                     statsPublisherConfiguration.getUsername(),
