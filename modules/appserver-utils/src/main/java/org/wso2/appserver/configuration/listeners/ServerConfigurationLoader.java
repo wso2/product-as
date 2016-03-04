@@ -22,6 +22,7 @@ import org.apache.catalina.Server;
 import org.wso2.appserver.Constants;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;;
+import org.wso2.appserver.utils.PathUtils;
 import org.wso2.appserver.utils.XMLUtils;
 
 import java.nio.file.Path;
@@ -68,10 +69,10 @@ public class ServerConfigurationLoader implements LifecycleListener {
     private static synchronized void buildGlobalConfiguration() throws ApplicationServerException {
 
         if (serverConfiguration == null) {
-            Path schemaPath = Paths.get(Constants.CATALINA_BASE_PATH, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                    Constants.WSO2_CONFIGURATION_DIRECTORY, Constants.SERVER_DESCRIPTOR_SCHEMA);
-            Path descriptorPath = Paths.get(Constants.CATALINA_BASE_PATH, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                    Constants.WSO2_CONFIGURATION_DIRECTORY, Constants.SERVER_DESCRIPTOR);
+            Path schemaPath = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
+                    Constants.SERVER_DESCRIPTOR_SCHEMA);
+            Path descriptorPath = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
+                    Constants.SERVER_DESCRIPTOR);
             serverConfiguration = XMLUtils.getUnmarshalledObject(descriptorPath, schemaPath, ServerConfiguration.class);
         }
     }
