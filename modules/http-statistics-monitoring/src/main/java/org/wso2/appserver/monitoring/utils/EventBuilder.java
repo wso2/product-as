@@ -23,7 +23,7 @@ import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.commons.lang.StringUtils;
 import org.wso2.appserver.monitoring.EventPublisherConstants;
-import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
+import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.carbon.databridge.commons.Event;
 
 import java.security.Principal;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -47,10 +48,10 @@ public class EventBuilder {
      * @param startTime The time at which the valve is invoked
      * @param responseTime The time that is taken for the client to receive a response
      * @return an Event object populated with data to be published.
-     * @throws EventBuilderException
+     * @throws StatPublisherException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
-                                   long responseTime) throws EventBuilderException {
+                                   long responseTime) throws StatPublisherException {
 
 
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
@@ -76,28 +77,22 @@ public class EventBuilder {
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";
 
-        String requestedURI = request.getRequestURI();
-
-        if (requestedURI != null) {
-            requestedURI = requestedURI.trim();
+        Optional.ofNullable(request.getRequestURI()).map(String::trim).ifPresent(requestedURI -> {
             String[] requestedUriParts = requestedURI.split(forwardSlash);
-
             if (!forwardSlash.equals(requestedURI)) {
                 payload.add((requestedUriParts[1]));
             } else {
                 payload.add((forwardSlash));
             }
-        }
+        });
 
         String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
                         + request.getContext().getEffectiveMinorVersion();
         payload.add((webappServletVersion));
-        String consumerName = extractUsername(request);
-        payload.add((consumerName));
+        payload.add(extractUsername(request));
         payload.add((request.getRequestURI()));
         payload.add((startTime));
         payload.add((request.getPathInfo()));
-//        parserUserAgent(request, uaParser, payload);
         payload.add((EventPublisherConstants.APP_TYPE));
         payload.add((request.getContext().getDisplayName()));
         payload.add((extractSessionId(request)));
@@ -182,35 +177,6 @@ public class EventBuilder {
         }
         return consumerName;
     }
-
-    //parse information about User Agent
-
-//    /**
-//     *
-//     * @param request The Request object of client
-//     * @param uaParser The Parser object that will be used to extract user agent information
-//     * @param payload The list containing all payload information
-//     */
-//    private static void parserUserAgent(Request request, Parser uaParser, List<Object> payload) {
-//
-//        String userAgent = request.getHeader(EventPublisherConstants.USER_AGENT);
-//        if (uaParser != null) {
-//            Client readableUserAgent = uaParser.parse(userAgent);
-//
-//            payload.add((readableUserAgent.userAgent.family));
-//            payload.add((readableUserAgent.userAgent.major));
-//            payload.add((readableUserAgent.os.family));
-//            payload.add((readableUserAgent.os.major));
-//            payload.add((readableUserAgent.device.family));
-//        }
-//
-//    }
-
-    /*
-    * Checks the remote address of the request. Server could be hiding behind a proxy or load balancer.
-    * if we get only request.getRemoteAddr() will give only the proxy pr load balancer address.
-    * For that we are checking the request forwarded address in the header of the request.
-    */
 
     /**
      * Gets the original client IP address.

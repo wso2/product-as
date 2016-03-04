@@ -26,8 +26,7 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
-import org.wso2.appserver.monitoring.exceptions.ConfigurationException;
-import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
+import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
 import org.wso2.appserver.utils.PathUtils;
 import org.wso2.carbon.databridge.agent.AgentHolder;
@@ -42,6 +41,7 @@ import org.wso2.carbon.databridge.commons.exception.TransportException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import javax.servlet.ServletException;
 
 /**
@@ -51,7 +51,6 @@ public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
     private DataPublisher dataPublisher = null;
-//    private Parser uaParser = null;
     StatsPublisherConfiguration statsPublisherConfiguration;
     Path path;
 
@@ -74,9 +73,9 @@ public class HttpStatValve extends ValveBase {
 
         try {
             dataPublisher = getDataPublisher();
-        } catch (ConfigurationException e) {
+        } catch (StatPublisherException e) {
             LOG.error("Initializing DataPublisher failed:", e);
-            throw new LifecycleException("Initializing DataPublisher failed", e);
+            throw new LifecycleException("Initializing DataPublisher failed: " + e);
         }
 //
 //        //why is this necessary
@@ -97,8 +96,9 @@ public class HttpStatValve extends ValveBase {
             try {
                 event = EventBuilder.buildEvent(statsPublisherConfiguration.getStreamId(), request, response, startTime,
                         responseTime);
-            } catch (EventBuilderException e) {
+            } catch (StatPublisherException e) {
                 LOG.error("Creating the Event failed: " + e);
+                throw new IOException("Creating the Event failed: " + e);
             }
 
             dataPublisher.publish(event);
@@ -118,10 +118,11 @@ public class HttpStatValve extends ValveBase {
     /**
      * Instantiate a data publisher to be used to publish data to DAS.
      * @return DataPublisher object initialized with configurations
-     * @throws ConfigurationException
+     * @throws StatPublisherException
      */
-    private DataPublisher getDataPublisher() throws ConfigurationException {
+    private DataPublisher getDataPublisher() throws StatPublisherException {
 
+        //to be removed
         Path path = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(), "Webapp_Statistics_Monitoring",
                 EventPublisherConstants.CLIENT_TRUSTSTORE);
         System.setProperty("javax.net.ssl.trustStore", path.toString());
@@ -132,7 +133,7 @@ public class HttpStatValve extends ValveBase {
 
         try {
 
-            if (statsPublisherConfiguration.getAuthenticationURL() == null) {
+            if (!Optional.ofNullable(statsPublisherConfiguration.getAuthenticationURL()).isPresent()) {
                 dataPublisher = new DataPublisher(statsPublisherConfiguration.getPublisherURL(),
                         statsPublisherConfiguration.getUsername(),
                         statsPublisherConfiguration.getPassword());
@@ -146,19 +147,19 @@ public class HttpStatValve extends ValveBase {
 
         } catch (DataEndpointAgentConfigurationException e) {
             LOG.error("Data Endpoint Agent configuration failed: " + e);
-            throw new ConfigurationException("Data Endpoint Agent configuration failed: ", e);
+            throw new StatPublisherException("Data Endpoint Agent configuration failed: ", e);
         } catch (DataEndpointException e) {
             LOG.error("Communication with Data Endpoint failed: " + e);
-            throw new ConfigurationException("Communication with Data Endpoint failed: ", e);
+            throw new StatPublisherException("Communication with Data Endpoint failed: ", e);
         } catch (DataEndpointConfigurationException e) {
             LOG.error("Parsing Data Endpoint configurations failed: " + e);
-            throw new ConfigurationException("Parsing Data Endpoint configurations failed: ", e);
+            throw new StatPublisherException("Parsing Data Endpoint configurations failed: ", e);
         } catch (DataEndpointAuthenticationException e) {
             LOG.error("Connection to Data Endpoint failed during authentication: " + e);
-            throw new ConfigurationException("Connection to Data Endpoint failed during authentication: ", e);
+            throw new StatPublisherException("Connection to Data Endpoint failed during authentication: ", e);
         } catch (TransportException e) {
             LOG.error("Connection failed: " + e);
-            throw new ConfigurationException("Connection failed: ", e);
+            throw new StatPublisherException("Connection failed: ", e);
         }
 
         return dataPublisher;
