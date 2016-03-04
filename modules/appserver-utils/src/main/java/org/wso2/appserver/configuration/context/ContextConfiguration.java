@@ -15,10 +15,12 @@
  */
 package org.wso2.appserver.configuration.context;
 
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * A Java class which models a holder for context level WSO2 specific configurations.
@@ -28,17 +30,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "wso2as-web")
 public class ContextConfiguration {
-    @XmlElement(name = "classloading")
-    private ClassloadingConfiguration classloadingConfiguration;
+    @XmlElement(name = "class-loader")
+    private ClassLoaderConfiguration classLoaderConfiguration;
     @XmlElement(name = "saml2-single-sign-on")
     private SSOConfiguration singleSignOnConfiguration;
 
-    public ClassloadingConfiguration getClassloadingConfiguration() {
-        return classloadingConfiguration;
+    public ClassLoaderConfiguration getClassLoaderConfiguration() {
+        return classLoaderConfiguration;
     }
 
-    public void setClassloadingConfiguration(ClassloadingConfiguration classloadingConfiguration) {
-        this.classloadingConfiguration = classloadingConfiguration;
+    public void setClassLoaderConfiguration(ClassLoaderConfiguration classLoaderConfiguration) {
+        this.classLoaderConfiguration = classLoaderConfiguration;
     }
 
     public SSOConfiguration getSingleSignOnConfiguration() {
@@ -50,29 +52,16 @@ public class ContextConfiguration {
     }
 
     /**
-     * A nested class which models context-level classloading configurations.
+     * Merges the globally defined context level configurations and context level configurations overridden at
+     * context level.
+     *
+     * @param newContextConfiguration the locally overridden context level configurations
      */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class ClassloadingConfiguration {
-        @XmlElement(name = "parent-first")
-        private Boolean isParentFirst;
-        @XmlElement
-        private String environments;
-
-        public Boolean isParentFirst() {
-            return isParentFirst;
-        }
-
-        public void enableParentFirst(Boolean isParentFirst) {
-            this.isParentFirst = isParentFirst;
-        }
-
-        public String getEnvironments() {
-            return environments;
-        }
-
-        public void setEnvironments(String environments) {
-            this.environments = environments;
-        }
+    public void merge(ContextConfiguration newContextConfiguration) {
+        this.classLoaderConfiguration.merge(newContextConfiguration.getClassLoaderConfiguration());
+        this.singleSignOnConfiguration.merge(newContextConfiguration.getSingleSignOnConfiguration());
     }
+
+
+
 }

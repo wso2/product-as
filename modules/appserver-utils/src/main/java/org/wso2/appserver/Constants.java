@@ -20,20 +20,21 @@ package org.wso2.appserver;
  *
  * @since 6.0.0
  */
-public class Constants {
+public final class Constants {
     //  Namespace for wso2as.xml file XML content
     public static final String SERVER_CONFIGURATION_NAMESPACE = "http://wso2.org/2016/wso2as-server";
     //  Namespace for wso2as-web.xml file XML content
     public static final String WEBAPP_DESCRIPTOR_NAMESPACE = "http://wso2.org/2016/wso2as-web";
-    //  Environmental variable property name constant
-    public static final String CATALINA_BASE = "catalina.base";
+
     //  File path related constants
     public static final String SERVER_DESCRIPTOR = "wso2as.xml";
     public static final String SERVER_DESCRIPTOR_SCHEMA = "wso2as.xsd";
     public static final String WEBAPP_DESCRIPTOR = "wso2as-web.xml";
     public static final String WEBAPP_DESCRIPTOR_SCHEMA = "wso2as-web.xsd";
-    public static final String TOMCAT_CONFIGURATION_HOME = "conf";
-    public static final String WSO2_CONFIGURATION_HOME = "wso2";
+
+    public static final String TOMCAT_CONFIGURATION_DIRECTORY = "conf";
+    public static final String WSO2_CONFIGURATION_DIRECTORY = "wso2";
+
     public static final String WEBAPP_RESOURCE_FOLDER = "WEB-INF";
 
     /**
