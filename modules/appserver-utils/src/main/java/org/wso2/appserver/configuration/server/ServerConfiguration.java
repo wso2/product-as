@@ -34,6 +34,8 @@ public class ServerConfiguration {
     private SSOConfiguration singleSignOnConfiguration;
     @XmlElement(name = "StatisticsPublisher")
     private StatsPublisherConfiguration statsPublisherConfiguration;
+    @XmlElement(name = "Security")
+    private SecurityConfiguration securityConfiguration;
 
     public ClassLoaderEnvironments getClassLoaderEnvironments() {
         return classLoaderEnvironments;
@@ -45,5 +47,9 @@ public class ServerConfiguration {
 
     public StatsPublisherConfiguration getStatsPublisherConfiguration() {
         return statsPublisherConfiguration;
+    }
+
+    public SecurityConfiguration getSecurityConfiguration() {
+        return securityConfiguration;
     }
 }

@@ -13,33 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.webapp.security.sso.utils;
+package org.wso2.appserver;
 
 /**
- * This is a singleton, utility class in which an instance acts as a holder for {@code Object} type instances.
+ * This class defines constants used within the unit-tests of Application Server Utils module.
  *
  * @since 6.0.0
  */
-public class SSOAgentDataHolder {
-    private static final SSOAgentDataHolder instance = new SSOAgentDataHolder();
-
-    private Object object;
+public class TestConstants {
+    protected static final String TEMP_DIRECTORY = System.getProperty("java.io.tmpdir");
+    protected static final String CATALINA_BASE = "tomcat-base";
+    protected static final String SAMPLE_CONFIGURATION_FILE = "sample.xml";
+    protected static final String SAMPLE_WSO2_SERVER_DESCRIPTOR = "sample-wso2as.xml";
+    protected static final String SAMPLE_WSO2_SERVER_DESCRIPTOR_SCHEMA = "sample-wso2as.xsd";
 
     /**
-     * Prevents instantiating the SSOAgentDataHolder class.
+     * Prevents instantiating this class.
      */
-    private SSOAgentDataHolder() {
-    }
-
-    public Object getObject() {
-        return object;
-    }
-
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
-    public static SSOAgentDataHolder getInstance() {
-        return instance;
+    private TestConstants() {
     }
 }

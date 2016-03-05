@@ -31,6 +31,5 @@
         <module>http-statistics-monitoring</module>
         <module>sample-module</module>
         <module>webapp-loader</module>
-        <module>webapp-management</module>
     </modules>
 </project>

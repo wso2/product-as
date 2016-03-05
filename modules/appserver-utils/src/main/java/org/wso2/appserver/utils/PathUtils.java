@@ -104,16 +104,15 @@ public final class PathUtils {
      *
      * @param context the webapp of which the context root is to be returned
      * @return the absolute file path representation of the webapp context root specified
-     * @throws ApplicationServerException if the context is null
+     * @throws ApplicationServerException if the context is null or if an error occurs while generating
+     *                                    the webapp file path
      */
     public static Path getWebAppPath(Context context) throws ApplicationServerException {
-        String webappFilePath = "";
-
-        //  Value of the following variable depends on various conditions. Sometimes you get just the webapp directory
-        //  name. Sometime you get absolute path the webapp directory or war file.
         try {
             if (context != null) {
-                String docBase = context.getDocBase();
+                //  Value of the following variable depends on various conditions. Sometimes you get just the webapp
+                //  directory name. Sometime you get absolute path the webapp directory or war file.
+                String webappFilePath;
                 Host host = (Host) context.getParent();
                 String appBase = host.getAppBase();
                 File canonicalAppBase = new File(appBase);
@@ -123,16 +122,19 @@ public final class PathUtils {
                     canonicalAppBase = new File(PathUtils.getCatalinaBase().toString(), appBase).getCanonicalFile();
                 }
 
+                String docBase = context.getDocBase();
                 File webappFile = new File(docBase);
                 if (webappFile.isAbsolute()) {
                     webappFilePath = webappFile.getCanonicalPath();
                 } else {
                     webappFilePath = (new File(canonicalAppBase, docBase)).getPath();
                 }
+                return Paths.get(webappFilePath);
+            } else {
+                throw new ApplicationServerException("Context cannot be null");
             }
         } catch (IOException ex) {
             throw new ApplicationServerException("Error while generating webapp file path", ex);
         }
-        return Paths.get(webappFilePath);
     }
 }

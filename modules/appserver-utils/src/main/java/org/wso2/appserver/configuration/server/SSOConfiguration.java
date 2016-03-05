@@ -37,16 +37,6 @@ public class SSOConfiguration {
     private String idpEntityId;
     @XmlElement(name = "SignatureValidatorImplClass")
     private String signatureValidatorImplClass;
-    @XmlElement(name = "KeystorePath")
-    private String keystorePath;
-    @XmlElement(name = "KeystorePassword")
-    private String keystorePassword;
-    @XmlElement(name = "IdPCertificateAlias")
-    private String idpCertificateAlias;
-    @XmlElement(name = "PrivateKeyAlias")
-    private String privateKeyAlias;
-    @XmlElement(name = "PrivateKeyPassword")
-    private String privateKeyPassword;
     @XmlElement(name = "Property")
     private List<Property> properties;
 
@@ -60,26 +50,6 @@ public class SSOConfiguration {
 
     public String getSignatureValidatorImplClass() {
         return signatureValidatorImplClass;
-    }
-
-    public String getKeystorePath() {
-        return keystorePath;
-    }
-
-    public String getKeystorePassword() {
-        return keystorePassword;
-    }
-
-    public String getIdpCertificateAlias() {
-        return idpCertificateAlias;
-    }
-
-    public String getPrivateKeyAlias() {
-        return privateKeyAlias;
-    }
-
-    public String getPrivateKeyPassword() {
-        return privateKeyPassword;
     }
 
     public List<Property> getProperties() {

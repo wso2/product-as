@@ -182,11 +182,6 @@
                 <version>${jacoco.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>${com.google.code.gson.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.googlecode.disruptor</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${googlecode.disruptor.version}</version>
@@ -198,20 +193,10 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${org.joda.time.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml</artifactId>
-                <version>${org.opensaml.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -252,11 +237,6 @@
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>webapp-loader</artifactId>
-                <version>${appserver.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>org.wso2.appserver.webapp.security</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
             <dependency>
@@ -315,13 +295,10 @@
         <carbon.analyticscommon.version>5.0.6</carbon.analyticscommon.version>
         <commons.lang.version>3.4</commons.lang.version>
         <commons.io.version>2.4</commons.io.version>
-        <com.google.code.gson.version>2.5</com.google.code.gson.version>
         <commons.pool.version>1.6</commons.pool.version>
         <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
         <junit.version>4.12</junit.version>
-        <org.joda.time.version>2.9.1</org.joda.time.version>
-        <org.opensaml.version>2.6.4</org.opensaml.version>
         <org.slf4j.api.version>1.7.18</org.slf4j.api.version>
         <org.slf4j.simple.version>1.7.18</org.slf4j.simple.version>
         <servlet.api.version>2.5</servlet.api.version>
