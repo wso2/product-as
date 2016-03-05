@@ -22,7 +22,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.appserver.webapp.security</artifactId>
-    <packaging>jar</packaging>
     <name>WSO2 Application Server - Web Application Security</name>
     <description>WSO2 Application Server web application security component</description>
     <url>http://wso2.org</url>
