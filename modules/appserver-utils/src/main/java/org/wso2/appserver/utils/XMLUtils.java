@@ -35,7 +35,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 /**
- * A Java class which defines XML utilities used within the Application Server Utils.
+ * A Java class which defines XML utilities.
  *
  * @since 6.0.0
  */

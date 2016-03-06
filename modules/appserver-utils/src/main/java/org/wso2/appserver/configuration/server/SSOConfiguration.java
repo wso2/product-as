@@ -44,12 +44,24 @@ public class SSOConfiguration {
         return idpURL;
     }
 
+    public void setIdpURL(String idpURL) {
+        this.idpURL = idpURL;
+    }
+
     public String getIdpEntityId() {
         return idpEntityId;
     }
 
+    public void setIdpEntityId(String idpEntityId) {
+        this.idpEntityId = idpEntityId;
+    }
+
     public String getSignatureValidatorImplClass() {
         return signatureValidatorImplClass;
+    }
+
+    public void setSignatureValidatorImplClass(String signatureValidatorImplClass) {
+        this.signatureValidatorImplClass = signatureValidatorImplClass;
     }
 
     public List<Property> getProperties() {

@@ -37,8 +37,16 @@ public class SecurityConfiguration {
         return keystore;
     }
 
+    public void setKeystore(Keystore keystore) {
+        this.keystore = keystore;
+    }
+
     public Truststore getTruststore() {
         return truststore;
+    }
+
+    public void setTruststore(Truststore truststore) {
+        this.truststore = truststore;
     }
 
     /**
@@ -61,20 +69,40 @@ public class SecurityConfiguration {
             return keystorePath;
         }
 
+        public void setKeystorePath(String keystorePath) {
+            this.keystorePath = keystorePath;
+        }
+
         public String getKeystorePassword() {
             return keystorePassword;
+        }
+
+        public void setKeystorePassword(String keystorePassword) {
+            this.keystorePassword = keystorePassword;
         }
 
         public String getIdpCertificateAlias() {
             return idpCertificateAlias;
         }
 
+        public void setIdpCertificateAlias(String idpCertificateAlias) {
+            this.idpCertificateAlias = idpCertificateAlias;
+        }
+
         public String getPrivateKeyAlias() {
             return privateKeyAlias;
         }
 
+        public void setPrivateKeyAlias(String privateKeyAlias) {
+            this.privateKeyAlias = privateKeyAlias;
+        }
+
         public String getPrivateKeyPassword() {
             return privateKeyPassword;
+        }
+
+        public void setPrivateKeyPassword(String privateKeyPassword) {
+            this.privateKeyPassword = privateKeyPassword;
         }
     }
 
@@ -92,8 +120,16 @@ public class SecurityConfiguration {
             return truststorePath;
         }
 
+        public void setTruststorePath(String truststorePath) {
+            this.truststorePath = truststorePath;
+        }
+
         public String getTrustStorePassword() {
             return trustStorePassword;
+        }
+
+        public void setTrustStorePassword(String trustStorePassword) {
+            this.trustStorePassword = trustStorePassword;
         }
     }
 }
