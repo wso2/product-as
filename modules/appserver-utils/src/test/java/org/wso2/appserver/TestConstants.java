@@ -28,6 +28,9 @@ public class TestConstants {
     protected static final String TEST_RESOURCE_FOLDER = "test-resources";
     protected static final String SAMPLE_XML_FILE = "sample-wso2as.xml";
     protected static final String SAMPLE_XSD_FILE = "sample-wso2as.xsd";
+    protected static final String PARENT_DESCRIPTOR = "parent-wso2as-web.xml";
+    protected static final String CHILD_DESCRIPTOR = "child-wso2as-web.xml";
+    protected static final String WEBAPP_DESCRIPTOR_XSD_FILE = "sample-wso2as-web.xsd";
     protected static final String INVALID_XML_FILE = "invalid.xml";
     protected static final String INVALID_XSD_FILE = "invalid.xsd";
     protected static final String NON_EXISTENT_XSD_FILE = "non-existent-sample-wso2as.xsd";
@@ -49,6 +52,8 @@ public class TestConstants {
     protected static final String APP_SERVER_URL = "https://localhost:8443";
     protected static final String REQUEST_URL_POSTFIX = "samlsso";
     protected static final String SAML_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect";
+    protected static final String ISSUER_ID = "foo-app";
+    protected static final String CONSUMER_URL = "https://localhost:8443/foo-app/acs";
     protected static final String CONSUMER_URL_POSTFIX = "/acs";
     protected static final String ATTR_CONSUMER_SERVICE_INDEX = "1784849";
     protected static final String SLO_URL_POSTFIX = "logout";

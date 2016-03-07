@@ -41,6 +41,12 @@
                         </goals>
                         <configuration>
                             <tasks>
+                                <copy file="src/test/resources/test-xml/child-wso2as-web.xml"
+                                      tofile="${project.build.directory}/test-resources/child-wso2as-web.xml"/>
+                                <copy file="src/test/resources/test-xml/parent-wso2as-web.xml"
+                                      tofile="${project.build.directory}/test-resources/parent-wso2as-web.xml"/>
+                                <copy file="src/test/resources/test-xml/sample-wso2as-web.xsd"
+                                      tofile="${project.build.directory}/test-resources/sample-wso2as-web.xsd"/>
                                 <copy file="src/test/resources/test-xml/sample-wso2as.xml"
                                       tofile="${project.build.directory}/test-resources/sample-wso2as.xml"/>
                                 <copy file="src/test/resources/test-xml/sample-wso2as.xsd"

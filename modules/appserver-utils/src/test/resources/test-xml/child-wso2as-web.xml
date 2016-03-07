@@ -27,6 +27,8 @@
         <enable-sso>true</enable-sso>
         <request-url-postfix>samlsso</request-url-postfix>
         <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</http-binding>
+        <issuer-id>foo-app</issuer-id>
+        <consumer-url>https://localhost:8443/foo-app/acs</consumer-url>
         <consumer-url-postfix>/acs</consumer-url-postfix>
         <enable-slo>true</enable-slo>
         <slo-url-postfix>logout</slo-url-postfix>
