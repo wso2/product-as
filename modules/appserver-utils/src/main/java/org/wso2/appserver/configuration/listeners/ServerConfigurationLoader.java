@@ -22,13 +22,12 @@ import org.apache.catalina.Server;
 import org.wso2.appserver.Constants;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
 import org.wso2.appserver.utils.XMLUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A Java class which loads the WSO2 specific server level configurations during Application Server startup.
@@ -36,7 +35,6 @@ import java.util.logging.Logger;
  * @since 6.0.0
  */
 public class ServerConfigurationLoader implements LifecycleListener {
-    private static final Logger logger = Logger.getLogger(ServerConfigurationLoader.class.getName());
     private static ServerConfiguration serverConfiguration;
 
     /**
@@ -53,11 +51,7 @@ public class ServerConfigurationLoader implements LifecycleListener {
         if (Lifecycle.BEFORE_START_EVENT.equals(lifecycleEvent.getType())) {
             Object source = lifecycleEvent.getSource();
             if (source instanceof Server) {
-                try {
-                    buildGlobalConfiguration();
-                } catch (ApplicationServerException e) {
-                    logger.log(Level.SEVERE, "An error has occurred when retrieving the server level configurations");
-                }
+                buildGlobalConfiguration();
             }
         }
     }
@@ -66,14 +60,19 @@ public class ServerConfigurationLoader implements LifecycleListener {
         return serverConfiguration;
     }
 
-    private static synchronized void buildGlobalConfiguration() throws ApplicationServerException {
-
-        if (serverConfiguration == null) {
-            Path schemaPath = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
-                    Constants.SERVER_DESCRIPTOR_SCHEMA);
-            Path descriptorPath = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
-                    Constants.SERVER_DESCRIPTOR);
-            serverConfiguration = XMLUtils.getUnmarshalledObject(descriptorPath, schemaPath, ServerConfiguration.class);
+    private static synchronized void buildGlobalConfiguration() {
+        try {
+            if (serverConfiguration == null) {
+                Path schemaPath = Paths.
+                        get(PathUtils.getWSO2ConfigurationHome().toString(), Constants.SERVER_DESCRIPTOR_SCHEMA);
+                Path descriptorPath = Paths.
+                        get(PathUtils.getWSO2ConfigurationHome().toString(), Constants.SERVER_DESCRIPTOR);
+                serverConfiguration = XMLUtils.
+                        getUnmarshalledObject(descriptorPath, schemaPath, ServerConfiguration.class);
+            }
+        } catch (ApplicationServerException e) {
+            throw new ApplicationServerRuntimeException("An error has occurred when building the global configuration",
+                    e);
         }
     }
 }

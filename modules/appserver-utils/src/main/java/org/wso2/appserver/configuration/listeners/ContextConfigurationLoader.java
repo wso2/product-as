@@ -15,7 +15,6 @@
  */
 package org.wso2.appserver.configuration.listeners;
 
-
 import org.apache.catalina.Context;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
@@ -23,6 +22,7 @@ import org.apache.catalina.LifecycleListener;
 import org.wso2.appserver.Constants;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
 import org.wso2.appserver.utils.XMLUtils;
 
@@ -32,8 +32,6 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A Java class which loads WSO2 specific context level configurations for all contexts.
@@ -41,7 +39,6 @@ import java.util.logging.Logger;
  * @since 6.0.0
  */
 public class ContextConfigurationLoader implements LifecycleListener {
-    private static final Logger logger = Logger.getLogger(ContextConfigurationLoader.class.getName());
     private static final Map<Context, ContextConfiguration> contextToConfigurationMap = new ConcurrentHashMap<>();
 
     /**
@@ -70,13 +67,8 @@ public class ContextConfigurationLoader implements LifecycleListener {
             Object source = lifecycleEvent.getSource();
             if (source instanceof Context) {
                 Context context = (Context) source;
-                try {
-                    ContextConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
-                    contextToConfigurationMap.put(context, effectiveConfiguration);
-                } catch (ApplicationServerException e) {
-                    logger.log(Level.SEVERE, "An error occurred when retrieving the effective " +
-                            "configuration for the context " + context, e);
-                }
+                ContextConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
+                contextToConfigurationMap.put(context, effectiveConfiguration);
             }
         }
     }
@@ -90,36 +82,36 @@ public class ContextConfigurationLoader implements LifecycleListener {
      *
      * @param context the {@link Context} for which the final set of context level configurations are generated
      * @return the final set of context level configurations for the specified {@link Context}
-     * @throws ApplicationServerException if the specified {@link Context} is null
      */
-    private static ContextConfiguration getEffectiveConfiguration(Context context) throws ApplicationServerException {
+    private static ContextConfiguration getEffectiveConfiguration(Context context) {
         if (context != null) {
-            Path schemaPath = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
-                    Constants.WEBAPP_DESCRIPTOR_SCHEMA);
+            Path schemaPath = Paths.
+                    get(PathUtils.getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
+            Path defaultWebAppDescriptor = Paths.
+                    get(PathUtils.getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR);
 
-            Path defaultWebAppDescriptor = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
-                    Constants.WEBAPP_DESCRIPTOR);
-
-            Path contextWebAppDescriptor = Paths.get(PathUtils.getWebAppPath(context).toString(),
-                    Constants.WEBAPP_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
-
-            if (!Files.exists(defaultWebAppDescriptor)) {
-                throw new ApplicationServerException("The " + defaultWebAppDescriptor.toString() + " does not exist");
+            ContextConfiguration effective;
+            try {
+                Path contextWebAppDescriptor = Paths.
+                        get(PathUtils.getWebAppPath(context).toString(), Constants.WEBAPP_RESOURCE_FOLDER,
+                                Constants.WEBAPP_DESCRIPTOR);
+                if (!Files.exists(defaultWebAppDescriptor)) {
+                    throw new ApplicationServerRuntimeException(
+                            "The " + defaultWebAppDescriptor.toString() + " does not exist");
+                }
+                effective = XMLUtils.
+                        getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, ContextConfiguration.class);
+                if (Files.exists(contextWebAppDescriptor)) {
+                    ContextConfiguration local = XMLUtils.
+                            getUnmarshalledObject(contextWebAppDescriptor, schemaPath, ContextConfiguration.class);
+                    effective.merge(local);
+                }
+            } catch (ApplicationServerException e) {
+                throw new ApplicationServerRuntimeException("Error when loading the context level configuration", e);
             }
-
-            ContextConfiguration effective = XMLUtils
-                    .getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, ContextConfiguration.class);
-
-            if (Files.exists(contextWebAppDescriptor)) {
-                ContextConfiguration local = XMLUtils
-                        .getUnmarshalledObject(contextWebAppDescriptor, schemaPath, ContextConfiguration.class);
-                effective.merge(local);
-            }
-
             return effective;
         } else {
-            throw new ApplicationServerException("Context cannot be null");
+            throw new ApplicationServerRuntimeException("Context cannot be null");
         }
     }
-
 }

@@ -39,6 +39,10 @@ public class ContextConfiguration {
         return classLoaderConfiguration;
     }
 
+    public void setClassLoaderConfiguration(ClassLoaderConfiguration classLoaderConfiguration) {
+        this.classLoaderConfiguration = classLoaderConfiguration;
+    }
+
     public SSOConfiguration getSingleSignOnConfiguration() {
         return singleSignOnConfiguration;
     }

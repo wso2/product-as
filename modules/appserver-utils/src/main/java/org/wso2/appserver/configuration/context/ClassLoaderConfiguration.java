@@ -39,8 +39,16 @@ public class ClassLoaderConfiguration {
         return isParentFirst;
     }
 
+    public void enableParentFirst(Boolean isParentFirst) {
+        this.isParentFirst = isParentFirst;
+    }
+
     public String getEnvironments() {
         return environments;
+    }
+
+    public void setEnvironments(String environments) {
+        this.environments = environments;
     }
 
     /**

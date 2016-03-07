@@ -128,12 +128,12 @@ public class XMLUtils {
      * @param expandEntityReferences true if the parser is to expand entity reference nodes, else false
      * @param namespaceAware         true if the parser provides support for XML namespaces, else false
      * @param entityResolver         the {@link EntityResolver} to be used within the parser, if {@code entityResolver}
-     *                               is set to null default implementation is used
+     *                               is set to n    ull default implementation is used
      * @return the generated {@link DocumentBuilder} instance
      * @throws ApplicationServerException if an error occurs when generating the new DocumentBuilder
      */
     public static DocumentBuilder getDocumentBuilder(boolean expandEntityReferences, boolean namespaceAware,
-            Optional<EntityResolver> entityResolver) throws ApplicationServerException {
+            EntityResolver entityResolver) throws ApplicationServerException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         if (!expandEntityReferences) {
             documentBuilderFactory.setExpandEntityReferences(false);
@@ -148,8 +148,7 @@ public class XMLUtils {
         } catch (ParserConfigurationException e) {
             throw new ApplicationServerException("Error when generating the new DocumentBuilder", e);
         }
-        entityResolver.ifPresent(docBuilder::setEntityResolver);
-
+        Optional.ofNullable(entityResolver).ifPresent(docBuilder::setEntityResolver);
         return docBuilder;
     }
 }

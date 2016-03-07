@@ -22,7 +22,7 @@ package org.wso2.appserver;
  */
 public final class Constants {
     //  Namespace for wso2as.xml file XML content
-    public static final String SERVER_CONFIGURATION_NAMESPACE = "http://wso2.org/2016/wso2as-server";
+    public static final String SERVER_CONFIGURATION_NAMESPACE = "http://wso2.org/2016/wso2as";
     //  Namespace for wso2as-web.xml file XML content
     public static final String WEBAPP_DESCRIPTOR_NAMESPACE = "http://wso2.org/2016/wso2as-web";
 

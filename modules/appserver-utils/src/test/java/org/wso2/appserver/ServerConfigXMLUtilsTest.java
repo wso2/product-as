@@ -33,14 +33,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
 
 /**
- * This class defines unit-tests for XML utilities.
+ * This class defines unit-tests for server level configurations.
  *
  * @since 6.0.0
  */
-public class XMLUtilTest {
-    private static final Logger logger = Logger.getLogger(XMLUtilTest.class.getName());
+public class ServerConfigXMLUtilsTest {
+    private static final Logger logger = Logger.getLogger(ServerConfigXMLUtilsTest.class.getName());
 
     @Test
     public void loadObjectFromFilePathTest() {
@@ -74,6 +75,62 @@ public class XMLUtilTest {
             logger.log(Level.INFO, "Error when unmarshalling the XML source", e);
             Assert.fail();
         }
+    }
+
+    @Test(expectedExceptions = { ApplicationServerException.class })
+    public void invalidSchemaPathTest() throws ApplicationServerException {
+        Path xmlSource = Paths.
+                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);
+        Path xmlSchema = Paths.get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER,
+                TestConstants.NON_EXISTENT_XSD_FILE);
+        try {
+            XMLUtils.getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, ServerConfiguration.class);
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Error when unmarshalling the XML source", e);
+        }
+    }
+
+    @Test(expectedExceptions = { ApplicationServerException.class })
+    public void invalidSchemaTest() throws ApplicationServerException {
+        Path xmlSchema = Paths.
+                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XSD_FILE);
+        XMLUtils.getXMLUnmarshaller(xmlSchema, ServerConfiguration.class);
+    }
+
+    @Test(expectedExceptions = { ApplicationServerException.class })
+    public void loadObjectFromInvalidFileTest() throws ApplicationServerException {
+        Path xmlSource = Paths.
+                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);
+        Path xmlSchema = Paths.
+                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
+        XMLUtils.getUnmarshalledObject(xmlSource, xmlSchema, ServerConfiguration.class);
+    }
+
+    @Test(expectedExceptions = { ApplicationServerException.class })
+    public void loadObjectFromInvalidInputStreamTest() throws ApplicationServerException {
+        Path xmlSource = Paths.
+                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);
+        Path xmlSchema = Paths.
+                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
+        try {
+            XMLUtils.getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, ServerConfiguration.class);
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Error when unmarshalling the XML source", e);
+        }
+    }
+
+    @Test
+    public void getNonNamespaceAwareDocumentBuilderTest() throws ApplicationServerException {
+        DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder(true, false, null);
+        boolean matchesRequirements = ((documentBuilder != null) && (!documentBuilder.isNamespaceAware()));
+        Assert.assertTrue(matchesRequirements);
+    }
+
+    @Test
+    public void getNamespaceAwareDocumentBuilderTest() throws ApplicationServerException {
+        DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder(false, true, null);
+        boolean matchesRequirements = ((documentBuilder != null) && (documentBuilder.isNamespaceAware()));
+        Assert.assertTrue(matchesRequirements);
     }
 
     protected static ServerConfiguration generateDefault() {
@@ -113,6 +170,17 @@ public class XMLUtilTest {
         ssoConfiguration.setIdpURL(TestConstants.IDP_URL);
         ssoConfiguration.setIdpEntityId(TestConstants.IDP_ENTITY_ID);
         ssoConfiguration.setSignatureValidatorImplClass(TestConstants.VALIDATOR_CLASS);
+
+        SSOConfiguration.Property loginURL = new SSOConfiguration.Property();
+        loginURL.setKey(TestConstants.LOGIN_URL_KEY);
+        loginURL.setValue(TestConstants.LOGIN_URL_VALUE);
+        SSOConfiguration.Property relayState = new SSOConfiguration.Property();
+        relayState.setKey(TestConstants.RELAY_STATE_KEY);
+        relayState.setValue(TestConstants.RELAY_STATE_VALUE);
+        List<SSOConfiguration.Property> properties = new ArrayList<>();
+        properties.add(loginURL);
+        properties.add(relayState);
+        ssoConfiguration.setProperties(properties);
 
         return ssoConfiguration;
     }
@@ -162,6 +230,49 @@ public class XMLUtilTest {
         return (classloading && sso && statsPublishing && security);
     }
 
+    private static boolean compareClassloadingConfigurations(ClassLoaderEnvironments actual,
+            ClassLoaderEnvironments expected) {
+        return (actual != null) && (expected != null) && actual.getEnvironments().getEnvironments().stream().
+                filter(env -> expected.getEnvironments().getEnvironments().stream().
+                        filter(expectedEnv -> (expectedEnv.getName().equals(env.getName().trim()) && expectedEnv
+                                .getClasspath().equals(env.getClasspath().trim()))).count() > 0).count() == expected
+                .getEnvironments().getEnvironments().size();
+    }
+
+    private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
+        if ((actual != null) && (expected != null)) {
+            boolean idpURL = actual.getIdpURL().trim().equals(expected.getIdpURL());
+            boolean idpEntityID = actual.getIdpEntityId().trim().equals(expected.getIdpEntityId());
+            boolean validatorClass = actual.getSignatureValidatorImplClass().trim().
+                    equals(expected.getSignatureValidatorImplClass());
+            boolean properties = compareSSOProperties(actual.getProperties(), expected.getProperties());
+            return (idpURL && idpEntityID && validatorClass && properties);
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean compareSSOProperties(List<SSOConfiguration.Property> actual,
+            List<SSOConfiguration.Property> expected) {
+        return (actual != null) && (expected != null) && actual.stream().filter(property -> expected.stream().
+                filter(expProperty -> ((expProperty.getKey().equals(property.getKey())) && (expProperty.getValue().
+                        equals(property.getValue())))).count() > 0).count() == expected.size();
+    }
+
+    private static boolean compareStatsPublishingConfigurations(StatsPublisherConfiguration actual,
+            StatsPublisherConfiguration expected) {
+        if ((actual != null) && (expected != null)) {
+            boolean username = actual.getUsername().trim().equals(expected.getUsername());
+            boolean password = actual.getPassword().trim().equals(expected.getPassword());
+            boolean authnURL = actual.getAuthenticationURL().trim().equals(expected.getAuthenticationURL());
+            boolean publisherURL = actual.getPublisherURL().trim().equals(expected.getPublisherURL());
+            boolean streamID = actual.getStreamId().trim().equals(expected.getStreamId());
+            return (username && password && authnURL && publisherURL && streamID);
+        } else {
+            return false;
+        }
+    }
+
     private static boolean compareSecurityConfigurations(SecurityConfiguration actual, SecurityConfiguration expected) {
         if ((actual != null) && (expected != null)) {
             boolean keystorePath, keystorePassword, certAlias, privateKeyAlias, privateKeyPassword;
@@ -193,40 +304,5 @@ public class XMLUtilTest {
         } else {
             return false;
         }
-    }
-
-    private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
-        if ((actual != null) && (expected != null)) {
-            boolean idpURL = actual.getIdpURL().trim().equals(expected.getIdpURL());
-            boolean idpEntityID = actual.getIdpEntityId().trim().equals(expected.getIdpEntityId());
-            boolean validatorClass = actual.getSignatureValidatorImplClass().trim().
-                    equals(expected.getSignatureValidatorImplClass());
-            return (idpURL && idpEntityID && validatorClass);
-        } else {
-            return false;
-        }
-    }
-
-    private static boolean compareStatsPublishingConfigurations(StatsPublisherConfiguration actual,
-            StatsPublisherConfiguration expected) {
-        if ((actual != null) && (expected != null)) {
-            boolean username = actual.getUsername().trim().equals(expected.getUsername());
-            boolean password = actual.getPassword().trim().equals(expected.getPassword());
-            boolean authnURL = actual.getAuthenticationURL().trim().equals(expected.getAuthenticationURL());
-            boolean publisherURL = actual.getPublisherURL().trim().equals(expected.getPublisherURL());
-            boolean streamID = actual.getStreamId().trim().equals(expected.getStreamId());
-            return (username && password && authnURL && publisherURL && streamID);
-        } else {
-            return false;
-        }
-    }
-
-    private static boolean compareClassloadingConfigurations(ClassLoaderEnvironments actual,
-            ClassLoaderEnvironments expected) {
-        return (actual != null) && (expected != null) && actual.getEnvironments().getEnvironments().stream().
-                filter(env -> expected.getEnvironments().getEnvironments().stream().
-                        filter(expectedEnv -> (expectedEnv.getName().equals(env.getName().trim()) && expectedEnv
-                                .getClasspath().equals(env.getClasspath().trim()))).count() > 0).count() == expected
-                .getEnvironments().getEnvironments().size();
     }
 }

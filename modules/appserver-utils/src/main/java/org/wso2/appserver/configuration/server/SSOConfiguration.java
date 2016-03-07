@@ -68,6 +68,10 @@ public class SSOConfiguration {
         return properties;
     }
 
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
+
     /**
      * A nested class which defines an additional configuration property for SSO.
      * <p>
@@ -85,8 +89,16 @@ public class SSOConfiguration {
             return key;
         }
 
+        public void setKey(String key) {
+            this.key = key;
+        }
+
         public String getValue() {
             return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 }

@@ -45,6 +45,10 @@
                                       tofile="${project.build.directory}/test-resources/sample-wso2as.xml"/>
                                 <copy file="src/test/resources/test-xml/sample-wso2as.xsd"
                                       tofile="${project.build.directory}/test-resources/sample-wso2as.xsd"/>
+                                <copy file="src/test/resources/test-xml/invalid.xml"
+                                      tofile="${project.build.directory}/test-resources/invalid.xml"/>
+                                <copy file="src/test/resources/test-xml/invalid.xsd"
+                                      tofile="${project.build.directory}/test-resources/invalid.xsd"/>
                             </tasks>
                         </configuration>
                     </execution>

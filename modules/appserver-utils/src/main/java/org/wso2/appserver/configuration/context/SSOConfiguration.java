@@ -76,6 +76,10 @@ public class SSOConfiguration {
         return skipURIs;
     }
 
+    public void setSkipURIs(SkipURIs skipURIs) {
+        this.skipURIs = skipURIs;
+    }
+
     public Boolean handleConsumerURLAfterSLO() {
         return handleConsumerURLAfterSLO;
     }
@@ -86,6 +90,10 @@ public class SSOConfiguration {
 
     public String getQueryParams() {
         return queryParams;
+    }
+
+    public void setQueryParams(String queryParams) {
+        this.queryParams = queryParams;
     }
 
     public String getApplicationServerURL() {
@@ -100,20 +108,40 @@ public class SSOConfiguration {
         return enableSSO;
     }
 
+    public void enableSSO(Boolean enableSSO) {
+        this.enableSSO = enableSSO;
+    }
+
     public String getRequestURLPostFix() {
         return requestURLPostFix;
+    }
+
+    public void setRequestURLPostFix(String requestURLPostFix) {
+        this.requestURLPostFix = requestURLPostFix;
     }
 
     public String getHttpBinding() {
         return httpBinding;
     }
 
+    public void setHttpBinding(String httpBinding) {
+        this.httpBinding = httpBinding;
+    }
+
     public String getIssuerId() {
         return issuerId;
     }
 
+    public void setIssuerId(String issuerId) {
+        this.issuerId = issuerId;
+    }
+
     public String getConsumerURL() {
         return consumerURL;
+    }
+
+    public void setConsumerURL(String consumerURL) {
+        this.consumerURL = consumerURL;
     }
 
     public String getConsumerURLPostFix() {
@@ -128,36 +156,72 @@ public class SSOConfiguration {
         return attributeConsumingServiceIndex;
     }
 
+    public void setAttributeConsumingServiceIndex(String attributeConsumingServiceIndex) {
+        this.attributeConsumingServiceIndex = attributeConsumingServiceIndex;
+    }
+
     public Boolean isSLOEnabled() {
         return enableSLO;
+    }
+
+    public void enableSLO(Boolean enableSLO) {
+        this.enableSLO = enableSLO;
     }
 
     public String getSLOURLPostFix() {
         return sloURLPostFix;
     }
 
+    public void setSLOURLPostFix(String sloURLPostFix) {
+        this.sloURLPostFix = sloURLPostFix;
+    }
+
     public Boolean isResponseSigningEnabled() {
         return enableResponseSigning;
+    }
+
+    public void enableResponseSigning(Boolean enableResponseSigning) {
+        this.enableResponseSigning = enableResponseSigning;
+    }
+
+    public Boolean isRequestSigningEnabled() {
+        return enableRequestSigning;
+    }
+
+    public void enableRequestSigning(Boolean enableRequestSigning) {
+        this.enableRequestSigning = enableRequestSigning;
     }
 
     public Boolean isAssertionSigningEnabled() {
         return enableAssertionSigning;
     }
 
+    public void enableAssertionSigning(Boolean enableAssertionSigning) {
+        this.enableAssertionSigning = enableAssertionSigning;
+    }
+
     public Boolean isAssertionEncryptionEnabled() {
         return enableAssertionEncryption;
+    }
+
+    public void enableAssertionEncryption(Boolean enableAssertionEncryption) {
+        this.enableAssertionEncryption = enableAssertionEncryption;
     }
 
     public Boolean isForceAuthnEnabled() {
         return enableForceAuthn;
     }
 
+    public void enableForceAuthn(Boolean enableForceAuthn) {
+        this.enableForceAuthn = enableForceAuthn;
+    }
+
     public Boolean isPassiveAuthnEnabled() {
         return enablePassiveAuthn;
     }
 
-    public Boolean isRequestSigningEnabled() {
-        return enableRequestSigning;
+    public void enablePassiveAuthn(Boolean enablePassiveAuthn) {
+        this.enablePassiveAuthn = enablePassiveAuthn;
     }
 
     public List<Property> getProperties() {
@@ -179,6 +243,10 @@ public class SSOConfiguration {
         public List<String> getSkipURIs() {
             return skipURIs;
         }
+
+        public void setSkipURIs(List<String> skipURIs) {
+            this.skipURIs = skipURIs;
+        }
     }
 
     /**
@@ -195,8 +263,16 @@ public class SSOConfiguration {
             return key;
         }
 
+        public void setKey(String key) {
+            this.key = key;
+        }
+
         public String getValue() {
             return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 

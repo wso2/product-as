@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A Java class which models a holder for server level statistics publisher configurations.
+ * A Java class which models a holder for server level statistics publishing configurations.
  *
  * @since 6.0.0
  */
