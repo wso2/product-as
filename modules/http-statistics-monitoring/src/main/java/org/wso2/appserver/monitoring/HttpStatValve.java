@@ -167,7 +167,7 @@ public class HttpStatValve extends ValveBase {
 
     /**
      *
-     * @param response
+     * @param response The Response object of client
      * @return
      */
     private boolean filterResponse (Response response) {
