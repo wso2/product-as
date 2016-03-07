@@ -29,10 +29,6 @@ import org.wso2.appserver.exceptions.ConfigurationException;
 public class ClassLoaderConfigurationException extends ConfigurationException {
     private static final long serialVersionUID = -6545119615865543591L;
 
-    public ClassLoaderConfigurationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public ClassLoaderConfigurationException(String message) {
         super(message);
     }

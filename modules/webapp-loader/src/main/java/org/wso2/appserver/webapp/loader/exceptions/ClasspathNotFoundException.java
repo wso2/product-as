@@ -27,10 +27,6 @@ package org.wso2.appserver.webapp.loader.exceptions;
 public class ClasspathNotFoundException extends ClassLoaderConfigurationException {
     private static final long serialVersionUID = -7723586559704686105L;
 
-    public ClasspathNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public ClasspathNotFoundException(String message) {
         super(message);
     }

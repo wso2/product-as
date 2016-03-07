@@ -30,10 +30,6 @@ public class UndefinedEnvironmentException extends ApplicationServerRuntimeExcep
 
     private static final long serialVersionUID = -8990486000212420137L;
 
-    public UndefinedEnvironmentException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public UndefinedEnvironmentException(String message) {
         super(message);
     }
