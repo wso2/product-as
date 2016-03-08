@@ -42,6 +42,17 @@ import javax.servlet.http.HttpSession;
  */
 public class EventBuilder {
 
+    /**
+     *
+     * @param streamId
+     * @param request
+     * @param response
+     * @param startTime
+     * @param responseTime
+     * @param uaParser
+     * @return
+     * @throws EventBuilderException
+     */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
                                    long responseTime, Parser uaParser) throws EventBuilderException {
 
@@ -54,6 +65,15 @@ public class EventBuilder {
 
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param startTime
+     * @param responseTime
+     * @param uaParser
+     * @return
+     */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
                                                  long responseTime, Parser uaParser) {
 
@@ -67,49 +87,51 @@ public class EventBuilder {
             String[] requestedUriParts = requestedURI.split(forwardSlash);
 
             if (!forwardSlash.equals(requestedURI)) {
-                payload.add(mapNull(requestedUriParts[1]));
+                payload.add((requestedUriParts[1]));
 
             } else {
-                payload.add(mapNull(forwardSlash));
+                payload.add((forwardSlash));
             }
         }
 
         String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
                 + request.getContext().getEffectiveMinorVersion();
-        payload.add(mapNull(webappServletVersion));
+        payload.add((webappServletVersion));
         String consumerName = extractUsername(request);
-        payload.add(mapNull(consumerName));
-        payload.add(mapNull(request.getRequestURI()));
-        payload.add(mapNull(startTime));
-        payload.add(mapNull(request.getPathInfo()));
+        payload.add((consumerName));
+        payload.add((request.getRequestURI()));
+        payload.add((startTime));
+        payload.add((request.getPathInfo()));
         parserUserAgent(request, uaParser, payload);
-        payload.add(mapNull(request.getLocale().getCountry()));
-        payload.add(mapNull(EventPublisherConstants.APP_TYPE));
-        payload.add(mapNull(request.getContext().getDisplayName()));
-        payload.add(mapNull(requestedURI));
-        payload.add(mapNull(extractSessionId(request)));
-        payload.add(mapNull(request.getMethod()));
-        payload.add(mapNull(request.getContentType()));
-        payload.add(mapNull(response.getContentType()));
-        payload.add(mapNull((long) response.getStatus()));
-        payload.add(mapNull(getClientIpAddress(request)));
-        payload.add(mapNull(request.getHeader(EventPublisherConstants.REFERRER)));
-        payload.add(mapNull(request.getRemoteUser()));
-        payload.add(mapNull(request.getAuthType()));
-
-        payload.add(mapNull(responseTime));
-        payload.add(mapNull((long) request.getContentLength()));
-        payload.add(mapNull((long) response.getContentLength()));
-        payload.add(mapNull(getRequestHeader(request)));
-        payload.add(mapNull(getResponseHeaders(response)));
-        payload.add(mapNull("-")); //request payload
-        payload.add(mapNull("-")); //response payload
-        payload.add(mapNull(request.getLocale().getLanguage()));
+        payload.add((request.getLocale().getCountry()));
+        payload.add((EventPublisherConstants.APP_TYPE));
+        payload.add((request.getContext().getDisplayName()));
+        payload.add((extractSessionId(request)));
+        payload.add((request.getMethod()));
+        payload.add((request.getContentType()));
+        payload.add((response.getContentType()));
+        payload.add(((long) response.getStatus()));
+        payload.add((getClientIpAddress(request)));
+        payload.add((request.getHeader(EventPublisherConstants.REFERRER)));
+        payload.add((request.getRemoteUser()));
+        payload.add((request.getAuthType()));
+        payload.add((responseTime));
+        payload.add(((long) request.getContentLength()));
+        payload.add(((long) response.getContentLength()));
+        payload.add((getRequestHeader(request)));
+        payload.add((getResponseHeaders(response)));
+        payload.add((request.getLocale().getLanguage()));
 
         return payload;
     }
 
     //get request headers
+
+    /**
+     *
+     * @param request
+     * @return
+     */
     private static String getRequestHeader(Request request) {
         HttpServletRequest httpServletRequest = request.getRequest();
         List<String> headers = new ArrayList<>();
@@ -122,6 +144,12 @@ public class EventBuilder {
     }
 
     //get response headers
+
+    /**
+     *
+     * @param response
+     * @return
+     */
     private static String getResponseHeaders(Response response) {
         HttpServletResponse httpServletResponse = response.getResponse();
         Collection<String> headerNames = httpServletResponse.getHeaderNames();
@@ -129,6 +157,12 @@ public class EventBuilder {
     }
 
     //extracts the Id of the current session associated with the request
+
+    /**
+     *
+     * @param request
+     * @return
+     */
     private static String extractSessionId(Request request) {
         final HttpSession session = request.getSession(false);
         // CXF web services does not have a session id, because they are stateless
@@ -137,6 +171,12 @@ public class EventBuilder {
     }
 
     //extracts the name of the current authenticated user for the request
+
+    /**
+     *
+     * @param request
+     * @return
+     */
     private static String extractUsername(Request request) {
         String consumerName;
         Principal principal = request.getUserPrincipal();
@@ -149,17 +189,24 @@ public class EventBuilder {
     }
 
     //parse information about User Agent
+
+    /**
+     *
+     * @param request
+     * @param uaParser
+     * @param payload
+     */
     private static void parserUserAgent(Request request, Parser uaParser, List<Object> payload) {
 
         String userAgent = request.getHeader(EventPublisherConstants.USER_AGENT);
         if (uaParser != null) {
             Client readableUserAgent = uaParser.parse(userAgent);
 
-            payload.add(mapNull(readableUserAgent.userAgent.major));
-            payload.add(mapNull(readableUserAgent.userAgent.family));
-            payload.add(mapNull(readableUserAgent.os.family));
-            payload.add(mapNull(readableUserAgent.os.major));
-            payload.add(mapNull(readableUserAgent.device.family));
+            payload.add((readableUserAgent.userAgent.family));
+            payload.add((readableUserAgent.userAgent.major));
+            payload.add((readableUserAgent.os.family));
+            payload.add((readableUserAgent.os.major));
+            payload.add((readableUserAgent.device.family));
         }
     }
 
@@ -168,57 +215,28 @@ public class EventBuilder {
     * if we get only request.getRemoteAddr() will give only the proxy pr load balancer address.
     * For that we are checking the request forwarded address in the header of the request.
     */
-    private static String getClientIpAddress(Request request) {
-        String ip = request.getHeader(EventPublisherConstants.X_FORWARDED_FOR);
-        ip = tryNextHeaderIfIpNull(request, ip, EventPublisherConstants.PROXY_CLIENT_IP);
-        ip = tryNextHeaderIfIpNull(request, ip, EventPublisherConstants.WL_PROXY_CLIENT_IP);
-        ip = tryNextHeaderIfIpNull(request, ip, EventPublisherConstants.HTTP_CLIENT_IP);
-        ip = tryNextHeaderIfIpNull(request, ip, EventPublisherConstants.HTTP_X_FORWARDED_FOR);
 
-        if (ip == null || ip.length() == 0 || EventPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-
-        return ip;
-    }
-
-    // If the input param ip is invalid, it will return the value of the next header as the output
-    private static String tryNextHeaderIfIpNull(Request request, String ip, String nextHeader) {
-        if (ip == null || ip.length() == 0 ||  EventPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
-            return request.getHeader(nextHeader);
-        }
-        return null;
-    }
     /**
-     * Maps null Integers to zero.
      *
-     * @param value
+     * @param request
      * @return
      */
-    protected Integer mapNull(Integer value) {
-        Integer zero = Integer.valueOf(0);
-        return (value == null) ? zero : value;
-    }
+    public static String getClientIpAddress(HttpServletRequest request) {
 
-    /**
-     * Maps null Long values to zero.
-     *
-     * @param value @param value The value that should be mapped.
-     * @return the value if not null, otherwise 0
-     */
-    protected static Long mapNull(Long value) {
-        Long zero = Long.valueOf(0);
-        return (value == null) ? zero : value;
-    }
+        String[] headers = {
+                EventPublisherConstants.X_FORWARDED_FOR,
+                EventPublisherConstants.PROXY_CLIENT_IP,
+                EventPublisherConstants.WL_PROXY_CLIENT_IP,
+                EventPublisherConstants.HTTP_CLIENT_IP,
+                EventPublisherConstants.HTTP_X_FORWARDED_FOR };
 
-    /**
-     * Map null String to -.
-     *
-     * @param value The value that should be mapped.
-     * @return the value if not null, otherwise "-"
-     */
-    protected static String mapNull(String value) {
-        return (value == null) ? "-" : value;
+        for (String header : headers) {
+            String ip = request.getHeader(header);
+            if (ip != null && ip.length() != 0 && !EventPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
+                return ip;
+            }
+        }
+        return request.getRemoteAddr();
     }
 
 }

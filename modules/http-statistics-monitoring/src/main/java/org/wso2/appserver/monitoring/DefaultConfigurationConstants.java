@@ -31,8 +31,7 @@ public class DefaultConfigurationConstants {
     public static final String PUBLISHER_URL = "tcp://127.0.0.1:7611";
     public static final String AUTHENTICATION_URL = "ssl://127.0.0.1:7711";
     public static final String STREAM_ID = "org.wso2.http.stats:1.0.0";
-    public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
-    public static final String CLIENT_TRUSTSTORE = "client-truststore.jks";
+
 
     /**
      * instantiating is not needed for this class. private constructor to block that.

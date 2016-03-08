@@ -29,10 +29,13 @@ public class EventPublisherConstants {
     public static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
     public static final String HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
     public static final String HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR";
+
     public static final String USER_AGENT = "user-agent";
     public static final String REFERRER = "Referer";
     public static final String ANONYMOUS_USER = "anonymous.user";
     public static final String APP_TYPE = "webapp";
+    public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
+    public static final String CLIENT_TRUSTSTORE = "client-truststore.jks";
 
     /**
      * instantiating is not needed for this class. private constructor to block that.
