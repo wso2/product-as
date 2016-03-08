@@ -27,6 +27,8 @@ import org.wso2.carbon.databridge.commons.Event;
 import ua_parser.Client;
 import ua_parser.Parser;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +56,7 @@ public class EventBuilder {
      * @throws EventBuilderException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
-                                   long responseTime, Parser uaParser) throws EventBuilderException {
+                                   long responseTime, Parser uaParser) throws EventBuilderException, MalformedURLException {
 
 
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime, uaParser);
@@ -75,7 +77,7 @@ public class EventBuilder {
      * @return
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
-                                                 long responseTime, Parser uaParser) {
+                                                 long responseTime, Parser uaParser) throws MalformedURLException {
 
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";

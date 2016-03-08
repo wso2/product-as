@@ -44,6 +44,7 @@ import ua_parser.Parser;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import javax.servlet.ServletException;
 
 /**
@@ -94,15 +95,17 @@ public class HttpStatValve extends ValveBase {
         getNext().invoke(request, response);
         long responseTime = System.currentTimeMillis() - startTime;
 
-        Event event = null;
-        try {
-            event = EventBuilder.buildEvent(statsPublisherConfiguration.getStreamId(), request, response, startTime,
-                    responseTime, uaParser);
-        } catch (EventBuilderException e) {
-            LOG.error("Creating the Event failed: " + e);
-        }
+        if (filterResponse(response)) {
+            Event event = null;
+            try {
+                event = EventBuilder.buildEvent(statsPublisherConfiguration.getStreamId(), request, response, startTime,
+                        responseTime, uaParser);
+            } catch (EventBuilderException e) {
+                LOG.error("Creating the Event failed: " + e);
+            }
 
-        dataPublisher.publish(event);
+            dataPublisher.publish(event);
+        }
     }
 
     /**
@@ -164,4 +167,18 @@ public class HttpStatValve extends ValveBase {
         return dataPublisher;
     }
 
+    /**
+     *
+     * @param response
+     * @return
+     */
+    private static boolean filterResponse(Response response){
+
+        String responseContentType = response.getContentType();
+        //if the response content is not null and is of type text/html, allow to publish stats
+        if (responseContentType != null && responseContentType.contains("text/html")) {
+            return true;
+        }
+        return false;
+    }
 }
