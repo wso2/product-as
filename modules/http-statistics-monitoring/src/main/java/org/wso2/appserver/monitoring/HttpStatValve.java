@@ -44,7 +44,6 @@ import ua_parser.Parser;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 import javax.servlet.ServletException;
 
 /**
@@ -71,15 +70,15 @@ public class HttpStatValve extends ValveBase {
         try {
             uaParser = new CachingParser();
         } catch (IOException e) {
-            LOG.error("Creating caching parser object failed:" + e);
-            throw new RuntimeException("Creating caching parser object failed:", e);
+            LOG.error("Initializing caching parser object failed:" + e);
+            throw new RuntimeException("Initializing caching parser object failed:", e);
         }
 
         try {
             dataPublisher = getDataPublisher();
         } catch (ConfigurationException e) {
-            LOG.error("Creating DataPublisher failed:", e);
-            throw new LifecycleException("Creating DataPublisher failed", e);
+            LOG.error("Initializing DataPublisher failed:", e);
+            throw new LifecycleException("Initializing DataPublisher failed", e);
         }
 //
 //        //why is this necessary
@@ -172,7 +171,7 @@ public class HttpStatValve extends ValveBase {
      * @param response
      * @return
      */
-    private static boolean filterResponse(Response response){
+    private boolean filterResponse (Response response) {
 
         String responseContentType = response.getContentType();
         //if the response content is not null and is of type text/html, allow to publish stats

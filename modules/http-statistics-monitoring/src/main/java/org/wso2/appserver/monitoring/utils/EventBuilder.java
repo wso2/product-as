@@ -27,8 +27,6 @@ import org.wso2.carbon.databridge.commons.Event;
 import ua_parser.Client;
 import ua_parser.Parser;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +54,7 @@ public class EventBuilder {
      * @throws EventBuilderException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
-                                   long responseTime, Parser uaParser) throws EventBuilderException, MalformedURLException {
+                                   long responseTime, Parser uaParser) throws EventBuilderException {
 
 
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime, uaParser);
@@ -77,53 +75,71 @@ public class EventBuilder {
      * @return
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
-                                                 long responseTime, Parser uaParser) throws MalformedURLException {
+                                                 long responseTime, Parser uaParser)  {
 
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";
 
-        String requestedURI = request.getRequestURI();
+        if (request != null) {
+            String requestedURI = request.getRequestURI();
 
-        if (requestedURI != null) {
-            requestedURI = requestedURI.trim();
-            String[] requestedUriParts = requestedURI.split(forwardSlash);
+            if (requestedURI != null) {
+                requestedURI = requestedURI.trim();
+                String[] requestedUriParts = requestedURI.split(forwardSlash);
 
-            if (!forwardSlash.equals(requestedURI)) {
-                payload.add((requestedUriParts[1]));
+                if (!forwardSlash.equals(requestedURI)) {
+                    payload.add((requestedUriParts[1]));
 
+                } else {
+                    payload.add((forwardSlash));
+                }
+            }
+
+            if ( request.getContext() != null) {
+                String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
+                        + request.getContext().getEffectiveMinorVersion();
+                payload.add((webappServletVersion));
             } else {
-                payload.add((forwardSlash));
+                payload.add(null);
+            }
+
+            String consumerName = extractUsername(request);
+            payload.add((consumerName));
+            payload.add((request.getRequestURI()));
+            payload.add((startTime));
+            payload.add((request.getPathInfo()));
+            parserUserAgent(request, uaParser, payload);
+            if(request.getLocale() != null) {
+                payload.add((request.getLocale().getCountry()));
+            }else{
+                payload.add(null);
+            }
+            payload.add((EventPublisherConstants.APP_TYPE));
+            if (request.getContext() != null) {
+                payload.add((request.getContext().getDisplayName()));
+            } else {
+                payload.add(null);
+            }
+            payload.add((extractSessionId(request)));
+            payload.add((request.getMethod()));
+            payload.add((request.getContentType()));
+            payload.add((response.getContentType()));
+            payload.add(((long) response.getStatus()));
+            payload.add((getClientIpAddress(request)));
+            payload.add((request.getHeader(EventPublisherConstants.REFERRER)));
+            payload.add((request.getRemoteUser()));
+            payload.add((request.getAuthType()));
+            payload.add((responseTime));
+            payload.add(((long) request.getContentLength()));
+            payload.add(((long) response.getContentLength()));
+            payload.add((getRequestHeader(request)));
+            payload.add((getResponseHeaders(response)));
+            if(request.getLocale() != null) {
+                payload.add((request.getLocale().getLanguage()));
+            }else {
+                payload.add(null);
             }
         }
-
-        String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
-                + request.getContext().getEffectiveMinorVersion();
-        payload.add((webappServletVersion));
-        String consumerName = extractUsername(request);
-        payload.add((consumerName));
-        payload.add((request.getRequestURI()));
-        payload.add((startTime));
-        payload.add((request.getPathInfo()));
-        parserUserAgent(request, uaParser, payload);
-        payload.add((request.getLocale().getCountry()));
-        payload.add((EventPublisherConstants.APP_TYPE));
-        payload.add((request.getContext().getDisplayName()));
-        payload.add((extractSessionId(request)));
-        payload.add((request.getMethod()));
-        payload.add((request.getContentType()));
-        payload.add((response.getContentType()));
-        payload.add(((long) response.getStatus()));
-        payload.add((getClientIpAddress(request)));
-        payload.add((request.getHeader(EventPublisherConstants.REFERRER)));
-        payload.add((request.getRemoteUser()));
-        payload.add((request.getAuthType()));
-        payload.add((responseTime));
-        payload.add(((long) request.getContentLength()));
-        payload.add(((long) response.getContentLength()));
-        payload.add((getRequestHeader(request)));
-        payload.add((getResponseHeaders(response)));
-        payload.add((request.getLocale().getLanguage()));
-
         return payload;
     }
 
@@ -135,14 +151,16 @@ public class EventBuilder {
      * @return
      */
     private static String getRequestHeader(Request request) {
-        HttpServletRequest httpServletRequest = request.getRequest();
+//        HttpServletRequest httpServletRequest = request.getRequest();
         List<String> headers = new ArrayList<>();
-        Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String header = headerNames.nextElement();
-            headers.add(header);
+        Enumeration<String> headerNames = request.getHeaderNames();
+        if (headerNames != null) {
+            while (headerNames.hasMoreElements()) {
+                String header = headerNames.nextElement();
+                headers.add(header);
+            }
         }
-        return headers.toString();
+        return (headerNames != null) ? headers.toString(): null;
     }
 
     //get response headers
@@ -153,9 +171,9 @@ public class EventBuilder {
      * @return
      */
     private static String getResponseHeaders(Response response) {
-        HttpServletResponse httpServletResponse = response.getResponse();
-        Collection<String> headerNames = httpServletResponse.getHeaderNames();
-        return headerNames.toString();
+//        HttpServletResponse httpServletResponse = response.getResponse();
+        Collection<String> headerNames = response.getHeaderNames();
+        return (headerNames != null) ? headerNames.toString():null;
     }
 
     //extracts the Id of the current session associated with the request
@@ -166,7 +184,7 @@ public class EventBuilder {
      * @return
      */
     private static String extractSessionId(Request request) {
-        final HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
         // CXF web services does not have a session id, because they are stateless
         return (session != null && session.getId() != null) ? session.getId() : "-";
 
@@ -201,7 +219,7 @@ public class EventBuilder {
     private static void parserUserAgent(Request request, Parser uaParser, List<Object> payload) {
 
         String userAgent = request.getHeader(EventPublisherConstants.USER_AGENT);
-        if (uaParser != null) {
+        if (uaParser != null && userAgent != null) {
             Client readableUserAgent = uaParser.parse(userAgent);
 
             payload.add((readableUserAgent.userAgent.family));
@@ -209,6 +227,12 @@ public class EventBuilder {
             payload.add((readableUserAgent.os.family));
             payload.add((readableUserAgent.os.major));
             payload.add((readableUserAgent.device.family));
+        }else{
+            payload.add(null);
+            payload.add(null);
+            payload.add(null);
+            payload.add(null);
+            payload.add(null);
         }
     }
 
@@ -223,7 +247,7 @@ public class EventBuilder {
      * @param request
      * @return
      */
-    public static String getClientIpAddress(HttpServletRequest request) {
+    public static String getClientIpAddress(Request request) {
 
         String[] headers = {
                 EventPublisherConstants.X_FORWARDED_FOR,
@@ -237,6 +261,7 @@ public class EventBuilder {
             if (ip != null && ip.length() != 0 && !EventPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
                 return ip;
             }
+
         }
         return request.getRemoteAddr();
     }
