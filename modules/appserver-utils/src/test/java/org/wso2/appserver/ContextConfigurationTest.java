@@ -20,8 +20,8 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
 import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
+import org.wso2.appserver.configuration.listeners.XMLUtils;
 import org.wso2.appserver.exceptions.ApplicationServerException;
-import org.wso2.appserver.utils.XMLUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @since 6.0.0
  */
-public class ContextConfigXMLUtilsTest {
+public class ContextConfigurationTest {
     @Test
     public void loadObjectFromFilePath() {
         Path xmlSchema = Paths.get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER,

@@ -17,31 +17,28 @@ package org.wso2.appserver;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.wso2.appserver.configuration.listeners.XMLUtils;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.SecurityConfiguration;
 import org.wso2.appserver.configuration.server.ServerConfiguration;
 import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
-import org.wso2.appserver.utils.XMLUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
 
 /**
  * This class defines unit-tests for server level configurations.
  *
  * @since 6.0.0
  */
-public class ServerConfigXMLUtilsTest {
-    private static final Logger logger = Logger.getLogger(ServerConfigXMLUtilsTest.class.getName());
+public class ServerConfigurationTest {
+    private static final Logger logger = Logger.getLogger(ServerConfigurationTest.class.getName());
 
     @Test
     public void loadObjectFromFilePathTest() {
@@ -60,36 +57,6 @@ public class ServerConfigXMLUtilsTest {
         }
     }
 
-    @Test
-    public void loadObjectFromFileInputStreamTest() {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
-        try {
-            ServerConfiguration actual = XMLUtils.
-                    getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, ServerConfiguration.class);
-            ServerConfiguration expected = generateDefault();
-            Assert.assertTrue(compare(actual, expected));
-        } catch (ApplicationServerException | IOException e) {
-            logger.log(Level.INFO, "Error when unmarshalling the XML source", e);
-            Assert.fail();
-        }
-    }
-
-    @Test(expectedExceptions = { ApplicationServerException.class })
-    public void invalidSchemaPathTest() throws ApplicationServerException {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);
-        Path xmlSchema = Paths.get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER,
-                TestConstants.NON_EXISTENT_XSD_FILE);
-        try {
-            XMLUtils.getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, ServerConfiguration.class);
-        } catch (IOException e) {
-            logger.log(Level.INFO, "Error when unmarshalling the XML source", e);
-        }
-    }
-
     @Test(expectedExceptions = { ApplicationServerException.class })
     public void invalidSchemaTest() throws ApplicationServerException {
         Path xmlSchema = Paths.
@@ -104,33 +71,6 @@ public class ServerConfigXMLUtilsTest {
         Path xmlSchema = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
         XMLUtils.getUnmarshalledObject(xmlSource, xmlSchema, ServerConfiguration.class);
-    }
-
-    @Test(expectedExceptions = { ApplicationServerException.class })
-    public void loadObjectFromInvalidInputStreamTest() throws ApplicationServerException {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
-        try {
-            XMLUtils.getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, ServerConfiguration.class);
-        } catch (IOException e) {
-            logger.log(Level.INFO, "Error when unmarshalling the XML source", e);
-        }
-    }
-
-    @Test
-    public void getNonNamespaceAwareDocumentBuilderTest() throws ApplicationServerException {
-        DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder(true, false, null);
-        boolean matchesRequirements = ((documentBuilder != null) && (!documentBuilder.isNamespaceAware()));
-        Assert.assertTrue(matchesRequirements);
-    }
-
-    @Test
-    public void getNamespaceAwareDocumentBuilderTest() throws ApplicationServerException {
-        DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder(false, true, null);
-        boolean matchesRequirements = ((documentBuilder != null) && (documentBuilder.isNamespaceAware()));
-        Assert.assertTrue(matchesRequirements);
     }
 
     protected static ServerConfiguration generateDefault() {

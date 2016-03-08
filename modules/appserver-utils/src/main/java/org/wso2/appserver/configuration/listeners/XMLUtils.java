@@ -13,24 +13,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils;
+package org.wso2.appserver.configuration.listeners;
 
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 import org.wso2.appserver.exceptions.ApplicationServerException;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -116,39 +111,5 @@ public class XMLUtils {
         } catch (JAXBException e) {
             throw new ApplicationServerConfigurationException("Error when unmarshalling the XML configuration", e);
         }
-    }
-
-    /**
-     * JAXP utility function
-     */
-
-    /**
-     * Generates a {@code javax.xml.parsers.DocumentBuilder} instance based on the specified configurations.
-     *
-     * @param expandEntityReferences true if the parser is to expand entity reference nodes, else false
-     * @param namespaceAware         true if the parser provides support for XML namespaces, else false
-     * @param entityResolver         the {@link EntityResolver} to be used within the parser, if {@code entityResolver}
-     *                               is set to n    ull default implementation is used
-     * @return the generated {@link DocumentBuilder} instance
-     * @throws ApplicationServerException if an error occurs when generating the new DocumentBuilder
-     */
-    public static DocumentBuilder getDocumentBuilder(boolean expandEntityReferences, boolean namespaceAware,
-            EntityResolver entityResolver) throws ApplicationServerException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        if (!expandEntityReferences) {
-            documentBuilderFactory.setExpandEntityReferences(false);
-        }
-        if (namespaceAware) {
-            documentBuilderFactory.setNamespaceAware(true);
-        }
-
-        DocumentBuilder docBuilder;
-        try {
-            docBuilder = documentBuilderFactory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new ApplicationServerException("Error when generating the new DocumentBuilder", e);
-        }
-        Optional.ofNullable(entityResolver).ifPresent(docBuilder::setEntityResolver);
-        return docBuilder;
     }
 }

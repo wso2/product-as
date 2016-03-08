@@ -21,8 +21,8 @@ limitations under the License.
     <test name="app-server-utils-unit-tests" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.appserver.PathUtilTest"/>
-            <class name="org.wso2.appserver.ContextConfigXMLUtilsTest"/>
-            <class name="org.wso2.appserver.ServerConfigXMLUtilsTest"/>
+            <!--<class name="org.wso2.appserver.ContextConfigurationTest"/>
+            <class name="org.wso2.appserver.ServerConfigurationTest"/>-->
         </classes>
     </test>
 </suite>

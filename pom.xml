@@ -94,11 +94,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <version>${maven.shade.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <executions>
                         <execution>
@@ -291,7 +286,6 @@
         <!-- plugin version properties -->
         <maven.checkstyleplugin.version>2.17</maven.checkstyleplugin.version>
         <maven.findbugsplugin.version>3.0.3</maven.findbugsplugin.version>
-        <maven.shade.plugin.version>2.4.2</maven.shade.plugin.version>
 
         <!-- dependency version properties -->
         <tomcat.version>8.0.28</tomcat.version>

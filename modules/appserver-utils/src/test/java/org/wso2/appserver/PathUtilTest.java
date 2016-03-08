@@ -19,7 +19,6 @@ import org.apache.catalina.Globals;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.utils.PathUtils;
 
 import java.nio.file.Path;
@@ -47,36 +46,15 @@ public class PathUtilTest {
     @Test
     public void getCatalinaConfigurationHomeTest() {
         Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY);
-        Path actual = PathUtils.getCatalinaConfigurationHome();
-        Assert.assertEquals(actual.toString(), expected.toString());
-    }
-
-    @Test
-    public void getCatalinaConfigurationFileTest() {
-        Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                TestConstants.SAMPLE_CONFIGURATION_FILE);
-        Path actual = PathUtils.getCatalinaConfigurationFile(TestConstants.SAMPLE_CONFIGURATION_FILE);
+        Path actual = PathUtils.getCatalinaConfigurationBase();
         Assert.assertEquals(actual.toString(), expected.toString());
     }
 
     @Test
     public void getWSO2ConfigurationHomeTest() {
         Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                Constants.WSO2_CONFIGURATION_DIRECTORY);
-        Path actual = PathUtils.getWSO2ConfigurationHome();
+                Constants.APP_SERVER_CONFIGURATION_DIRECTORY);
+        Path actual = PathUtils.getAppServerConfigurationBase();
         Assert.assertEquals(actual.toString(), expected.toString());
-    }
-
-    @Test
-    public void getWSO2ConfigurationFileTest() {
-        Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                Constants.WSO2_CONFIGURATION_DIRECTORY, TestConstants.SAMPLE_CONFIGURATION_FILE);
-        Path actual = PathUtils.getWSO2ConfigurationFile(TestConstants.SAMPLE_CONFIGURATION_FILE);
-        Assert.assertEquals(actual.toString(), expected.toString());
-    }
-
-    @Test(expectedExceptions = { ApplicationServerException.class })
-    public void getWebAppPathFromNullContextTest() throws ApplicationServerException {
-        PathUtils.getWebAppPath(null);
     }
 }

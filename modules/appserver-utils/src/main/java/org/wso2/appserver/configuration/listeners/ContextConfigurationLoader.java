@@ -24,8 +24,8 @@ import org.wso2.appserver.configuration.context.ContextConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
-import org.wso2.appserver.utils.XMLUtils;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -63,7 +63,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
      */
     @Override
     public void lifecycleEvent(LifecycleEvent lifecycleEvent) {
-        if (Lifecycle.BEFORE_START_EVENT.equals(lifecycleEvent.getType())) {
+        if (Lifecycle.CONFIGURE_START_EVENT.equals(lifecycleEvent.getType())) {
             Object source = lifecycleEvent.getSource();
             if (source instanceof Context) {
                 Context context = (Context) source;
@@ -86,24 +86,24 @@ public class ContextConfigurationLoader implements LifecycleListener {
     private static ContextConfiguration getEffectiveConfiguration(Context context) {
         if (context != null) {
             Path schemaPath = Paths.
-                    get(PathUtils.getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
+                    get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
             Path defaultWebAppDescriptor = Paths.
-                    get(PathUtils.getWSO2ConfigurationHome().toString(), Constants.WEBAPP_DESCRIPTOR);
+                    get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR);
 
             ContextConfiguration effective;
             try {
-                Path contextWebAppDescriptor = Paths.
-                        get(PathUtils.getWebAppPath(context).toString(), Constants.WEBAPP_RESOURCE_FOLDER,
-                                Constants.WEBAPP_DESCRIPTOR);
+                InputStream inputStream = context.getServletContext().getResourceAsStream(
+                        "/" + Constants.WEBAPP_RESOURCE_FOLDER + "/" + Constants.WEBAPP_DESCRIPTOR);
+
                 if (!Files.exists(defaultWebAppDescriptor)) {
                     throw new ApplicationServerRuntimeException(
                             "The " + defaultWebAppDescriptor.toString() + " does not exist");
                 }
                 effective = XMLUtils.
                         getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, ContextConfiguration.class);
-                if (Files.exists(contextWebAppDescriptor)) {
+                if (inputStream != null) {
                     ContextConfiguration local = XMLUtils.
-                            getUnmarshalledObject(contextWebAppDescriptor, schemaPath, ContextConfiguration.class);
+                            getUnmarshalledObject(inputStream, schemaPath, ContextConfiguration.class);
                     effective.merge(local);
                 }
             } catch (ApplicationServerException e) {
