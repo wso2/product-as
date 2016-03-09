@@ -34,5 +34,6 @@
         <is-force-authn>false</is-force-authn>
         <is-passive-authn>false</is-passive-authn>
         <property key="RelayState">index.jsp</property>
+        <property key="TenantId">tenant1</property>
     </saml2-single-sign-on>
 </wso2as-web>

@@ -20,13 +20,15 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Server;
 import org.wso2.appserver.Constants;
-import org.wso2.appserver.configuration.server.ServerConfiguration;
+import org.wso2.appserver.configuration.server.AppServerConfiguration;
+import org.wso2.appserver.configuration.server.SecurityConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 /**
  * A Java class which loads the WSO2 specific server level configurations during Application Server startup.
@@ -34,7 +36,7 @@ import java.nio.file.Paths;
  * @since 6.0.0
  */
 public class ServerConfigurationLoader implements LifecycleListener {
-    private static ServerConfiguration serverConfiguration;
+    private static AppServerConfiguration appServerConfiguration;
 
     /**
      * Retrieves the WSO2 specific, server level configurations from the configurations file before server startup
@@ -55,23 +57,42 @@ public class ServerConfigurationLoader implements LifecycleListener {
         }
     }
 
-    public static ServerConfiguration getServerConfiguration() {
-        return serverConfiguration;
+    public static AppServerConfiguration getServerConfiguration() {
+        return appServerConfiguration;
     }
 
     private static synchronized void buildGlobalConfiguration() {
         try {
-            if (serverConfiguration == null) {
+            if (appServerConfiguration == null) {
                 Path schemaPath = Paths.get(PathUtils.getAppServerConfigurationBase().toString(),
                         Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
                 Path descriptorPath = Paths.
                         get(PathUtils.getAppServerConfigurationBase().toString(), Constants.APP_SERVER_DESCRIPTOR);
-                serverConfiguration = XMLUtils.
-                        getUnmarshalledObject(descriptorPath, schemaPath, ServerConfiguration.class);
+                appServerConfiguration = Utils.
+                        getUnmarshalledObject(descriptorPath, schemaPath, AppServerConfiguration.class);
+                setSecuritySystemProperties();
             }
         } catch (ApplicationServerException e) {
             throw new ApplicationServerRuntimeException("An error has occurred when building the global configuration",
                     e);
         }
+    }
+
+    /**
+     * Sets the system properties associated with Java SSL.
+     */
+    private static void setSecuritySystemProperties() {
+        Optional.ofNullable(appServerConfiguration).ifPresent(configuration -> {
+            SecurityConfiguration securityConfiguration = configuration.getSecurityConfiguration();
+
+            System.setProperty("javax.net.ssl.keyStore",
+                    securityConfiguration.getKeystore().getLocation().replace("\\", "/"));
+            System.setProperty("javax.net.ssl.keyStorePassword", securityConfiguration.getKeystore().getPassword());
+            System.setProperty("javax.net.ssl.keyStoreType", securityConfiguration.getKeystore().getType());
+            System.setProperty("javax.net.ssl.trustStore",
+                    securityConfiguration.getTruststore().getLocation().replace("\\", "/"));
+            System.setProperty("javax.net.ssl.trustStorePassword", securityConfiguration.getTruststore().getPassword());
+            System.setProperty("javax.net.ssl.trustStoreType", securityConfiguration.getTruststore().getType());
+        });
     }
 }

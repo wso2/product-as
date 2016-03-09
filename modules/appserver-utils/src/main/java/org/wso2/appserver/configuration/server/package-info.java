@@ -15,7 +15,9 @@
  */
 
 /**
- * package information for server configuration namespace.
+ * Package information for server configuration namespace.
+ *
+ * @since 6.0.0
  */
 @XmlSchema(
         namespace = Constants.APP_SERVER_CONFIGURATION_NAMESPACE,

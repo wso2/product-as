@@ -37,6 +37,8 @@ public class SSOConfiguration {
     private String idpEntityId;
     @XmlElement(name = "SignatureValidatorImplClass")
     private String signatureValidatorImplClass;
+    @XmlElement(name = "IdPCertificateAlias")
+    private String idpCertificateAlias;
     @XmlElement(name = "Property")
     private List<Property> properties;
 
@@ -62,6 +64,14 @@ public class SSOConfiguration {
 
     public void setSignatureValidatorImplClass(String signatureValidatorImplClass) {
         this.signatureValidatorImplClass = signatureValidatorImplClass;
+    }
+
+    public String getIdpCertificateAlias() {
+        return idpCertificateAlias;
+    }
+
+    public void setIdpCertificateAlias(String idpCertificateAlias) {
+        this.idpCertificateAlias = idpCertificateAlias;
     }
 
     public List<Property> getProperties() {

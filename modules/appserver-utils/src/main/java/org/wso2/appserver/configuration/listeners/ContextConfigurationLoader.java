@@ -20,7 +20,7 @@ import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.wso2.appserver.Constants;
-import org.wso2.appserver.configuration.context.ContextConfiguration;
+import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
@@ -39,21 +39,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 6.0.0
  */
 public class ContextConfigurationLoader implements LifecycleListener {
-    private static final Map<Context, ContextConfiguration> contextToConfigurationMap = new ConcurrentHashMap<>();
+    private static final Map<Context, AppServerWebAppConfiguration>
+            contextToConfigurationMap = new ConcurrentHashMap<>();
 
     /**
-     * Retrieves the {@code ContextConfiguration} matching the specified context.
+     * Retrieves the {@code AppServerWebAppConfiguration} matching the specified context.
      *
-     * @param context the context for which the matching {@link ContextConfiguration} is to be returned
-     * @return the {@code ContextConfiguration} matching the specified context
+     * @param context the context for which the matching {@link AppServerWebAppConfiguration} is to be returned
+     * @return the {@code AppServerWebAppConfiguration} matching the specified context
      */
-    public static Optional<ContextConfiguration> getContextConfiguration(Context context) {
-        ContextConfiguration configuration = contextToConfigurationMap.get(context);
+    public static Optional<AppServerWebAppConfiguration> getContextConfiguration(Context context) {
+        AppServerWebAppConfiguration configuration = contextToConfigurationMap.get(context);
         return Optional.ofNullable(configuration);
     }
 
     /**
-     * Processes {@code Context}s before their start event to retrieve a final set of WSO2 specific
+     * Processes {@code Context}s at "configure_start" event to retrieve a final set of WSO2 specific
      * context level configurations.
      * <p>
      * For the purpose of generating the effective set of configurations, the global and context level webapp
@@ -67,7 +68,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
             Object source = lifecycleEvent.getSource();
             if (source instanceof Context) {
                 Context context = (Context) source;
-                ContextConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
+                AppServerWebAppConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
                 contextToConfigurationMap.put(context, effectiveConfiguration);
             }
         }
@@ -83,27 +84,26 @@ public class ContextConfigurationLoader implements LifecycleListener {
      * @param context the {@link Context} for which the final set of context level configurations are generated
      * @return the final set of context level configurations for the specified {@link Context}
      */
-    private static ContextConfiguration getEffectiveConfiguration(Context context) {
+    private static AppServerWebAppConfiguration getEffectiveConfiguration(Context context) {
         if (context != null) {
             Path schemaPath = Paths.
                     get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
             Path defaultWebAppDescriptor = Paths.
                     get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR);
 
-            ContextConfiguration effective;
+            AppServerWebAppConfiguration effective;
             try {
                 InputStream inputStream = context.getServletContext().getResourceAsStream(
                         "/" + Constants.WEBAPP_RESOURCE_FOLDER + "/" + Constants.WEBAPP_DESCRIPTOR);
-
                 if (!Files.exists(defaultWebAppDescriptor)) {
                     throw new ApplicationServerRuntimeException(
                             "The " + defaultWebAppDescriptor.toString() + " does not exist");
                 }
-                effective = XMLUtils.
-                        getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, ContextConfiguration.class);
+                effective = Utils.
+                        getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, AppServerWebAppConfiguration.class);
                 if (inputStream != null) {
-                    ContextConfiguration local = XMLUtils.
-                            getUnmarshalledObject(inputStream, schemaPath, ContextConfiguration.class);
+                    AppServerWebAppConfiguration local = Utils.
+                            getUnmarshalledObject(inputStream, schemaPath, AppServerWebAppConfiguration.class);
                     effective.merge(local);
                 }
             } catch (ApplicationServerException e) {

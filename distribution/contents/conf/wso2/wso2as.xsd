@@ -43,6 +43,7 @@
                             <xs:element name="IdPEntityId" type="xs:string"/>
                             <xs:element name="SignatureValidatorImplClass" type="xs:string" minOccurs="0"
                                         maxOccurs="1"/>
+                            <xs:element name="IdPCertificateAlias" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>
@@ -69,22 +70,39 @@
                 <xs:element name="Security" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Keystore" minOccurs="0" maxOccurs="1">
+                            <xs:element name="KeyStore" minOccurs="0" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="KeystorePath" type="xs:anyURI"/>
-                                        <xs:element name="KeystorePassword" type="xs:string"/>
-                                        <xs:element name="IdPCertificateAlias" type="xs:string"/>
-                                        <xs:element name="PrivateKeyAlias" type="xs:string"/>
-                                        <xs:element name="PrivateKeyPassword" type="xs:string"/>
+                                        <xs:element name="Location" type="xs:anyURI"/>
+                                        <xs:element name="Type" default="JKS">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="JKS"/>
+                                                    <xs:enumeration value="PKCS11"/>
+                                                    <xs:enumeration value="PKCS12"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="Password" type="xs:string"/>
+                                        <xs:element name="KeyAlias" type="xs:string"/>
+                                        <xs:element name="KeyPassword" type="xs:string"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
-                            <xs:element name="Truststore" minOccurs="0" maxOccurs="1">
+                            <xs:element name="TrustStore" minOccurs="0" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="TruststorePath" type="xs:anyURI"/>
-                                        <xs:element name="TruststorePassword" type="xs:string"/>
+                                        <xs:element name="Location" type="xs:anyURI"/>
+                                        <xs:element name="Type" default="JKS">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="JKS"/>
+                                                    <xs:enumeration value="PKCS11"/>
+                                                    <xs:enumeration value="PKCS12"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="Password" type="xs:string"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

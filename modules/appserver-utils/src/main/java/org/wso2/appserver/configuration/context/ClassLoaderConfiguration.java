@@ -26,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A class which models context-level classloading configurations.
+ *
+ * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement

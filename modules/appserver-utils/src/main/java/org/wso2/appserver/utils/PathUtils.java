@@ -40,7 +40,7 @@ public final class PathUtils {
     }
 
     /**
-     * Prevents instantiating the {@code PathUtils} class.
+     * Prevents instantiating this class.
      */
     private PathUtils() {
     }

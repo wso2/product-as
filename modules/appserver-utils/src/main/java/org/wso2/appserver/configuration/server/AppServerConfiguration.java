@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "AppServer")
-public class ServerConfiguration {
+public class AppServerConfiguration {
     @XmlElement(name = "ClassLoader")
     private ClassLoaderEnvironments classLoaderEnvironments;
     @XmlElement(name = "SAML2SingleSignOn")

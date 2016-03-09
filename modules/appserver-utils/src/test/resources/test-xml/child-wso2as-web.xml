@@ -38,5 +38,7 @@
         <enable-response-signing>true</enable-response-signing>
         <is-force-authn>false</is-force-authn>
         <is-passive-authn>false</is-passive-authn>
+        <property key="RelayState">index.jsp</property>
+        <property key="LoginURL">index.jsp</property>
     </saml2-single-sign-on>
 </wso2as-web>

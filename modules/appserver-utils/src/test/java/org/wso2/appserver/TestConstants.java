@@ -23,7 +23,6 @@ package org.wso2.appserver;
 public class TestConstants {
     protected static final String TEMP_DIRECTORY = System.getProperty("java.io.tmpdir");
     protected static final String CATALINA_BASE = "tomcat-base";
-    protected static final String SAMPLE_CONFIGURATION_FILE = "sample.xml";
     protected static final String BUILD_DIRECTORY = "target";
     protected static final String TEST_RESOURCE_FOLDER = "test-resources";
     protected static final String SAMPLE_XML_FILE = "sample-wso2as.xml";
@@ -43,10 +42,13 @@ public class TestConstants {
     protected static final String IDP_URL = "https://localhost:9443/samlsso";
     protected static final String IDP_ENTITY_ID = "localhost";
     protected static final String VALIDATOR_CLASS = "org.wso2.appserver.webapp.SAMLSignatureValidatorImplementation";
+    protected static final String IDP_CERT_ALIAS = "wso2carbon";
     protected static final String LOGIN_URL_KEY = "LoginURL";
     protected static final String LOGIN_URL_VALUE = "index.jsp";
     protected static final String RELAY_STATE_KEY = "RelayState";
     protected static final String RELAY_STATE_VALUE = "index.jsp";
+    protected static final String TENANT_ID_KEY = "TenantId";
+    protected static final String TENANT_ID_VALUE = "tenant1";
     protected static final String SKIP_URI = "http://www.example.com";
     protected static final String QUERY_PARAMS = "tenant=admin&dialect=SAML";
     protected static final String APP_SERVER_URL = "https://localhost:8443";
@@ -65,8 +67,8 @@ public class TestConstants {
     protected static final String STREAM_ID = "org.wso2.http.stat:1.0.0";
 
     protected static final String KEYSTORE_PATH = "${catalina.base}/keystore.jks";
+    protected static final String TYPE = "JKS";
     protected static final String KEYSTORE_PASSWORD = "wso2carbon";
-    protected static final String IDP_CERT_ALIAS = "wso2carbon";
     protected static final String PRIVATE_KEY_ALIAS = "wso2carbon";
     protected static final String PRIVATE_KEY_PASSWORD = "wso2carbon";
 

@@ -17,29 +17,27 @@ package org.wso2.appserver;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.wso2.appserver.configuration.listeners.XMLUtils;
+import org.wso2.appserver.configuration.listeners.Utils;
+import org.wso2.appserver.configuration.server.AppServerConfiguration;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.SecurityConfiguration;
-import org.wso2.appserver.configuration.server.ServerConfiguration;
 import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class defines unit-tests for server level configurations.
  *
  * @since 6.0.0
  */
-public class ServerConfigurationTest {
-    private static final Logger logger = Logger.getLogger(ServerConfigurationTest.class.getName());
-
+public class AppServerConfigurationTest {
     @Test
     public void loadObjectFromFilePathTest() {
         Path xmlSource = Paths.
@@ -47,40 +45,23 @@ public class ServerConfigurationTest {
         Path xmlSchema = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
         try {
-            ServerConfiguration actual = XMLUtils.
-                    getUnmarshalledObject(xmlSource, xmlSchema, ServerConfiguration.class);
-            ServerConfiguration expected = generateDefault();
+            AppServerConfiguration actual = Utils.
+                    getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
+            AppServerConfiguration expected = generateDefault();
             Assert.assertTrue(compare(actual, expected));
-        } catch (ApplicationServerException e) {
-            logger.log(Level.INFO, "Error when unmarshalling the XML source", e);
+        } catch (ApplicationServerException | IOException e) {
             Assert.fail();
         }
     }
 
-    @Test(expectedExceptions = { ApplicationServerException.class })
-    public void invalidSchemaTest() throws ApplicationServerException {
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XSD_FILE);
-        XMLUtils.getXMLUnmarshaller(xmlSchema, ServerConfiguration.class);
-    }
+    protected static AppServerConfiguration generateDefault() {
+        AppServerConfiguration appServerConfiguration = new AppServerConfiguration();
+        appServerConfiguration.setClassLoaderEnvironments(prepareClassLoaderEnv());
+        appServerConfiguration.setSingleSignOnConfiguration(prepareSSOConfigs());
+        appServerConfiguration.setStatsPublisherConfiguration(prepareStatsPublishingConfigs());
+        appServerConfiguration.setSecurityConfiguration(prepareSecurityConfigs());
 
-    @Test(expectedExceptions = { ApplicationServerException.class })
-    public void loadObjectFromInvalidFileTest() throws ApplicationServerException {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
-        XMLUtils.getUnmarshalledObject(xmlSource, xmlSchema, ServerConfiguration.class);
-    }
-
-    protected static ServerConfiguration generateDefault() {
-        ServerConfiguration serverConfiguration = new ServerConfiguration();
-        serverConfiguration.setClassLoaderEnvironments(prepareClassLoaderEnv());
-        serverConfiguration.setSingleSignOnConfiguration(prepareSSOConfigs());
-        serverConfiguration.setStatsPublisherConfiguration(prepareStatsPublishingConfigs());
-        serverConfiguration.setSecurityConfiguration(prepareSecurityConfigs());
-
-        return serverConfiguration;
+        return appServerConfiguration;
     }
 
     private static ClassLoaderEnvironments prepareClassLoaderEnv() {
@@ -110,6 +91,7 @@ public class ServerConfigurationTest {
         ssoConfiguration.setIdpURL(TestConstants.IDP_URL);
         ssoConfiguration.setIdpEntityId(TestConstants.IDP_ENTITY_ID);
         ssoConfiguration.setSignatureValidatorImplClass(TestConstants.VALIDATOR_CLASS);
+        ssoConfiguration.setIdpCertificateAlias(TestConstants.IDP_CERT_ALIAS);
 
         SSOConfiguration.Property loginURL = new SSOConfiguration.Property();
         loginURL.setKey(TestConstants.LOGIN_URL_KEY);
@@ -141,15 +123,16 @@ public class ServerConfigurationTest {
         SecurityConfiguration configuration = new SecurityConfiguration();
 
         SecurityConfiguration.Keystore keystore = new SecurityConfiguration.Keystore();
-        keystore.setKeystorePath(TestConstants.KEYSTORE_PATH);
-        keystore.setKeystorePassword(TestConstants.KEYSTORE_PASSWORD);
-        keystore.setIdpCertificateAlias(TestConstants.IDP_CERT_ALIAS);
-        keystore.setPrivateKeyAlias(TestConstants.PRIVATE_KEY_ALIAS);
-        keystore.setPrivateKeyPassword(TestConstants.PRIVATE_KEY_PASSWORD);
+        keystore.setLocation(TestConstants.KEYSTORE_PATH);
+        keystore.setPassword(TestConstants.KEYSTORE_PASSWORD);
+        keystore.setType(TestConstants.TYPE);
+        keystore.setKeyAlias(TestConstants.PRIVATE_KEY_ALIAS);
+        keystore.setKeyPassword(TestConstants.PRIVATE_KEY_PASSWORD);
 
         SecurityConfiguration.Truststore truststore = new SecurityConfiguration.Truststore();
-        truststore.setTruststorePath(TestConstants.TRUSTSTORE_PATH);
-        truststore.setTrustStorePassword(TestConstants.TRUSTSTORE_PASSWORD);
+        truststore.setLocation(TestConstants.TRUSTSTORE_PATH);
+        truststore.setType(TestConstants.TYPE);
+        truststore.setPassword(TestConstants.TRUSTSTORE_PASSWORD);
 
         configuration.setKeystore(keystore);
         configuration.setTruststore(truststore);
@@ -157,7 +140,7 @@ public class ServerConfigurationTest {
         return configuration;
     }
 
-    protected static boolean compare(ServerConfiguration actual, ServerConfiguration expected) {
+    protected static boolean compare(AppServerConfiguration actual, AppServerConfiguration expected) {
         boolean classloading = compareClassloadingConfigurations(actual.getClassLoaderEnvironments(),
                 expected.getClassLoaderEnvironments());
         boolean sso = compareSSOConfigurations(actual.getSingleSignOnConfiguration(),
@@ -185,8 +168,9 @@ public class ServerConfigurationTest {
             boolean idpEntityID = actual.getIdpEntityId().trim().equals(expected.getIdpEntityId());
             boolean validatorClass = actual.getSignatureValidatorImplClass().trim().
                     equals(expected.getSignatureValidatorImplClass());
+            boolean idpCertAlias = actual.getIdpCertificateAlias().trim().equals(expected.getIdpCertificateAlias());
             boolean properties = compareSSOProperties(actual.getProperties(), expected.getProperties());
-            return (idpURL && idpEntityID && validatorClass && properties);
+            return (idpURL && idpEntityID && validatorClass && idpCertAlias && properties);
         } else {
             return false;
         }
@@ -215,32 +199,31 @@ public class ServerConfigurationTest {
 
     private static boolean compareSecurityConfigurations(SecurityConfiguration actual, SecurityConfiguration expected) {
         if ((actual != null) && (expected != null)) {
-            boolean keystorePath, keystorePassword, certAlias, privateKeyAlias, privateKeyPassword;
-            keystorePath = keystorePassword = certAlias = privateKeyAlias = privateKeyPassword = false;
+            boolean keystorePath, keystorePassword, type, privateKeyAlias, privateKeyPassword;
+            keystorePath = keystorePassword = type = privateKeyAlias = privateKeyPassword = false;
             if ((actual.getKeystore() != null) && (expected.getKeystore() != null)) {
-                keystorePath = actual.getKeystore().getKeystorePath().trim().
-                        equals(expected.getKeystore().getKeystorePath());
-                keystorePassword = actual.getKeystore().getKeystorePassword().trim().
-                        equals(expected.getKeystore().getKeystorePassword());
-                certAlias = actual.getKeystore().getIdpCertificateAlias().trim().
-                        equals(expected.getKeystore().getIdpCertificateAlias());
-                privateKeyAlias = actual.getKeystore().getPrivateKeyAlias().trim().
-                        equals(expected.getKeystore().getPrivateKeyAlias());
-                privateKeyPassword = actual.getKeystore().getPrivateKeyPassword().trim().
-                        equals(expected.getKeystore().getPrivateKeyPassword());
+                keystorePath = actual.getKeystore().getLocation().trim().equals(expected.getKeystore().getLocation());
+                keystorePassword = actual.getKeystore().getPassword().trim().
+                        equals(expected.getKeystore().getPassword());
+                type = actual.getKeystore().getType().trim().equals(expected.getKeystore().getType());
+                privateKeyAlias = actual.getKeystore().getKeyAlias().trim().
+                        equals(expected.getKeystore().getKeyAlias());
+                privateKeyPassword = actual.getKeystore().getKeyPassword().trim().
+                        equals(expected.getKeystore().getKeyPassword());
             }
 
-            boolean truststorePath, truststorePassword;
-            truststorePath = truststorePassword = false;
+            boolean truststorePath, truststorePassword, truststoreType;
+            truststorePath = truststorePassword = truststoreType = false;
             if ((actual.getTruststore() != null) && (expected.getTruststore() != null)) {
-                truststorePath = actual.getTruststore().getTruststorePath().trim().
-                        equals(expected.getTruststore().getTruststorePath());
-                truststorePassword = actual.getTruststore().getTrustStorePassword().trim().
-                        equals(expected.getTruststore().getTrustStorePassword());
+                truststorePath = actual.getTruststore().getLocation().trim().
+                        equals(expected.getTruststore().getLocation());
+                truststorePassword = actual.getTruststore().getPassword().trim().
+                        equals(expected.getTruststore().getPassword());
+                truststoreType = actual.getTruststore().getType().trim().equals(expected.getTruststore().getType());
             }
 
-            return (keystorePath && keystorePassword && certAlias && privateKeyAlias && privateKeyPassword &&
-                    truststorePath && truststorePassword);
+            return (keystorePath && keystorePassword && type && privateKeyAlias && privateKeyPassword &&
+                    truststorePath && truststorePassword && truststoreType);
         } else {
             return false;
         }

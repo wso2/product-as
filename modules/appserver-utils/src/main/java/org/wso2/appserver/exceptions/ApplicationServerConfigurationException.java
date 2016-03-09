@@ -29,6 +29,10 @@ package org.wso2.appserver.exceptions;
 public class ApplicationServerConfigurationException extends ApplicationServerException {
     private static final long serialVersionUID = -3620848532234792303L;
 
+    public ApplicationServerConfigurationException(String message) {
+        super(message);
+    }
+
     public ApplicationServerConfigurationException(String message, Throwable cause) {
         super(message, cause);
     }

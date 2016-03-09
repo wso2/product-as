@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class SecurityConfiguration {
-    @XmlElement(name = "Keystore")
+    @XmlElement(name = "KeyStore")
     private Keystore keystore;
-    @XmlElement(name = "Truststore")
+    @XmlElement(name = "TrustStore")
     private Truststore truststore;
 
     public Keystore getKeystore() {
@@ -54,55 +54,55 @@ public class SecurityConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Keystore {
-        @XmlElement(name = "KeystorePath")
-        private String keystorePath;
-        @XmlElement(name = "KeystorePassword")
-        private String keystorePassword;
-        @XmlElement(name = "IdPCertificateAlias")
-        private String idpCertificateAlias;
-        @XmlElement(name = "PrivateKeyAlias")
-        private String privateKeyAlias;
-        @XmlElement(name = "PrivateKeyPassword")
-        private String privateKeyPassword;
+        @XmlElement(name = "Location")
+        private String location;
+        @XmlElement(name = "Type")
+        private String type;
+        @XmlElement(name = "Password")
+        private String password;
+        @XmlElement(name = "KeyAlias")
+        private String keyAlias;
+        @XmlElement(name = "KeyPassword")
+        private String keyPassword;
 
-        public String getKeystorePath() {
-            return keystorePath;
+        public String getLocation() {
+            return location;
         }
 
-        public void setKeystorePath(String keystorePath) {
-            this.keystorePath = keystorePath;
+        public void setLocation(String location) {
+            this.location = location;
         }
 
-        public String getKeystorePassword() {
-            return keystorePassword;
+        public String getType() {
+            return type;
         }
 
-        public void setKeystorePassword(String keystorePassword) {
-            this.keystorePassword = keystorePassword;
+        public void setType(String type) {
+            this.type = type;
         }
 
-        public String getIdpCertificateAlias() {
-            return idpCertificateAlias;
+        public String getPassword() {
+            return password;
         }
 
-        public void setIdpCertificateAlias(String idpCertificateAlias) {
-            this.idpCertificateAlias = idpCertificateAlias;
+        public void setPassword(String password) {
+            this.password = password;
         }
 
-        public String getPrivateKeyAlias() {
-            return privateKeyAlias;
+        public String getKeyAlias() {
+            return keyAlias;
         }
 
-        public void setPrivateKeyAlias(String privateKeyAlias) {
-            this.privateKeyAlias = privateKeyAlias;
+        public void setKeyAlias(String keyAlias) {
+            this.keyAlias = keyAlias;
         }
 
-        public String getPrivateKeyPassword() {
-            return privateKeyPassword;
+        public String getKeyPassword() {
+            return keyPassword;
         }
 
-        public void setPrivateKeyPassword(String privateKeyPassword) {
-            this.privateKeyPassword = privateKeyPassword;
+        public void setKeyPassword(String keyPassword) {
+            this.keyPassword = keyPassword;
         }
     }
 
@@ -111,25 +111,35 @@ public class SecurityConfiguration {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Truststore {
-        @XmlElement(name = "TruststorePath")
-        private String truststorePath;
-        @XmlElement(name = "TruststorePassword")
-        private String trustStorePassword;
+        @XmlElement(name = "Location")
+        private String location;
+        @XmlElement(name = "Type")
+        private String type;
+        @XmlElement(name = "Password")
+        private String password;
 
-        public String getTruststorePath() {
-            return truststorePath;
+        public String getLocation() {
+            return location;
         }
 
-        public void setTruststorePath(String truststorePath) {
-            this.truststorePath = truststorePath;
+        public void setLocation(String location) {
+            this.location = location;
         }
 
-        public String getTrustStorePassword() {
-            return trustStorePassword;
+        public String getType() {
+            return type;
         }
 
-        public void setTrustStorePassword(String trustStorePassword) {
-            this.trustStorePassword = trustStorePassword;
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
     }
 }
