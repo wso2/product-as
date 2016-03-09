@@ -33,8 +33,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -80,66 +78,48 @@ public class EventBuilder {
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";
 
-        if (request != null) {
-            String requestedURI = request.getRequestURI();
+        String requestedURI = request.getRequestURI();
 
-            if (requestedURI != null) {
-                requestedURI = requestedURI.trim();
-                String[] requestedUriParts = requestedURI.split(forwardSlash);
+        if (requestedURI != null) {
+            requestedURI = requestedURI.trim();
+            String[] requestedUriParts = requestedURI.split(forwardSlash);
 
-                if (!forwardSlash.equals(requestedURI)) {
-                    payload.add((requestedUriParts[1]));
-
-                } else {
-                    payload.add((forwardSlash));
-                }
-            }
-
-            if ( request.getContext() != null) {
-                String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
-                        + request.getContext().getEffectiveMinorVersion();
-                payload.add((webappServletVersion));
+            if (!forwardSlash.equals(requestedURI)) {
+                payload.add((requestedUriParts[1]));
             } else {
-                payload.add(null);
-            }
-
-            String consumerName = extractUsername(request);
-            payload.add((consumerName));
-            payload.add((request.getRequestURI()));
-            payload.add((startTime));
-            payload.add((request.getPathInfo()));
-            parserUserAgent(request, uaParser, payload);
-            if(request.getLocale() != null) {
-                payload.add((request.getLocale().getCountry()));
-            }else{
-                payload.add(null);
-            }
-            payload.add((EventPublisherConstants.APP_TYPE));
-            if (request.getContext() != null) {
-                payload.add((request.getContext().getDisplayName()));
-            } else {
-                payload.add(null);
-            }
-            payload.add((extractSessionId(request)));
-            payload.add((request.getMethod()));
-            payload.add((request.getContentType()));
-            payload.add((response.getContentType()));
-            payload.add(((long) response.getStatus()));
-            payload.add((getClientIpAddress(request)));
-            payload.add((request.getHeader(EventPublisherConstants.REFERRER)));
-            payload.add((request.getRemoteUser()));
-            payload.add((request.getAuthType()));
-            payload.add((responseTime));
-            payload.add(((long) request.getContentLength()));
-            payload.add(((long) response.getContentLength()));
-            payload.add((getRequestHeader(request)));
-            payload.add((getResponseHeaders(response)));
-            if(request.getLocale() != null) {
-                payload.add((request.getLocale().getLanguage()));
-            }else {
-                payload.add(null);
+                payload.add((forwardSlash));
             }
         }
+
+        String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
+                        + request.getContext().getEffectiveMinorVersion();
+        payload.add((webappServletVersion));
+        String consumerName = extractUsername(request);
+        payload.add((consumerName));
+        payload.add((request.getRequestURI()));
+        payload.add((startTime));
+        payload.add((request.getPathInfo()));
+        parserUserAgent(request, uaParser, payload);
+        payload.add((request.getLocale().getCountry()));
+        payload.add((EventPublisherConstants.APP_TYPE));
+        payload.add((request.getContext().getDisplayName()));
+        payload.add((extractSessionId(request)));
+        payload.add((request.getMethod()));
+        payload.add((request.getContentType()));
+        payload.add((response.getContentType()));
+        payload.add(((long) response.getStatus()));
+        payload.add((getClientIpAddress(request)));
+        payload.add((request.getHeader(EventPublisherConstants.REFERRER)));
+        payload.add((request.getRemoteUser()));
+        payload.add((request.getAuthType()));
+        payload.add((responseTime));
+        payload.add(((long) request.getContentLength()));
+        payload.add(((long) response.getContentLength()));
+        payload.add((getRequestHeader(request)));
+        payload.add((getResponseHeaders(response)));
+        payload.add((request.getLocale().getLanguage()));
+
+
         return payload;
     }
 
@@ -160,7 +140,7 @@ public class EventBuilder {
                 headers.add(header);
             }
         }
-        return (headerNames != null) ? headers.toString(): null;
+        return (headerNames != null) ? headers.toString() : null;
     }
 
     //get response headers
@@ -173,7 +153,7 @@ public class EventBuilder {
     private static String getResponseHeaders(Response response) {
 //        HttpServletResponse httpServletResponse = response.getResponse();
         Collection<String> headerNames = response.getHeaderNames();
-        return (headerNames != null) ? headerNames.toString():null;
+        return (headerNames != null) ? headerNames.toString() : null;
     }
 
     //extracts the Id of the current session associated with the request
@@ -219,7 +199,7 @@ public class EventBuilder {
     private static void parserUserAgent(Request request, Parser uaParser, List<Object> payload) {
 
         String userAgent = request.getHeader(EventPublisherConstants.USER_AGENT);
-        if (uaParser != null && userAgent != null) {
+        if (uaParser != null) {
             Client readableUserAgent = uaParser.parse(userAgent);
 
             payload.add((readableUserAgent.userAgent.family));
@@ -227,13 +207,8 @@ public class EventBuilder {
             payload.add((readableUserAgent.os.family));
             payload.add((readableUserAgent.os.major));
             payload.add((readableUserAgent.device.family));
-        }else{
-            payload.add(null);
-            payload.add(null);
-            payload.add(null);
-            payload.add(null);
-            payload.add(null);
         }
+
     }
 
     /*
