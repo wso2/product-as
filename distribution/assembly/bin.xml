@@ -47,7 +47,7 @@
     <dependencySets>
         <!--Include application server modules here-->
         <dependencySet>
-            <outputDirectory>/${distribution.file.name}/lib/wso2</outputDirectory>
+            <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:appserver-utils</include>
                 <include>org.wso2.appserver:http-statistics-monitoring:jar</include>
