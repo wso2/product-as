@@ -29,13 +29,13 @@ import java.nio.file.Paths;
 public final class PathUtils {
     private static final Path PATH_CATALINA_BASE;
     private static final Path PATH_CATALINA_CONFIG_BASE;
-    private static final Path PATH_WSO2_CONFIG_BASE;
+    private static final Path PATH_APP_SERVER_CONFIG_BASE;
 
     static {
         String catalinaBase = System.getProperty(Globals.CATALINA_BASE_PROP);
         PATH_CATALINA_BASE = Paths.get(catalinaBase);
         PATH_CATALINA_CONFIG_BASE = Paths.get(catalinaBase, Constants.TOMCAT_CONFIGURATION_DIRECTORY);
-        PATH_WSO2_CONFIG_BASE = Paths.get(catalinaBase, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
+        PATH_APP_SERVER_CONFIG_BASE = Paths.get(catalinaBase, Constants.TOMCAT_CONFIGURATION_DIRECTORY,
                 Constants.APP_SERVER_CONFIGURATION_DIRECTORY);
     }
 
@@ -71,6 +71,6 @@ public final class PathUtils {
      * @return a {@link Path} instance representing the WSO2 Application Server's WSO2-specific configuration base
      */
     public static Path getAppServerConfigurationBase() {
-        return PATH_WSO2_CONFIG_BASE;
+        return PATH_APP_SERVER_CONFIG_BASE;
     }
 }
