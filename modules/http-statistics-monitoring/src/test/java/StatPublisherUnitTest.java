@@ -48,9 +48,13 @@ public class StatPublisherUnitTest {
 
     private Request request;
     private Response response;
-//    private static EventBuilder eventBuilder = new EventBuilder();
     Parser uaParser;
 
+    /**
+     * This method mocks Request and Response objects and sets up all necessary information.
+     *
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
 
@@ -108,9 +112,11 @@ public class StatPublisherUnitTest {
         when(request.getServerName()).thenReturn("localhost");
         when(request.getLocalName()).thenReturn("localhost");
 
-
     }
 
+    /**
+     * This test case checks if Event object is created properly.
+     */
     @Test
     public void buildEventTest() {
 
@@ -129,7 +135,6 @@ public class StatPublisherUnitTest {
         payload.add("Mac OS X");
         payload.add("10");
         payload.add("Other");
-        payload.add("SL");
         payload.add("webapp");
         payload.add("Test Display Name");
         payload.add("-");

@@ -41,14 +41,15 @@ import javax.servlet.http.HttpSession;
 public class EventBuilder {
 
     /**
+     * Creates an Event to be published by the DataPublisher.
      *
-     * @param streamId
-     * @param request
-     * @param response
-     * @param startTime
-     * @param responseTime
-     * @param uaParser
-     * @return
+     * @param streamId Unique ID of the event stream definition deployed in DAS
+     * @param request The Request object of client
+     * @param response The Response object of client
+     * @param startTime The time at which the valve is invoked
+     * @param responseTime The time that is taken for the client to receive a response
+     * @param uaParser The Parser object that will be used to extract user agent information
+     * @return an Event object populated with data to be published.
      * @throws EventBuilderException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
@@ -64,13 +65,14 @@ public class EventBuilder {
     }
 
     /**
+     * Creates a list of payload data
      *
-     * @param request
-     * @param response
-     * @param startTime
-     * @param responseTime
-     * @param uaParser
-     * @return
+     * @param request The Request object of client
+     * @param response The Response object of client
+     * @param startTime The time at which the valve is invoked
+     * @param responseTime The time that is taken for the client to receive a response
+     * @param uaParser The Parser object that will be used to extract user agent information
+     * @return A list containing all payload data that were extracted from the request and response
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
                                                  long responseTime, Parser uaParser)  {
@@ -100,7 +102,6 @@ public class EventBuilder {
         payload.add((startTime));
         payload.add((request.getPathInfo()));
         parserUserAgent(request, uaParser, payload);
-        payload.add((request.getLocale().getCountry()));
         payload.add((EventPublisherConstants.APP_TYPE));
         payload.add((request.getContext().getDisplayName()));
         payload.add((extractSessionId(request)));
@@ -119,16 +120,14 @@ public class EventBuilder {
         payload.add((getResponseHeaders(response)));
         payload.add((request.getLocale().getLanguage()));
 
-
         return payload;
     }
 
-    //get request headers
-
     /**
+     * Gets all request headers and their corresponding values.
      *
-     * @param request
-     * @return
+     * @param request The Request object of client
+     * @return A string containing all request headers and their values
      */
     private static String getRequestHeaders(Request request) {
         List<String> requestHeaders = new ArrayList<>();
@@ -141,12 +140,11 @@ public class EventBuilder {
         return StringUtils.join(requestHeaders, ",");
     }
 
-    //get response headers
-
     /**
+     * Gets all response headers and their corresponding values.
      *
-     * @param response
-     * @return
+     * @param response The Response object of client
+     * @return A string containing all response headers and their values
      */
     private static String getResponseHeaders(Response response) {
         List<String> responseHeaders = new ArrayList<>();
@@ -159,12 +157,11 @@ public class EventBuilder {
         return StringUtils.join(responseHeaders, ",");
     }
 
-    //extracts the Id of the current session associated with the request
-
     /**
+     * Extracts the session ID of the current session associated with the request.
      *
-     * @param request
-     * @return
+     * @param request The Request object of client
+     * @return The session ID of client
      */
     private static String extractSessionId(Request request) {
         HttpSession session = request.getSession(false);
@@ -173,12 +170,11 @@ public class EventBuilder {
 
     }
 
-    //extracts the name of the current authenticated user for the request
-
     /**
+     * Extracts the name of the current authenticated user for the request.
      *
-     * @param request
-     * @return
+     * @param request The Request object of client
+     * @return The username of the current authenticated user
      */
     private static String extractUsername(Request request) {
         String consumerName;
@@ -195,9 +191,9 @@ public class EventBuilder {
 
     /**
      *
-     * @param request
-     * @param uaParser
-     * @param payload
+     * @param request The Request object of client
+     * @param uaParser The Parser object that will be used to extract user agent information
+     * @param payload The list containing all payload information
      */
     private static void parserUserAgent(Request request, Parser uaParser, List<Object> payload) {
 
@@ -221,9 +217,10 @@ public class EventBuilder {
     */
 
     /**
+     * Gets the original client IP address.
      *
-     * @param request
-     * @return
+     * @param request The Request object of client
+     * @return The original IP address of the client
      */
     private static String getClientIpAddress(Request request) {
 
