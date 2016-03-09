@@ -29,10 +29,9 @@ import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
-import org.wso2.appserver.webapp.loader.exceptions.ClasspathNotFoundException;
-import org.wso2.appserver.webapp.loader.exceptions.UndefinedEnvironmentException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,7 +62,7 @@ public class WebappClassLoaderContext {
                 try {
                     repositories.addAll(generateClasspath(environment.getClasspath()));
                     definedEnvironments.put(environment.getName(), repositories);
-                } catch (ClasspathNotFoundException ex) {
+                } catch (FileNotFoundException ex) {
                     String message = "Environment configuration of: " + environment.getName() + " is wrong.";
                     log.error(message, ex);
                     throw new ApplicationServerRuntimeException(message, ex);
@@ -77,6 +76,7 @@ public class WebappClassLoaderContext {
 
     /**
      * Construct web application specific classloader behaviour
+     *
      * @param context the context of the web application
      */
     public WebappClassLoaderContext(Context context) {
@@ -93,16 +93,15 @@ public class WebappClassLoaderContext {
                             selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
                         } else {
                             String message = "Undefined environment: " + environmentName + " in " + context.getPath();
-                            log.error(message);
-                            throw new UndefinedEnvironmentException(message);
+                            log.warn(message);
                         }
                     });
-
                 });
     }
 
     /**
      * Get the all jar library urls specified by the each environment for this web application
+     *
      * @return A list containing the jar library urls as strings
      */
     public List<String> getProvidedRepositories() {
@@ -116,6 +115,7 @@ public class WebappClassLoaderContext {
 
     /**
      * Returns the classloader's parent first behaviour of this web application.
+     *
      * @return true of the configuration specified paren first classloader behaviour.otherwise false.
      */
     public boolean isParentFirst() {
@@ -123,14 +123,14 @@ public class WebappClassLoaderContext {
     }
 
     // returns a list of jar url's for the given path
-    private static List<String> generateClasspath(String classPath) throws ClasspathNotFoundException {
+    private static List<String> generateClasspath(String classPath) throws FileNotFoundException {
 
         List<String> urlStr = new ArrayList<>();
         String realClassPath = StrSubstitutor.replaceSystemProperties(classPath);
         File classPathUrl = new File(realClassPath);
 
         if (!classPathUrl.exists()) {
-            throw new ClasspathNotFoundException("The classpath: " + realClassPath + " does not exist.");
+            throw new FileNotFoundException("The classpath: " + realClassPath + " does not exist.");
         }
 
         if (classPathUrl.isFile()) {
