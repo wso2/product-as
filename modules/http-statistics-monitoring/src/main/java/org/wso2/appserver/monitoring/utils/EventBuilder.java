@@ -21,6 +21,7 @@ package org.wso2.appserver.monitoring.utils;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
+import org.apache.commons.lang.StringUtils;
 import org.wso2.appserver.monitoring.EventPublisherConstants;
 import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
 import org.wso2.carbon.databridge.commons.Event;
@@ -30,8 +31,7 @@ import ua_parser.Parser;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Enumeration;
+import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 
@@ -57,7 +57,7 @@ public class EventBuilder {
 
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime, uaParser);
 
-        return new Event(streamId, System.currentTimeMillis(),
+        return new Event(streamId, startTime,
                 new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray() ,
                 null, payload.toArray());
 
@@ -115,7 +115,7 @@ public class EventBuilder {
         payload.add((responseTime));
         payload.add(((long) request.getContentLength()));
         payload.add(((long) response.getContentLength()));
-        payload.add((getRequestHeader(request)));
+        payload.add((getRequestHeaders(request)));
         payload.add((getResponseHeaders(response)));
         payload.add((request.getLocale().getLanguage()));
 
@@ -130,17 +130,15 @@ public class EventBuilder {
      * @param request
      * @return
      */
-    private static String getRequestHeader(Request request) {
-//        HttpServletRequest httpServletRequest = request.getRequest();
-        List<String> headers = new ArrayList<>();
-        Enumeration<String> headerNames = request.getHeaderNames();
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String header = headerNames.nextElement();
-                headers.add(header);
-            }
-        }
-        return (headerNames != null) ? headers.toString() : null;
+    private static String getRequestHeaders(Request request) {
+        List<String> requestHeaders = new ArrayList<>();
+        Collections.list(request.getHeaderNames()).forEach(header -> {
+            List<String> values = new ArrayList<>();
+            values.add(request.getHeader(header));
+            String tmpString = "(" + StringUtils.join(values, ",") + ")";
+            requestHeaders.add(header + ":" + tmpString);
+        });
+        return StringUtils.join(requestHeaders, ",");
     }
 
     //get response headers
@@ -151,9 +149,14 @@ public class EventBuilder {
      * @return
      */
     private static String getResponseHeaders(Response response) {
-//        HttpServletResponse httpServletResponse = response.getResponse();
-        Collection<String> headerNames = response.getHeaderNames();
-        return (headerNames != null) ? headerNames.toString() : null;
+        List<String> responseHeaders = new ArrayList<>();
+        response.getHeaderNames().forEach(header -> {
+                    List<String> values = new ArrayList<>();
+                    values.add(response.getHeader(header));
+                    String tmpString = "(" + StringUtils.join(values, ",") + ")";
+                    responseHeaders.add(header + ":" + tmpString);
+        });
+        return StringUtils.join(responseHeaders, ",");
     }
 
     //extracts the Id of the current session associated with the request
@@ -222,22 +225,25 @@ public class EventBuilder {
      * @param request
      * @return
      */
-    public static String getClientIpAddress(Request request) {
+    private static String getClientIpAddress(Request request) {
 
-        String[] headers = {
-                EventPublisherConstants.X_FORWARDED_FOR,
+        List<String> headers = Arrays.asList(EventPublisherConstants.X_FORWARDED_FOR,
                 EventPublisherConstants.PROXY_CLIENT_IP,
                 EventPublisherConstants.WL_PROXY_CLIENT_IP,
                 EventPublisherConstants.HTTP_CLIENT_IP,
-                EventPublisherConstants.HTTP_X_FORWARDED_FOR };
+                EventPublisherConstants.HTTP_X_FORWARDED_FOR
+                );
 
         for (String header : headers) {
             String ip = request.getHeader(header);
             if (ip != null && ip.length() != 0 && !EventPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
                 return ip;
+            } else {
+               return request.getRemoteAddr();
             }
 
         }
+
         return request.getRemoteAddr();
     }
 
