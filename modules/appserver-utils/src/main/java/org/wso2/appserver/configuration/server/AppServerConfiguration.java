@@ -27,23 +27,45 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "AppServer")
-public class ServerConfiguration {
+public class AppServerConfiguration {
     @XmlElement(name = "ClassLoader")
     private ClassLoaderEnvironments classLoaderEnvironments;
     @XmlElement(name = "SAML2SingleSignOn")
     private SSOConfiguration singleSignOnConfiguration;
     @XmlElement(name = "StatisticsPublisher")
     private StatsPublisherConfiguration statsPublisherConfiguration;
+    @XmlElement(name = "Security")
+    private SecurityConfiguration securityConfiguration;
 
     public ClassLoaderEnvironments getClassLoaderEnvironments() {
         return classLoaderEnvironments;
+    }
+
+    public void setClassLoaderEnvironments(ClassLoaderEnvironments classLoaderEnvironments) {
+        this.classLoaderEnvironments = classLoaderEnvironments;
     }
 
     public SSOConfiguration getSingleSignOnConfiguration() {
         return singleSignOnConfiguration;
     }
 
+    public void setSingleSignOnConfiguration(SSOConfiguration singleSignOnConfiguration) {
+        this.singleSignOnConfiguration = singleSignOnConfiguration;
+    }
+
     public StatsPublisherConfiguration getStatsPublisherConfiguration() {
         return statsPublisherConfiguration;
+    }
+
+    public void setStatsPublisherConfiguration(StatsPublisherConfiguration statsPublisherConfiguration) {
+        this.statsPublisherConfiguration = statsPublisherConfiguration;
+    }
+
+    public SecurityConfiguration getSecurityConfiguration() {
+        return securityConfiguration;
+    }
+
+    public void setSecurityConfiguration(SecurityConfiguration securityConfiguration) {
+        this.securityConfiguration = securityConfiguration;
     }
 }

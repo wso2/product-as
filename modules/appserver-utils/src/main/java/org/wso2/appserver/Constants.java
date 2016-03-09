@@ -21,20 +21,56 @@ package org.wso2.appserver;
  * @since 6.0.0
  */
 public final class Constants {
-    //  Namespace for wso2as.xml file XML content
-    public static final String SERVER_CONFIGURATION_NAMESPACE = "http://wso2.org/2016/wso2as-server";
-    //  Namespace for wso2as-web.xml file XML content
+    /**
+     * XML namespace constants
+     */
+
+    /**
+     * Namespace for wso2as.xml file XML content
+     */
+    public static final String APP_SERVER_CONFIGURATION_NAMESPACE = "http://wso2.org/2016/wso2as";
+
+    /**
+     * Namespace for wso2as-web.xml file XML content
+     */
     public static final String WEBAPP_DESCRIPTOR_NAMESPACE = "http://wso2.org/2016/wso2as-web";
 
-    //  File path related constants
-    public static final String SERVER_DESCRIPTOR = "wso2as.xml";
-    public static final String SERVER_DESCRIPTOR_SCHEMA = "wso2as.xsd";
+    /**
+     * File name constants
+     */
+
+    /**
+     * WSO2 Application Server descriptor file name
+     */
+    public static final String APP_SERVER_DESCRIPTOR = "wso2as.xml";
+    /**
+     * WSO2 Application Server descriptor XML schema file name
+     */
+    public static final String APP_SERVER_DESCRIPTOR_SCHEMA = "wso2as.xsd";
+    /**
+     * WSO2 Application Server context level descriptor file name
+     */
     public static final String WEBAPP_DESCRIPTOR = "wso2as-web.xml";
+    /**
+     * WSO2 Application Server context level descriptor schema file name
+     */
     public static final String WEBAPP_DESCRIPTOR_SCHEMA = "wso2as-web.xsd";
 
-    public static final String TOMCAT_CONFIGURATION_DIRECTORY = "conf";
-    public static final String WSO2_CONFIGURATION_DIRECTORY = "wso2";
+    /**
+     * Folder identifier constants
+     */
 
+    /**
+     * Apache Tomcat configuration base directory identifier
+     */
+    public static final String TOMCAT_CONFIGURATION_DIRECTORY = "conf";
+    /**
+     * WSO2 Application Server configuration base directory identifier
+     */
+    public static final String APP_SERVER_CONFIGURATION_DIRECTORY = "wso2";
+    /**
+     * Web application specific resource folder identifier
+     */
     public static final String WEBAPP_RESOURCE_FOLDER = "WEB-INF";
 
     /**

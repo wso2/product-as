@@ -23,13 +23,43 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>appserver-utils</artifactId>
     <version>6.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
     <name>WSO2 Application Server - Module - Utils</name>
-    <description>WSO2 Application Server Utils</description>
+    <description>Common WSO2 Application Server utilities</description>
     <url>http://wso2.com</url>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-test-resources</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <copy file="src/test/resources/test-xml/child-wso2as-web.xml"
+                                      tofile="${project.build.directory}/test-resources/child-wso2as-web.xml"/>
+                                <copy file="src/test/resources/test-xml/parent-wso2as-web.xml"
+                                      tofile="${project.build.directory}/test-resources/parent-wso2as-web.xml"/>
+                                <copy file="src/test/resources/test-xml/sample-wso2as-web.xsd"
+                                      tofile="${project.build.directory}/test-resources/sample-wso2as-web.xsd"/>
+                                <copy file="src/test/resources/test-xml/sample-wso2as.xml"
+                                      tofile="${project.build.directory}/test-resources/sample-wso2as.xml"/>
+                                <copy file="src/test/resources/test-xml/sample-wso2as.xsd"
+                                      tofile="${project.build.directory}/test-resources/sample-wso2as.xsd"/>
+                                <copy file="src/test/resources/test-xml/invalid.xml"
+                                      tofile="${project.build.directory}/test-resources/invalid.xml"/>
+                                <copy file="src/test/resources/test-xml/invalid.xsd"
+                                      tofile="${project.build.directory}/test-resources/invalid.xsd"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -42,6 +72,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -51,8 +94,22 @@
             <artifactId>tomcat-embed-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-catalina</artifactId>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <classifier>runtime</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
         </dependency>
     </dependencies>
 </project>
