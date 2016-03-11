@@ -76,8 +76,9 @@
                                 <chmod dir="${project.build.directory}/wso2as-6.0.0-SNAPSHOT/bin" perm="755"
                                        includes="**/*.sh"/>
                                 <echo message="Starting the server" level="info"/>
-                                <exec executable="bin/startup.sh"
+                                <exec executable="bin/catalina.sh"
                                       dir="${project.build.directory}/wso2as-6.0.0-SNAPSHOT/">
+                                    <arg line="start" />
                                 </exec>
                                 <echo message="Waiting 20 seconds until the server started" level="info"/>
                                 <sleep seconds="20"/>
@@ -93,9 +94,12 @@
                         <configuration>
                             <target>
                                 <echo message="Stopping the server" level="info"/>
-                                <exec executable="bin/shutdown.sh"
+                                <exec executable="bin/catalina.sh"
                                       dir="${project.build.directory}/wso2as-6.0.0-SNAPSHOT/">
+                                    <arg line="stop" />
                                 </exec>
+                                <echo message="Waiting 10 seconds until the server stopped" level="info"/>
+                                <sleep seconds="10"/>
                             </target>
                         </configuration>
                         <goals>
