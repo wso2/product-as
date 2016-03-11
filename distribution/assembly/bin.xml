@@ -19,15 +19,7 @@
     <fileSets>
 
         <fileSet>
-            <directory>contents/webapps/</directory>
-            <outputDirectory>${distribution.file.name}/webapps</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>contents/lib/</directory>
-            <outputDirectory>${distribution.file.name}/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>contents/conf/</directory>
+            <directory>appserver-home/conf/</directory>
             <outputDirectory>${distribution.file.name}/conf/</outputDirectory>
         </fileSet>
         <fileSet>

@@ -16,6 +16,8 @@
  * under the License.
  */
 
+package org.wso2.appserver.test.integration;
+
 import org.junit.Assert;
 import org.junit.Test;
 
