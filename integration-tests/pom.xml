@@ -26,30 +26,44 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>distribution</artifactId>
+            <type>zip</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*IT.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <includes>
-                        <include>**/*IT.java</include>
-                    </includes>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/integration-test-suite.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <appserver.home>${project.build.directory}/${distribution.file.name}</appserver.home>
+                        <simplelogger.properties>simplelogger.properties</simplelogger.properties>
+                        <listener.server.timeout>20</listener.server.timeout>
+                        <port.check.min>6000</port.check.min>
+                        <port.check.max>9000</port.check.max>
+                    </systemPropertyVariables>
                 </configuration>
                 <executions>
                     <execution>
@@ -63,48 +77,19 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>start-server-distribution</id>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <target>
-                                <echo message="Extracting the wso2as-6.0.0-SNAPSHOT distribution" level="info"/>
-                                <unzip src="../distribution/target/wso2as-6.0.0-SNAPSHOT.zip"
-                                       dest="${project.build.directory}"/>
-                                <chmod dir="${project.build.directory}/wso2as-6.0.0-SNAPSHOT/bin" perm="755"
-                                       includes="**/*.sh"/>
-                                <echo message="Starting the server" level="info"/>
-                                <exec executable="bin/catalina.sh"
-                                      dir="${project.build.directory}/wso2as-6.0.0-SNAPSHOT/">
-                                    <arg line="start" />
-                                </exec>
-                                <echo message="Waiting 20 seconds until the server started" level="info"/>
-                                <sleep seconds="20"/>
-                            </target>
-                        </configuration>
+                        <id>unpack</id>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>unpack-dependencies</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>terminate-server</id>
-                        <phase>post-integration-test</phase>
                         <configuration>
-                            <target>
-                                <echo message="Stopping the server" level="info"/>
-                                <exec executable="bin/catalina.sh"
-                                      dir="${project.build.directory}/wso2as-6.0.0-SNAPSHOT/">
-                                    <arg line="stop" />
-                                </exec>
-                                <echo message="Waiting 10 seconds until the server stopped" level="info"/>
-                                <sleep seconds="10"/>
-                            </target>
+                            <includeGroupIds>org.wso2.appserver</includeGroupIds>
+                            <includeArtifactIds>distribution</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

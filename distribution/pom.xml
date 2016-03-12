@@ -87,10 +87,6 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>sample-module</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
             <artifactId>webapp-loader</artifactId>
         </dependency>
 
@@ -123,7 +119,6 @@
 
     <properties>
         <plugins.assembly.descriptor>assembly/bin.xml</plugins.assembly.descriptor>
-        <distribution.file.name>wso2as-${project.version}</distribution.file.name>
     </properties>
 
 </project>

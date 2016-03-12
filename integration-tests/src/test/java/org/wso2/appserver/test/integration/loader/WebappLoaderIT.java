@@ -1,25 +1,28 @@
 /*
- * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
+ *  WSO2 Inc. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied. See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
  */
 
-package org.wso2.appserver.test.integration;
+package org.wso2.appserver.test.integration.loader;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.wso2.appserver.test.integration.TestConstants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,14 +43,15 @@ public class WebappLoaderIT {
     public void environmentConfigurationTest() {
 
         try {
-            String url = "http://localhost:8080/simple-storage-service/storage/store/get/defaultKey";
+            String url = "http://localhost:" + System.getProperty(TestConstants.APPSERVER_PORT) +
+                    "/simple-storage-service/storage/store/get/defaultKey";
             URL requestUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
             connection.setRequestMethod("GET");
 
             int responseCode = connection.getResponseCode();
 
-            Assert.assertEquals("Response Code", 200, responseCode);
+            Assert.assertEquals(200, responseCode);
 
             if (responseCode == 200) {
                 BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
@@ -57,7 +61,7 @@ public class WebappLoaderIT {
                     sb.append(output);
                 }
                 String expectedDefaultValue = "This is a simple REST storage service for storing key value pairs.";
-                Assert.assertEquals("Response Default Content", expectedDefaultValue, sb.toString());
+                Assert.assertEquals(expectedDefaultValue, sb.toString());
 
             }
 
