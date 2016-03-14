@@ -38,7 +38,8 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerConfigurationTest {
-    @Test
+    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration " +
+            "descriptor")
     public void loadObjectFromFilePathTest() {
         Path xmlSource = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);

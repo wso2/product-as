@@ -33,7 +33,8 @@ import java.nio.file.Paths;
  * @since 6.0.0
  */
 public class UtilsTest {
-    @Test(expectedExceptions = { ApplicationServerConfigurationException.class })
+    @Test(description = "Attempts to load the XML file content with a non-existent XML schema file for validation",
+            expectedExceptions = { ApplicationServerConfigurationException.class })
     public void loadObjectFromNonExistentSchemaAsPath() throws ApplicationServerConfigurationException {
         Path xmlSource = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);
@@ -42,14 +43,16 @@ public class UtilsTest {
         Utils.getUnmarshalledObject(xmlSource, xmlSchema, AppServerConfiguration.class);
     }
 
-    @Test(expectedExceptions = { ApplicationServerConfigurationException.class })
+    @Test(description = "Uses an invalid XML schema file for validation",
+            expectedExceptions = { ApplicationServerConfigurationException.class })
     public void invalidSchemaTest() throws ApplicationServerException {
         Path xmlSchema = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XSD_FILE);
         Utils.getXMLUnmarshaller(xmlSchema, AppServerConfiguration.class);
     }
 
-    @Test(expectedExceptions = { ApplicationServerConfigurationException.class })
+    @Test(description = "Attempts to load content from a file path source with invalid XML syntax",
+            expectedExceptions = { ApplicationServerConfigurationException.class })
     public void loadObjectFromInvalidFileTest() throws ApplicationServerException {
         Path xmlSource = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);
@@ -58,7 +61,8 @@ public class UtilsTest {
         Utils.getUnmarshalledObject(xmlSource, xmlSchema, AppServerConfiguration.class);
     }
 
-    @Test(expectedExceptions = { ApplicationServerConfigurationException.class })
+    @Test(description = "Attempts to load content from a file input stream with invalid XML syntax",
+            expectedExceptions = { ApplicationServerConfigurationException.class })
     public void loadObjectFromInvalidInputStreamTest() throws ApplicationServerException {
         Path xmlSource = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);

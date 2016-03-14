@@ -34,7 +34,7 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerWebAppConfigurationTest {
-    @Test
+    @Test(description = "Loads the XML file content of the WSO2 App Server specific webapp descriptor")
     public void loadObjectFromFilePath() {
         Path xmlSchema = Paths.get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER,
                 TestConstants.WEBAPP_DESCRIPTOR_XSD_FILE);
