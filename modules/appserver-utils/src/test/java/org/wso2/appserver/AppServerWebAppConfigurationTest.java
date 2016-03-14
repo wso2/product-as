@@ -21,7 +21,7 @@ import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
 import org.wso2.appserver.configuration.listeners.Utils;
-import org.wso2.appserver.exceptions.ApplicationServerException;
+import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,24 +35,19 @@ import java.util.List;
  */
 public class AppServerWebAppConfigurationTest {
     @Test(description = "Loads the XML file content of the WSO2 App Server specific webapp descriptor")
-    public void loadObjectFromFilePath() {
+    public void loadObjectFromFilePath() throws ApplicationServerConfigurationException {
         Path xmlSchema = Paths.get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER,
                 TestConstants.WEBAPP_DESCRIPTOR_XSD_FILE);
         Path parent = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.PARENT_DESCRIPTOR);
         Path child = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.CHILD_DESCRIPTOR);
-
-        try {
-            AppServerWebAppConfiguration parentConfig = Utils.
-                    getUnmarshalledObject(parent, xmlSchema, AppServerWebAppConfiguration.class);
-            AppServerWebAppConfiguration childConfig = Utils.
-                    getUnmarshalledObject(child, xmlSchema, AppServerWebAppConfiguration.class);
-            parentConfig.merge(childConfig);
-            Assert.assertTrue(compare(parentConfig, prepareDefault()));
-        } catch (ApplicationServerException e) {
-            Assert.fail();
-        }
+        AppServerWebAppConfiguration parentConfig = Utils.
+                getUnmarshalledObject(parent, xmlSchema, AppServerWebAppConfiguration.class);
+        AppServerWebAppConfiguration childConfig = Utils.
+                getUnmarshalledObject(child, xmlSchema, AppServerWebAppConfiguration.class);
+        parentConfig.merge(childConfig);
+        Assert.assertTrue(compare(parentConfig, prepareDefault()));
     }
 
     private static AppServerWebAppConfiguration prepareDefault() {
