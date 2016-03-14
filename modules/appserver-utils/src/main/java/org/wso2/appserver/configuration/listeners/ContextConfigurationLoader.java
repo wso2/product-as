@@ -39,8 +39,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 6.0.0
  */
 public class ContextConfigurationLoader implements LifecycleListener {
-    private static final Map<Context, AppServerWebAppConfiguration>
-            contextToConfigurationMap = new ConcurrentHashMap<>();
+    private static final Map<Context, AppServerWebAppConfiguration> contextToConfigurationMap =
+            new ConcurrentHashMap<>();
 
     /**
      * Retrieves the {@code AppServerWebAppConfiguration} matching the specified context.
@@ -64,12 +64,19 @@ public class ContextConfigurationLoader implements LifecycleListener {
      */
     @Override
     public void lifecycleEvent(LifecycleEvent lifecycleEvent) {
+        Object source;
         if (Lifecycle.CONFIGURE_START_EVENT.equals(lifecycleEvent.getType())) {
-            Object source = lifecycleEvent.getSource();
+            source = lifecycleEvent.getSource();
             if (source instanceof Context) {
                 Context context = (Context) source;
                 AppServerWebAppConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
                 contextToConfigurationMap.put(context, effectiveConfiguration);
+            }
+        } else if (Lifecycle.AFTER_STOP_EVENT.equals(lifecycleEvent.getType())) {
+            source = lifecycleEvent.getSource();
+            if (source instanceof Context) {
+                Context context = (Context) source;
+                contextToConfigurationMap.remove(context);
             }
         }
     }
