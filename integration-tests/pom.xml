@@ -68,8 +68,8 @@
                         <appserver.home>${project.build.directory}/${distribution.file.name}</appserver.home>
                         <simplelogger.properties>simplelogger.properties</simplelogger.properties>
                         <listener.server.timeout>20</listener.server.timeout>
-                        <port.check.min>6000</port.check.min>
-                        <port.check.max>9000</port.check.max>
+                        <port.check.min>8000</port.check.min>
+                        <port.check.max>8100</port.check.max>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>

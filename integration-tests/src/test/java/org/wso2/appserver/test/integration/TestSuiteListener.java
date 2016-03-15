@@ -22,10 +22,12 @@ package org.wso2.appserver.test.integration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.IExecutionListener;
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,19 +38,21 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 
+public class TestSuiteListener implements ISuiteListener {
 
-public class TestExecutionListener implements IExecutionListener {
-
-    private static final Logger log = LoggerFactory.getLogger(TestExecutionListener.class);
+    private static final Logger log = LoggerFactory.getLogger(TestSuiteListener.class);
     private Process applicationServerProcess;
     private int serverStartCheckTimeout;
     private File appserverHome;
@@ -56,42 +60,54 @@ public class TestExecutionListener implements IExecutionListener {
     private boolean isSuccessServerStartup = false;
 
     @Override
-    public void onExecutionStart() {
-
-        log.info("Starting pre-integration test setup...");
-
-        appserverHome = new File(System.getProperty(TestConstants.APPSERVER_HOME));
-        log.info("Application server home : " + appserverHome.toString());
-
-        serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
-
-        log.info("Searching for free port...");
-        System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(getAvailablePort()));
-        log.info("Found free port : " + System.getProperty(TestConstants.APPSERVER_PORT));
-        applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
-
-        replaceServerXML();
+    public void onStart(ISuite iSuite) {
 
         try {
+            log.info("Starting pre-integration test setup...");
+
+            appserverHome = new File(System.getProperty(TestConstants.APPSERVER_HOME));
+            log.info("Application server home : " + appserverHome.toString());
+
+            serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
+
+            log.info("Searching availability of the default port...");
+
+            if (isPortAvailable(TestConstants.TOMCAT_DEFAULT_PORT)) {
+                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is available.");
+                System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(TestConstants.TOMCAT_DEFAULT_PORT));
+                applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
+            } else {
+                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is not available. " +
+                        "Searching for free port...");
+                System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(getAvailablePort()));
+                log.info("Found free port : " + System.getProperty(TestConstants.APPSERVER_PORT));
+                applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
+                replaceServerXML();
+            }
+
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
-        } catch (IOException ex) {
-            terminateApplicationServer();
-            log.error("Could not start process", ex);
-        }
 
-        if (applicationServerProcess != null) {
             waitForServerStartup();
+
+            if (isSuccessServerStartup) {
+                log.info("Application server started successfully. Running test suite...");
+            }
+
+        } catch (IOException | TransformerException | SAXException | XPathExpressionException |
+                ParserConfigurationException ex) {
+            terminateApplicationServer();
+            String message = "Could not start the server";
+            log.error(message, ex);
+            throw new RuntimeException(message, ex);
         }
 
-        if (isSuccessServerStartup) {
-            log.info("Application server started successfully. Running test suite...");
-        }
+
     }
 
     @Override
-    public void onExecutionFinish() {
+    public void onFinish(ISuite iSuite) {
 
         log.info("Starting post-integration tasks...");
         log.info("Terminating the Application server");
@@ -124,7 +140,7 @@ public class TestExecutionListener implements IExecutionListener {
         }
     }
 
-    private void waitForServerStartup() {
+    private void waitForServerStartup() throws IOException {
 
         log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
         int currentSeconds = 0;
@@ -146,7 +162,9 @@ public class TestExecutionListener implements IExecutionListener {
             log.info("Server started in " + currentSeconds + " seconds");
         } else {
             isSuccessServerStartup = false;
-            log.error("Server startup timeout.");
+            String message = "Server startup timeout.";
+            log.error(message);
+            throw new IOException(message);
         }
     }
 
@@ -197,21 +215,20 @@ public class TestExecutionListener implements IExecutionListener {
         return false;
     }
 
-    private void replaceServerXML() {
-        try {
-            Path serverXML = Paths.get(appserverHome.getAbsolutePath(), "conf", "server.xml");
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
-                    new InputSource(serverXML.toString()));
+    private void replaceServerXML() throws ParserConfigurationException, IOException, SAXException,
+            XPathExpressionException, TransformerException {
 
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            NodeList nodes = (NodeList) xpath.evaluate("/Server/Service/Connector[1]/@port", doc,
-                    XPathConstants.NODESET);
+        Path serverXML = Paths.get(appserverHome.getAbsolutePath(), "conf", "server.xml");
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
+                new InputSource(serverXML.toString()));
 
-            nodes.item(0).setNodeValue(System.getProperty(TestConstants.APPSERVER_PORT));
-            Transformer xFormer = TransformerFactory.newInstance().newTransformer();
-            xFormer.transform(new DOMSource(doc), new StreamResult(serverXML.toFile()));
-        } catch (Exception ex) {
-            log.error("Error while changing the server.xml", ex);
-        }
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        NodeList nodes = (NodeList) xpath.evaluate("/Server/Service/Connector[1]/@port", doc,
+                XPathConstants.NODESET);
+
+        nodes.item(0).setNodeValue(System.getProperty(TestConstants.APPSERVER_PORT));
+        Transformer xFormer = TransformerFactory.newInstance().newTransformer();
+        xFormer.transform(new DOMSource(doc), new StreamResult(serverXML.toFile()));
+
     }
 }

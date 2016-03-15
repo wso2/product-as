@@ -16,17 +16,12 @@ limitations under the License.
 <suite name="integration">
 
     <listeners>
-        <listener class-name="org.wso2.appserver.test.integration.TestExecutionListener"/>
+        <listener class-name="org.wso2.appserver.test.integration.TestSuiteListener"/>
     </listeners>
 
-    <test name="sample">
+    <test name="wso2as-test">
         <classes>
             <class name="org.wso2.appserver.test.integration.sample.SampleTestIT"/>
-        </classes>
-    </test>
-
-    <test name="webapp-loader">
-        <classes>
             <class name="org.wso2.appserver.test.integration.loader.WebappLoaderIT"/>
         </classes>
     </test>
