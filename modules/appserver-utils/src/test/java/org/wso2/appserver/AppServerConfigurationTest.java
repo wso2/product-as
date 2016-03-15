@@ -28,7 +28,6 @@ import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +37,13 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerConfigurationTest {
-    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration " +
-            "descriptor")
-    public void loadObjectFromFilePathTest() throws IOException, ApplicationServerConfigurationException {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
+    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
+            + "descriptor")
+    public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
+        Path xmlSource = TestUtils.
+                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.SAMPLE_XML_FILE);
+        Path xmlSchema = TestUtils.
+                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.SAMPLE_XSD_FILE);
         AppServerConfiguration actual = Utils.
                 getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
         AppServerConfiguration expected = generateDefault();
@@ -152,11 +151,15 @@ public class AppServerConfigurationTest {
 
     private static boolean compareClassloadingConfigurations(ClassLoaderEnvironments actual,
             ClassLoaderEnvironments expected) {
-        return (actual != null) && (expected != null) && actual.getEnvironments().getEnvironments().stream().
-                filter(env -> expected.getEnvironments().getEnvironments().stream().
-                        filter(expectedEnv -> (expectedEnv.getName().equals(env.getName().trim()) && expectedEnv
-                                .getClasspath().equals(env.getClasspath().trim()))).count() > 0).count() == expected
-                .getEnvironments().getEnvironments().size();
+        if ((actual != null) && (expected != null)) {
+            return actual.getEnvironments().getEnvironments().stream().
+                    filter(env -> expected.getEnvironments().getEnvironments().stream().
+                            filter(expectedEnv -> (expectedEnv.getName().equals(env.getName().trim()) && expectedEnv.
+                                    getClasspath().equals(env.getClasspath().trim()))).count() == 1).
+                    count() == expected.getEnvironments().getEnvironments().size();
+        } else {
+            return (actual == null) && (expected == null);
+        }
     }
 
     private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
@@ -169,15 +172,19 @@ public class AppServerConfigurationTest {
             boolean properties = compareSSOProperties(actual.getProperties(), expected.getProperties());
             return (idpURL && idpEntityID && validatorClass && idpCertAlias && properties);
         } else {
-            return false;
+            return (actual == null) && (expected == null);
         }
     }
 
     private static boolean compareSSOProperties(List<SSOConfiguration.Property> actual,
             List<SSOConfiguration.Property> expected) {
-        return (actual != null) && (expected != null) && actual.stream().filter(property -> expected.stream().
-                filter(expProperty -> ((expProperty.getKey().equals(property.getKey())) && (expProperty.getValue().
-                        equals(property.getValue())))).count() > 0).count() == expected.size();
+        if ((actual != null) && (expected != null)) {
+            return actual.stream().filter(property -> expected.stream().
+                    filter(expProperty -> ((expProperty.getKey().equals(property.getKey())) && (expProperty.getValue().
+                            equals(property.getValue())))).count() > 0).count() == expected.size();
+        } else {
+            return (actual == null) && (expected == null);
+        }
     }
 
     private static boolean compareStatsPublishingConfigurations(StatsPublisherConfiguration actual,
@@ -190,7 +197,7 @@ public class AppServerConfigurationTest {
             boolean streamID = actual.getStreamId().trim().equals(expected.getStreamId());
             return (username && password && authnURL && publisherURL && streamID);
         } else {
-            return false;
+            return (actual == null) && (expected == null);
         }
     }
 
@@ -207,6 +214,12 @@ public class AppServerConfigurationTest {
                         equals(expected.getKeystore().getKeyAlias());
                 privateKeyPassword = actual.getKeystore().getKeyPassword().trim().
                         equals(expected.getKeystore().getKeyPassword());
+            } else if ((actual.getKeystore() == null) && (expected.getKeystore() == null)) {
+                keystorePath = true;
+                keystorePassword = true;
+                type = true;
+                privateKeyAlias = true;
+                privateKeyPassword = true;
             }
 
             boolean truststorePath, truststorePassword, truststoreType;
@@ -217,12 +230,16 @@ public class AppServerConfigurationTest {
                 truststorePassword = actual.getTruststore().getPassword().trim().
                         equals(expected.getTruststore().getPassword());
                 truststoreType = actual.getTruststore().getType().trim().equals(expected.getTruststore().getType());
+            } else if ((actual.getTruststore() == null) && (expected.getTruststore() == null)) {
+                truststorePath = true;
+                truststorePassword = true;
+                truststoreType = true;
             }
 
             return (keystorePath && keystorePassword && type && privateKeyAlias && privateKeyPassword &&
                     truststorePath && truststorePassword && truststoreType);
         } else {
-            return false;
+            return (actual == null) && (expected == null);
         }
     }
 }

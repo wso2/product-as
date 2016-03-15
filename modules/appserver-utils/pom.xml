@@ -31,37 +31,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-test-resources</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <copy file="src/test/resources/test-xml/child-wso2as-web.xml"
-                                      tofile="${project.build.directory}/test-resources/child-wso2as-web.xml"/>
-                                <copy file="src/test/resources/test-xml/parent-wso2as-web.xml"
-                                      tofile="${project.build.directory}/test-resources/parent-wso2as-web.xml"/>
-                                <copy file="src/test/resources/test-xml/sample-wso2as-web.xsd"
-                                      tofile="${project.build.directory}/test-resources/sample-wso2as-web.xsd"/>
-                                <copy file="src/test/resources/test-xml/sample-wso2as.xml"
-                                      tofile="${project.build.directory}/test-resources/sample-wso2as.xml"/>
-                                <copy file="src/test/resources/test-xml/sample-wso2as.xsd"
-                                      tofile="${project.build.directory}/test-resources/sample-wso2as.xsd"/>
-                                <copy file="src/test/resources/test-xml/invalid.xml"
-                                      tofile="${project.build.directory}/test-resources/invalid.xml"/>
-                                <copy file="src/test/resources/test-xml/invalid.xsd"
-                                      tofile="${project.build.directory}/test-resources/invalid.xsd"/>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
             </plugin>
             <plugin>

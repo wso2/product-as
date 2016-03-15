@@ -23,6 +23,8 @@ import org.wso2.appserver.configuration.context.SSOConfiguration;
 import org.wso2.appserver.configuration.listeners.Utils;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 
+import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -35,13 +37,13 @@ import java.util.List;
  */
 public class AppServerWebAppConfigurationTest {
     @Test(description = "Loads the XML file content of the WSO2 App Server specific webapp descriptor")
-    public void loadObjectFromFilePath() throws ApplicationServerConfigurationException {
-        Path xmlSchema = Paths.get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER,
-                TestConstants.WEBAPP_DESCRIPTOR_XSD_FILE);
-        Path parent = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.PARENT_DESCRIPTOR);
-        Path child = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.CHILD_DESCRIPTOR);
+    public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
+        Path xmlSchema = TestUtils.getResourceFile(
+                TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.WEBAPP_DESCRIPTOR_XSD_FILE);
+        Path parent = TestUtils.
+                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.PARENT_DESCRIPTOR);
+        Path child = TestUtils.
+                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.CHILD_DESCRIPTOR);
         AppServerWebAppConfiguration parentConfig = Utils.
                 getUnmarshalledObject(parent, xmlSchema, AppServerWebAppConfiguration.class);
         AppServerWebAppConfiguration childConfig = Utils.
@@ -118,8 +120,12 @@ public class AppServerWebAppConfigurationTest {
 
     private static boolean compareClassloadingConfigs(ClassLoaderConfiguration actual,
             ClassLoaderConfiguration expected) {
-        return ((actual != null) && (expected != null) && (actual.isParentFirst() == expected.isParentFirst())
-                && (actual.getEnvironments().trim().equals(expected.getEnvironments())));
+        if ((actual != null) && (expected != null)) {
+            return (actual.isParentFirst() == expected.isParentFirst()) && (actual.getEnvironments().trim().
+                    equals(expected.getEnvironments()));
+        } else {
+            return ((actual == null) && (expected == null));
+        }
     }
 
     private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
@@ -146,7 +152,7 @@ public class AppServerWebAppConfigurationTest {
                     && binding && issuerID && consumerURL && serviceIndex && enableSLO && ssl && forceAuthn
                     && passiveAuthn && properties);
         } else {
-            return false;
+            return ((actual == null) && (expected == null));
         }
     }
 
@@ -159,7 +165,7 @@ public class AppServerWebAppConfigurationTest {
             List<SSOConfiguration.Property> expected) {
         return actual.stream().filter(property -> expected.stream().
                 filter(exp -> (property.getKey().trim().equals(exp.getKey()) && property.getValue().trim().
-                                equals(exp.getValue()))).count() > 0).count() == expected.size();
+                        equals(exp.getValue()))).count() > 0).count() == expected.size();
     }
 
     private static boolean compareSSLProperties(SSOConfiguration actual, SSOConfiguration expected) {
@@ -178,5 +184,15 @@ public class AppServerWebAppConfigurationTest {
         boolean sloURLPostfix = actual.getSLOURLPostfix().trim().equals(expected.getSLOURLPostfix());
 
         return requestURLPostfix && consumerURLPostfix && sloURLPostfix;
+    }
+
+    private Path getResourceFile(String resourceName) throws IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resourceURL = classLoader.getResource(resourceName);
+        if (resourceURL != null) {
+            return Paths.get(resourceURL.getPath());
+        } else {
+            throw new IOException("Error when loading the resource file " + resourceName);
+        }
     }
 }
