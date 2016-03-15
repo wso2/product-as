@@ -24,30 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Random;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 
 public class TestSuiteListener implements ISuiteListener {
@@ -70,19 +51,11 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
-            log.info("Searching availability of the default port...");
 
             if (isPortAvailable(TestConstants.TOMCAT_DEFAULT_PORT)) {
                 log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is available.");
                 System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(TestConstants.TOMCAT_DEFAULT_PORT));
                 applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
-            } else {
-                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is not available. " +
-                        "Searching for free port...");
-                System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(getAvailablePort()));
-                log.info("Found free port : " + System.getProperty(TestConstants.APPSERVER_PORT));
-                applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
-                replaceServerXML();
             }
 
 
@@ -95,8 +68,7 @@ public class TestSuiteListener implements ISuiteListener {
                 log.info("Application server started successfully. Running test suite...");
             }
 
-        } catch (IOException | TransformerException | SAXException | XPathExpressionException |
-                ParserConfigurationException ex) {
+        } catch (IOException ex) {
             terminateApplicationServer();
             String message = "Could not start the server";
             log.error(message, ex);
@@ -187,15 +159,6 @@ public class TestSuiteListener implements ISuiteListener {
     }
 
 
-    private int getAvailablePort() {
-        int port;
-        int min = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
-        int max = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
-        do {
-            port = new Random().nextInt(max - min + 1) + min;
-        } while (!isPortAvailable(port));
-        return port;
-    }
 
     private boolean isPortAvailable(final int port) {
         ServerSocket serverSocket = null;
@@ -215,20 +178,4 @@ public class TestSuiteListener implements ISuiteListener {
         return false;
     }
 
-    private void replaceServerXML() throws ParserConfigurationException, IOException, SAXException,
-            XPathExpressionException, TransformerException {
-
-        Path serverXML = Paths.get(appserverHome.getAbsolutePath(), "conf", "server.xml");
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
-                new InputSource(serverXML.toString()));
-
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        NodeList nodes = (NodeList) xpath.evaluate("/Server/Service/Connector[1]/@port", doc,
-                XPathConstants.NODESET);
-
-        nodes.item(0).setNodeValue(System.getProperty(TestConstants.APPSERVER_PORT));
-        Transformer xFormer = TransformerFactory.newInstance().newTransformer();
-        xFormer.transform(new DOMSource(doc), new StreamResult(serverXML.toFile()));
-
-    }
 }
