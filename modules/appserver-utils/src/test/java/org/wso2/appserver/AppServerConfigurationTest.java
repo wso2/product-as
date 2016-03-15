@@ -23,7 +23,7 @@ import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.SecurityConfiguration;
 import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
-import org.wso2.appserver.exceptions.ApplicationServerException;
+import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,20 +38,17 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerConfigurationTest {
-    @Test
-    public void loadObjectFromFilePathTest() {
+    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration " +
+            "descriptor")
+    public void loadObjectFromFilePathTest() throws IOException, ApplicationServerConfigurationException {
         Path xmlSource = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);
         Path xmlSchema = Paths.
                 get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
-        try {
-            AppServerConfiguration actual = Utils.
-                    getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
-            AppServerConfiguration expected = generateDefault();
-            Assert.assertTrue(compare(actual, expected));
-        } catch (ApplicationServerException | IOException e) {
-            Assert.fail();
-        }
+        AppServerConfiguration actual = Utils.
+                getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
+        AppServerConfiguration expected = generateDefault();
+        Assert.assertTrue(compare(actual, expected));
     }
 
     protected static AppServerConfiguration generateDefault() {

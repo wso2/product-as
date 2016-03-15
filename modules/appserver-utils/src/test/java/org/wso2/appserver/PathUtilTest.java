@@ -37,20 +37,20 @@ public class PathUtilTest {
         System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
     }
 
-    @Test
+    @Test(description = "Loads a file path representation of the CATALINA_BASE")
     public void getCatalinaBaseTest() {
         Path actual = PathUtils.getCatalinaBase();
         Assert.assertEquals(actual.toString(), CATALINA_BASE.toString());
     }
 
-    @Test
+    @Test(description = "Loads a file path representation of the Tomcat config-base")
     public void getCatalinaConfigurationHomeTest() {
         Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY);
         Path actual = PathUtils.getCatalinaConfigurationBase();
         Assert.assertEquals(actual.toString(), expected.toString());
     }
 
-    @Test
+    @Test(description = "Loads a file path representation of the WSO2 specific config-base")
     public void getWSO2ConfigurationHomeTest() {
         Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
                 Constants.APP_SERVER_CONFIGURATION_DIRECTORY);
