@@ -96,6 +96,19 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>copy-webapp-descriptors</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <copy file="src/test/resources/webapp-descriptors/overridden-wso2as-web.xml"
+                                      tofile="${project.build.directory}/${distribution.file.name}/webapps/sample/WEB-INF/wso2as-web.xml"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

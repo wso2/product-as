@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.test.integration.configurations;
 
+import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.AppServerConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
@@ -26,10 +27,15 @@ import java.io.IOException;
  *
  * @since 6.0.0
  */
-public class ServerConfigurationLoaderTestCase {
-    public void testLoadingValidServerDescriptor() throws IOException, ApplicationServerConfigurationException {
+public class ConfigurationLoaderTestCase {
+    //  load server level configurations
+    public void testLoadingServerDescriptor() throws IOException, ApplicationServerConfigurationException {
         AppServerConfiguration expected = ConfigurationTestUtils.loadDefaultServerConfiguration();
         AppServerConfiguration actual = ServerConfigurationLoader.getServerConfiguration();
         ConfigurationTestUtils.compareServerDescriptors(actual, expected);
+    }
+
+    public void testWebAppDescriptorForNonOverridden() throws IOException, ApplicationServerConfigurationException {
+        AppServerWebAppConfiguration expected = ConfigurationTestUtils.loadDefaultGlobalContextConfiguration();
     }
 }
