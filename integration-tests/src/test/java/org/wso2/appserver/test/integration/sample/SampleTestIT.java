@@ -22,7 +22,7 @@ package org.wso2.appserver.test.integration.sample;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.wso2.appserver.test.integration.TestConstants;
+import org.wso2.appserver.test.integration.TestBase;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -32,17 +32,16 @@ import java.net.URL;
  * This sample test class demonstrate how to write a test cases which runs on integration test phase.
  * Every class that requires run in integration test phase should have prefix of <strong>IT</strong>
  */
-public class SampleTestIT {
-
+public class SampleTestIT extends TestBase {
     /**
      * This sample test case check if the server is running by sending a request to the server.
      */
     @Test
     public void serverStatusTest() {
 
-        String url = "http://localhost:" + System.getProperty(TestConstants.APPSERVER_PORT);
+
         try {
-            URL requestUrl = new URL(url);
+            URL requestUrl = new URL(getBaseUrl());
             HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
             connection.setRequestMethod("GET");
 
