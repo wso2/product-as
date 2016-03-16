@@ -28,5 +28,6 @@
 
     <modules>
         <module>hello-world</module>
+        <module>simple-storage-service</module>
     </modules>
 </project>

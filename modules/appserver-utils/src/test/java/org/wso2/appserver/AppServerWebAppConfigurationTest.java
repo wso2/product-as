@@ -59,7 +59,6 @@ public class AppServerWebAppConfigurationTest {
 
     private static ClassLoaderConfiguration prepareClassLoaderConfiguration() {
         ClassLoaderConfiguration classloading = new ClassLoaderConfiguration();
-        classloading.enableParentFirst(true);
         classloading.setEnvironments(TestConstants.JAXRS_ENV_NAME);
         return classloading;
     }
@@ -118,7 +117,7 @@ public class AppServerWebAppConfigurationTest {
 
     private static boolean compareClassloadingConfigs(ClassLoaderConfiguration actual,
             ClassLoaderConfiguration expected) {
-        return ((actual != null) && (expected != null) && (actual.isParentFirst() == expected.isParentFirst())
+        return ((actual != null) && (expected != null)
                 && (actual.getEnvironments().trim().equals(expected.getEnvironments())));
     }
 

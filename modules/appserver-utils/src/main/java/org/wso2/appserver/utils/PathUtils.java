@@ -15,7 +15,9 @@
  */
 package org.wso2.appserver.utils;
 
+import org.apache.catalina.Context;
 import org.apache.catalina.Globals;
+import org.apache.catalina.Host;
 import org.wso2.appserver.Constants;
 
 import java.nio.file.Path;
@@ -72,5 +74,16 @@ public final class PathUtils {
      */
     public static Path getAppServerConfigurationBase() {
         return PATH_APP_SERVER_CONFIG_BASE;
+    }
+
+    public static Path getWebappPath(Context context) {
+        Path webappFilePath = null;
+        if (context != null) {
+            String docBase = context.getDocBase();
+            Host host = (Host) context.getParent();
+            String appBase = host.getAppBase();
+            webappFilePath = Paths.get(PATH_CATALINA_BASE.toString(), appBase, docBase);
+        }
+        return webappFilePath;
     }
 }
