@@ -11,9 +11,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
+<wso2as-web xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as-web"
+            xsi:schemaLocation="http://wso2.org/2016/wso2as-web wso2as-web.xsd">
     <class-loader>
-        <parent-first>false</parent-first>
         <environments>CXF</environments>
     </class-loader>
     <saml2-single-sign-on>

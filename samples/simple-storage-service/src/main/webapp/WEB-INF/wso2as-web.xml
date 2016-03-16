@@ -18,7 +18,6 @@
   -->
 <wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
     <class-loader>
-        <parent-first>false</parent-first>
         <environments>CXF,Spring</environments>
     </class-loader>
     <saml2-single-sign-on>

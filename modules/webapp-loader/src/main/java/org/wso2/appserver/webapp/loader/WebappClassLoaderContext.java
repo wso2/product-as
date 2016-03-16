@@ -48,7 +48,6 @@ public class WebappClassLoaderContext {
     private static Map<String, List<String>> definedEnvironments = new ConcurrentHashMap<>();
     private static final Log log = LogFactory.getLog(AppServerWebappLoader.class);
 
-    private boolean isParentFirst = false;
     private Map<String, List<String>> selectedEnvironments = new ConcurrentHashMap<>();
 
     static {
@@ -84,7 +83,6 @@ public class WebappClassLoaderContext {
         ContextConfigurationLoader.getContextConfiguration(context)
                 .ifPresent(configuration -> {
                     ClassLoaderConfiguration classLoaderConfiguration = configuration.getClassLoaderConfiguration();
-                    this.isParentFirst = classLoaderConfiguration.isParentFirst();
                     List<String> environmentNames = Arrays
                             .asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
 
@@ -111,15 +109,6 @@ public class WebappClassLoaderContext {
                 .map(Map.Entry::getValue)
                 .forEach(repositories::addAll);
         return repositories;
-    }
-
-    /**
-     * Returns the classloader's parent first behaviour of this web application.
-     *
-     * @return true of the configuration specified paren first classloader behaviour.otherwise false.
-     */
-    public boolean isParentFirst() {
-        return isParentFirst;
     }
 
     // returns a list of jar url's for the given path
