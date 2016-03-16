@@ -96,6 +96,8 @@ public class StatPublisherUnitTest {
         when(response.getContentType()).thenReturn("/");
         when(response.getStatus()).thenReturn(200);
         when(response.getHeader("Referer")).thenReturn(null);
+        when(response.getHeader("User-Agent")).thenReturn(null);
+        when(response.getHeader("Host")).thenReturn(null);
         when(request.getRemoteUser()).thenReturn(null);
         when(request.getAuthType()).thenReturn(null);
         when(request.getContentLength()).thenReturn(-1);
@@ -134,10 +136,12 @@ public class StatPublisherUnitTest {
         payload.add(null);
         payload.add(null);
         payload.add(null);
+        payload.add(null);
+        payload.add(null);
         payload.add(0L);
         payload.add(-1L);
         payload.add(-1L);
-        payload.add("X-Forwarded-For:(),Proxy-Client-IP:(),WL-Proxy-Client-IP:(),HTTP_CLIENT_IP:()," +
+        payload.add("X-Forwarded-For:();Proxy-Client-IP:();WL-Proxy-Client-IP:();HTTP_CLIENT_IP:();" +
                 "HTTP_X_FORWARDED_FOR:()");
         payload.add("");
         payload.add("en");

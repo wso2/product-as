@@ -21,10 +21,13 @@
     <Agent>
         <Name>Thrift</Name>
         <DataEndpointClass>org.wso2.carbon.databridge.agent.endpoint.thrift.ThriftDataEndpoint</DataEndpointClass>
+        <!--<TrustSore>src/main/resources/client-truststore.jks</TrustSore>-->
+        <!--<TrustSorePassword>wso2carbon</TrustSorePassword>-->
         <QueueSize>32768</QueueSize>
         <BatchSize>200</BatchSize>
         <CorePoolSize>5</CorePoolSize>
         <MaxPoolSize>10</MaxPoolSize>
+        <SocketTimeoutMS>30000</SocketTimeoutMS>
         <KeepAliveTimeInPool>20</KeepAliveTimeInPool>
         <ReconnectionInterval>30</ReconnectionInterval>
         <MaxTransportPoolSize>250</MaxTransportPoolSize>
@@ -39,12 +42,14 @@
 
     <Agent>
         <Name>Binary</Name>
-        <DataEndpointClass>org.wso2.carbon.databridge.agent.endpoint.binary.BinaryDataEndpoint
-        </DataEndpointClass>
+        <DataEndpointClass>org.wso2.carbon.databridge.agent.endpoint.binary.BinaryDataEndpoint</DataEndpointClass>
+        <!--<TrustSore>src/main/resources/client-truststore.jks</TrustSore>-->
+        <!--<TrustSorePassword>wso2carbon</TrustSorePassword>-->
         <QueueSize>32768</QueueSize>
         <BatchSize>200</BatchSize>
         <CorePoolSize>5</CorePoolSize>
         <MaxPoolSize>10</MaxPoolSize>
+        <SocketTimeoutMS>30000</SocketTimeoutMS>
         <KeepAliveTimeInPool>20</KeepAliveTimeInPool>
         <ReconnectionInterval>30</ReconnectionInterval>
         <MaxTransportPoolSize>250</MaxTransportPoolSize>
@@ -56,6 +61,5 @@
         <SecureEvictionTimePeriod>5500</SecureEvictionTimePeriod>
         <SecureMinIdleTimeInPool>5000</SecureMinIdleTimeInPool>
     </Agent>
-
 </DataAgentsConfiguration>
 

@@ -45,6 +45,9 @@ public class EventPublisherConstants {
     // currently requested page was followed
     public static final String REFERRER = "Referer";
 
+    public static final String USER_AGENT = "User-Agent";
+    public static final String HOST = "Host";
+
     //a probable value for IP address set in headers
     public static final String UNKNOWN = "unknown";
 

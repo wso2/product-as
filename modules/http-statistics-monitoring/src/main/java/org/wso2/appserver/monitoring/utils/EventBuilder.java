@@ -102,6 +102,8 @@ public class EventBuilder {
         payload.add(((long) response.getStatus()));
         payload.add((getClientIpAddress(request)));
         payload.add((request.getHeader(EventPublisherConstants.REFERRER)));
+        payload.add(request.getHeader(EventPublisherConstants.USER_AGENT));
+        payload.add(request.getHeader(EventPublisherConstants.HOST));
         payload.add((request.getRemoteUser()));
         payload.add((request.getAuthType()));
         payload.add((responseTime));
@@ -128,7 +130,7 @@ public class EventBuilder {
             String tmpString = "(" + StringUtils.join(values, ",") + ")";
             requestHeaders.add(header + ":" + tmpString);
         });
-        return StringUtils.join(requestHeaders, ",");
+        return StringUtils.join(requestHeaders, ";");
     }
 
     /**
