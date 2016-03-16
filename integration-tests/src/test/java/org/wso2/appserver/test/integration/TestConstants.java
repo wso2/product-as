@@ -19,6 +19,9 @@
 
 package org.wso2.appserver.test.integration;
 
+/**
+ * Constants required by the integration tests
+ */
 public final class TestConstants {
     public static final String APPSERVER_HOME = "appserver.home";
     public static final String SERVER_TIMEOUT = "listener.server.timeout";
@@ -26,4 +29,5 @@ public final class TestConstants {
     public static final String PORT_CHECK_MAX = "port.check.max";
     public static final String APPSERVER_PORT = "appserver.port";
     public static final int TOMCAT_DEFAULT_PORT = 8080;
+    public static final int TOMCAT_AJP_PORT = 8009;
 }

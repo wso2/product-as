@@ -37,21 +37,16 @@ public class SampleTestIT extends TestBase {
      * This sample test case check if the server is running by sending a request to the server.
      */
     @Test
-    public void serverStatusTest() {
+    public void testServerStatus() throws IOException {
 
 
-        try {
-            URL requestUrl = new URL(getBaseUrl());
-            HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-            connection.setRequestMethod("GET");
+        URL requestUrl = new URL(getBaseUrl());
+        HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+        connection.setRequestMethod("GET");
 
-            int responseCode = connection.getResponseCode();
+        int responseCode = connection.getResponseCode();
 
-            Assert.assertEquals(200, responseCode);
-
-        } catch (IOException e) {
-            Assert.fail("Fail connection to the server. Error: " + e.getMessage());
-        }
+        Assert.assertEquals(responseCode, 200);
 
     }
 }

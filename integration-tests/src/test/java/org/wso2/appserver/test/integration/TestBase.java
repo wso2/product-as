@@ -18,6 +18,9 @@
 
 package org.wso2.appserver.test.integration;
 
+/**
+ * The base class for the integration tests.
+ */
 public class TestBase {
 
     public String getAppserverHome() {

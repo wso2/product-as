@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+/**
+ * The test suite listeners class provides the environment setup for the integration test.
+ */
 public class TestSuiteListener implements ISuiteListener {
 
     private static final Logger log = LoggerFactory.getLogger(TestSuiteListener.class);

@@ -40,34 +40,28 @@ public class WebappLoaderIT extends TestBase {
      * This sample test case check if the server is running by sending a request to the server.
      */
     @Test
-    public void environmentConfigurationTest() {
+    public void testEnvironmentConfiguration() throws IOException{
 
-        try {
-            String url = getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey";
-            URL requestUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-            connection.setRequestMethod("GET");
 
-            int responseCode = connection.getResponseCode();
+        String url = getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey";
+        URL requestUrl = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+        connection.setRequestMethod("GET");
 
-            Assert.assertEquals(200, responseCode);
+        int responseCode = connection.getResponseCode();
 
-            if (responseCode == 200) {
-                BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
-                StringBuilder sb = new StringBuilder();
-                String output;
-                while ((output = br.readLine()) != null) {
-                    sb.append(output);
-                }
-                String expectedDefaultValue = "This is a simple REST storage service for storing key value pairs.";
-                Assert.assertEquals(expectedDefaultValue, sb.toString());
-
+        if (responseCode == 200) {
+            BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
+            StringBuilder sb = new StringBuilder();
+            String output;
+            while ((output = br.readLine()) != null) {
+                sb.append(output);
             }
+            String expectedDefaultValue = "This is a simple REST storage service for storing key value pairs.";
+            Assert.assertEquals(expectedDefaultValue, sb.toString());
 
-
-        } catch (IOException e) {
-            Assert.fail("Fail connection to the server. Error: " + e.getMessage());
         }
+
 
     }
 }
