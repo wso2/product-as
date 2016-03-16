@@ -1,259 +1,136 @@
 /*
- * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
+ *  WSO2 Inc. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied. See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
  *
  */
+
 package org.wso2.appserver.webapp.loader;
 
+import org.apache.catalina.Context;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
+import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
+import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Contains information about the class loading behaviour of a webapp.
+ * Build and stores the class loading context of a webapp which defines in the classloader configurations.
+ *
+ * @since 6.0.0
  */
 public class WebappClassLoaderContext {
 
+    private static Map<String, List<String>> definedEnvironments = new ConcurrentHashMap<>();
+    private static final Log log = LogFactory.getLog(AppServerWebappLoader.class);
 
-    private boolean parentFirst = false;
+    private Map<String, List<String>> selectedEnvironments = new ConcurrentHashMap<>();
 
-    private List<String> delegatedPackages = new ArrayList<>();
-    private List<String> delegatedPackageStems = new ArrayList<>();
-    private List<String> excludedPackages = new ArrayList<>();
-    private List<String> excludedPackageStems = new ArrayList<>();
-    private List<String> delegatedResources = new ArrayList<>();
-    private List<String> delegatedResourceStems = new ArrayList<>();
-    private List<String> excludedResources = new ArrayList<>();
-    private List<String> excludedResourceStems = new ArrayList<>();
+    static {
+        List<ClassLoaderEnvironments.Environment> environments = ServerConfigurationLoader.getServerConfiguration()
+                .getClassLoaderEnvironments().getEnvironments().getEnvironments();
 
-    private List<String> repositories = new ArrayList<>();
-    private List<String> environments = new ArrayList<>();
-
-    private boolean noExcludedPackages = true;
-    private boolean noExcludedResources = true;
-    private boolean delegateAllPackages = false;
-    private boolean delegateAllResources = false;
-
-    public WebappClassLoaderContext() {
-    }
-
-    /**
-     * Check whether the specific package is a delegated package.
-     *
-     * @param name full name of the package
-     * @return true if the package is marked as a delegated package.Otherwise false.
-     */
-    public boolean isDelegatedPackage(String name) {
-
-        if (delegateAllPackages) {
-            return true;
-        }
-
-        Optional<String> optionalName = Optional.ofNullable(name);
-
-        if (!optionalName.isPresent()) {
-            return false;
-        } else {
-
-            // Looking up the package
-            String packageName;
-            int pos = optionalName.get().lastIndexOf('.');
-            if (pos != -1) {
-                packageName = optionalName.get().substring(0, pos);
+        // populate the classpath defines in each environment
+        environments.forEach((environment) -> {
+            if (!definedEnvironments.containsKey(environment.getName())) {
+                List<String> repositories = new ArrayList<>();
+                try {
+                    repositories.addAll(generateClasspath(environment.getClasspath()));
+                    definedEnvironments.put(environment.getName(), repositories);
+                } catch (FileNotFoundException ex) {
+                    String message = "Environment configuration of: " + environment.getName() + " is wrong.";
+                    log.error(message, ex);
+                    throw new ApplicationServerRuntimeException(message, ex);
+                }
             } else {
-                return false;
+                log.warn("Duplicated environment: " + environment.getName()
+                        + ", skipping classpath: " + environment.getClasspath());
             }
-
-            return (delegatedPackageStems.stream().anyMatch(packageName::startsWith)
-                    || delegatedPackages.stream().anyMatch(packageName::equals));
-        }
-
-
+        });
     }
 
     /**
-     * Check whether the specific package is excluded.
+     * Construct web application specific classloader behaviour
      *
-     * @param name full name of the package
-     * @return true if the package is excluded.Otherwise false.
+     * @param context the context of the web application
      */
-    public boolean isExcludedPackage(String name) {
+    public WebappClassLoaderContext(Context context) {
 
-        if (noExcludedPackages) {
-            return false;
-        }
+        ContextConfigurationLoader.getContextConfiguration(context)
+                .ifPresent(configuration -> {
+                    ClassLoaderConfiguration classLoaderConfiguration = configuration.getClassLoaderConfiguration();
+                    List<String> environmentNames = Arrays
+                            .asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
 
-        Optional<String> optionalName = Optional.ofNullable(name);
-
-        if (!optionalName.isPresent()) {
-            return false;
-        } else {
-            // Looking up the package
-            String packageName;
-            int pos = optionalName.get().lastIndexOf('.');
-            if (pos != -1) {
-                packageName = name.substring(0, pos);
-            } else {
-                return false;
-            }
-
-            return (excludedPackageStems.stream().anyMatch(packageName::startsWith)
-                    || excludedPackages.stream().anyMatch(packageName::equals));
-        }
-
-
+                    environmentNames.forEach(environmentName -> {
+                        if (definedEnvironments.containsKey(environmentName)) {
+                            selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
+                        } else {
+                            String message = "Undefined environment: " + environmentName + " in " + context.getPath();
+                            log.warn(message);
+                        }
+                    });
+                });
     }
 
     /**
-     * Check whether the specific resources is excluded.
+     * Get the all jar library urls specified by the each environment for this web application
      *
-     * @param name full name of the resource
-     * @return true if the resource is excluded.Otherwise false.
+     * @return A list containing the jar library urls as strings
      */
-    public boolean isExcludedResources(String name) {
-        if (noExcludedResources) {
-            return false;
+    public List<String> getProvidedRepositories() {
+        List<String> repositories = new ArrayList<>();
+        selectedEnvironments.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .forEach(repositories::addAll);
+        return repositories;
+    }
+
+    // returns a list of jar url's for the given path
+    private static List<String> generateClasspath(String classPath) throws FileNotFoundException {
+
+        List<String> urlStr = new ArrayList<>();
+        String realClassPath = StrSubstitutor.replaceSystemProperties(classPath);
+        File classPathUrl = new File(realClassPath);
+
+        if (!classPathUrl.exists()) {
+            throw new FileNotFoundException("The classpath: " + realClassPath + " does not exist.");
         }
 
-        Optional<String> optionalName = Optional.ofNullable(name);
-
-        return optionalName.isPresent()
-                && (excludedResourceStems.stream().anyMatch(optionalName.get()::startsWith)
-                || excludedResources.stream().anyMatch(optionalName.get()::equals));
-
-    }
-
-    /**
-     * Check whether the specific resources is a delegated resource.
-     *
-     * @param name full name of the resource
-     * @return true if the resource is belongs to the delegated resource list.Otherwise false.
-     */
-    public boolean isDelegatedResource(String name) {
-
-        if (delegateAllResources) {
-            return true;
+        if (classPathUrl.isFile()) {
+            urlStr.add(classPathUrl.toURI().toString());
+            return urlStr;
         }
 
-        Optional<String> optionalName = Optional.ofNullable(name);
+        FileUtils.listFiles(classPathUrl, new String[]{"jar"}, false)
+                .forEach((file) -> urlStr.add(file.toURI().toString()));
 
-        return optionalName.isPresent()
-                && (delegatedResourceStems.stream().anyMatch(optionalName.get()::startsWith)
-                || delegatedResources.stream().anyMatch(optionalName.get()::equals));
-
-
-    }
-
-    /**
-     * Build the delegated and excluded packages to the webapp.
-     *
-     * @param delegatedPkgList a list containing the paths to packages
-     */
-    public void setDelegatedPackages(List<String> delegatedPkgList) {
-
-        excludedPackageStems = delegatedPkgList.stream()
-                .filter(pkg -> pkg.startsWith("!"))
-                .map(s -> s.substring(1))
-                .filter(s -> s.endsWith(".*"))
-                .map(s -> s.substring(0, s.length() - 2))
-                .collect(Collectors.toList());
-
-        excludedPackages = delegatedPkgList.stream()
-                .filter(pkg -> pkg.startsWith("!"))
-                .map(s -> s.substring(1))
-                .filter(s -> !s.endsWith(".*"))
-                .collect(Collectors.toList());
-
-        delegatedPackageStems = delegatedPkgList.stream()
-                .filter(pkg -> (!pkg.startsWith("!") && pkg.endsWith(".*")))
-                .map(s -> s.substring(0, s.length() - 2))
-                .collect(Collectors.toList());
-        delegatedPackages = delegatedPkgList.stream()
-                .filter(pkg -> (!pkg.startsWith("!") && !pkg.equals("*") && !pkg.endsWith(".*")))
-                .collect(Collectors.toList());
-
-        delegateAllPackages = delegatedPkgList.stream()
-                .anyMatch(pkg -> pkg.equals("*"));
-
-        noExcludedPackages = !delegatedPkgList.stream()
-                .anyMatch(pkg -> pkg.startsWith("!"));
-
-    }
-
-    /**
-     * Build the delegated and excluded resources to the webapp.
-     *
-     * @param delegatedResourceList a list containing the paths to resources
-     */
-    public void setDelegatedResources(List<String> delegatedResourceList) {
-
-        excludedResourceStems = delegatedResourceList.stream()
-                .filter(res -> res.startsWith("!"))
-                .map(s -> s.substring(1))
-                .filter(s -> s.endsWith("/*"))
-                .map(s -> s.substring(0, s.length() - 2))
-                .collect(Collectors.toList());
-
-        excludedResources = delegatedResourceList.stream()
-                .filter(res -> res.startsWith("!"))
-                .map(s -> s.substring(1))
-                .filter(s -> !s.endsWith("/*"))
-                .collect(Collectors.toList());
-
-        delegatedResourceStems = delegatedResourceList.stream()
-                .filter(res -> (!res.startsWith("!") && res.endsWith("/*")))
-                .map(s -> s.substring(0, s.length() - 2))
-                .collect(Collectors.toList());
-
-        delegatedResources = delegatedResourceList.stream()
-                .filter(res -> (!res.startsWith("!") && !res.equals("*") && !res.endsWith("/*")))
-                .collect(Collectors.toList());
-
-        delegateAllResources = delegatedResourceList.stream()
-                .anyMatch(res -> res.equals("*"));
-
-        noExcludedResources = !delegatedResourceList.stream()
-                .anyMatch(res -> res.startsWith("!"));
-
-    }
-
-
-    public String[] getProvidedRepositories() {
-        return repositories.toArray(new String[repositories.size()]);
-    }
-
-    public void setProvidedRepositories(List<String> repositories) {
-        this.repositories.addAll(repositories);
-    }
-
-    public boolean isParentFirst() {
-        return parentFirst;
-    }
-
-    public void setParentFirst(boolean parentFirst) {
-        this.parentFirst = parentFirst;
-    }
-
-    public void setEnvironments(List<String> environments) {
-        this.environments = environments;
-    }
-
-    public String[] getEnvironments() {
-        return environments.toArray(new String[environments.size()]);
+        return urlStr;
     }
 
 

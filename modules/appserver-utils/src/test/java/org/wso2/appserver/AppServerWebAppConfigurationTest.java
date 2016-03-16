@@ -24,9 +24,7 @@ import org.wso2.appserver.configuration.listeners.Utils;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +59,6 @@ public class AppServerWebAppConfigurationTest {
 
     private static ClassLoaderConfiguration prepareClassLoaderConfiguration() {
         ClassLoaderConfiguration classloading = new ClassLoaderConfiguration();
-        classloading.enableParentFirst(true);
         classloading.setEnvironments(TestConstants.JAXRS_ENV_NAME);
         return classloading;
     }
@@ -120,12 +117,8 @@ public class AppServerWebAppConfigurationTest {
 
     private static boolean compareClassloadingConfigs(ClassLoaderConfiguration actual,
             ClassLoaderConfiguration expected) {
-        if ((actual != null) && (expected != null)) {
-            return (actual.isParentFirst() == expected.isParentFirst()) && (actual.getEnvironments().trim().
-                    equals(expected.getEnvironments()));
-        } else {
-            return ((actual == null) && (expected == null));
-        }
+        return ((actual != null) && (expected != null) && (actual.getEnvironments().trim().
+                equals(expected.getEnvironments())));
     }
 
     private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
@@ -184,15 +177,5 @@ public class AppServerWebAppConfigurationTest {
         boolean sloURLPostfix = actual.getSLOURLPostfix().trim().equals(expected.getSLOURLPostfix());
 
         return requestURLPostfix && consumerURLPostfix && sloURLPostfix;
-    }
-
-    private Path getResourceFile(String resourceName) throws IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL resourceURL = classLoader.getResource(resourceName);
-        if (resourceURL != null) {
-            return Paths.get(resourceURL.getPath());
-        } else {
-            throw new IOException("Error when loading the resource file " + resourceName);
-        }
     }
 }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,15 +19,7 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>contents/webapps/</directory>
-            <outputDirectory>${distribution.file.name}/webapps</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>contents/lib/</directory>
-            <outputDirectory>${distribution.file.name}/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>contents/conf/</directory>
+            <directory>appserver-home/conf/</directory>
             <outputDirectory>${distribution.file.name}/conf/</outputDirectory>
         </fileSet>
         <fileSet>
@@ -44,36 +37,45 @@
     </fileSets>
 
     <dependencySets>
-        <!--Include application server modules here-->
+        <!-- Include application server modules here -->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:appserver-utils</include>
-                <include>org.wso2.appserver:sample-module:jar</include>
-                <include>org.wso2.appserver:webapp-loader:jar</include>
                 <include>org.wso2.appserver:http-statistics-monitoring:jar</include>
+                <include>org.wso2.appserver:webapp-loader:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
-
-        <!--Include extra libs here-->
-        <dependencySet>
-            <outputDirectory>/${distribution.file.name}/lib/ext</outputDirectory>
-            <includes>
-                <include>commons-io:commons-io:jar</include>
-                <include>org.apache.commons:commons-lang3:jar</include>
-            </includes>
-            <useProjectArtifact>false</useProjectArtifact>
-        </dependencySet>
-
-        <!--Include sample web apps here-->
+        <!-- Include sample web apps here -->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:hello-world:war</include>
+                <include>org.wso2.appserver:simple-storage-service:war</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+        </dependencySet>
+        <!-- Include application server runtime libs here -->
+        <!-- CXF runtime -->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib/runtimes/cxf</outputDirectory>
+            <includes>
+                <include>org.apache.cxf:cxf-rt-frontend-jaxrs:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
+        <!-- Spring runtime -->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib/runtimes/spring</outputDirectory>
+            <includes>
+                <include>org.springframework:spring-web:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
     </dependencySets>
 </assembly>

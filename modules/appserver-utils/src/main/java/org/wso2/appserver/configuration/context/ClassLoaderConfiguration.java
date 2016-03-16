@@ -32,18 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class ClassLoaderConfiguration {
-    @XmlElement(name = "parent-first")
-    private Boolean isParentFirst;
-    @XmlElement
+    @XmlElement(name = "environments")
     private String environments;
-
-    public Boolean isParentFirst() {
-        return isParentFirst;
-    }
-
-    public void enableParentFirst(Boolean isParentFirst) {
-        this.isParentFirst = isParentFirst;
-    }
 
     public String getEnvironments() {
         return environments;
@@ -59,9 +49,7 @@ public class ClassLoaderConfiguration {
      * @param configuration the local, context level group of classloading configuration to be merged with
      */
     public void merge(ClassLoaderConfiguration configuration) {
-        Optional.ofNullable(configuration).ifPresent(mergeable -> {
-            isParentFirst = Optional.ofNullable(mergeable.isParentFirst).orElse(isParentFirst);
-            environments = Optional.ofNullable(mergeable.environments).orElse(environments);
-        });
+        Optional.ofNullable(configuration).ifPresent(
+                mergeable -> environments = Optional.ofNullable(mergeable.environments).orElse(environments));
     }
 }

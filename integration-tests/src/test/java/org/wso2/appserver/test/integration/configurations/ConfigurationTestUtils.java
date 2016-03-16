@@ -175,8 +175,7 @@ public class ConfigurationTestUtils {
     private static boolean compareWebAppClassloading(ClassLoaderConfiguration actual,
             ClassLoaderConfiguration expected) {
         if ((actual != null) && (expected != null)) {
-            return (actual.isParentFirst() == expected.isParentFirst()) && (actual.getEnvironments().trim().
-                    equals(expected.getEnvironments()));
+            return actual.getEnvironments().trim().equals(expected.getEnvironments());
         } else {
             return ((actual == null) && (expected == null));
         }

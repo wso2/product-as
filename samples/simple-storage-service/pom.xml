@@ -11,36 +11,34 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>modules</artifactId>
+        <artifactId>samples</artifactId>
         <groupId>org.wso2.appserver</groupId>
         <version>6.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>webapp-loader</artifactId>
-    <name>WSO2 Application Server - Module - Webapp Loader</name>
+    <artifactId>simple-storage-service</artifactId>
+    <name>WSO2 Application Server - Sample - Storage Service</name>
+    <packaging>war</packaging>
     <url>http://wso2.com</url>
+
+    <build>
+        <finalName>simple-storage</finalName>
+    </build>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-catalina</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>appserver-utils</artifactId>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

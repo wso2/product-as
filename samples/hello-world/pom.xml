@@ -21,7 +21,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>hello-world</artifactId>
-    <name>WSO2 Application Server - Webapp Sample</name>
+    <name>WSO2 Application Server - Sample - Hello World</name>
     <packaging>war</packaging>
     <url>http://wso2.com</url>
 

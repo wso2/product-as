@@ -25,7 +25,6 @@ import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,19 +63,18 @@ public class ContextConfigurationLoader implements LifecycleListener {
      */
     @Override
     public void lifecycleEvent(LifecycleEvent lifecycleEvent) {
-        Object source;
-        if (Lifecycle.CONFIGURE_START_EVENT.equals(lifecycleEvent.getType())) {
-            source = lifecycleEvent.getSource();
+        if (Lifecycle.BEFORE_START_EVENT.equals(lifecycleEvent.getType())) {
+            Object source = lifecycleEvent.getSource();
             if (source instanceof Context) {
                 Context context = (Context) source;
                 AppServerWebAppConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
                 contextToConfigurationMap.put(context, effectiveConfiguration);
-            }
-        } else if (Lifecycle.AFTER_STOP_EVENT.equals(lifecycleEvent.getType())) {
-            source = lifecycleEvent.getSource();
-            if (source instanceof Context) {
-                Context context = (Context) source;
-                contextToConfigurationMap.remove(context);
+            } else if (Lifecycle.AFTER_STOP_EVENT.equals(lifecycleEvent.getType())) {
+                source = lifecycleEvent.getSource();
+                if (source instanceof Context) {
+                    Context context = (Context) source;
+                    contextToConfigurationMap.remove(context);
+                }
             }
         }
     }
@@ -97,20 +95,19 @@ public class ContextConfigurationLoader implements LifecycleListener {
                     get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
             Path defaultWebAppDescriptor = Paths.
                     get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR);
-
             AppServerWebAppConfiguration effective;
             try {
-                InputStream inputStream = context.getServletContext().getResourceAsStream(
-                        "/" + Constants.WEBAPP_RESOURCE_FOLDER + "/" + Constants.WEBAPP_DESCRIPTOR);
+                Path localWebAppDescriptor = Paths.get(PathUtils.getWebAppPath(context).toString(),
+                        Constants.WEBAPP_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
                 if (!Files.exists(defaultWebAppDescriptor)) {
                     throw new ApplicationServerRuntimeException(
                             "The " + defaultWebAppDescriptor.toString() + " does not exist");
                 }
                 effective = Utils.
                         getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, AppServerWebAppConfiguration.class);
-                if (inputStream != null) {
-                    AppServerWebAppConfiguration local = Utils.
-                            getUnmarshalledObject(inputStream, schemaPath, AppServerWebAppConfiguration.class);
+                if (Files.exists(localWebAppDescriptor)) {
+                    AppServerWebAppConfiguration local = Utils.getUnmarshalledObject(localWebAppDescriptor, schemaPath,
+                                    AppServerWebAppConfiguration.class);
                     effective.merge(local);
                 }
             } catch (ApplicationServerException e) {

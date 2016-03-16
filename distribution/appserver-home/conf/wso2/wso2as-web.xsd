@@ -19,7 +19,7 @@
                 <xs:element name="class-loader" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="environments" type="xs:string"/>
+                            <xs:element name="environments" type="xs:string" minOccurs="0" maxOccurs="1"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
