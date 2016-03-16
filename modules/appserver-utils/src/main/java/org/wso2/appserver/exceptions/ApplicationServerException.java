@@ -16,8 +16,7 @@
 package org.wso2.appserver.exceptions;
 
 /**
- * This class defines a custom exception type specified for WSO2 Application Server and thrown when the
- * application server encountered an error.
+ * This class defines a custom checked exception type specific to WSO2 Application Server.
  *
  * @since 6.0.0
  */

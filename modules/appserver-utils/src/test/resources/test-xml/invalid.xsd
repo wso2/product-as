@@ -12,7 +12,7 @@
  limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" elementFormDefault="qualified"
-           xmlns="http://wso2.org/2016/wso2as" targetNamespace="http://wso2.org/2016/wso2as">
+           xmlns="sample-wso2as-web.xsd" targetNamespace="http://wso2.org/2016/wso2as">
     <xs:element name="AppServer">
         <xs:complexType>
             <xs:sequence>
@@ -22,11 +22,11 @@
                             <xs:element name="Environments">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="Environment" minOccurs="1" maxOccurs="unbounded">
+                                        <xs:element name="Environment" type="xs:anyType" minOccurs="1" maxOccurs="unbounded">
                                             <xs:complexType>
                                                 <xs:sequence>
-                                                    <xs:element name="Name" type="xs:string" maxOccurs="1"/>
-                                                    <xs:element name="Classpath" type="xs:string" maxOccurs="1"/>
+                                                    <xs:element name="Name" type="xs:string"/>
+                                                    <xs:element name="Classpath" type="xs:string"/>
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>
@@ -43,7 +43,6 @@
                             <xs:element name="IdPEntityId" type="xs:string"/>
                             <xs:element name="SignatureValidatorImplClass" type="xs:string" minOccurs="0"
                                         maxOccurs="1"/>
-                            <xs:element name="IdPCertificateAlias" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>
@@ -70,39 +69,22 @@
                 <xs:element name="Security" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="KeyStore" minOccurs="0" maxOccurs="1">
+                            <xs:element name="Keystore" minOccurs="0" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="Location" type="xs:anyURI"/>
-                                        <xs:element name="Type" default="JKS">
-                                            <xs:simpleType>
-                                                <xs:restriction base="xs:string">
-                                                    <xs:enumeration value="JKS"/>
-                                                    <xs:enumeration value="PKCS11"/>
-                                                    <xs:enumeration value="PKCS12"/>
-                                                </xs:restriction>
-                                            </xs:simpleType>
-                                        </xs:element>
-                                        <xs:element name="Password" type="xs:string"/>
-                                        <xs:element name="KeyAlias" type="xs:string"/>
-                                        <xs:element name="KeyPassword" type="xs:string"/>
+                                        <xs:element name="KeystorePath" type="xs:anyURI"/>
+                                        <xs:element name="KeystorePassword" type="xs:string"/>
+                                        <xs:element name="IdPCertificateAlias" type="xs:string"/>
+                                        <xs:element name="PrivateKeyAlias" type="xs:string"/>
+                                        <xs:element name="PrivateKeyPassword" type="xs:string"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
-                            <xs:element name="TrustStore" minOccurs="0" maxOccurs="1">
+                            <xs:element name="Truststore" minOccurs="0" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="Location" type="xs:anyURI"/>
-                                        <xs:element name="Type" default="JKS">
-                                            <xs:simpleType>
-                                                <xs:restriction base="xs:string">
-                                                    <xs:enumeration value="JKS"/>
-                                                    <xs:enumeration value="PKCS11"/>
-                                                    <xs:enumeration value="PKCS12"/>
-                                                </xs:restriction>
-                                            </xs:simpleType>
-                                        </xs:element>
-                                        <xs:element name="Password" type="xs:string"/>
+                                        <xs:element name="TruststorePath" type="xs:anyURI"/>
+                                        <xs:element name="TruststorePassword" type="xs:string"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

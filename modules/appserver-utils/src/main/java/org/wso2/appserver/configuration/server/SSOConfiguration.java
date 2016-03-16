@@ -37,16 +37,8 @@ public class SSOConfiguration {
     private String idpEntityId;
     @XmlElement(name = "SignatureValidatorImplClass")
     private String signatureValidatorImplClass;
-    @XmlElement(name = "KeystorePath")
-    private String keystorePath;
-    @XmlElement(name = "KeystorePassword")
-    private String keystorePassword;
     @XmlElement(name = "IdPCertificateAlias")
     private String idpCertificateAlias;
-    @XmlElement(name = "PrivateKeyAlias")
-    private String privateKeyAlias;
-    @XmlElement(name = "PrivateKeyPassword")
-    private String privateKeyPassword;
     @XmlElement(name = "Property")
     private List<Property> properties;
 
@@ -54,36 +46,40 @@ public class SSOConfiguration {
         return idpURL;
     }
 
+    public void setIdpURL(String idpURL) {
+        this.idpURL = idpURL;
+    }
+
     public String getIdpEntityId() {
         return idpEntityId;
+    }
+
+    public void setIdpEntityId(String idpEntityId) {
+        this.idpEntityId = idpEntityId;
     }
 
     public String getSignatureValidatorImplClass() {
         return signatureValidatorImplClass;
     }
 
-    public String getKeystorePath() {
-        return keystorePath;
-    }
-
-    public String getKeystorePassword() {
-        return keystorePassword;
+    public void setSignatureValidatorImplClass(String signatureValidatorImplClass) {
+        this.signatureValidatorImplClass = signatureValidatorImplClass;
     }
 
     public String getIdpCertificateAlias() {
         return idpCertificateAlias;
     }
 
-    public String getPrivateKeyAlias() {
-        return privateKeyAlias;
-    }
-
-    public String getPrivateKeyPassword() {
-        return privateKeyPassword;
+    public void setIdpCertificateAlias(String idpCertificateAlias) {
+        this.idpCertificateAlias = idpCertificateAlias;
     }
 
     public List<Property> getProperties() {
         return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
     }
 
     /**
@@ -103,8 +99,16 @@ public class SSOConfiguration {
             return key;
         }
 
+        public void setKey(String key) {
+            this.key = key;
+        }
+
         public String getValue() {
             return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 }

@@ -17,7 +17,6 @@
         <format>zip</format>
     </formats>
     <fileSets>
-
         <fileSet>
             <directory>appserver-home/conf/</directory>
             <outputDirectory>${distribution.file.name}/conf/</outputDirectory>
@@ -81,6 +80,5 @@
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
-
     </dependencySets>
 </assembly>

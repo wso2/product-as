@@ -15,7 +15,10 @@
  */
 package org.wso2.appserver.configuration.context;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -25,6 +28,8 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * A Java class which models a holder for context level single-sign-on (SSO) configurations.
+ *
+ * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
@@ -40,7 +45,7 @@ public class SSOConfiguration {
     @XmlElement(name = "enable-sso")
     private Boolean enableSSO;
     @XmlElement(name = "request-url-postfix")
-    private String requestURLPostFix;
+    private String requestURLPostfix;
     @XmlElement(name = "http-binding")
     private String httpBinding;
     @XmlElement(name = "issuer-id")
@@ -48,13 +53,13 @@ public class SSOConfiguration {
     @XmlElement(name = "consumer-url")
     private String consumerURL;
     @XmlElement(name = "consumer-url-postfix")
-    private String consumerURLPostFix;
+    private String consumerURLPostfix;
     @XmlElement(name = "attribute-consuming-service-index")
     private String attributeConsumingServiceIndex;
     @XmlElement(name = "enable-slo")
     private Boolean enableSLO;
     @XmlElement(name = "slo-url-postfix")
-    private String sloURLPostFix;
+    private String sloURLPostfix;
     @XmlElement(name = "enable-response-signing")
     private Boolean enableResponseSigning;
     @XmlElement(name = "enable-assertion-signing")
@@ -110,12 +115,12 @@ public class SSOConfiguration {
         this.enableSSO = enableSSO;
     }
 
-    public String getRequestURLPostFix() {
-        return requestURLPostFix;
+    public String getRequestURLPostfix() {
+        return requestURLPostfix;
     }
 
-    public void setRequestURLPostFix(String requestURLPostFix) {
-        this.requestURLPostFix = requestURLPostFix;
+    public void setRequestURLPostfix(String requestURLPostFix) {
+        this.requestURLPostfix = requestURLPostFix;
     }
 
     public String getHttpBinding() {
@@ -142,12 +147,12 @@ public class SSOConfiguration {
         this.consumerURL = consumerURL;
     }
 
-    public String getConsumerURLPostFix() {
-        return consumerURLPostFix;
+    public String getConsumerURLPostfix() {
+        return consumerURLPostfix;
     }
 
-    public void setConsumerURLPostFix(String consumerURLPostFix) {
-        this.consumerURLPostFix = consumerURLPostFix;
+    public void setConsumerURLPostfix(String consumerURLPostFix) {
+        this.consumerURLPostfix = consumerURLPostFix;
     }
 
     public String getAttributeConsumingServiceIndex() {
@@ -166,12 +171,12 @@ public class SSOConfiguration {
         this.enableSLO = enableSLO;
     }
 
-    public String getSLOURLPostFix() {
-        return sloURLPostFix;
+    public String getSLOURLPostfix() {
+        return sloURLPostfix;
     }
 
-    public void setSLOURLPostFix(String sloURLPostFix) {
-        this.sloURLPostFix = sloURLPostFix;
+    public void setSLOURLPostfix(String sloURLPostFix) {
+        this.sloURLPostfix = sloURLPostFix;
     }
 
     public Boolean isResponseSigningEnabled() {
@@ -180,6 +185,14 @@ public class SSOConfiguration {
 
     public void enableResponseSigning(Boolean enableResponseSigning) {
         this.enableResponseSigning = enableResponseSigning;
+    }
+
+    public Boolean isRequestSigningEnabled() {
+        return enableRequestSigning;
+    }
+
+    public void enableRequestSigning(Boolean enableRequestSigning) {
+        this.enableRequestSigning = enableRequestSigning;
     }
 
     public Boolean isAssertionSigningEnabled() {
@@ -212,14 +225,6 @@ public class SSOConfiguration {
 
     public void enablePassiveAuthn(Boolean enablePassiveAuthn) {
         this.enablePassiveAuthn = enablePassiveAuthn;
-    }
-
-    public Boolean isRequestSigningEnabled() {
-        return enableRequestSigning;
-    }
-
-    public void enableRequestSigning(Boolean enableRequestSigning) {
-        this.enableRequestSigning = enableRequestSigning;
     }
 
     public List<Property> getProperties() {
@@ -261,8 +266,16 @@ public class SSOConfiguration {
             return key;
         }
 
+        public void setKey(String key) {
+            this.key = key;
+        }
+
         public String getValue() {
             return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 
@@ -270,66 +283,41 @@ public class SSOConfiguration {
      * Merges the context level single-sign-on (SSO) configurations defined globally and overridden at context level
      * (if any).
      *
+     * @param configurations the local, context level group of SSO configurations to be merged with
      */
-    // TODO: 3/3/16 implement the merge
-    public void merge(SSOConfiguration newSSOConfiguration) {
-
-//        SSOConfiguration effective = new SSOConfiguration();
-//
-//        if ((global != null) && (local != null)) {
-//            effective.setSkipURIs(Optional.ofNullable(local.getSkipURIs()).orElse(global.getSkipURIs()));
-//            effective.enableHandlingConsumerURLAfterSLO(Optional.ofNullable(local.handleConsumerURLAfterSLO()).
-//                    orElse(global.handleConsumerURLAfterSLO()));
-//            effective.setQueryParams(Optional.ofNullable(local.getQueryParams()).orElse(global.getQueryParams()));
-//            effective.setApplicationServerURL(
-//                    Optional.ofNullable(local.getApplicationServerURL()).orElse(global.getApplicationServerURL()));
-//            effective.enableSSO(Optional.ofNullable(local.isSSOEnabled()).orElse(global.isSSOEnabled()));
-//            effective.setRequestURLPostFix(
-//                    Optional.ofNullable(local.getRequestURLPostFix()).orElse(global.getRequestURLPostFix()));
-//            effective.setHttpBinding(Optional.ofNullable(local.getHttpBinding()).orElse(global.getHttpBinding()));
-//            effective.setIssuerId(local.getIssuerId());
-//            effective.setConsumerURL(local.getConsumerURL());
-//            effective.setConsumerURLPostFix(
-//                    Optional.ofNullable(local.getConsumerURLPostFix()).orElse(global.getConsumerURLPostFix()));
-//            effective.setAttributeConsumingServiceIndex(Optional.ofNullable(local.
-// getAttributeConsumingServiceIndex()).
-//                    orElse(global.getAttributeConsumingServiceIndex()));
-//            effective.enableSLO(Optional.ofNullable(local.isSLOEnabled()).orElse(global.isSLOEnabled()));
-//            effective.setSLOURLPostFix(Optional.ofNullable(local.getSLOURLPostFix()).orElse(global.
-// getSLOURLPostFix()));
-//            effective.enableAssertionEncryption(Optional.ofNullable(local.isAssertionEncryptionEnabled()).
-//                    orElse(global.isAssertionEncryptionEnabled()));
-//            effective.enableAssertionSigning(Optional.ofNullable(local.isAssertionSigningEnabled()).
-//                    orElse(global.isAssertionSigningEnabled()));
-//            effective.enableRequestSigning(
-//                    Optional.ofNullable(local.isRequestSigningEnabled()).orElse(global.isRequestSigningEnabled()));
-//            effective.enableResponseSigning(
-//                    Optional.ofNullable(local.isResponseSigningEnabled()).orElse(global.isResponseSigningEnabled()));
-//            effective.enableForceAuthn(
-//                    Optional.ofNullable(local.isForceAuthnEnabled()).orElse(global.isForceAuthnEnabled()));
-//            effective.enablePassiveAuthn(
-//                    Optional.ofNullable(local.isPassiveAuthnEnabled()).orElse(global.isPassiveAuthnEnabled()));
-//            List<SSOConfiguration.Property> properties = prioritizeProperties(global.getProperties(),
-//                    local.getProperties());
-//            if (properties.isEmpty()) {
-//                effective.setProperties(null);
-//            } else {
-//                effective.setProperties(properties);
-//            }
-//        } else if (global != null) {
-//            effective = global;
-//            effective.setIssuerId(null);
-//            effective.setConsumerURL(null);
-//            List<SSOConfiguration.Property> properties = prioritizeProperties(global.getProperties(), null);
-//            if (properties.isEmpty()) {
-//                effective.setProperties(null);
-//            } else {
-//                effective.setProperties(properties);
-//            }
-//        }
-//        return effective;
+    protected void merge(SSOConfiguration configurations) {
+        Optional.ofNullable(configurations).ifPresent(configs -> {
+            skipURIs = Optional.ofNullable(configs.skipURIs).orElse(skipURIs);
+            handleConsumerURLAfterSLO = Optional.ofNullable(configs.handleConsumerURLAfterSLO).
+                    orElse(handleConsumerURLAfterSLO);
+            queryParams = Optional.ofNullable(configs.queryParams).orElse(queryParams);
+            applicationServerURL = Optional.ofNullable(configs.applicationServerURL).orElse(applicationServerURL);
+            enableSSO = Optional.ofNullable(configs.enableSSO).orElse(enableSSO);
+            requestURLPostfix = Optional.ofNullable(configs.requestURLPostfix).orElse(requestURLPostfix);
+            httpBinding = Optional.ofNullable(configs.httpBinding).orElse(httpBinding);
+            issuerId = configs.issuerId;
+            consumerURL = configs.consumerURL;
+            consumerURLPostfix = Optional.ofNullable(configs.consumerURLPostfix).orElse(consumerURLPostfix);
+            attributeConsumingServiceIndex = Optional.ofNullable(configs.attributeConsumingServiceIndex).
+                    orElse(attributeConsumingServiceIndex);
+            enableSLO = Optional.ofNullable(configs.enableSLO).orElse(enableSLO);
+            sloURLPostfix = Optional.ofNullable(configs.sloURLPostfix).orElse(sloURLPostfix);
+            enableAssertionEncryption = Optional.ofNullable(configs.enableAssertionEncryption).
+                    orElse(enableAssertionEncryption);
+            enableAssertionSigning = Optional.ofNullable(configs.enableAssertionSigning).orElse(enableAssertionSigning);
+            enableRequestSigning = Optional.ofNullable(configs.enableRequestSigning).orElse(enableRequestSigning);
+            enableResponseSigning = Optional.ofNullable(configs.enableResponseSigning).orElse(enableResponseSigning);
+            enableForceAuthn = Optional.ofNullable(configs.enableForceAuthn).orElse(enableForceAuthn);
+            enablePassiveAuthn = Optional.ofNullable(configs.enablePassiveAuthn).orElse(enablePassiveAuthn);
+            List<SSOConfiguration.Property> properties = prioritizeProperties(this.getProperties(),
+                    configs.getProperties());
+            if (properties.isEmpty()) {
+                this.setProperties(null);
+            } else {
+                this.setProperties(properties);
+            }
+        });
     }
-
 
     /**
      * Prioritizes the additional webapp descriptor properties.
@@ -338,41 +326,21 @@ public class SSOConfiguration {
      * @param local  the set of additional SSO properties defined at context level
      * @return the final, effective set of webapp descriptor additional SSO properties
      */
-//    private static List<SSOConfiguration.Property> prioritizeProperties(List<SSOConfiguration.Property> global,
-//                                                                        List<SSOConfiguration.Property> local) {
-//        List<SSOConfiguration.Property> effective = new ArrayList<>();
-//        if ((global != null) && (local != null)) {
-//            global.stream().forEach(property -> {
-//                Optional<SSOConfiguration.Property> matching = getProperty(property.getKey(), local);
-//                if (matching.isPresent()) {
-//                    effective.add(matching.get());
-//                } else {
-//                    effective.add(property);
-//                }
-//            });
-//        } else if (global != null) {
-//            global.stream().forEach(effective::add);
-//        } else if (local != null) {
-//            local.stream().forEach(effective::add);
-//        }
-//        return effective;
-//    }
-
-    /**
-     * Returns an additional {@code Property} if exists in the list of properties.
-     *
-     * @param key  the key of the property to be checked
-     * @param list the list of properties
-     * @return the SSO property if exists
-     */
-//    private static Optional<SSOConfiguration.Property> getProperty(String key, List<SSOConfiguration.Property> list) {
-//        if (key == null) {
-//            return Optional.empty();
-//        }
-//        if (list != null) {
-//            return list.stream().filter(property -> property.getKey().equals(key)).findFirst();
-//        } else {
-//            return Optional.empty();
-//        }
-//    }
+    private static List<SSOConfiguration.Property> prioritizeProperties(List<SSOConfiguration.Property> global,
+            List<SSOConfiguration.Property> local) {
+        List<SSOConfiguration.Property> effective = new ArrayList<>();
+        if ((global != null) && (local != null)) {
+            local.stream().forEach(effective::add);
+            //  Check whether any globally defined configurations which aren't defined locally, are available
+            Stream<Property> properties = global.stream().filter(globalProperty -> local.stream().
+                    filter(localProperty -> ((globalProperty.getKey().equals(localProperty.getKey()))
+                                    && (globalProperty.getValue().equals(localProperty.getValue())))).count() == 0);
+            properties.forEach(effective::add);
+        } else if (global != null) {
+            global.stream().forEach(effective::add);
+        } else if (local != null) {
+            local.stream().forEach(effective::add);
+        }
+        return effective;
+    }
 }

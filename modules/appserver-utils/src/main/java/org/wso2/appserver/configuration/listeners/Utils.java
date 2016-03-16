@@ -13,10 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.wso2.appserver.utils;
+package org.wso2.appserver.configuration.listeners;
 
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -30,17 +28,15 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-
 /**
- * A Java class which defines XML utilities used within the Application Server Utils.
+ * A Java class which defines XML utilities.
  *
  * @since 6.0.0
  */
-public class XMLUtils {
+public class Utils {
     /**
      * JAXB utility functions.
      */
-    private static final Log log = LogFactory.getLog(XMLUtils.class.getName());
 
     /**
      * Returns an XML unmarshaller for the defined Java classes.
@@ -62,20 +58,12 @@ public class XMLUtils {
                 Schema xmlSchema = schemaFactory.newSchema(schemaPath.toFile());
                 unmarshaller.setSchema(xmlSchema);
             } else {
-                String message = "Configuration schema not found: " + schemaPath.toString();
-                if (log.isDebugEnabled()) {
-                    log.debug(message);
-                }
-                throw new ApplicationServerConfigurationException(message);
+                throw new ApplicationServerConfigurationException(
+                        "Configuration schema not found in the file path: " + schemaPath.toString());
             }
             return unmarshaller;
-
-        } catch (JAXBException | SAXException ex) {
-            String message = "Error when creating the XML unmarshaller";
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new ApplicationServerConfigurationException(message, ex);
+        } catch (JAXBException | SAXException e) {
+            throw new ApplicationServerConfigurationException("Error when creating the XML unmarshaller", e);
         }
     }
 
@@ -98,11 +86,7 @@ public class XMLUtils {
             Object unmarshalled = unmarshaller.unmarshal(source.toFile());
             return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
-            String message = "Error when unmarshalling the XML configuration";
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new ApplicationServerConfigurationException(message, e);
+            throw new ApplicationServerConfigurationException("Error when unmarshalling the XML configuration", e);
         }
     }
 
@@ -125,11 +109,7 @@ public class XMLUtils {
             Object unmarshalled = unmarshaller.unmarshal(inputStream);
             return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
-            String message = "Error when unmarshalling the XML configuration";
-            if (log.isDebugEnabled()) {
-                log.debug(message);
-            }
-            throw new ApplicationServerConfigurationException(message, e);
+            throw new ApplicationServerConfigurationException("Error when unmarshalling the XML configuration", e);
         }
     }
 }

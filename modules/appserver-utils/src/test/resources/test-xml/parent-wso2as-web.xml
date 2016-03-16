@@ -11,17 +11,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
+<wso2as-web xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as-web"
+            xsi:schemaLocation="http://wso2.org/2016/wso2as-web sample-wso2as-web.xsd">
     <class-loader>
-        <parent-first>false</parent-first>
+        <parent-first>true</parent-first>
         <environments>CXF</environments>
     </class-loader>
     <saml2-single-sign-on>
-        <!--<skip-uris>
-            <skip-uri>http://www.example.com</skip-uri>
-        </skip-uris>-->
         <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
-        <query-params>tenant=admin&amp;dialect=SAML</query-params>
         <application-server-url>https://localhost:8443</application-server-url>
         <enable-sso>false</enable-sso>
         <request-url-postfix>samlsso</request-url-postfix>
@@ -36,5 +33,7 @@
         <enable-response-signing>false</enable-response-signing>
         <is-force-authn>false</is-force-authn>
         <is-passive-authn>false</is-passive-authn>
+        <property key="RelayState">index.jsp</property>
+        <property key="TenantId">tenant1</property>
     </saml2-single-sign-on>
 </wso2as-web>

@@ -18,6 +18,7 @@
 
 package org.wso2.appserver.configuration.context;
 
+import java.util.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -25,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * A class which models context-level classloading configurations.
+ *
+ * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
@@ -50,15 +53,15 @@ public class ClassLoaderConfiguration {
         this.environments = environments;
     }
 
-    public void merge(ClassLoaderConfiguration newClassLoaderConfiguration) {
-
-        if (newClassLoaderConfiguration != null) {
-            if (newClassLoaderConfiguration.isParentFirst() != null) {
-                this.enableParentFirst(newClassLoaderConfiguration.isParentFirst());
-            }
-            if (newClassLoaderConfiguration.getEnvironments() != null) {
-                this.setEnvironments(newClassLoaderConfiguration.getEnvironments());
-            }
-        }
+    /**
+     * Merges the context level classloading configuration defined globally and overridden at context level (if any).
+     *
+     * @param configuration the local, context level group of classloading configuration to be merged with
+     */
+    public void merge(ClassLoaderConfiguration configuration) {
+        Optional.ofNullable(configuration).ifPresent(mergeable -> {
+            isParentFirst = Optional.ofNullable(mergeable.isParentFirst).orElse(isParentFirst);
+            environments = Optional.ofNullable(mergeable.environments).orElse(environments);
+        });
     }
 }

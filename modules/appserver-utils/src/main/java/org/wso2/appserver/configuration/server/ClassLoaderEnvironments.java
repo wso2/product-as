@@ -36,6 +36,10 @@ public class ClassLoaderEnvironments {
         return environments;
     }
 
+    public void setEnvironments(Environments environments) {
+        this.environments = environments;
+    }
+
     /**
      * A nested class which models a group of class-loading environments for Application Server.
      */
@@ -46,6 +50,10 @@ public class ClassLoaderEnvironments {
 
         public List<Environment> getEnvironments() {
             return environments;
+        }
+
+        public void setEnvironments(List<Environment> environments) {
+            this.environments = environments;
         }
     }
 
@@ -63,8 +71,16 @@ public class ClassLoaderEnvironments {
             return name;
         }
 
+        public void setName(String name) {
+            this.name = name;
+        }
+
         public String getClasspath() {
             return classpath;
+        }
+
+        public void setClasspath(String classpath) {
+            this.classpath = classpath;
         }
     }
 }
