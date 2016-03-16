@@ -40,7 +40,7 @@ public class WebappLoaderIT extends TestBase {
      * This sample test case check if the server is running by sending a request to the server.
      */
     @Test
-    public void testEnvironmentConfiguration() throws IOException{
+    public void testEnvironmentConfiguration() throws IOException {
 
 
         String url = getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey";

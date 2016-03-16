@@ -117,10 +117,10 @@ public class TestSuiteListener implements ISuiteListener {
     private void waitForServerStartup() throws IOException {
 
         log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
-        int currentSeconds = 0;
+        int startupCounter = 0;
         boolean isTimeout = false;
         while (!isServerListening("localhost", applicationServerPort)) {
-            if (currentSeconds >= 20) {
+            if (startupCounter >= 20) {
                 isTimeout = true;
                 break;
             }
@@ -128,12 +128,12 @@ public class TestSuiteListener implements ISuiteListener {
                 Thread.sleep(1000);
             } catch (InterruptedException ignored) {
             }
-            currentSeconds++;
+            startupCounter++;
         }
 
         if (!isTimeout) {
             isSuccessServerStartup = true;
-            log.info("Server started in " + currentSeconds + " seconds");
+            log.info("Server started.");
         } else {
             isSuccessServerStartup = false;
             String message = "Server startup timeout.";
