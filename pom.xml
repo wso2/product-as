@@ -344,11 +344,36 @@
             <!-- Runtimes CXF-->
             <dependency>
                 <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
                 <version>${runtime.cxf.version}</version>
             </dependency>
 
             <!--Runtime Spring-->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
@@ -390,6 +415,7 @@
         <uaparser.version>1.3.0.wso2v1</uaparser.version>
         <runtime.spring.version>4.2.5.RELEASE</runtime.spring.version>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
+        <runtime.cxf.spring.version>4.1.7.RELEASE</runtime.cxf.spring.version>
         <slf4j.version>1.7.18</slf4j.version>
     </properties>
 </project>
