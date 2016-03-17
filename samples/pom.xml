@@ -28,5 +28,6 @@
 
     <modules>
         <module>simple-jax-rs-service</module>
+        <module>jaxrs_basic</module>
     </modules>
 </project>

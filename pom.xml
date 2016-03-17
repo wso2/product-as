@@ -295,6 +295,16 @@
                 <artifactId>ua-parser</artifactId>
                 <version>${uaparser.version}</version>
             </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons.httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>${jsr.api.version}</version>
+            </dependency>
 
             <!--WSO2 Application Server Sample Webapps-->
             <dependency>
@@ -306,7 +316,7 @@
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jaxrs_basic</artifactId>
-                <version>5.3.1-SNAPSHOT</version>
+                <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
 
@@ -405,9 +415,11 @@
         <commons.lang.version>3.4</commons.lang.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.pool.version>1.6</commons.pool.version>
+        <commons.httpclient.version>3.1</commons.httpclient.version>
         <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
         <junit.version>4.12</junit.version>
+        <jsr.api.version>1.1.1</jsr.api.version>
         <org.slf4j.api.version>1.7.18</org.slf4j.api.version>
         <org.slf4j.simple.version>1.7.18</org.slf4j.simple.version>
         <servlet.api.version>2.5</servlet.api.version>
