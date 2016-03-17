@@ -20,14 +20,20 @@
 package org.wso2.appserver.test.integration;
 
 /**
- * Constants required by the integration tests
+ * This class defines the constants used during integration tests.
+ *
+ * @since 6.0.0
  */
 public final class TestConstants {
+    //  System property constant names
     public static final String APPSERVER_HOME = "appserver.home";
+    public static final String BUILD_DIRECTORY = "build.directory";
     public static final String SERVER_TIMEOUT = "listener.server.timeout";
     public static final String PORT_CHECK_MIN = "port.check.min";
     public static final String PORT_CHECK_MAX = "port.check.max";
     public static final String APPSERVER_PORT = "appserver.port";
+
+    //  Port value constants
     public static final int TOMCAT_DEFAULT_PORT = 8080;
     public static final int TOMCAT_AJP_PORT = 8009;
 }

@@ -70,6 +70,7 @@ public class ServerConfigurationLoader implements LifecycleListener {
                         get(PathUtils.getAppServerConfigurationBase().toString(), Constants.APP_SERVER_DESCRIPTOR);
                 appServerConfiguration = Utils.
                         getUnmarshalledObject(descriptorPath, schemaPath, AppServerConfiguration.class);
+                Optional.ofNullable(appServerConfiguration).ifPresent(AppServerConfiguration::resolveVariables);
                 setSecuritySystemProperties();
             }
         } catch (ApplicationServerException e) {

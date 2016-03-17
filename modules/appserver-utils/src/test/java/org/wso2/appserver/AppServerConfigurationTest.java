@@ -15,7 +15,10 @@
  */
 package org.wso2.appserver;
 
+import org.apache.catalina.Globals;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.listeners.Utils;
 import org.wso2.appserver.configuration.server.AppServerConfiguration;
@@ -28,6 +31,7 @@ import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,15 +41,24 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerConfigurationTest {
-    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
-            + "descriptor")
+    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEMP_DIRECTORY, TestConstants.CATALINA_BASE);
+    private static final StrSubstitutor STRING_SUB = new StrSubstitutor(System.getenv());
+
+    @BeforeClass
+    public void setupCatalinaBaseEnv() {
+        System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
+    }
+
+    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration " +
+            "descriptor")
     public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
-        Path xmlSource = TestUtils.
-                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.SAMPLE_XML_FILE);
-        Path xmlSchema = TestUtils.
-                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.SAMPLE_XSD_FILE);
+        Path xmlSource = Paths.get(TestConstants.TEST_RESOURCE_FOLDER , TestConstants.SAMPLE_XML_FILE);
+        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
+
         AppServerConfiguration actual = Utils.
                 getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
+        actual.resolveVariables();
+
         AppServerConfiguration expected = generateDefault();
         Assert.assertTrue(compare(actual, expected));
     }
@@ -73,6 +86,10 @@ public class AppServerConfigurationTest {
         List<ClassLoaderEnvironments.Environment> envList = new ArrayList<>();
         envList.add(cxf);
         envList.add(jaxrs);
+
+        envList.forEach(environment -> environment.setClasspath(STRING_SUB.replace(environment.getClasspath())));
+        envList.forEach(environment -> environment.
+                setClasspath(StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
 
         ClassLoaderEnvironments.Environments environments = new ClassLoaderEnvironments.Environments();
         environments.setEnvironments(envList);
@@ -132,6 +149,13 @@ public class AppServerConfigurationTest {
 
         configuration.setKeystore(keystore);
         configuration.setTruststore(truststore);
+
+        configuration.getKeystore().setLocation(STRING_SUB.replace(configuration.getKeystore().getLocation()));
+        configuration.getTruststore().setLocation(STRING_SUB.replace(configuration.getTruststore().getLocation()));
+        configuration.getKeystore().
+                setLocation(StrSubstitutor.replaceSystemProperties(configuration.getKeystore().getLocation()));
+        configuration.getTruststore().setLocation(
+                StrSubstitutor.replaceSystemProperties(configuration.getTruststore().getLocation()));
 
         return configuration;
     }

@@ -25,6 +25,7 @@ import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +37,9 @@ import java.util.List;
 public class AppServerWebAppConfigurationTest {
     @Test(description = "Loads the XML file content of the WSO2 App Server specific webapp descriptor")
     public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
-        Path xmlSchema = TestUtils.getResourceFile(
-                TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.WEBAPP_DESCRIPTOR_XSD_FILE);
-        Path parent = TestUtils.
-                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.PARENT_DESCRIPTOR);
-        Path child = TestUtils.
-                getResourceFile(TestConstants.TEST_RESOURCE_SUB_FOLDER + "/" + TestConstants.CHILD_DESCRIPTOR);
+        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.WEBAPP_DESCRIPTOR_XSD_FILE);
+        Path parent = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.PARENT_DESCRIPTOR);
+        Path child = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.CHILD_DESCRIPTOR);
         AppServerWebAppConfiguration parentConfig = Utils.
                 getUnmarshalledObject(parent, xmlSchema, AppServerWebAppConfiguration.class);
         AppServerWebAppConfiguration childConfig = Utils.

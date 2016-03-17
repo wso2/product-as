@@ -20,9 +20,10 @@ package org.wso2.appserver.test.integration;
 
 /**
  * The base class for the integration tests.
+ *
+ * @since 6.0.0
  */
 public class TestBase {
-
     public String getAppserverHome() {
         return System.getProperty(TestConstants.APPSERVER_HOME);
     }

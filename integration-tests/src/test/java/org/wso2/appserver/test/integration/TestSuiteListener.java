@@ -19,7 +19,6 @@
 
 package org.wso2.appserver.test.integration;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ISuite;
@@ -34,7 +33,6 @@ import java.net.Socket;
  * The test suite listeners class provides the environment setup for the integration test.
  */
 public class TestSuiteListener implements ISuiteListener {
-
     private static final Logger log = LoggerFactory.getLogger(TestSuiteListener.class);
     private Process applicationServerProcess;
     private int serverStartCheckTimeout;
@@ -44,7 +42,6 @@ public class TestSuiteListener implements ISuiteListener {
 
     @Override
     public void onStart(ISuite iSuite) {
-
         try {
             log.info("Starting pre-integration test setup...");
 
@@ -53,13 +50,11 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
-
             if (isPortAvailable(TestConstants.TOMCAT_DEFAULT_PORT)) {
                 log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is available.");
                 System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(TestConstants.TOMCAT_DEFAULT_PORT));
                 applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
             }
-
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
@@ -76,13 +71,10 @@ public class TestSuiteListener implements ISuiteListener {
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
-
-
     }
 
     @Override
     public void onFinish(ISuite iSuite) {
-
         log.info("Starting post-integration tasks...");
         log.info("Terminating the Application server");
         terminateApplicationServer();
@@ -94,16 +86,12 @@ public class TestSuiteListener implements ISuiteListener {
         log.info(os + " operating system was detected");
         if (os.toLowerCase().contains("unix") || os.toLowerCase().contains("linux")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("./bin/catalina.sh", "run")
-                    .start();
+            return applicationServerProcess = new ProcessBuilder().directory(appserverHome).
+                    command("./bin/catalina.sh", "run").start();
         } else if (os.toLowerCase().contains("windows")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("\\bin\\catalina.bat", "run")
-                    .start();
+            return applicationServerProcess = new ProcessBuilder().directory(appserverHome).
+                    command("\\bin\\catalina.bat", "run").start();
         }
         return null;
     }
@@ -115,7 +103,6 @@ public class TestSuiteListener implements ISuiteListener {
     }
 
     private void waitForServerStartup() throws IOException {
-
         log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
         int startupCounter = 0;
         boolean isTimeout = false;
@@ -142,7 +129,6 @@ public class TestSuiteListener implements ISuiteListener {
         }
     }
 
-
     private boolean isServerListening(String host, int port) {
         Socket socket = null;
         try {
@@ -159,8 +145,6 @@ public class TestSuiteListener implements ISuiteListener {
             }
         }
     }
-
-
 
     private boolean isPortAvailable(final int port) {
         ServerSocket serverSocket = null;
@@ -179,5 +163,4 @@ public class TestSuiteListener implements ISuiteListener {
         }
         return false;
     }
-
 }

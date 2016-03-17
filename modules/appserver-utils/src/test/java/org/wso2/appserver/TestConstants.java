@@ -22,6 +22,7 @@ package org.wso2.appserver;
  */
 public class TestConstants {
     protected static final String TEMP_DIRECTORY = System.getProperty("java.io.tmpdir");
+    protected static final String TEST_RESOURCE_FOLDER = System.getProperty("test.resources");
     protected static final String CATALINA_BASE = "tomcat-base";
     protected static final String SAMPLE_XML_FILE = "sample-wso2as.xml";
     protected static final String SAMPLE_XSD_FILE = "sample-wso2as.xsd";
@@ -31,12 +32,11 @@ public class TestConstants {
     protected static final String INVALID_XML_FILE = "invalid.xml";
     protected static final String INVALID_XSD_FILE = "invalid.xsd";
     protected static final String NON_EXISTENT_XSD_FILE = "non-existent-sample-wso2as.xsd";
-    protected static final String TEST_RESOURCE_SUB_FOLDER = "test-resources";
 
     protected static final String CXF_ENV_NAME = "CXF";
-    protected static final String CXF_ENV_CLASSPATH = "${catalina.home}/lib/runtimes/cxf/";
+    protected static final String CXF_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/cxf/";
     protected static final String JAXRS_ENV_NAME = "JAX-RS";
-    protected static final String JAXRS_ENV_CLASSPATH = "${catalina.home}/lib/runtimes/hello-parent-runtime.jar";
+    protected static final String JAXRS_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/hello-parent-runtime.jar";
 
     protected static final String IDP_URL = "https://localhost:9443/samlsso";
     protected static final String IDP_ENTITY_ID = "localhost";
