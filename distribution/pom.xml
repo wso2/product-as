@@ -96,6 +96,11 @@
             <artifactId>simple-storage-service</artifactId>
             <type>war</type>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jaxrs_basic</artifactId>
+            <type>war</type>
+        </dependency>
 
         <!--Application Server runtime lib's-->
 

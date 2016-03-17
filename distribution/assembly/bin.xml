@@ -53,6 +53,7 @@
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:simple-storage-service:war</include>
+                <include>org.wso2.appserver:jaxrs_basic:war</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputFileNameMapping> ${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>

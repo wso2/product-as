@@ -299,14 +299,14 @@
             <!--WSO2 Application Server Sample Webapps-->
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>hello-world</artifactId>
+                <artifactId>simple-storage-service</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>simple-storage-service</artifactId>
-                <version>${appserver.version}</version>
+                <artifactId>jaxrs_basic</artifactId>
+                <version>5.3.1-SNAPSHOT</version>
                 <type>war</type>
             </dependency>
 
