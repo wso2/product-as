@@ -15,12 +15,20 @@
  */
 package org.wso2.appserver;
 
+import org.apache.catalina.Context;
+import org.apache.catalina.Globals;
+import org.apache.catalina.Host;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleEvent;
+import org.apache.catalina.core.StandardContext;
+import org.apache.catalina.core.StandardHost;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
-import org.wso2.appserver.configuration.listeners.Utils;
+import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 
 import java.io.IOException;
@@ -28,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class defines unit-tests for context level configurations.
@@ -35,17 +44,30 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerWebAppConfigurationTest {
+    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
+
+    @BeforeClass
+    public void setupCatalinaBaseEnv() throws IOException {
+        System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
+    }
+
     @Test(description = "Loads the XML file content of the WSO2 App Server specific webapp descriptor")
     public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
-        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.WEBAPP_DESCRIPTOR_XSD_FILE);
-        Path parent = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.PARENT_DESCRIPTOR);
-        Path child = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.CHILD_DESCRIPTOR);
-        AppServerWebAppConfiguration parentConfig = Utils.
-                getUnmarshalledObject(parent, xmlSchema, AppServerWebAppConfiguration.class);
-        AppServerWebAppConfiguration childConfig = Utils.
-                getUnmarshalledObject(child, xmlSchema, AppServerWebAppConfiguration.class);
-        parentConfig.merge(childConfig);
-        Assert.assertTrue(compare(parentConfig, prepareDefault()));
+        ContextConfigurationLoader contextConfigurationLoader = new ContextConfigurationLoader();
+
+        Context context = new StandardContext();
+        Host host = new StandardHost();
+        host.setAppBase("webapps");
+        context.setParent(new StandardHost());
+        context.setDocBase("sample");
+        contextConfigurationLoader.lifecycleEvent(new LifecycleEvent(context, Lifecycle.BEFORE_START_EVENT, null));
+
+        Optional<AppServerWebAppConfiguration> effective = ContextConfigurationLoader.getContextConfiguration(context);
+        if (effective.isPresent()) {
+            Assert.assertTrue(compare(effective.get(), prepareDefault()));
+        } else {
+            Assert.fail();
+        }
     }
 
     private static AppServerWebAppConfiguration prepareDefault() {

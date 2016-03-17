@@ -16,10 +16,15 @@
 package org.wso2.appserver;
 
 import org.apache.catalina.Globals;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleEvent;
+import org.apache.catalina.Server;
+import org.apache.catalina.core.StandardServer;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.Utils;
 import org.wso2.appserver.configuration.server.AppServerConfiguration;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
@@ -41,19 +46,33 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerConfigurationTest {
-    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEMP_DIRECTORY, TestConstants.CATALINA_BASE);
+    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
     private static final StrSubstitutor STRING_SUB = new StrSubstitutor(System.getenv());
 
     @BeforeClass
-    public void setupCatalinaBaseEnv() {
+    public void setupCatalinaBaseEnv() throws IOException {
         System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
     }
 
-    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration " +
-            "descriptor")
+    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
+            + "descriptor")
     public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
-        Path xmlSource = Paths.get(TestConstants.TEST_RESOURCE_FOLDER , TestConstants.SAMPLE_XML_FILE);
-        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
+        ServerConfigurationLoader loader = new ServerConfigurationLoader();
+        Server server = new StandardServer();
+        loader.lifecycleEvent(new LifecycleEvent(server, Lifecycle.BEFORE_START_EVENT, null));
+
+        AppServerConfiguration actual = ServerConfigurationLoader.getServerConfiguration();
+        AppServerConfiguration expected = generateDefault();
+        Assert.assertTrue(compare(actual, expected));
+    }
+
+    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
+            + "descriptor using a FileInputStream")
+    public void testObjectLoadingFromInputStream() throws IOException, ApplicationServerConfigurationException {
+        Path xmlSource = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
+                Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR);
+        Path xmlSchema = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
+                Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
 
         AppServerConfiguration actual = Utils.
                 getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
@@ -154,8 +173,8 @@ public class AppServerConfigurationTest {
         configuration.getTruststore().setLocation(STRING_SUB.replace(configuration.getTruststore().getLocation()));
         configuration.getKeystore().
                 setLocation(StrSubstitutor.replaceSystemProperties(configuration.getKeystore().getLocation()));
-        configuration.getTruststore().setLocation(
-                StrSubstitutor.replaceSystemProperties(configuration.getTruststore().getLocation()));
+        configuration.getTruststore()
+                .setLocation(StrSubstitutor.replaceSystemProperties(configuration.getTruststore().getLocation()));
 
         return configuration;
     }

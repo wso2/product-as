@@ -52,7 +52,7 @@
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <systemPropertyVariables>
-                        <test.resources>src/test/resources/test-resources</test.resources>
+                        <test.resources>src/test/resources/testresources</test.resources>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

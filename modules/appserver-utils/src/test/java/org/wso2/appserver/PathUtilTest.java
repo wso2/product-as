@@ -30,7 +30,7 @@ import java.nio.file.Paths;
  * @since 6.0.0
  */
 public class PathUtilTest {
-    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEMP_DIRECTORY, TestConstants.CATALINA_BASE);
+    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
 
     @BeforeClass
     public void setupCatalinaBaseEnv() {

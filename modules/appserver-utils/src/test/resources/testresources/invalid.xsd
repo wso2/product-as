@@ -12,7 +12,7 @@
  limitations under the License.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" elementFormDefault="qualified"
-           xmlns="sample-wso2as-web.xsd" targetNamespace="http://wso2.org/2016/wso2as">
+           xmlns="http://wso2.org/2016/wso2as" targetNamespace="http://wso2.org/2016/wso2as">
     <xs:element name="AppServer">
         <xs:complexType>
             <xs:sequence>
