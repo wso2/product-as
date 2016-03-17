@@ -14,21 +14,26 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-         http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
 
-    <display-name>JAX-WS/JAX-RS Webapp</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>WEB-INF/beans.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 
     <servlet>
         <servlet-name>JAXServlet</servlet-name>
         <display-name>JAX-WS/JAX-RS Servlet</display-name>
-        <description>JAX-WS/JAX-RS Endpoint</description>
-        <servlet-class>
-            org.apache.cxf.transport.servlet.CXFServlet
-        </servlet-class>
+        <!--<description>JAX-WS/JAX-RS Endpoint</description>-->
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
         <init-param>
             <param-name>service-list-stylesheet</param-name>
             <param-value>servicelist.css</param-value>
@@ -41,9 +46,6 @@
         <url-pattern>/services/*</url-pattern>
     </servlet-mapping>
 
-    <session-config>
-        <session-timeout>60</session-timeout>
-    </session-config>
 
 </web-app>
 

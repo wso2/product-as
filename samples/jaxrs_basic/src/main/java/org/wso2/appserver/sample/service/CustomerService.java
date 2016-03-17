@@ -1,20 +1,28 @@
 /*
- * Copyright 2011-2012 WSO2, Inc. (http://wso2.com)
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  WSO2 Inc. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied. See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
  */
 
-package demo.jaxrs.server;
+package org.wso2.appserver.sample.service;
+
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -25,14 +33,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.Map;
 
-@Path("/customerservice/")
+/**
+ * Web service class
+ */
+@Service
+@Path("/customerservice")
 public class CustomerService {
     long currentId = 123;
-    Map<Long, Customer> customers = new HashMap<Long, Customer>();
-    Map<Long, Order> orders = new HashMap<Long, Order>();
+    Map<Long, Customer> customers = new HashMap<>();
+    Map<Long, Order> orders = new HashMap<>();
 
     public CustomerService() {
         init();
@@ -41,17 +51,14 @@ public class CustomerService {
     @GET
     @Path("/customers/{id}/")
     public Customer getCustomer(@PathParam("id") String id) {
-        System.out.println("----invoking getCustomer, Customer id is: " + id);
         long idNumber = Long.parseLong(id);
-        Customer c = customers.get(idNumber);
-        return c;
+        return customers.get(idNumber);
     }
 
     @PUT
     @Path("/customers/")
     @Consumes("text/xml")
     public Response updateCustomer(Customer customer) {
-        System.out.println("----invoking updateCustomer, Customer name is: " + customer.getName());
         Customer c = customers.get(customer.getId());
         Response r;
         if (c != null) {
@@ -67,7 +74,6 @@ public class CustomerService {
     @Path("/customers/")
     @Consumes("text/xml")
     public Response addCustomer(Customer customer) {
-        System.out.println("----invoking addCustomer, Customer name is: " + customer.getName());
         customer.setId(++currentId);
 
         customers.put(customer.getId(), customer);
@@ -82,14 +88,12 @@ public class CustomerService {
     @Consumes("text/plain")
     @Produces("text/plain")
     public String getCustomerName(String id) {
-        System.out.println("----invoking getCustomerName, Customer id is: " + id);
         return "Isuru Suriarachchi";
     }
 
     @DELETE
     @Path("/customers/{id}/")
     public Response deleteCustomer(@PathParam("id") String id) {
-        System.out.println("----invoking deleteCustomer, Customer id is: " + id);
         long idNumber = Long.parseLong(id);
         Customer c = customers.get(idNumber);
 
@@ -106,12 +110,8 @@ public class CustomerService {
 
     @Path("/orders/{orderId}/")
     public Order getOrder(@PathParam("orderId") String orderId) {
-        System.out.println("----invoking getOrder, Order id is: " + orderId);
         long idNumber = Long.parseLong(orderId);
         Order c = orders.get(idNumber);
-        if (c == null) {
-            System.out.println("No order available for the id:" + orderId);
-        }
         return c;
     }
 
