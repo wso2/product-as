@@ -60,9 +60,6 @@ public class EventPublisherConstants {
     // Resides in product-as/distribution/contents/conf/wso2
     public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
 
-    //Trust store file that refers to all trusted certificates.
-    // Resides in product-as/distribution/contents/conf/wso2/Webapp_Statistics_Monitoring
-    public static final String CLIENT_TRUSTSTORE = "client-truststore.jks";
 
     /**
      * instantiating is not needed for this class. private constructor to block that.

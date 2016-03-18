@@ -53,7 +53,6 @@ public class HttpStatValve extends ValveBase {
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
     private DataPublisher dataPublisher = null;
     StatsPublisherConfiguration statsPublisherConfiguration;
-    Path path;
 
     @Override
     protected void initInternal() throws LifecycleException {
@@ -64,14 +63,6 @@ public class HttpStatValve extends ValveBase {
         setTrustStorePath();
         statsPublisherConfiguration = ServerConfigurationLoader.getServerConfiguration().
                 getStatsPublisherConfiguration();
-//        path = PathUtils.getWSO2ConfigurationHome();
-
-//        try {
-//            uaParser = new CachingParser();
-//        } catch (IOException e) {
-//            LOG.error("Initializing caching parser object failed:" + e);
-//            throw new RuntimeException("Initializing caching parser object failed:", e);
-//        }
 
         try {
             dataPublisher = getDataPublisher();
@@ -79,11 +70,7 @@ public class HttpStatValve extends ValveBase {
             LOG.error("Initializing DataPublisher failed:", e);
             throw new LifecycleException("Initializing DataPublisher failed: " + e);
         }
-//
-//        //why is this necessary
-//        if (dataPublisher == null) {
-//            throw new LifecycleException("DataPublisher was not created.");
-//        }
+
     }
 
     @Override
@@ -94,7 +81,7 @@ public class HttpStatValve extends ValveBase {
         long responseTime = System.currentTimeMillis() - startTime;
 
         if (filterResponse(response)) {
-            Event event = null;
+            Event event;
             try {
                 event = EventBuilder.buildEvent(statsPublisherConfiguration.getStreamId(), request, response, startTime,
                         responseTime);
@@ -164,16 +151,13 @@ public class HttpStatValve extends ValveBase {
     /**
      * Filter to process only requests of text/html type.
      * @param response The Response object of client
-     * @return
+     * @return true if request is of text/html type and false if not
      */
     private boolean filterResponse (Response response) {
 
         String responseContentType = response.getContentType();
         //if the response content is not null and is of type text/html, allow to publish stats
-        if (responseContentType != null && responseContentType.contains("text/html")) {
-            return true;
-        }
-        return false;
+        return responseContentType != null && responseContentType.contains("text/html");
     }
 
     /**

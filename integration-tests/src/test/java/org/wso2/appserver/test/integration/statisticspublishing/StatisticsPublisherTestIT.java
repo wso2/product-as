@@ -125,18 +125,14 @@ public class StatisticsPublisherTestIT {
         try {
             URL requestUrl = new URL(url);
 
-            int numberOfRequestsMade = 10;
             int responseCode;
+            HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+            connection.setRequestMethod("GET");
+            responseCode = connection.getResponseCode();
+            Assert.assertEquals(200, responseCode);
 
-            for (int i = 0; i < numberOfRequestsMade; i++) {
-                HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-                connection.setRequestMethod("GET");
-                responseCode = connection.getResponseCode();
-                Assert.assertEquals(200, responseCode);
-            }
+            //TODO: Validate the events being published to the Thrift data end point
 
-            Assert.assertEquals(numberOfRequestsMade, thriftTestServer.getNumberOfEventsReceived());
-            thriftTestServer.resetReceivedEvents();
         } catch (IOException e) {
             Assert.fail("Fail connection to the server. Error: " + e.getMessage());
         }
