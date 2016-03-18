@@ -19,18 +19,21 @@
 package org.wso2.appserver.exceptions;
 
 /**
- * Thrown when the application server failed to build the configurations.
+ * This class defines a custom checked exception type specified for WSO2 Application Server which is thrown when
+ * the Application Server encounters configuration related issues.
+ * <p>
+ * This class extends from the {@link ApplicationServerException} custom checked exception type.
  *
  * @since 6.0.0
  */
 public class ApplicationServerConfigurationException extends ApplicationServerException {
     private static final long serialVersionUID = -3620848532234792303L;
 
-    public ApplicationServerConfigurationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public ApplicationServerConfigurationException(String message) {
         super(message);
+    }
+
+    public ApplicationServerConfigurationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

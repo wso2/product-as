@@ -22,6 +22,7 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
@@ -60,9 +61,10 @@ public class HttpStatValve extends ValveBase {
 
         LOG.debug("The HttpStatValve initialized.");
 
+        setTrustStorePath();
         statsPublisherConfiguration = ServerConfigurationLoader.getServerConfiguration().
                 getStatsPublisherConfiguration();
-        path = PathUtils.getWSO2ConfigurationHome();
+//        path = PathUtils.getWSO2ConfigurationHome();
 
 //        try {
 //            uaParser = new CachingParser();
@@ -110,7 +112,7 @@ public class HttpStatValve extends ValveBase {
      * @return the path to the file containing configurations for the Data Agent
      */
     private String getDataAgentConfigPath() {
-        Path path = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(),
+        Path path = Paths.get(PathUtils.getAppServerConfigurationBase().toString(),
                 EventPublisherConstants.DATA_AGENT_CONF);
         return path.toString();
     }
@@ -121,12 +123,6 @@ public class HttpStatValve extends ValveBase {
      * @throws StatPublisherException
      */
     private DataPublisher getDataPublisher() throws StatPublisherException {
-
-        //to be removed
-        Path path = Paths.get(PathUtils.getWSO2ConfigurationHome().toString(), "Webapp_Statistics_Monitoring",
-                EventPublisherConstants.CLIENT_TRUSTSTORE);
-        System.setProperty("javax.net.ssl.trustStore", path.toString());
-        System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
 
         AgentHolder.setConfigPath(getDataAgentConfigPath());
         DataPublisher dataPublisher;
@@ -166,7 +162,7 @@ public class HttpStatValve extends ValveBase {
     }
 
     /**
-     *
+     * Filter to process only requests of text/html type.
      * @param response The Response object of client
      * @return
      */
@@ -178,5 +174,14 @@ public class HttpStatValve extends ValveBase {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Setting the System property for the trust store.
+     */
+    private void setTrustStorePath() {
+        String pathToBeReplaced = System.getProperty("javax.net.ssl.trustStore");
+        String realTrustStorePath = StrSubstitutor.replaceSystemProperties(pathToBeReplaced);
+        System.setProperty("javax.net.ssl.trustStore", realTrustStorePath);
     }
 }

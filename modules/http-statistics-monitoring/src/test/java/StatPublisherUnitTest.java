@@ -20,9 +20,9 @@ import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.mapper.MappingData;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.wso2.appserver.monitoring.EventPublisherConstants;
 import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
@@ -52,7 +52,7 @@ public class StatPublisherUnitTest {
      *
      * @throws Exception
      */
-    @Before
+    @BeforeClass
     public void setUp() throws Exception {
 
         request = mock(Request.class);
@@ -156,7 +156,7 @@ public class StatPublisherUnitTest {
             Assert.fail("Building event failed.");
         }
 
-        Assert.assertEquals("Event created", testEvent, event);
+        Assert.assertEquals(testEvent, event, "Event created");
     }
 
 }

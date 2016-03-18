@@ -22,7 +22,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>webapp-loader</artifactId>
-    <name>WSO2 Application Server - Webapp Loader</name>
+    <name>WSO2 Application Server - Module - Webapp Loader</name>
 
     <dependencies>
         <dependency>
@@ -36,6 +36,10 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-utils</artifactId>
         </dependency>
     </dependencies>
 </project>

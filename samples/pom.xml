@@ -24,8 +24,10 @@
     <packaging>pom</packaging>
     <artifactId>samples</artifactId>
     <name>WSO2 Application Server - Samples</name>
+    <url>http://wso2.com</url>
 
     <modules>
         <module>hello-world</module>
+        <module>simple-storage-service</module>
     </modules>
 </project>

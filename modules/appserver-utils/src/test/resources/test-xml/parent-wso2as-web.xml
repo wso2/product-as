@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<wso2as-web xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as-web"
+            xsi:schemaLocation="http://wso2.org/2016/wso2as-web sample-wso2as-web.xsd">
+    <class-loader>
+        <parent-first>true</parent-first>
+        <environments>CXF</environments>
+    </class-loader>
+    <saml2-single-sign-on>
+        <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
+        <application-server-url>https://localhost:8443</application-server-url>
+        <enable-sso>false</enable-sso>
+        <request-url-postfix>samlsso</request-url-postfix>
+        <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
+        <consumer-url-postfix>/acs</consumer-url-postfix>
+        <attribute-consuming-service-index>1784849</attribute-consuming-service-index>
+        <enable-slo>false</enable-slo>
+        <slo-url-postfix>logout</slo-url-postfix>
+        <enable-assertion-encryption>false</enable-assertion-encryption>
+        <enable-assertion-signing>false</enable-assertion-signing>
+        <enable-request-signing>false</enable-request-signing>
+        <enable-response-signing>false</enable-response-signing>
+        <is-force-authn>false</is-force-authn>
+        <is-passive-authn>false</is-passive-authn>
+        <property key="RelayState">index.jsp</property>
+        <property key="TenantId">tenant1</property>
+    </saml2-single-sign-on>
+</wso2as-web>

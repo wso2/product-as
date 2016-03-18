@@ -25,7 +25,9 @@ public class DataPublisherTestUtil {
     public static void setTrustStoreParams() {
         File filePath = new File("src" + File.separator + "test" + File.separator + "resources");
         if (!filePath.exists()) {
-            filePath = new File("components" + File.separator + "data-bridge" + File.separator + "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator + "test" + File.separator + "resources");
+            filePath = new File("components" + File.separator + "data-bridge" + File.separator +
+                    "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator + "test" +
+                    File.separator + "resources");
         }
         if (!filePath.exists()) {
             filePath = new File("resources");
@@ -42,7 +44,9 @@ public class DataPublisherTestUtil {
     public static void setKeyStoreParams() {
         File filePath = new File("src" + File.separator + "test" + File.separator + "resources");
         if (!filePath.exists()) {
-            filePath = new File("components" + File.separator + "data-bridge" + File.separator + "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator + "test" + File.separator + "resources");
+            filePath = new File("components" + File.separator + "data-bridge" + File.separator +
+                    "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator +
+                    "test" + File.separator + "resources");
         }
         if (!filePath.exists()) {
             filePath = new File("resources");
@@ -58,7 +62,9 @@ public class DataPublisherTestUtil {
     public static String getDataAgentConfigPath() {
         File filePath = new File("src" + File.separator + "test" + File.separator + "resources");
         if (!filePath.exists()) {
-            filePath = new File("components" + File.separator + "data-bridge" + File.separator + "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator + "test" + File.separator + "resources");
+            filePath = new File("components" + File.separator + "data-bridge" + File.separator +
+                    "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator +
+                    "test" + File.separator + "resources");
         }
         if (!filePath.exists()) {
             filePath = new File("resources");
@@ -72,7 +78,9 @@ public class DataPublisherTestUtil {
     public static String getDataBridgeConfigPath() {
         File filePath = new File("src" + File.separator + "test" + File.separator + "resources");
         if (!filePath.exists()) {
-            filePath = new File("components" + File.separator + "data-bridge" + File.separator + "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator + "test" + File.separator + "resources");
+            filePath = new File("components" + File.separator + "data-bridge" + File.separator +
+                    "org.wso2.carbon.databridge.agent" + File.separator + "src" + File.separator +
+                    "test" + File.separator + "resources");
         }
         if (!filePath.exists()) {
             filePath = new File("resources");

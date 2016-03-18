@@ -17,36 +17,32 @@
 */
 package org.wso2.appserver.test.integration.statisticspublishing;
 
-import junit.framework.Assert;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.wso2.carbon.databridge.agent.AgentHolder;
-import org.wso2.carbon.databridge.agent.DataPublisher;
+
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
-import org.wso2.carbon.databridge.commons.utils.DataBridgeCommonsUtils;
 import org.wso2.carbon.databridge.core.exception.DataBridgeException;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.SocketException;
 import java.net.URL;
 
 
 public class StatisticsPublisherTestIT {
     Logger log = Logger.getLogger(StatisticsPublisherTestIT.class);
-    private static final String STREAM_NAME = "org.wso2.http.stats";
-    private static final String VERSION = "1.0.0";
+    //    private static final String STREAM_NAME = "org.wso2.http.stats";
+//    private static final String VERSION = "1.0.0";
     private ThriftTestServer thriftTestServer;
 
 //
@@ -89,14 +85,13 @@ public class StatisticsPublisherTestIT {
 
     @BeforeClass
     public static void init() {
-//        System.out.println(DataPublisherTestUtil.getDataBridgeConfigPath());
 
         DataPublisherTestUtil.setKeyStoreParams();
         DataPublisherTestUtil.setTrustStoreParams();
 
     }
 
-    private String convertJSONtoString() {
+    private String convertJSONtoString() throws IOException {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;
         try {
@@ -104,16 +99,15 @@ public class StatisticsPublisherTestIT {
             Object obj = parser.parse(new FileReader(DataPublisherTestUtil.getStreamDefinitionPath()));
 
             jsonObject = (JSONObject) obj;
-//            System.out.println(jsonObject.toJSONString());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IOException("Failed");
         }
         return jsonObject.toJSONString();
     }
+
     private synchronized void startServer(int port) throws
-            StreamDefinitionStoreException, MalformedStreamDefinitionException, DataBridgeException {
-//        System.out.println(convertJSONtoString());
+            StreamDefinitionStoreException, MalformedStreamDefinitionException, DataBridgeException, IOException {
         thriftTestServer = new ThriftTestServer();
         thriftTestServer.start(port);
         thriftTestServer.addStreamDefinition(convertJSONtoString(), -1234);
@@ -121,25 +115,31 @@ public class StatisticsPublisherTestIT {
     }
 
     @Test
-    public void testDataEndpoint() throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException, DataEndpointException, DataEndpointConfigurationException, MalformedStreamDefinitionException, DataBridgeException, StreamDefinitionStoreException, SocketException {
+    public void testDataEndpoint() throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException,
+            TransportException, DataEndpointException, DataEndpointConfigurationException,
+            MalformedStreamDefinitionException, DataBridgeException, StreamDefinitionStoreException, IOException {
 
         startServer(7611);
 
         String url = "http://localhost:8080";
         try {
             URL requestUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-            connection.setRequestMethod("GET");
 
-            int responseCode = connection.getResponseCode();
-            org.junit.Assert.assertEquals("Response Code", 200, responseCode);
+            int numberOfRequestsMade = 10;
+            int responseCode;
 
+            for (int i = 0; i < numberOfRequestsMade; i++) {
+                HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+                connection.setRequestMethod("GET");
+                responseCode = connection.getResponseCode();
+                Assert.assertEquals(200, responseCode);
+            }
 
+            Assert.assertEquals(numberOfRequestsMade, thriftTestServer.getNumberOfEventsReceived());
+            thriftTestServer.resetReceivedEvents();
         } catch (IOException e) {
-            org.junit.Assert.fail("Fail connection to the server. Error: " + e.getMessage());
+            Assert.fail("Fail connection to the server. Error: " + e.getMessage());
         }
-
-
 
         thriftTestServer.stop();
     }

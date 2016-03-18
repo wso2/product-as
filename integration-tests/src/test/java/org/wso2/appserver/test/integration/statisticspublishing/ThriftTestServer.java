@@ -1,7 +1,6 @@
 package org.wso2.appserver.test.integration.statisticspublishing;
 
 
-
 import org.apache.log4j.Logger;
 import org.wso2.carbon.databridge.commons.Credentials;
 import org.wso2.carbon.databridge.commons.Event;
@@ -49,8 +48,8 @@ public class ThriftTestServer {
         getStreamDefinitionStore().saveStreamDefinitionToStore(streamDefinition, tenantId);
     }
 
-    private InMemoryStreamDefinitionStore getStreamDefinitionStore(){
-        if (streamDefinitionStore == null){
+    private InMemoryStreamDefinitionStore getStreamDefinitionStore() {
+        if (streamDefinitionStore == null) {
             streamDefinitionStore = new InMemoryStreamDefinitionStore();
         }
         return streamDefinitionStore;
@@ -64,7 +63,7 @@ public class ThriftTestServer {
             @Override
             public boolean authenticate(String userName,
                                         String password) {
-                return true;// allays authenticate to true
+                return true;    // allays authenticate to true
 
             }
 
@@ -108,7 +107,6 @@ public class ThriftTestServer {
             public void receive(List<Event> eventList, Credentials credentials) {
                 numberOfEventsReceived.addAndGet(eventList.size());
                 log.info("Received events : " + numberOfEventsReceived);
-//                log.info("eventListSize=" + eventList.size() + " eventList " + eventList + " for username " + credentials.getUsername());
             }
 
         });
@@ -120,8 +118,11 @@ public class ThriftTestServer {
     }
 
     public int getNumberOfEventsReceived() {
-        if(numberOfEventsReceived != null) return numberOfEventsReceived.get();
-        else return 0;
+        if (numberOfEventsReceived != null) {
+            return numberOfEventsReceived.get();
+        } else {
+            return 0;
+        }
     }
 
     public void resetReceivedEvents() {
@@ -164,20 +165,22 @@ public class ThriftTestServer {
                 Thread.sleep(stopAfterTimeMilliSeconds);
             } catch (InterruptedException e) {
             }
-            if (thriftDataReceiver != null) thriftDataReceiver.stop();
+            if (thriftDataReceiver != null) {
+                thriftDataReceiver.stop();
+            }
 
             eventReceived = getNumberOfEventsReceived();
 
-            log.info("Number of events received in server shutdown :"+ eventReceived);
+            log.info("Number of events received in server shutdown :" + eventReceived);
             try {
                 Thread.sleep(startAfterTimeMS);
             } catch (InterruptedException e) {
             }
 
             try {
-                if (thriftDataReceiver != null){
+                if (thriftDataReceiver != null) {
                     thriftDataReceiver.start(DataPublisherTestUtil.LOCAL_HOST);
-                }else {
+                } else {
                     start(port);
                 }
             } catch (DataBridgeException e) {

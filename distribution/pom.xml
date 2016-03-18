@@ -23,26 +23,17 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>distribution</artifactId>
     <name>WSO2 Application Server - Distribution</name>
+    <packaging>pom</packaging>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
-                        <descriptor>assembly/bin.xml</descriptor>
+                        <descriptor>${plugins.assembly.descriptor}</descriptor>
                     </descriptors>
                     <finalName>${distribution.file.name}</finalName>
                 </configuration>
@@ -77,18 +68,18 @@
     </build>
 
     <dependencies>
+
+        <!--Tomcat distribution-->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
             <type>zip</type>
         </dependency>
+
+        <!--WSO2 Application Server Modules-->
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
@@ -96,8 +87,10 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>appserver-utils</artifactId>
+            <artifactId>webapp-loader</artifactId>
         </dependency>
+
+        <!--WSO2 Application Server Sample Webapps-->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>hello-world</artifactId>
@@ -105,11 +98,27 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>sample-module</artifactId>
+            <artifactId>simple-storage-service</artifactId>
+            <type>war</type>
         </dependency>
+
+        <!--Application Server runtime lib's-->
+
+        <!--Spring-->
         <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>webapp-loader</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <!--CXF-->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
         </dependency>
     </dependencies>
+
+    <properties>
+        <plugins.assembly.descriptor>assembly/bin.xml</plugins.assembly.descriptor>
+    </properties>
+
 </project>

@@ -19,7 +19,7 @@
 package org.wso2.appserver.exceptions;
 
 /**
- * Thrown when the application server startup process has failed.
+ * This class defines a custom unchecked exception type specific to WSO2 Application Server.
  *
  * @since 6.0.0
  */

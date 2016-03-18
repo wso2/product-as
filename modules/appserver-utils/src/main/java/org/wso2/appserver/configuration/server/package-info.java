@@ -15,13 +15,15 @@
  */
 
 /**
- * package information for server configuration namespace.
+ * Package information for server configuration namespace.
+ *
+ * @since 6.0.0
  */
 @XmlSchema(
-        namespace = Constants.SERVER_CONFIGURATION_NAMESPACE,
+        namespace = Constants.APP_SERVER_CONFIGURATION_NAMESPACE,
         elementFormDefault = XmlNsForm.QUALIFIED,
         xmlns = {
-                @XmlNs(prefix = "", namespaceURI = Constants.SERVER_CONFIGURATION_NAMESPACE)
+                @XmlNs(prefix = "", namespaceURI = Constants.APP_SERVER_CONFIGURATION_NAMESPACE)
         }
 )
 package org.wso2.appserver.configuration.server;

@@ -24,11 +24,11 @@
     <packaging>pom</packaging>
     <artifactId>modules</artifactId>
     <name>WSO2 Application Server - Modules</name>
+    <url>http://wso2.com</url>
 
     <modules>
         <module>appserver-utils</module>
         <module>http-statistics-monitoring</module>
-        <module>sample-module</module>
         <module>webapp-loader</module>
     </modules>
 </project>

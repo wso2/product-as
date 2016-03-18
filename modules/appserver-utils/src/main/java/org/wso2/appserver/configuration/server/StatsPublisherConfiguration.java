@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A Java class which models a holder for server level statistics publisher configurations.
+ * A Java class which models a holder for server level statistics publishing configurations.
  *
  * @since 6.0.0
  */
@@ -45,6 +45,10 @@ public class StatsPublisherConfiguration {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -53,15 +57,31 @@ public class StatsPublisherConfiguration {
         return dataAgentType;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getAuthenticationURL() {
         return authenticationURL;
+    }
+
+    public void setAuthenticationURL(String authenticationURL) {
+        this.authenticationURL = authenticationURL;
     }
 
     public String getPublisherURL() {
         return publisherURL;
     }
 
+    public void setPublisherURL(String publisherURL) {
+        this.publisherURL = publisherURL;
+    }
+
     public String getStreamId() {
         return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
     }
 }

@@ -15,7 +15,9 @@
  */
 
 /**
- * package information for context configuration namespace.
+ * Package information for context configuration namespace.
+ *
+ * @since 6.0.0
  */
 @XmlSchema(
         namespace = Constants.WEBAPP_DESCRIPTOR_NAMESPACE,
