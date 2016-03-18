@@ -41,47 +41,8 @@ import java.net.URL;
 
 public class StatisticsPublisherTestIT {
     Logger log = Logger.getLogger(StatisticsPublisherTestIT.class);
-    //    private static final String STREAM_NAME = "org.wso2.http.stats";
-//    private static final String VERSION = "1.0.0";
+
     private ThriftTestServer thriftTestServer;
-
-//
-//    private static final String STREAM_DEFN = "{" +
-//            "  'name':'" + STREAM_NAME + "'," +
-//            "  'version':'" + VERSION + "'," +
-//            "  'metaData':[ " +
-//            "          {'name':'server_address','type':'STRING'}" +
-//            "          {'name':'server_name','type':'STRING'}" +
-//            "  ]," +
-//            "  'payloadData':[" +
-//            "          {'name':'appName','type':'STRING'}," +
-//            "          {'name':'appVersion','type':'STRING'}," +
-//            "          {'name':'userId','type':'STRING'}," +
-//            "          {'name':'requestUri','type':'STRING'}," +
-//            "          {'name':'timestamp','type':'STRING'}," +
-//            "          {'name':'resourcePath','type':'STRING'}," +
-//            "          {'name':'appType','type':'STRING'}," +
-//            "          {'name':'appDisplayName','type':'STRING'}," +
-//            "          {'name':'sessionId','type':'STRING'}," +
-//            "          {'name':'httpMethod','type':'STRING'}," +
-//            "          {'name':'requestContentType','type':'STRING'}," +
-//            "          {'name':'responseContentType','type':'STRING'}," +
-//            "          {'name':'responseHttpStatusCode','type':'LONG'}," +
-//            "          {'name':'remoteAddress','type':'STRING'}," +
-//            "          {'name':'referrer','type':'STRING'}," +
-//            "          {'name':'userAgent','type':'STRING'}," +
-//            "          {'name':'host','type':'STRING'}," +
-//            "          {'name':'remoteUser','type':'STRING'}," +
-//            "          {'name':'authType','type':'STRING'}," +
-//            "          {'name':'responseTime','type':'LONG'}," +
-//            "          {'name':'requestSizeBytes','type':'LONG'}," +
-//            "          {'name':'responseSizeBytes','type':'LONG'}," +
-//            "          {'name':'requestHeader','type':'STRING'}," +
-//            "          {'name':'responseHeader','type':'STRING'}," +
-//            "          {'name':'language','type':'STRING'}," +
-//            "  ]" +
-//            "}";
-
 
     @BeforeClass
     public static void init() {
