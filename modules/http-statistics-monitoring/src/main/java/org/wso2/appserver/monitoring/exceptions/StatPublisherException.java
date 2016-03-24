@@ -14,25 +14,21 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
 package org.wso2.appserver.monitoring.exceptions;
 
 /**
- * Thrown when the Data Endpoint Agent configuration fails.
+ * General exception class for the Statistics Publisher module
  */
-public class ConfigurationException extends Exception {
+public class StatPublisherException extends Exception {
 
-    public ConfigurationException() {
-        super();
-    }
-
-    public ConfigurationException(String message) {
-        super(message);
-    }
-
-    public ConfigurationException(String message, Throwable cause) {
+    /**
+     * Exception to be thrown when an error occurs in the statistics publisher module
+     * @param message the detail message
+     * @param cause the cause of exception
+     */
+    public StatPublisherException(String message, Throwable cause) {
         super(message, cause);
     }
 }
