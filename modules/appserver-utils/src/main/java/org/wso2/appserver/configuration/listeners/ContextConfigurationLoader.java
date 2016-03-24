@@ -63,18 +63,19 @@ public class ContextConfigurationLoader implements LifecycleListener {
      */
     @Override
     public void lifecycleEvent(LifecycleEvent lifecycleEvent) {
+        Object source;
         if (Lifecycle.BEFORE_START_EVENT.equals(lifecycleEvent.getType())) {
-            Object source = lifecycleEvent.getSource();
+            source = lifecycleEvent.getSource();
             if (source instanceof Context) {
                 Context context = (Context) source;
                 AppServerWebAppConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
                 contextToConfigurationMap.put(context, effectiveConfiguration);
-            } else if (Lifecycle.AFTER_STOP_EVENT.equals(lifecycleEvent.getType())) {
-                source = lifecycleEvent.getSource();
-                if (source instanceof Context) {
-                    Context context = (Context) source;
-                    contextToConfigurationMap.remove(context);
-                }
+            }
+        } else if (Lifecycle.AFTER_STOP_EVENT.equals(lifecycleEvent.getType())) {
+            source = lifecycleEvent.getSource();
+            if (source instanceof Context) {
+                Context context = (Context) source;
+                contextToConfigurationMap.remove(context);
             }
         }
     }
@@ -107,7 +108,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
                         getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, AppServerWebAppConfiguration.class);
                 if (Files.exists(localWebAppDescriptor)) {
                     AppServerWebAppConfiguration local = Utils.getUnmarshalledObject(localWebAppDescriptor, schemaPath,
-                                    AppServerWebAppConfiguration.class);
+                            AppServerWebAppConfiguration.class);
                     effective.merge(local);
                 }
             } catch (ApplicationServerException e) {

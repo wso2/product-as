@@ -15,7 +15,6 @@
  */
 package org.wso2.appserver.configuration.context;
 
-import java.util.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -70,34 +69,5 @@ public class AppServerWebAppConfiguration {
         classLoaderConfiguration.merge(configuration.classLoaderConfiguration);
         singleSignOnConfiguration.merge(configuration.singleSignOnConfiguration);
         statsPublisherConfiguration.merge(configuration.statsPublisherConfiguration);
-    }
-
-    /**
-     * A nested class which models a holder for context level statistics publishing configurations.
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class StatsPublisherConfiguration {
-        @XmlElement(name = "enable-stats-publisher")
-        private Boolean enableStatsPublisher;
-
-        public Boolean isStatsPublisherEnabled() {
-            return enableStatsPublisher;
-        }
-
-        public void enableStatsPublisher(Boolean enableStatsPublisher) {
-            this.enableStatsPublisher = enableStatsPublisher;
-        }
-
-        /**
-         * Merges the context level stats-publishing configuration defined globally and overridden at
-         * context level (if any).
-         *
-         * @param configuration the local, context level group of stats-publishing configuration to be merged with
-         */
-        public void merge(StatsPublisherConfiguration configuration) {
-            Optional.ofNullable(configuration).ifPresent(
-                    mergeable -> enableStatsPublisher = Optional.ofNullable(mergeable.enableStatsPublisher).
-                            orElse(enableStatsPublisher));
-        }
     }
 }

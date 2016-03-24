@@ -18,6 +18,7 @@ package org.wso2.appserver.sample.utils;
 import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
 import org.wso2.appserver.configuration.context.SSOConfiguration;
+import org.wso2.appserver.configuration.context.StatsPublisherConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,9 +85,8 @@ public class ContextConfigurationUtils {
         return ssoConfiguration;
     }
 
-    private static AppServerWebAppConfiguration.StatsPublisherConfiguration prepareStatsPublisherConfiguration() {
-        AppServerWebAppConfiguration.StatsPublisherConfiguration configuration =
-                new AppServerWebAppConfiguration.StatsPublisherConfiguration();
+    private static StatsPublisherConfiguration prepareStatsPublisherConfiguration() {
+        StatsPublisherConfiguration configuration = new StatsPublisherConfiguration();
         configuration.enableStatsPublisher(true);
         return configuration;
     }
@@ -163,8 +163,8 @@ public class ContextConfigurationUtils {
         return requestURLPostfix && consumerURLPostfix && sloURLPostfix;
     }
 
-    private static boolean compareStatsPublisherConfigs(AppServerWebAppConfiguration.StatsPublisherConfiguration actual,
-            AppServerWebAppConfiguration.StatsPublisherConfiguration expected) {
+    private static boolean compareStatsPublisherConfigs(StatsPublisherConfiguration actual,
+            StatsPublisherConfiguration expected) {
         return ((actual != null) && (expected != null) && (actual.isStatsPublisherEnabled().
                 equals(expected.isStatsPublisherEnabled())));
     }

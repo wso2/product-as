@@ -118,7 +118,7 @@
                     </suiteXmlFiles>
                     <systemPropertyVariables>
                         <appserver.home>${project.build.directory}/${distribution.file.name}</appserver.home>
-                        <appserver.version>${project.version}</appserver.version>
+                        <appserver.version>${appserver.version}</appserver.version>
                         <build.directory>${project.build.directory}</build.directory>
                         <simplelogger.properties>simplelogger.properties</simplelogger.properties>
                         <listener.server.timeout>20</listener.server.timeout>
