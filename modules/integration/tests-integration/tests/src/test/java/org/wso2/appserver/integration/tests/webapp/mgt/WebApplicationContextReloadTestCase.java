@@ -26,7 +26,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.extensions.servers.utils.ArchiveExtractor;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.utils.ServerConstants;
 
@@ -75,13 +75,13 @@ public class WebApplicationContextReloadTestCase extends ASIntegrationTest {
             dependsOnMethods = "testWebApplicationExplodedDeployment")
     public void testContextReloadServlets() throws Exception {
         String webAppURLLocal = webAppURL + "/" + webAppName + "/servlet";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         assertEquals(response.getResponseCode(), 200);
         String content1 = response.getData().trim();
 
         testWebApplicationExplodedDeployment();
         Thread.sleep(WEBAPP_DEPLOYMENT_DELAY);
-        response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         assertEquals(response.getResponseCode(), 200);
         String content2 = response.getData().trim();
 
@@ -93,13 +93,13 @@ public class WebApplicationContextReloadTestCase extends ASIntegrationTest {
             dependsOnMethods = "testWebApplicationExplodedDeployment")
     public void testContextReloadingJSPs() throws Exception {
         String webAppURLLocal = webAppURL + "/" + webAppName + "/index.jsp";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         assertEquals(response.getResponseCode(), 200);
         int time1 = Integer.parseInt(response.getData().trim());
 
         testWebApplicationExplodedDeployment();
         Thread.sleep(WEBAPP_DEPLOYMENT_DELAY);
-        response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         assertEquals(response.getResponseCode(), 200);
         int time2 = Integer.parseInt(response.getData().trim());
 

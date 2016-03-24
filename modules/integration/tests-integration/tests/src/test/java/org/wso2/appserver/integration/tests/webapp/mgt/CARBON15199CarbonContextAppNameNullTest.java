@@ -39,7 +39,7 @@ import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.extensions.servers.carbonserver.MultipleServersManager;
 import org.wso2.carbon.automation.extensions.servers.carbonserver.TestServerManager;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 import org.wso2.carbon.integration.common.admin.client.TenantManagementServiceClient;
@@ -187,12 +187,12 @@ public class CARBON15199CarbonContextAppNameNullTest extends ASIntegrationTest {
         checkWebAppAutoUnloadingToGhostState();
         // Testing the application name when web app is unloaded.
         String webAppURLLocal = superTenantServerWebAppUrl + "/" + webAppName + "/app/name";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         assertEquals(response.getData(), webAppName, "Application name not set in the first request");
 
         // Testing the application name when tenant is unloaded.
         String tenantWebAppURLLocal = tenantServerWebAppUrl + "/webapps/" + webAppName + "/app/name";
-        HttpResponse tenantResponse = HttpRequestUtil.sendGetRequest(tenantWebAppURLLocal, null);
+        HttpResponse tenantResponse = ASHttpRequestUtil.sendGetRequest(tenantWebAppURLLocal, null);
         assertEquals(tenantResponse.getData(), webAppName, "Application name not set in the first request");
     }
 

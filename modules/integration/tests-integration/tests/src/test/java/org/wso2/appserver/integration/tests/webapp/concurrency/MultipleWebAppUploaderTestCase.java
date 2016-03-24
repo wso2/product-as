@@ -25,7 +25,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.TestExceptionHandler;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import java.io.File;
@@ -108,16 +108,16 @@ public class MultipleWebAppUploaderTestCase extends ASIntegrationTest {
           dependsOnMethods = "testWebApplicationDeployment")
     public void testInvokeWebapps() throws IOException {
         String webAppURL1 = webAppURL + "/" + webAppFileName1 + "/Calendar.html";
-        HttpResponse response1 = HttpRequestUtil.sendGetRequest(webAppURL1, null);
+        HttpResponse response1 = ASHttpRequestUtil.sendGetRequest(webAppURL1, null);
         assertTrue(response1.getData().contains("<h1>GWT Calendar</h1>"), "Webapp invocation fail");
 
         String webAppURL2 = webAppURL + "/" + webAppFileName2 + "/hello";
-        HttpResponse response2 = HttpRequestUtil.sendGetRequest(webAppURL2, null);
+        HttpResponse response2 = ASHttpRequestUtil.sendGetRequest(webAppURL2, null);
         assertTrue(response2.getData().contains("HelloServlet in myServletWAR!"),
                    "Webapp invocation fail");
 
         String webAppURL3 = webAppURL + "/" + webAppFileName3 + "/hello.jsp";
-        HttpResponse response3 = HttpRequestUtil.sendGetRequest(webAppURL3, null);
+        HttpResponse response3 = ASHttpRequestUtil.sendGetRequest(webAppURL3, null);
         assertTrue(response3.getData().contains("Sample Application JSP Page"),
                    "Webapp invocation fail");
     }

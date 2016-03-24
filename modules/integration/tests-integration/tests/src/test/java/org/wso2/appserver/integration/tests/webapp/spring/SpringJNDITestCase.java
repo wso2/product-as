@@ -28,7 +28,7 @@ import org.wso2.appserver.integration.common.utils.*;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import java.io.*;
@@ -84,7 +84,7 @@ public class SpringJNDITestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Verify Get Operation", dependsOnMethods = "testSpringWARUpload")
     public void testGetOperation() throws Exception {
         String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
-        HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(endpoint, null);
         try {
             JSONArray jsonArray = new JSONArray(response.getData());
             assertTrue(jsonArray.length() > 0);
@@ -103,11 +103,11 @@ public class SpringJNDITestCase extends ASIntegrationTest {
         JSONArray jsonArray;
 
         try {
-            response = HttpRequestUtil.sendGetRequest(getEndpoint, null);
+            response = ASHttpRequestUtil.sendGetRequest(getEndpoint, null);
             jsonArray = new JSONArray(response.getData());
             int initialSize = jsonArray.length();
-            HttpRequestUtil.sendPutRequest(data, endpoint, writer, contentType);
-            response = HttpRequestUtil.sendGetRequest(getEndpoint, null);
+            ASHttpRequestUtil.sendPutRequest(data, endpoint, writer, contentType);
+            response = ASHttpRequestUtil.sendGetRequest(getEndpoint, null);
             jsonArray = new JSONArray(response.getData());
             assertTrue(jsonArray.length() == (initialSize + 1));
         } catch (JSONException e) {
@@ -125,8 +125,8 @@ public class SpringJNDITestCase extends ASIntegrationTest {
         HttpResponse response;
 
         try {
-            HttpRequestUtil.sendPostRequest(data, endpoint, writer, contentType);
-            response = HttpRequestUtil.sendGetRequest(getEndpoint, null);
+            ASHttpRequestUtil.sendPostRequest(data, endpoint, writer, contentType);
+            response = ASHttpRequestUtil.sendGetRequest(getEndpoint, null);
             JSONAssert.assertEquals(expectedData, new JSONObject(response.getData()), false);
         } catch (JSONException e) {
             assertTrue(false);
@@ -141,11 +141,11 @@ public class SpringJNDITestCase extends ASIntegrationTest {
         JSONArray jsonArray;
 
         try {
-            response = HttpRequestUtil.sendGetRequest(getEndpoint, null);
+            response = ASHttpRequestUtil.sendGetRequest(getEndpoint, null);
             jsonArray = new JSONArray(response.getData());
             int initialSize = jsonArray.length();
             sendDeleteRequest(endpoint, contentType);
-            response = HttpRequestUtil.sendGetRequest(getEndpoint, null);
+            response = ASHttpRequestUtil.sendGetRequest(getEndpoint, null);
             jsonArray = new JSONArray(response.getData());
             assertTrue(jsonArray.length() == (initialSize - 1));
         } catch (JSONException e) {

@@ -34,7 +34,7 @@ import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.logging.view.stub.types.carbon.LogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
@@ -259,7 +259,7 @@ public class WebAppLoggingTestCase extends ASIntegrationTest {
 	}
 
 	private int makeRequest(String url) throws IOException {
-		HttpResponse response = HttpRequestUtil.sendGetRequest(url, null);
+		HttpResponse response = ASHttpRequestUtil.sendGetRequest(url, null);
 		log.debug("Response of the webapp : " + response.getData());
 		return response.getResponseCode();
 	}

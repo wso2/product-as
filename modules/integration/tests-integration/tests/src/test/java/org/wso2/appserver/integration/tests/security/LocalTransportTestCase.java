@@ -30,7 +30,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.common.HomePageGenerator;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpsResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpsURLConnectionClient;
@@ -117,7 +117,7 @@ public class LocalTransportTestCase extends ASIntegrationTest {
         String url = webAppURL +
                 "/service-mgt/change_service_state_ajaxprocessor.jsp?serviceName=" + serviceName + "&isActive=false";
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(url, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(url, null);
         log.info("HTTPS client response code " + response.getResponseCode());
 
         ServiceMetaData serviceMetaDataAfter = serviceAdminClient.getServicesData(serviceName);
@@ -132,7 +132,7 @@ public class LocalTransportTestCase extends ASIntegrationTest {
         String url = webAppURL +
                 "/server-admin/proxy_ajaxprocessor.jsp?action=restartGracefully";
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(url, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(url, null);
         log.info("HTTPS client response code " + response.getResponseCode());
 
         Thread.sleep(5000); //force wait until server start gracefully shut down.

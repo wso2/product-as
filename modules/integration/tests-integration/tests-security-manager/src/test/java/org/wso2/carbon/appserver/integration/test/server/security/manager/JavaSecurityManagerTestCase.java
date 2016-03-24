@@ -33,7 +33,7 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.engine.frameworkutils.enums.OperatingSystems;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
@@ -96,7 +96,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "Accessing user-mgt.xml test")
     public void testAccessingFileUnderConfDirSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/directFile"
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppUrl + "/directFile"
                 , "fileName=repository/conf/user-mgt.xml");
         //verifying the error message
         Assert.assertTrue(response.getData().contains("Error occurred while reading file. Reason:" +
@@ -106,7 +106,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "Accessing registry database configurations test")
     public void testGetRegistryDBConfigSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/registryDBConfig", null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppUrl + "/registryDBConfig", null);
         //verifying the error message
         Assert.assertTrue(response.getData().contains("Error occurred when reading registry DB config. " +
                                                       "Reason: access denied (\\\"java.io.FilePermission\\")
@@ -115,7 +115,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "Accessing user management database configurations")
     public void testGetUserManagerDBConfigSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/userManagerDBConfig", null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppUrl + "/userManagerDBConfig", null);
         //verifying the error message
         Assert.assertTrue(response.getData().contains("Error occurred when reading user manager DB config. " +
                                                       "Reason: access denied (\\\"java.io.FilePermission\\")
@@ -124,7 +124,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "calling ServerConfiguration.getInstance()")
     public void getServerConfigurationSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/serverConfiguration"
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppUrl + "/serverConfiguration"
                 , null);
         //verifying the error message
         Assert.assertTrue(response.getData().contains("Error occurred while calling ServerConfiguration.getInstance()." +
@@ -137,7 +137,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "reading axis2 file path from carbon using CarbonUtils")
     public void testAccessingFilePathFromCarbonUtilsSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/axis2FilePath", null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppUrl + "/axis2FilePath", null);
         //verifying the error message
         Assert.assertTrue(response.getData().contains("Error occurred while reading axis2 file path." +
                                                       " Reason: access denied " +
@@ -148,7 +148,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "Copping file to carbon home")
     public void testCopyFileToCarbonHomeSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.doPost(new URL(webAppUrl + "/fileCopy" +
+        HttpResponse response = ASHttpRequestUtil.doPost(new URL(webAppUrl + "/fileCopy" +
                                                                "?source=repository/conf/axis2/axis2.xml" +
                                                                "&destination=repository/conf" +
                                                                "/axis2/axis2.xml-dummy"),
@@ -161,7 +161,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "Creating a file on the server")
     public void testWritingFileUnderConfDirSecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.doPost(new URL(webAppUrl + "/directFile?fileName=repository/" +
+        HttpResponse response = ASHttpRequestUtil.doPost(new URL(webAppUrl + "/directFile?fileName=repository/" +
                                                                "conf/user-mgt-dummy.xml"), "");
         //verifying the error message
         Assert.assertTrue(response.getData().contains("Error occurred while creating file. Reason: " +
@@ -171,7 +171,7 @@ public class JavaSecurityManagerTestCase extends ASIntegrationTest {
 
     @Test(groups = {"wso2.as"}, description = "Accessing System Properties")
     public void testGettingSystemPropertySecurity() throws Exception {
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppUrl + "/systemProperty/carbon.home"
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppUrl + "/systemProperty/carbon.home"
                 , null);
         //verifying the error message
         Assert.assertTrue(response.getData().contains("SYSTEM PROPERTY >")

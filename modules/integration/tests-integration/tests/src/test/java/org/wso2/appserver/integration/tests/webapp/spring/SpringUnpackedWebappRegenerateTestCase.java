@@ -30,7 +30,7 @@ import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.utils.ServerConstants;
 
@@ -93,7 +93,7 @@ public class SpringUnpackedWebappRegenerateTestCase extends ASIntegrationTest {
     private void testInvokeWebApp() throws Exception {
         String endpointURL = "/student";
         String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
-        HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(endpoint, null);
         String expectedMsg = "{\"status\":\"success\"}";
         assertTrue(expectedMsg.equalsIgnoreCase(response.getData()));
     }

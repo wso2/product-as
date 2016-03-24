@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import java.io.File;
@@ -79,7 +79,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
         assertTrue(webAppAdminClient.stopWebApp(webAppFileName, hostname), "failed to stop web application");
         Assert.assertEquals(webAppAdminClient.getWebAppInfo(webAppName).getState(), "Stopped", "Stop State mismatched");
         String webAppURLLocal = webAppURL + "/" + webAppName;
-        Assert.assertEquals(HttpRequestUtil.sendGetRequest(webAppURLLocal, null).getResponseCode(), 302, "Response code mismatch. Client request " +
+        Assert.assertEquals(ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null).getResponseCode(), 302, "Response code mismatch. Client request " +
                                                                                                     "got a response even after web app is stopped");
     }
 
@@ -115,7 +115,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
                    "Web Application unDeployment failed");
 
         String webAppURLLocal = webAppURL + "/" + webAppName + "/spring/intro";
-        HttpRequestUtil client = new HttpRequestUtil();
+        ASHttpRequestUtil client = new ASHttpRequestUtil();
         HttpResponse response = client.sendGetRequest(webAppURLLocal, null);
         Assert.assertEquals(response.getResponseCode(), 302, "Response code mismatch. Client request " +
                                                              "got a response even after web app is undeployed");
@@ -130,7 +130,7 @@ public class SpringApplicationDeploymentTestCase extends ASIntegrationTest {
 
     private void getAndVerifyApplicationPage() throws IOException {
         String webAppURLocal = webAppURL + "/" + webAppName + "/spring/intro";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLocal, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLocal, null);
         assertTrue(response.getData().contains("Welcome to Spring Travel")
                 , "Web app invocation fail. Expected text not found");
     }

@@ -19,7 +19,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
         HttpResponse response;
         url = webAppBaseURL + "error/err.jsp";
         try {
-            response = HttpRequestUtil.sendGetRequest(url, "name=audi");
+            response = ASHttpRequestUtil.sendGetRequest(url, "name=audi");
             fail("Invoking the error page should return response with status code 500. This should throw an exception. " +
                     "url - " + url);
         } catch (IOException e) {
@@ -57,26 +57,26 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
                     " http://localhost:9863/example/jsp/error/err.jsp?name=audi";
             assertEquals(e.getMessage(), errorMessage, "Error HTTP status code 500 did not return for url - " + url);
         }
-        response = HttpRequestUtil.sendGetRequest(url, "name=integra");
+        response = ASHttpRequestUtil.sendGetRequest(url, "name=integra");
         assertEquals(response.getResponseCode(), 200, "200 OK HTTP code did not return for url - " + url);
 
         // jsp:include
         url = webAppBaseURL + "include/include.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         String expectedString = "To get the current time in ms by including the output of another JSP";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
 
         // jsp:forward
         url = webAppBaseURL + "forward/forward.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         expectedString = "VM Memory usage";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
 
         // JSP-to-Servlet-to-JSP
         url = webAppBaseURL + "jsptoserv/jsptoservlet.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         expectedString = "I have been invoked byservletToJspServlet.";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
@@ -89,7 +89,7 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
         String webAppBaseURL = webAppURL + webAppContext + "/jsp/tagplugin/";
         //tag plugins - c:if check
         String url = webAppBaseURL + "if.jsp";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(url, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(url, null);
         String expectedString = "The result of testing for (1==1) is: true";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
@@ -99,7 +99,7 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
 
         //tag plugins - c:forEach check
         url = webAppBaseURL + "foreach.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         expectedString = "One";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
@@ -115,7 +115,7 @@ public class JSPExampleWebappTestCase extends ASIntegrationTest {
 
         //tag plugins - c:choose
         url = webAppBaseURL + "choose.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         String actualString = response.getData().replaceAll("\\n|\\r|\\s", "");
         expectedString = "#0:Huh?";
         assertTrue(actualString.contains(expectedString),

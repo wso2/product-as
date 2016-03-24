@@ -25,7 +25,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.TestExceptionHandler;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import java.io.File;
@@ -90,7 +90,7 @@ public class SingleWebAppUploaderTestCase extends ASIntegrationTest {
           dependsOnMethods = "testWebApplicationDeployment")
     public void testInvokeWebapps() throws IOException {
         String webAppURL1 = webAppURL + "/" + webAppFileName + "/simple-servlet";
-        HttpResponse response1 = HttpRequestUtil.sendGetRequest(webAppURL1, null);
+        HttpResponse response1 = ASHttpRequestUtil.sendGetRequest(webAppURL1, null);
         assertTrue(response1.getData().contains("Hello, World"));
     }
 

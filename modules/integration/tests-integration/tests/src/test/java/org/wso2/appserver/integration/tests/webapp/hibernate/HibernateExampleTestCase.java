@@ -22,7 +22,7 @@ import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpURLConnectionClient;
 
@@ -82,7 +82,7 @@ public class HibernateExampleTestCase extends ASIntegrationTest {
         Map<String, String> headers = new HashMap<>(1);
         headers.put("Accept", "application/xml");
 
-        HttpResponse response = HttpRequestUtil.doGet(getEndpoint, headers);
+        HttpResponse response = ASHttpRequestUtil.doGet(getEndpoint, headers);
         String actualValue = response.getData();
         assertEquals(actualValue, expectedValue);
 
@@ -91,7 +91,7 @@ public class HibernateExampleTestCase extends ASIntegrationTest {
         writer = new StringWriter();
         HttpURLConnectionClient.sendPutRequest(data, endpoint, writer, "application/x-www-form-urlencoded");
 
-        response = HttpRequestUtil.doGet(getEndpoint, headers);
+        response = ASHttpRequestUtil.doGet(getEndpoint, headers);
         expectedValue = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Employees>" +
                 "<Employee><firstName>Kasun</firstName><id>1</id><lastName>Gajasinghe</lastName><salary>15000</salary>" +
                 "</Employee></Employees>";
@@ -102,7 +102,7 @@ public class HibernateExampleTestCase extends ASIntegrationTest {
 
         HttpURLConnectionClient.sendDeleteRequest(endpoint, null);
 
-        response = HttpRequestUtil.doGet(getEndpoint, headers);
+        response = ASHttpRequestUtil.doGet(getEndpoint, headers);
         expectedValue = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Employees/>"; //empty array
         actualValue = response.getData();
         assertEquals(actualValue, expectedValue);
