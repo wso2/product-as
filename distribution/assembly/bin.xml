@@ -42,7 +42,6 @@
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:appserver-utils:jar</include>
-                <include>org.wso2.appserver:configuration-loader-valve:jar</include>
                 <include>org.wso2.appserver:http-statistics-monitoring:jar</include>
                 <include>org.wso2.appserver:webapp-loader:jar</include>
             </includes>
@@ -53,7 +52,6 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
-                <include>org.wso2.appserver:configuration-loader:war</include>
                 <include>org.wso2.appserver:hello-world:war</include>
                 <include>org.wso2.appserver:simple-storage-service:war</include>
             </includes>

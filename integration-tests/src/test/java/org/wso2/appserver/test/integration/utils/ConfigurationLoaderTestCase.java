@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 6.0.0
  */
 public class ConfigurationLoaderTestCase extends TestBase {
-    private static final String sampleContextRoot = "/configuration-loader";
+    private static final String sampleContextRoot = "/configuration-loader-" + System.getProperty("appserver.version");
     private static final String serverConfigurationTestResultAttrName = "isServerConfigurationUniform";
     private static final String contextConfigurationTestResultAttrName = "isContextConfigurationUniform";
 

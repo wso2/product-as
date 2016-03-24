@@ -49,7 +49,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 /**
- * The test suite listeners class provides the environment setup for the integration tests.
+ * The test suite listener class provides the environment setup for the integration tests.
  *
  * @since 6.0.0
  */

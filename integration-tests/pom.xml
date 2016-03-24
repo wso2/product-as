@@ -32,6 +32,16 @@
             <artifactId>tomcat-catalina</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- WSO2 Application Server distribution -->
+        <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>distribution</artifactId>
             <type>zip</type>
@@ -42,14 +52,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- WSO2 Application Server test artifacts -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>configuration-loader</artifactId>
+            <type>war</type>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>configuration-loader-valve</artifactId>
         </dependency>
     </dependencies>
 
@@ -71,6 +82,31 @@
                             <outputDirectory>${project.build.directory}/</outputDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>add-tomcat-test-components</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.wso2.appserver</includeGroupIds>
+                            <includeArtifactIds>configuration-loader-valve</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/${distribution.file.name}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-test-webapps</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.wso2.appserver</includeGroupIds>
+                            <includeArtifactIds>configuration-loader</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -82,6 +118,7 @@
                     </suiteXmlFiles>
                     <systemPropertyVariables>
                         <appserver.home>${project.build.directory}/${distribution.file.name}</appserver.home>
+                        <appserver.version>${project.version}</appserver.version>
                         <build.directory>${project.build.directory}</build.directory>
                         <simplelogger.properties>simplelogger.properties</simplelogger.properties>
                         <listener.server.timeout>20</listener.server.timeout>

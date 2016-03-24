@@ -37,10 +37,7 @@ import java.net.URL;
  * @since 6.0.0
  */
 public class WebappLoaderIT extends TestBase {
-    /**
-     * This sample test case check if the server is running by sending a request to the server.
-     */
-    @Test
+    @Test(description = "Checks if the server is running by sending a request to the server")
     public void testEnvironmentConfiguration() throws IOException {
         URL requestUrl = new URL(getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey");
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
