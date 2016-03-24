@@ -11,8 +11,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>samples</artifactId>
         <groupId>org.wso2.appserver</groupId>
@@ -20,19 +21,24 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>hello-world</artifactId>
-    <packaging>war</packaging>
-    <name>WSO2 Application Server - Sample - Hello World</name>
+    <artifactId>configuration-loader-valve</artifactId>
+    <name>WSO2 Application Server - Sample - Configuration Loader Valve</name>
+    <description>An Apache Tomcat, integration test artifact valve for WSO2 App Server specific configuration loading
+    </description>
     <url>http://wso2.com</url>
-
-    <build>
-        <finalName>hello-world</finalName>
-    </build>
 
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-utils</artifactId>
         </dependency>
     </dependencies>
 </project>

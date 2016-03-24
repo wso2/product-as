@@ -16,13 +16,12 @@
  *  under the License.
  *
  */
-
 package org.wso2.appserver.test.integration.sample;
-
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.appserver.test.integration.TestBase;
+import org.wso2.appserver.test.integration.TestConstants;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -43,7 +42,7 @@ public class SampleTestIT extends TestBase {
     public void testServerStatus() throws IOException {
         URL requestUrl = new URL(getBaseUrl());
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-        connection.setRequestMethod("GET");
+        connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
 
         int responseCode = connection.getResponseCode();
         Assert.assertEquals(responseCode, 200);

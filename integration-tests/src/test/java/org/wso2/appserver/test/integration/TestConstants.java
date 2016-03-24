@@ -27,13 +27,15 @@ package org.wso2.appserver.test.integration;
 public final class TestConstants {
     //  System property constant names
     public static final String APPSERVER_HOME = "appserver.home";
-    public static final String BUILD_DIRECTORY = "build.directory";
     public static final String SERVER_TIMEOUT = "listener.server.timeout";
-    public static final String PORT_CHECK_MIN = "port.check.min";
-    public static final String PORT_CHECK_MAX = "port.check.max";
     public static final String APPSERVER_PORT = "appserver.port";
 
     //  Port value constants
     public static final int TOMCAT_DEFAULT_PORT = 8080;
-    public static final int TOMCAT_AJP_PORT = 8009;
+
+    //  HTTP method constants
+    public static final String HTTP_GET_METHOD = "GET";
+
+    //  Sample Apache Tomcat Valve fully qualified class name
+    public static final String CONFIGURATION_LOADER_SAMPLE_VALVE = "org.wso2.appserver.sample.ConfigurationLoaderValve";
 }

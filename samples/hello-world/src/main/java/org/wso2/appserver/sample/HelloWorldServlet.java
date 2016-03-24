@@ -27,9 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *  Sample servlet containing a hello world as response.
+ *
+ *  @since 6.0.0
  */
 public class HelloWorldServlet extends HttpServlet {
-
     private static final long serialVersionUID = -6580705829559379240L;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,5 +40,4 @@ public class HelloWorldServlet extends HttpServlet {
         out.flush();
         out.close();
     }
-
 }

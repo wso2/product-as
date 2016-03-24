@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.configuration.context;
 
+import java.util.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -32,6 +33,8 @@ public class AppServerWebAppConfiguration {
     private ClassLoaderConfiguration classLoaderConfiguration;
     @XmlElement(name = "saml2-single-sign-on")
     private SSOConfiguration singleSignOnConfiguration;
+    @XmlElement(name = "statistics-publisher")
+    private StatsPublisherConfiguration statsPublisherConfiguration;
 
     public ClassLoaderConfiguration getClassLoaderConfiguration() {
         return classLoaderConfiguration;
@@ -49,6 +52,14 @@ public class AppServerWebAppConfiguration {
         this.singleSignOnConfiguration = singleSignOnConfiguration;
     }
 
+    public StatsPublisherConfiguration getStatsPublisherConfiguration() {
+        return statsPublisherConfiguration;
+    }
+
+    public void setStatsPublisherConfiguration(StatsPublisherConfiguration statsPublisherConfiguration) {
+        this.statsPublisherConfiguration = statsPublisherConfiguration;
+    }
+
     /**
      * Merges the globally defined context level configurations and context level configurations overridden at
      * context level.
@@ -58,5 +69,35 @@ public class AppServerWebAppConfiguration {
     public void merge(AppServerWebAppConfiguration configuration) {
         classLoaderConfiguration.merge(configuration.classLoaderConfiguration);
         singleSignOnConfiguration.merge(configuration.singleSignOnConfiguration);
+        statsPublisherConfiguration.merge(configuration.statsPublisherConfiguration);
+    }
+
+    /**
+     * A nested class which models a holder for context level statistics publishing configurations.
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class StatsPublisherConfiguration {
+        @XmlElement(name = "enable-stats-publisher")
+        private Boolean enableStatsPublisher;
+
+        public Boolean isStatsPublisherEnabled() {
+            return enableStatsPublisher;
+        }
+
+        public void enableStatsPublisher(Boolean enableStatsPublisher) {
+            this.enableStatsPublisher = enableStatsPublisher;
+        }
+
+        /**
+         * Merges the context level stats-publishing configuration defined globally and overridden at
+         * context level (if any).
+         *
+         * @param configuration the local, context level group of stats-publishing configuration to be merged with
+         */
+        public void merge(StatsPublisherConfiguration configuration) {
+            Optional.ofNullable(configuration).ifPresent(
+                    mergeable -> enableStatsPublisher = Optional.ofNullable(mergeable.enableStatsPublisher).
+                            orElse(enableStatsPublisher));
+        }
     }
 }

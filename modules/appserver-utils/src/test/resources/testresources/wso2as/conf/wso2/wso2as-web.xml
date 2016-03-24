@@ -11,8 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<wso2as-web xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as-web"
-            xsi:schemaLocation="http://wso2.org/2016/wso2as-web wso2as-web.xsd">
+<wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
     <class-loader>
         <environments>CXF</environments>
     </class-loader>
@@ -35,4 +34,7 @@
         <property key="RelayState">index.jsp</property>
         <property key="TenantId">tenant1</property>
     </saml2-single-sign-on>
+    <statistics-publisher>
+        <enable-stats-publisher>false</enable-stats-publisher>
+    </statistics-publisher>
 </wso2as-web>

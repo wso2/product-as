@@ -21,6 +21,7 @@ package org.wso2.appserver.test.integration.loader;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.appserver.test.integration.TestBase;
+import org.wso2.appserver.test.integration.TestConstants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,10 +42,9 @@ public class WebappLoaderIT extends TestBase {
      */
     @Test
     public void testEnvironmentConfiguration() throws IOException {
-        String url = getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey";
-        URL requestUrl = new URL(url);
+        URL requestUrl = new URL(getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey");
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-        connection.setRequestMethod("GET");
+        connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
 
         int responseCode = connection.getResponseCode();
         if (responseCode == 200) {
