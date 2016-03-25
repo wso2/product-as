@@ -131,7 +131,7 @@ public class StatPublisherUnitTest {
         payload.add("GET");
         payload.add(null);
         payload.add("/");
-        payload.add(200L);
+        payload.add(200);
         payload.add("127.0.0.1");
         payload.add(null);
         payload.add(null);
@@ -139,8 +139,8 @@ public class StatPublisherUnitTest {
         payload.add(null);
         payload.add(null);
         payload.add(0L);
-        payload.add(-1L);
-        payload.add(-1L);
+        payload.add(-1);
+        payload.add(-1);
         payload.add("X-Forwarded-For:();Proxy-Client-IP:();WL-Proxy-Client-IP:();HTTP_CLIENT_IP:();" +
                 "HTTP_X_FORWARDED_FOR:()");
         payload.add("");
