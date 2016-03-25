@@ -36,9 +36,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Utility class to create an Event to published by the DataPublisher.
+ *
+ * @since 6.0.0
  */
 public class EventBuilder {
-
     /**
      * Creates an Event to be published by the DataPublisher.
      *
@@ -52,18 +53,15 @@ public class EventBuilder {
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
                                    long responseTime) throws StatPublisherException {
-
-
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
 
         return new Event(streamId, startTime,
                 new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray() ,
                 null, payload.toArray());
-
     }
 
     /**
-     * Creates a list of payload data
+     * Creates a list of payload data.
      *
      * @param request The Request object of client
      * @param response The Response object of client
@@ -73,7 +71,6 @@ public class EventBuilder {
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
                                                  long responseTime)  {
-
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";
 
@@ -187,7 +184,6 @@ public class EventBuilder {
      * @return The original IP address of the client
      */
     private static String getClientIpAddress(Request request) {
-
         List<String> headers = Arrays.asList(EventPublisherConstants.X_FORWARDED_FOR,
                 EventPublisherConstants.PROXY_CLIENT_IP,
                 EventPublisherConstants.WL_PROXY_CLIENT_IP,
@@ -204,8 +200,6 @@ public class EventBuilder {
             }
 
         }
-
         return request.getRemoteAddr();
     }
-
 }

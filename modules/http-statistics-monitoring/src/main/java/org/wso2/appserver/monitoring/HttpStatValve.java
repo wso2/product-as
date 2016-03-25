@@ -47,9 +47,10 @@ import javax.servlet.ServletException;
 
 /**
  * Custom Tomcat valve to Publish server statistics data to Data Analytics Server.
+ *
+ * @since 6.0.0
  */
 public class HttpStatValve extends ValveBase {
-
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
     private DataPublisher dataPublisher = null;
     StatsPublisherConfiguration statsPublisherConfiguration;
@@ -70,12 +71,10 @@ public class HttpStatValve extends ValveBase {
             LOG.error("Initializing DataPublisher failed:", e);
             throw new LifecycleException("Initializing DataPublisher failed: " + e);
         }
-
     }
 
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
-
         Long startTime = System.currentTimeMillis();
         getNext().invoke(request, response);
         long responseTime = System.currentTimeMillis() - startTime;
@@ -95,22 +94,23 @@ public class HttpStatValve extends ValveBase {
     }
 
     /**
-     * get file path to the file containing Data Agent configuration and properties.
+     * Get file path to the file containing Data Agent configuration and properties.
+     *
      * @return the path to the file containing configurations for the Data Agent
      */
     private String getDataAgentConfigPath() {
-        Path path = Paths.get(PathUtils.getAppServerConfigurationBase().toString(),
-                EventPublisherConstants.DATA_AGENT_CONF);
+        Path path = Paths
+                .get(PathUtils.getAppServerConfigurationBase().toString(), EventPublisherConstants.DATA_AGENT_CONF);
         return path.toString();
     }
 
     /**
      * Instantiate a data publisher to be used to publish data to DAS.
+     *
      * @return DataPublisher object initialized with configurations
      * @throws StatPublisherException
      */
     private DataPublisher getDataPublisher() throws StatPublisherException {
-
         AgentHolder.setConfigPath(getDataAgentConfigPath());
         DataPublisher dataPublisher;
 
@@ -118,13 +118,11 @@ public class HttpStatValve extends ValveBase {
 
             if (!Optional.ofNullable(statsPublisherConfiguration.getAuthenticationURL()).isPresent()) {
                 dataPublisher = new DataPublisher(statsPublisherConfiguration.getPublisherURL(),
-                        statsPublisherConfiguration.getUsername(),
-                        statsPublisherConfiguration.getPassword());
+                        statsPublisherConfiguration.getUsername(), statsPublisherConfiguration.getPassword());
             } else {
                 dataPublisher = new DataPublisher(statsPublisherConfiguration.getDataAgentType(),
                         statsPublisherConfiguration.getPublisherURL(),
-                        statsPublisherConfiguration.getAuthenticationURL(),
-                        statsPublisherConfiguration.getUsername(),
+                        statsPublisherConfiguration.getAuthenticationURL(), statsPublisherConfiguration.getUsername(),
                         statsPublisherConfiguration.getPassword());
             }
 
@@ -144,16 +142,16 @@ public class HttpStatValve extends ValveBase {
             LOG.error("Connection failed: " + e);
             throw new StatPublisherException("Connection failed: ", e);
         }
-
         return dataPublisher;
     }
 
     /**
      * Filter to process only requests of text/html type.
+     *
      * @param response The Response object of client
      * @return true if request is of text/html type and false if not
      */
-    private boolean filterResponse (Response response) {
+    private boolean filterResponse(Response response) {
 
         String responseContentType = response.getContentType();
         //if the response content is not null and is of type text/html, allow to publish stats

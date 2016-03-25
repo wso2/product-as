@@ -16,7 +16,6 @@
  *  under the License.
  *
  */
-
 package org.wso2.appserver.test.integration;
 
 /**
