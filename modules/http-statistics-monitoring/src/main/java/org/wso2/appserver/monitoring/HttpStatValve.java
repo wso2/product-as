@@ -46,13 +46,13 @@ import java.util.Optional;
 import javax.servlet.ServletException;
 
 /**
- * Custom Tomcat valve to Publish server statistics data to Data Analytics Server.
+ * An implementation of {@code ValveBase} that publishes HTTP statistics of the requests to WSO2 Data Analytics Server.
  */
 public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
-    private DataPublisher dataPublisher = null;
-    StatsPublisherConfiguration statsPublisherConfiguration;
+    private DataPublisher dataPublisher;
+    private StatsPublisherConfiguration statsPublisherConfiguration;
 
     @Override
     protected void initInternal() throws LifecycleException {
@@ -96,16 +96,18 @@ public class HttpStatValve extends ValveBase {
 
     /**
      * get file path to the file containing Data Agent configuration and properties.
+     *
      * @return the path to the file containing configurations for the Data Agent
      */
     private String getDataAgentConfigPath() {
         Path path = Paths.get(PathUtils.getAppServerConfigurationBase().toString(),
-                EventPublisherConstants.DATA_AGENT_CONF);
+                Constants.DATA_AGENT_CONF);
         return path.toString();
     }
 
     /**
      * Instantiate a data publisher to be used to publish data to DAS.
+     *
      * @return DataPublisher object initialized with configurations
      * @throws StatPublisherException
      */
@@ -150,10 +152,11 @@ public class HttpStatValve extends ValveBase {
 
     /**
      * Filter to process only requests of text/html type.
+     *
      * @param response The Response object of client
      * @return true if request is of text/html type and false if not
      */
-    private boolean filterResponse (Response response) {
+    private boolean filterResponse(Response response) {
 
         String responseContentType = response.getContentType();
         //if the response content is not null and is of type text/html, allow to publish stats
