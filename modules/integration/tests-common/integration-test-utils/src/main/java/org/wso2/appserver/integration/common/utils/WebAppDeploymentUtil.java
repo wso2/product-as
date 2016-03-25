@@ -27,7 +27,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.appserver.integration.common.clients.WebAppAdminClient;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 public class WebAppDeploymentUtil {
@@ -161,7 +161,7 @@ public class WebAppDeploymentUtil {
         Calendar startTime = Calendar.getInstance();
         while ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) < WEBAPP_DEPLOYMENT_DELAY) {
             try {
-                response = HttpRequestUtil.sendGetRequest(endpoint, null);
+                response = ASHttpRequestUtil.sendGetRequest(endpoint, null);
                 if (response != null && !response.getData().isEmpty() && !response.getData().equalsIgnoreCase(previousData)) {
                     return Boolean.TRUE;
                 }

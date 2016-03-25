@@ -29,7 +29,7 @@ import org.wso2.carbon.automation.engine.annotations.ExecutionEnvironment;
 import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.utils.ServerConstants;
 import java.io.File;
@@ -145,7 +145,7 @@ public class SpringNegativeTestCase extends ASIntegrationTest {
         String webApp = ASIntegrationConstants.TARGET_RESOURCE_LOCATION + "spring" + File.separator + webAppMode.getWebAppName() + ".war";
         webAppAdminClient.uploadWarFile(webApp);
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppMode.getWebAppName()));
-        HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(endpoint, null);
         webAppAdminClient.uploadWarFile(webApp);
         assertTrue(WebAppDeploymentUtil.isWebAppRedeployed(webAppMode.getWebAppName(), response.getData(), endpoint),
                    "Web app redeployment failed: " + webAppMode.getWebAppName());

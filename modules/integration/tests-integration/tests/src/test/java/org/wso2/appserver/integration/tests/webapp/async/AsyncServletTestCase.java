@@ -32,7 +32,7 @@ import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 
@@ -97,7 +97,7 @@ public class AsyncServletTestCase extends ASIntegrationTest {
 
     private void testAsyncServletRequest(String asyncContext, String expectedResponse) throws IOException {
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL + asyncContext, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURL + asyncContext, null);
         String result = response.getData();
 
         log.info("Response - " + result);

@@ -28,7 +28,7 @@ import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.extensions.servers.utils.FileManipulator;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
 import org.wso2.carbon.utils.ServerConstants;
@@ -113,7 +113,7 @@ public class SpringWebappClassloading extends ASIntegrationTest{
     public void testGetOperation() throws Exception {
         String endpointURL = "/student";
         String endpoint = webAppURL + "/" + webAppMode.getWebAppName() + endpointURL;
-        HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(endpoint, null);
         try {
             JSONArray jsonArray = new JSONArray(response.getData());
             assertTrue(jsonArray.length() > 0);

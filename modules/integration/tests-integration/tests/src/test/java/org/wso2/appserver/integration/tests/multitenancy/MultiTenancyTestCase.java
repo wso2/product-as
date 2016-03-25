@@ -28,7 +28,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.integration.common.admin.client.TenantManagementServiceClient;
 import org.wso2.carbon.integration.common.utils.exceptions.AutomationUtilException;
@@ -164,14 +164,14 @@ public class MultiTenancyTestCase extends ASIntegrationTest {
 		String webAppURL = getWebAppURL(WebAppTypes.WEBAPPS) +
 		                   "/t/" + FIRST_TENANT_DOMAIN +
 		                   "/webapps/HelloWorldWebapp/";
-		HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL, null);
+		HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURL, null);
 		
 		//todo check the correct response status code once WSAS-2094 is fixed
 		assertEquals(response.getData(), "",
 		             "After de-activating a tenant tenant web app is accessible");
 
 		tenantManagementServiceClient.activateTenant(FIRST_TENANT_DOMAIN);
-		assertEquals(HttpRequestUtil.sendGetRequest(webAppURL, null).getResponseCode(), HttpStatus.SC_OK,
+		assertEquals(ASHttpRequestUtil.sendGetRequest(webAppURL, null).getResponseCode(), HttpStatus.SC_OK,
 		             "After activating the tenant tenant web app is not accessible");
 
 	}

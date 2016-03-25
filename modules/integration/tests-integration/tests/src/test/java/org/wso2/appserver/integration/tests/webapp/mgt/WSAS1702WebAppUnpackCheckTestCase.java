@@ -30,7 +30,7 @@ import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.integration.common.admin.client.TenantManagementServiceClient;
 import org.wso2.carbon.integration.common.utils.LoginLogoutClient;
@@ -79,7 +79,7 @@ public class WSAS1702WebAppUnpackCheckTestCase extends ASIntegrationTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(backendURL, sessionCookie, webAppName)
                 , "Web Application Deployment failed");
         String webAppURLLocal = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName + "/" + "Calendar.html";
-        HttpResponse response1 = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        HttpResponse response1 = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         assertTrue(response1.getData().contains("<h1>GWT Calendar</h1>"), "Webapp invocation fail");
     }
 
@@ -117,7 +117,7 @@ public class WSAS1702WebAppUnpackCheckTestCase extends ASIntegrationTest {
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
                 backendURL, sessionCookie, webAppName), "Web Application unDeployment failed");
         String webAppURLLocal = getWebAppURL(WebAppTypes.WEBAPPS) + "/" + webAppName;
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         Assert.assertEquals(response.getResponseCode(), 404, "Response code mismatch. Client request " +
                 "got a response even after web app is undeployed");
     }

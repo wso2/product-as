@@ -31,7 +31,7 @@ import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.exceptions.AutomationFrameworkException;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 
@@ -62,7 +62,7 @@ public class JpaServletCdiTestCase extends ASIntegrationTest {
     public static void main(String[] args) {
         try {
             URL orderEp = new URL("http://localhost:9768/jpa-order-processor/order");
-            HttpResponse response = HttpRequestUtil.doPost(orderEp, "item=Item0001&quantity=100&placeOrder=Place+Order");
+            HttpResponse response = ASHttpRequestUtil.doPost(orderEp, "item=Item0001&quantity=100&placeOrder=Place+Order");
             System.out.println(response.getData());
         } catch (AutomationFrameworkException | MalformedURLException e) {
             e.printStackTrace();
@@ -87,7 +87,7 @@ public class JpaServletCdiTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "test jpa and jax-ws")
     public void testJpaServletCdi() throws Exception {
         URL orderEp = new URL(webAppURL + "/order");
-        HttpResponse response = HttpRequestUtil.doPost(orderEp, "item=Item0001&quantity=100&placeOrder=Place+Order");
+        HttpResponse response = ASHttpRequestUtil.doPost(orderEp, "item=Item0001&quantity=100&placeOrder=Place+Order");
         String result = response.getData();
 
         log.info("Response - " + result);

@@ -18,7 +18,7 @@ package org.wso2.appserver.integration.tests.webapp.jsp;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import static org.testng.Assert.assertTrue;
@@ -37,13 +37,13 @@ public class JSP2ExampleWebappTestCase extends ASIntegrationTest {
         String webAppBaseURL = webAppURL + webAppContext + "/jsp/jsp2/";
 
         String url = webAppBaseURL + "simpletag/hello.jsp";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(url, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(url, null);
         String expectedString = "Hello, world!";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
 
         url = webAppBaseURL + "simpletag/repeat.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         expectedString = "Invocation 1 of 5";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
@@ -52,7 +52,7 @@ public class JSP2ExampleWebappTestCase extends ASIntegrationTest {
                 getFailMessage(response.getData(), expectedString));
 
         url = webAppBaseURL + "simpletag/book.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         expectedString = "The Lord of the Rings";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));
@@ -67,7 +67,7 @@ public class JSP2ExampleWebappTestCase extends ASIntegrationTest {
                 getFailMessage(response.getData(), expectedString));
 
         url = webAppBaseURL + "tagfiles/hello.jsp";
-        response = HttpRequestUtil.sendGetRequest(url, null);
+        response = ASHttpRequestUtil.sendGetRequest(url, null);
         expectedString = "Hello, world!";
         assertTrue(response.getData().contains(expectedString),
                 getFailMessage(response.getData(), expectedString));

@@ -33,7 +33,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.extensions.servers.utils.ArchiveExtractor;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.webapp.mgt.stub.WebappAdminStub;
 import org.wso2.carbon.webapp.mgt.stub.types.carbon.SessionMetadata;
@@ -167,7 +167,7 @@ public class WebappAdminTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "Tests webapp session information", dependsOnMethods = "testStartStopWebapp")
     public void testWebAppSessionExpiration() throws IOException {
         String endpoint = webAppURL + "/" + webAppName;
-        HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(endpoint, null);
         assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
 
         SessionsWrapper sessions = webAppAdminStub.getActiveSessions(webAppFileName, 0, hostName);
@@ -200,7 +200,7 @@ public class WebappAdminTestCase extends ASIntegrationTest {
 
         Map<String, String> cookieHeader = new HashMap<>(1);
         cookieHeader.put("Cookie", cookie);
-        response = HttpRequestUtil.doGet(endpoint, cookieHeader);
+        response = ASHttpRequestUtil.doGet(endpoint, cookieHeader);
         assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
         assertTrue(response.getData().contains("Hello 2!"), "Expected value: Hello 2!, actual value: " +
                 response.getData());
@@ -233,7 +233,7 @@ public class WebappAdminTestCase extends ASIntegrationTest {
         webAppAdminStub.expireAllSessions(webAppFileName);
 
         String endpoint = webAppURL + "/" + webAppName;
-        HttpResponse response = HttpRequestUtil.sendGetRequest(endpoint, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(endpoint, null);
         assertEquals(response.getResponseCode(), HttpStatus.SC_OK);
 
         try {
@@ -297,7 +297,7 @@ public class WebappAdminTestCase extends ASIntegrationTest {
      * This sends a get request, and returns a HttpResponse object populated with
      * content, response code, and header fields.
      * <p/>
-     * HttpRequestUtil.sendGetRequest does not include the header fields - TA-990
+     * ASHttpRequestUtil.sendGetRequest does not include the header fields - TA-990
      */
     private HttpResponse sendGetRequest(String endpoint, String requestParameters) throws IOException {
         if (requestParameters != null && requestParameters.length() > 0) {

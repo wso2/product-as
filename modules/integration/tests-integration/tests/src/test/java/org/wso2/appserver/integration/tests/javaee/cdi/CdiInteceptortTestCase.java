@@ -29,7 +29,7 @@ import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.appserver.integration.common.utils.WebAppTypes;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 
@@ -76,7 +76,7 @@ public class CdiInteceptortTestCase extends ASIntegrationTest {
     @Test(groups = "wso2.as", description = "test cdi interceptor with servlet")
     public void testCdiServlet() throws Exception {
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURL, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURL, null);
         String result = response.getData();
 
         log.info("Response - " + result);

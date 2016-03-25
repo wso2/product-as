@@ -25,7 +25,7 @@ import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import java.io.File;
@@ -79,10 +79,10 @@ public class WSAS1687JSTL12ELExpressionsTestCase extends ASIntegrationTest {
             webAppURLLocal = webAppURL + "/webapps" + webAppContext + "/index.jsp";
         }
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "flowerName=rose");
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "flowerName=rose");
         assertEquals(response.getData().trim(), "Color: \"red\"", "EL expression evaluation failed.");
 
-        response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "flowerName=Sunflower");
+        response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "flowerName=Sunflower");
         assertEquals(response.getData().trim(), "Color: \"NOT red\"", "EL expression evaluation failed.");
     }
 
@@ -95,7 +95,7 @@ public class WSAS1687JSTL12ELExpressionsTestCase extends ASIntegrationTest {
                 "Web Application unDeployment failed");
 
         String webAppURLLocal = webAppURL + webAppContext;
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         Assert.assertEquals(response.getResponseCode(), 302, "Response code mismatch. Client request " +
                 "got a response even after web app is undeployed");
     }

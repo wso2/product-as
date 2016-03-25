@@ -28,7 +28,7 @@ import org.wso2.appserver.integration.common.utils.WebAppDeploymentUtil;
 import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 
 import java.io.File;
@@ -100,7 +100,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
         // Requests are sent directly to worker nodes
         log.info(" ----- Validating web application deployment via worker node-1 : " + webAppURLLocalWorker1);
 
-        HttpResponse worker1Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
+        HttpResponse worker1Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
 
         long currentTime = System.currentTimeMillis();
 
@@ -115,7 +115,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
             } catch (InterruptedException e) {
                 //ignored the exception here since it will exit the execution
             }
-            worker1Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
+            worker1Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
         }
 
         log.info(" ----- ResponseCode received worker node-1 : " + worker1Response.getResponseCode());
@@ -126,7 +126,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
 
         log.info(" ----- Validating web application deployment via worker node-2 : " + webAppURLLocalWorker2);
 
-        HttpResponse worker2Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
+        HttpResponse worker2Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
 
         // Reset currentTime for worker node 2
         currentTime = System.currentTimeMillis();
@@ -142,7 +142,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
             } catch (InterruptedException e) {
                 //ignored the exception here since it will exit the execution
             }
-            worker2Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
+            worker2Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
         }
 
         log.info(" ----- ResponseCode received worker node-2 : " + worker2Response.getResponseCode());
@@ -179,7 +179,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
         // Requests are sent directly to worker nodes after undeploying web app in manager node
         log.info(" ----- Validating web application undeployment via worker node-1 : " + webAppURLLocalWorker1);
 
-        HttpResponse worker1Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
+        HttpResponse worker1Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
 
         long currentTime = System.currentTimeMillis();
 
@@ -195,7 +195,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
             } catch (InterruptedException e) {
                 //ignored the exception here since it will exit the execution
             }
-            worker1Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
+            worker1Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker1, null);
         }
 
         log.info(" ----- ResponseCode received worker node-1 : " + worker1Response.getResponseCode());
@@ -208,7 +208,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
 
         log.info(" ----- Validating web application undeployment via worker node-2 : " + webAppURLLocalWorker2);
 
-        HttpResponse worker2Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
+        HttpResponse worker2Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
 
         // Reset currentTime for worker node 2
         currentTime = System.currentTimeMillis();
@@ -225,7 +225,7 @@ public class WebAppDepSyncTestCase extends ASPlatformBaseTest {
             } catch (InterruptedException e) {
                 //ignored the exception here since it will exit the execution
             }
-            worker2Response = HttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
+            worker2Response = ASHttpRequestUtil.sendGetRequest(webAppURLLocalWorker2, null);
         }
 
         log.info(" ----- ResponseCode received worker node-2 : " + worker2Response.getResponseCode());

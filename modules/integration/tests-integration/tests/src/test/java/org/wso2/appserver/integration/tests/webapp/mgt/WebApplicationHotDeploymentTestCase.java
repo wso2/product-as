@@ -28,7 +28,7 @@ import org.wso2.carbon.automation.engine.annotations.SetEnvironment;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.common.FileManager;
 import org.wso2.carbon.automation.test.utils.http.client.HttpClientUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.utils.ServerConstants;
 
@@ -85,7 +85,7 @@ public class WebApplicationHotDeploymentTestCase extends ASIntegrationTest {
                 backendURL, sessionCookie, webAppName),
                 "Web Application unDeployment failed");
         String webAppURLLocal = webAppURL + "/appServer-valied-deploymant-1.0.0";
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, null);
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, null);
         Assert.assertEquals(response.getResponseCode(), 302, "Response code mismatch. Client request " +
                 "got a response even after web app is undeployed");
     }

@@ -29,7 +29,7 @@ import org.wso2.carbon.automation.engine.context.AutomationContext;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
 import org.wso2.carbon.automation.test.utils.common.TestConfigurationProvider;
-import org.wso2.carbon.automation.test.utils.http.client.HttpRequestUtil;
+import org.wso2.appserver.integration.common.utils.ASHttpRequestUtil;
 import org.wso2.carbon.automation.test.utils.http.client.HttpResponse;
 import org.wso2.carbon.integration.common.admin.client.NDataSourceAdminServiceClient;
 import org.wso2.carbon.integration.common.utils.mgt.ServerConfigurationManager;
@@ -125,7 +125,7 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
             webAppURLLocal = webAppURL + "/webapps" + tomcatWebAppContext + "/jndi/tomcat-resource-lookup";
         }
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WebappContextDB");
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WebappContextDB");
         Assert.assertEquals(response.getData(), "DataSourceAvailable");
     }
 
@@ -143,7 +143,7 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
 //            webAppURLLocal = webAppURL + "/webapps" + tomcatWebAppContext + "/jndi/tomcat-resource-lookup";
         }
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/TomcatContextDB");
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/TomcatContextDB");
         Assert.assertEquals(response.getData(), "DataSourceAvailable");
     }
 
@@ -164,12 +164,12 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
         String webAppURLLocal;
         if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
             webAppURLLocal = webAppURL + carbonWebAppContext + "/jndi/carbon-datasource-lookup";
-            HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WSO2CarbonDB");
+            HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WSO2CarbonDB");
             Assert.assertEquals(response.getData(), "DataSourceAvailable");
 
         } else if (userMode == TestUserMode.TENANT_ADMIN) {
             webAppURLLocal = webAppURL + "/webapps" + carbonWebAppContext + "/jndi/carbon-datasource-lookup";
-            HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WSO2CarbonDB");
+            HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WSO2CarbonDB");
             Assert.assertEquals(response.getData(), "DataSourceNotFound");
         }
     }
@@ -186,7 +186,7 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
             webAppURLLocal = webAppURL + "/webapps" + carbonWebAppContext + "/jndi/tomcat-resource-lookup";
         }
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WebappContextDB");
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/WebappContextDB");
         Assert.assertEquals(response.getData(), "DataSourceNotFound");
     }
 
@@ -227,7 +227,7 @@ public class JNDIResourceLookupTestCase extends ASIntegrationTest {
             webAppURLLocal = webAppURL + "/webapps" + carbonWebAppContext + "/jndi/carbon-datasource-lookup";
         }
 
-        HttpResponse response = HttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/myCarbonDS");
+        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURLLocal, "dsName=jdbc/myCarbonDS");
         Assert.assertEquals(response.getData(), "DataSourceAvailable");
     }
 
