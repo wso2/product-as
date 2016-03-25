@@ -21,7 +21,7 @@ package org.wso2.appserver.monitoring.utils;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.wso2.appserver.monitoring.EventPublisherConstants;
 import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.carbon.databridge.commons.Event;

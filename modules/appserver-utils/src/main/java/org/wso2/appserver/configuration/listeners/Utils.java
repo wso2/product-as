@@ -29,7 +29,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 /**
- * A Java class which defines XML utilities.
+ * A Java class which defines utilities.
  *
  * @since 6.0.0
  */

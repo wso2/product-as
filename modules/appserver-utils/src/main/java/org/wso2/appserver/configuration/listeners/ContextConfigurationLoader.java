@@ -38,8 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 6.0.0
  */
 public class ContextConfigurationLoader implements LifecycleListener {
-    private static final Map<Context, AppServerWebAppConfiguration>
-            contextToConfigurationMap = new ConcurrentHashMap<>();
+    private static final Map<Context, AppServerWebAppConfiguration> contextToConfigurationMap =
+            new ConcurrentHashMap<>();
 
     /**
      * Retrieves the {@code AppServerWebAppConfiguration} matching the specified context.
@@ -63,12 +63,19 @@ public class ContextConfigurationLoader implements LifecycleListener {
      */
     @Override
     public void lifecycleEvent(LifecycleEvent lifecycleEvent) {
+        Object source;
         if (Lifecycle.BEFORE_START_EVENT.equals(lifecycleEvent.getType())) {
-            Object source = lifecycleEvent.getSource();
+            source = lifecycleEvent.getSource();
             if (source instanceof Context) {
                 Context context = (Context) source;
                 AppServerWebAppConfiguration effectiveConfiguration = getEffectiveConfiguration(context);
                 contextToConfigurationMap.put(context, effectiveConfiguration);
+            }
+        } else if (Lifecycle.AFTER_STOP_EVENT.equals(lifecycleEvent.getType())) {
+            source = lifecycleEvent.getSource();
+            if (source instanceof Context) {
+                Context context = (Context) source;
+                contextToConfigurationMap.remove(context);
             }
         }
     }
@@ -89,13 +96,10 @@ public class ContextConfigurationLoader implements LifecycleListener {
                     get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR_SCHEMA);
             Path defaultWebAppDescriptor = Paths.
                     get(PathUtils.getAppServerConfigurationBase().toString(), Constants.WEBAPP_DESCRIPTOR);
-
-            Path localWebAppDescriptor = Paths.
-                    get(PathUtils.getWebappPath(context).toString(), Constants.WEBAPP_RESOURCE_FOLDER,
-                            Constants.WEBAPP_DESCRIPTOR);
-
             AppServerWebAppConfiguration effective;
             try {
+                Path localWebAppDescriptor = Paths.get(PathUtils.getWebAppPath(context).toString(),
+                        Constants.WEBAPP_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
                 if (!Files.exists(defaultWebAppDescriptor)) {
                     throw new ApplicationServerRuntimeException(
                             "The " + defaultWebAppDescriptor.toString() + " does not exist");
@@ -103,9 +107,8 @@ public class ContextConfigurationLoader implements LifecycleListener {
                 effective = Utils.
                         getUnmarshalledObject(defaultWebAppDescriptor, schemaPath, AppServerWebAppConfiguration.class);
                 if (Files.exists(localWebAppDescriptor)) {
-                    AppServerWebAppConfiguration local = Utils.
-                            getUnmarshalledObject(localWebAppDescriptor, schemaPath,
-                                    AppServerWebAppConfiguration.class);
+                    AppServerWebAppConfiguration local = Utils.getUnmarshalledObject(localWebAppDescriptor, schemaPath,
+                            AppServerWebAppConfiguration.class);
                     effective.merge(local);
                 }
             } catch (ApplicationServerException e) {

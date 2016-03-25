@@ -15,7 +15,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.wso2.appserver.sample;
 
 import java.io.IOException;
@@ -27,17 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *  Sample servlet containing a hello world as response.
+ *
+ *  @since 6.0.0
  */
 public class HelloWorldServlet extends HttpServlet {
-
     private static final long serialVersionUID = -6580705829559379240L;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         PrintWriter out = response.getWriter();
         out.println("<h1>Hello World from Servlet</h1>");
         out.flush();
         out.close();
     }
-
 }

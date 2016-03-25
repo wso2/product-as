@@ -19,22 +19,41 @@
 
 package org.wso2.appserver.test.integration;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 /**
- * The test suite listeners class provides the environment setup for the integration test.
+ * The test suite listener class provides the environment setup for the integration tests.
+ *
+ * @since 6.0.0
  */
 public class TestSuiteListener implements ISuiteListener {
-
     private static final Logger log = LoggerFactory.getLogger(TestSuiteListener.class);
     private Process applicationServerProcess;
     private int serverStartCheckTimeout;
@@ -44,7 +63,6 @@ public class TestSuiteListener implements ISuiteListener {
 
     @Override
     public void onStart(ISuite iSuite) {
-
         try {
             log.info("Starting pre-integration test setup...");
 
@@ -53,13 +71,13 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
-
             if (isPortAvailable(TestConstants.TOMCAT_DEFAULT_PORT)) {
                 log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is available.");
                 System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(TestConstants.TOMCAT_DEFAULT_PORT));
                 applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
             }
 
+            addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
@@ -70,19 +88,17 @@ public class TestSuiteListener implements ISuiteListener {
                 log.info("Application server started successfully. Running test suite...");
             }
 
-        } catch (IOException ex) {
+        } catch (IOException | ParserConfigurationException | XPathExpressionException | SAXException |
+                TransformerException ex) {
             terminateApplicationServer();
             String message = "Could not start the server";
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
-
-
     }
 
     @Override
     public void onFinish(ISuite iSuite) {
-
         log.info("Starting post-integration tasks...");
         log.info("Terminating the Application server");
         terminateApplicationServer();
@@ -94,16 +110,12 @@ public class TestSuiteListener implements ISuiteListener {
         log.info(os + " operating system was detected");
         if (os.toLowerCase().contains("unix") || os.toLowerCase().contains("linux")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("./bin/catalina.sh", "run")
-                    .start();
+            return applicationServerProcess = new ProcessBuilder().directory(appserverHome).
+                    command("./bin/catalina.sh", "run").start();
         } else if (os.toLowerCase().contains("windows")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("\\bin\\catalina.bat", "run")
-                    .start();
+            return applicationServerProcess = new ProcessBuilder().directory(appserverHome).
+                    command("\\bin\\catalina.bat", "run").start();
         }
         return null;
     }
@@ -115,7 +127,6 @@ public class TestSuiteListener implements ISuiteListener {
     }
 
     private void waitForServerStartup() throws IOException {
-
         log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
         int startupCounter = 0;
         boolean isTimeout = false;
@@ -142,8 +153,14 @@ public class TestSuiteListener implements ISuiteListener {
         }
     }
 
-
-    private boolean isServerListening(String host, int port) {
+    /**
+     * Checks if the server is listening using the {@code host} name and the {@code port} number specified.
+     *
+     * @param host the host name
+     * @param port the port number
+     * @return true if the server is listening else false
+     */
+    private static boolean isServerListening(String host, int port) {
         Socket socket = null;
         try {
             socket = new Socket(host, port);
@@ -160,9 +177,13 @@ public class TestSuiteListener implements ISuiteListener {
         }
     }
 
-
-
-    private boolean isPortAvailable(final int port) {
+    /**
+     * Checks if the specified {@code port} number is available or closed.
+     *
+     * @param port the port number
+     * @return true if the specified {@code port} is available or closed else false
+     */
+    private static boolean isPortAvailable(final int port) {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(port);
@@ -180,4 +201,34 @@ public class TestSuiteListener implements ISuiteListener {
         return false;
     }
 
+    /**
+     * Registers an Apache Tomcat Valve in the server.xml of the Application Server Catalina config base.
+     *
+     * @param className the fully qualified class name of the Valve implementation
+     * @throws ParserConfigurationException if a DocumentBuilder cannot be created
+     * @throws SAXException                 if any parse errors occur
+     * @throws IOException                  if an I/O error occurs
+     * @throws XPathExpressionException     if the XPath expression cannot be evaluated
+     * @throws TransformerException         if an error occurs during the transformation
+     */
+    private static void addValveToServerXML(String className)
+            throws ParserConfigurationException, SAXException, IOException, XPathExpressionException,
+            TransformerException {
+        Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().
+                parse(new InputSource(serverXML.toString()));
+
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        NodeList valves = (NodeList) xpath.
+                evaluate("/Server/Service/Engine/Host/Valve", doc, XPathConstants.NODESET);
+
+        Element valve = doc.createElement("Valve");
+        Attr attrClassName = doc.createAttribute("className");
+        attrClassName.setValue(className);
+        valve.setAttributeNode(attrClassName);
+        valves.item(0).getParentNode().insertBefore(valve, valves.item(0));
+
+        Transformer xFormer = TransformerFactory.newInstance().newTransformer();
+        xFormer.transform(new DOMSource(doc), new StreamResult(serverXML.toFile().getAbsolutePath()));
+    }
 }

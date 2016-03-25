@@ -15,7 +15,6 @@
  */
 package org.wso2.appserver;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.listeners.Utils;
 import org.wso2.appserver.configuration.server.AppServerConfiguration;
@@ -35,43 +34,33 @@ import java.nio.file.Paths;
 public class UtilsTest {
     @Test(description = "Attempts to load the XML file content with a non-existent XML schema file for validation",
             expectedExceptions = { ApplicationServerConfigurationException.class })
-    public void loadObjectFromNonExistentSchemaAsPath() throws ApplicationServerConfigurationException {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XML_FILE);
-        Path xmlSchema = Paths.get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER,
-                TestConstants.NON_EXISTENT_XSD_FILE);
+    public void testLoadingObjectFromNonExistentSchemaAsPath()
+            throws IOException, ApplicationServerConfigurationException {
+        Path xmlSource = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR);
+        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.NON_EXISTENT_SCHEMA);
         Utils.getUnmarshalledObject(xmlSource, xmlSchema, AppServerConfiguration.class);
     }
 
     @Test(description = "Uses an invalid XML schema file for validation",
             expectedExceptions = { ApplicationServerConfigurationException.class })
-    public void invalidSchemaTest() throws ApplicationServerException {
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XSD_FILE);
+    public void testLoadingObjectWithInvalidSchema() throws IOException, ApplicationServerException {
+        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.INVALID_SCHEMA_FILE);
         Utils.getXMLUnmarshaller(xmlSchema, AppServerConfiguration.class);
     }
 
-    @Test(description = "Attempts to load content from a file path source with invalid XML syntax",
+    @Test(description = "Attempts to load content from a file source with invalid XML syntax",
             expectedExceptions = { ApplicationServerConfigurationException.class })
-    public void loadObjectFromInvalidFileTest() throws ApplicationServerException {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
+    public void testLoadingObjectFromInvalidFile() throws IOException, ApplicationServerException {
+        Path xmlSource = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.INVALID_DESCRIPTOR);
+        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
         Utils.getUnmarshalledObject(xmlSource, xmlSchema, AppServerConfiguration.class);
     }
 
     @Test(description = "Attempts to load content from a file input stream with invalid XML syntax",
             expectedExceptions = { ApplicationServerConfigurationException.class })
-    public void loadObjectFromInvalidInputStreamTest() throws ApplicationServerException {
-        Path xmlSource = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.INVALID_XML_FILE);
-        Path xmlSchema = Paths.
-                get(TestConstants.BUILD_DIRECTORY, TestConstants.TEST_RESOURCE_FOLDER, TestConstants.SAMPLE_XSD_FILE);
-        try {
-            Utils.getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
-        } catch (IOException e) {
-            Assert.fail();
-        }
+    public void testLoadingObjectFromInvalidInputStream() throws IOException, ApplicationServerException {
+        Path xmlSource = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.INVALID_DESCRIPTOR);
+        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
+        Utils.getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
     }
 }

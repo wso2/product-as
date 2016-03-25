@@ -19,7 +19,10 @@ import org.apache.catalina.Context;
 import org.apache.catalina.Globals;
 import org.apache.catalina.Host;
 import org.wso2.appserver.Constants;
+import org.wso2.appserver.exceptions.ApplicationServerException;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -76,14 +79,40 @@ public final class PathUtils {
         return PATH_APP_SERVER_CONFIG_BASE;
     }
 
-    public static Path getWebappPath(Context context) {
-        Path webappFilePath = null;
-        if (context != null) {
-            String docBase = context.getDocBase();
-            Host host = (Host) context.getParent();
-            String appBase = host.getAppBase();
-            webappFilePath = Paths.get(PATH_CATALINA_BASE.toString(), appBase, docBase);
+    /**
+     * Returns an absolute file path representation of the webapp context root specified.
+     *
+     * @param context the webapp of which the context root is to be returned
+     * @return the absolute file path representation of the webapp context root specified
+     * @throws ApplicationServerException if an IOException occurs when retrieving the context root
+     */
+    public static Path getWebAppPath(Context context) throws ApplicationServerException {
+        String webappFilePath = "";
+
+        //  Value of the following variable depends on various conditions. Sometimes you get just the webapp directory
+        //  name. Sometime you get absolute path the webapp directory or war file.
+        try {
+            if (context != null) {
+                String docBase = context.getDocBase();
+                Host host = (Host) context.getParent();
+                String appBase = host.getAppBase();
+                File canonicalAppBase = new File(appBase);
+                if (canonicalAppBase.isAbsolute()) {
+                    canonicalAppBase = canonicalAppBase.getCanonicalFile();
+                } else {
+                    canonicalAppBase = new File(PathUtils.getCatalinaBase().toString(), appBase).getCanonicalFile();
+                }
+
+                File webappFile = new File(docBase);
+                if (webappFile.isAbsolute()) {
+                    webappFilePath = webappFile.getCanonicalPath();
+                } else {
+                    webappFilePath = (new File(canonicalAppBase, docBase)).getPath();
+                }
+            }
+        } catch (IOException e) {
+            throw new ApplicationServerException("Error while generating webapp file path", e);
         }
-        return webappFilePath;
+        return Paths.get(webappFilePath);
     }
 }

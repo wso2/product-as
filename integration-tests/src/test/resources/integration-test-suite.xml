@@ -14,18 +14,16 @@ limitations under the License.
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="integration">
-
     <listeners>
         <listener class-name="org.wso2.appserver.test.integration.TestSuiteListener"/>
     </listeners>
 
     <test name="wso2as-test">
         <classes>
+            <class name="org.wso2.appserver.test.integration.utils.ConfigurationLoaderTestCase"/>
             <class name="org.wso2.appserver.test.integration.sample.SampleTestIT"/>
-            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderIT"/>
             <class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestIT"/>
-
+            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderIT"/>
         </classes>
     </test>
-
 </suite>

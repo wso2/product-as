@@ -27,6 +27,8 @@
     <url>http://wso2.com</url>
 
     <modules>
+        <module>configuration-loader</module>
+        <module>configuration-loader-valve</module>
         <module>hello-world</module>
         <module>simple-storage-service</module>
     </modules>

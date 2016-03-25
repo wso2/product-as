@@ -15,6 +15,8 @@
  */
 package org.wso2.appserver.configuration.server;
 
+import org.apache.commons.lang3.text.StrSubstitutor;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -67,5 +69,38 @@ public class AppServerConfiguration {
 
     public void setSecurityConfiguration(SecurityConfiguration securityConfiguration) {
         this.securityConfiguration = securityConfiguration;
+    }
+
+    /**
+     * Resolves the environmental and system variable placeholders specified among the configurations.
+     */
+    public void resolveVariables() {
+        resolveEnvVariables();
+        resolveSystemProperties();
+    }
+
+    /**
+     * Resolves the environmental variable placeholders specified among the configurations.
+     */
+    private void resolveEnvVariables() {
+        StrSubstitutor strSubstitutor = new StrSubstitutor(System.getenv());
+        classLoaderEnvironments.getEnvironments().getEnvironments().
+                forEach(environment -> environment.setClasspath(strSubstitutor.replace(environment.getClasspath())));
+        securityConfiguration.getKeystore().
+                setLocation(strSubstitutor.replace(securityConfiguration.getKeystore().getLocation()));
+        securityConfiguration.getTruststore().
+                setLocation(strSubstitutor.replace(securityConfiguration.getTruststore().getLocation()));
+    }
+
+    /**
+     * Resolves the system variable placeholders specified among the configurations.
+     */
+    private void resolveSystemProperties() {
+        classLoaderEnvironments.getEnvironments().getEnvironments().forEach(environment -> environment.
+                setClasspath(StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
+        securityConfiguration.getKeystore().
+                setLocation(StrSubstitutor.replaceSystemProperties(securityConfiguration.getKeystore().getLocation()));
+        securityConfiguration.getTruststore().setLocation(
+                StrSubstitutor.replaceSystemProperties(securityConfiguration.getTruststore().getLocation()));
     }
 }
