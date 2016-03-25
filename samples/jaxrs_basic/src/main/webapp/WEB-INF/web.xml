@@ -32,7 +32,7 @@
     <servlet>
         <servlet-name>JAXServlet</servlet-name>
         <display-name>JAX-WS/JAX-RS Servlet</display-name>
-        <!--<description>JAX-WS/JAX-RS Endpoint</description>-->
+        <description>JAX-WS/JAX-RS Endpoint</description>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
         <init-param>
             <param-name>service-list-stylesheet</param-name>
