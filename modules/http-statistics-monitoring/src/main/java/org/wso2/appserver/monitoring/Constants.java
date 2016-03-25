@@ -19,9 +19,9 @@
 package org.wso2.appserver.monitoring;
 
 /**
- * The Constants used within this package in setting the statistics.
+ * The Constants used in http stat publishing module.
  */
-public class EventPublisherConstants {
+public class Constants {
 
     //standard header field name for identifying the originating IP address of a client connecting to a Web server
     // through an HTTP proxy or load balancer
@@ -59,13 +59,5 @@ public class EventPublisherConstants {
     //File containing the configurations and properties that define the data agent in the JVM.
     // Resides in product-as/distribution/contents/conf/wso2
     public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
-
-
-    /**
-     * instantiating is not needed for this class. private constructor to block that.
-     */
-    private EventPublisherConstants() {
-
-    }
 
 }
