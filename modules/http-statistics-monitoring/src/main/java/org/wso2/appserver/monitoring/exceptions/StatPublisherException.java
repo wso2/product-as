@@ -25,8 +25,9 @@ public class StatPublisherException extends Exception {
 
     /**
      * Exception to be thrown when an error occurs in the statistics publisher module
+     *
      * @param message the detail message
-     * @param cause the cause of exception
+     * @param cause   the cause of exception
      */
     public StatPublisherException(String message, Throwable cause) {
         super(message, cause);
