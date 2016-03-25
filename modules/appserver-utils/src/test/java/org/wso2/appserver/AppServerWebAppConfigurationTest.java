@@ -155,20 +155,20 @@ public class AppServerWebAppConfigurationTest {
     private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
         if ((actual != null) && (expected != null)) {
             boolean skipURIs = compareSkipURIs(actual.getSkipURIs(), expected.getSkipURIs());
-            boolean handlingConsumerURLAfterSLO = (actual.handleConsumerURLAfterSLO() == expected.
+            boolean handlingConsumerURLAfterSLO = actual.handleConsumerURLAfterSLO().equals(expected.
                     handleConsumerURLAfterSLO());
             boolean queryParams = actual.getQueryParams().trim().equals(expected.getQueryParams());
             boolean appServerURL = actual.getApplicationServerURL().trim().equals(expected.getApplicationServerURL());
-            boolean enableSSO = (actual.isSSOEnabled() == expected.isSSOEnabled());
+            boolean enableSSO = actual.isSSOEnabled().equals(expected.isSSOEnabled());
             boolean binding = actual.getHttpBinding().trim().equals(expected.getHttpBinding());
             boolean issuerID = actual.getIssuerId().trim().equals(expected.getIssuerId());
             boolean consumerURL = actual.getConsumerURL().trim().equals(expected.getConsumerURL());
             boolean serviceIndex = actual.getAttributeConsumingServiceIndex().trim().
                     equals(expected.getAttributeConsumingServiceIndex());
-            boolean enableSLO = (actual.isSLOEnabled() == expected.isSLOEnabled());
+            boolean enableSLO = actual.isSLOEnabled().equals(expected.isSLOEnabled());
             boolean ssl = compareSSLProperties(actual, expected);
-            boolean forceAuthn = (actual.isForceAuthnEnabled() == expected.isForceAuthnEnabled());
-            boolean passiveAuthn = (actual.isPassiveAuthnEnabled() == expected.isPassiveAuthnEnabled());
+            boolean forceAuthn = actual.isForceAuthnEnabled().equals(expected.isForceAuthnEnabled());
+            boolean passiveAuthn = actual.isPassiveAuthnEnabled().equals(expected.isPassiveAuthnEnabled());
             boolean postfixes = comparePostfixes(actual, expected);
             boolean properties = compareProperties(actual.getProperties(), expected.getProperties());
 
@@ -193,11 +193,11 @@ public class AppServerWebAppConfigurationTest {
     }
 
     private static boolean compareSSLProperties(SSOConfiguration actual, SSOConfiguration expected) {
-        boolean assertionSigning = (actual.isAssertionSigningEnabled() == expected.isAssertionSigningEnabled());
-        boolean assertionEncryption = (actual.isAssertionEncryptionEnabled() == expected.
+        boolean assertionSigning = actual.isAssertionSigningEnabled().equals(expected.isAssertionSigningEnabled());
+        boolean assertionEncryption = actual.isAssertionEncryptionEnabled().equals(expected.
                 isAssertionEncryptionEnabled());
-        boolean requestSigning = (actual.isRequestSigningEnabled() == expected.isRequestSigningEnabled());
-        boolean responseSigning = (actual.isResponseSigningEnabled() == expected.isResponseSigningEnabled());
+        boolean requestSigning = actual.isRequestSigningEnabled().equals(expected.isRequestSigningEnabled());
+        boolean responseSigning = actual.isResponseSigningEnabled().equals(expected.isResponseSigningEnabled());
 
         return assertionSigning && assertionEncryption && requestSigning && responseSigning;
     }

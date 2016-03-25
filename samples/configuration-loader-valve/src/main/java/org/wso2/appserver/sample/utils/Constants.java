@@ -48,9 +48,10 @@ public class Constants {
 
     protected static final String USERNAME = "admin";
     protected static final String PASSWORD = "admin";
+    protected static final String DATA_AGENT_TYPE = "Thrift";
     protected static final String AUTHN_URL = "ssl://127.0.0.1:7711";
     protected static final String PUBLISHER_URL = "tcp://127.0.0.1:7611";
-    protected static final String STREAM_ID = "org.wso2.http.stat:1.0.0";
+    protected static final String STREAM_ID = "org.wso2.http.stats:1.0.0";
 
     protected static final String KEYSTORE_PATH = "${catalina.base}/keystore.jks";
     protected static final String TYPE = "JKS";
@@ -58,7 +59,7 @@ public class Constants {
     protected static final String PRIVATE_KEY_ALIAS = "wso2carbon";
     protected static final String PRIVATE_KEY_PASSWORD = "wso2carbon";
 
-    protected static final String TRUSTSTORE_PATH = "${catalina.base}/client-truststore.jks";
+    protected static final String TRUSTSTORE_PATH = "${catalina.base}/conf/wso2/client-truststore.jks";
     protected static final String TRUSTSTORE_PASSWORD = "wso2carbon";
 
     /**

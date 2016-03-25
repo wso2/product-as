@@ -76,6 +76,7 @@
             <artifactId>tomcat</artifactId>
             <type>zip</type>
         </dependency>
+
         <!-- WSO2 Application Server Modules -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
@@ -89,6 +90,7 @@
             <groupId>org.wso2.appserver</groupId>
             <artifactId>webapp-loader</artifactId>
         </dependency>
+
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
@@ -100,6 +102,7 @@
             <artifactId>simple-storage-service</artifactId>
             <type>war</type>
         </dependency>
+
         <!-- Application Server runtime libs -->
         <!-- Spring -->
         <dependency>

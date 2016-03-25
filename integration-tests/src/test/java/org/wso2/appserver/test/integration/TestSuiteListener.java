@@ -229,6 +229,6 @@ public class TestSuiteListener implements ISuiteListener {
         valves.item(0).getParentNode().insertBefore(valve, valves.item(0));
 
         Transformer xFormer = TransformerFactory.newInstance().newTransformer();
-        xFormer.transform(new DOMSource(doc), new StreamResult(serverXML.toFile()));
+        xFormer.transform(new DOMSource(doc), new StreamResult(serverXML.toFile().getAbsolutePath()));
     }
 }

@@ -84,6 +84,7 @@ public class ServerConfigurationUtils {
 
         configuration.setUsername(Constants.USERNAME);
         configuration.setPassword(Constants.PASSWORD);
+        configuration.setDataAgentType(Constants.DATA_AGENT_TYPE);
         configuration.setAuthenticationURL(Constants.AUTHN_URL);
         configuration.setPublisherURL(Constants.PUBLISHER_URL);
         configuration.setStreamId(Constants.STREAM_ID);
@@ -128,7 +129,6 @@ public class ServerConfigurationUtils {
                 expected.getStatsPublisherConfiguration());
         boolean security = compareSecurityConfigurations(actual.getSecurityConfiguration(),
                 expected.getSecurityConfiguration());
-
         return (classloading && sso && statsPublishing && security);
     }
 
@@ -175,10 +175,11 @@ public class ServerConfigurationUtils {
         if ((actual != null) && (expected != null)) {
             boolean username = actual.getUsername().trim().equals(expected.getUsername());
             boolean password = actual.getPassword().trim().equals(expected.getPassword());
+            boolean dataAgent = actual.getDataAgentType().trim().equals(expected.getDataAgentType());
             boolean authnURL = actual.getAuthenticationURL().trim().equals(expected.getAuthenticationURL());
             boolean publisherURL = actual.getPublisherURL().trim().equals(expected.getPublisherURL());
             boolean streamID = actual.getStreamId().trim().equals(expected.getStreamId());
-            return (username && password && authnURL && publisherURL && streamID);
+            return (username && password && dataAgent && authnURL && publisherURL && streamID);
         } else {
             return (actual == null) && (expected == null);
         }
@@ -218,7 +219,6 @@ public class ServerConfigurationUtils {
                 truststorePassword = true;
                 truststoreType = true;
             }
-
             return (keystorePath && keystorePassword && type && privateKeyAlias && privateKeyPassword &&
                     truststorePath && truststorePassword && truststoreType);
         } else {

@@ -144,6 +144,7 @@ public class AppServerConfigurationTest {
 
         configuration.setUsername(TestConstants.USERNAME);
         configuration.setPassword(TestConstants.PASSWORD);
+        configuration.setDataAgentType(TestConstants.DATA_AGENT_TYPE);
         configuration.setAuthenticationURL(TestConstants.AUTHN_URL);
         configuration.setPublisherURL(TestConstants.PUBLISHER_URL);
         configuration.setStreamId(TestConstants.STREAM_ID);
@@ -235,10 +236,11 @@ public class AppServerConfigurationTest {
         if ((actual != null) && (expected != null)) {
             boolean username = actual.getUsername().trim().equals(expected.getUsername());
             boolean password = actual.getPassword().trim().equals(expected.getPassword());
+            boolean dataAgent = actual.getDataAgentType().trim().equals(expected.getDataAgentType());
             boolean authnURL = actual.getAuthenticationURL().trim().equals(expected.getAuthenticationURL());
             boolean publisherURL = actual.getPublisherURL().trim().equals(expected.getPublisherURL());
             boolean streamID = actual.getStreamId().trim().equals(expected.getStreamId());
-            return (username && password && authnURL && publisherURL && streamID);
+            return (username && password && dataAgent && authnURL && publisherURL && streamID);
         } else {
             return (actual == null) && (expected == null);
         }

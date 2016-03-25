@@ -23,6 +23,7 @@ limitations under the License.
             <class name="org.wso2.appserver.test.integration.utils.ConfigurationLoaderTestCase"/>
             <class name="org.wso2.appserver.test.integration.sample.SampleTestIT"/>
             <class name="org.wso2.appserver.test.integration.loader.WebappLoaderIT"/>
+            <class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestIT"/>
         </classes>
     </test>
 </suite>

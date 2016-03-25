@@ -55,6 +55,7 @@ public class TestConstants {
 
     protected static final String USERNAME = "admin";
     protected static final String PASSWORD = "admin";
+    protected static final String DATA_AGENT_TYPE = "Thrift";
     protected static final String AUTHN_URL = "ssl://127.0.0.1:7711";
     protected static final String PUBLISHER_URL = "tcp://127.0.0.1:7611";
     protected static final String STREAM_ID = "org.wso2.http.stat:1.0.0";

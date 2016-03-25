@@ -12,8 +12,6 @@ import org.wso2.appserver.sample.utils.ServerConfigurationUtils;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 
 /**
@@ -30,7 +28,6 @@ public class ConfigurationLoaderValve extends ValveBase {
         AppServerConfiguration actualServerConfiguration = ServerConfigurationLoader.getServerConfiguration();
         boolean isServerConfigurationUniform = ServerConfigurationUtils.
                 compare(actualServerConfiguration, expectedServerConfiguration);
-        Logger.getLogger(ConfigurationLoaderValve.class.getName()).log(Level.INFO, isServerConfigurationUniform + "");
         request.setAttribute("isServerConfigurationUniform", isServerConfigurationUniform);
 
         Optional<AppServerWebAppConfiguration> expectedWebAppConfiguration = ContextConfigurationLoader.
@@ -39,8 +36,6 @@ public class ConfigurationLoaderValve extends ValveBase {
         expectedWebAppConfiguration.ifPresent(configuration -> {
             boolean isContextConfigurationUniform = ContextConfigurationUtils.
                     compare(actualWebAppConfiguration, configuration);
-            Logger.getLogger(ConfigurationLoaderValve.class.getName())
-                    .log(Level.INFO, isContextConfigurationUniform + "");
             request.setAttribute("isContextConfigurationUniform", isContextConfigurationUniform);
         });
 

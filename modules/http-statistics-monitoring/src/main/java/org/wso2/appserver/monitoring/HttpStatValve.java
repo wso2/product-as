@@ -18,14 +18,18 @@
  */
 package org.wso2.appserver.monitoring;
 
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.wso2.appserver.monitoring.exceptions.ConfigurationException;
-import org.wso2.appserver.monitoring.exceptions.EventBuilderException;
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
+import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
+import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
+import org.wso2.appserver.utils.PathUtils;
 import org.wso2.carbon.databridge.agent.AgentHolder;
 import org.wso2.carbon.databridge.agent.DataPublisher;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
@@ -35,10 +39,10 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import javax.servlet.ServletException;
 
 /**
@@ -47,164 +51,121 @@ import javax.servlet.ServletException;
 public class HttpStatValve extends ValveBase {
 
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
-    private String username = DefaultConfigurationConstants.USERNAME;
-    private String password = DefaultConfigurationConstants.PASSWORD;
-    private String configFileFolder = DefaultConfigurationConstants.CONFIG_FILE_FOLDER;
-    private String url = DefaultConfigurationConstants.URL;
-    private String streamId = DefaultConfigurationConstants.STREAM_ID;
     private DataPublisher dataPublisher = null;
-    private String appServerHome;
+    StatsPublisherConfiguration statsPublisherConfiguration;
 
     @Override
-    protected void initInternal() {
+    protected void initInternal() throws LifecycleException {
+        super.initInternal();
+
         LOG.debug("The HttpStatValve initialized.");
-        File userDir = new File(System.getProperty("catalina.base"));
-        appServerHome = userDir.getAbsolutePath();
+
+        setTrustStorePath();
+        statsPublisherConfiguration = ServerConfigurationLoader.getServerConfiguration().
+                getStatsPublisherConfiguration();
+
+        try {
+            dataPublisher = getDataPublisher();
+        } catch (StatPublisherException e) {
+            LOG.error("Initializing DataPublisher failed:", e);
+            throw new LifecycleException("Initializing DataPublisher failed: " + e);
+        }
+
     }
 
     @Override
-    public void invoke(Request request, Response response)  {
-
-        if (dataPublisher == null) {
-            try {
-                dataPublisher = getDataPublisher();
-            } catch (ConfigurationException e) {
-                LOG.error("Failed at setting configurations: " + e);
-            }
-        }
+    public void invoke(Request request, Response response) throws IOException, ServletException {
 
         Long startTime = System.currentTimeMillis();
-
-        try {
-            getNext().invoke(request, response);
-        } catch (IOException e) {
-            LOG.error("IO error occurred:" + e);
-        } catch (ServletException e) {
-            LOG.error("Servlet error occurred" + e);
-        }
+        getNext().invoke(request, response);
         long responseTime = System.currentTimeMillis() - startTime;
 
-        Event event = null;
-        try {
-            event = EventBuilder.buildEvent(getStreamId(), request, response, startTime, responseTime);
-        } catch (EventBuilderException e) {
-            LOG.error("Creating the Event failed: " + e);
-        }
-        dataPublisher.publish(event);
+        if (filterResponse(response)) {
+            Event event;
+            try {
+                event = EventBuilder.buildEvent(statsPublisherConfiguration.getStreamId(), request, response, startTime,
+                        responseTime);
+            } catch (StatPublisherException e) {
+                LOG.error("Creating the Event failed: " + e);
+                throw new IOException("Creating the Event failed: " + e);
+            }
 
+            dataPublisher.publish(event);
+        }
     }
 
-    //get file path to the file containing Data Agent configuration and properties
+    /**
+     * get file path to the file containing Data Agent configuration and properties.
+     * @return the path to the file containing configurations for the Data Agent
+     */
     private String getDataAgentConfigPath() {
-        Path path = Paths.get(appServerHome, getConfigFileFolder(), DefaultConfigurationConstants.DATA_AGENT_CONF);
+        Path path = Paths.get(PathUtils.getAppServerConfigurationBase().toString(),
+                EventPublisherConstants.DATA_AGENT_CONF);
         return path.toString();
     }
 
-    //instantiate a data publisher to be used to publish data to DAS
-    private DataPublisher getDataPublisher() throws ConfigurationException {
+    /**
+     * Instantiate a data publisher to be used to publish data to DAS.
+     * @return DataPublisher object initialized with configurations
+     * @throws StatPublisherException
+     */
+    private DataPublisher getDataPublisher() throws StatPublisherException {
 
         AgentHolder.setConfigPath(getDataAgentConfigPath());
-        String url = getUrl();
         DataPublisher dataPublisher;
 
         try {
-            dataPublisher = new DataPublisher(url, getUsername(), getPassword());
+
+            if (!Optional.ofNullable(statsPublisherConfiguration.getAuthenticationURL()).isPresent()) {
+                dataPublisher = new DataPublisher(statsPublisherConfiguration.getPublisherURL(),
+                        statsPublisherConfiguration.getUsername(),
+                        statsPublisherConfiguration.getPassword());
+            } else {
+                dataPublisher = new DataPublisher(statsPublisherConfiguration.getDataAgentType(),
+                        statsPublisherConfiguration.getPublisherURL(),
+                        statsPublisherConfiguration.getAuthenticationURL(),
+                        statsPublisherConfiguration.getUsername(),
+                        statsPublisherConfiguration.getPassword());
+            }
+
         } catch (DataEndpointAgentConfigurationException e) {
             LOG.error("Data Endpoint Agent configuration failed: " + e);
-            throw new ConfigurationException("Data Endpoint Agent configuration failed: ", e);
+            throw new StatPublisherException("Data Endpoint Agent configuration failed: ", e);
         } catch (DataEndpointException e) {
             LOG.error("Communication with Data Endpoint failed: " + e);
-            throw new ConfigurationException("Communication with Data Endpoint failed: ", e);
+            throw new StatPublisherException("Communication with Data Endpoint failed: ", e);
         } catch (DataEndpointConfigurationException e) {
             LOG.error("Parsing Data Endpoint configurations failed: " + e);
-            throw new ConfigurationException("Parsing Data Endpoint configurations failed: ", e);
+            throw new StatPublisherException("Parsing Data Endpoint configurations failed: ", e);
         } catch (DataEndpointAuthenticationException e) {
             LOG.error("Connection to Data Endpoint failed during authentication: " + e);
-            throw new ConfigurationException("Connection to Data Endpoint failed during authentication: ", e);
+            throw new StatPublisherException("Connection to Data Endpoint failed during authentication: ", e);
         } catch (TransportException e) {
             LOG.error("Connection failed: " + e);
-            throw new ConfigurationException("Connection failed: ", e);
+            throw new StatPublisherException("Connection failed: ", e);
         }
 
         return dataPublisher;
     }
 
     /**
-     *
-     * @param password login password for DAS
+     * Filter to process only requests of text/html type.
+     * @param response The Response object of client
+     * @return true if request is of text/html type and false if not
      */
-    public void setPassword(String password) {
-        this.password = password;
+    private boolean filterResponse (Response response) {
+
+        String responseContentType = response.getContentType();
+        //if the response content is not null and is of type text/html, allow to publish stats
+        return responseContentType != null && responseContentType.contains("text/html");
     }
 
     /**
-     *
-     * @return login password for DAS
+     * Setting the System property for the trust store.
      */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     *
-     * @param username login username for DAS
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     *
-     * @return login username for DAS
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     *
-     * @param configFileFolder relative path to the folder containing transport configuration files
-     */
-    public void setConfigFileFolder(String configFileFolder) {
-        this.configFileFolder = configFileFolder;
-    }
-
-    /**
-     *
-     * @return relative path to the folder containing transport configuration files
-     */
-    public String getConfigFileFolder() {
-        return configFileFolder;
-    }
-
-    /**
-     *
-     * @param url DAS url
-     */
-    public void setUrl(String url) {
-        this.url = url; }
-
-    /**
-     *
-     * @return DAS url
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     *
-     * @param streamId Unique ID of the Event Stream from which data is published to DAS
-     */
-    public void setStreamId(String streamId) {
-        this.streamId = streamId;
-    }
-
-    /**
-     *
-     * @return Unique ID of the Event Stream from which data is published to DAS
-     */
-    public String getStreamId() {
-        return streamId;
+    private void setTrustStorePath() {
+        String pathToBeReplaced = System.getProperty("javax.net.ssl.trustStore");
+        String realTrustStorePath = StrSubstitutor.replaceSystemProperties(pathToBeReplaced);
+        System.setProperty("javax.net.ssl.trustStore", realTrustStorePath);
     }
 }
