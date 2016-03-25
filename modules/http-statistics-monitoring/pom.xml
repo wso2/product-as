@@ -163,10 +163,6 @@
             <artifactId>disruptor</artifactId>
         </dependency>
         <dependency>
-            <groupId>ua.parser.wso2</groupId>
-            <artifactId>ua-parser</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.10.19</version>
