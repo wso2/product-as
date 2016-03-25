@@ -135,9 +135,9 @@
                 <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                        prefix="localhost_access_log" suffix=".txt"
                        pattern="%h %l %u %t &quot;%r&quot; %s %b"/>
-                <Valve className="org.wso2.appserver.monitoring.HttpStatValve"
-                       username="admin" password="admin" configFileFolder="conf/wso2/Webapp_Statistics_Monitoring"
-                       url="tcp://127.0.0.1:7611" streamId="org.wso2.http.stats:1.0.0"/>
+
+                <!-- uncomment this valve to enable HTTP statistics publishing to WSO2 DAS -->
+                <!--<Valve className="org.wso2.appserver.monitoring.HttpStatValve"/>-->
 
             </Host>
         </Engine>

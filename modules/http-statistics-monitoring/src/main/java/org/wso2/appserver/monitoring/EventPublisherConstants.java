@@ -19,19 +19,47 @@
 package org.wso2.appserver.monitoring;
 
 /**
- * The Constants used within this package.
+ * The Constants used within this package in setting the statistics.
  */
 public class EventPublisherConstants {
 
+    //standard header field name for identifying the originating IP address of a client connecting to a Web server
+    // through an HTTP proxy or load balancer
     public static final String X_FORWARDED_FOR = "X-Forwarded-For";
-    public static final String UNKNOWN = "unknown";
+
+    //header field name that identifies the browser client IP instead of web server IP
     public static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
+
+    //header field name that identifies the browser client IP instead of web server IP that acts as a proxy
+    // for a WebLogic Server
     public static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
+
+    //header field name for header that identify the ip-address of the host that is making the HTTP request
+    // through the proxy
     public static final String HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
+
+    //header field name for header containing a complete track of the forwarding chain through proxies
     public static final String HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR";
-    public static final String USER_AGENT = "user-agent";
+
+    //header field name for header that identify the address of the previous web page from which a link to the
+    // currently requested page was followed
     public static final String REFERRER = "Referer";
+
+    public static final String USER_AGENT = "User-Agent";
+    public static final String HOST = "Host";
+
+    //a probable value for IP address set in headers
+    public static final String UNKNOWN = "unknown";
+
+    //constant to represent a user when an authenticated user for the current session is not present
     public static final String ANONYMOUS_USER = "anonymous.user";
+
+    public static final String APP_TYPE = "webapp";
+
+    //File containing the configurations and properties that define the data agent in the JVM.
+    // Resides in product-as/distribution/contents/conf/wso2
+    public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
+
 
     /**
      * instantiating is not needed for this class. private constructor to block that.

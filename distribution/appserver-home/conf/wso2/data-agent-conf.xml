@@ -21,8 +21,6 @@
     <Agent>
         <Name>Thrift</Name>
         <DataEndpointClass>org.wso2.carbon.databridge.agent.endpoint.thrift.ThriftDataEndpoint</DataEndpointClass>
-        <TrustSore>conf/wso2/Webapp_Statistics_Monitoring/client-truststore.jks</TrustSore>
-        <TrustSorePassword>wso2carbon</TrustSorePassword>
         <QueueSize>32768</QueueSize>
         <BatchSize>200</BatchSize>
         <CorePoolSize>5</CorePoolSize>
@@ -43,8 +41,6 @@
         <Name>Binary</Name>
         <DataEndpointClass>org.wso2.carbon.databridge.agent.endpoint.binary.BinaryDataEndpoint
         </DataEndpointClass>
-        <TrustSore>conf/wso2/Webapp_Statistics_Monitoring/client-truststore.jks</TrustSore>
-        <TrustSorePassword>wso2carbon</TrustSorePassword>
         <QueueSize>32768</QueueSize>
         <BatchSize>200</BatchSize>
         <CorePoolSize>5</CorePoolSize>

@@ -60,7 +60,8 @@
                         <xs:sequence>
                             <xs:element name="Username" type="xs:string"/>
                             <xs:element name="Password" type="xs:string"/>
-                            <xs:element name="AuthenticationURL" type="xs:anyURI"/>
+                            <xs:element name="DataAgentType" type="xs:string"/>
+                            <xs:element name="AuthenticationURL" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="PublisherURL" type="xs:anyURI"/>
                             <xs:element name="StreamId" type="xs:string"/>
                         </xs:sequence>
