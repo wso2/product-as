@@ -268,17 +268,27 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons.httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>${jsr.api.version}</version>
+            </dependency>
 
             <!--WSO2 Application Server Sample Webapps-->
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>hello-world</artifactId>
+                <artifactId>simple-storage-service</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>simple-storage-service</artifactId>
+                <artifactId>jaxrs_basic</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
@@ -337,20 +347,40 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>com.googlecode.disruptor</groupId>
-                <artifactId>disruptor</artifactId>
-                <version>${googlecode.disruptor.version}</version>
-            </dependency>
 
             <!-- Runtimes CXF-->
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxrs</artifactId>
                 <version>${runtime.cxf.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
 
             <!--Runtime Spring-->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
@@ -382,15 +412,18 @@
         <commons.lang.version>3.4</commons.lang.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.pool.version>1.6</commons.pool.version>
+        <commons.httpclient.version>3.1</commons.httpclient.version>
         <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
         <junit.version>4.12</junit.version>
+        <jsr.api.version>1.1.1</jsr.api.version>
         <org.slf4j.api.version>1.7.18</org.slf4j.api.version>
         <org.slf4j.simple.version>1.7.18</org.slf4j.simple.version>
         <servlet.api.version>2.5</servlet.api.version>
         <testng.version>6.9.10</testng.version>
         <runtime.spring.version>4.2.5.RELEASE</runtime.spring.version>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
+        <runtime.cxf.spring.version>4.1.7.RELEASE</runtime.cxf.spring.version>
         <slf4j.version>1.7.18</slf4j.version>
     </properties>
 </project>

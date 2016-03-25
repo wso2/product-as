@@ -52,8 +52,8 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
-                <include>org.wso2.appserver:hello-world:war</include>
                 <include>org.wso2.appserver:simple-storage-service:war</include>
+                <include>org.wso2.appserver:jaxrs_basic:war</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <outputFileNameMapping> ${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
@@ -65,7 +65,12 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib/runtimes/cxf</outputDirectory>
             <includes>
-                <include>org.apache.cxf:cxf-rt-frontend-jaxrs:jar</include>
+                <include>org.apache.cxf:cxf-rt-frontend-jaxws:jar</include>
+                <include>org.apache.cxf:cxf-rt-transports-http:jar</include>
+                <include>org.springframework:spring-web:jar</include>
+                <include>org.springframework:spring-context:jar</include>
+                <include>org.springframework:spring-aop:jar</include>
+                <include>org.springframework:spring-webmvc:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
@@ -76,6 +81,9 @@
             <outputDirectory>/${distribution.file.name}/lib/runtimes/spring</outputDirectory>
             <includes>
                 <include>org.springframework:spring-web:jar</include>
+                <include>org.springframework:spring-context:jar</include>
+                <include>org.springframework:spring-aop:jar</include>
+                <include>org.springframework:spring-webmvc:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>

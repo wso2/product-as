@@ -27,7 +27,7 @@
     <url>http://wso2.com</url>
 
     <modules>
-        <module>hello-world</module>
-        <module>simple-storage-service</module>
+        <module>simple-jax-rs-service</module>
+        <module>jaxrs_basic</module>
     </modules>
 </project>
