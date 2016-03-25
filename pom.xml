@@ -269,11 +269,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>ua.parser.wso2</groupId>
-                <artifactId>ua-parser</artifactId>
-                <version>${uaparser.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${commons.httpclient.version}</version>
