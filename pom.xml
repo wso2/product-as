@@ -278,6 +278,11 @@
                 <artifactId>jsr311-api</artifactId>
                 <version>${jsr.api.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>org.jacoco.ant</artifactId>
+                <version>${org.jacoco.ant.version}</version>
+            </dependency>
 
             <!--WSO2 Application Server Sample Webapps-->
             <dependency>
@@ -415,6 +420,7 @@
         <commons.httpclient.version>3.1</commons.httpclient.version>
         <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
+        <org.jacoco.ant.version>0.7.5.201505241946</org.jacoco.ant.version>
         <junit.version>4.12</junit.version>
         <jsr.api.version>1.1.1</jsr.api.version>
         <org.slf4j.api.version>1.7.18</org.slf4j.api.version>

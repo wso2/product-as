@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Paths;
 
 /**
  * The test suite listeners class provides the environment setup for the integration test.
@@ -92,18 +93,24 @@ public class TestSuiteListener implements ISuiteListener {
     private Process startPlatformDependApplicationServer() throws IOException {
         String os = System.getProperty("os.name");
         log.info(os + " operating system was detected");
+
+        String jacocoAgentDir = System.getProperty("jacoco-agent.dir");
+        String jacocoRuntimeJar = System.getProperty("jacoco-agent.runtime");
+        String jacocoDataFile = System.getProperty("jacoco-agent.data.file");
+        String jacocoArg = "-javaagent:" + Paths.get(jacocoAgentDir, jacocoRuntimeJar)
+                + "=destfile=" + Paths.get(jacocoAgentDir, jacocoDataFile);
+        log.info("Jacoco argLine: " + jacocoArg);
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.directory(appserverHome);
+        processBuilder.environment().put("JAVA_OPTS", jacocoArg);
+
         if (os.toLowerCase().contains("unix") || os.toLowerCase().contains("linux")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("./bin/catalina.sh", "run")
-                    .start();
+            return applicationServerProcess = processBuilder.command("./bin/catalina.sh", "run").start();
         } else if (os.toLowerCase().contains("windows")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("\\bin\\catalina.bat", "run")
-                    .start();
+            return applicationServerProcess = processBuilder.command("\\bin\\catalina.bat", "run").start();
         }
         return null;
     }
@@ -159,7 +166,6 @@ public class TestSuiteListener implements ISuiteListener {
             }
         }
     }
-
 
 
     private boolean isPortAvailable(final int port) {
