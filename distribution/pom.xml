@@ -93,7 +93,7 @@
         <!--WSO2 Application Server Sample Webapps-->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>simple-storage-service</artifactId>
+            <artifactId>simple-jax-rs-service</artifactId>
             <type>war</type>
         </dependency>
         <dependency>
