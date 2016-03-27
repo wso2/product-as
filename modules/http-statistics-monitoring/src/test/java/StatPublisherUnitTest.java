@@ -23,7 +23,7 @@ import org.apache.catalina.mapper.MappingData;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.wso2.appserver.monitoring.EventPublisherConstants;
+import org.wso2.appserver.monitoring.Constants;
 import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
 import org.wso2.carbon.databridge.commons.Event;
@@ -69,11 +69,11 @@ public class StatPublisherUnitTest {
         //setting request locale
         Locale locale = new Locale("en", "SL");
 
-        List<String> requestHeaders = Arrays.asList(EventPublisherConstants.X_FORWARDED_FOR,
-                EventPublisherConstants.PROXY_CLIENT_IP,
-                EventPublisherConstants.WL_PROXY_CLIENT_IP,
-                EventPublisherConstants.HTTP_CLIENT_IP,
-                EventPublisherConstants.HTTP_X_FORWARDED_FOR
+        List<String> requestHeaders = Arrays.asList(Constants.X_FORWARDED_FOR,
+                Constants.PROXY_CLIENT_IP,
+                Constants.WL_PROXY_CLIENT_IP,
+                Constants.HTTP_CLIENT_IP,
+                Constants.HTTP_X_FORWARDED_FOR
         );
         Enumeration<String> headerNames = Collections.enumeration(requestHeaders);
         List<String> responseHeaders = new ArrayList<>();
@@ -131,7 +131,7 @@ public class StatPublisherUnitTest {
         payload.add("GET");
         payload.add(null);
         payload.add("/");
-        payload.add(200L);
+        payload.add(200);
         payload.add("127.0.0.1");
         payload.add(null);
         payload.add(null);
@@ -139,8 +139,8 @@ public class StatPublisherUnitTest {
         payload.add(null);
         payload.add(null);
         payload.add(0L);
-        payload.add(-1L);
-        payload.add(-1L);
+        payload.add(-1);
+        payload.add(-1);
         payload.add("X-Forwarded-For:();Proxy-Client-IP:();WL-Proxy-Client-IP:();HTTP_CLIENT_IP:();" +
                 "HTTP_X_FORWARDED_FOR:()");
         payload.add("");

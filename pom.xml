@@ -158,6 +158,11 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons.httpclient.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
@@ -194,6 +199,11 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>${jsr.api.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.thrift</groupId>
                 <artifactId>libthrift</artifactId>
                 <version>${thrift.libthrift.version}</version>
@@ -226,36 +236,6 @@
                 <version>${appserver.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.logging</artifactId>
-                <version>${carbon.logging.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.analytics-common</groupId>
-                <artifactId>org.wso2.carbon.databridge.agent</artifactId>
-                <version>${carbon.analyticscommon.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi.services</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
                 <groupId>org.wso2.carbon.analytics-common</groupId>
                 <artifactId>org.wso2.carbon.databridge.commons</artifactId>
                 <version>${carbon.analyticscommon.version}</version>
@@ -273,15 +253,15 @@
                 <exclusions>
                     <exclusion>
                         <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.axis2</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
                         <artifactId>org.wso2.carbon.core</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.wso2.carbon</groupId>
                         <artifactId>org.wso2.carbon.utils</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.axis2</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -291,44 +271,20 @@
                 <version>${carbon.analyticscommon.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.core</artifactId>
-                    </exclusion>
-                    <exclusion>
                         <groupId>org.eclipse.osgi</groupId>
                         <artifactId>org.eclipse.osgi</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.utils</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
                         <artifactId>org.wso2.carbon.axis2</artifactId>
                     </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.analytics-common</groupId>
-                <artifactId>org.wso2.carbon.databridge.receiver.thrift</artifactId>
-                <scope>test</scope>
-                <version>${carbon.analyticscommon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.analytics-common</groupId>
-                <artifactId>org.wso2.carbon.databridge.receiver.binary</artifactId>
-                <scope>test</scope>
-                <version>${carbon.analyticscommon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.analytics-common</groupId>
-                <artifactId>org.wso2.carbon.databridge.core</artifactId>
-                <scope>test</scope>
-                <version>${carbon.analyticscommon.version}</version>
-                <exclusions>
                     <exclusion>
                         <groupId>org.wso2.carbon</groupId>
                         <artifactId>org.wso2.carbon.core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.utils</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -367,13 +323,13 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>hello-world</artifactId>
+                <artifactId>jaxrs_basic</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>simple-storage-service</artifactId>
+                <artifactId>simple-jax-rs-service</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
@@ -384,11 +340,36 @@
                 <artifactId>cxf-rt-frontend-jaxrs</artifactId>
                 <version>${runtime.cxf.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
 
             <!-- Runtime Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
                 <version>${runtime.spring.version}</version>
             </dependency>
 
@@ -405,11 +386,6 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>sample-module</artifactId>
-                <version>${appserver.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
                 <artifactId>webapp-loader</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
@@ -420,6 +396,60 @@
                 <artifactId>testng</artifactId>
                 <version>${testng.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.logging</artifactId>
+                <version>${carbon.logging.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.osgi</groupId>
+                        <artifactId>org.eclipse.osgi</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+                <version>${carbon.analyticscommon.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.osgi</groupId>
+                        <artifactId>org.eclipse.osgi</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.eclipse.osgi</groupId>
+                        <artifactId>org.eclipse.osgi.services</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.databridge.core</artifactId>
+                <scope>test</scope>
+                <version>${carbon.analyticscommon.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.databridge.receiver.binary</artifactId>
+                <scope>test</scope>
+                <version>${carbon.analyticscommon.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.databridge.receiver.thrift</artifactId>
+                <scope>test</scope>
+                <version>${carbon.analyticscommon.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -442,8 +472,9 @@
 
         <!-- dependency version properties -->
         <tomcat.version>8.0.28</tomcat.version>
-        <carbon.logging.version>4.4.3</carbon.logging.version>
         <carbon.analyticscommon.version>5.0.6</carbon.analyticscommon.version>
+        <carbon.logging.version>4.4.3</carbon.logging.version>
+        <commons.httpclient.version>3.1</commons.httpclient.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>3.4</commons.lang.version>
         <commons.pool.version>1.6</commons.pool.version>
@@ -451,7 +482,7 @@
         <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
         <googlecode.json-simple.version>1.1.1</googlecode.json-simple.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
-        <junit.version>4.12</junit.version>
+        <jsr.api.version>1.1.1</jsr.api.version>
         <org.apache.httpcomponents.httpclient.version>4.3.1.wso2v2</org.apache.httpcomponents.httpclient.version>
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>
         <org.wso2.orbit.com.lmax.disruptor>3.3.2.wso2v2</org.wso2.orbit.com.lmax.disruptor>

@@ -15,18 +15,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.wso2.appserver.monitoring.exceptions;
 
 /**
- * General exception class for the Statistics Publisher module.
- *
- * @since 6.0.0
+ * General exception class for the Statistics Publisher module
  */
 public class StatPublisherException extends Exception {
-    private static final long serialVersionUID = 4873065404369927874L;
 
     /**
-     * Exception to be thrown when an error occurs in the statistics publisher module.
+     * Exception to be thrown when an error occurs in the statistics publisher module
      *
      * @param message the detail message
      * @param cause   the cause of exception

@@ -22,7 +22,7 @@ package org.wso2.appserver.monitoring.utils;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.wso2.appserver.monitoring.EventPublisherConstants;
+import org.wso2.appserver.monitoring.Constants;
 import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.carbon.databridge.commons.Event;
 
@@ -35,42 +35,43 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 /**
- * Utility class to create an Event to published by the DataPublisher.
- *
- * @since 6.0.0
+ * Utility class to create an Event to be published by the DataPublisher.
  */
 public class EventBuilder {
+
     /**
      * Creates an Event to be published by the DataPublisher.
      *
-     * @param streamId Unique ID of the event stream definition deployed in DAS
-     * @param request The Request object of client
-     * @param response The Response object of client
-     * @param startTime The time at which the valve is invoked
+     * @param streamId     Unique ID of the event stream definition deployed in DAS
+     * @param request      The Request object of client
+     * @param response     The Response object of client
+     * @param startTime    The time at which the valve is invoked
      * @param responseTime The time that is taken for the client to receive a response
      * @return an Event object populated with data to be published.
      * @throws StatPublisherException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
-                                   long responseTime) throws StatPublisherException {
+            long responseTime) throws StatPublisherException {
+
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
 
         return new Event(streamId, startTime,
-                new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray() ,
+                new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray(),
                 null, payload.toArray());
     }
 
     /**
-     * Creates a list of payload data.
+     * Creates the payload
      *
-     * @param request The Request object of client
-     * @param response The Response object of client
-     * @param startTime The time at which the valve is invoked
+     * @param request      The Request object of client
+     * @param response     The Response object of client
+     * @param startTime    The time at which the valve is invoked
      * @param responseTime The time that is taken for the client to receive a response
      * @return A list containing all payload data that were extracted from the request and response
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
-                                                 long responseTime)  {
+            long responseTime) {
+
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";
 
@@ -84,31 +85,32 @@ public class EventBuilder {
         });
 
         String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
-                        + request.getContext().getEffectiveMinorVersion();
-        payload.add((webappServletVersion));
+                + request.getContext().getEffectiveMinorVersion();
+
+        payload.add(webappServletVersion);
         payload.add(extractUsername(request));
-        payload.add((request.getRequestURI()));
-        payload.add((startTime));
-        payload.add((request.getPathInfo()));
-        payload.add((EventPublisherConstants.APP_TYPE));
-        payload.add((request.getContext().getDisplayName()));
-        payload.add((extractSessionId(request)));
-        payload.add((request.getMethod()));
-        payload.add((request.getContentType()));
-        payload.add((response.getContentType()));
-        payload.add(((long) response.getStatus()));
-        payload.add((getClientIpAddress(request)));
-        payload.add((request.getHeader(EventPublisherConstants.REFERRER)));
-        payload.add(request.getHeader(EventPublisherConstants.USER_AGENT));
-        payload.add(request.getHeader(EventPublisherConstants.HOST));
-        payload.add((request.getRemoteUser()));
-        payload.add((request.getAuthType()));
-        payload.add((responseTime));
-        payload.add(((long) request.getContentLength()));
-        payload.add(((long) response.getContentLength()));
-        payload.add((getRequestHeaders(request)));
-        payload.add((getResponseHeaders(response)));
-        payload.add((request.getLocale().getLanguage()));
+        payload.add(request.getRequestURI());
+        payload.add(startTime);
+        payload.add(request.getPathInfo());
+        payload.add(Constants.APP_TYPE);
+        payload.add(request.getContext().getDisplayName());
+        payload.add(extractSessionId(request));
+        payload.add(request.getMethod());
+        payload.add(request.getContentType());
+        payload.add(response.getContentType());
+        payload.add(response.getStatus());
+        payload.add(getClientIpAddress(request));
+        payload.add(request.getHeader(Constants.REFERRER));
+        payload.add(request.getHeader(Constants.USER_AGENT));
+        payload.add(request.getHeader(Constants.HOST));
+        payload.add(request.getRemoteUser());
+        payload.add(request.getAuthType());
+        payload.add(responseTime);
+        payload.add(request.getContentLength());
+        payload.add(response.getContentLength());
+        payload.add(getRequestHeaders(request));
+        payload.add(getResponseHeaders(response));
+        payload.add(request.getLocale().getLanguage());
 
         return payload;
     }
@@ -139,10 +141,10 @@ public class EventBuilder {
     private static String getResponseHeaders(Response response) {
         List<String> responseHeaders = new ArrayList<>();
         response.getHeaderNames().forEach(header -> {
-                    List<String> values = new ArrayList<>();
-                    values.add(response.getHeader(header));
-                    String tmpString = "(" + StringUtils.join(values, ",") + ")";
-                    responseHeaders.add(header + ":" + tmpString);
+            List<String> values = new ArrayList<>();
+            values.add(response.getHeader(header));
+            String tmpString = "(" + StringUtils.join(values, ",") + ")";
+            responseHeaders.add(header + ":" + tmpString);
         });
         return StringUtils.join(responseHeaders, ",");
     }
@@ -172,7 +174,7 @@ public class EventBuilder {
         if (principal != null) {
             consumerName = principal.getName();
         } else {
-            consumerName = EventPublisherConstants.ANONYMOUS_USER;
+            consumerName = Constants.ANONYMOUS_USER;
         }
         return consumerName;
     }
@@ -184,22 +186,25 @@ public class EventBuilder {
      * @return The original IP address of the client
      */
     private static String getClientIpAddress(Request request) {
-        List<String> headers = Arrays.asList(EventPublisherConstants.X_FORWARDED_FOR,
-                EventPublisherConstants.PROXY_CLIENT_IP,
-                EventPublisherConstants.WL_PROXY_CLIENT_IP,
-                EventPublisherConstants.HTTP_CLIENT_IP,
-                EventPublisherConstants.HTTP_X_FORWARDED_FOR
-                );
+
+        List<String> headers = Arrays.asList(Constants.X_FORWARDED_FOR,
+                Constants.PROXY_CLIENT_IP,
+                Constants.WL_PROXY_CLIENT_IP,
+                Constants.HTTP_CLIENT_IP,
+                Constants.HTTP_X_FORWARDED_FOR
+        );
 
         for (String header : headers) {
             String ip = request.getHeader(header);
-            if (ip != null && ip.length() != 0 && !EventPublisherConstants.UNKNOWN.equalsIgnoreCase(ip)) {
+            if (ip != null && ip.length() != 0 && !Constants.UNKNOWN.equalsIgnoreCase(ip)) {
                 return ip;
             } else {
-               return request.getRemoteAddr();
+                return request.getRemoteAddr();
             }
 
         }
+
         return request.getRemoteAddr();
     }
+
 }
