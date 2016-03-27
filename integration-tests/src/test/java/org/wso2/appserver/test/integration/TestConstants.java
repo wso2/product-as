@@ -28,6 +28,8 @@ public final class TestConstants {
     public static final String APPSERVER_HOME = "appserver.home";
     public static final String SERVER_TIMEOUT = "listener.server.timeout";
     public static final String APPSERVER_PORT = "appserver.port";
+    public static final String PORT_CHECK_MIN = "port.check.min";
+    public static final String PORT_CHECK_MAX = "port.check.max";
 
     //  Port value constants
     public static final int TOMCAT_DEFAULT_PORT = 8080;

@@ -14,7 +14,9 @@
  *  KIND, either express or implied. See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
+
 package org.wso2.appserver.test.integration;
 
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import org.testng.ISuiteListener;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -34,6 +37,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -47,7 +51,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 /**
- * The test suite listener class provides the environment setup for the integration tests.
+ * The test suite listeners class provides the environment setup for the integration test.
  *
  * @since 6.0.0
  */
@@ -57,7 +61,7 @@ public class TestSuiteListener implements ISuiteListener {
     private int serverStartCheckTimeout;
     private File appserverHome;
     private int applicationServerPort;
-    private boolean isSuccessServerStartup = false;
+    private boolean isSuccessServerStartup;
 
     @Override
     public void onStart(ISuite iSuite) {
@@ -69,13 +73,36 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
-            if (isPortAvailable(TestConstants.TOMCAT_DEFAULT_PORT)) {
-                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is available.");
-                System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(TestConstants.TOMCAT_DEFAULT_PORT));
-                applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
+            int availablePort = TestConstants.TOMCAT_DEFAULT_PORT;
+
+            if (isPortAvailable(availablePort)) {
+                log.info("Default port " + availablePort + " is available.");
+            } else {
+                int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
+                int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
+
+                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is not available. Trying to use a " +
+                        "port between " + portCheckMin + " and " + portCheckMax);
+
+                availablePort = portCheckMin;
+
+                while (availablePort <= portCheckMax) {
+                    log.info("Trying to use port " + availablePort);
+                    if (isPortAvailable(availablePort)) {
+                        log.info("Port " + availablePort + " is available and is using as the port for the server.");
+                        break;
+                    }
+                    availablePort++;
+                }
             }
 
             addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
+
+            applicationServerPort = availablePort;
+            System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
+
+            log.info("Changing the HTTP connector port of the server to " + applicationServerPort);
+            setHTTPConnectorPort(applicationServerPort);
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
@@ -86,8 +113,8 @@ public class TestSuiteListener implements ISuiteListener {
                 log.info("Application server started successfully. Running test suite...");
             }
 
-        } catch (IOException | ParserConfigurationException | XPathExpressionException | SAXException |
-                TransformerException ex) {
+        } catch (IOException | TransformerException | SAXException | ParserConfigurationException
+                | XPathExpressionException ex) {
             terminateApplicationServer();
             String message = "Could not start the server";
             log.error(message, ex);
@@ -97,6 +124,7 @@ public class TestSuiteListener implements ISuiteListener {
 
     @Override
     public void onFinish(ISuite iSuite) {
+
         log.info("Starting post-integration tasks...");
         log.info("Terminating the Application server");
         terminateApplicationServer();
@@ -108,12 +136,12 @@ public class TestSuiteListener implements ISuiteListener {
         log.info(os + " operating system was detected");
         if (os.toLowerCase().contains("unix") || os.toLowerCase().contains("linux")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder().directory(appserverHome).
-                    command("./bin/catalina.sh", "run").start();
+            return applicationServerProcess = new ProcessBuilder().directory(appserverHome)
+                    .command("./bin/catalina.sh", "run").start();
         } else if (os.toLowerCase().contains("windows")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder().directory(appserverHome).
-                    command("\\bin\\catalina.bat", "run").start();
+            return applicationServerProcess = new ProcessBuilder().directory(appserverHome)
+                    .command("\\bin\\catalina.bat", "run").start();
         }
         return null;
     }
@@ -129,7 +157,7 @@ public class TestSuiteListener implements ISuiteListener {
         int startupCounter = 0;
         boolean isTimeout = false;
         while (!isServerListening("localhost", applicationServerPort)) {
-            if (startupCounter >= 20) {
+            if (startupCounter >= serverStartCheckTimeout) {
                 isTimeout = true;
                 break;
             }
@@ -213,20 +241,49 @@ public class TestSuiteListener implements ISuiteListener {
             throws ParserConfigurationException, SAXException, IOException, XPathExpressionException,
             TransformerException {
         Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
                 parse(new InputSource(serverXML.toString()));
-
         XPath xpath = XPathFactory.newInstance().newXPath();
         NodeList valves = (NodeList) xpath.
-                evaluate("/Server/Service/Engine/Host/Valve", doc, XPathConstants.NODESET);
+                evaluate("/Server/Service/Engine/Host/Valve", document, XPathConstants.NODESET);
 
-        Element valve = doc.createElement("Valve");
-        Attr attrClassName = doc.createAttribute("className");
+        Element valve = document.createElement("Valve");
+        Attr attrClassName = document.createAttribute("className");
         attrClassName.setValue(className);
         valve.setAttributeNode(attrClassName);
         valves.item(0).getParentNode().insertBefore(valve, valves.item(0));
 
         Transformer xFormer = TransformerFactory.newInstance().newTransformer();
-        xFormer.transform(new DOMSource(doc), new StreamResult(serverXML.toFile().getAbsolutePath()));
+        xFormer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getAbsolutePath()));
+    }
+
+    /**
+     * Replaces the HTTP connector port in server.xml with the given value.
+     *
+     * @param httpConnectorPort port to be set in the HTTP connector
+     */
+    private static void setHTTPConnectorPort(int httpConnectorPort)
+            throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
+                parse(new InputSource(serverXML.toString()));
+        NodeList connectors = document.getElementsByTagName("Connector");
+        Node httpConnector = null;
+        for (int i = 0; i < connectors.getLength(); i++) {
+            Node connector = connectors.item(i);
+            if (connector.getAttributes().getNamedItem("protocol").getTextContent().equals("HTTP/1.1")) {
+                httpConnector = connector;
+                break;
+            }
+        }
+
+        if (httpConnector != null) {
+            Node port = httpConnector.getAttributes().getNamedItem("port");
+            port.setTextContent(String.valueOf(httpConnectorPort));
+        }
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getPath()));
     }
 }
