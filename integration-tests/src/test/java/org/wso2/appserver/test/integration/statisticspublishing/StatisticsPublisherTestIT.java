@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 public class StatisticsPublisherTestIT {
     Logger log = Logger.getLogger(StatisticsPublisherTestIT.class);
 
@@ -72,7 +71,6 @@ public class StatisticsPublisherTestIT {
         thriftTestServer = new ThriftTestServer();
         thriftTestServer.start(port);
         thriftTestServer.addStreamDefinition(convertJSONtoString(), -1234);
-
     }
 
     @Test
@@ -100,6 +98,4 @@ public class StatisticsPublisherTestIT {
 
         thriftTestServer.stop();
     }
-
-
 }

@@ -14,9 +14,7 @@
  *  KIND, either express or implied. See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-
 package org.wso2.appserver.test.integration;
 
 import org.slf4j.Logger;

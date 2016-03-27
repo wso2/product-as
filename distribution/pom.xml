@@ -94,12 +94,12 @@
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>simple-jax-rs-service</artifactId>
+            <artifactId>jaxrs_basic</artifactId>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>jaxrs_basic</artifactId>
+            <artifactId>simple-jax-rs-service</artifactId>
             <type>war</type>
         </dependency>
 
@@ -107,19 +107,19 @@
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
         <!-- CXF -->
         <dependency>

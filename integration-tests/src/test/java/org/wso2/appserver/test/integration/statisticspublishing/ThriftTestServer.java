@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThriftTestServer {
-
     Logger log = Logger.getLogger(ThriftTestServer.class);
     ThriftDataReceiver thriftDataReceiver;
     InMemoryStreamDefinitionStore streamDefinitionStore;
@@ -51,7 +50,6 @@ public class ThriftTestServer {
         Thread.sleep(100000000);
         thriftTestServer.stop();
     }
-
 
     public void addStreamDefinition(StreamDefinition streamDefinition, int tenantId)
             throws StreamDefinitionStoreException {
