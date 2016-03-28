@@ -24,6 +24,7 @@ import org.testng.ISuiteListener;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -35,6 +36,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -71,36 +74,36 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
-            int availablePort = TestConstants.TOMCAT_DEFAULT_PORT;
+            // These min and max values are for the HTTP connector port
+            int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
+            int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
 
-            if (isPortAvailable(availablePort)) {
-                log.info("Default port " + availablePort + " is available.");
-            } else {
-                int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
-                int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
+            int portDeduction = TestConstants.TOMCAT_DEFAULT_PORT - portCheckMin;
+            int portCheckRange = portCheckMax - portCheckMin;
 
-                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is not available. Trying to use a " +
-                        "port between " + portCheckMin + " and " + portCheckMax);
+            applicationServerPort = getAvailablePort(TestConstants.TOMCAT_DEFAULT_PORT_NAME,
+                    TestConstants.TOMCAT_DEFAULT_PORT, portCheckMin, portCheckRange);
 
-                availablePort = portCheckMin;
+            int ajpPort = getAvailablePort(TestConstants.TOMCAT_AJP_PORT_NAME, TestConstants.TOMCAT_DEFAULT_AJP_PORT,
+                    TestConstants.TOMCAT_DEFAULT_AJP_PORT - portDeduction, portCheckRange);
+            int serverShutdownPort = getAvailablePort(TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME,
+                    TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT,
+                    TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT - portDeduction, portCheckRange);
 
-                while (availablePort <= portCheckMax) {
-                    log.info("Trying to use port " + availablePort);
-                    if (isPortAvailable(availablePort)) {
-                        log.info("Port " + availablePort + " is available and is using as the port for the server.");
-                        break;
-                    }
-                    availablePort++;
-                }
+            System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
+
+            if (applicationServerPort != TestConstants.TOMCAT_DEFAULT_PORT ||
+                    ajpPort != TestConstants.TOMCAT_DEFAULT_AJP_PORT ||
+                    serverShutdownPort != TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT) {
+                log.info("Changing the ports of server.xml [{}:{}, {}:{}, {}:{}]",
+                        TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
+                        TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort, TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME,
+                        serverShutdownPort);
+
+                updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort);
             }
 
             addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
-
-            applicationServerPort = availablePort;
-            System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
-
-            log.info("Changing the HTTP connector port of the server to " + applicationServerPort);
-            setHTTPConnectorPort(applicationServerPort);
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
@@ -111,18 +114,18 @@ public class TestSuiteListener implements ISuiteListener {
                 log.info("Application server started successfully. Running test suite...");
             }
 
-        } catch (IOException | TransformerException | SAXException | ParserConfigurationException
-                | XPathExpressionException ex) {
+        } catch (IOException | TransformerException | SAXException | ParserConfigurationException |
+                XPathExpressionException ex) {
             terminateApplicationServer();
             String message = "Could not start the server";
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
+
     }
 
     @Override
     public void onFinish(ISuite iSuite) {
-
         log.info("Starting post-integration tasks...");
         log.info("Terminating the Application server");
         terminateApplicationServer();
@@ -132,16 +135,13 @@ public class TestSuiteListener implements ISuiteListener {
     private Process startPlatformDependApplicationServer() throws IOException {
         String os = System.getProperty("os.name");
         log.info(os + " operating system was detected");
-        if (os.toLowerCase().contains("unix") || os.toLowerCase().contains("linux")) {
-            log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder().directory(appserverHome)
-                    .command("./bin/catalina.sh", "run").start();
-        } else if (os.toLowerCase().contains("windows")) {
-            log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder().directory(appserverHome)
-                    .command("\\bin\\catalina.bat", "run").start();
+        log.info("Starting server as a " + os + " process");
+
+        if (os.toLowerCase().contains("windows")) {
+            return Runtime.getRuntime().exec("\\bin\\catalina.bat run", null, appserverHome);
+        } else {
+            return Runtime.getRuntime().exec("./bin/catalina.sh run", null, appserverHome);
         }
-        return null;
     }
 
     public void terminateApplicationServer() {
@@ -226,6 +226,82 @@ public class TestSuiteListener implements ISuiteListener {
     }
 
     /**
+     * Updates http and ajp connector ports and server shutdown port in server.xml
+     *
+     * @param httpConnectorPort  http connector port
+     * @param ajpPort            ajp port
+     * @param serverShutdownPort server shutdown port
+     */
+    private static void updateServerPorts(int httpConnectorPort, int ajpPort, int serverShutdownPort)
+            throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
+
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
+                parse(new InputSource(serverXML.toString()));
+
+        //  Change http connector and ajp connector ports
+        Map<String, String> connectorProtocolPortMap = new HashMap<>();
+        connectorProtocolPortMap.put("HTTP/1.1", String.valueOf(httpConnectorPort));
+        connectorProtocolPortMap.put("AJP/1.3", String.valueOf(ajpPort));
+
+        NodeList connectors = document.getElementsByTagName("Connector");
+        for (int i = 0; i < connectors.getLength(); i++) {
+            Node connector = connectors.item(i);
+            NamedNodeMap connectorAttributes = connector.getAttributes();
+            String protocol = connectorAttributes.getNamedItem("protocol").getTextContent();
+            if (connectorProtocolPortMap.containsKey(protocol)) {
+                connectorAttributes.getNamedItem("port").setTextContent(connectorProtocolPortMap.get(protocol));
+            }
+        }
+
+        // change server shutdown port
+        Node server = document.getElementsByTagName("Server").item(0);
+        server.getAttributes().getNamedItem("port").setTextContent(String.valueOf(serverShutdownPort));
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getPath()));
+
+    }
+
+    /**
+     * Checks whether the given default port is available, if not try to find an available port within the range
+     * staring from the minimum port value.
+     *
+     * @param portName  name of the port
+     * @param port      default port
+     * @param portMin   minimum port value in the range
+     * @param portRange port range
+     * @return available port
+     */
+    private int getAvailablePort(String portName, int port, int portMin, int portRange) {
+        if (isPortAvailable(port)) {
+            log.info("{} default port {} is available.", portName, port);
+            return port;
+        } else {
+            log.info("{} default port {} is not available. Trying to use a port between {} and {}", portName, port,
+                    portMin, (portMin + portRange));
+
+            port = portMin;
+            while (port <= (portMin + portRange)) {
+                log.info("Trying to use port {} for {}", port, portName);
+                if (isPortAvailable(port)) {
+                    log.info("Port {} is available for {}", port, portName);
+                    break;
+                }
+                port++;
+            }
+        }
+
+        if (port > (portMin + portRange)) {
+            throw new RuntimeException("Couldn't find a port for " + portName + " between ports " + portMin + " and " +
+                    (portMin + portRange));
+        } else {
+            return port;
+        }
+    }
+
+    /**
      * Registers an Apache Tomcat Valve in the server.xml of the Application Server Catalina config base.
      *
      * @param className the fully qualified class name of the Valve implementation
@@ -253,35 +329,5 @@ public class TestSuiteListener implements ISuiteListener {
 
         Transformer xFormer = TransformerFactory.newInstance().newTransformer();
         xFormer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getAbsolutePath()));
-    }
-
-    /**
-     * Replaces the HTTP connector port in server.xml with the given value.
-     *
-     * @param httpConnectorPort port to be set in the HTTP connector
-     */
-    private static void setHTTPConnectorPort(int httpConnectorPort)
-            throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
-                parse(new InputSource(serverXML.toString()));
-        NodeList connectors = document.getElementsByTagName("Connector");
-        Node httpConnector = null;
-        for (int i = 0; i < connectors.getLength(); i++) {
-            Node connector = connectors.item(i);
-            if (connector.getAttributes().getNamedItem("protocol").getTextContent().equals("HTTP/1.1")) {
-                httpConnector = connector;
-                break;
-            }
-        }
-
-        if (httpConnector != null) {
-            Node port = httpConnector.getAttributes().getNamedItem("port");
-            port.setTextContent(String.valueOf(httpConnectorPort));
-        }
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        transformer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getPath()));
     }
 }
