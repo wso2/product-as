@@ -91,13 +91,12 @@ public class TestSuiteListener implements ISuiteListener {
                     availablePort++;
                 }
 
-                applicationServerPort = availablePort;
-                System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
-
-                log.info("Changing the HTTP connector port of the server to " + applicationServerPort);
-                setHTTPConnectorPort(applicationServerPort);
+                log.info("Changing the HTTP connector port of the server to " + availablePort);
+                setHTTPConnectorPort(availablePort);
             }
 
+            applicationServerPort = availablePort;
+            System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
