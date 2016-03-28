@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -35,6 +36,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -69,34 +72,35 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
-            int availablePort = TestConstants.TOMCAT_DEFAULT_PORT;
+            // These min and max values are for the HTTP connector port
+            int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
+            int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
 
-            if (isPortAvailable(availablePort)) {
-                log.info("Default port " + availablePort + " is available.");
-            } else {
-                int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
-                int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
+            int portDeduction = TestConstants.TOMCAT_DEFAULT_PORT - portCheckMin;
+            int portCheckRange = portCheckMax - portCheckMin;
 
-                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is not available. Trying to use a " +
-                        "port between " + portCheckMin + " and " + portCheckMax);
+            applicationServerPort = getAvailablePort(TestConstants.TOMCAT_DEFAULT_PORT_NAME,
+                    TestConstants.TOMCAT_DEFAULT_PORT, portCheckMin, portCheckRange);
 
-                availablePort = portCheckMin;
+            int ajpPort = getAvailablePort(TestConstants.TOMCAT_AJP_PORT_NAME,
+                    TestConstants.TOMCAT_DEFAULT_AJP_PORT,
+                    TestConstants.TOMCAT_DEFAULT_AJP_PORT - portDeduction, portCheckRange);
+            int serverShutdownPort = getAvailablePort(TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME,
+                    TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT,
+                    TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT - portDeduction, portCheckRange);
 
-                while (availablePort <= portCheckMax) {
-                    log.info("Trying to use port " + availablePort);
-                    if (isPortAvailable(availablePort)) {
-                        log.info("Port " + availablePort + " is available and is using as the port for the server.");
-                        break;
-                    }
-                    availablePort++;
-                }
-            }
-
-            applicationServerPort = availablePort;
             System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
 
-            log.info("Changing the HTTP connector port of the server to " + applicationServerPort);
-            setHTTPConnectorPort(applicationServerPort);
+            if (applicationServerPort != TestConstants.TOMCAT_DEFAULT_PORT ||
+                    ajpPort != TestConstants.TOMCAT_DEFAULT_AJP_PORT ||
+                    serverShutdownPort != TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT) {
+                log.info("Changing the ports of server.xml [{}:{}, {}:{}, {}:{}]",
+                        TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
+                        TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort,
+                        TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME, serverShutdownPort);
+
+                updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort);
+            }
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
@@ -216,11 +220,14 @@ public class TestSuiteListener implements ISuiteListener {
     }
 
     /**
-     * Replaces the HTTP connector port in server.xml with the given value.
+     * Updates http and ajp connector ports and server shutdown port in server.xml
      *
-     * @param httpConnectorPort port to be set in the HTTP connector
+     * @param httpConnectorPort  http connector port
+     * @param ajpPort            ajp port
+     * @param serverShutdownPort server shutdown port
      */
-    private void setHTTPConnectorPort(int httpConnectorPort) throws ParserConfigurationException, IOException,
+    private void updateServerPorts(int httpConnectorPort, int ajpPort, int serverShutdownPort)
+            throws ParserConfigurationException, IOException,
             SAXException, TransformerException {
         Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
 
@@ -228,24 +235,65 @@ public class TestSuiteListener implements ISuiteListener {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(serverXML.toString());
 
+        // change http connector and ajp connector ports
+        Map<String, String> connectorProtocolPortMap = new HashMap<>();
+        connectorProtocolPortMap.put("HTTP/1.1", String.valueOf(httpConnectorPort));
+        connectorProtocolPortMap.put("AJP/1.3", String.valueOf(ajpPort));
+
         NodeList connectors = document.getElementsByTagName("Connector");
-        Node httpConnector = null;
         for (int i = 0; i < connectors.getLength(); i++) {
             Node connector = connectors.item(i);
-            if (connector.getAttributes().getNamedItem("protocol").getTextContent().equals("HTTP/1.1")) {
-                httpConnector = connector;
-                break;
+            NamedNodeMap connectorAttributes = connector.getAttributes();
+            String protocol = connectorAttributes.getNamedItem("protocol").getTextContent();
+            if (connectorProtocolPortMap.containsKey(protocol)) {
+                connectorAttributes.getNamedItem("port").setTextContent(connectorProtocolPortMap.get(protocol));
             }
         }
 
-        if (httpConnector != null) {
-            Node port = httpConnector.getAttributes().getNamedItem("port");
-            port.setTextContent(String.valueOf(httpConnectorPort));
-        }
+        // change server shutdown port
+        Node server = document.getElementsByTagName("Server").item(0);
+        server.getAttributes().getNamedItem("port").setTextContent(String.valueOf(serverShutdownPort));
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getPath()));
 
+    }
+
+    /**
+     * Checks whether the given default port is available, if not try to find an available port within the range
+     * staring from the minimum port value.
+     *
+     * @param portName  name of the port
+     * @param port      default port
+     * @param portMin   minimum port value in the range
+     * @param portRange port range
+     * @return available port
+     */
+    private int getAvailablePort(String portName, int port, int portMin, int portRange) {
+        if (isPortAvailable(port)) {
+            log.info("{} default port {} is available.", portName, port);
+            return port;
+        } else {
+            log.info("{} default port {} is not available. Trying to use a port between {} and {}", portName, port,
+                    portMin, (portMin + portRange));
+
+            port = portMin;
+            while (port <= (portMin + portRange)) {
+                log.info("Trying to use port {} for {}", port, portName);
+                if (isPortAvailable(port)) {
+                    log.info("Port {} is available for {}", port, portName);
+                    break;
+                }
+                port++;
+            }
+        }
+
+        if (port > (portMin + portRange)) {
+            throw new RuntimeException("Couldn't find a port for " + portName + " between ports " + portMin + " and " +
+                    (portMin + portRange));
+        } else {
+            return port;
+        }
     }
 }
