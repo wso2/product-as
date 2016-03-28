@@ -90,13 +90,14 @@ public class TestSuiteListener implements ISuiteListener {
                     }
                     availablePort++;
                 }
+
+                applicationServerPort = availablePort;
+                System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
+
+                log.info("Changing the HTTP connector port of the server to " + applicationServerPort);
+                setHTTPConnectorPort(applicationServerPort);
             }
 
-            applicationServerPort = availablePort;
-            System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
-
-            log.info("Changing the HTTP connector port of the server to " + applicationServerPort);
-            setHTTPConnectorPort(applicationServerPort);
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
@@ -230,7 +231,7 @@ public class TestSuiteListener implements ISuiteListener {
             SAXException, TransformerException {
         Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance().newInstance();
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(serverXML.toString());
 
