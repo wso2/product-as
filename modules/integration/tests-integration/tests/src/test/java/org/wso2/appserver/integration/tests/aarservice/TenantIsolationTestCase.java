@@ -8,7 +8,6 @@ import org.wso2.appserver.integration.common.clients.AARServiceUploaderClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationLoggingUtil;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
 import org.wso2.carbon.automation.engine.frameworkutils.FrameworkPathUtil;
-import org.wso2.carbon.automation.test.utils.http.client.HttpsResponse;
 import org.wso2.carbon.automation.test.utils.http.client.HttpsURLConnectionClient;
 import org.wso2.carbon.base.CarbonBaseUtils;
 import org.wso2.carbon.integration.common.admin.client.AuthenticatorClient;
@@ -25,8 +24,8 @@ public class TenantIsolationTestCase extends ASIntegrationTest {
 
     private final String carbonLogFile = CarbonBaseUtils.getCarbonHome() + File.separator +
             "repository" + File.separator + "logs" + File.separator + "wso2carbon.log";
-    private final String proxyURI = "http://localhost:9863/services/t/t1.com/echo/";
-    private final String disableProxyURI = "https://localhost:9543/t/t1.com/carbon/service-mgt/" +
+    private final String serviceURI = "http://localhost:9863/services/t/t1.com/echo/";
+    private final String disableServiceURI = "https://localhost:9543/t/t1.com/carbon/service-mgt/" +
             "change_service_state_ajaxprocessor.jsp?serviceName=echo&isActive=false";
     private HttpsURLConnectionClient httpsClient = new HttpsURLConnectionClient();
 
@@ -60,10 +59,10 @@ public class TenantIsolationTestCase extends ASIntegrationTest {
 
 
     @Test(groups = "wso2.esb", description = "Try disable proxy from other tenant t2", enabled = false)
-    public void testTenantIsolationOtherTenant() throws IOException, InterruptedException {
+    public void testTenantIsolation() throws IOException, InterruptedException {
         // Try disable axis2 service from another tenant t2
-        httpsClient.getWithBasicAuth(disableProxyURI, null, "t2admin@t2.com", "t2admin");
-        httpsClient.getRequest(proxyURI, null);
+        httpsClient.getWithBasicAuth(disableServiceURI, null, "t2admin@t2.com", "t2admin");
+        httpsClient.getRequest(serviceURI, null);
         String[] commonsLogs = ASIntegrationLoggingUtil.getLogsFromLogfile(
                 new File(carbonLogFile));
         boolean isExpectedErrorOccurred =
