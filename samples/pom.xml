@@ -24,9 +24,12 @@
     <packaging>pom</packaging>
     <artifactId>samples</artifactId>
     <name>WSO2 Application Server - Samples</name>
+    <description>WSO2 Application Server sample artifacts</description>
     <url>http://wso2.com</url>
 
     <modules>
+        <module>configuration-loader</module>
+        <module>configuration-loader-valve</module>
         <module>simple-jax-rs-service</module>
         <module>jaxrs_basic</module>
     </modules>

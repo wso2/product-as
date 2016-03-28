@@ -30,7 +30,7 @@ import java.nio.file.Paths;
  * @since 6.0.0
  */
 public class PathUtilTest {
-    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEMP_DIRECTORY, TestConstants.CATALINA_BASE);
+    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
 
     @BeforeClass
     public void setupCatalinaBaseEnv() {
@@ -38,20 +38,20 @@ public class PathUtilTest {
     }
 
     @Test(description = "Loads a file path representation of the CATALINA_BASE")
-    public void getCatalinaBaseTest() {
+    public void testCatalinaBase() {
         Path actual = PathUtils.getCatalinaBase();
         Assert.assertEquals(actual.toString(), CATALINA_BASE.toString());
     }
 
     @Test(description = "Loads a file path representation of the Tomcat config-base")
-    public void getCatalinaConfigurationHomeTest() {
+    public void testCatalinaConfigurationHome() {
         Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY);
         Path actual = PathUtils.getCatalinaConfigurationBase();
         Assert.assertEquals(actual.toString(), expected.toString());
     }
 
     @Test(description = "Loads a file path representation of the WSO2 specific config-base")
-    public void getWSO2ConfigurationHomeTest() {
+    public void testWSO2ConfigurationHome() {
         Path expected = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
                 Constants.APP_SERVER_CONFIGURATION_DIRECTORY);
         Path actual = PathUtils.getAppServerConfigurationBase();

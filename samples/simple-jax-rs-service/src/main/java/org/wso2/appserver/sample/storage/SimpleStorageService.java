@@ -15,7 +15,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.wso2.appserver.sample.storage;
 
 import org.springframework.stereotype.Service;
@@ -33,11 +32,12 @@ import javax.ws.rs.Produces;
 
 /**
  *  Sample JAX-RS class for storing and retrieving key value pairs.
+ *
+ *  @since 6.0.0
  */
 @Service
 @Path("/store")
 public class SimpleStorageService {
-
     Map<String, String> storageMap = new Hashtable<>();
 
     public SimpleStorageService() {

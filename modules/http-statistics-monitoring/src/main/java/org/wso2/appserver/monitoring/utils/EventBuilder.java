@@ -21,7 +21,7 @@ package org.wso2.appserver.monitoring.utils;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.wso2.appserver.monitoring.Constants;
 import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.carbon.databridge.commons.Event;
@@ -51,7 +51,7 @@ public class EventBuilder {
      * @throws StatPublisherException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
-                                   long responseTime) throws StatPublisherException {
+            long responseTime) throws StatPublisherException {
 
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
 
@@ -70,7 +70,7 @@ public class EventBuilder {
      * @return A list containing all payload data that were extracted from the request and response
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
-                                                 long responseTime) {
+            long responseTime) {
 
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";

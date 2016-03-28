@@ -14,24 +14,33 @@
  *  KIND, either express or implied. See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-
 package org.wso2.appserver.test.integration;
 
 /**
- * Constants required by the integration tests
+ * This class defines the constants used during integration tests.
+ *
+ * @since 6.0.0
  */
 public final class TestConstants {
+    //  System property constant names
     public static final String APPSERVER_HOME = "appserver.home";
     public static final String SERVER_TIMEOUT = "listener.server.timeout";
+    public static final String APPSERVER_PORT = "appserver.port";
     public static final String PORT_CHECK_MIN = "port.check.min";
     public static final String PORT_CHECK_MAX = "port.check.max";
-    public static final String APPSERVER_PORT = "appserver.port";
     public static final String TOMCAT_DEFAULT_PORT_NAME = "Tomcat port";
     public static final String TOMCAT_AJP_PORT_NAME = "AJP port";
     public static final String TOMCAT_SERVER_SHUTDOWN_PORT_NAME = "Server shutdown port";
+
+    //  Default port number constants
     public static final int TOMCAT_DEFAULT_PORT = 8080;
     public static final int TOMCAT_DEFAULT_AJP_PORT = 8009;
     public static final int TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT = 8005;
+
+    //  HTTP method constants
+    public static final String HTTP_GET_METHOD = "GET";
+
+    //  Sample Apache Tomcat Valve fully qualified class name
+    public static final String CONFIGURATION_LOADER_SAMPLE_VALVE = "org.wso2.appserver.sample.ConfigurationLoaderValve";
 }

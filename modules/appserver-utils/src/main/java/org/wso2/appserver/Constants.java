@@ -73,8 +73,6 @@ public final class Constants {
      */
     public static final String WEBAPP_RESOURCE_FOLDER = "WEB-INF";
 
-
-
     /**
      * Prevents instantiating this class.
      */

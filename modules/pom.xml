@@ -24,6 +24,7 @@
     <packaging>pom</packaging>
     <artifactId>modules</artifactId>
     <name>WSO2 Application Server - Modules</name>
+    <description>WSO2 Application Server Parent Pom of feature modules</description>
     <url>http://wso2.com</url>
 
     <modules>
