@@ -24,12 +24,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 
 /**
  * The test suite listeners class provides the environment setup for the integration test.
@@ -54,13 +69,34 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
+            int availablePort = TestConstants.TOMCAT_DEFAULT_PORT;
 
-            if (isPortAvailable(TestConstants.TOMCAT_DEFAULT_PORT)) {
-                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is available.");
-                System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(TestConstants.TOMCAT_DEFAULT_PORT));
-                applicationServerPort = Integer.valueOf(System.getProperty(TestConstants.APPSERVER_PORT));
+            if (isPortAvailable(availablePort)) {
+                log.info("Default port " + availablePort + " is available.");
+            } else {
+                int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
+                int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
+
+                log.info("Default port " + TestConstants.TOMCAT_DEFAULT_PORT + " is not available. Trying to use a " +
+                        "port between " + portCheckMin + " and " + portCheckMax);
+
+                availablePort = portCheckMin;
+
+                while (availablePort <= portCheckMax) {
+                    log.info("Trying to use port " + availablePort);
+                    if (isPortAvailable(availablePort)) {
+                        log.info("Port " + availablePort + " is available and is using as the port for the server.");
+                        break;
+                    }
+                    availablePort++;
+                }
             }
 
+            applicationServerPort = availablePort;
+            System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
+
+            log.info("Changing the HTTP connector port of the server to " + applicationServerPort);
+            setHTTPConnectorPort(applicationServerPort);
 
             log.info("Starting the server...");
             applicationServerProcess = startPlatformDependApplicationServer();
@@ -71,13 +107,12 @@ public class TestSuiteListener implements ISuiteListener {
                 log.info("Application server started successfully. Running test suite...");
             }
 
-        } catch (IOException ex) {
+        } catch (IOException | TransformerException | SAXException | ParserConfigurationException ex) {
             terminateApplicationServer();
             String message = "Could not start the server";
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
-
 
     }
 
@@ -127,7 +162,7 @@ public class TestSuiteListener implements ISuiteListener {
         int startupCounter = 0;
         boolean isTimeout = false;
         while (!isServerListening("localhost", applicationServerPort)) {
-            if (startupCounter >= 20) {
+            if (startupCounter >= serverStartCheckTimeout) {
                 isTimeout = true;
                 break;
             }
@@ -186,4 +221,37 @@ public class TestSuiteListener implements ISuiteListener {
         return false;
     }
 
+    /**
+     * Replaces the HTTP connector port in server.xml with the given value.
+     *
+     * @param httpConnectorPort port to be set in the HTTP connector
+     */
+    private void setHTTPConnectorPort(int httpConnectorPort) throws ParserConfigurationException, IOException,
+            SAXException, TransformerException {
+        Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
+
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance().newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.parse(serverXML.toString());
+
+        NodeList connectors = document.getElementsByTagName("Connector");
+        Node httpConnector = null;
+        for (int i = 0; i < connectors.getLength(); i++) {
+            Node connector = connectors.item(i);
+            if (connector.getAttributes().getNamedItem("protocol").getTextContent().equals("HTTP/1.1")) {
+                httpConnector = connector;
+                break;
+            }
+        }
+
+        if (httpConnector != null) {
+            Node port = httpConnector.getAttributes().getNamedItem("port");
+            port.setTextContent(String.valueOf(httpConnectorPort));
+        }
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getPath()));
+
+    }
 }

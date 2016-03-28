@@ -17,7 +17,7 @@
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
-        <version>2</version>
+        <version>3</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -287,7 +287,7 @@
             <!--WSO2 Application Server Sample Webapps-->
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>simple-storage-service</artifactId>
+                <artifactId>simple-jax-rs-service</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
