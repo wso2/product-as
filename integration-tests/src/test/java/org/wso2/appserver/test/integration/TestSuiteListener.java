@@ -132,20 +132,13 @@ public class TestSuiteListener implements ISuiteListener {
     private Process startPlatformDependApplicationServer() throws IOException {
         String os = System.getProperty("os.name");
         log.info(os + " operating system was detected");
-        if (os.toLowerCase().contains("unix") || os.toLowerCase().contains("linux")) {
-            log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("./bin/catalina.sh", "run")
-                    .start();
-        } else if (os.toLowerCase().contains("windows")) {
-            log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = new ProcessBuilder()
-                    .directory(appserverHome)
-                    .command("\\bin\\catalina.bat", "run")
-                    .start();
+        log.info("Starting server as a " + os + " process");
+
+        if (os.toLowerCase().contains("windows")) {
+            return Runtime.getRuntime().exec("\\bin\\catalina.bat run", null, appserverHome);
+        } else {
+            return Runtime.getRuntime().exec("./bin/catalina.sh run", null, appserverHome);
         }
-        return null;
     }
 
     public void terminateApplicationServer() {
