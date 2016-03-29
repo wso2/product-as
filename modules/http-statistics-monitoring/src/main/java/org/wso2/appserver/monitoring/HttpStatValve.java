@@ -56,10 +56,9 @@ public class HttpStatValve extends ValveBase {
     @Override
     protected void initInternal() throws LifecycleException {
         super.initInternal();
-
         LOG.debug("The HttpStatValve initialized.");
-
         setTrustStorePath();
+
         statsPublisherConfiguration = ServerConfigurationLoader.getServerConfiguration().
                 getStatsPublisherConfiguration();
 
@@ -86,7 +85,6 @@ public class HttpStatValve extends ValveBase {
                 LOG.error("Creating the Event failed: " + e);
                 throw new IOException("Creating the Event failed: " + e);
             }
-
             dataPublisher.publish(event);
         }
     }
@@ -121,7 +119,6 @@ public class HttpStatValve extends ValveBase {
                         statsPublisherConfiguration.getAuthenticationURL(), statsPublisherConfiguration.getUsername(),
                         statsPublisherConfiguration.getPassword());
             }
-
         } catch (DataEndpointAgentConfigurationException e) {
             LOG.error("Data Endpoint Agent configuration failed: " + e);
             throw new StatPublisherException("Data Endpoint Agent configuration failed: ", e);
