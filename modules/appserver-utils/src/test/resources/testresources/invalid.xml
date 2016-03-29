@@ -12,7 +12,7 @@
  limitations under the License.
 -->
 <AppServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as"
-           xsi:schemaLocation="http://wso2.org/2016/wso2as sample-wso2as.xsd">
+           xsi:schemaLocation="http://wso2.org/2016/wso2as wso2as/conf/wso2/wso2as.xsd">
     <SAML2SingleSignOn>
         <IdPURL>https://localhost:9443/samlsso</IdPURL>
         <IdPEntityId>localhost</IdPEntityId>

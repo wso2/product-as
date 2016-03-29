@@ -11,29 +11,35 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<wso2as-web xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as-web"
-            xsi:schemaLocation="http://wso2.org/2016/wso2as-web sample-wso2as-web.xsd">
+<wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
     <class-loader>
-        <parent-first>true</parent-first>
-        <environments>CXF</environments>
+        <environments>JAX-RS</environments>
     </class-loader>
     <saml2-single-sign-on>
-        <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
+        <skip-uris>
+            <skip-uri>http://www.example.com</skip-uri>
+        </skip-uris>
+        <handle-consumer-url-after-slo>false</handle-consumer-url-after-slo>
+        <query-params>tenant=admin&amp;dialect=SAML</query-params>
         <application-server-url>https://localhost:8443</application-server-url>
-        <enable-sso>false</enable-sso>
+        <enable-sso>true</enable-sso>
         <request-url-postfix>samlsso</request-url-postfix>
-        <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
+        <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</http-binding>
+        <issuer-id>foo-app</issuer-id>
+        <consumer-url>https://localhost:8443/foo-app/acs</consumer-url>
         <consumer-url-postfix>/acs</consumer-url-postfix>
-        <attribute-consuming-service-index>1784849</attribute-consuming-service-index>
-        <enable-slo>false</enable-slo>
+        <enable-slo>true</enable-slo>
         <slo-url-postfix>logout</slo-url-postfix>
-        <enable-assertion-encryption>false</enable-assertion-encryption>
-        <enable-assertion-signing>false</enable-assertion-signing>
-        <enable-request-signing>false</enable-request-signing>
-        <enable-response-signing>false</enable-response-signing>
+        <enable-assertion-encryption>true</enable-assertion-encryption>
+        <enable-assertion-signing>true</enable-assertion-signing>
+        <enable-request-signing>true</enable-request-signing>
+        <enable-response-signing>true</enable-response-signing>
         <is-force-authn>false</is-force-authn>
         <is-passive-authn>false</is-passive-authn>
         <property key="RelayState">index.jsp</property>
-        <property key="TenantId">tenant1</property>
+        <property key="LoginURL">index.jsp</property>
     </saml2-single-sign-on>
+    <statistics-publisher>
+        <enable-stats-publisher>true</enable-stats-publisher>
+    </statistics-publisher>
 </wso2as-web>

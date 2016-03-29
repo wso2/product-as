@@ -32,6 +32,8 @@ public class AppServerWebAppConfiguration {
     private ClassLoaderConfiguration classLoaderConfiguration;
     @XmlElement(name = "saml2-single-sign-on")
     private SSOConfiguration singleSignOnConfiguration;
+    @XmlElement(name = "statistics-publisher")
+    private StatsPublisherConfiguration statsPublisherConfiguration;
 
     public ClassLoaderConfiguration getClassLoaderConfiguration() {
         return classLoaderConfiguration;
@@ -49,6 +51,13 @@ public class AppServerWebAppConfiguration {
         this.singleSignOnConfiguration = singleSignOnConfiguration;
     }
 
+    public StatsPublisherConfiguration getStatsPublisherConfiguration() {
+        return statsPublisherConfiguration;
+    }
+
+    public void setStatsPublisherConfiguration(StatsPublisherConfiguration statsPublisherConfiguration) {
+        this.statsPublisherConfiguration = statsPublisherConfiguration;
+    }
 
     /**
      * Merges the globally defined context level configurations and context level configurations overridden at
@@ -59,5 +68,6 @@ public class AppServerWebAppConfiguration {
     public void merge(AppServerWebAppConfiguration configuration) {
         classLoaderConfiguration.merge(configuration.classLoaderConfiguration);
         singleSignOnConfiguration.merge(configuration.singleSignOnConfiguration);
+        statsPublisherConfiguration.merge(configuration.statsPublisherConfiguration);
     }
 }

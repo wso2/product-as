@@ -21,23 +21,16 @@ package org.wso2.appserver;
  * @since 6.0.0
  */
 public class TestConstants {
-    protected static final String TEMP_DIRECTORY = System.getProperty("java.io.tmpdir");
-    protected static final String CATALINA_BASE = "tomcat-base";
-    protected static final String BUILD_DIRECTORY = "target";
-    protected static final String TEST_RESOURCE_FOLDER = "test-resources";
-    protected static final String SAMPLE_XML_FILE = "sample-wso2as.xml";
-    protected static final String SAMPLE_XSD_FILE = "sample-wso2as.xsd";
-    protected static final String PARENT_DESCRIPTOR = "parent-wso2as-web.xml";
-    protected static final String CHILD_DESCRIPTOR = "child-wso2as-web.xml";
-    protected static final String WEBAPP_DESCRIPTOR_XSD_FILE = "sample-wso2as-web.xsd";
-    protected static final String INVALID_XML_FILE = "invalid.xml";
-    protected static final String INVALID_XSD_FILE = "invalid.xsd";
-    protected static final String NON_EXISTENT_XSD_FILE = "non-existent-sample-wso2as.xsd";
+    protected static final String TEST_RESOURCES = System.getProperty("test.resources");
+    protected static final String CATALINA_BASE = "wso2as";
+    protected static final String INVALID_DESCRIPTOR = "invalid.xml";
+    protected static final String INVALID_SCHEMA_FILE = "invalid.xsd";
+    protected static final String NON_EXISTENT_SCHEMA = "non-existent-sample-wso2as.xsd";
 
     protected static final String CXF_ENV_NAME = "CXF";
-    protected static final String CXF_ENV_CLASSPATH = "${catalina.home}/lib/runtimes/cxf/";
+    protected static final String CXF_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/cxf/";
     protected static final String JAXRS_ENV_NAME = "JAX-RS";
-    protected static final String JAXRS_ENV_CLASSPATH = "${catalina.home}/lib/runtimes/hello-parent-runtime.jar";
+    protected static final String JAXRS_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/hello-parent-runtime.jar";
 
     protected static final String IDP_URL = "https://localhost:9443/samlsso";
     protected static final String IDP_ENTITY_ID = "localhost";
@@ -62,7 +55,8 @@ public class TestConstants {
 
     protected static final String USERNAME = "admin";
     protected static final String PASSWORD = "admin";
-    protected static final String AUTHN_URL = "ssl://127.0.0.1:7611";
+    protected static final String DATA_AGENT_TYPE = "Thrift";
+    protected static final String AUTHN_URL = "ssl://127.0.0.1:7711";
     protected static final String PUBLISHER_URL = "tcp://127.0.0.1:7611";
     protected static final String STREAM_ID = "org.wso2.http.stat:1.0.0";
 

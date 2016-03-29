@@ -15,7 +15,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.wso2.appserver.configuration.context;
 
 import java.util.Optional;
@@ -32,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class ClassLoaderConfiguration {
-
     @XmlElement(name = "environments")
     private String environments;
 
@@ -50,8 +48,7 @@ public class ClassLoaderConfiguration {
      * @param configuration the local, context level group of classloading configuration to be merged with
      */
     public void merge(ClassLoaderConfiguration configuration) {
-        Optional.ofNullable(configuration).ifPresent(mergeable -> {
-            environments = Optional.ofNullable(mergeable.environments).orElse(environments);
-        });
+        Optional.ofNullable(configuration).ifPresent(
+                mergeable -> environments = Optional.ofNullable(mergeable.environments).orElse(environments));
     }
 }

@@ -22,8 +22,10 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>distribution</artifactId>
-    <name>WSO2 Application Server - Distribution</name>
     <packaging>pom</packaging>
+    <name>WSO2 Application Server - Distribution</name>
+    <description>This module generates the WSO2 Application Server product distribution (zip)</description>
+    <url>http://wso2.com</url>
 
     <build>
         <plugins>
@@ -33,7 +35,7 @@
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
-                        <descriptor>${plugins.assembly.descriptor}</descriptor>
+                        <descriptor>assembly/bin.xml</descriptor>
                     </descriptors>
                     <finalName>${distribution.file.name}</finalName>
                 </configuration>
@@ -68,15 +70,14 @@
     </build>
 
     <dependencies>
-
-        <!--Tomcat distribution-->
+        <!-- Tomcat Distribution -->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
             <type>zip</type>
         </dependency>
 
-        <!--WSO2 Application Server Modules-->
+        <!-- WSO2 Application Server Modules -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-utils</artifactId>
@@ -90,39 +91,37 @@
             <artifactId>webapp-loader</artifactId>
         </dependency>
 
-        <!--WSO2 Application Server Sample Webapps-->
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>simple-jax-rs-service</artifactId>
-            <type>war</type>
-        </dependency>
+        <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jaxrs_basic</artifactId>
             <type>war</type>
         </dependency>
-
-        <!--Application Server runtime lib's-->
-
-        <!--Spring-->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>simple-jax-rs-service</artifactId>
+            <type>war</type>
         </dependency>
+
+        <!-- Application Server runtime libs -->
+        <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
-
-        <!--CXF-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <!-- CXF -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -132,9 +131,4 @@
             <artifactId>cxf-rt-transports-http</artifactId>
         </dependency>
     </dependencies>
-
-    <properties>
-        <plugins.assembly.descriptor>assembly/bin.xml</plugins.assembly.descriptor>
-    </properties>
-
 </project>

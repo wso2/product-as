@@ -19,7 +19,6 @@
         <groupId>org.wso2.appserver</groupId>
         <version>6.0.0-SNAPSHOT</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <artifactId>appserver-utils</artifactId>
     <version>6.0.0-SNAPSHOT</version>
@@ -29,41 +28,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-test-resources</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <copy file="src/test/resources/test-xml/child-wso2as-web.xml"
-                                      tofile="${project.build.directory}/test-resources/child-wso2as-web.xml"/>
-                                <copy file="src/test/resources/test-xml/parent-wso2as-web.xml"
-                                      tofile="${project.build.directory}/test-resources/parent-wso2as-web.xml"/>
-                                <copy file="src/test/resources/test-xml/sample-wso2as-web.xsd"
-                                      tofile="${project.build.directory}/test-resources/sample-wso2as-web.xsd"/>
-                                <copy file="src/test/resources/test-xml/sample-wso2as.xml"
-                                      tofile="${project.build.directory}/test-resources/sample-wso2as.xml"/>
-                                <copy file="src/test/resources/test-xml/sample-wso2as.xsd"
-                                      tofile="${project.build.directory}/test-resources/sample-wso2as.xsd"/>
-                                <copy file="src/test/resources/test-xml/invalid.xml"
-                                      tofile="${project.build.directory}/test-resources/invalid.xml"/>
-                                <copy file="src/test/resources/test-xml/invalid.xsd"
-                                      tofile="${project.build.directory}/test-resources/invalid.xsd"/>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -83,6 +47,9 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <test.resources>src/test/resources/testresources</test.resources>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
@@ -90,8 +57,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jacoco</groupId>

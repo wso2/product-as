@@ -19,7 +19,6 @@
                 <xs:element name="class-loader" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="parent-first" type="xs:boolean"/>
                             <xs:element name="environments" type="xs:string"/>
                         </xs:sequence>
                     </xs:complexType>
@@ -85,6 +84,13 @@
                                     </xs:simpleContent>
                                 </xs:complexType>
                             </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="statistics-publisher" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="enable-stats-publisher" type="xs:boolean"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>

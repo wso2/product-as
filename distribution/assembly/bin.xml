@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,31 +37,28 @@
     </fileSets>
 
     <dependencySets>
-        <!--Include application server modules here-->
+        <!-- Include application server modules here -->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
-                <include>org.wso2.appserver:appserver-utils</include>
+                <include>org.wso2.appserver:appserver-utils:jar</include>
                 <include>org.wso2.appserver:http-statistics-monitoring:jar</include>
                 <include>org.wso2.appserver:webapp-loader:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
-
-        <!--Include sample web apps here-->
+        <!-- Include sample web apps here -->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:jaxrs_basic:war</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
-            <outputFileNameMapping> ${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
         </dependencySet>
-
-        <!--Include application server runtime lib's here-->
-
-        <!--CXF runtime-->
+        <!-- Include application server runtime libs here -->
+        <!-- CXF runtime -->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib/runtimes/cxf</outputDirectory>
             <includes>
@@ -74,8 +72,7 @@
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
-
-        <!--Spring runtime-->
+        <!-- Spring runtime -->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib/runtimes/spring</outputDirectory>
             <includes>

@@ -17,11 +17,8 @@
         <environments>CXF</environments>
     </class-loader>
     <saml2-single-sign-on>
-        <!--<skip-uris>
-            <skip-uri>http://www.example.com</skip-uri>
-        </skip-uris>-->
         <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
-        <query-params>tenant=admin&amp;dialect=SAML</query-params>
+        <query-params>tenant=admin&amp;</query-params>
         <application-server-url>https://localhost:8443</application-server-url>
         <enable-sso>false</enable-sso>
         <request-url-postfix>samlsso</request-url-postfix>
@@ -37,4 +34,7 @@
         <is-force-authn>false</is-force-authn>
         <is-passive-authn>false</is-passive-authn>
     </saml2-single-sign-on>
+    <statistics-publisher>
+        <enable-stats-publisher>false</enable-stats-publisher>
+    </statistics-publisher>
 </wso2as-web>

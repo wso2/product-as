@@ -57,6 +57,10 @@ public class StatsPublisherConfiguration {
         return dataAgentType;
     }
 
+    public void setDataAgentType(String dataAgentType) {
+        this.dataAgentType = dataAgentType;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
