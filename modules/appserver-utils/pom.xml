@@ -48,6 +48,8 @@
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <systemPropertyVariables>
+                        <appserver.version>${appserver.version}</appserver.version>
+                        <build.directory>${project.build.directory}</build.directory>
                         <test.resources>src/test/resources/testresources</test.resources>
                     </systemPropertyVariables>
                 </configuration>

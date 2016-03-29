@@ -19,10 +19,10 @@ import org.apache.catalina.Globals;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.Server;
+import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.core.StandardServer;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.Utils;
@@ -32,8 +32,11 @@ import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.SecurityConfiguration;
 import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,17 +52,37 @@ public class AppServerConfigurationTest {
     private static final Path CATALINA_BASE = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
     private static final StrSubstitutor STRING_SUB = new StrSubstitutor(System.getenv());
 
-    @BeforeClass
-    public void setupCatalinaBaseEnv() throws IOException {
-        System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
+    @Test(description = "Loads the XML file content of an invalid WSO2 App Server specific server level "
+            + "configuration descriptor", expectedExceptions = {
+            ApplicationServerRuntimeException.class }, priority = 1)
+    @SuppressWarnings("unchecked")
+    public void testObjectLoadingFromInvalidServerDescriptor()
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        List<Class> classes = ClassLoader.getFaultyClassInstances();
+        Server server = new StandardServer();
+
+        ServerConfigurationLoader loader = new ServerConfigurationLoader();
+        Method method = (classes.stream().filter(aClass -> aClass.getName()
+                .equals("org.wso2.appserver.configuration.listeners.ServerConfigurationLoader")).findFirst()).get()
+                .getMethod("lifecycleEvent", LifecycleEvent.class);
+        LifecycleEvent lifecycleEvent = new LifecycleEvent(server, Lifecycle.BEFORE_START_EVENT, null);
+        method.invoke(loader, lifecycleEvent);
     }
 
     @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
             + "descriptor")
     public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
+        System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
+
         ServerConfigurationLoader loader = new ServerConfigurationLoader();
-        Server server = new StandardServer();
-        loader.lifecycleEvent(new LifecycleEvent(server, Lifecycle.BEFORE_START_EVENT, null));
+
+        List<Lifecycle> components = new ArrayList<>();
+        components.add(new StandardHost());
+        components.add(new StandardServer());
+        components.stream().forEach(component -> {
+            loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
+            loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.AFTER_START_EVENT, null));
+        });
 
         AppServerConfiguration actual = ServerConfigurationLoader.getServerConfiguration();
         AppServerConfiguration expected = generateDefault();
@@ -69,6 +92,8 @@ public class AppServerConfigurationTest {
     @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
             + "descriptor using a FileInputStream")
     public void testObjectLoadingFromInputStream() throws IOException, ApplicationServerConfigurationException {
+        System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
+
         Path xmlSource = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
                 Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR);
         Path xmlSchema = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,

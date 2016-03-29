@@ -23,6 +23,7 @@ package org.wso2.appserver;
 public class TestConstants {
     protected static final String TEST_RESOURCES = System.getProperty("test.resources");
     protected static final String CATALINA_BASE = "wso2as";
+    protected static final String FAULTY_CATALINA_BASE = "faulty-wso2as";
     protected static final String INVALID_DESCRIPTOR = "invalid.xml";
     protected static final String INVALID_SCHEMA_FILE = "invalid.xsd";
     protected static final String NON_EXISTENT_SCHEMA = "non-existent-sample-wso2as.xsd";
