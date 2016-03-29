@@ -14,50 +14,67 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 package org.wso2.appserver.monitoring;
 
 /**
- * The Constants used in http stat publishing module.
+ * The constants used in http stats publishing module.
+ *
+ * @since 6.0.0
  */
 public class Constants {
-
-    //standard header field name for identifying the originating IP address of a client connecting to a Web server
-    // through an HTTP proxy or load balancer
+    /**
+     * Standard header field name for identifying the originating IP address of a client connecting to a Web server
+     * through an HTTP proxy or load balancer.
+     */
     public static final String X_FORWARDED_FOR = "X-Forwarded-For";
 
-    //header field name that identifies the browser client IP instead of web server IP
+    /**
+     * Header field name that identifies the browser client IP instead of web server IP.
+     */
     public static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
 
-    //header field name that identifies the browser client IP instead of web server IP that acts as a proxy
-    // for a WebLogic Server
+    /**
+     * Header field name that identifies the browser client IP instead of web server IP that acts as a proxy for a
+     * WebLogic Server.
+     */
     public static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
 
-    //header field name for header that identify the ip-address of the host that is making the HTTP request
-    // through the proxy
+    /**
+     * Header field name for header that identify the ip-address of the host that is making the HTTP request
+     * through the proxy.
+     */
     public static final String HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
 
-    //header field name for header containing a complete track of the forwarding chain through proxies
+    /**
+     * Header field name for header containing a complete track of the forwarding chain through proxies.
+     */
     public static final String HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR";
 
-    //header field name for header that identify the address of the previous web page from which a link to the
-    // currently requested page was followed
+    /**
+     * Header field name for header that identify the address of the previous web page from which a link to the
+     * currently requested page was followed.
+     */
     public static final String REFERRER = "Referer";
 
     public static final String USER_AGENT = "User-Agent";
     public static final String HOST = "Host";
 
-    //a probable value for IP address set in headers
+    /**
+     * A probable value for IP address set in headers.
+     */
     public static final String UNKNOWN = "unknown";
 
-    //constant to represent a user when an authenticated user for the current session is not present
+    /**
+     * Constant to represent a user when an authenticated user for the current session is not present.
+     */
     public static final String ANONYMOUS_USER = "anonymous.user";
 
     public static final String APP_TYPE = "webapp";
 
-    //File containing the configurations and properties that define the data agent in the JVM.
-    // Resides in product-as/distribution/contents/conf/wso2
+    /**
+     * File containing the configurations and properties that define the data agent in the JVM. Resides in
+     * product-as/distribution/contents/conf/wso2.
+     */
     public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
-
 }
