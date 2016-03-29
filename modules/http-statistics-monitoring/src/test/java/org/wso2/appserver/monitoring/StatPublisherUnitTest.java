@@ -16,7 +16,6 @@ package org.wso2.appserver.monitoring;
  * specific language governing permissions and limitations
  * under the License.
  */
-
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.core.StandardContext;
@@ -40,10 +39,10 @@ import static org.mockito.Mockito.when;
 /**
  * This sample test class contains unit tests performed for the methods used within the http-statistics-monitoring
  * module.
+ *
+ * @since 6.0.0
  */
-
 public class StatPublisherUnitTest {
-
     private Request request;
     private Response response;
 
@@ -54,7 +53,6 @@ public class StatPublisherUnitTest {
      */
     @BeforeClass
     public void setUp() throws Exception {
-
         request = mock(Request.class);
         response = mock(Response.class);
 
@@ -110,15 +108,11 @@ public class StatPublisherUnitTest {
         when(response.getContentLength()).thenReturn(-1);
     }
 
-    /**
-     * This test case checks if Event object is created properly.
-     */
-    @Test
+    @Test(description = "Checks if Event object is created properly")
     public void buildEventTest() {
-
         Long startTime = System.currentTimeMillis();
 
-        //creating the payload list
+        //  creating the payload list
         List<Object> payload = new ArrayList<>();
         payload.add("/");
         payload.add("3.1");
@@ -158,5 +152,4 @@ public class StatPublisherUnitTest {
 
         Assert.assertEquals(testEvent, event, "Event created");
     }
-
 }

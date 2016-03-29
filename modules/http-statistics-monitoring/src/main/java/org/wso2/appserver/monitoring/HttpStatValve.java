@@ -14,7 +14,6 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 package org.wso2.appserver.monitoring;
 
@@ -22,7 +21,6 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
@@ -47,9 +45,10 @@ import javax.servlet.ServletException;
 
 /**
  * An implementation of {@code ValveBase} that publishes HTTP statistics of the requests to WSO2 Data Analytics Server.
+ *
+ * @since 6.0.0
  */
 public class HttpStatValve extends ValveBase {
-
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
     private DataPublisher dataPublisher;
     private StatsPublisherConfiguration statsPublisherConfiguration;
@@ -57,10 +56,9 @@ public class HttpStatValve extends ValveBase {
     @Override
     protected void initInternal() throws LifecycleException {
         super.initInternal();
-
         LOG.debug("The HttpStatValve initialized.");
-
         setTrustStorePath();
+
         statsPublisherConfiguration = ServerConfigurationLoader.getServerConfiguration().
                 getStatsPublisherConfiguration();
 
@@ -70,12 +68,10 @@ public class HttpStatValve extends ValveBase {
             LOG.error("Initializing DataPublisher failed:", e);
             throw new LifecycleException("Initializing DataPublisher failed: " + e);
         }
-
     }
 
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
-
         Long startTime = System.currentTimeMillis();
         getNext().invoke(request, response);
         long responseTime = System.currentTimeMillis() - startTime;
@@ -89,47 +85,40 @@ public class HttpStatValve extends ValveBase {
                 LOG.error("Creating the Event failed: " + e);
                 throw new IOException("Creating the Event failed: " + e);
             }
-
             dataPublisher.publish(event);
         }
     }
 
     /**
-     * get file path to the file containing Data Agent configuration and properties.
+     * Gets file path to the file containing Data Agent configuration and properties.
      *
      * @return the path to the file containing configurations for the Data Agent
      */
     private String getDataAgentConfigPath() {
-        Path path = Paths.get(PathUtils.getAppServerConfigurationBase().toString(),
-                Constants.DATA_AGENT_CONF);
+        Path path = Paths.get(PathUtils.getAppServerConfigurationBase().toString(), Constants.DATA_AGENT_CONF);
         return path.toString();
     }
 
     /**
-     * Instantiate a data publisher to be used to publish data to DAS.
+     * Instantiates a data publisher to be used to publish data to DAS.
      *
      * @return DataPublisher object initialized with configurations
      * @throws StatPublisherException
      */
     private DataPublisher getDataPublisher() throws StatPublisherException {
-
         AgentHolder.setConfigPath(getDataAgentConfigPath());
         DataPublisher dataPublisher;
 
         try {
-
             if (!Optional.ofNullable(statsPublisherConfiguration.getAuthenticationURL()).isPresent()) {
                 dataPublisher = new DataPublisher(statsPublisherConfiguration.getPublisherURL(),
-                        statsPublisherConfiguration.getUsername(),
-                        statsPublisherConfiguration.getPassword());
+                        statsPublisherConfiguration.getUsername(), statsPublisherConfiguration.getPassword());
             } else {
                 dataPublisher = new DataPublisher(statsPublisherConfiguration.getDataAgentType(),
                         statsPublisherConfiguration.getPublisherURL(),
-                        statsPublisherConfiguration.getAuthenticationURL(),
-                        statsPublisherConfiguration.getUsername(),
+                        statsPublisherConfiguration.getAuthenticationURL(), statsPublisherConfiguration.getUsername(),
                         statsPublisherConfiguration.getPassword());
             }
-
         } catch (DataEndpointAgentConfigurationException e) {
             LOG.error("Data Endpoint Agent configuration failed: " + e);
             throw new StatPublisherException("Data Endpoint Agent configuration failed: ", e);
@@ -151,24 +140,22 @@ public class HttpStatValve extends ValveBase {
     }
 
     /**
-     * Filter to process only requests of text/html type.
+     * Filters to process only requests of text/html type.
      *
-     * @param response The Response object of client
+     * @param response the Response object of client
      * @return true if request is of text/html type and false if not
      */
     private boolean filterResponse(Response response) {
-
         String responseContentType = response.getContentType();
-        //if the response content is not null and is of type text/html, allow to publish stats
-        return responseContentType != null && responseContentType.contains("text/html");
+        //  if the response content is not null and is of type text/html, allow to publish stats
+        return ((responseContentType != null) && (responseContentType.contains("text/html")));
     }
 
     /**
-     * Setting the System property for the trust store.
+     * Setting the system property for the trust store.
      */
     private void setTrustStorePath() {
         String pathToBeReplaced = System.getProperty("javax.net.ssl.trustStore");
-        String realTrustStorePath = StrSubstitutor.replaceSystemProperties(pathToBeReplaced);
-        System.setProperty("javax.net.ssl.trustStore", realTrustStorePath);
+        System.setProperty("javax.net.ssl.trustStore", pathToBeReplaced);
     }
 }
