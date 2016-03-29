@@ -14,9 +14,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
-
 package org.wso2.appserver.monitoring.utils;
 
 import org.apache.catalina.connector.Request;
@@ -36,18 +34,19 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Utility class to create an Event to be published by the DataPublisher.
+ *
+ * @since 6.0.0
  */
 public class EventBuilder {
-
     /**
      * Creates an Event to be published by the DataPublisher.
      *
-     * @param streamId     Unique ID of the event stream definition deployed in DAS
-     * @param request      The Request object of client
-     * @param response     The Response object of client
-     * @param startTime    The time at which the valve is invoked
-     * @param responseTime The time that is taken for the client to receive a response
-     * @return an Event object populated with data to be published.
+     * @param streamId     unique ID of the event stream definition deployed in DAS
+     * @param request      the Request object of client
+     * @param response     the Response object of client
+     * @param startTime    the time at which the valve is invoked
+     * @param responseTime the time that is taken for the client to receive a response
+     * @return an Event object populated with data to be published
      * @throws StatPublisherException
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
@@ -56,22 +55,21 @@ public class EventBuilder {
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
 
         return new Event(streamId, startTime,
-                new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray(),
-                null, payload.toArray());
+                new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray(), null,
+                payload.toArray());
     }
 
     /**
-     * Creates the payload
+     * Creates the payload.
      *
-     * @param request      The Request object of client
-     * @param response     The Response object of client
-     * @param startTime    The time at which the valve is invoked
-     * @param responseTime The time that is taken for the client to receive a response
-     * @return A list containing all payload data that were extracted from the request and response
+     * @param request      the Request object of client
+     * @param response     the Response object of client
+     * @param startTime    the time at which the valve is invoked
+     * @param responseTime the time that is taken for the client to receive a response
+     * @return a list containing all payload data that were extracted from the request and response
      */
     private static List<Object> buildPayloadData(Request request, Response response, long startTime,
             long responseTime) {
-
         List<Object> payload = new ArrayList<>();
         final String forwardSlash = "/";
 
@@ -84,8 +82,8 @@ public class EventBuilder {
             }
         });
 
-        String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "."
-                + request.getContext().getEffectiveMinorVersion();
+        String webappServletVersion = request.getContext().getEffectiveMajorVersion() + "." +
+                request.getContext().getEffectiveMinorVersion();
 
         payload.add(webappServletVersion);
         payload.add(extractUsername(request));
@@ -118,8 +116,8 @@ public class EventBuilder {
     /**
      * Gets all request headers and their corresponding values.
      *
-     * @param request The Request object of client
-     * @return A string containing all request headers and their values
+     * @param request the Request object of client
+     * @return a {@link String} containing all request headers and their values
      */
     private static String getRequestHeaders(Request request) {
         List<String> requestHeaders = new ArrayList<>();
@@ -135,8 +133,8 @@ public class EventBuilder {
     /**
      * Gets all response headers and their corresponding values.
      *
-     * @param response The Response object of client
-     * @return A string containing all response headers and their values
+     * @param response the Response object of client
+     * @return a {@link String} containing all response headers and their values
      */
     private static String getResponseHeaders(Response response) {
         List<String> responseHeaders = new ArrayList<>();
@@ -152,21 +150,20 @@ public class EventBuilder {
     /**
      * Extracts the session ID of the current session associated with the request.
      *
-     * @param request The Request object of client
-     * @return The session ID of client
+     * @param request the Request object of client
+     * @return the session ID of client
      */
     private static String extractSessionId(Request request) {
         HttpSession session = request.getSession(false);
         // CXF web services does not have a session id, because they are stateless
         return (session != null && session.getId() != null) ? session.getId() : "-";
-
     }
 
     /**
      * Extracts the name of the current authenticated user for the request.
      *
-     * @param request The Request object of client
-     * @return The username of the current authenticated user
+     * @param request the Request object of client
+     * @return the username of the current authenticated user
      */
     private static String extractUsername(Request request) {
         String consumerName;
@@ -182,17 +179,13 @@ public class EventBuilder {
     /**
      * Gets the original client IP address.
      *
-     * @param request The Request object of client
-     * @return The original IP address of the client
+     * @param request the Request object of client
+     * @return the original IP address of the client
      */
     private static String getClientIpAddress(Request request) {
-
-        List<String> headers = Arrays.asList(Constants.X_FORWARDED_FOR,
-                Constants.PROXY_CLIENT_IP,
-                Constants.WL_PROXY_CLIENT_IP,
-                Constants.HTTP_CLIENT_IP,
-                Constants.HTTP_X_FORWARDED_FOR
-        );
+        List<String> headers = Arrays.
+                asList(Constants.X_FORWARDED_FOR, Constants.PROXY_CLIENT_IP, Constants.WL_PROXY_CLIENT_IP,
+                        Constants.HTTP_CLIENT_IP, Constants.HTTP_X_FORWARDED_FOR);
 
         for (String header : headers) {
             String ip = request.getHeader(header);
@@ -201,10 +194,8 @@ public class EventBuilder {
             } else {
                 return request.getRemoteAddr();
             }
-
         }
 
         return request.getRemoteAddr();
     }
-
 }
