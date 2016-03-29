@@ -21,7 +21,6 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
@@ -160,7 +159,6 @@ public class HttpStatValve extends ValveBase {
      */
     private void setTrustStorePath() {
         String pathToBeReplaced = System.getProperty("javax.net.ssl.trustStore");
-        String realTrustStorePath = StrSubstitutor.replaceSystemProperties(pathToBeReplaced);
-        System.setProperty("javax.net.ssl.trustStore", realTrustStorePath);
+        System.setProperty("javax.net.ssl.trustStore", pathToBeReplaced);
     }
 }
