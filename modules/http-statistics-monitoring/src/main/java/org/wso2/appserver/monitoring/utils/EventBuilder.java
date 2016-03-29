@@ -155,7 +155,7 @@ public class EventBuilder {
      */
     private static String extractSessionId(Request request) {
         HttpSession session = request.getSession(false);
-        // CXF web services does not have a session id, because they are stateless
+        //  CXF web services does not have a session id, because they are stateless
         return (session != null && session.getId() != null) ? session.getId() : "-";
     }
 

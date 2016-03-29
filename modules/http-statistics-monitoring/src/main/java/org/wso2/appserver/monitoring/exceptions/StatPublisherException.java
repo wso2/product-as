@@ -23,7 +23,6 @@ package org.wso2.appserver.monitoring.exceptions;
  * @since 6.0.0
  */
 public class StatPublisherException extends Exception {
-
     /**
      * Exception to be thrown when an error occurs in the statistics publisher module.
      *

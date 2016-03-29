@@ -155,7 +155,7 @@ public class HttpStatValve extends ValveBase {
     }
 
     /**
-     * Setting the System property for the trust store.
+     * Setting the system property for the trust store.
      */
     private void setTrustStorePath() {
         String pathToBeReplaced = System.getProperty("javax.net.ssl.trustStore");
