@@ -51,7 +51,6 @@ public class EventBuilder {
      */
     public static Event buildEvent(String streamId, Request request, Response response, long startTime,
             long responseTime) throws StatPublisherException {
-
         List<Object> payload = buildPayloadData(request, response, startTime, responseTime);
 
         return new Event(streamId, startTime,
