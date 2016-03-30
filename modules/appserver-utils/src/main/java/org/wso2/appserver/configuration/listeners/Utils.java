@@ -18,7 +18,6 @@ package org.wso2.appserver.configuration.listeners;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 import org.xml.sax.SAXException;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.xml.XMLConstants;
@@ -84,29 +83,6 @@ public class Utils {
         try {
             Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
             Object unmarshalled = unmarshaller.unmarshal(source.toFile());
-            return bindingClass.cast(unmarshalled);
-        } catch (JAXBException e) {
-            throw new ApplicationServerConfigurationException("Error when unmarshalling the XML configuration", e);
-        }
-    }
-
-    /**
-     * Builds an XML binding from the {@code InputStream} specified.
-     *
-     * @param inputStream  the {@link InputStream} to unmarshall XML data from
-     * @param schema       an optional file path representation of an XML schema file against which the source XML
-     *                     is to be validated
-     * @param bindingClass the class to be recognized by the {@link JAXBContext}
-     * @param <T>          the type of the class to be bound
-     * @return bound object (Type T) of XML
-     * @throws ApplicationServerConfigurationException if an error occurred when creating the unmarshaller or
-     *                                                 unmarshalling the XML source
-     */
-    public static <T> T getUnmarshalledObject(InputStream inputStream, Path schema, Class<T> bindingClass)
-            throws ApplicationServerConfigurationException {
-        try {
-            Unmarshaller unmarshaller = getXMLUnmarshaller(schema, bindingClass);
-            Object unmarshalled = unmarshaller.unmarshal(inputStream);
             return bindingClass.cast(unmarshalled);
         } catch (JAXBException e) {
             throw new ApplicationServerConfigurationException("Error when unmarshalling the XML configuration", e);

@@ -23,6 +23,7 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.core.StandardHost;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
@@ -31,8 +32,10 @@ import org.wso2.appserver.configuration.context.SSOConfiguration;
 import org.wso2.appserver.configuration.context.StatsPublisherConfiguration;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -45,30 +48,79 @@ import java.util.Optional;
  * @since 6.0.0
  */
 public class AppServerWebAppConfigurationTest {
-    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
+    private static final Path catalina_base = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
+    private static final Path config_base_webapp_descriptor = Paths.
+            get(catalina_base.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
+                    Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.WEBAPP_DESCRIPTOR);
+    private static final ContextConfigurationLoader context_configuration_loader = new ContextConfigurationLoader();
+    private static final Host host = new StandardHost();
+    private static final Context sample_context = new StandardContext();
+    private static final Context faulty_sample_context = new StandardContext();
 
     @BeforeClass
     public void setupCatalinaBaseEnv() throws IOException {
-        System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
+        System.setProperty(Globals.CATALINA_BASE_PROP, catalina_base.toString());
+        prepareCatalinaComponents();
     }
 
-    @Test(description = "Loads the XML file content of the WSO2 App Server specific webapp descriptor")
-    public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
-        ContextConfigurationLoader contextConfigurationLoader = new ContextConfigurationLoader();
+    @Test(description = "Attempts to load XML file content of a non-existent webapp descriptor",
+            expectedExceptions = { ApplicationServerRuntimeException.class }, priority = 1)
+    public void testObjectLoadingFromNonExistentDescriptor() {
+        List<Lifecycle> components = new ArrayList<>();
+        components.add(host);
+        components.add(sample_context);
+        components.stream().forEach(component -> {
+            context_configuration_loader.
+                    lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
+            context_configuration_loader.
+                    lifecycleEvent(new LifecycleEvent(component, Lifecycle.CONFIGURE_START_EVENT, null));
+        });
+    }
 
-        Context context = new StandardContext();
-        Host host = new StandardHost();
-        host.setAppBase("webapps");
-        context.setParent(new StandardHost());
-        context.setDocBase("sample");
-        contextConfigurationLoader.lifecycleEvent(new LifecycleEvent(context, Lifecycle.BEFORE_START_EVENT, null));
+    @Test(description = "Loads the XML file content of a WSO2 App Server specific webapp descriptor", priority = 2)
+    public void testObjectLoadingFromDescriptor() throws IOException, ApplicationServerConfigurationException {
+        Path source = Paths.get(TestConstants.TEST_RESOURCES, Constants.WEBAPP_DESCRIPTOR);
+        Files.copy(source, config_base_webapp_descriptor);
 
-        Optional<AppServerWebAppConfiguration> effective = ContextConfigurationLoader.getContextConfiguration(context);
+        context_configuration_loader.
+                lifecycleEvent(new LifecycleEvent(sample_context, Lifecycle.BEFORE_START_EVENT, null));
+
+        Optional<AppServerWebAppConfiguration> effective = ContextConfigurationLoader.
+                getContextConfiguration(sample_context);
         if (effective.isPresent()) {
             Assert.assertTrue(compare(effective.get(), prepareDefault()));
         } else {
             Assert.fail();
         }
+    }
+
+    @Test(description = "Loads the XML file content of an erroneous WSO2 App Server specific webapp descriptor",
+            expectedExceptions = { ApplicationServerRuntimeException.class }, priority = 3)
+    public void testObjectLoadingFromFaultyDescriptor() {
+        context_configuration_loader.
+                lifecycleEvent(new LifecycleEvent(faulty_sample_context, Lifecycle.BEFORE_START_EVENT, null));
+    }
+
+    @Test(description = "Checks the removal of per webapp configurations at Lifecycle.AFTER_STOP_EVENT", priority = 4)
+    public void testWebAppConfigurationUnloading() {
+        context_configuration_loader.
+                lifecycleEvent(new LifecycleEvent(sample_context, Lifecycle.AFTER_STOP_EVENT, null));
+        Optional<AppServerWebAppConfiguration> configuration = ContextConfigurationLoader.
+                getContextConfiguration(sample_context);
+        Assert.assertFalse(configuration.isPresent());
+    }
+
+    @AfterClass
+    public void destroy() throws IOException {
+        Files.delete(config_base_webapp_descriptor);
+    }
+
+    private static void prepareCatalinaComponents() {
+        host.setAppBase(TestConstants.WEBAPP_BASE);
+        sample_context.setParent(host);
+        sample_context.setDocBase(TestConstants.SAMPLE_WEBAPP);
+        faulty_sample_context.setParent(host);
+        faulty_sample_context.setDocBase(TestConstants.FAULTY_SAMPLE_WEBAPP);
     }
 
     private static AppServerWebAppConfiguration prepareDefault() {

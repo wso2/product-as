@@ -22,7 +22,6 @@ import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -54,13 +53,5 @@ public class UtilsTest {
         Path xmlSource = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.INVALID_DESCRIPTOR);
         Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
         Utils.getUnmarshalledObject(xmlSource, xmlSchema, AppServerConfiguration.class);
-    }
-
-    @Test(description = "Attempts to load content from a file input stream with invalid XML syntax",
-            expectedExceptions = { ApplicationServerConfigurationException.class })
-    public void testLoadingObjectFromInvalidInputStream() throws IOException, ApplicationServerException {
-        Path xmlSource = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.INVALID_DESCRIPTOR);
-        Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
-        Utils.getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
     }
 }
