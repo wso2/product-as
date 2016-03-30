@@ -111,8 +111,7 @@ public class CustomerService {
     @Path("/orders/{orderId}/")
     public Order getOrder(@PathParam("orderId") String orderId) {
         long idNumber = Long.parseLong(orderId);
-        Order c = orders.get(idNumber);
-        return c;
+        return orders.get(idNumber);
     }
 
     final void init() {
