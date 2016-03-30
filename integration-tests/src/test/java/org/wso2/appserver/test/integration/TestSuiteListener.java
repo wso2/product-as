@@ -135,13 +135,26 @@ public class TestSuiteListener implements ISuiteListener {
     private Process startPlatformDependApplicationServer() throws IOException {
         String os = System.getProperty("os.name");
         log.info(os + " operating system was detected");
-        log.info("Starting server as a " + os + " process");
+
+        String jacocoAgentDir = System.getProperty("jacoco-agent.dir");
+        String jacocoRuntimeJar = System.getProperty("jacoco-agent.runtime");
+        String jacocoDataFile = System.getProperty("jacoco-agent.data.file");
+        String jacocoArg = "-javaagent:" + Paths.get(jacocoAgentDir, jacocoRuntimeJar)
+                + "=destfile=" + Paths.get(jacocoAgentDir, jacocoDataFile);
+        log.info("Jacoco argLine: " + jacocoArg);
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.directory(appserverHome);
+        processBuilder.environment().put("JAVA_OPTS", jacocoArg);
 
         if (os.toLowerCase().contains("windows")) {
-            return Runtime.getRuntime().exec("\\bin\\catalina.bat run", null, appserverHome);
+            log.info("Starting server as a " + os + " process");
+            return applicationServerProcess = processBuilder.command("\\bin\\catalina.bat", "run").start();
         } else {
-            return Runtime.getRuntime().exec("./bin/catalina.sh run", null, appserverHome);
+            log.info("Starting server as a " + os + " process");
+            return applicationServerProcess = processBuilder.command("./bin/catalina.sh", "run").start();
         }
+
     }
 
     public void terminateApplicationServer() {
@@ -274,7 +287,7 @@ public class TestSuiteListener implements ISuiteListener {
      * @param portRange port range
      * @return available port
      */
-    private int getAvailablePort(String portName, int port, int portMin, int portRange) {
+    private static int getAvailablePort(String portName, int port, int portMin, int portRange) {
         if (isPortAvailable(port)) {
             log.info("{} default port {} is available.", portName, port);
             return port;
