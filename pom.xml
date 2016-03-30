@@ -127,6 +127,34 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>analyze-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>analyze-only</goal>
+                        </goals>
+                        <configuration>
+                            <failOnWarning>true</failOnWarning>
+                            <ignoreNonCompile>true</ignoreNonCompile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>analyze-dependency-management</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>analyze-dep-mgt</goal>
+                        </goals>
+                        <configuration>
+                            <failBuild>true</failBuild>
+                            <ignoreDirect>false</ignoreDirect>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -469,6 +497,8 @@
         <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
         <googlecode.json-simple.version>1.1.1</googlecode.json-simple.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
+        <org.jacoco.ant.version>0.7.5.201505241946</org.jacoco.ant.version>
+        <junit.version>4.12</junit.version>
         <jsr.api.version>1.1.1</jsr.api.version>
         <org.apache.httpcomponents.httpclient.version>4.3.1.wso2v2</org.apache.httpcomponents.httpclient.version>
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>

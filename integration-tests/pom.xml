@@ -85,6 +85,10 @@
                     <groupId>org.wso2.carbon</groupId>
                     <artifactId>org.wso2.carbon.core</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>slf4j.wso2</groupId>
+                    <artifactId>slf4j</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -98,6 +102,12 @@
         <dependency>
             <groupId>org.wso2.carbon.analytics-common</groupId>
             <artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>slf4j.wso2</groupId>
+                    <artifactId>slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.analytics-common</groupId>
@@ -128,6 +138,12 @@
             <groupId>org.wso2.appserver</groupId>
             <artifactId>configuration-loader-valve</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <classifier>runtime</classifier>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -138,7 +154,7 @@
                 <executions>
                     <execution>
                         <id>unpack</id>
-                        <phase>process-resources</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
@@ -173,6 +189,37 @@
                             </outputDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-jacoco-dependencies</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/jacoco/</outputDirectory>
+                            <includeTypes>jar</includeTypes>
+                            <includeArtifactIds>org.jacoco.agent</includeArtifactIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>analyze-dependencies</id>
+                        <goals>
+                            <goal>analyze-only</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>analyze-dependency-management</id>
+                        <goals>
+                            <goal>analyze-dep-mgt</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -190,7 +237,11 @@
                         <listener.server.timeout>20</listener.server.timeout>
                         <port.check.min>8000</port.check.min>
                         <port.check.max>8100</port.check.max>
+                        <jacoco-agent.dir>${project.build.directory}/jacoco/</jacoco-agent.dir>
+                        <jacoco-agent.runtime>org.jacoco.agent-runtime.jar</jacoco-agent.runtime>
+                        <jacoco-agent.data.file>jacoco-it.exec</jacoco-agent.data.file>
                     </systemPropertyVariables>
+
                 </configuration>
                 <executions>
                     <execution>
@@ -209,33 +260,49 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <inherited>false</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>pre-integration-test</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
+                        <phase>verify</phase>
                         <configuration>
-                            <destFile>${project.build.directory}/jacoco.exec</destFile>
-                            <propertyName>jacoco.agent.arg</propertyName>
+                            <target xmlns:jacoco="antlib:org.jacoco.ant">
+                                <!--//this task is to provide class/src files locations for jacoco report generation-->
+                                <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+                                    <classpath path="${project.build.directory}"/>
+                                </taskdef>
+                                <jacoco:report>
+                                    <executiondata>
+                                        <file file="${project.build.directory}/jacoco/jacoco-it.exec"/>
+                                    </executiondata>
+                                    <structure name="WSO2 Application Server 6.0.0 Module Integration Tests">
+                                        <classfiles>
+                                            <fileset dir="../modules/appserver-utils/target/classes"/>
+                                            <fileset dir="../modules/http-statistics-monitoring/target/classes"/>
+                                            <fileset dir="../modules/webapp-loader/target/classes"/>
+                                        </classfiles>
+                                        <sourcefiles encoding="UTF-8">
+                                            <fileset dir="../modules/appserver-utils/src/main/java/"/>
+                                            <fileset dir="../modules/http-statistics-monitoring/src/main/java/"/>
+                                            <fileset dir="../modules/webapp-loader/src/main/java/"/>
+                                        </sourcefiles>
+                                    </structure>
+                                    <html destdir="${project.build.directory}/site/jacoco"/>
+                                </jacoco:report>
+                            </target>
                         </configuration>
-                    </execution>
-                    <execution>
-                        <id>post-integration-test</id>
-                        <phase>post-integration-test</phase>
                         <goals>
-                            <goal>report</goal>
+                            <goal>run</goal>
                         </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/jacoco.exec</dataFile>
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>org.jacoco.ant</artifactId>
+                        <version>${org.jacoco.ant.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
