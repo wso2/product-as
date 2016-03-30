@@ -15,14 +15,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wso2.appserver.test.integration.sample;
+package org.wso2.appserver.test.integration.loader;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.appserver.test.integration.TestBase;
 import org.wso2.appserver.test.integration.TestConstants;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -33,14 +35,23 @@ import java.net.URL;
  *
  * @since 6.0.0
  */
-public class SampleTestIT extends TestBase {
+public class WebappLoaderTestCase extends TestBase {
     @Test(description = "Checks if the server is running by sending a request to the server")
-    public void testServerStatus() throws IOException {
-        URL requestUrl = new URL(getBaseUrl());
+    public void testEnvironmentConfiguration() throws IOException {
+        URL requestUrl = new URL(getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey");
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
 
         int responseCode = connection.getResponseCode();
-        Assert.assertEquals(responseCode, 200);
+        if (responseCode == 200) {
+            BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
+            StringBuilder sb = new StringBuilder();
+            String output;
+            while ((output = br.readLine()) != null) {
+                sb.append(output);
+            }
+            String expectedDefaultValue = "This is a simple REST storage service for storing key value pairs.";
+            Assert.assertEquals(expectedDefaultValue, sb.toString());
+        }
     }
 }
