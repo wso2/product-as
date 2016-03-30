@@ -147,14 +147,14 @@ public class TestSuiteListener implements ISuiteListener {
         processBuilder.directory(appserverHome);
         processBuilder.environment().put("JAVA_OPTS", jacocoArg);
 
-        if (os.toLowerCase().contains("unix") || os.toLowerCase().contains("linux")) {
-            log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = processBuilder.command("./bin/catalina.sh", "run").start();
-        } else if (os.toLowerCase().contains("windows")) {
+        if (os.toLowerCase().contains("windows")) {
             log.info("Starting server as a " + os + " process");
             return applicationServerProcess = processBuilder.command("\\bin\\catalina.bat", "run").start();
+        } else {
+            log.info("Starting server as a " + os + " process");
+            return applicationServerProcess = processBuilder.command("./bin/catalina.sh", "run").start();
         }
-        return null;
+
     }
 
     public void terminateApplicationServer() {
