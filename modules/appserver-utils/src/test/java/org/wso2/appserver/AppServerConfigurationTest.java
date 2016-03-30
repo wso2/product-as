@@ -18,20 +18,21 @@ package org.wso2.appserver;
 import org.apache.catalina.Globals;
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
-import org.apache.catalina.Server;
+import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.core.StandardServer;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
-import org.wso2.appserver.configuration.listeners.Utils;
 import org.wso2.appserver.configuration.server.AppServerConfiguration;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.SecurityConfiguration;
 import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
+import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -46,40 +47,47 @@ import java.util.List;
  * @since 6.0.0
  */
 public class AppServerConfigurationTest {
-    private static final Path CATALINA_BASE = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
-    private static final StrSubstitutor STRING_SUB = new StrSubstitutor(System.getenv());
+    private static final Path catalina_base = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
+    private static final Path config_base_server_descriptor = Paths.
+            get(catalina_base.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
+                    Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR);
+    private static final StrSubstitutor string_sub = new StrSubstitutor(System.getenv());
+    private static final List<Lifecycle> lifecycle_components = generateSampleTomcatComponents();
+    private static final ServerConfigurationLoader loader = new ServerConfigurationLoader();
 
     @BeforeClass
     public void setupCatalinaBaseEnv() throws IOException {
-        System.setProperty(Globals.CATALINA_BASE_PROP, CATALINA_BASE.toString());
+        System.setProperty(Globals.CATALINA_BASE_PROP, catalina_base.toString());
+    }
+
+    @Test(description = "Attempts to load XML file content of a non-existent server descriptor",
+            expectedExceptions = { ApplicationServerRuntimeException.class }, priority = 1)
+    public void testObjectLoadingFromNonExistentDescriptor() {
+        lifecycle_components.stream().forEach(component -> {
+            loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
+            loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.AFTER_START_EVENT, null));
+        });
     }
 
     @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
-            + "descriptor")
-    public void testObjectLoadingFromFilePath() throws IOException, ApplicationServerConfigurationException {
-        ServerConfigurationLoader loader = new ServerConfigurationLoader();
-        Server server = new StandardServer();
-        loader.lifecycleEvent(new LifecycleEvent(server, Lifecycle.BEFORE_START_EVENT, null));
+            + "descriptor", priority = 2)
+    public void testObjectLoadingFromDescriptor() throws IOException, ApplicationServerConfigurationException {
+        Path source = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR);
+        Files.copy(source, config_base_server_descriptor);
+
+        lifecycle_components.stream().forEach(component -> {
+            loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
+            loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.AFTER_START_EVENT, null));
+        });
 
         AppServerConfiguration actual = ServerConfigurationLoader.getServerConfiguration();
         AppServerConfiguration expected = generateDefault();
         Assert.assertTrue(compare(actual, expected));
     }
 
-    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
-            + "descriptor using a FileInputStream")
-    public void testObjectLoadingFromInputStream() throws IOException, ApplicationServerConfigurationException {
-        Path xmlSource = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR);
-        Path xmlSchema = Paths.get(CATALINA_BASE.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
-
-        AppServerConfiguration actual = Utils.
-                getUnmarshalledObject(Files.newInputStream(xmlSource), xmlSchema, AppServerConfiguration.class);
-        actual.resolveVariables();
-
-        AppServerConfiguration expected = generateDefault();
-        Assert.assertTrue(compare(actual, expected));
+    @AfterClass
+    public void destroy() throws IOException {
+        Files.delete(config_base_server_descriptor);
     }
 
     protected static AppServerConfiguration generateDefault() {
@@ -106,7 +114,7 @@ public class AppServerConfigurationTest {
         envList.add(cxf);
         envList.add(jaxrs);
 
-        envList.forEach(environment -> environment.setClasspath(STRING_SUB.replace(environment.getClasspath())));
+        envList.forEach(environment -> environment.setClasspath(string_sub.replace(environment.getClasspath())));
         envList.forEach(environment -> environment.
                 setClasspath(StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
 
@@ -170,8 +178,8 @@ public class AppServerConfigurationTest {
         configuration.setKeystore(keystore);
         configuration.setTruststore(truststore);
 
-        configuration.getKeystore().setLocation(STRING_SUB.replace(configuration.getKeystore().getLocation()));
-        configuration.getTruststore().setLocation(STRING_SUB.replace(configuration.getTruststore().getLocation()));
+        configuration.getKeystore().setLocation(string_sub.replace(configuration.getKeystore().getLocation()));
+        configuration.getTruststore().setLocation(string_sub.replace(configuration.getTruststore().getLocation()));
         configuration.getKeystore().
                 setLocation(StrSubstitutor.replaceSystemProperties(configuration.getKeystore().getLocation()));
         configuration.getTruststore()
@@ -286,5 +294,13 @@ public class AppServerConfigurationTest {
         } else {
             return (actual == null) && (expected == null);
         }
+    }
+
+    private static List<Lifecycle> generateSampleTomcatComponents() {
+        List<Lifecycle> components = new ArrayList<>();
+        components.add(new StandardHost());
+        components.add(new StandardServer());
+
+        return components;
     }
 }

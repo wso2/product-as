@@ -287,7 +287,7 @@ public class TestSuiteListener implements ISuiteListener {
      * @param portRange port range
      * @return available port
      */
-    private int getAvailablePort(String portName, int port, int portMin, int portRange) {
+    private static int getAvailablePort(String portName, int port, int portMin, int portRange) {
         if (isPortAvailable(port)) {
             log.info("{} default port {} is available.", portName, port);
             return port;

@@ -48,6 +48,8 @@
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <systemPropertyVariables>
+                        <appserver.version>${appserver.version}</appserver.version>
+                        <build.directory>${project.build.directory}</build.directory>
                         <test.resources>src/test/resources/testresources</test.resources>
                     </systemPropertyVariables>
                 </configuration>
@@ -70,14 +72,6 @@
             <classifier>runtime</classifier>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-api</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-simple</artifactId>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>

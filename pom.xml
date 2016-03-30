@@ -249,11 +249,6 @@
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
@@ -510,10 +505,10 @@
         <googlecode.disruptor.version>2.10.4</googlecode.disruptor.version>
         <googlecode.json-simple.version>1.1.1</googlecode.json-simple.version>
         <jacoco.version>0.7.6.201602180812</jacoco.version>
-        <org.jacoco.ant.version>0.7.5.201505241946</org.jacoco.ant.version>
         <junit.version>4.12</junit.version>
         <jsr.api.version>1.1.1</jsr.api.version>
         <org.apache.httpcomponents.httpclient.version>4.3.1.wso2v2</org.apache.httpcomponents.httpclient.version>
+        <org.jacoco.ant.version>0.7.5.201505241946</org.jacoco.ant.version>
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>
         <org.wso2.orbit.com.lmax.disruptor>3.3.2.wso2v2</org.wso2.orbit.com.lmax.disruptor>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
