@@ -74,7 +74,7 @@ public class WebappClassLoaderContext {
     }
 
     /**
-     * Construct web application specific classloader behaviour
+     * Construct web application specific classloader behaviour.
      *
      * @param context the context of the web application
      */
@@ -98,7 +98,7 @@ public class WebappClassLoaderContext {
     }
 
     /**
-     * Get the all jar library urls specified by the each environment for this web application
+     * Get the all jar library urls specified by the each environment for this web application.
      *
      * @return A list containing the jar library urls as strings
      */

@@ -46,7 +46,7 @@ public class AppServerWebappClassLoader extends WebappClassLoaderBase {
     }
 
     /**
-     * Sets the {@link WebappClassLoaderContext} associated with this classloader
+     * Sets the {@link WebappClassLoaderContext} associated with this classloader.
      * @param classLoaderContext the web application specific classloader context.
      */
     public synchronized void setWebappClassLoaderContext(WebappClassLoaderContext classLoaderContext) {
