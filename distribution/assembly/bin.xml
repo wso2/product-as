@@ -67,6 +67,7 @@
             <outputDirectory>/${distribution.file.name}/lib/runtimes/cxf</outputDirectory>
             <includes>
                 <include>org.apache.cxf:cxf-rt-frontend-jaxws:jar</include>
+                <include>org.apache.cxf:cxf-rt-frontend-jaxrs:jar</include>
                 <include>org.apache.cxf:cxf-rt-transports-http:jar</include>
                 <include>org.springframework:spring-web:jar</include>
                 <include>org.springframework:spring-context:jar</include>
