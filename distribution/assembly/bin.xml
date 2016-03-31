@@ -76,17 +76,5 @@
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
-        <!-- Spring runtime -->
-        <dependencySet>
-            <outputDirectory>/${distribution.file.name}/lib/runtimes/spring</outputDirectory>
-            <includes>
-                <include>org.springframework:spring-web:jar</include>
-                <include>org.springframework:spring-context:jar</include>
-                <include>org.springframework:spring-aop:jar</include>
-                <include>org.springframework:spring-webmvc:jar</include>
-            </includes>
-            <useProjectArtifact>false</useProjectArtifact>
-            <useTransitiveFiltering>true</useTransitiveFiltering>
-        </dependencySet>
     </dependencySets>
 </assembly>
