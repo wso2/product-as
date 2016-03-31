@@ -26,6 +26,9 @@ public class TestConstants {
     protected static final String INVALID_DESCRIPTOR = "invalid.xml";
     protected static final String INVALID_SCHEMA_FILE = "invalid.xsd";
     protected static final String NON_EXISTENT_SCHEMA = "non-existent-sample-wso2as.xsd";
+    protected static final String WEBAPP_BASE = "webapps";
+    protected static final String SAMPLE_WEBAPP = "sample";
+    protected static final String FAULTY_SAMPLE_WEBAPP = "faulty-sample";
 
     protected static final String CXF_ENV_NAME = "CXF";
     protected static final String CXF_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/cxf/";

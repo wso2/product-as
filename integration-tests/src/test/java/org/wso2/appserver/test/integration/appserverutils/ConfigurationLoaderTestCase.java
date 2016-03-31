@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.appserver.test.integration.utils;
+package org.wso2.appserver.test.integration.appserverutils;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
