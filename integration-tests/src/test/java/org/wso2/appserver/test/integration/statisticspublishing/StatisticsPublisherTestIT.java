@@ -38,6 +38,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * The Java class which defines the Statistics Data Publisher test cases.
+ *
+ * @since 6.0.0
+ */
 public class StatisticsPublisherTestIT {
     Logger log = Logger.getLogger(StatisticsPublisherTestIT.class);
 

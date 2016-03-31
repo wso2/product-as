@@ -19,6 +19,11 @@ package org.wso2.appserver.test.integration.statisticspublishing;
 
 import java.io.File;
 
+/**
+ * This Java class defines Data Publisher test utilities.
+ *
+ * @since 6.0.0
+ */
 public class DataPublisherTestUtil {
     public static final String LOCAL_HOST = "localhost";
 

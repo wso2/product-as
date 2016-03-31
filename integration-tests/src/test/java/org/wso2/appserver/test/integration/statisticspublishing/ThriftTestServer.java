@@ -37,6 +37,11 @@ import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * A Java class which defines the Thrift Server management functions.
+ *
+ * @since 6.0.0
+ */
 public class ThriftTestServer {
     Logger log = Logger.getLogger(ThriftTestServer.class);
     ThriftDataReceiver thriftDataReceiver;
@@ -75,8 +80,7 @@ public class ThriftTestServer {
         numberOfEventsReceived = new AtomicInteger(0);
         DataBridge databridge = new DataBridge(new AuthenticationHandler() {
             @Override
-            public boolean authenticate(String userName,
-                                        String password) {
+            public boolean authenticate(String userName, String password) {
                 return true;    // allays authenticate to true
 
             }
@@ -107,8 +111,7 @@ public class ThriftTestServer {
         databridge.subscribe(new AgentCallback() {
             int totalSize = 0;
 
-            public void definedStream(StreamDefinition streamDefinition,
-                                      int tenantId) {
+            public void definedStream(StreamDefinition streamDefinition, int tenantId) {
                 log.info("StreamDefinition " + streamDefinition);
             }
 
@@ -158,7 +161,6 @@ public class ThriftTestServer {
     public int getEventsReceivedBeforeLastRestart() {
         return restarterThread.eventReceived;
     }
-
 
     class RestarterThread implements Runnable {
         int eventReceived;
