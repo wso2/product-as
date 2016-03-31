@@ -1,22 +1,26 @@
 =================================================================================
-  Licensed to the WSO2 Inc. under one or more contributor license agreements.
-  See the NOTICE file distributed with this work for additional information
-  regarding copyright ownership. The ASF licenses this file to You under the
-  Apache License, Version 2.0 (the "License"); you may not use this file except
-  in compliance with the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+  WSO2 Inc. licenses this file to you under the Apache License,
+  Version 2.0 (the "License"); you may not use this file except
+  in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied. See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
 ================================================================================
 
-            ===============================================================
-            Running The WSO2 Application Server 6.0.0 Servlet/JSP Container
-            ===============================================================
+            =========================================
+            Running The WSO2 Application Server 6.0.0
+            =========================================
 
 WSO2 Application Server 6.0.0 requires a Java Standard Edition Runtime
 Environment (JRE) version 8 or later.
@@ -42,7 +46,7 @@ Running With JRE 8 Or Later
 
 (2.1) Download a binary distribution of Application Server from:
 
-      http://www.wso2.org/
+      http://wso2.com/products/application-server/
 
 (2.2) Unpack the binary distribution so that it resides in its own
       directory (conventionally named "wso2as-[version]").
@@ -52,16 +56,7 @@ Running With JRE 8 Or Later
       directory.
 
 NOTE:  As an alternative to downloading a binary distribution, you can
-create your own from the Appication Server source code, as described in
-"BUILDING.txt".  You can either
-
-  a)  Do the full "release" build and find the created distribution in the
-      "output/release" directory and then proceed with unpacking as above, or
-
-  b)  Do a simple build and use the "output/build" directory as
-      "CATALINA_HOME".  Be warned that there are some differences between the
-      contents of the "output/build" directory and a full "release"
-      distribution.
+create your own from the Appication Server source code.
 
 
 (3) Configure Environment Variables
@@ -141,40 +136,6 @@ following features:
     the standard shutdown command.
 
 
-(3.4) Using the "setenv" script (optional, recommended)
-
-Apart from CATALINA_HOME and CATALINA_BASE, all environment variables can
-be specified in the "setenv" script. The script is placed either into
-CATALINA_BASE/bin or into CATALINA_HOME/bin directory and is named
-setenv.bat (on Windows) or setenv.sh (on *nix). The file has to be
-readable.
-
-By default the setenv script file is absent. If the script file is present
-both in CATALINA_BASE and in CATALINA_HOME, the one in CATALINA_BASE is
-preferred.
-
-For example, to configure the JRE_HOME and CATALINA_PID variables you can
-create the following script file:
-
-On Windows, %CATALINA_BASE%\bin\setenv.bat:
-
-  set "JRE_HOME=%ProgramFiles%\Java\jre7"
-  exit /b 0
-
-On *nix, $CATALINA_BASE/bin/setenv.sh:
-
-  JRE_HOME=/usr/java/latest
-  CATALINA_PID="$CATALINA_BASE/tomcat.pid"
-
-
-The CATALINA_HOME and CATALINA_BASE variables cannot be configured in the
-setenv script, because they are used to locate that file.
-
-All the environment variables described here and the "setenv" script are
-used only if you use the standard scripts to launch Application Server. For example, if
-you have installed Application Server as a service on Windows, the service wrapper
-launches Java directly and does not use the script files.
-
 
 (4) Start Up Application Server
 
@@ -182,17 +143,9 @@ launches Java directly and does not use the script files.
 
   On Windows:
 
-      %CATALINA_HOME%\bin\startup.bat
-
-    or
-
       %CATALINA_HOME%\bin\catalina.bat start
 
   On *nix:
-
-      $CATALINA_HOME/bin/startup.sh
-
-    or
 
       $CATALINA_HOME/bin/catalina.sh start
 
@@ -204,7 +157,7 @@ launches Java directly and does not use the script files.
 (4.3) Further information about configuring and running Application Server can be found in
       the documentation included here, as well as on the Tomcat web site:
 
-      http://tomcat.WSO2.org/
+      https://docs.wso2.com/display/AS600/
 
 
 (5) Shut Down Application Server
@@ -213,111 +166,22 @@ launches Java directly and does not use the script files.
 
   On Windows:
 
-      %CATALINA_HOME%\bin\shutdown.bat
-
-    or
-
       %CATALINA_HOME%\bin\catalina.bat stop
 
   On *nix:
 
-      $CATALINA_HOME/bin/shutdown.sh
-
-    or
-
       $CATALINA_HOME/bin/catalina.sh stop
 
-==================================================
+==============================================================
 Advanced Configuration - Multiple Application Server Instances
-==================================================
+==============================================================
 
 In many circumstances, it is desirable to have a single copy of a Application Server
 binary distribution shared among multiple users on the same server.  To make
 this possible, you can set the CATALINA_BASE environment variable to the
 directory that contains the files for your 'personal' Application Server instance.
 
-When running with a separate CATALINA_HOME and CATALINA_BASE, the files
-and directories are split as following:
-
-In CATALINA_BASE:
-
- * bin  - Only the following files:
-
-           * setenv.sh (*nix) or setenv.bat (Windows),
-           * tomcat-juli.jar
-
-          The setenv scripts were described above. The tomcat-juli library
-          is documented in the Logging chapter in the User Guide.
-
- * conf - Server configuration files (including server.xml)
-
- * lib  - Libraries and classes, as explained below
-
- * logs - Log and output files
-
- * webapps - Automatically loaded web applications
-
- * work - Temporary working directories for web applications
-
- * temp - Directory used by the JVM for temporary files (java.io.tmpdir)
-
-
-In CATALINA_HOME:
-
- * bin  - Startup and shutdown scripts
-
-          The following files will be used only if they are absent in
-          CATALINA_BASE/bin:
-
-          setenv.sh (*nix), setenv.bat (Windows), tomcat-juli.jar
-
- * lib  - Libraries and classes, as explained below
-
- * endorsed - Libraries that override standard "Endorsed Standards"
-              libraries provided by JRE. See Classloading documentation
-              in the User Guide for details.
-
-              By default this "endorsed" directory is absent.
-
-In the default configuration the JAR libraries and classes both in
-CATALINA_BASE/lib and in CATALINA_HOME/lib will be added to the common
-classpath, but the ones in CATALINA_BASE will be added first and thus will
-be searched first.
-
-The idea is that you may leave the standard Application Server libraries in
-CATALINA_HOME/lib and add other ones such as database drivers into
-CATALINA_BASE/lib.
-
-In general it is advised to never share libraries between web applications,
-but put them into WEB-INF/lib directories inside the applications. See
-Classloading documentation in the User Guide for details.
-
-
-It might be useful to note that the values of CATALINA_HOME and
-CATALINA_BASE can be referenced in the XML configuration files processed
-by Application Server as ${catalina.home} and ${catalina.base} respectively.
-
-For example, the standard manager web application can be kept in
-CATALINA_HOME/webapps/manager and loaded into CATALINA_BASE by using
-the following trick:
-
- * Copy the CATALINA_HOME/webapps/manager/META-INF/context.xml
-   file as CATALINA_BASE/conf/Catalina/localhost/manager.xml
-
- * Add docBase attribute as shown below.
-
-The file will look like the following:
-
-  <?xml version="1.0" encoding="UTF-8"?>
-  <Context docBase="${catalina.home}/webapps/manager"
-    antiResourceLocking="false" privileged="true" >
-    <Valve className="org.apache.catalina.valves.RemoteAddrValve"
-         allow="127\.0\.0\.1" />
-  </Context>
-
-See Deployer chapter in User Guide and Context and Host chapters in the
-Configuration Reference for more information on contexts and web
-application deployment.
+See tomcat guide for more information https://tomcat.apache.org/tomcat-8.0-doc/RUNNING.txt
 
 
 ================
