@@ -38,8 +38,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class StatisticsPublisherTestIT {
-    Logger log = Logger.getLogger(StatisticsPublisherTestIT.class);
+public class StatisticsPublisherTestCase {
+    Logger log = Logger.getLogger(StatisticsPublisherTestCase.class);
 
     private ThriftTestServer thriftTestServer;
 
