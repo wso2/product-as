@@ -20,7 +20,6 @@
 package org.wso2.appserver.sample.service;
 
 
-//import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,9 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Customer")
 public class Customer {
-//    @XmlElement(name = "id")
     private long id;
-//    @XmlElement(name = "name")
     private String name;
 
     public long getId() {
