@@ -139,8 +139,8 @@ public class TestSuiteListener implements ISuiteListener {
         String jacocoAgentDir = System.getProperty("jacoco-agent.dir");
         String jacocoRuntimeJar = System.getProperty("jacoco-agent.runtime");
         String jacocoDataFile = System.getProperty("jacoco-agent.data.file");
-        String jacocoArg = "-javaagent:" + Paths.get(jacocoAgentDir, jacocoRuntimeJar)
-                + "=destfile=" + Paths.get(jacocoAgentDir, jacocoDataFile);
+        String jacocoArg = "-javaagent:" + Paths.get(jacocoAgentDir, jacocoRuntimeJar) + "=destfile=" + Paths
+                .get(jacocoAgentDir, jacocoDataFile);
         log.info("Jacoco argLine: " + jacocoArg);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
@@ -149,7 +149,8 @@ public class TestSuiteListener implements ISuiteListener {
 
         if (os.toLowerCase().contains("windows")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = processBuilder.command("\\bin\\catalina.bat", "run").start();
+            String catalinaPath = new File(appserverHome, "bin\\catalina.bat").getAbsolutePath();
+            return applicationServerProcess = processBuilder.command(catalinaPath, "run").start();
         } else {
             log.info("Starting server as a " + os + " process");
             return applicationServerProcess = processBuilder.command("./bin/catalina.sh", "run").start();
