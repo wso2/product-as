@@ -33,7 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class StatisticsPublisherTestIT extends TestBase {
+public class StatisticsPublisherTestCase extends TestBase {
 
     // timeout for reading the number of events from the thrift server.
     private static final int TIMEOUT = 15;

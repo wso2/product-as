@@ -50,6 +50,7 @@ public class CustomerService {
 
     @GET
     @Path("/customers/{id}/")
+    @Produces("application/xml")
     public Customer getCustomer(@PathParam("id") String id) {
         long idNumber = Long.parseLong(id);
         return customers.get(idNumber);

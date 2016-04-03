@@ -49,13 +49,9 @@ public class ServerConfigurationUtils {
         ClassLoaderEnvironments.Environment cxf = new ClassLoaderEnvironments.Environment();
         cxf.setName(Constants.CXF_ENV_NAME);
         cxf.setClasspath(Constants.CXF_ENV_CLASSPATH);
-        ClassLoaderEnvironments.Environment spring = new ClassLoaderEnvironments.Environment();
-        spring.setName(Constants.SPRING_ENV_NAME);
-        spring.setClasspath(Constants.SPRING_ENV_CLASSPATH);
 
         List<ClassLoaderEnvironments.Environment> envList = new ArrayList<>();
         envList.add(cxf);
-        envList.add(spring);
 
         envList.forEach(environment -> environment.setClasspath(STRING_SUB.replace(environment.getClasspath())));
         envList.forEach(environment -> environment.

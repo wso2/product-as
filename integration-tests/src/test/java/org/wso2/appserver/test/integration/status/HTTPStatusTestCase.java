@@ -29,7 +29,6 @@ import java.net.URL;
 /**
  * This sample test class demonstrate how to write a test cases which runs on integration test phase.
  * <p>
- * Every class that requires run in integration test phase should have prefix of <strong>IT</strong>.
  *
  * @since 6.0.0
  */

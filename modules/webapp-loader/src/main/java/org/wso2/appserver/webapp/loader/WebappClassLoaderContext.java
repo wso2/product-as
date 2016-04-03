@@ -83,17 +83,21 @@ public class WebappClassLoaderContext {
         ContextConfigurationLoader.getContextConfiguration(context)
                 .ifPresent(configuration -> {
                     ClassLoaderConfiguration classLoaderConfiguration = configuration.getClassLoaderConfiguration();
-                    List<String> environmentNames = Arrays
-                            .asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
 
-                    environmentNames.forEach(environmentName -> {
-                        if (definedEnvironments.containsKey(environmentName)) {
-                            selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
-                        } else {
-                            String message = "Undefined environment: " + environmentName + " in " + context.getPath();
-                            log.warn(message);
-                        }
-                    });
+                    if (classLoaderConfiguration != null && classLoaderConfiguration.getEnvironments() != null) {
+                        List<String> environmentNames = Arrays
+                                .asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
+
+                        environmentNames.forEach(environmentName -> {
+                            if (definedEnvironments.containsKey(environmentName)) {
+                                selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
+                            } else {
+                                String message = "Undefined environment: " + environmentName + " in "
+                                        + context.getPath();
+                                log.warn(message);
+                            }
+                        });
+                    }
                 });
     }
 
