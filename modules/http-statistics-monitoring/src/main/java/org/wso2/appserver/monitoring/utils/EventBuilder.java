@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -38,6 +40,9 @@ import javax.servlet.http.HttpSession;
  * @since 6.0.0
  */
 public class EventBuilder {
+
+    private static Map<String, String> arbitraryData;
+
     /**
      * Creates an Event to be published by the DataPublisher.
      *
@@ -55,7 +60,29 @@ public class EventBuilder {
 
         return new Event(streamId, startTime,
                 new ArrayList<>(Arrays.asList(request.getServerName(), request.getLocalName())).toArray(), null,
-                payload.toArray());
+                payload.toArray(), getArbitraryData());
+    }
+
+    /**
+     * Returns the arbitrary data map.
+     * If the map is null, reads the system variables, populates the map and returns it.
+     *
+     * @return arbitrary data map
+     */
+    private static Map<String, String> getArbitraryData() {
+        if (arbitraryData == null) {
+            readArbitraryData(Constants.ARBITRARY_FIELD_PREFIX);
+        }
+        return arbitraryData;
+    }
+
+    /**
+     * Reads the system variables with the defined prefix and populates the arbitrary data map.
+     */
+    private static void readArbitraryData(String prefix) {
+        arbitraryData = System.getenv().entrySet().stream()
+                .filter(varName -> varName.getKey().startsWith(prefix))
+                .collect(Collectors.toMap(varName -> varName.getKey(), varName -> varName.getValue()));
     }
 
     /**
