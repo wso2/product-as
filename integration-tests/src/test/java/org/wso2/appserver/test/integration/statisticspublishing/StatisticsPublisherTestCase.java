@@ -17,7 +17,6 @@
  */
 package org.wso2.appserver.test.integration.statisticspublishing;
 
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -39,21 +38,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class StatisticsPublisherTestCase {
-    Logger log = Logger.getLogger(StatisticsPublisherTestCase.class);
-
     private ThriftTestServer thriftTestServer;
 
     @BeforeClass
     public static void init() {
-
         DataPublisherTestUtil.setKeyStoreParams();
         DataPublisherTestUtil.setTrustStoreParams();
-
     }
 
     private String convertJSONtoString() throws IOException {
         JSONParser parser = new JSONParser();
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         try {
 
             Object obj = parser.parse(new FileReader(DataPublisherTestUtil.getStreamDefinitionPath()));
@@ -95,7 +90,6 @@ public class StatisticsPublisherTestCase {
         } catch (IOException e) {
             Assert.fail("Fail connection to the server. Error: " + e.getMessage());
         }
-
         thriftTestServer.stop();
     }
 }
