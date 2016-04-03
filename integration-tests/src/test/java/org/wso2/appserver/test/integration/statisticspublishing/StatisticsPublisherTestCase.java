@@ -74,12 +74,12 @@ public class StatisticsPublisherTestCase extends TestBase {
 
         int time = 0;
         int numberOfEventsReceived;
-        while (((numberOfEventsReceived = thriftTestServer.getNumberOfEventsReceived()) < 1) || time < TIMEOUT) {
+        while (((numberOfEventsReceived = thriftTestServer.getNumberOfEventsReceived()) == 0) || time < TIMEOUT) {
             Thread.sleep(1000);
             time++;
         }
 
-        Assert.assertEquals(numberOfEventsReceived, 1, "Data is not published to the thrift server");
+        Assert.assertTrue(numberOfEventsReceived > 0, "Data is not published to the thrift server");
     }
 
     @AfterClass
