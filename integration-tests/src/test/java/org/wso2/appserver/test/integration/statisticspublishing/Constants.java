@@ -26,7 +26,7 @@ public class Constants {
     // Thrift server host.
     public static final String HOST = "127.0.0.1";
 
-    // Thrift server ports
+    // Thrift server ports.
     public static final int DEFAULT_THRIFT_PORT = 7611;
     public static final int PORT_SCAN_MIN = 7800;
     public static final int PORT_SCAN_MAX = 7900;
