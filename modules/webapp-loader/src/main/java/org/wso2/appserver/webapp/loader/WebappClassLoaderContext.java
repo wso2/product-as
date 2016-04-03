@@ -14,7 +14,9 @@
  *  KIND, either express or implied. See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
+
 package org.wso2.appserver.webapp.loader;
 
 import org.apache.catalina.Context;
@@ -42,16 +44,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 6.0.0
  */
 public class WebappClassLoaderContext {
+
     private static Map<String, List<String>> definedEnvironments = new ConcurrentHashMap<>();
     private static final Log log = LogFactory.getLog(AppServerWebappLoader.class);
 
     private Map<String, List<String>> selectedEnvironments = new ConcurrentHashMap<>();
 
     static {
-        List<ClassLoaderEnvironments.Environment> environments = ServerConfigurationLoader.getServerConfiguration().
-                getClassLoaderEnvironments().getEnvironments().getEnvironments();
+        List<ClassLoaderEnvironments.Environment> environments = ServerConfigurationLoader.getServerConfiguration()
+                .getClassLoaderEnvironments().getEnvironments().getEnvironments();
 
-        //  populate the classpath defines in each environment
+        // populate the classpath defines in each environment
         environments.forEach((environment) -> {
             if (!definedEnvironments.containsKey(environment.getName())) {
                 List<String> repositories = new ArrayList<>();
@@ -64,47 +67,57 @@ public class WebappClassLoaderContext {
                     throw new ApplicationServerRuntimeException(message, ex);
                 }
             } else {
-                log.warn("Duplicated environment: " + environment.getName() + ", skipping classpath: " + environment
-                        .getClasspath());
+                log.warn("Duplicated environment: " + environment.getName()
+                        + ", skipping classpath: " + environment.getClasspath());
             }
         });
     }
 
     /**
-     * Constructs web application specific classloader behaviour.
+     * Construct web application specific classloader behaviour
      *
      * @param context the context of the web application
      */
     public WebappClassLoaderContext(Context context) {
-        ContextConfigurationLoader.getContextConfiguration(context).ifPresent(configuration -> {
-            ClassLoaderConfiguration classLoaderConfiguration = configuration.getClassLoaderConfiguration();
-            List<String> environmentNames = Arrays.
-                    asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
 
-            environmentNames.forEach(environmentName -> {
-                if (definedEnvironments.containsKey(environmentName)) {
-                    selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
-                } else {
-                    String message = "Undefined environment: " + environmentName + " in " + context.getPath();
-                    log.warn(message);
-                }
-            });
-        });
+        ContextConfigurationLoader.getContextConfiguration(context)
+                .ifPresent(configuration -> {
+                    ClassLoaderConfiguration classLoaderConfiguration = configuration.getClassLoaderConfiguration();
+
+                    if (classLoaderConfiguration != null && classLoaderConfiguration.getEnvironments() != null) {
+                        List<String> environmentNames = Arrays
+                                .asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
+
+                        environmentNames.forEach(environmentName -> {
+                            if (definedEnvironments.containsKey(environmentName)) {
+                                selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
+                            } else {
+                                String message = "Undefined environment: " + environmentName + " in "
+                                        + context.getPath();
+                                log.warn(message);
+                            }
+                        });
+                    }
+                });
     }
 
     /**
-     * Gets the all jar library urls specified by the each environment for this web application.
+     * Get the all jar library urls specified by the each environment for this web application
      *
-     * @return a list containing the jar library urls as strings
+     * @return A list containing the jar library urls as strings
      */
     public List<String> getProvidedRepositories() {
         List<String> repositories = new ArrayList<>();
-        selectedEnvironments.entrySet().stream().map(Map.Entry::getValue).forEach(repositories::addAll);
+        selectedEnvironments.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .forEach(repositories::addAll);
         return repositories;
     }
 
-    //  returns a list of jar url's for the given path
+    // returns a list of jar url's for the given path
     private static List<String> generateClasspath(String classPath) throws FileNotFoundException {
+
         List<String> urlStr = new ArrayList<>();
         String realClassPath = StrSubstitutor.replaceSystemProperties(classPath);
         File classPathUrl = new File(realClassPath);
@@ -118,9 +131,11 @@ public class WebappClassLoaderContext {
             return urlStr;
         }
 
-        FileUtils.listFiles(classPathUrl, new String[] { "jar" }, false).
-                forEach((file) -> urlStr.add(file.toURI().toString()));
+        FileUtils.listFiles(classPathUrl, new String[]{"jar"}, false)
+                .forEach((file) -> urlStr.add(file.toURI().toString()));
 
         return urlStr;
     }
+
+
 }

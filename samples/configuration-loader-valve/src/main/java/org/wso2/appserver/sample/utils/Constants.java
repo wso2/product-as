@@ -24,7 +24,6 @@ public class Constants {
     protected static final String CXF_ENV_NAME = "CXF";
     protected static final String CXF_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/cxf/";
     protected static final String SPRING_ENV_NAME = "Spring";
-    protected static final String SPRING_ENV_CLASSPATH = "${catalina.home}/lib/runtimes/spring/";
 
     protected static final String IDP_URL = "https://localhost:9443/samlsso";
     protected static final String IDP_ENTITY_ID = "localhost";
