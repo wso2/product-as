@@ -20,9 +20,10 @@ limitations under the License.
 
     <test name="wso2as-test">
         <classes>
-            <class name="org.wso2.appserver.test.integration.appserverutils.ConfigurationLoaderTestCase"/>
-            <class name="org.wso2.appserver.test.integration.status.HTTPStatusTestCase"/>
-            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderTestCase"/>
+            <!--<class name="org.wso2.appserver.test.integration.appserverutils.ConfigurationLoaderTestCase"/>-->
+            <!--<class name="org.wso2.appserver.test.integration.status.HTTPStatusTestCase"/>-->
+            <!--<class name="org.wso2.appserver.test.integration.loader.WebappLoaderTestCase"/>-->
+            <class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestIT"/>
         </classes>
     </test>
 </suite>
