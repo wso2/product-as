@@ -227,7 +227,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/integration-test-suite.xml</suiteXmlFile>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <systemPropertyVariables>
                         <appserver.home>${project.build.directory}/${distribution.file.name}</appserver.home>

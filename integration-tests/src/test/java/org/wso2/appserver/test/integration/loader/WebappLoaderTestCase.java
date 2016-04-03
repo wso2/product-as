@@ -38,11 +38,12 @@ import java.net.URL;
 public class WebappLoaderTestCase extends TestBase {
     @Test(description = "Checks if the server is running by sending a request to the server")
     public void testEnvironmentConfiguration() throws IOException {
-        URL requestUrl = new URL(getBaseUrl() + "/simple-storage-service/storage/store/get/defaultKey");
+        URL requestUrl = new URL(getBaseUrl() + "/jaxrs_basic/services/customerservice/customers/123/");
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
 
         int responseCode = connection.getResponseCode();
+        Assert.assertEquals(responseCode, 200, "Server Response Code");
         if (responseCode == 200) {
             BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream())));
             StringBuilder sb = new StringBuilder();
@@ -50,8 +51,7 @@ public class WebappLoaderTestCase extends TestBase {
             while ((output = br.readLine()) != null) {
                 sb.append(output);
             }
-            String expectedDefaultValue = "This is a simple REST storage service for storing key value pairs.";
-            Assert.assertEquals(expectedDefaultValue, sb.toString());
+            Assert.assertTrue(sb.toString().contains("John"), "Test the Customer name John");
         }
     }
 }

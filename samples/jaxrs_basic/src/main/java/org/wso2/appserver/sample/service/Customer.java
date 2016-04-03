@@ -19,6 +19,7 @@
 
 package org.wso2.appserver.sample.service;
 
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
