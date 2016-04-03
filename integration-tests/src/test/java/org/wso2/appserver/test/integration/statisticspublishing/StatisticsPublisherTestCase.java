@@ -37,6 +37,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * This class defines integration tests for HTTP monitoring stats publisher.
+ *
+ * @since 6.0.0
+ */
 public class StatisticsPublisherTestCase {
     private ThriftTestServer thriftTestServer;
 
