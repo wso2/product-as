@@ -31,9 +31,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- *  Sample JAX-RS class for storing and retrieving key value pairs.
+ * Sample JAX-RS class for storing and retrieving key value pairs.
  *
- *  @since 6.0.0
+ * @since 6.0.0
  */
 @Service
 @Path("/store")

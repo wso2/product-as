@@ -40,6 +40,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Thrift test server to be used in the http statistics publishing test case.
+ *
+ * @since 6.0.0
  */
 public class ThriftTestServer {
 

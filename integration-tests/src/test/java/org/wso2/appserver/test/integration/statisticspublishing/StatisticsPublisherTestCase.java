@@ -33,6 +33,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+/**
+ * This class defines integration tests for HTTP monitoring stats publisher.
+ *
+ * @since 6.0.0
+ */
 public class StatisticsPublisherTestCase extends TestBase {
 
     // timeout for reading the number of events from the thrift server.
@@ -89,7 +94,7 @@ public class StatisticsPublisherTestCase extends TestBase {
 
     private String convertJSONtoString() throws IOException {
         JSONParser parser = new JSONParser();
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         try {
             Object obj = parser.parse(new FileReader(DataPublisherTestUtil.getStreamDefinitionPath()));
             jsonObject = (JSONObject) obj;

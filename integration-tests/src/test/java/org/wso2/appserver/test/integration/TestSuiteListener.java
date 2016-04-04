@@ -135,8 +135,8 @@ public class TestSuiteListener implements ISuiteListener {
         String jacocoAgentDir = System.getProperty("jacoco-agent.dir");
         String jacocoRuntimeJar = System.getProperty("jacoco-agent.runtime");
         String jacocoDataFile = System.getProperty("jacoco-agent.data.file");
-        String jacocoArg = "-javaagent:" + Paths.get(jacocoAgentDir, jacocoRuntimeJar)
-                + "=destfile=" + Paths.get(jacocoAgentDir, jacocoDataFile);
+        String jacocoArg = "-javaagent:" + Paths.get(jacocoAgentDir, jacocoRuntimeJar) + "=destfile=" + Paths
+                .get(jacocoAgentDir, jacocoDataFile);
         log.info("Jacoco argLine: " + jacocoArg);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
@@ -145,7 +145,8 @@ public class TestSuiteListener implements ISuiteListener {
 
         if (os.toLowerCase().contains("windows")) {
             log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = processBuilder.command("\\bin\\catalina.bat", "run").start();
+            String catalinaPath = new File(appserverHome, "bin\\catalina.bat").getAbsolutePath();
+            return applicationServerProcess = processBuilder.command(catalinaPath, "run").start();
         } else {
             log.info("Starting server as a " + os + " process");
             return applicationServerProcess = processBuilder.command("./bin/catalina.sh", "run").start();
@@ -187,7 +188,7 @@ public class TestSuiteListener implements ISuiteListener {
     }
 
     /**
-     * Updates http and ajp connector ports and server shutdown port in server.xml
+     * Updates http and ajp connector ports and server shutdown port in server.xml.
      *
      * @param httpConnectorPort  http connector port
      * @param ajpPort            ajp port
@@ -200,7 +201,7 @@ public class TestSuiteListener implements ISuiteListener {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
                 parse(new InputSource(serverXML.toString()));
 
-        //  Change http connector and ajp connector ports
+        //  change http connector and ajp connector ports
         Map<String, String> connectorProtocolPortMap = new HashMap<>();
         connectorProtocolPortMap.put("HTTP/1.1", String.valueOf(httpConnectorPort));
         connectorProtocolPortMap.put("AJP/1.3", String.valueOf(ajpPort));
@@ -215,7 +216,7 @@ public class TestSuiteListener implements ISuiteListener {
             }
         }
 
-        // change server shutdown port
+        //  change server shutdown port
         Node server = document.getElementsByTagName("Server").item(0);
         server.getAttributes().getNamedItem("port").setTextContent(String.valueOf(serverShutdownPort));
 
