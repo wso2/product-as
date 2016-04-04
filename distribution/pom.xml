@@ -74,7 +74,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.wso2.appserver</groupId>
-                                    <artifactId>http-statistics-monitoring</artifactId>
+                                    <artifactId>appserver-http-statistics-monitoring</artifactId>
                                     <type>jar</type>
                                     <includes>Http_Stats_Analytics.car</includes>
                                     <outputDirectory>
@@ -104,11 +104,11 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>http-statistics-monitoring</artifactId>
+            <artifactId>appserver-http-statistics-monitoring</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>webapp-loader</artifactId>
+            <artifactId>appserver-webapp-loader</artifactId>
         </dependency>
 
         <!-- WSO2 Application Server Sample Webapps -->

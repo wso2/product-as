@@ -378,12 +378,12 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>http-statistics-monitoring</artifactId>
+                <artifactId>appserver-http-statistics-monitoring</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>webapp-loader</artifactId>
+                <artifactId>appserver-webapp-loader</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
 

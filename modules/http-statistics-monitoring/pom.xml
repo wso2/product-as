@@ -21,7 +21,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>http-statistics-monitoring</artifactId>
+    <artifactId>appserver-http-statistics-monitoring</artifactId>
     <name>WSO2 Application Server - Module - Http Statistics Monitoring</name>
     <url>http://wso2.com</url>
 
