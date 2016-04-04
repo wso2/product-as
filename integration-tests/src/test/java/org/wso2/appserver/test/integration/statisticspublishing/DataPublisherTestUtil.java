@@ -26,16 +26,6 @@ import java.nio.file.Paths;
  * @since 6.0.0
  */
 public class DataPublisherTestUtil {
-    public static final String LOCAL_HOST = "localhost";
-
-    /**
-     * Sets the trust store parameters.
-     */
-    public static void setTrustStoreParams() {
-        Path trustStorePath = Paths.get("src", "test", "resources", "client-truststore.jks").toAbsolutePath();
-        System.setProperty("javax.net.ssl.trustStore", trustStorePath.toString());
-        System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
-    }
 
     /**
      * Sets the key store parameters.

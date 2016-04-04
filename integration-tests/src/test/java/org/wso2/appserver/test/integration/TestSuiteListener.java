@@ -32,11 +32,10 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,38 +73,35 @@ public class TestSuiteListener implements ISuiteListener {
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
-            // These min and max values are for the HTTP connector port
-            int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
-            int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
+            applicationServerPort = TestConstants.TOMCAT_DEFAULT_PORT;
+            int ajpPort = TestConstants.TOMCAT_DEFAULT_AJP_PORT;
+            int serverShutdownPort = TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT;
 
-            int portDeduction = TestConstants.TOMCAT_DEFAULT_PORT - portCheckMin;
-            int portCheckRange = portCheckMax - portCheckMin;
+            if (!TestUtils.isPortAvailable(applicationServerPort) || !TestUtils.isPortAvailable(ajpPort) ||
+                    !TestUtils.isPortAvailable(serverShutdownPort)) {
+                int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
+                int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
 
-            applicationServerPort = getAvailablePort(TestConstants.TOMCAT_DEFAULT_PORT_NAME,
-                    TestConstants.TOMCAT_DEFAULT_PORT, portCheckMin, portCheckRange);
+                List<Integer> availablePorts = TestUtils.getAvailablePortsFromRange(portCheckMin, portCheckMax, 3);
 
-            int ajpPort = getAvailablePort(TestConstants.TOMCAT_AJP_PORT_NAME, TestConstants.TOMCAT_DEFAULT_AJP_PORT,
-                    TestConstants.TOMCAT_DEFAULT_AJP_PORT - portDeduction, portCheckRange);
-            int serverShutdownPort = getAvailablePort(TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME,
-                    TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT,
-                    TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT - portDeduction, portCheckRange);
+                if ((availablePorts != null) && availablePorts.size() > 2) {
+                    applicationServerPort = availablePorts.get(0);
+                    ajpPort = availablePorts.get(1);
+                    serverShutdownPort = availablePorts.get(2);
+
+                    updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort);
+                }
+            }
 
             System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
 
-            if (applicationServerPort != TestConstants.TOMCAT_DEFAULT_PORT ||
-                    ajpPort != TestConstants.TOMCAT_DEFAULT_AJP_PORT ||
-                    serverShutdownPort != TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT) {
-                log.info("Changing the ports of server.xml [{}:{}, {}:{}, {}:{}]",
-                        TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
-                        TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort, TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME,
-                        serverShutdownPort);
-
-                updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort);
-            }
-
             addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
+            addValveToServerXML(TestConstants.HTTP_STATISTICS_PUBLISHING_VALVE);
 
-            log.info("Starting the server...");
+            log.info("Starting the server [{}:{}, {}:{}, {}:{}] ...",
+                    TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
+                    TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort,
+                    TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME, serverShutdownPort);
             applicationServerProcess = startPlatformDependApplicationServer();
 
             waitForServerStartup();
@@ -168,7 +164,7 @@ public class TestSuiteListener implements ISuiteListener {
         log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
         int startupCounter = 0;
         boolean isTimeout = false;
-        while (!isServerListening("localhost", applicationServerPort)) {
+        while (!TestUtils.isServerListening("localhost", applicationServerPort)) {
             if (startupCounter >= serverStartCheckTimeout) {
                 isTimeout = true;
                 break;
@@ -189,54 +185,6 @@ public class TestSuiteListener implements ISuiteListener {
             log.error(message);
             throw new IOException(message);
         }
-    }
-
-    /**
-     * Checks if the server is listening using the {@code host} name and the {@code port} number specified.
-     *
-     * @param host the host name
-     * @param port the port number
-     * @return true if the server is listening else false
-     */
-    private static boolean isServerListening(String host, int port) {
-        Socket socket = null;
-        try {
-            socket = new Socket(host, port);
-            return true;
-        } catch (Exception e) {
-            return false;
-        } finally {
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (Exception ignored) {
-                }
-            }
-        }
-    }
-
-    /**
-     * Checks if the specified {@code port} number is available or closed.
-     *
-     * @param port the port number
-     * @return true if the specified {@code port} is available or closed else false
-     */
-    private static boolean isPortAvailable(final int port) {
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(port);
-            serverSocket.setReuseAddress(true);
-            return true;
-        } catch (final IOException ignored) {
-        } finally {
-            if (serverSocket != null) {
-                try {
-                    serverSocket.close();
-                } catch (IOException ignored) {
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -279,43 +227,6 @@ public class TestSuiteListener implements ISuiteListener {
     }
 
     /**
-     * Checks whether the given default port is available, if not try to find an available port within the range
-     * staring from the minimum port value.
-     *
-     * @param portName  name of the port
-     * @param port      default port
-     * @param portMin   minimum port value in the range
-     * @param portRange port range
-     * @return available port
-     */
-    private static int getAvailablePort(String portName, int port, int portMin, int portRange) {
-        if (isPortAvailable(port)) {
-            log.info("{} default port {} is available.", portName, port);
-            return port;
-        } else {
-            log.info("{} default port {} is not available. Trying to use a port between {} and {}", portName, port,
-                    portMin, (portMin + portRange));
-
-            port = portMin;
-            while (port <= (portMin + portRange)) {
-                log.info("Trying to use port {} for {}", port, portName);
-                if (isPortAvailable(port)) {
-                    log.info("Port {} is available for {}", port, portName);
-                    break;
-                }
-                port++;
-            }
-        }
-
-        if (port > (portMin + portRange)) {
-            throw new RuntimeException("Couldn't find a port for " + portName + " between ports " + portMin + " and " +
-                    (portMin + portRange));
-        } else {
-            return port;
-        }
-    }
-
-    /**
      * Registers an Apache Tomcat Valve in the server.xml of the Application Server Catalina config base.
      *
      * @param className the fully qualified class name of the Valve implementation
@@ -339,7 +250,7 @@ public class TestSuiteListener implements ISuiteListener {
         Attr attrClassName = document.createAttribute("className");
         attrClassName.setValue(className);
         valve.setAttributeNode(attrClassName);
-        valves.item(0).getParentNode().insertBefore(valve, valves.item(0));
+        valves.item(0).getParentNode().appendChild(valve);
 
         Transformer xFormer = TransformerFactory.newInstance().newTransformer();
         xFormer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getAbsolutePath()));
