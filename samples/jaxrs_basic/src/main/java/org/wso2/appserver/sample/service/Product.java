@@ -14,15 +14,15 @@
  *  KIND, either express or implied. See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-
 package org.wso2.appserver.sample.service;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Product class
+ * A Java class which models a product.
+ *
+ * @since 6.0.0
  */
 @XmlRootElement(name = "Product")
 public class Product {

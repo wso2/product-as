@@ -22,6 +22,8 @@ import java.nio.file.Paths;
 
 /**
  * Util methods related to HTTP statistics publishing integration test.
+ *
+ * @since 6.0.0
  */
 public class DataPublisherTestUtil {
     public static final String LOCAL_HOST = "localhost";
@@ -55,7 +57,7 @@ public class DataPublisherTestUtil {
     }
 
     /**
-     * Returns the absolute path of the org.wso2.http.stats_1.0.0.json
+     * Returns the absolute path of the org.wso2.http.stats_1.0.0.json.
      *
      * @return absolute path of the org.wso2.http.stats_1.0.0.json
      */
