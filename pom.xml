@@ -218,7 +218,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>distribution</artifactId>
+                <artifactId>wso2as</artifactId>
                 <type>zip</type>
                 <version>${appserver.version}</version>
             </dependency>

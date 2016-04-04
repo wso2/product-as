@@ -30,7 +30,7 @@
         <!-- WSO2 Application Server distribution -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>distribution</artifactId>
+            <artifactId>wso2as</artifactId>
             <type>zip</type>
             <exclusions>
                 <exclusion>
@@ -101,7 +101,7 @@
                         </goals>
                         <configuration>
                             <includeGroupIds>org.wso2.appserver</includeGroupIds>
-                            <includeArtifactIds>distribution</includeArtifactIds>
+                            <includeArtifactIds>wso2as</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/</outputDirectory>
                         </configuration>
                     </execution>
