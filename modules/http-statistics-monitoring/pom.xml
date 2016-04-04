@@ -21,7 +21,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>http-statistics-monitoring</artifactId>
+    <artifactId>appserver-http-statistics-monitoring</artifactId>
     <name>WSO2 Application Server - Module - Http Statistics Monitoring</name>
     <url>http://wso2.com</url>
 
@@ -100,6 +100,10 @@
                 <exclusion>
                     <groupId>org.wso2.carbon</groupId>
                     <artifactId>org.wso2.carbon.core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.thrift</groupId>
+                    <artifactId>libthrift</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
