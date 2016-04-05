@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -142,7 +143,7 @@ public class StatPublisherUnitTest {
 
         Event testEvent = new Event("org.wso2.http.stats:1.0.0", startTime,
                 new ArrayList<>(Arrays.asList("localhost", "localhost.localdomain")).toArray(),
-                null, payload.toArray());
+                null, payload.toArray(), new HashMap<String, String>());
         Event event = null;
         try {
             event = EventBuilder.buildEvent("org.wso2.http.stats:1.0.0", request, response, startTime, 0);

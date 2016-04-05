@@ -77,4 +77,10 @@ public class Constants {
      * product-as/distribution/contents/conf/wso2.
      */
     public static final String DATA_AGENT_CONF = "data-agent-conf.xml";
+
+    /**
+     * Constant to define the prefix for arbitrary value system variables.
+     * Any system variable with this prefix is published as an arbitrary data in the statistics publisher.
+     */
+    public static final String ARBITRARY_FIELD_PREFIX = "WSO2_";
 }

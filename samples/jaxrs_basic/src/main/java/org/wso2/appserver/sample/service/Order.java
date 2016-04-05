@@ -14,9 +14,7 @@
  *  KIND, either express or implied. See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-
 package org.wso2.appserver.sample.service;
 
 import java.util.HashMap;
@@ -27,9 +25,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 /**
- * Order class
+ * A Java class which models an order.
+ *
+ * @since 6.0.0
  */
 @XmlRootElement(name = "Order")
 public class Order {
@@ -59,11 +58,8 @@ public class Order {
 
     @GET
     @Path("products/{productId}/")
-    public Product getProduct(
-            @PathParam("productId")
-            int productId) {
-        Product p = products.get(Long.valueOf(productId));
-        return p;
+    public Product getProduct(@PathParam("productId") int productId) {
+        return products.get((long) productId);
     }
 
     final void init() {

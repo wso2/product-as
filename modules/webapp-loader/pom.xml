@@ -21,7 +21,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>webapp-loader</artifactId>
+    <artifactId>appserver-webapp-loader</artifactId>
     <name>WSO2 Application Server - Module - Webapp Loader</name>
     <url>http://wso2.com</url>
 
@@ -46,7 +46,6 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-juli</artifactId>
             <scope>provided</scope>
-            <version>8.0.28</version>
         </dependency>
         <dependency>
             <groupId>org.jacoco</groupId>

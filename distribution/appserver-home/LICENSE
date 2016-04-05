@@ -1,0 +1,114 @@
+
+This product is licensed by WSO2 Inc. under Apache License 2.0. The license
+can be downloaded from the following locations:
+	http://www.apache.org/licenses/LICENSE-2.0.html
+	http://www.apache.org/licenses/LICENSE-2.0.txt
+
+This product also contains software under different licenses. This table below
+all the contained libraries (jar files) and the license under which they are
+provided to you.
+
+At the bottom of this file is a table that shows what each license indicated
+below is and where the actual text of the license can be found.
+
+Name                                                                            License
+------------------------------------------------------------------------------------------
+annotations-api.jar                                                             apache2
+aopalliance-1.0.jar                                                             apache2
+appserver-utils-6.0.0-m1.jar                                                    apache2
+asm-5.0.4.jar                                                                   bsd
+bootstrap.jar                                                                   apache2
+catalina-ant.jar                                                                apache2
+catalina-ha.jar                                                                 apache2
+catalina-storeconfig.jar                                                        apache2
+catalina-tribes.jar                                                             apache2
+catalina.jar                                                                    apache2
+commons-codec-1.9.jar                                                           apache2
+commons-daemon.jar                                                              apache2
+commons-io-2.4.jar                                                              apache2
+commons-lang3-3.4.jar                                                           apache2
+commons-logging-1.2.jar                                                         apache2
+commons-pool-1.5.6.wso2v1.jar                                                   apache2
+cxf-core-3.1.5.jar                                                              apache2
+cxf-rt-bindings-soap-3.1.5.jar                                                  apache2
+cxf-rt-bindings-xml-3.1.5.jar                                                   apache2
+cxf-rt-databinding-jaxb-3.1.5.jar                                               apache2
+cxf-rt-frontend-jaxrs-3.1.5.jar                                                 apache2
+cxf-rt-frontend-jaxws-3.1.5.jar                                                 apache2
+cxf-rt-frontend-simple-3.1.5.jar                                                apache2
+cxf-rt-transports-http-3.1.5.jar                                                apache2
+cxf-rt-ws-addr-3.1.5.jar                                                        apache2
+cxf-rt-ws-policy-3.1.5.jar                                                      apache2
+cxf-rt-wsdl-3.1.5.jar                                                           apache2
+disruptor-3.3.2.wso2v2.jar                                                      apache2
+ecj-4.4.2.jar                                                                   epl1
+el-api.jar                                                                      apache2
+gson-2.3.1.jar                                                                  apache2
+appserver-http-statistics-monitoring-6.0.0-m1.jar                               apache2
+httpclient-4.3.1.wso2v2.jar                                                     apache2
+jasper-el.jar                                                                   apache2
+jasper.jar                                                                      apache2
+javax.annotation-api-1.2.jar                                                    cddl+gpl
+javax.ws.rs-api-2.0.1.jar                                                       cddl+gpl
+jaxb-core-2.2.11.jar                                                            cddl+gpl
+jaxb-impl-2.2.11.jar                                                            cddl+gpl
+json-1.0.0.wso2v1.jar                                                           apache2
+jsp-api.jar                                                                     apache2
+libthrift-0.8.0.wso2v1.jar                                                      apache2
+log4j-1.2.17.jar                                                                apache2
+log4j-1.2.17.wso2v1.jar                                                         apache2
+neethi-3.0.3.jar                                                                apache2
+org.wso2.carbon.databridge.agent-5.0.8.jar                                      apache2
+org.wso2.carbon.databridge.commons-5.0.8.jar                                    apache2
+org.wso2.carbon.databridge.commons.binary-5.0.8.jar                             apache2
+org.wso2.carbon.databridge.commons.thrift-5.0.8.jar                             apache2
+org.wso2.carbon.logging-4.4.3.jar                                               apache2
+servlet-api.jar                                                                 apache2
+slf4j-1.5.10.wso2v1.jar                                                         mit
+slf4j-api-1.7.12.jar                                                            mit
+spring-aop-4.2.5.RELEASE.jar                                                    apache2
+spring-beans-4.2.5.RELEASE.jar                                                  apache2
+spring-context-4.2.5.RELEASE.jar                                                apache2
+spring-core-4.2.5.RELEASE.jar                                                   apache2
+spring-expression-4.2.5.RELEASE.jar                                             apache2
+spring-web-4.2.5.RELEASE.jar                                                    apache2
+spring-webmvc-4.2.5.RELEASE.jar                                                 apache2
+stax2-api-3.1.4.jar                                                             bsd
+taglibs-standard-impl-1.2.5.jar                                                 apache2
+taglibs-standard-spec-1.2.5.jar                                                 apache2
+tomcat-api.jar                                                                  apache2
+tomcat-coyote.jar                                                               apache2
+tomcat-dbcp.jar                                                                 apache2
+tomcat-i18n-es.jar                                                              apache2
+tomcat-i18n-fr.jar                                                              apache2
+tomcat-i18n-ja.jar                                                              apache2
+tomcat-jdbc.jar                                                                 apache2
+tomcat-jni.jar                                                                  apache2
+tomcat-juli.jar                                                                 apache2
+tomcat-util-scan.jar                                                            apache2
+tomcat-util.jar                                                                 apache2
+tomcat-websocket.jar                                                            apache2
+appserver-webapp-loader-6.0.0-m1.jar                                            apache2
+websocket-api.jar                                                               apache2
+woodstox-core-asl-4.4.1.jar                                                     apache2
+wsdl4j-1.6.3.jar                                                                epl1
+xml-resolver-1.2.jar                                                            apache2
+xmlschema-core-2.2.1.jar                                                        apache2
+
+
+
+The license types used by the above libraries and their information is given below:
+
+bsd            Berkeley License
+               http://www.opensource.org/licenses/bsd-license.php
+apache2        Apache License Version 2.0
+               http://www.apache.org/licenses/LICENSE-2.0.html
+mit            MIT License
+               http://www.opensource.org/licenses/mit-license.php
+cddl1          Common Development and Distribution License
+               http://www.opensource.org/licenses/cddl1.php
+cpl1           Common Public License
+               http://opensource.org/licenses/cpl1.0.php
+cddl+gpl       CDDL + GPLv2
+               https://glassfish.dev.java.net/public/CDDL+GPL.html
+epl1           Eclipse Public License               http://www.eclipse.org/legal/epl-v10.html

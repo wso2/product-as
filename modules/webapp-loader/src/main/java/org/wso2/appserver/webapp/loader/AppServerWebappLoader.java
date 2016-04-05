@@ -27,7 +27,6 @@ import org.apache.catalina.loader.WebappLoader;
  * @since 6.0.0
  */
 public class AppServerWebappLoader extends WebappLoader {
-
     @SuppressWarnings("unused")
     public AppServerWebappLoader() {
         super();
@@ -45,5 +44,4 @@ public class AppServerWebappLoader extends WebappLoader {
         super.startInternal();
         ((AppServerWebappClassLoader) getClassLoader()).setWebappClassLoaderContext(webappClassLoaderContext);
     }
-
 }
