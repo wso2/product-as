@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.configuration.context;
 
+import java.util.Optional;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -63,11 +64,24 @@ public class AppServerWebAppConfiguration {
      * Merges the globally defined context level configurations and context level configurations overridden at
      * context level.
      *
-     * @param configuration group of context level configuration capable of being merged with this group
+     * @param webAppConfiguration group of context level configuration capable of being merged with this group
      */
-    public void merge(AppServerWebAppConfiguration configuration) {
-        classLoaderConfiguration.merge(configuration.classLoaderConfiguration);
-        singleSignOnConfiguration.merge(configuration.singleSignOnConfiguration);
-        statsPublisherConfiguration.merge(configuration.statsPublisherConfiguration);
+    public void merge(AppServerWebAppConfiguration webAppConfiguration) {
+        Optional.ofNullable(webAppConfiguration).ifPresent(configuration -> {
+            Optional.ofNullable(classLoaderConfiguration).
+                    ifPresent(classLoaderConfig -> classLoaderConfig.merge(configuration.classLoaderConfiguration));
+            classLoaderConfiguration = Optional.ofNullable(classLoaderConfiguration).
+                    orElse(configuration.classLoaderConfiguration);
+
+            Optional.ofNullable(singleSignOnConfiguration).
+                    ifPresent(ssoConfig -> ssoConfig.merge(configuration.singleSignOnConfiguration));
+            singleSignOnConfiguration = Optional.ofNullable(singleSignOnConfiguration).
+                    orElse(configuration.singleSignOnConfiguration);
+
+            Optional.ofNullable(statsPublisherConfiguration).ifPresent(
+                    statsPublisherConfig -> statsPublisherConfig.merge(configuration.statsPublisherConfiguration));
+            statsPublisherConfiguration = Optional.ofNullable(statsPublisherConfiguration).
+                    orElse(configuration.statsPublisherConfiguration);
+        });
     }
 }
