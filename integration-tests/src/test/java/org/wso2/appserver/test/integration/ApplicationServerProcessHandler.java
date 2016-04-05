@@ -22,6 +22,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+/**
+ *  Class for handling the WSO2 Application Server start and stop process.
+ *
+ *  @since 6.0.0
+ */
 public class ApplicationServerProcessHandler {
 
     private final ProcessBuilder applicationServerProcessBuilder;
@@ -49,11 +54,19 @@ public class ApplicationServerProcessHandler {
         applicationServerProcessBuilder.environment().put("JAVA_OPTS", jacocoArgLine);
     }
 
+    /**
+     * Get the jacoco test coverage agent argument.
+     * @return jacoco argument.
+     */
     public String getJacocoArgLine() {
         return jacocoArgLine;
     }
 
-
+    /**
+     * Starts the WSO2 Application Server as a separate process.
+     * @throws IOException when process fails to start.
+     * @throws InterruptedException if the waiting of the process fails.
+     */
     public void startServer() throws IOException, InterruptedException {
         Process startupProcess;
         if (operatingSystem.toLowerCase().contains("windows")) {
@@ -66,6 +79,11 @@ public class ApplicationServerProcessHandler {
         startupProcess.waitFor();
     }
 
+    /**
+     * Stop the previously started WSO2 Application Server.
+     * @throws IOException when process fails to start.
+     * @throws InterruptedException if the waiting of the process fails.
+     */
     public void stopServer() throws IOException, InterruptedException {
         Process stopProcess;
         if (operatingSystem.toLowerCase().contains("windows")) {
