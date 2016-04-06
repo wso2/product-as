@@ -23,13 +23,14 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 /**
- *  Class for handling the WSO2 Application Server start and stop process.
+ * Class for handling the WSO2 Application Server start and stop process.
  *
- *  @since 6.0.0
+ * @since 6.0.0
  */
 public class ApplicationServerProcessHandler {
 
     private final ProcessBuilder applicationServerProcessBuilder;
+    private Process applicationServerProcess;
     private String jacocoArgLine;
     private String operatingSystem;
 
@@ -56,6 +57,7 @@ public class ApplicationServerProcessHandler {
 
     /**
      * Get the jacoco test coverage agent argument.
+     *
      * @return jacoco argument.
      */
     public String getJacocoArgLine() {
@@ -64,36 +66,28 @@ public class ApplicationServerProcessHandler {
 
     /**
      * Starts the WSO2 Application Server as a separate process.
-     * @throws IOException when process fails to start.
-     * @throws InterruptedException if the waiting of the process fails.
+     *
+     * @throws IOException          when process fails to start.
      */
-    public void startServer() throws IOException, InterruptedException {
-        Process startupProcess;
+    public void startServer() throws IOException {
+        File redirectFile = Paths.get(System.getProperty("build.directory"), "server.log").toFile();
+        applicationServerProcessBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(redirectFile));
         if (operatingSystem.toLowerCase().contains("windows")) {
-            startupProcess = applicationServerProcessBuilder.command("cmd.exe", "/C", "bin\\catalina.bat", "start")
-                    .start();
+            applicationServerProcess = applicationServerProcessBuilder
+                    .command("cmd.exe", "/C", "bin\\catalina.bat", "run").start();
         } else {
-            startupProcess = applicationServerProcessBuilder.command("./bin/catalina.sh", "start").start();
+            applicationServerProcess = applicationServerProcessBuilder.command("./bin/catalina.sh", "run").start();
         }
-
-        startupProcess.waitFor();
     }
 
     /**
      * Stop the previously started WSO2 Application Server.
-     * @throws IOException when process fails to start.
-     * @throws InterruptedException if the waiting of the process fails.
+     *
      */
-    public void stopServer() throws IOException, InterruptedException {
-        Process stopProcess;
-        if (operatingSystem.toLowerCase().contains("windows")) {
-            stopProcess = applicationServerProcessBuilder.command("cmd.exe", "/C", "bin\\catalina.bat", "stop")
-                    .start();
-        } else {
-            stopProcess = applicationServerProcessBuilder.command("./bin/catalina.sh", "stop").start();
+    public void stopServer() {
+        if (applicationServerProcess != null) {
+            applicationServerProcess.destroy();
         }
-
-        stopProcess.waitFor();
     }
 
     public String getOperatingSystem() {

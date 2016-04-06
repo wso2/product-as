@@ -117,7 +117,7 @@ public class TestSuiteListener implements ISuiteListener {
 
 
         } catch (IOException | TransformerException | SAXException | ParserConfigurationException |
-                XPathExpressionException | InterruptedException ex) {
+                XPathExpressionException  ex) {
             String message = "Could not start the server process";
             log.error(message, ex);
             throw new RuntimeException(message, ex);
@@ -128,10 +128,7 @@ public class TestSuiteListener implements ISuiteListener {
     private void registerShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                try {
-                    new ApplicationServerProcessHandler(appserverHome).stopServer();
-                } catch (IOException | InterruptedException ignore) {
-                }
+                processHandler.stopServer();
             }
         });
     }
@@ -140,13 +137,7 @@ public class TestSuiteListener implements ISuiteListener {
     public void onFinish(ISuite iSuite) {
         log.info("Starting post-integration tasks...");
         log.info("Terminating the Application server");
-        try {
-            processHandler.stopServer();
-        } catch (IOException | InterruptedException ex) {
-            String message = "Could not terminate the server process";
-            log.error(message, ex);
-            throw new RuntimeException(message, ex);
-        }
+        processHandler.stopServer();
         log.info("Finished the post-integration tasks...");
     }
 
