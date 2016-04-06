@@ -1,7 +1,6 @@
 # Welcome to WSO2 Application Server
 
-Welcome to WSO2 Application Server, the successor of WSO2 Carbon based Application Server. From version 6.0.0 onward,
-WSO2 Application Server is based on vanilla Apache Tomcat. WSO2 provides a number of features by means of extensions to Tomcat
+Welcome to WSO2 Application Server, the successor of WSO2 Carbon based Application Server. WSO2 Application Server 6.0.0 is a complete revamp and is based on vanilla Apache Tomcat. WSO2 provides a number of features by means of extensions to Tomcat
 to add/enhance the functionality. It provides first class support for generic web applications and JAX-RS/JAX-WS web
 applications. The performance of the server and individual application can be monitored by integrating WSO2 Application
 Server with WSO2 Data Analytics Server.
