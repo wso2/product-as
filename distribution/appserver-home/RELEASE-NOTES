@@ -1,0 +1,97 @@
+================================================================================
+  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+
+  WSO2 Inc. licenses this file to you under the Apache License,
+  Version 2.0 (the "License"); you may not use this file except
+  in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied. See the License for the
+  specific language governing permissions and limitations
+  under the License.
+================================================================================
+
+
+                     WSO2 Application Server 6.0.0-M1
+                            Release Notes
+
+Welcome to WSO2 Application Server, the successor of WSO2 Carbon based
+Application Server. WSO2 Application Server 6.0.0 is a complete revamp and is
+based on vanilla Apache Tomcat. WSO2 provides a number of features by means of
+extensions to Tomcat to add/enhance the functionality. It provides first class
+support for generic web applications and JAX-RS/JAX-WS web applications. The
+performance of the server and individual application can be monitored by
+integrating WSO2 Application Server with WSO2 Data Analytics Server.
+
+WSO2 Application Server is an open source project and it is available under the
+Apache Software License (v2.0)
+
+
+=============
+KEY FEATURES:
+=============
+* HTTP Statistics Monitoring
+* Webapp classloading runtimes
+
+
+=============
+FIXED ISSUES:
+=============
+https://wso2.org/jira/browse/WSAS-2202?filter=13011
+
+
+=============
+KNOWN ISSUES:
+=============
+https://wso2.org/jira/browse/WSAS-2202?filter=13012
+
+
+=================
+REPORTING ISSUES:
+=================
+Issues, documentation errors and feature requests regarding WSO2 Application Server
+can be reported through the public issue tracking system.
+    https://wso2.org/jira/browse/WSAS.
+
+
+===========
+CONTACT US:
+===========
+WSO2 Application Server developers can be contacted via the Development and
+Architecture mailing lists.
+    dev@wso2.org
+    architecture@wso2.org
+
+Alternatively, questions can also be raised in the stackoverflow forum,
+    http://stackoverflow.com/questions/tagged/wso2
+
+
+==================
+HOW TO CONTRIBUTE:
+==================
+You can find comprehensive instructions on how to contribute from the Getting Involved
+section on the documentation site.
+    https://docs.wso2.com/display/AS600/Get+Involved
+
+
+========
+SUPPORT:
+========
+We are committed to ensuring that your enterprise middleware deployment is
+completely supported from evaluation to production. Our unique approach ensures
+that all support leverages our open development methodology and is provided by
+the very same engineers who build the technology. For additional support
+information please refer to,
+    http://wso2.com/support/.
+
+For further details, please see the WSO2 Application Server Documentation.
+    https://docs.wso2.com/display/AS600
+
+
+
+Thank you for your interest in WSO2 Application Server.
