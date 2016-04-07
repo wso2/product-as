@@ -60,7 +60,7 @@ public class ThriftTestServer {
     }
 
     /**
-     * Starts the server
+     * Starts the server.
      *
      * @throws DataBridgeException
      */

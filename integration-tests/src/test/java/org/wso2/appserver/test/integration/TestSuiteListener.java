@@ -57,11 +57,12 @@ import javax.xml.xpath.XPathFactory;
  */
 public class TestSuiteListener implements ISuiteListener {
     private static final Logger log = LoggerFactory.getLogger(TestSuiteListener.class);
-    private Process applicationServerProcess;
+
     private int serverStartCheckTimeout;
     private File appserverHome;
     private int applicationServerPort;
     private boolean isSuccessServerStartup;
+    private ApplicationServerProcessHandler processHandler;
 
     @Override
     public void onStart(ISuite iSuite) {
@@ -70,6 +71,7 @@ public class TestSuiteListener implements ISuiteListener {
 
             appserverHome = new File(System.getProperty(TestConstants.APPSERVER_HOME));
             log.info("Application server home : " + appserverHome.toString());
+            processHandler = new ApplicationServerProcessHandler(appserverHome);
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
 
@@ -98,66 +100,45 @@ public class TestSuiteListener implements ISuiteListener {
             addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
             addValveToServerXML(TestConstants.HTTP_STATISTICS_PUBLISHING_VALVE);
 
+            log.info(processHandler.getOperatingSystem() + " operating system was detected");
+            log.info("Jacoco argLine: " + processHandler.getJacocoArgLine());
             log.info("Starting the server [{}:{}, {}:{}, {}:{}] ...",
                     TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
                     TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort,
                     TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME, serverShutdownPort);
-            applicationServerProcess = startPlatformDependApplicationServer();
 
+            processHandler.startServer();
+            registerShutdownHook();
             waitForServerStartup();
 
             if (isSuccessServerStartup) {
                 log.info("Application server started successfully. Running test suite...");
             }
 
+
         } catch (IOException | TransformerException | SAXException | ParserConfigurationException |
-                XPathExpressionException ex) {
-            terminateApplicationServer();
-            String message = "Could not start the server";
+                XPathExpressionException  ex) {
+            String message = "Could not start the server process";
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
 
     }
 
+    private void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                processHandler.stopServer();
+            }
+        });
+    }
+
     @Override
     public void onFinish(ISuite iSuite) {
         log.info("Starting post-integration tasks...");
         log.info("Terminating the Application server");
-        terminateApplicationServer();
+        processHandler.stopServer();
         log.info("Finished the post-integration tasks...");
-    }
-
-    private Process startPlatformDependApplicationServer() throws IOException {
-        String os = System.getProperty("os.name");
-        log.info(os + " operating system was detected");
-
-        String jacocoAgentDir = System.getProperty("jacoco-agent.dir");
-        String jacocoRuntimeJar = System.getProperty("jacoco-agent.runtime");
-        String jacocoDataFile = System.getProperty("jacoco-agent.data.file");
-        String jacocoArg = "-javaagent:" + Paths.get(jacocoAgentDir, jacocoRuntimeJar) + "=destfile=" + Paths
-                .get(jacocoAgentDir, jacocoDataFile);
-        log.info("Jacoco argLine: " + jacocoArg);
-
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.directory(appserverHome);
-        processBuilder.environment().put("JAVA_OPTS", jacocoArg);
-
-        if (os.toLowerCase().contains("windows")) {
-            log.info("Starting server as a " + os + " process");
-            String catalinaPath = new File(appserverHome, "bin\\catalina.bat").getAbsolutePath();
-            return applicationServerProcess = processBuilder.command(catalinaPath, "run").start();
-        } else {
-            log.info("Starting server as a " + os + " process");
-            return applicationServerProcess = processBuilder.command("./bin/catalina.sh", "run").start();
-        }
-
-    }
-
-    public void terminateApplicationServer() {
-        if (applicationServerProcess != null) {
-            applicationServerProcess.destroy();
-        }
     }
 
     private void waitForServerStartup() throws IOException {

@@ -53,10 +53,22 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.databridge.core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>slf4j.wso2</groupId>
+                    <artifactId>slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.databridge.receiver.thrift</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>slf4j.wso2</groupId>
+                    <artifactId>slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
