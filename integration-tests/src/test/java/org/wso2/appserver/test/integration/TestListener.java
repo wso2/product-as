@@ -19,7 +19,6 @@ package org.wso2.appserver.test.integration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -32,6 +31,14 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -43,13 +50,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 /**
  * The test suite listeners class provides the environment setup for the integration test.
@@ -178,7 +179,7 @@ public class TestListener implements ITestListener {
     private void registerShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                if(!isSuccessTermination) {
+                if (!isSuccessTermination) {
                     if (serverStatusHook != null) {
                         try {
                             serverStatusHook.beforeServerShutdown();
