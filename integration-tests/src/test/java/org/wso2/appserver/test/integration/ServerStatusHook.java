@@ -18,13 +18,38 @@
 
 package org.wso2.appserver.test.integration;
 
+/**
+ * Implementing this interface allows an object to get the Application Server startup events for the integration
+ * testing. The implemented fully qualified name of the class should added to the testng.xml file with parameter
+ * name <strong>server-status-hook</strong>.
+ */
 public interface ServerStatusHook {
 
-    void beforeServerStart();
+    /**
+     * This method get called before the server startup.
+     *
+     * @throws Exception When error occurred inside the implemented method.
+     */
+    void beforeServerStart() throws Exception;
 
-    void afterServerStart();
+    /**
+     * This method get called after the server startup.
+     *
+     * @throws Exception When error occurred inside the implemented method.
+     */
+    void afterServerStart() throws Exception;
 
-    void beforeServerShutdown();
+    /**
+     * This method get called before the server shutdown process.
+     *
+     * @throws Exception When error occurred inside the implemented method.
+     */
+    void beforeServerShutdown() throws Exception;
 
-    void afterServerShutdown();
+    /**
+     * This method get called after server shutdown.
+     *
+     * @throws Exception When error occurred inside the implemented method.
+     */
+    void afterServerShutdown() throws Exception;
 }

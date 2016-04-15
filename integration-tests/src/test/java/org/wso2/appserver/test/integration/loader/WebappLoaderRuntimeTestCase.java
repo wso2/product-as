@@ -35,7 +35,7 @@ import java.net.URL;
  *
  * @since 6.0.0
  */
-public class WebappLoaderTestCase extends TestBase {
+public class WebappLoaderRuntimeTestCase extends TestBase {
     @Test(description = "Checks if the server is running by sending a request to the server")
     public void testEnvironmentConfiguration() throws IOException {
         URL requestUrl = new URL(getBaseUrl() + "/jaxrs_basic/services/customerservice/customers/123/");

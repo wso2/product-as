@@ -64,9 +64,26 @@ public class TestListener implements ITestListener {
     private int applicationServerPort;
     private boolean isSuccessServerStartup;
     private ApplicationServerProcessHandler processHandler;
+    private ServerStatusHook serverStatusHook;
+    private boolean isSuccessTermination = false;
 
-    public void onStart(ISuite iSuite) {
+    @Override
+    public void onStart(ITestContext iTestContext) {
+
         try {
+            log.info("Starting test: " + iTestContext.getName());
+            String hookClassName = iTestContext.getCurrentXmlTest().getParameter("server-status-hook");
+            if (hookClassName != null) {
+                Class<?> clazz = Class.forName(hookClassName);
+                Object hookObject = clazz.newInstance();
+
+                if (hookObject instanceof ServerStatusHook) {
+                    serverStatusHook = (ServerStatusHook) hookObject;
+                } else {
+                    log.info("Class: " + clazz.getName() + " must implement the ServerStatusHook interface.");
+                }
+            }
+
             log.info("Starting pre-integration test setup...");
 
             appserverHome = new File(System.getProperty(TestConstants.APPSERVER_HOME));
@@ -102,6 +119,11 @@ public class TestListener implements ITestListener {
 
             log.info(processHandler.getOperatingSystem() + " operating system was detected");
             log.info("Jacoco argLine: " + processHandler.getJacocoArgLine());
+
+            if (serverStatusHook != null) {
+                serverStatusHook.beforeServerStart();
+            }
+
             log.info("Starting the server [{}:{}, {}:{}, {}:{}] ...",
                     TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
                     TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort,
@@ -115,31 +137,62 @@ public class TestListener implements ITestListener {
                 log.info("Application server started successfully. Running test suite...");
             }
 
+            if (serverStatusHook != null) {
+                serverStatusHook.afterServerStart();
+            }
 
-        } catch (IOException | TransformerException | SAXException | ParserConfigurationException |
-                XPathExpressionException ex) {
+        } catch (Exception ex) {
             String message = "Could not start the server process";
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
-
     }
+
+    @Override
+    public void onFinish(ITestContext iTestContext) {
+        log.info("Starting post-integration tasks...");
+        if (serverStatusHook != null) {
+            try {
+                serverStatusHook.beforeServerShutdown();
+            } catch (Exception ignore) {
+            }
+        }
+        log.info("Terminating the Application server");
+        processHandler.stopServer();
+        if (serverStatusHook != null) {
+            try {
+                serverStatusHook.afterServerShutdown();
+            } catch (Exception ignore) {
+            }
+        }
+        log.info("Finished the post-integration tasks...");
+        log.info("Finished test: " + iTestContext.getName());
+        isSuccessTermination = true;
+    }
+
 
     private void registerShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                processHandler.stopServer();
+                if(!isSuccessTermination) {
+                    if (serverStatusHook != null) {
+                        try {
+                            serverStatusHook.beforeServerShutdown();
+                        } catch (Exception ignore) {
+                        }
+                    }
+                    processHandler.stopServer();
+                    if (serverStatusHook != null) {
+                        try {
+                            serverStatusHook.afterServerShutdown();
+                        } catch (Exception ignore) {
+                        }
+                    }
+                }
             }
         });
     }
 
-
-    public void onFinish(ISuite iSuite) {
-        log.info("Starting post-integration tasks...");
-        log.info("Terminating the Application server");
-        processHandler.stopServer();
-        log.info("Finished the post-integration tasks...");
-    }
 
     private void waitForServerStartup() throws IOException {
         log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
@@ -237,39 +290,29 @@ public class TestListener implements ITestListener {
         xFormer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getAbsolutePath()));
     }
 
+
     @Override
     public void onTestStart(ITestResult iTestResult) {
 
-        System.out.println();
     }
 
     @Override
     public void onTestSuccess(ITestResult iTestResult) {
-        System.out.println();
+
     }
 
     @Override
     public void onTestFailure(ITestResult iTestResult) {
-        System.out.println();
+
     }
 
     @Override
     public void onTestSkipped(ITestResult iTestResult) {
-        System.out.println();
+
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult iTestResult) {
-        System.out.println();
-    }
 
-    @Override
-    public void onStart(ITestContext iTestContext) {
-        System.out.println();
-    }
-
-    @Override
-    public void onFinish(ITestContext iTestContext) {
-        System.out.println();
     }
 }
