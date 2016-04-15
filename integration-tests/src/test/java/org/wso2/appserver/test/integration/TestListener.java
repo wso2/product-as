@@ -159,6 +159,10 @@ public class TestListener implements ITestListener {
         }
         log.info("Terminating the Application server");
         processHandler.stopServer();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ignore) {
+        }
         if (serverStatusHook != null) {
             try {
                 serverStatusHook.afterServerShutdown();
@@ -182,6 +186,10 @@ public class TestListener implements ITestListener {
                         }
                     }
                     processHandler.stopServer();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ignore) {
+                    }
                     if (serverStatusHook != null) {
                         try {
                             serverStatusHook.afterServerShutdown();

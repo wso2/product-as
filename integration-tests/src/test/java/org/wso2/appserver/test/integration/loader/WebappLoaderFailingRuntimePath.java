@@ -45,7 +45,7 @@ public class WebappLoaderFailingRuntimePath extends TestBase {
         connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
 
         int responseCode = connection.getResponseCode();
-        Assert.assertNotEquals(responseCode, 200, "Server Response Code");
+        Assert.assertNotEquals(responseCode, 200, "Check Server Response Code is not equals to 200");
 
     }
 }
