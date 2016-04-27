@@ -47,8 +47,9 @@ public class ClassLoaderConfiguration {
      *
      * @param configuration the local, context level group of classloading configuration to be merged with
      */
-    public void merge(ClassLoaderConfiguration configuration) {
-        Optional.ofNullable(configuration).ifPresent(
-                mergeable -> environments = Optional.ofNullable(mergeable.environments).orElse(environments));
+    void merge(ClassLoaderConfiguration configuration) {
+        Optional.ofNullable(configuration)
+                .ifPresent(mergeable ->
+                        environments = Optional.ofNullable(mergeable.environments).orElse(environments));
     }
 }

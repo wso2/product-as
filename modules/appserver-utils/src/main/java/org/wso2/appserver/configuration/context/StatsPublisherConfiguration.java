@@ -48,9 +48,10 @@ public class StatsPublisherConfiguration {
      *
      * @param configuration the local, context level group of stats-publishing configuration to be merged with
      */
-    public void merge(org.wso2.appserver.configuration.context.StatsPublisherConfiguration configuration) {
-        Optional.ofNullable(configuration).
-                ifPresent(mergeable -> enableStatsPublisher = Optional.ofNullable(mergeable.enableStatsPublisher).
-                        orElse(enableStatsPublisher));
+    void merge(org.wso2.appserver.configuration.context.StatsPublisherConfiguration configuration) {
+        Optional.ofNullable(configuration)
+                .ifPresent(mergeable ->
+                        enableStatsPublisher = Optional.ofNullable(mergeable.enableStatsPublisher)
+                                .orElse(enableStatsPublisher));
     }
 }

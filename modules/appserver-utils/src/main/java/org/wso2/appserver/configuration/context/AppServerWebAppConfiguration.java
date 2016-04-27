@@ -67,21 +67,27 @@ public class AppServerWebAppConfiguration {
      * @param webAppConfiguration group of context level configuration capable of being merged with this group
      */
     public void merge(AppServerWebAppConfiguration webAppConfiguration) {
-        Optional.ofNullable(webAppConfiguration).ifPresent(configuration -> {
-            Optional.ofNullable(classLoaderConfiguration).
-                    ifPresent(classLoaderConfig -> classLoaderConfig.merge(configuration.classLoaderConfiguration));
-            classLoaderConfiguration = Optional.ofNullable(classLoaderConfiguration).
-                    orElse(configuration.classLoaderConfiguration);
+        Optional.ofNullable(webAppConfiguration)
+                .ifPresent(configuration -> {
+                    Optional.ofNullable(classLoaderConfiguration)
+                            .ifPresent(classLoaderConfig ->
+                                    classLoaderConfig.merge(configuration.classLoaderConfiguration));
 
-            Optional.ofNullable(singleSignOnConfiguration).
-                    ifPresent(ssoConfig -> ssoConfig.merge(configuration.singleSignOnConfiguration));
-            singleSignOnConfiguration = Optional.ofNullable(singleSignOnConfiguration).
-                    orElse(configuration.singleSignOnConfiguration);
+                    classLoaderConfiguration = Optional.ofNullable(classLoaderConfiguration)
+                            .orElse(configuration.classLoaderConfiguration);
 
-            Optional.ofNullable(statsPublisherConfiguration).ifPresent(
-                    statsPublisherConfig -> statsPublisherConfig.merge(configuration.statsPublisherConfiguration));
-            statsPublisherConfiguration = Optional.ofNullable(statsPublisherConfiguration).
-                    orElse(configuration.statsPublisherConfiguration);
-        });
+                    Optional.ofNullable(singleSignOnConfiguration)
+                            .ifPresent(ssoConfig -> ssoConfig.merge(configuration.singleSignOnConfiguration));
+
+                    singleSignOnConfiguration = Optional.ofNullable(singleSignOnConfiguration)
+                            .orElse(configuration.singleSignOnConfiguration);
+
+                    Optional.ofNullable(statsPublisherConfiguration)
+                            .ifPresent(statsPublisherConfig ->
+                                    statsPublisherConfig.merge(configuration.statsPublisherConfiguration));
+
+                    statsPublisherConfiguration = Optional.ofNullable(statsPublisherConfiguration)
+                            .orElse(configuration.statsPublisherConfiguration);
+                });
     }
 }
