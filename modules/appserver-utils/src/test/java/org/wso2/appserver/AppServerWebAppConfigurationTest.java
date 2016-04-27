@@ -69,12 +69,14 @@ public class AppServerWebAppConfigurationTest {
         List<Lifecycle> components = new ArrayList<>();
         components.add(host);
         components.add(sample_context);
-        components.stream().forEach(component -> {
-            context_configuration_loader.
-                    lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
-            context_configuration_loader.
-                    lifecycleEvent(new LifecycleEvent(component, Lifecycle.CONFIGURE_START_EVENT, null));
-        });
+        components
+                .stream()
+                .forEach(component -> {
+                    context_configuration_loader.
+                            lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
+                    context_configuration_loader.
+                            lifecycleEvent(new LifecycleEvent(component, Lifecycle.CONFIGURE_START_EVENT, null));
+                });
     }
 
     @Test(description = "Loads the XML file content of a WSO2 App Server specific webapp descriptor", priority = 2)
@@ -233,15 +235,25 @@ public class AppServerWebAppConfigurationTest {
     }
 
     private static boolean compareSkipURIs(SSOConfiguration.SkipURIs actual, SSOConfiguration.SkipURIs expected) {
-        return actual.getSkipURIs().stream().filter(skipURI -> expected.getSkipURIs().stream().
-                filter(uri -> uri.trim().equals(skipURI)).count() > 0).count() == expected.getSkipURIs().size();
+        return actual.getSkipURIs()
+                .stream()
+                .filter(skipURI -> expected.getSkipURIs()
+                        .stream()
+                        .filter(uri -> uri.trim().equals(skipURI))
+                        .count() > 0)
+                .count() == expected.getSkipURIs().size();
     }
 
     private static boolean compareProperties(List<SSOConfiguration.Property> actual,
             List<SSOConfiguration.Property> expected) {
-        return actual.stream().filter(property -> expected.stream().
-                filter(exp -> (property.getKey().trim().equals(exp.getKey()) && property.getValue().trim().
-                        equals(exp.getValue()))).count() > 0).count() == expected.size();
+        return actual
+                .stream()
+                .filter(property -> expected
+                        .stream()
+                        .filter(exp -> (property.getKey().trim().equals(exp.getKey()) && property.getValue().trim().
+                                equals(exp.getValue())))
+                        .count() > 0)
+                .count() == expected.size();
     }
 
     private static boolean compareSSLProperties(SSOConfiguration actual, SSOConfiguration expected) {
