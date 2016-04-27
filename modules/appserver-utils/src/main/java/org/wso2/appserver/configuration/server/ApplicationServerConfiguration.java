@@ -31,43 +31,43 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "AppServer")
 public class ApplicationServerConfiguration {
     @XmlElement(name = "ClassLoader")
-    private ClassLoaderEnvironments classLoaderEnvironments;
+    private AppServerClassLoading classLoaderEnvironments;
     @XmlElement(name = "SAML2SingleSignOn")
-    private SSOConfiguration singleSignOnConfiguration;
+    private AppServerSingleSignOn singleSignOnConfiguration;
     @XmlElement(name = "StatisticsPublisher")
-    private StatsPublisherConfiguration statsPublisherConfiguration;
+    private AppServerStatsPublishing statsPublisherConfiguration;
     @XmlElement(name = "Security")
-    private SecurityConfiguration securityConfiguration;
+    private AppServerSecurity securityConfiguration;
 
-    public ClassLoaderEnvironments getClassLoaderEnvironments() {
+    public AppServerClassLoading getClassLoaderEnvironments() {
         return classLoaderEnvironments;
     }
 
-    public void setClassLoaderEnvironments(ClassLoaderEnvironments classLoaderEnvironments) {
+    public void setClassLoaderEnvironments(AppServerClassLoading classLoaderEnvironments) {
         this.classLoaderEnvironments = classLoaderEnvironments;
     }
 
-    public SSOConfiguration getSingleSignOnConfiguration() {
+    public AppServerSingleSignOn getSingleSignOnConfiguration() {
         return singleSignOnConfiguration;
     }
 
-    public void setSingleSignOnConfiguration(SSOConfiguration singleSignOnConfiguration) {
+    public void setSingleSignOnConfiguration(AppServerSingleSignOn singleSignOnConfiguration) {
         this.singleSignOnConfiguration = singleSignOnConfiguration;
     }
 
-    public StatsPublisherConfiguration getStatsPublisherConfiguration() {
+    public AppServerStatsPublishing getStatsPublisherConfiguration() {
         return statsPublisherConfiguration;
     }
 
-    public void setStatsPublisherConfiguration(StatsPublisherConfiguration statsPublisherConfiguration) {
+    public void setStatsPublisherConfiguration(AppServerStatsPublishing statsPublisherConfiguration) {
         this.statsPublisherConfiguration = statsPublisherConfiguration;
     }
 
-    public SecurityConfiguration getSecurityConfiguration() {
+    public AppServerSecurity getSecurityConfiguration() {
         return securityConfiguration;
     }
 
-    public void setSecurityConfiguration(SecurityConfiguration securityConfiguration) {
+    public void setSecurityConfiguration(AppServerSecurity securityConfiguration) {
         this.securityConfiguration = securityConfiguration;
     }
 

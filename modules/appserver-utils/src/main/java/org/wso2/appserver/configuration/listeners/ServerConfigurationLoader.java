@@ -20,8 +20,8 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Server;
 import org.wso2.appserver.Constants;
+import org.wso2.appserver.configuration.server.AppServerSecurity;
 import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
-import org.wso2.appserver.configuration.server.SecurityConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
@@ -84,7 +84,7 @@ public class ServerConfigurationLoader implements LifecycleListener {
      */
     private static void setSecuritySystemProperties() {
         Optional.ofNullable(appServerConfiguration).ifPresent(configuration -> {
-            SecurityConfiguration securityConfiguration = configuration.getSecurityConfiguration();
+            AppServerSecurity securityConfiguration = configuration.getSecurityConfiguration();
 
             System.setProperty("javax.net.ssl.keyStore",
                     securityConfiguration.getKeystore().getLocation().replace("\\", "/"));

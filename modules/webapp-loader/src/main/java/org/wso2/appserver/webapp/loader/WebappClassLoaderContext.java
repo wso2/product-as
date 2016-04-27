@@ -26,7 +26,7 @@ import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
-import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
+import org.wso2.appserver.configuration.server.AppServerClassLoading;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 
 import java.io.File;
@@ -49,7 +49,7 @@ public class WebappClassLoaderContext {
     private Map<String, List<String>> selectedEnvironments = new ConcurrentHashMap<>();
 
     static {
-        List<ClassLoaderEnvironments.Environment> environments = ServerConfigurationLoader.getServerConfiguration().
+        List<AppServerClassLoading.Environment> environments = ServerConfigurationLoader.getServerConfiguration().
                 getClassLoaderEnvironments().getEnvironments().getEnvironments();
 
         //  populates the classpath defines in each environment
