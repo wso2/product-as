@@ -26,7 +26,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
-import org.wso2.appserver.configuration.server.AppServerConfiguration;
+import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.SecurityConfiguration;
@@ -46,7 +46,7 @@ import java.util.List;
  *
  * @since 6.0.0
  */
-public class AppServerConfigurationTest {
+public class ApplicationServerConfigurationTest {
     private static final Path catalina_base = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
     private static final Path config_base_server_descriptor = Paths.
             get(catalina_base.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
@@ -80,8 +80,8 @@ public class AppServerConfigurationTest {
             loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.AFTER_START_EVENT, null));
         });
 
-        AppServerConfiguration actual = ServerConfigurationLoader.getServerConfiguration();
-        AppServerConfiguration expected = generateDefault();
+        ApplicationServerConfiguration actual = ServerConfigurationLoader.getServerConfiguration();
+        ApplicationServerConfiguration expected = generateDefault();
         Assert.assertTrue(compare(actual, expected));
     }
 
@@ -90,8 +90,8 @@ public class AppServerConfigurationTest {
         Files.delete(config_base_server_descriptor);
     }
 
-    protected static AppServerConfiguration generateDefault() {
-        AppServerConfiguration appServerConfiguration = new AppServerConfiguration();
+    protected static ApplicationServerConfiguration generateDefault() {
+        ApplicationServerConfiguration appServerConfiguration = new ApplicationServerConfiguration();
         appServerConfiguration.setClassLoaderEnvironments(prepareClassLoaderEnv());
         appServerConfiguration.setSingleSignOnConfiguration(prepareSSOConfigs());
         appServerConfiguration.setStatsPublisherConfiguration(prepareStatsPublishingConfigs());
@@ -188,7 +188,7 @@ public class AppServerConfigurationTest {
         return configuration;
     }
 
-    protected static boolean compare(AppServerConfiguration actual, AppServerConfiguration expected) {
+    protected static boolean compare(ApplicationServerConfiguration actual, ApplicationServerConfiguration expected) {
         boolean classloading = compareClassloadingConfigurations(actual.getClassLoaderEnvironments(),
                 expected.getClassLoaderEnvironments());
         boolean sso = compareSSOConfigurations(actual.getSingleSignOnConfiguration(),

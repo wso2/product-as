@@ -16,7 +16,7 @@
 package org.wso2.appserver.sample.utils;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.wso2.appserver.configuration.server.AppServerConfiguration;
+import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
 import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
 import org.wso2.appserver.configuration.server.SSOConfiguration;
 import org.wso2.appserver.configuration.server.SecurityConfiguration;
@@ -33,8 +33,8 @@ import java.util.List;
 public class ServerConfigurationUtils {
     private static final StrSubstitutor STRING_SUB = new StrSubstitutor(System.getenv());
 
-    public static AppServerConfiguration generateDefault() {
-        AppServerConfiguration appServerConfiguration = new AppServerConfiguration();
+    public static ApplicationServerConfiguration generateDefault() {
+        ApplicationServerConfiguration appServerConfiguration = new ApplicationServerConfiguration();
         appServerConfiguration.setClassLoaderEnvironments(prepareClassLoaderEnv());
         appServerConfiguration.setSingleSignOnConfiguration(prepareSSOConfigs());
         appServerConfiguration.setStatsPublisherConfiguration(prepareStatsPublishingConfigs());
@@ -116,7 +116,7 @@ public class ServerConfigurationUtils {
         return configuration;
     }
 
-    public static boolean compare(AppServerConfiguration actual, AppServerConfiguration expected) {
+    public static boolean compare(ApplicationServerConfiguration actual, ApplicationServerConfiguration expected) {
         boolean classloading = compareClassloadingConfigurations(actual.getClassLoaderEnvironments(),
                 expected.getClassLoaderEnvironments());
         boolean sso = compareSSOConfigurations(actual.getSingleSignOnConfiguration(),
