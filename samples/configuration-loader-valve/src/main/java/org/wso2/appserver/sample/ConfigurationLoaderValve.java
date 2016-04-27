@@ -33,11 +33,12 @@ public class ConfigurationLoaderValve extends ValveBase {
         Optional<AppServerWebAppConfiguration> expectedWebAppConfiguration = ContextConfigurationLoader.
                 getContextConfiguration(request.getContext());
         AppServerWebAppConfiguration actualWebAppConfiguration = ContextConfigurationUtils.prepareDefault();
-        expectedWebAppConfiguration.ifPresent(configuration -> {
-            boolean isContextConfigurationUniform = ContextConfigurationUtils.
-                    compare(actualWebAppConfiguration, configuration);
-            request.setAttribute("isContextConfigurationUniform", isContextConfigurationUniform);
-        });
+        expectedWebAppConfiguration
+                .ifPresent(configuration -> {
+                    boolean isContextConfigurationUniform = ContextConfigurationUtils.
+                            compare(actualWebAppConfiguration, configuration);
+                    request.setAttribute("isContextConfigurationUniform", isContextConfigurationUniform);
+                });
 
         getNext().invoke(request, response);
     }

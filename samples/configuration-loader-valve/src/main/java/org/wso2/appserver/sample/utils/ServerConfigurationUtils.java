@@ -53,9 +53,11 @@ public class ServerConfigurationUtils {
         List<ClassLoaderEnvironments.Environment> envList = new ArrayList<>();
         envList.add(cxf);
 
-        envList.forEach(environment -> environment.setClasspath(STRING_SUB.replace(environment.getClasspath())));
-        envList.forEach(environment -> environment.
-                setClasspath(StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
+        envList
+                .forEach(environment -> environment.setClasspath(STRING_SUB.replace(environment.getClasspath())));
+        envList
+                .forEach(environment -> environment.
+                        setClasspath(StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
 
         ClassLoaderEnvironments.Environments environments = new ClassLoaderEnvironments.Environments();
         environments.setEnvironments(envList);
@@ -131,11 +133,14 @@ public class ServerConfigurationUtils {
     private static boolean compareClassloadingConfigurations(ClassLoaderEnvironments actual,
             ClassLoaderEnvironments expected) {
         if ((actual != null) && (expected != null)) {
-            return actual.getEnvironments().getEnvironments().stream().
-                    filter(env -> expected.getEnvironments().getEnvironments().stream().
-                            filter(expectedEnv -> (expectedEnv.getName().equals(env.getName().trim()) && expectedEnv.
-                                    getClasspath().equals(env.getClasspath().trim()))).count() == 1).
-                    count() == expected.getEnvironments().getEnvironments().size();
+            return actual.getEnvironments().getEnvironments()
+                    .stream()
+                    .filter(env -> expected.getEnvironments().getEnvironments()
+                            .stream()
+                            .filter(expectedEnv -> (expectedEnv.getName().equals(env.getName().trim()) && expectedEnv.
+                                    getClasspath().equals(env.getClasspath().trim())))
+                            .count() == 1)
+                    .count() == expected.getEnvironments().getEnvironments().size();
         } else {
             return (actual == null) && (expected == null);
         }
@@ -158,9 +163,15 @@ public class ServerConfigurationUtils {
     private static boolean compareSSOProperties(List<SSOConfiguration.Property> actual,
             List<SSOConfiguration.Property> expected) {
         if ((actual != null) && (expected != null)) {
-            return actual.stream().filter(property -> expected.stream().
-                    filter(expProperty -> ((expProperty.getKey().equals(property.getKey())) && (expProperty.getValue().
-                            equals(property.getValue())))).count() > 0).count() == expected.size();
+            return actual
+                    .stream()
+                    .filter(property -> expected
+                            .stream()
+                            .filter(expProperty -> ((expProperty.getKey().equals(property.getKey())) && (expProperty.
+                                    getValue().
+                                            equals(property.getValue()))))
+                            .count() > 0)
+                    .count() == expected.size();
         } else {
             return (actual == null) && (expected == null);
         }
