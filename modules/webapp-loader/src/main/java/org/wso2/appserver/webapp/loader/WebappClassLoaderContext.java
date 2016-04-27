@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
+import org.wso2.appserver.configuration.context.WebAppClassLoading;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.AppServerClassLoading;
@@ -78,7 +78,7 @@ public class WebappClassLoaderContext {
      */
     public WebappClassLoaderContext(Context context) {
         ContextConfigurationLoader.getContextConfiguration(context).ifPresent(configuration -> {
-            ClassLoaderConfiguration classLoaderConfiguration = configuration.getClassLoaderConfiguration();
+            WebAppClassLoading classLoaderConfiguration = configuration.getClassLoaderConfiguration();
 
             if (classLoaderConfiguration != null && classLoaderConfiguration.getEnvironments() != null) {
                 List<String> environmentNames = Arrays
