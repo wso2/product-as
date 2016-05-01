@@ -71,7 +71,7 @@ public final class Constants {
     /**
      * Web application specific resource folder identifier.
      */
-    public static final String WEBAPP_RESOURCE_FOLDER = "WEB-INF";
+    public static final String WEB_CONTAINER_RESOURCE_FOLDER = "META-INF";
 
     /**
      * Prevents instantiating this class.
