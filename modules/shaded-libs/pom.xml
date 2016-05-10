@@ -20,7 +20,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <artifactId>shade-libs</artifactId>
+    <artifactId>shaded-libs</artifactId>
 
     <modules>
         <module>slf4j</module>

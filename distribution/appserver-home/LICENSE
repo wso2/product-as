@@ -54,7 +54,7 @@ jaxb-core-2.2.11.jar                                                            
 jaxb-impl-2.2.11.jar                                                            cddl+gpl
 json-1.0.0.wso2v1.jar                                                           apache2
 jsp-api.jar                                                                     apache2
-libthrift-0.8.0.wso2v1.jar                                                      apache2
+libthrift-shaded-0.9.3.wso2v1.jar                                               apache2
 log4j-1.2.17.jar                                                                apache2
 log4j-1.2.17.wso2v1.jar                                                         apache2
 neethi-3.0.3.jar                                                                apache2
@@ -64,8 +64,7 @@ org.wso2.carbon.databridge.commons.binary-5.0.8.jar                             
 org.wso2.carbon.databridge.commons.thrift-5.0.8.jar                             apache2
 org.wso2.carbon.logging-4.4.3.jar                                               apache2
 servlet-api.jar                                                                 apache2
-slf4j-1.5.10.wso2v1.jar                                                         mit
-slf4j-api-1.7.12.jar                                                            mit
+slf4j-shaded-1.7.21.wso2v1.jar                                                  mit
 spring-aop-4.2.5.RELEASE.jar                                                    apache2
 spring-beans-4.2.5.RELEASE.jar                                                  apache2
 spring-context-4.2.5.RELEASE.jar                                                apache2
