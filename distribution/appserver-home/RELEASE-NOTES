@@ -17,7 +17,7 @@
 ================================================================================
 
 
-                     WSO2 Application Server 6.0.0-M1
+                     WSO2 Application Server 6.0.0-M2
                             Release Notes
 
 Welcome to WSO2 Application Server, the successor of WSO2 Carbon based
@@ -42,13 +42,13 @@ KEY FEATURES:
 =============
 FIXED ISSUES:
 =============
-https://wso2.org/jira/browse/WSAS-2202?filter=13011
+https://wso2.org/jira/browse/WSAS-2194?filter=13061
 
 
 =============
 KNOWN ISSUES:
 =============
-https://wso2.org/jira/browse/WSAS-2202?filter=13012
+https://wso2.org/jira/browse/WSAS-2237?filter=13062
 
 
 =================

@@ -15,7 +15,7 @@ Name                                                                            
 ------------------------------------------------------------------------------------------
 annotations-api.jar                                                             apache2
 aopalliance-1.0.jar                                                             apache2
-appserver-utils-6.0.0-m1.jar                                                    apache2
+appserver-utils-6.0.0-m2.jar                                                    apache2
 asm-5.0.4.jar                                                                   bsd
 bootstrap.jar                                                                   apache2
 catalina-ant.jar                                                                apache2
@@ -44,7 +44,7 @@ disruptor-3.3.2.wso2v2.jar                                                      
 ecj-4.4.2.jar                                                                   epl1
 el-api.jar                                                                      apache2
 gson-2.3.1.jar                                                                  apache2
-appserver-http-statistics-monitoring-6.0.0-m1.jar                               apache2
+appserver-http-statistics-monitoring-6.0.0-m2.jar                               apache2
 httpclient-4.3.1.wso2v2.jar                                                     apache2
 jasper-el.jar                                                                   apache2
 jasper.jar                                                                      apache2
@@ -54,7 +54,7 @@ jaxb-core-2.2.11.jar                                                            
 jaxb-impl-2.2.11.jar                                                            cddl+gpl
 json-1.0.0.wso2v1.jar                                                           apache2
 jsp-api.jar                                                                     apache2
-libthrift-0.8.0.wso2v1.jar                                                      apache2
+libthrift-shaded-0.9.3.wso2v1.jar                                               apache2
 log4j-1.2.17.jar                                                                apache2
 log4j-1.2.17.wso2v1.jar                                                         apache2
 neethi-3.0.3.jar                                                                apache2
@@ -64,8 +64,7 @@ org.wso2.carbon.databridge.commons.binary-5.0.8.jar                             
 org.wso2.carbon.databridge.commons.thrift-5.0.8.jar                             apache2
 org.wso2.carbon.logging-4.4.3.jar                                               apache2
 servlet-api.jar                                                                 apache2
-slf4j-1.5.10.wso2v1.jar                                                         mit
-slf4j-api-1.7.12.jar                                                            mit
+slf4j-shaded-1.7.21.wso2v1.jar                                                  mit
 spring-aop-4.2.5.RELEASE.jar                                                    apache2
 spring-beans-4.2.5.RELEASE.jar                                                  apache2
 spring-context-4.2.5.RELEASE.jar                                                apache2
@@ -88,7 +87,7 @@ tomcat-juli.jar                                                                 
 tomcat-util-scan.jar                                                            apache2
 tomcat-util.jar                                                                 apache2
 tomcat-websocket.jar                                                            apache2
-appserver-webapp-loader-6.0.0-m1.jar                                            apache2
+appserver-webapp-loader-6.0.0-m2.jar                                            apache2
 websocket-api.jar                                                               apache2
 woodstox-core-asl-4.4.1.jar                                                     apache2
 wsdl4j-1.6.3.jar                                                                epl1

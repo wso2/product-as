@@ -360,6 +360,18 @@
                 <version>${appserver.version}</version>
             </dependency>
 
+            <!-- Shaded Dependency Modules -->
+            <dependency>
+                <groupId>org.wso2.shade.slf4j</groupId>
+                <artifactId>slf4j-shaded</artifactId>
+                <version>${slf4j.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.shade.org.apache.thrift</groupId>
+                <artifactId>libthrift-shaded</artifactId>
+                <version>${libthrift.shade.version}</version>
+            </dependency>
+
             <!-- WSO2 Application Server Tests -->
             <dependency>
                 <groupId>org.testng</groupId>
@@ -527,8 +539,11 @@
         <uaparser.version>1.3.0.wso2v1</uaparser.version>
         <xerces.xerces.version>2.4.0</xerces.xerces.version>
         <xerces.xercesImpl.version>2.11.0</xerces.xercesImpl.version>
-        <libthrift.version>0.9.3</libthrift.version>
         <commons-pool.version>1.5.7</commons-pool.version>
+        <libthrift.version>0.9.3</libthrift.version>
+        <libthrift.shade.version>0.9.3.wso2v1</libthrift.shade.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <slf4j.shade.version>1.7.21.wso2v1</slf4j.shade.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>

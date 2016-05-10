@@ -109,6 +109,16 @@
             <artifactId>appserver-webapp-loader</artifactId>
         </dependency>
 
+        <!-- WSO2 Application Server shaded libraries -->
+        <dependency>
+            <groupId>org.wso2.shade.slf4j</groupId>
+            <artifactId>slf4j-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.shade.org.apache.thrift</groupId>
+            <artifactId>libthrift-shaded</artifactId>
+        </dependency>
+
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
@@ -175,20 +185,12 @@
             <artifactId>org.wso2.carbon.logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.thrift</groupId>
-            <artifactId>libthrift</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-pool</groupId>
             <artifactId>commons-pool</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.lmax</groupId>
