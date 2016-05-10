@@ -22,7 +22,7 @@
     <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver</artifactId>
     <packaging>pom</packaging>
-    <version>6.0.0-m2</version>
+    <version>6.0.0-SNAPSHOT</version>
     <name>WSO2 Application Server - Parent</name>
     <description>WSO2 Application Server Parent Pom</description>
     <url>http://wso2.com</url>
@@ -497,7 +497,7 @@
         <url>https://github.com/wso2/product-as.git</url>
         <developerConnection>scm:git:https://github.com/wso2/product-as.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/product-as.git</connection>
-        <tag>v6.0.0-m2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
@@ -505,7 +505,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- WSO2 Application Server version -->
-        <appserver.version>6.0.0-m2</appserver.version>
+        <appserver.version>6.0.0-SNAPSHOT</appserver.version>
         <!-- WSO2 Application Server distribution identifier -->
         <distribution.file.name>wso2as-${project.version}</distribution.file.name>
 
@@ -541,9 +541,9 @@
         <xerces.xercesImpl.version>2.11.0</xerces.xercesImpl.version>
         <commons-pool.version>1.5.7</commons-pool.version>
         <libthrift.version>0.9.3</libthrift.version>
-        <libthrift.shade.version>0.9.3.wso2v1-m2</libthrift.shade.version>
+        <libthrift.shade.version>0.9.4.wso2v1-SNAPSHOT</libthrift.shade.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <slf4j.shade.version>1.7.21.wso2v1-m2</slf4j.shade.version>
+        <slf4j.shade.version>1.7.22.wso2v1-SNAPSHOT</slf4j.shade.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>
