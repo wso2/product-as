@@ -15,13 +15,13 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>shaded-libs</artifactId>
-        <version>6.0.0-SNAPSHOT</version>
+        <version>6.0.0-m2</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.slf4j</groupId>
     <artifactId>slf4j-shaded</artifactId>
-    <version>${slf4j.shade.version}</version>
+    <version>1.7.21.wso2v1-m2</version>
 
     <dependencies>
         <dependency>
