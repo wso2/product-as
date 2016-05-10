@@ -111,11 +111,11 @@
 
         <!-- WSO2 Application Server shaded libraries -->
         <dependency>
-            <groupId>org.wso2.shade.slf4j</groupId>
+            <groupId>org.wso2.appserver.shade.slf4j</groupId>
             <artifactId>slf4j-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.shade.org.apache.thrift</groupId>
+            <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
             <artifactId>libthrift-shaded</artifactId>
         </dependency>
 

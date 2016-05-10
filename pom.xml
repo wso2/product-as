@@ -362,12 +362,12 @@
 
             <!-- Shaded Dependency Modules -->
             <dependency>
-                <groupId>org.wso2.shade.slf4j</groupId>
+                <groupId>org.wso2.appserver.shade.slf4j</groupId>
                 <artifactId>slf4j-shaded</artifactId>
                 <version>${slf4j.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.shade.org.apache.thrift</groupId>
+                <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
                 <artifactId>libthrift-shaded</artifactId>
                 <version>${libthrift.shade.version}</version>
             </dependency>

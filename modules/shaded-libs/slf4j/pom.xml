@@ -19,7 +19,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.shade.slf4j</groupId>
+    <groupId>org.wso2.appserver.shade.slf4j</groupId>
     <artifactId>slf4j-shaded</artifactId>
     <version>${slf4j.shade.version}</version>
 

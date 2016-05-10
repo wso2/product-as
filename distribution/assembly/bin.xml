@@ -55,8 +55,8 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
-                <include>org.wso2.shade.org.apache.thrift:libthrift-shaded:jar</include>
-                <include>org.wso2.shade.slf4j:slf4j-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.apache.thrift:libthrift-shaded:jar</include>
+                <include>org.wso2.appserver.shade.slf4j:slf4j-shaded:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
