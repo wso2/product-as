@@ -56,7 +56,6 @@ public class WebAppDescriptorStopAndStartTestCase extends WebAppDescriptorTestBa
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
-        //sampleAppDirectory = SAMPLE_APP_LOCATION + File.separator + "stop-start";
         sampleAppDirectory = Paths.get(SAMPLE_APP_LOCATION ,"stop-start").toString();
         super.init();
     }
@@ -105,10 +104,10 @@ public class WebAppDescriptorStopAndStartTestCase extends WebAppDescriptorTestBa
             description = "Invoke web application after stopping and starting",
             dependsOnMethods = "testWebApplicationStart")
     public void testInvokeWebApp() throws AutomationFrameworkException {
-        testForEnvironment(true,"Tomcat");
-        testForEnvironment(true,"Carbon");
-        testForEnvironment(true,"CXF");
-        testForEnvironment(true,"Spring");
+        testForEnvironment(true, "Tomcat");
+        testForEnvironment(true, "Carbon");
+        testForEnvironment(true, "CXF");
+        testForEnvironment(true, "Spring");
     }
 
     @AfterClass(alwaysRun = true)

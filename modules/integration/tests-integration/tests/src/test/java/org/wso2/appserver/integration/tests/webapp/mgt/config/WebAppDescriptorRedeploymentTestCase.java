@@ -80,7 +80,7 @@ public class WebAppDescriptorRedeploymentTestCase extends WebAppDescriptorTestBa
         testForEnvironment(false, "Spring");
     }
 
-    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })//TODO: verify
+    @SetEnvironment(executionEnvironments = { ExecutionEnvironment.STANDALONE })
     @Test(groups = "wso2.as",
             description = "Deploying exploded web application" + " file to deployment directory",
             dependsOnMethods = "testInvokeWebAppBeforeReload")
