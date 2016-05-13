@@ -15,18 +15,29 @@
 
 package org.wso2.appserver.integration.tests.logviewer;
 
+import org.apache.axis2.AxisFault;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.integration.common.clients.LogViewerClient;
 import org.wso2.appserver.integration.common.utils.ASIntegrationTest;
+import org.wso2.carbon.logging.view.stub.LogViewerException;
 import org.wso2.carbon.logging.view.stub.types.carbon.LogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogFileInfo;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import javax.activation.DataHandler;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * This class test the log viewer feature in the super tenant domain
@@ -75,6 +86,37 @@ public class LogViewerTestCase extends ASIntegrationTest {
         PaginatedLogFileInfo logFileInfo = logViewerClient.getLocalLogFiles(0, "", "");
         assertEquals(logFileInfo.getLogFileInfo()[0].getLogDate(), "0_Current Log",
                      "Unexpected log date was returned.");
+    }
+
+    @Test(groups = "wso2.as", description = "Download archived logfile")
+    public void testDownloadArchivedLogFiles() throws Exception {
+        String logFileContent = downloadLogFile("wso2carbon.log");
+        Assert.assertTrue(logFileContent.contains("@carbon.super [-1234]' logged in at"),
+                "Downloaded log file does not contain required logged event");
+    }
+
+    @Test(groups = "wso2.as", description = "Download non existing file")
+    public void testDownloadArchivedLogFilesErrorCase1() throws Exception {
+        try {
+            downloadLogFile("anyfile");
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof AxisFault && e.getMessage().contains("Error getting the file input stream"));
+        }
+    }
+
+    @Test(groups = "wso2.as", description = "Download path traversed file")
+    public void testDownloadArchivedLogFilesErrorCase2() throws Exception {
+        try {
+            downloadLogFile("../../repository/conf/registry.xml");
+        } catch (Exception e) {
+            Assert.assertTrue(e instanceof AxisFault && e.getMessage().contains("Error getting the file input stream"));
+        }
+    }
+    private String downloadLogFile(String logFileName) throws LogViewerException, IOException {
+        LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
+        DataHandler logFileDataHandler = logViewerClient.downloadArchivedLogFiles(logFileName, "", "");
+        InputStream logFileInputStream = logFileDataHandler.getInputStream();
+        return IOUtils.toString(logFileInputStream);
     }
 
 }

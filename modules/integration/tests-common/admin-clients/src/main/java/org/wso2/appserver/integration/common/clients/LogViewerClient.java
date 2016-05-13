@@ -23,6 +23,7 @@ import org.wso2.carbon.logging.view.stub.LogViewerStub;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogEvent;
 import org.wso2.carbon.logging.view.stub.types.carbon.PaginatedLogFileInfo;
 
+import javax.activation.DataHandler;
 import java.rmi.RemoteException;
 
 /**
@@ -52,16 +53,11 @@ public class LogViewerClient {
     /**
      * Return log events of the given page (as a collection of loginfo)
      *
-     * @param pageNumber
-     *         - page number
-     * @param type
-     *         - type of the log
-     * @param keyword
-     *         - keyword to search
-     * @param tenantDomain
-     *         - tenant domain
-     * @param serverKey
-     *         - server key
+     * @param pageNumber   - page number
+     * @param type         - type of the log
+     * @param keyword      - keyword to search
+     * @param tenantDomain - tenant domain
+     * @param serverKey    - server key
      * @return - a paginated log event of the requested page
      * @throws RemoteException
      * @throws LogViewerLogViewerException
@@ -70,7 +66,7 @@ public class LogViewerClient {
                                                    String tenantDomain, String serverKey)
             throws RemoteException, LogViewerLogViewerException {
         String errorMsg = "Error occurred while getting paginated log events. Backend service may" +
-                          " be unavailable";
+                " be unavailable";
         try {
             return logViewerStub
                     .getPaginatedLogEvents(pageNumber, type, keyword, tenantDomain, serverKey);
@@ -86,12 +82,9 @@ public class LogViewerClient {
     /**
      * Return a paginated collection of local log file information
      *
-     * @param pageNumber
-     *         - page number
-     * @param tenantDomain
-     *         - tenant domain
-     * @param serverKey
-     *         - server key
+     * @param pageNumber   - page number
+     * @param tenantDomain - tenant domain
+     * @param serverKey    - server key
      * @return - a paginated log file information
      * @throws RemoteException
      * @throws LogViewerLogViewerException
@@ -101,7 +94,7 @@ public class LogViewerClient {
             throws RemoteException, LogViewerLogViewerException {
 
         String errorMsg = "Error occurred while getting local log files. Backend service may be " +
-                          "unavailable";
+                "unavailable";
         try {
             return logViewerStub.getLocalLogFiles(pageNumber, tenantDomain, serverKey);
         } catch (RemoteException e) {
@@ -117,18 +110,12 @@ public class LogViewerClient {
     /**
      * Get a paginated log info collection per application
      *
-     * @param pageNumber
-     *         - page number
-     * @param type
-     *         - type of the log
-     * @param keyword
-     *         - keyword to search
-     * @param appName
-     *         - application name
-     * @param tenantDomain
-     *         - tenant domain
-     * @param serverKey
-     *         - server key
+     * @param pageNumber   - page number
+     * @param type         - type of the log
+     * @param keyword      - keyword to search
+     * @param appName      - application name
+     * @param tenantDomain - tenant domain
+     * @param serverKey    - server key
      * @return - a paginated log info collection
      * @throws RemoteException
      * @throws LogViewerException
@@ -138,10 +125,35 @@ public class LogViewerClient {
                                                               String tenantDomain, String serverKey)
             throws RemoteException, LogViewerException {
         String errorMsg = "Error occurred while getting paginated application log events. Backend" +
-                          "service may be unavailable";
+                "service may be unavailable";
         try {
             return logViewerStub.getPaginatedApplicationLogEvents(pageNumber, type, keyword,
-                                                                  appName, tenantDomain, serverKey);
+                    appName, tenantDomain, serverKey);
+        } catch (RemoteException e) {
+            log.error(errorMsg, e);
+            throw e;
+        } catch (LogViewerException e) {
+            log.error(errorMsg, e);
+            throw e;
+        }
+    }
+
+    /**
+     * Download archived log files from backend.
+     *
+     * @param logFileName name of the log file to download
+     * @param tenantDomain tenant domain
+     * @param serverKey server key
+     * @return DataHandler object of the downloaded file
+     * @throws RemoteException
+     * @throws LogViewerException
+     */
+    public DataHandler downloadArchivedLogFiles(String logFileName, String tenantDomain, String serverKey)
+            throws RemoteException, LogViewerException {
+        String errorMsg = "Error occurred while downloading archived log files from backend";
+
+        try {
+            return logViewerStub.downloadArchivedLogFiles(logFileName, tenantDomain, serverKey);
         } catch (RemoteException e) {
             log.error(errorMsg, e);
             throw e;
