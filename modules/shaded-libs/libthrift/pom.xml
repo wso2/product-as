@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
     <artifactId>libthrift-shaded</artifactId>
-    <version>${libthrift.shade.version}</version>
+    <version>0.9.4.wso2v1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>

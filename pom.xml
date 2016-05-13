@@ -541,9 +541,9 @@
         <xerces.xercesImpl.version>2.11.0</xerces.xercesImpl.version>
         <commons-pool.version>1.5.7</commons-pool.version>
         <libthrift.version>0.9.3</libthrift.version>
-        <libthrift.shade.version>0.9.3.wso2v1-SNAPSHOT</libthrift.shade.version>
+        <libthrift.shade.version>0.9.4.wso2v1-SNAPSHOT</libthrift.shade.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <slf4j.shade.version>1.7.21.wso2v1-SNAPSHOT</slf4j.shade.version>
+        <slf4j.shade.version>1.7.22.wso2v1-SNAPSHOT</slf4j.shade.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>
