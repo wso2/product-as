@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-public class StatsPublisherConfiguration {
+public class AppServerStatsPublishing {
     @XmlElement(name = "Username")
     private String username;
     @XmlElement(name = "Password")

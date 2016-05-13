@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-public class SecurityConfiguration {
+public class AppServerSecurity {
     @XmlElement(name = "KeyStore")
     private Keystore keystore;
     @XmlElement(name = "TrustStore")
