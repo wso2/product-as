@@ -39,6 +39,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+/**
+ * This class is the Server Status Hook used for class loading tests.
+ *
+ * @since 6.0.0
+ */
 public class ClassLoaderEnvironmentWriterHook implements ServerStatusHook {
 
     String originalRuntimePath = "";
