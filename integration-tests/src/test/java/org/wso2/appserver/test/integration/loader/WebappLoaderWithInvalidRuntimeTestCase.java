@@ -28,22 +28,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * This sample test class demonstrate how to write a test cases which runs on integration test phase.
- * <p>
- * Every class that requires run in integration test phase should have prefix of <strong>IT</strong>.
+ * This test case sets an invalid runtime and checks whether the jaxrs_basic sample webapp can be invoked.
  *
  * @since 6.0.0
  */
-public class WebappLoaderFailingRuntimePath extends TestBase {
+public class WebappLoaderWithInvalidRuntimeTestCase extends TestBase {
 
-    @Test(description = "Checks if the server is no running")
+    @Test(description = "test whether the jaxrs_basic webapp can be invoked with an invalid runtime configuration")
     public void testEnvironmentConfiguration() throws IOException {
         URL requestUrl = new URL(getBaseUrl() + "/jaxrs_basic/services/customerservice/customers/123/");
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
 
         int responseCode = connection.getResponseCode();
-        Assert.assertNotEquals(responseCode, 200, "Check Server Response Code is not equals to 200");
+        Assert.assertNotEquals(responseCode, 200, "Invalid runtime configuration doesn't affect the jaxrs_basic " +
+                "webapp, custom runtime environments configuration doesn't seem to work properly.");
 
     }
 }

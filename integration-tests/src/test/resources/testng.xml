@@ -36,7 +36,7 @@ limitations under the License.
         <parameter name="server-status-hook"
                    value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>
         <classes>
-            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderFailingRuntimePath"/>
+            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderWithInvalidRuntimeTestCase"/>
         </classes>
     </test>
 </suite>
