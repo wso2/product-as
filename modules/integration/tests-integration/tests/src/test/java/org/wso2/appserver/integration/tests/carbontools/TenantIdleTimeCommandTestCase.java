@@ -71,21 +71,8 @@ public class TenantIdleTimeCommandTestCase extends ASIntegrationTest {
 
     @Test(groups = "wso2.as", description = "Clean tenants after idle time")
     public void testTenantIdleTime() throws Exception {
-
-       /* AutomationContext context =
-                new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
-                                      ASIntegrationConstants.AS_INSTANCE_0002,
-                                      ContextXpathConstants.SUPER_TENANT,
-                                      ContextXpathConstants.ADMIN);
-*/
         LoginLogoutClient loginLogoutClient = new LoginLogoutClient(context);
         String sessionCookie = loginLogoutClient.login();
-
-        /*AutomationContext contextUser =
-                new AutomationContext(ASIntegrationConstants.AS_PRODUCT_GROUP,
-                                      ASIntegrationConstants.AS_INSTANCE_0002,
-                                      ContextXpathConstants.SUPER_TENANT,
-                                      "userKey1");*/
 
         LoginLogoutClient loginLogoutClientUser = new LoginLogoutClient(contextUser);
         loginLogoutClientUser.login();
