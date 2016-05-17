@@ -20,8 +20,8 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Server;
 import org.wso2.appserver.Constants;
-import org.wso2.appserver.configuration.server.AppServerConfiguration;
-import org.wso2.appserver.configuration.server.SecurityConfiguration;
+import org.wso2.appserver.configuration.server.AppServerSecurity;
+import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 import org.wso2.appserver.exceptions.ApplicationServerRuntimeException;
 import org.wso2.appserver.utils.PathUtils;
@@ -36,7 +36,7 @@ import java.util.Optional;
  * @since 6.0.0
  */
 public class ServerConfigurationLoader implements LifecycleListener {
-    private static AppServerConfiguration appServerConfiguration;
+    private static ApplicationServerConfiguration appServerConfiguration;
 
     /**
      * Retrieves the WSO2 specific, server level configurations from the configurations file before server startup
@@ -57,7 +57,7 @@ public class ServerConfigurationLoader implements LifecycleListener {
         }
     }
 
-    public static AppServerConfiguration getServerConfiguration() {
+    public static ApplicationServerConfiguration getServerConfiguration() {
         return appServerConfiguration;
     }
 
@@ -69,8 +69,8 @@ public class ServerConfigurationLoader implements LifecycleListener {
                 Path descriptorPath = Paths.
                         get(PathUtils.getAppServerConfigurationBase().toString(), Constants.APP_SERVER_DESCRIPTOR);
                 appServerConfiguration = Utils.
-                        getUnmarshalledObject(descriptorPath, schemaPath, AppServerConfiguration.class);
-                Optional.ofNullable(appServerConfiguration).ifPresent(AppServerConfiguration::resolveVariables);
+                        getUnmarshalledObject(descriptorPath, schemaPath, ApplicationServerConfiguration.class);
+                Optional.ofNullable(appServerConfiguration).ifPresent(ApplicationServerConfiguration::resolveVariables);
                 setSecuritySystemProperties();
             }
         } catch (ApplicationServerException e) {
@@ -84,7 +84,7 @@ public class ServerConfigurationLoader implements LifecycleListener {
      */
     private static void setSecuritySystemProperties() {
         Optional.ofNullable(appServerConfiguration).ifPresent(configuration -> {
-            SecurityConfiguration securityConfiguration = configuration.getSecurityConfiguration();
+            AppServerSecurity securityConfiguration = configuration.getSecurityConfiguration();
 
             System.setProperty("javax.net.ssl.keyStore",
                     securityConfiguration.getKeystore().getLocation().replace("\\", "/"));

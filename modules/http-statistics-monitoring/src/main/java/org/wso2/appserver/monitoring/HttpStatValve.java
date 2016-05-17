@@ -24,7 +24,7 @@ import org.apache.catalina.valves.ValveBase;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
-import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
+import org.wso2.appserver.configuration.server.AppServerStatsPublishing;
 import org.wso2.appserver.monitoring.exceptions.StatPublisherException;
 import org.wso2.appserver.monitoring.utils.EventBuilder;
 import org.wso2.appserver.utils.PathUtils;
@@ -51,7 +51,7 @@ import javax.servlet.ServletException;
 public class HttpStatValve extends ValveBase {
     private static final Log LOG = LogFactory.getLog(HttpStatValve.class);
     private DataPublisher dataPublisher;
-    private StatsPublisherConfiguration statsPublisherConfiguration;
+    private AppServerStatsPublishing statsPublisherConfiguration;
 
     @Override
     protected void initInternal() throws LifecycleException {

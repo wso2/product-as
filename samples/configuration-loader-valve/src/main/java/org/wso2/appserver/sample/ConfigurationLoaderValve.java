@@ -6,7 +6,7 @@ import org.apache.catalina.valves.ValveBase;
 import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
-import org.wso2.appserver.configuration.server.AppServerConfiguration;
+import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
 import org.wso2.appserver.sample.utils.ContextConfigurationUtils;
 import org.wso2.appserver.sample.utils.ServerConfigurationUtils;
 
@@ -24,8 +24,8 @@ import javax.servlet.ServletException;
 public class ConfigurationLoaderValve extends ValveBase {
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
-        AppServerConfiguration expectedServerConfiguration = ServerConfigurationUtils.generateDefault();
-        AppServerConfiguration actualServerConfiguration = ServerConfigurationLoader.getServerConfiguration();
+        ApplicationServerConfiguration expectedServerConfiguration = ServerConfigurationUtils.generateDefault();
+        ApplicationServerConfiguration actualServerConfiguration = ServerConfigurationLoader.getServerConfiguration();
         boolean isServerConfigurationUniform = ServerConfigurationUtils.
                 compare(actualServerConfiguration, expectedServerConfiguration);
         request.setAttribute("isServerConfigurationUniform", isServerConfigurationUniform);

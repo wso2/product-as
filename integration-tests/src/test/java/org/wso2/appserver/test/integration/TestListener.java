@@ -1,26 +1,27 @@
 /*
- *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
- *  WSO2 Inc. licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License.
- *  You may obtain a copy of the License at
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.wso2.appserver.test.integration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.ISuite;
-import org.testng.ISuiteListener;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -50,23 +51,40 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+
 /**
  * The test suite listeners class provides the environment setup for the integration test.
  *
  * @since 6.0.0
  */
-public class TestSuiteListener implements ISuiteListener {
-    private static final Logger log = LoggerFactory.getLogger(TestSuiteListener.class);
+public class TestListener implements ITestListener {
+    private static final Logger log = LoggerFactory.getLogger(TestListener.class);
 
     private int serverStartCheckTimeout;
     private File appserverHome;
     private int applicationServerPort;
     private boolean isSuccessServerStartup;
     private ApplicationServerProcessHandler processHandler;
+    private ServerStatusHook serverStatusHook;
+    private boolean isSuccessTermination = false;
 
     @Override
-    public void onStart(ISuite iSuite) {
+    public void onStart(ITestContext iTestContext) {
+
         try {
+            log.info("Starting test: " + iTestContext.getName());
+            String hookClassName = iTestContext.getCurrentXmlTest().getParameter("server-status-hook");
+            if (hookClassName != null) {
+                Class<?> clazz = Class.forName(hookClassName);
+                Object hookObject = clazz.newInstance();
+
+                if (hookObject instanceof ServerStatusHook) {
+                    serverStatusHook = (ServerStatusHook) hookObject;
+                } else {
+                    log.info("Class: " + clazz.getName() + " must implement the ServerStatusHook interface.");
+                }
+            }
+
             log.info("Starting pre-integration test setup...");
 
             appserverHome = new File(System.getProperty(TestConstants.APPSERVER_HOME));
@@ -102,6 +120,11 @@ public class TestSuiteListener implements ISuiteListener {
 
             log.info(processHandler.getOperatingSystem() + " operating system was detected");
             log.info("Jacoco argLine: " + processHandler.getJacocoArgLine());
+
+            if (serverStatusHook != null) {
+                serverStatusHook.beforeServerStart();
+            }
+
             log.info("Starting the server [{}:{}, {}:{}, {}:{}] ...",
                     TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
                     TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort,
@@ -115,31 +138,70 @@ public class TestSuiteListener implements ISuiteListener {
                 log.info("Application server started successfully. Running test suite...");
             }
 
+            if (serverStatusHook != null) {
+                serverStatusHook.afterServerStart();
+            }
 
-        } catch (IOException | TransformerException | SAXException | ParserConfigurationException |
-                XPathExpressionException  ex) {
+        } catch (Exception ex) {
             String message = "Could not start the server process";
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
-
     }
+
+    @Override
+    public void onFinish(ITestContext iTestContext) {
+        log.info("Starting post-integration tasks...");
+        if (serverStatusHook != null) {
+            try {
+                serverStatusHook.beforeServerShutdown();
+            } catch (Exception ignore) {
+            }
+        }
+        log.info("Terminating the Application server");
+        processHandler.stopServer();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ignore) {
+        }
+        if (serverStatusHook != null) {
+            try {
+                serverStatusHook.afterServerShutdown();
+            } catch (Exception ignore) {
+            }
+        }
+        log.info("Finished the post-integration tasks...");
+        log.info("Finished test: " + iTestContext.getName());
+        isSuccessTermination = true;
+    }
+
 
     private void registerShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                processHandler.stopServer();
+                if (!isSuccessTermination) {
+                    if (serverStatusHook != null) {
+                        try {
+                            serverStatusHook.beforeServerShutdown();
+                        } catch (Exception ignore) {
+                        }
+                    }
+                    processHandler.stopServer();
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException ignore) {
+                    }
+                    if (serverStatusHook != null) {
+                        try {
+                            serverStatusHook.afterServerShutdown();
+                        } catch (Exception ignore) {
+                        }
+                    }
+                }
             }
         });
     }
 
-    @Override
-    public void onFinish(ISuite iSuite) {
-        log.info("Starting post-integration tasks...");
-        log.info("Terminating the Application server");
-        processHandler.stopServer();
-        log.info("Finished the post-integration tasks...");
-    }
 
     private void waitForServerStartup() throws IOException {
         log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
@@ -235,5 +297,31 @@ public class TestSuiteListener implements ISuiteListener {
 
         Transformer xFormer = TransformerFactory.newInstance().newTransformer();
         xFormer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getAbsolutePath()));
+    }
+
+
+    @Override
+    public void onTestStart(ITestResult iTestResult) {
+
+    }
+
+    @Override
+    public void onTestSuccess(ITestResult iTestResult) {
+
+    }
+
+    @Override
+    public void onTestFailure(ITestResult iTestResult) {
+
+    }
+
+    @Override
+    public void onTestSkipped(ITestResult iTestResult) {
+
+    }
+
+    @Override
+    public void onTestFailedButWithinSuccessPercentage(ITestResult iTestResult) {
+
     }
 }

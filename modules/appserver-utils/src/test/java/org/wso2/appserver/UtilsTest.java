@@ -17,7 +17,7 @@ package org.wso2.appserver;
 
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.listeners.Utils;
-import org.wso2.appserver.configuration.server.AppServerConfiguration;
+import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
 import org.wso2.appserver.exceptions.ApplicationServerConfigurationException;
 import org.wso2.appserver.exceptions.ApplicationServerException;
 
@@ -37,14 +37,14 @@ public class UtilsTest {
             throws IOException, ApplicationServerConfigurationException {
         Path xmlSource = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR);
         Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.NON_EXISTENT_SCHEMA);
-        Utils.getUnmarshalledObject(xmlSource, xmlSchema, AppServerConfiguration.class);
+        Utils.getUnmarshalledObject(xmlSource, xmlSchema, ApplicationServerConfiguration.class);
     }
 
     @Test(description = "Uses an invalid XML schema file for validation",
             expectedExceptions = { ApplicationServerConfigurationException.class })
     public void testLoadingObjectWithInvalidSchema() throws IOException, ApplicationServerException {
         Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.INVALID_SCHEMA_FILE);
-        Utils.getXMLUnmarshaller(xmlSchema, AppServerConfiguration.class);
+        Utils.getXMLUnmarshaller(xmlSchema, ApplicationServerConfiguration.class);
     }
 
     @Test(description = "Attempts to load content from a file source with invalid XML syntax",
@@ -52,6 +52,6 @@ public class UtilsTest {
     public void testLoadingObjectFromInvalidFile() throws IOException, ApplicationServerException {
         Path xmlSource = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.INVALID_DESCRIPTOR);
         Path xmlSchema = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR_SCHEMA);
-        Utils.getUnmarshalledObject(xmlSource, xmlSchema, AppServerConfiguration.class);
+        Utils.getUnmarshalledObject(xmlSource, xmlSchema, ApplicationServerConfiguration.class);
     }
 }

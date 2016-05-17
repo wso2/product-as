@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-public class ClassLoaderEnvironments {
+public class AppServerClassLoading {
     @XmlElement(name = "Environments")
     private Environments environments;
 

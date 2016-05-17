@@ -16,9 +16,9 @@
 package org.wso2.appserver.sample.utils;
 
 import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
-import org.wso2.appserver.configuration.context.ClassLoaderConfiguration;
-import org.wso2.appserver.configuration.context.SSOConfiguration;
-import org.wso2.appserver.configuration.context.StatsPublisherConfiguration;
+import org.wso2.appserver.configuration.context.WebAppClassLoading;
+import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
+import org.wso2.appserver.configuration.context.WebAppStatsPublishing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +37,16 @@ public class ContextConfigurationUtils {
         return configuration;
     }
 
-    private static ClassLoaderConfiguration prepareClassLoaderConfiguration() {
-        ClassLoaderConfiguration classloading = new ClassLoaderConfiguration();
+    private static WebAppClassLoading prepareClassLoaderConfiguration() {
+        WebAppClassLoading classloading = new WebAppClassLoading();
         classloading.setEnvironments(Constants.SPRING_ENV_NAME);
         return classloading;
     }
 
-    private static SSOConfiguration prepareSSOConfiguration() {
-        SSOConfiguration ssoConfiguration = new SSOConfiguration();
+    private static WebAppSingleSignOn prepareSSOConfiguration() {
+        WebAppSingleSignOn ssoConfiguration = new WebAppSingleSignOn();
 
-        SSOConfiguration.SkipURIs skipURIs = new SSOConfiguration.SkipURIs();
+        WebAppSingleSignOn.SkipURIs skipURIs = new WebAppSingleSignOn.SkipURIs();
         List<String> uris = new ArrayList<>();
         uris.add(Constants.SKIP_URI);
         skipURIs.setSkipURIs(uris);
@@ -71,13 +71,13 @@ public class ContextConfigurationUtils {
         ssoConfiguration.enableForceAuthn(false);
         ssoConfiguration.enablePassiveAuthn(false);
 
-        SSOConfiguration.Property relayState = new SSOConfiguration.Property();
+        WebAppSingleSignOn.Property relayState = new WebAppSingleSignOn.Property();
         relayState.setKey(Constants.RELAY_STATE_KEY);
         relayState.setValue(Constants.RELAY_STATE_VALUE);
-        SSOConfiguration.Property loginURL = new SSOConfiguration.Property();
+        WebAppSingleSignOn.Property loginURL = new WebAppSingleSignOn.Property();
         loginURL.setKey(Constants.LOGIN_URL_KEY);
         loginURL.setValue(Constants.LOGIN_URL_VALUE);
-        List<SSOConfiguration.Property> properties = new ArrayList<>();
+        List<WebAppSingleSignOn.Property> properties = new ArrayList<>();
         properties.add(relayState);
         properties.add(loginURL);
         ssoConfiguration.setProperties(properties);
@@ -85,8 +85,8 @@ public class ContextConfigurationUtils {
         return ssoConfiguration;
     }
 
-    private static StatsPublisherConfiguration prepareStatsPublisherConfiguration() {
-        StatsPublisherConfiguration configuration = new StatsPublisherConfiguration();
+    private static WebAppStatsPublishing prepareStatsPublisherConfiguration() {
+        WebAppStatsPublishing configuration = new WebAppStatsPublishing();
         configuration.enableStatsPublisher(true);
         return configuration;
     }
@@ -99,13 +99,13 @@ public class ContextConfigurationUtils {
                 expected.getStatsPublisherConfiguration())));
     }
 
-    private static boolean compareClassloadingConfigs(ClassLoaderConfiguration actual,
-            ClassLoaderConfiguration expected) {
+    private static boolean compareClassloadingConfigs(WebAppClassLoading actual,
+            WebAppClassLoading expected) {
         return ((actual != null) && (expected != null) && (actual.getEnvironments().trim().
                 equals(expected.getEnvironments())));
     }
 
-    private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
+    private static boolean compareSSOConfigurations(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
         if ((actual != null) && (expected != null)) {
             boolean skipURIs = compareSkipURIs(actual.getSkipURIs(), expected.getSkipURIs());
             boolean handlingConsumerURLAfterSLO = actual.handleConsumerURLAfterSLO().equals(expected.
@@ -133,7 +133,7 @@ public class ContextConfigurationUtils {
         }
     }
 
-    private static boolean compareSkipURIs(SSOConfiguration.SkipURIs actual, SSOConfiguration.SkipURIs expected) {
+    private static boolean compareSkipURIs(WebAppSingleSignOn.SkipURIs actual, WebAppSingleSignOn.SkipURIs expected) {
         return actual.getSkipURIs()
                 .stream()
                 .filter(skipURI -> expected.getSkipURIs()
@@ -143,8 +143,8 @@ public class ContextConfigurationUtils {
                 .count() == expected.getSkipURIs().size();
     }
 
-    private static boolean compareProperties(List<SSOConfiguration.Property> actual,
-            List<SSOConfiguration.Property> expected) {
+    private static boolean compareProperties(List<WebAppSingleSignOn.Property> actual,
+                                             List<WebAppSingleSignOn.Property> expected) {
         return actual
                 .stream()
                 .filter(property -> expected
@@ -155,7 +155,7 @@ public class ContextConfigurationUtils {
                 .count() == expected.size();
     }
 
-    private static boolean compareSSLProperties(SSOConfiguration actual, SSOConfiguration expected) {
+    private static boolean compareSSLProperties(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
         boolean assertionSigning = actual.isAssertionSigningEnabled().equals(expected.isAssertionSigningEnabled());
         boolean assertionEncryption = actual.isAssertionEncryptionEnabled().equals(expected.
                 isAssertionEncryptionEnabled());
@@ -165,7 +165,7 @@ public class ContextConfigurationUtils {
         return assertionSigning && assertionEncryption && requestSigning && responseSigning;
     }
 
-    private static boolean comparePostfixes(SSOConfiguration actual, SSOConfiguration expected) {
+    private static boolean comparePostfixes(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
         boolean requestURLPostfix = actual.getRequestURLPostfix().trim().equals(expected.getRequestURLPostfix());
         boolean consumerURLPostfix = actual.getConsumerURLPostfix().trim().equals(expected.getConsumerURLPostfix());
         boolean sloURLPostfix = actual.getSLOURLPostfix().trim().equals(expected.getSLOURLPostfix());
@@ -173,8 +173,8 @@ public class ContextConfigurationUtils {
         return requestURLPostfix && consumerURLPostfix && sloURLPostfix;
     }
 
-    private static boolean compareStatsPublisherConfigs(StatsPublisherConfiguration actual,
-            StatsPublisherConfiguration expected) {
+    private static boolean compareStatsPublisherConfigs(WebAppStatsPublishing actual,
+            WebAppStatsPublishing expected) {
         return ((actual != null) && (expected != null) && (actual.isStatsPublisherEnabled().
                 equals(expected.isStatsPublisherEnabled())));
     }

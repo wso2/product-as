@@ -19,7 +19,7 @@ limitations under the License.
 <suite name="WSO2-App-Server-Utils_Test-Suite">
     <test name="app-server-utils-unit-tests" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.appserver.AppServerConfigurationTest"/>
+            <class name="org.wso2.appserver.ApplicationServerConfigurationTest"/>
             <class name="org.wso2.appserver.AppServerWebAppConfigurationTest"/>
             <class name="org.wso2.appserver.PathUtilTest"/>
             <class name="org.wso2.appserver.UtilsTest"/>

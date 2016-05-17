@@ -24,34 +24,33 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A class which models a holder for context level statistics publishing configurations.
+ * A class which models context-level classloading configurations.
  *
  * @since 6.0.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-public class StatsPublisherConfiguration {
-    @XmlElement(name = "enable-stats-publisher")
-    private Boolean enableStatsPublisher;
+public class WebAppClassLoading {
+    @XmlElement(name = "environments")
+    private String environments;
 
-    public Boolean isStatsPublisherEnabled() {
-        return enableStatsPublisher;
+    public String getEnvironments() {
+        return environments;
     }
 
-    public void enableStatsPublisher(Boolean enableStatsPublisher) {
-        this.enableStatsPublisher = enableStatsPublisher;
+    public void setEnvironments(String environments) {
+        this.environments = environments;
     }
 
     /**
-     * Merges the context level stats-publishing configuration defined globally and overridden at
-     * context level (if any).
+     * Merges the context level classloading configuration defined globally and overridden at context level (if any).
      *
-     * @param configuration the local, context level group of stats-publishing configuration to be merged with
+     * @param configuration the local, context level group of classloading configuration to be merged with
      */
-    void merge(org.wso2.appserver.configuration.context.StatsPublisherConfiguration configuration) {
+    void merge(WebAppClassLoading configuration) {
         Optional.ofNullable(configuration)
                 .ifPresent(mergeable ->
-                        enableStatsPublisher = Optional.ofNullable(mergeable.enableStatsPublisher)
-                                .orElse(enableStatsPublisher));
+                        environments = Optional.ofNullable(mergeable.environments)
+                                .orElse(environments));
     }
 }

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-public class SSOConfiguration {
+public class AppServerSingleSignOn {
     @XmlElement(name = "IdPURL")
     private String idpURL;
     @XmlElement(name = "IdPEntityId")

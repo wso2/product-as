@@ -19,8 +19,8 @@
 package org.wso2.appserver.test.integration.statisticspublishing;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.wso2.carbon.databridge.commons.Credentials;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.StreamDefinition;

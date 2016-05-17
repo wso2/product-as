@@ -16,11 +16,11 @@
 package org.wso2.appserver.sample.utils;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.wso2.appserver.configuration.server.AppServerConfiguration;
-import org.wso2.appserver.configuration.server.ClassLoaderEnvironments;
-import org.wso2.appserver.configuration.server.SSOConfiguration;
-import org.wso2.appserver.configuration.server.SecurityConfiguration;
-import org.wso2.appserver.configuration.server.StatsPublisherConfiguration;
+import org.wso2.appserver.configuration.server.AppServerClassLoading;
+import org.wso2.appserver.configuration.server.AppServerSecurity;
+import org.wso2.appserver.configuration.server.AppServerSingleSignOn;
+import org.wso2.appserver.configuration.server.AppServerStatsPublishing;
+import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +33,8 @@ import java.util.List;
 public class ServerConfigurationUtils {
     private static final StrSubstitutor STRING_SUB = new StrSubstitutor(System.getenv());
 
-    public static AppServerConfiguration generateDefault() {
-        AppServerConfiguration appServerConfiguration = new AppServerConfiguration();
+    public static ApplicationServerConfiguration generateDefault() {
+        ApplicationServerConfiguration appServerConfiguration = new ApplicationServerConfiguration();
         appServerConfiguration.setClassLoaderEnvironments(prepareClassLoaderEnv());
         appServerConfiguration.setSingleSignOnConfiguration(prepareSSOConfigs());
         appServerConfiguration.setStatsPublisherConfiguration(prepareStatsPublishingConfigs());
@@ -43,14 +43,14 @@ public class ServerConfigurationUtils {
         return appServerConfiguration;
     }
 
-    private static ClassLoaderEnvironments prepareClassLoaderEnv() {
-        ClassLoaderEnvironments classloadingEnvironments = new ClassLoaderEnvironments();
+    private static AppServerClassLoading prepareClassLoaderEnv() {
+        AppServerClassLoading classloadingEnvironments = new AppServerClassLoading();
 
-        ClassLoaderEnvironments.Environment cxf = new ClassLoaderEnvironments.Environment();
+        AppServerClassLoading.Environment cxf = new AppServerClassLoading.Environment();
         cxf.setName(Constants.CXF_ENV_NAME);
         cxf.setClasspath(Constants.CXF_ENV_CLASSPATH);
 
-        List<ClassLoaderEnvironments.Environment> envList = new ArrayList<>();
+        List<AppServerClassLoading.Environment> envList = new ArrayList<>();
         envList.add(cxf);
 
         envList
@@ -59,15 +59,15 @@ public class ServerConfigurationUtils {
                 .forEach(environment -> environment.
                         setClasspath(StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
 
-        ClassLoaderEnvironments.Environments environments = new ClassLoaderEnvironments.Environments();
+        AppServerClassLoading.Environments environments = new AppServerClassLoading.Environments();
         environments.setEnvironments(envList);
         classloadingEnvironments.setEnvironments(environments);
 
         return classloadingEnvironments;
     }
 
-    private static SSOConfiguration prepareSSOConfigs() {
-        SSOConfiguration ssoConfiguration = new SSOConfiguration();
+    private static AppServerSingleSignOn prepareSSOConfigs() {
+        AppServerSingleSignOn ssoConfiguration = new AppServerSingleSignOn();
 
         ssoConfiguration.setIdpURL(Constants.IDP_URL);
         ssoConfiguration.setIdpEntityId(Constants.IDP_ENTITY_ID);
@@ -77,8 +77,8 @@ public class ServerConfigurationUtils {
         return ssoConfiguration;
     }
 
-    private static StatsPublisherConfiguration prepareStatsPublishingConfigs() {
-        StatsPublisherConfiguration configuration = new StatsPublisherConfiguration();
+    private static AppServerStatsPublishing prepareStatsPublishingConfigs() {
+        AppServerStatsPublishing configuration = new AppServerStatsPublishing();
 
         configuration.setUsername(Constants.USERNAME);
         configuration.setPassword(Constants.PASSWORD);
@@ -90,17 +90,17 @@ public class ServerConfigurationUtils {
         return configuration;
     }
 
-    private static SecurityConfiguration prepareSecurityConfigs() {
-        SecurityConfiguration configuration = new SecurityConfiguration();
+    private static AppServerSecurity prepareSecurityConfigs() {
+        AppServerSecurity configuration = new AppServerSecurity();
 
-        SecurityConfiguration.Keystore keystore = new SecurityConfiguration.Keystore();
+        AppServerSecurity.Keystore keystore = new AppServerSecurity.Keystore();
         keystore.setLocation(Constants.KEYSTORE_PATH);
         keystore.setPassword(Constants.KEYSTORE_PASSWORD);
         keystore.setType(Constants.TYPE);
         keystore.setKeyAlias(Constants.PRIVATE_KEY_ALIAS);
         keystore.setKeyPassword(Constants.PRIVATE_KEY_PASSWORD);
 
-        SecurityConfiguration.Truststore truststore = new SecurityConfiguration.Truststore();
+        AppServerSecurity.Truststore truststore = new AppServerSecurity.Truststore();
         truststore.setLocation(Constants.TRUSTSTORE_PATH);
         truststore.setType(Constants.TYPE);
         truststore.setPassword(Constants.TRUSTSTORE_PASSWORD);
@@ -118,7 +118,7 @@ public class ServerConfigurationUtils {
         return configuration;
     }
 
-    public static boolean compare(AppServerConfiguration actual, AppServerConfiguration expected) {
+    public static boolean compare(ApplicationServerConfiguration actual, ApplicationServerConfiguration expected) {
         boolean classloading = compareClassloadingConfigurations(actual.getClassLoaderEnvironments(),
                 expected.getClassLoaderEnvironments());
         boolean sso = compareSSOConfigurations(actual.getSingleSignOnConfiguration(),
@@ -130,8 +130,8 @@ public class ServerConfigurationUtils {
         return (classloading && sso && statsPublishing && security);
     }
 
-    private static boolean compareClassloadingConfigurations(ClassLoaderEnvironments actual,
-            ClassLoaderEnvironments expected) {
+    private static boolean compareClassloadingConfigurations(AppServerClassLoading actual,
+            AppServerClassLoading expected) {
         if ((actual != null) && (expected != null)) {
             return actual.getEnvironments().getEnvironments()
                     .stream()
@@ -146,7 +146,7 @@ public class ServerConfigurationUtils {
         }
     }
 
-    private static boolean compareSSOConfigurations(SSOConfiguration actual, SSOConfiguration expected) {
+    private static boolean compareSSOConfigurations(AppServerSingleSignOn actual, AppServerSingleSignOn expected) {
         if ((actual != null) && (expected != null)) {
             boolean idpURL = actual.getIdpURL().trim().equals(expected.getIdpURL());
             boolean idpEntityID = actual.getIdpEntityId().trim().equals(expected.getIdpEntityId());
@@ -160,8 +160,8 @@ public class ServerConfigurationUtils {
         }
     }
 
-    private static boolean compareSSOProperties(List<SSOConfiguration.Property> actual,
-            List<SSOConfiguration.Property> expected) {
+    private static boolean compareSSOProperties(List<AppServerSingleSignOn.Property> actual,
+            List<AppServerSingleSignOn.Property> expected) {
         if ((actual != null) && (expected != null)) {
             return actual
                     .stream()
@@ -177,8 +177,8 @@ public class ServerConfigurationUtils {
         }
     }
 
-    private static boolean compareStatsPublishingConfigurations(StatsPublisherConfiguration actual,
-            StatsPublisherConfiguration expected) {
+    private static boolean compareStatsPublishingConfigurations(AppServerStatsPublishing actual,
+            AppServerStatsPublishing expected) {
         if ((actual != null) && (expected != null)) {
             boolean username = actual.getUsername().trim().equals(expected.getUsername());
             boolean password = actual.getPassword().trim().equals(expected.getPassword());
@@ -192,7 +192,7 @@ public class ServerConfigurationUtils {
         }
     }
 
-    private static boolean compareSecurityConfigurations(SecurityConfiguration actual, SecurityConfiguration expected) {
+    private static boolean compareSecurityConfigurations(AppServerSecurity actual, AppServerSecurity expected) {
         if ((actual != null) && (expected != null)) {
             boolean keystorePath, keystorePassword, type, privateKeyAlias, privateKeyPassword;
             keystorePath = keystorePassword = type = privateKeyAlias = privateKeyPassword = false;

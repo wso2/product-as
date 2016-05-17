@@ -30,33 +30,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "wso2as-web")
 public class AppServerWebAppConfiguration {
     @XmlElement(name = "class-loader")
-    private ClassLoaderConfiguration classLoaderConfiguration;
+    private WebAppClassLoading classLoaderConfiguration;
     @XmlElement(name = "saml2-single-sign-on")
-    private SSOConfiguration singleSignOnConfiguration;
+    private WebAppSingleSignOn singleSignOnConfiguration;
     @XmlElement(name = "statistics-publisher")
-    private StatsPublisherConfiguration statsPublisherConfiguration;
+    private WebAppStatsPublishing statsPublisherConfiguration;
 
-    public ClassLoaderConfiguration getClassLoaderConfiguration() {
+    public WebAppClassLoading getClassLoaderConfiguration() {
         return classLoaderConfiguration;
     }
 
-    public void setClassLoaderConfiguration(ClassLoaderConfiguration classLoaderConfiguration) {
+    public void setClassLoaderConfiguration(WebAppClassLoading classLoaderConfiguration) {
         this.classLoaderConfiguration = classLoaderConfiguration;
     }
 
-    public SSOConfiguration getSingleSignOnConfiguration() {
+    public WebAppSingleSignOn getSingleSignOnConfiguration() {
         return singleSignOnConfiguration;
     }
 
-    public void setSingleSignOnConfiguration(SSOConfiguration singleSignOnConfiguration) {
+    public void setSingleSignOnConfiguration(WebAppSingleSignOn singleSignOnConfiguration) {
         this.singleSignOnConfiguration = singleSignOnConfiguration;
     }
 
-    public StatsPublisherConfiguration getStatsPublisherConfiguration() {
+    public WebAppStatsPublishing getStatsPublisherConfiguration() {
         return statsPublisherConfiguration;
     }
 
-    public void setStatsPublisherConfiguration(StatsPublisherConfiguration statsPublisherConfiguration) {
+    public void setStatsPublisherConfiguration(WebAppStatsPublishing statsPublisherConfiguration) {
         this.statsPublisherConfiguration = statsPublisherConfiguration;
     }
 

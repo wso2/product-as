@@ -99,7 +99,7 @@ public class ContextConfigurationLoader implements LifecycleListener {
             AppServerWebAppConfiguration effective;
             try {
                 Path localWebAppDescriptor = Paths.get(PathUtils.getWebAppPath(context).toString(),
-                        Constants.WEBAPP_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
+                        Constants.WEB_CONTAINER_RESOURCE_FOLDER, Constants.WEBAPP_DESCRIPTOR);
                 if (!Files.exists(defaultWebAppDescriptor)) {
                     throw new ApplicationServerRuntimeException(
                             "The " + defaultWebAppDescriptor.toString() + " does not exist");

@@ -29,14 +29,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * This sample test class demonstrate how to write a test cases which runs on integration test phase.
- * <p>
- * Every class that requires run in integration test phase should have prefix of <strong>IT</strong>.
+ * This test case checkes whether the CXF runtime is properly engaged in the default distribution.
  *
  * @since 6.0.0
  */
-public class WebappLoaderTestCase extends TestBase {
-    @Test(description = "Checks if the server is running by sending a request to the server")
+public class WebappLoaderRuntimeTestCase extends TestBase {
+    @Test(description = "tests whether the jaxrs_basic webapp can be invoked")
     public void testEnvironmentConfiguration() throws IOException {
         URL requestUrl = new URL(getBaseUrl() + "/jaxrs_basic/services/customerservice/customers/123/");
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
@@ -51,7 +49,8 @@ public class WebappLoaderTestCase extends TestBase {
             while ((output = br.readLine()) != null) {
                 sb.append(output);
             }
-            Assert.assertTrue(sb.toString().contains("John"), "Test the Customer name John");
+            Assert.assertTrue(sb.toString().contains("John"), "Response from jaxrs_basic is wrong, CXF runtime is " +
+                    "not engaged");
         }
     }
 }

@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-public class SSOConfiguration {
+public class WebAppSingleSignOn {
     @XmlElement(name = "skip-uris")
     private SkipURIs skipURIs;
     @XmlElement(name = "handle-consumer-url-after-slo")
@@ -285,12 +285,12 @@ public class SSOConfiguration {
      *
      * @param configurations the local, context level group of SSO configurations to be merged with
      */
-    void merge(SSOConfiguration configurations) {
+    void merge(WebAppSingleSignOn configurations) {
         Optional.ofNullable(configurations)
                 .ifPresent(configs -> {
                     skipURIs = Optional.ofNullable(configs.skipURIs).orElse(skipURIs);
-                    handleConsumerURLAfterSLO = Optional.ofNullable(configs.handleConsumerURLAfterSLO).
-                            orElse(handleConsumerURLAfterSLO);
+                    handleConsumerURLAfterSLO = Optional.ofNullable(configs.handleConsumerURLAfterSLO)
+                            .orElse(handleConsumerURLAfterSLO);
                     queryParams = Optional.ofNullable(configs.queryParams).orElse(queryParams);
                     applicationServerURL = Optional.ofNullable(configs.applicationServerURL)
                             .orElse(applicationServerURL);
@@ -323,7 +323,7 @@ public class SSOConfiguration {
                     enablePassiveAuthn = Optional.ofNullable(configs.enablePassiveAuthn)
                             .orElse(enablePassiveAuthn);
 
-                    List<SSOConfiguration.Property> properties = prioritizeProperties(this.getProperties(),
+                    List<WebAppSingleSignOn.Property> properties = prioritizeProperties(this.getProperties(),
                             configs.getProperties());
 
                     if (properties.isEmpty()) {
@@ -341,15 +341,16 @@ public class SSOConfiguration {
      * @param local  the set of additional SSO properties defined at context level
      * @return the final, effective set of webapp descriptor additional SSO properties
      */
-    private static List<SSOConfiguration.Property> prioritizeProperties(List<SSOConfiguration.Property> global,
-            List<SSOConfiguration.Property> local) {
-        List<SSOConfiguration.Property> effective = new ArrayList<>();
+    private static List<WebAppSingleSignOn.Property> prioritizeProperties(List<WebAppSingleSignOn.Property> global,
+            List<WebAppSingleSignOn.Property> local) {
+        List<WebAppSingleSignOn.Property> effective = new ArrayList<>();
         if ((global != null) && (local != null)) {
             local
                     .stream()
                     .forEach(effective::add);
             //  Check whether any globally defined configurations which aren't defined locally, are available
-            Stream<Property> properties = global.stream()
+            Stream<Property> properties = global
+                    .stream()
                     .filter(globalProperty -> local
                             .stream()
                             .filter(localProperty -> ((globalProperty.getKey().equals(localProperty.getKey()))
