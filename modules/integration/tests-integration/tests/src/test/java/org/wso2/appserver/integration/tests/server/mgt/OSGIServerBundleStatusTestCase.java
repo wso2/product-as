@@ -41,7 +41,8 @@ public class OSGIServerBundleStatusTestCase extends OSGIServerBundleStatusTest {
         this.serverPropertyMap.put("-DportOffset", "105");
         this.serverPropertyMap.put("-DosgiConsole", Integer.toString(telnetPort));
         AutomationContext autoCtx = new AutomationContext();
-        CarbonTestServerManager server = new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"), this.serverPropertyMap);
+        CarbonTestServerManager server = new CarbonTestServerManager(autoCtx, System.getProperty("carbon.zip"),
+                this.serverPropertyMap);
         this.manager.startServers(new TestServerManager[]{server});
     }
 }
