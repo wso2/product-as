@@ -53,22 +53,23 @@ public class WebappClassLoaderContext {
                 getClassLoaderEnvironments().getEnvironments().getEnvironments();
 
         //  populates the classpath defines in each environment
-        environments.forEach((environment) -> {
-            if (!definedEnvironments.containsKey(environment.getName())) {
-                List<String> repositories = new ArrayList<>();
-                try {
-                    repositories.addAll(generateClasspath(environment.getClasspath()));
-                    definedEnvironments.put(environment.getName(), repositories);
-                } catch (FileNotFoundException ex) {
-                    String message = "Environment configuration of: " + environment.getName() + " is wrong.";
-                    log.error(message, ex);
-                    throw new ApplicationServerRuntimeException(message, ex);
-                }
-            } else {
-                log.warn("Duplicated environment: " + environment.getName() + ", skipping classpath: " + environment.
-                        getClasspath());
-            }
-        });
+        environments
+                .forEach((environment) -> {
+                    if (!definedEnvironments.containsKey(environment.getName())) {
+                        List<String> repositories = new ArrayList<>();
+                        try {
+                            repositories.addAll(generateClasspath(environment.getClasspath()));
+                            definedEnvironments.put(environment.getName(), repositories);
+                        } catch (FileNotFoundException ex) {
+                            String message = "Environment configuration of: " + environment.getName() + " is wrong.";
+                            log.error(message, ex);
+                            throw new ApplicationServerRuntimeException(message, ex);
+                        }
+                    } else {
+                        log.warn("Duplicated environment: " + environment.getName() + ", skipping classpath: "
+                                + environment.getClasspath());
+                    }
+                });
     }
 
     /**
@@ -76,24 +77,29 @@ public class WebappClassLoaderContext {
      *
      * @param context the context of the web application
      */
-    public WebappClassLoaderContext(Context context) {
-        ContextConfigurationLoader.getContextConfiguration(context).ifPresent(configuration -> {
-            WebAppClassLoading classLoaderConfiguration = configuration.getClassLoaderConfiguration();
+    WebappClassLoaderContext(Context context) {
+        ContextConfigurationLoader.getContextConfiguration(context)
+                .ifPresent(configuration -> {
 
-            if (classLoaderConfiguration != null && classLoaderConfiguration.getEnvironments() != null) {
-                List<String> environmentNames = Arrays
-                        .asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
+                    WebAppClassLoading classLoaderConfiguration = configuration.getClassLoaderConfiguration();
 
-                environmentNames.forEach(environmentName -> {
-                    if (definedEnvironments.containsKey(environmentName)) {
-                        selectedEnvironments.put(environmentName, definedEnvironments.get(environmentName));
-                    } else {
-                        String message = "Undefined environment: " + environmentName + " in " + context.getPath();
-                        log.warn(message);
+                    if (classLoaderConfiguration != null && classLoaderConfiguration.getEnvironments() != null) {
+                        List<String> environmentNames = Arrays.
+                                asList(classLoaderConfiguration.getEnvironments().split("\\s*,\\s*"));
+
+                        environmentNames
+                                .forEach(environmentName -> {
+                                    if (definedEnvironments.containsKey(environmentName)) {
+                                        selectedEnvironments.
+                                                put(environmentName, definedEnvironments.get(environmentName));
+                                    } else {
+                                        String message = "Undefined environment: " + environmentName + " in " + context
+                                                .getPath();
+                                        log.warn(message);
+                                    }
+                        });
                     }
                 });
-            }
-        });
     }
 
     /**
@@ -101,9 +107,12 @@ public class WebappClassLoaderContext {
      *
      * @return A list containing the jar library urls as strings
      */
-    public List<String> getProvidedRepositories() {
+    List<String> getProvidedRepositories() {
         List<String> repositories = new ArrayList<>();
-        selectedEnvironments.entrySet().stream().map(Map.Entry::getValue).forEach(repositories::addAll);
+        selectedEnvironments.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .forEach(repositories::addAll);
         return repositories;
     }
 
@@ -122,10 +131,9 @@ public class WebappClassLoaderContext {
             return urlStr;
         }
 
-        FileUtils.listFiles(classPathUrl, new String[] { "jar" }, false).
-                forEach((file) -> urlStr.add(file.toURI().toString()));
+        FileUtils.listFiles(classPathUrl, new String[] { "jar" }, false)
+                .forEach((file) -> urlStr.add(file.toURI().toString()));
 
         return urlStr;
     }
-
 }

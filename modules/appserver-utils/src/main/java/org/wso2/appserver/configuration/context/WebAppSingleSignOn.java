@@ -285,38 +285,53 @@ public class WebAppSingleSignOn {
      *
      * @param configurations the local, context level group of SSO configurations to be merged with
      */
-    protected void merge(WebAppSingleSignOn configurations) {
-        Optional.ofNullable(configurations).ifPresent(configs -> {
-            skipURIs = Optional.ofNullable(configs.skipURIs).orElse(skipURIs);
-            handleConsumerURLAfterSLO = Optional.ofNullable(configs.handleConsumerURLAfterSLO).
-                    orElse(handleConsumerURLAfterSLO);
-            queryParams = Optional.ofNullable(configs.queryParams).orElse(queryParams);
-            applicationServerURL = Optional.ofNullable(configs.applicationServerURL).orElse(applicationServerURL);
-            enableSSO = Optional.ofNullable(configs.enableSSO).orElse(enableSSO);
-            requestURLPostfix = Optional.ofNullable(configs.requestURLPostfix).orElse(requestURLPostfix);
-            httpBinding = Optional.ofNullable(configs.httpBinding).orElse(httpBinding);
-            issuerId = configs.issuerId;
-            consumerURL = configs.consumerURL;
-            consumerURLPostfix = Optional.ofNullable(configs.consumerURLPostfix).orElse(consumerURLPostfix);
-            attributeConsumingServiceIndex = Optional.ofNullable(configs.attributeConsumingServiceIndex).
-                    orElse(attributeConsumingServiceIndex);
-            enableSLO = Optional.ofNullable(configs.enableSLO).orElse(enableSLO);
-            sloURLPostfix = Optional.ofNullable(configs.sloURLPostfix).orElse(sloURLPostfix);
-            enableAssertionEncryption = Optional.ofNullable(configs.enableAssertionEncryption).
-                    orElse(enableAssertionEncryption);
-            enableAssertionSigning = Optional.ofNullable(configs.enableAssertionSigning).orElse(enableAssertionSigning);
-            enableRequestSigning = Optional.ofNullable(configs.enableRequestSigning).orElse(enableRequestSigning);
-            enableResponseSigning = Optional.ofNullable(configs.enableResponseSigning).orElse(enableResponseSigning);
-            enableForceAuthn = Optional.ofNullable(configs.enableForceAuthn).orElse(enableForceAuthn);
-            enablePassiveAuthn = Optional.ofNullable(configs.enablePassiveAuthn).orElse(enablePassiveAuthn);
-            List<WebAppSingleSignOn.Property> properties = prioritizeProperties(this.getProperties(),
-                    configs.getProperties());
-            if (properties.isEmpty()) {
-                this.setProperties(null);
-            } else {
-                this.setProperties(properties);
-            }
-        });
+    void merge(WebAppSingleSignOn configurations) {
+        Optional.ofNullable(configurations)
+                .ifPresent(configs -> {
+                    skipURIs = Optional.ofNullable(configs.skipURIs).orElse(skipURIs);
+                    handleConsumerURLAfterSLO = Optional.ofNullable(configs.handleConsumerURLAfterSLO)
+                            .orElse(handleConsumerURLAfterSLO);
+                    queryParams = Optional.ofNullable(configs.queryParams).orElse(queryParams);
+                    applicationServerURL = Optional.ofNullable(configs.applicationServerURL)
+                            .orElse(applicationServerURL);
+                    enableSSO = Optional.ofNullable(configs.enableSSO)
+                            .orElse(enableSSO);
+                    requestURLPostfix = Optional.ofNullable(configs.requestURLPostfix)
+                            .orElse(requestURLPostfix);
+                    httpBinding = Optional.ofNullable(configs.httpBinding)
+                            .orElse(httpBinding);
+                    issuerId = configs.issuerId;
+                    consumerURL = configs.consumerURL;
+                    consumerURLPostfix = Optional.ofNullable(configs.consumerURLPostfix)
+                            .orElse(consumerURLPostfix);
+                    attributeConsumingServiceIndex = Optional.ofNullable(configs.attributeConsumingServiceIndex)
+                            .orElse(attributeConsumingServiceIndex);
+                    enableSLO = Optional.ofNullable(configs.enableSLO)
+                            .orElse(enableSLO);
+                    sloURLPostfix = Optional.ofNullable(configs.sloURLPostfix)
+                            .orElse(sloURLPostfix);
+                    enableAssertionEncryption = Optional.ofNullable(configs.enableAssertionEncryption)
+                            .orElse(enableAssertionEncryption);
+                    enableAssertionSigning = Optional.ofNullable(configs.enableAssertionSigning)
+                            .orElse(enableAssertionSigning);
+                    enableRequestSigning = Optional.ofNullable(configs.enableRequestSigning)
+                            .orElse(enableRequestSigning);
+                    enableResponseSigning = Optional.ofNullable(configs.enableResponseSigning)
+                            .orElse(enableResponseSigning);
+                    enableForceAuthn = Optional.ofNullable(configs.enableForceAuthn)
+                            .orElse(enableForceAuthn);
+                    enablePassiveAuthn = Optional.ofNullable(configs.enablePassiveAuthn)
+                            .orElse(enablePassiveAuthn);
+
+                    List<WebAppSingleSignOn.Property> properties = prioritizeProperties(this.getProperties(),
+                            configs.getProperties());
+
+                    if (properties.isEmpty()) {
+                        this.setProperties(null);
+                    } else {
+                        this.setProperties(properties);
+                    }
+                });
     }
 
     /**
@@ -330,16 +345,26 @@ public class WebAppSingleSignOn {
             List<WebAppSingleSignOn.Property> local) {
         List<WebAppSingleSignOn.Property> effective = new ArrayList<>();
         if ((global != null) && (local != null)) {
-            local.stream().forEach(effective::add);
+            local
+                    .stream()
+                    .forEach(effective::add);
             //  Check whether any globally defined configurations which aren't defined locally, are available
-            Stream<Property> properties = global.stream().filter(globalProperty -> local.stream().
-                    filter(localProperty -> ((globalProperty.getKey().equals(localProperty.getKey()))
+            Stream<Property> properties = global
+                    .stream()
+                    .filter(globalProperty -> local
+                            .stream()
+                            .filter(localProperty -> ((globalProperty.getKey().equals(localProperty.getKey()))
                                     && (globalProperty.getValue().equals(localProperty.getValue())))).count() == 0);
+
             properties.forEach(effective::add);
         } else if (global != null) {
-            global.stream().forEach(effective::add);
+            global
+                    .stream()
+                    .forEach(effective::add);
         } else if (local != null) {
-            local.stream().forEach(effective::add);
+            local
+                    .stream()
+                    .forEach(effective::add);
         }
         return effective;
     }
