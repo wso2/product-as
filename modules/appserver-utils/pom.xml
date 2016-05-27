@@ -37,11 +37,11 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                    <systemPropertyVariables>
+                    <systemProperties>
                         <appserver.version>${appserver.version}</appserver.version>
                         <build.directory>${project.build.directory}</build.directory>
                         <test.resources>src/test/resources/testresources</test.resources>
-                    </systemPropertyVariables>
+                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>
