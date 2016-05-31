@@ -22,7 +22,6 @@ import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.core.StandardServer;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
@@ -48,9 +47,9 @@ import java.util.List;
  */
 public class ApplicationServerConfigurationTest {
     private static final Path catalina_base = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
-    private static final Path config_base_server_descriptor = Paths.
-            get(catalina_base.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
-                    Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR);
+    private static final Path dist_server_descriptor = Paths.get(
+            catalina_base.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
+            Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.APP_SERVER_DESCRIPTOR);
     private static final StrSubstitutor string_sub = new StrSubstitutor(System.getenv());
     private static final List<Lifecycle> lifecycle_components = generateSampleTomcatComponents();
     private static final ServerConfigurationLoader loader = new ServerConfigurationLoader();
@@ -61,37 +60,46 @@ public class ApplicationServerConfigurationTest {
     }
 
     @Test(description = "Attempts to load XML file content of a non-existent server descriptor",
-            expectedExceptions = { ApplicationServerRuntimeException.class }, priority = 1)
+            expectedExceptions = { ApplicationServerRuntimeException.class })
     public void testObjectLoadingFromNonExistentDescriptor() {
         lifecycle_components
                 .stream()
-                .forEach(component -> {
-                    loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
-                    loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.AFTER_START_EVENT, null));
-                });
+                .forEach(component -> loader.lifecycleEvent(
+                        new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null)));
     }
 
-    @Test(description = "Loads the XML file content of the WSO2 App Server specific server level configuration "
-            + "descriptor", priority = 2)
-    public void testObjectLoadingFromDescriptor() throws IOException, ApplicationServerConfigurationException {
-        Path source = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR);
-        Files.copy(source, config_base_server_descriptor);
+    @Test(description = "Tests loading the XML file content from an invalid server descriptor", expectedExceptions =
+            {ApplicationServerRuntimeException.class}, priority = 1)
+    public void testObjectLoadingFromInvalidDescriptor() throws IOException {
+        Path source = Paths.get(TestConstants.TEST_RESOURCES, "faulty-wso2as.xml");
+        Files.copy(source, dist_server_descriptor);
 
         lifecycle_components
                 .stream()
-                .forEach(component -> {
-                    loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
-                    loader.lifecycleEvent(new LifecycleEvent(component, Lifecycle.AFTER_START_EVENT, null));
-                });
+                .forEach(component -> loader.lifecycleEvent(
+                        new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null)));
+    }
+
+    @Test(description = "Loads the XML file content of a valid WSO2 App Server specific server level configuration " +
+            "descriptor", priority = 2)
+    public void testObjectLoadingFromDescriptor() throws IOException, ApplicationServerConfigurationException {
+        //  deletes the existing server descriptor
+        Files.delete(dist_server_descriptor);
+
+        Path source = Paths.get(TestConstants.TEST_RESOURCES, Constants.APP_SERVER_DESCRIPTOR);
+        Files.copy(source, dist_server_descriptor);
+
+        lifecycle_components
+                .stream()
+                .forEach(component -> loader.lifecycleEvent(
+                        new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null)));
 
         ApplicationServerConfiguration actual = ServerConfigurationLoader.getServerConfiguration();
         ApplicationServerConfiguration expected = generateDefault();
         Assert.assertTrue(compare(actual, expected));
-    }
 
-    @AfterClass
-    public void destroy() throws IOException {
-        Files.delete(config_base_server_descriptor);
+        //  deletes the existing server descriptor
+        Files.delete(dist_server_descriptor);
     }
 
     private static ApplicationServerConfiguration generateDefault() {
@@ -138,6 +146,7 @@ public class ApplicationServerConfigurationTest {
         ssoConfiguration.setIdpEntityId(TestConstants.IDP_ENTITY_ID);
         ssoConfiguration.setSignatureValidatorImplClass(TestConstants.VALIDATOR_CLASS);
         ssoConfiguration.setIdpCertificateAlias(TestConstants.IDP_CERT_ALIAS);
+        ssoConfiguration.setACSBase(TestConstants.APP_SERVER_URL);
 
         AppServerSingleSignOn.Property loginURL = new AppServerSingleSignOn.Property();
         loginURL.setKey(TestConstants.LOGIN_URL_KEY);
@@ -230,8 +239,9 @@ public class ApplicationServerConfigurationTest {
             boolean validatorClass = actual.getSignatureValidatorImplClass().trim().
                     equals(expected.getSignatureValidatorImplClass());
             boolean idpCertAlias = actual.getIdpCertificateAlias().trim().equals(expected.getIdpCertificateAlias());
+            boolean acsBase = actual.getACSBase().trim().equals(expected.getACSBase());
             boolean properties = compareSSOProperties(actual.getProperties(), expected.getProperties());
-            return (idpURL && idpEntityID && validatorClass && idpCertAlias && properties);
+            return (idpURL && idpEntityID && validatorClass && idpCertAlias && acsBase && properties);
         } else {
             return (actual == null) && (expected == null);
         }

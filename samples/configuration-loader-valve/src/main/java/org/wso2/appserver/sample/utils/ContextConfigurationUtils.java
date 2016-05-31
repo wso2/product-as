@@ -46,30 +46,25 @@ public class ContextConfigurationUtils {
     private static WebAppSingleSignOn prepareSSOConfiguration() {
         WebAppSingleSignOn ssoConfiguration = new WebAppSingleSignOn();
 
+        ssoConfiguration.enableSSO(true);
+        ssoConfiguration.setHttpBinding(Constants.SAML_BINDING);
+        ssoConfiguration.setIssuerId(Constants.ISSUER_ID);
+        ssoConfiguration.setConsumerURL(Constants.CONSUMER_URL);
+        ssoConfiguration.setConsumerURLPostfix(Constants.CONSUMER_URL_POSTFIX);
+
         WebAppSingleSignOn.SkipURIs skipURIs = new WebAppSingleSignOn.SkipURIs();
         List<String> uris = new ArrayList<>();
         uris.add(Constants.SKIP_URI);
         skipURIs.setSkipURIs(uris);
         ssoConfiguration.setSkipURIs(skipURIs);
 
-        ssoConfiguration.enableHandlingConsumerURLAfterSLO(true);
-        ssoConfiguration.setQueryParams(Constants.QUERY_PARAMS);
-        ssoConfiguration.setApplicationServerURL(Constants.APP_SERVER_URL);
-        ssoConfiguration.enableSSO(true);
-        ssoConfiguration.setRequestURLPostfix(Constants.REQUEST_URL_POSTFIX);
-        ssoConfiguration.setHttpBinding(Constants.SAML_BINDING);
-        ssoConfiguration.setIssuerId(Constants.ISSUER_ID);
-        ssoConfiguration.setConsumerURL(Constants.CONSUMER_URL);
-        ssoConfiguration.setConsumerURLPostfix(Constants.CONSUMER_URL_POSTFIX);
-        ssoConfiguration.setAttributeConsumingServiceIndex(Constants.ATTR_CONSUMER_SERVICE_INDEX);
+        ssoConfiguration.setOptionalParams(Constants.QUERY_PARAMS);
         ssoConfiguration.enableSLO(true);
         ssoConfiguration.setSLOURLPostfix(Constants.SLO_URL_POSTFIX);
         ssoConfiguration.enableAssertionSigning(true);
         ssoConfiguration.enableAssertionEncryption(true);
         ssoConfiguration.enableRequestSigning(true);
         ssoConfiguration.enableResponseSigning(true);
-        ssoConfiguration.enableForceAuthn(false);
-        ssoConfiguration.enablePassiveAuthn(false);
 
         WebAppSingleSignOn.Property relayState = new WebAppSingleSignOn.Property();
         relayState.setKey(Constants.RELAY_STATE_KEY);
@@ -108,26 +103,18 @@ public class ContextConfigurationUtils {
     private static boolean compareSSOConfigurations(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
         if ((actual != null) && (expected != null)) {
             boolean skipURIs = compareSkipURIs(actual.getSkipURIs(), expected.getSkipURIs());
-            boolean handlingConsumerURLAfterSLO = actual.handleConsumerURLAfterSLO().equals(expected.
-                    handleConsumerURLAfterSLO());
-            boolean queryParams = actual.getQueryParams().trim().equals(expected.getQueryParams());
-            boolean appServerURL = actual.getApplicationServerURL().trim().equals(expected.getApplicationServerURL());
+            boolean queryParams = actual.getOptionalParams().trim().equals(expected.getOptionalParams());
             boolean enableSSO = actual.isSSOEnabled().equals(expected.isSSOEnabled());
             boolean binding = actual.getHttpBinding().trim().equals(expected.getHttpBinding());
             boolean issuerID = actual.getIssuerId().trim().equals(expected.getIssuerId());
             boolean consumerURL = actual.getConsumerURL().trim().equals(expected.getConsumerURL());
-            boolean serviceIndex = actual.getAttributeConsumingServiceIndex().trim().
-                    equals(expected.getAttributeConsumingServiceIndex());
             boolean enableSLO = actual.isSLOEnabled().equals(expected.isSLOEnabled());
             boolean ssl = compareSSLProperties(actual, expected);
-            boolean forceAuthn = actual.isForceAuthnEnabled().equals(expected.isForceAuthnEnabled());
-            boolean passiveAuthn = actual.isPassiveAuthnEnabled().equals(expected.isPassiveAuthnEnabled());
             boolean postfixes = comparePostfixes(actual, expected);
             boolean properties = compareProperties(actual.getProperties(), expected.getProperties());
 
-            return (skipURIs && handlingConsumerURLAfterSLO && queryParams && appServerURL && enableSSO && postfixes
-                    && binding && issuerID && consumerURL && serviceIndex && enableSLO && ssl && forceAuthn
-                    && passiveAuthn && properties);
+            return (skipURIs && queryParams && enableSSO && postfixes
+                    && binding && issuerID && consumerURL && enableSLO && ssl && properties);
         } else {
             return ((actual == null) && (expected == null));
         }
@@ -166,11 +153,10 @@ public class ContextConfigurationUtils {
     }
 
     private static boolean comparePostfixes(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
-        boolean requestURLPostfix = actual.getRequestURLPostfix().trim().equals(expected.getRequestURLPostfix());
         boolean consumerURLPostfix = actual.getConsumerURLPostfix().trim().equals(expected.getConsumerURLPostfix());
         boolean sloURLPostfix = actual.getSLOURLPostfix().trim().equals(expected.getSLOURLPostfix());
 
-        return requestURLPostfix && consumerURLPostfix && sloURLPostfix;
+        return consumerURLPostfix && sloURLPostfix;
     }
 
     private static boolean compareStatsPublisherConfigs(WebAppStatsPublishing actual,

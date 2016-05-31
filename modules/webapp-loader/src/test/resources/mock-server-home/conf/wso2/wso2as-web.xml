@@ -23,24 +23,15 @@
         <environments>Env1</environments>
     </class-loader>
     <saml2-single-sign-on>
-        <!--<skip-uris>
-            <skip-uri>http://www.example.com</skip-uri>
-        </skip-uris>-->
-        <handle-consumer-url-after-slo>true</handle-consumer-url-after-slo>
-        <query-params>tenant=admin&amp;dialect=SAML</query-params>
-        <application-server-url>https://localhost:8443</application-server-url>
         <enable-sso>false</enable-sso>
-        <request-url-postfix>samlsso</request-url-postfix>
         <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
-        <consumer-url-postfix>/acs</consumer-url-postfix>
-        <attribute-consuming-service-index>1784849</attribute-consuming-service-index>
+        <consumer-url-postfix>acs</consumer-url-postfix>
         <enable-slo>false</enable-slo>
         <slo-url-postfix>logout</slo-url-postfix>
         <enable-assertion-encryption>false</enable-assertion-encryption>
         <enable-assertion-signing>false</enable-assertion-signing>
         <enable-request-signing>false</enable-request-signing>
         <enable-response-signing>false</enable-response-signing>
-        <is-force-authn>false</is-force-authn>
-        <is-passive-authn>false</is-passive-authn>
+        <property key="TenantId">tenant1</property>
     </saml2-single-sign-on>
 </wso2as-web>

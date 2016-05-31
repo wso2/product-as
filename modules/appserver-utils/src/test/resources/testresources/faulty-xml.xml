@@ -16,8 +16,8 @@
     <SAML2SingleSignOn>
         <IdPURL>https://localhost:9443/samlsso</IdPURL>
         <IdPEntityId>localhost</IdPEntityId>
-        <SignatureValidatorImplClass>org.wso2.appserver.webapp.SAMLSignatureValidatorImplementation
-        </SignatureValidatorImplClass>
+        <SignatureValidatorImplClass>org.wso2.appserver.webapp.SAMLSignatureValidatorImplementation</SignatureValidatorImplClass>
+        <ApplicationServerURL>https://localhost:8443</ApplicationServerURL>
         <Property Key="LoginURL">index.jsp</Property>
         <Property Key="RelayState">index.jsp</Property>
     </SAML2SingleSignOn>

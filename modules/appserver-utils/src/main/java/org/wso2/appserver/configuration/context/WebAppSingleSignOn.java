@@ -34,18 +34,8 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class WebAppSingleSignOn {
-    @XmlElement(name = "skip-uris")
-    private SkipURIs skipURIs;
-    @XmlElement(name = "handle-consumer-url-after-slo")
-    private Boolean handleConsumerURLAfterSLO;
-    @XmlElement(name = "query-params")
-    private String queryParams;
-    @XmlElement(name = "application-server-url")
-    private String applicationServerURL;
     @XmlElement(name = "enable-sso")
     private Boolean enableSSO;
-    @XmlElement(name = "request-url-postfix")
-    private String requestURLPostfix;
     @XmlElement(name = "http-binding")
     private String httpBinding;
     @XmlElement(name = "issuer-id")
@@ -54,58 +44,24 @@ public class WebAppSingleSignOn {
     private String consumerURL;
     @XmlElement(name = "consumer-url-postfix")
     private String consumerURLPostfix;
-    @XmlElement(name = "attribute-consuming-service-index")
-    private String attributeConsumingServiceIndex;
+    @XmlElement(name = "skip-uris")
+    private SkipURIs skipURIs;
+    @XmlElement(name = "optional-params")
+    private String optionalParams;
     @XmlElement(name = "enable-slo")
     private Boolean enableSLO;
     @XmlElement(name = "slo-url-postfix")
     private String sloURLPostfix;
-    @XmlElement(name = "enable-response-signing")
-    private Boolean enableResponseSigning;
-    @XmlElement(name = "enable-assertion-signing")
-    private Boolean enableAssertionSigning;
     @XmlElement(name = "enable-assertion-encryption")
     private Boolean enableAssertionEncryption;
+    @XmlElement(name = "enable-assertion-signing")
+    private Boolean enableAssertionSigning;
     @XmlElement(name = "enable-request-signing")
     private Boolean enableRequestSigning;
-    @XmlElement(name = "is-force-authn")
-    private Boolean enableForceAuthn;
-    @XmlElement(name = "is-passive-authn")
-    private Boolean enablePassiveAuthn;
+    @XmlElement(name = "enable-response-signing")
+    private Boolean enableResponseSigning;
     @XmlElement(name = "property")
     private List<Property> properties;
-
-    public SkipURIs getSkipURIs() {
-        return skipURIs;
-    }
-
-    public void setSkipURIs(SkipURIs skipURIs) {
-        this.skipURIs = skipURIs;
-    }
-
-    public Boolean handleConsumerURLAfterSLO() {
-        return handleConsumerURLAfterSLO;
-    }
-
-    public void enableHandlingConsumerURLAfterSLO(Boolean handleConsumerURLAfterSLO) {
-        this.handleConsumerURLAfterSLO = handleConsumerURLAfterSLO;
-    }
-
-    public String getQueryParams() {
-        return queryParams;
-    }
-
-    public void setQueryParams(String queryParams) {
-        this.queryParams = queryParams;
-    }
-
-    public String getApplicationServerURL() {
-        return applicationServerURL;
-    }
-
-    public void setApplicationServerURL(String applicationServerURL) {
-        this.applicationServerURL = applicationServerURL;
-    }
 
     public Boolean isSSOEnabled() {
         return enableSSO;
@@ -113,14 +69,6 @@ public class WebAppSingleSignOn {
 
     public void enableSSO(Boolean enableSSO) {
         this.enableSSO = enableSSO;
-    }
-
-    public String getRequestURLPostfix() {
-        return requestURLPostfix;
-    }
-
-    public void setRequestURLPostfix(String requestURLPostFix) {
-        this.requestURLPostfix = requestURLPostFix;
     }
 
     public String getHttpBinding() {
@@ -155,12 +103,20 @@ public class WebAppSingleSignOn {
         this.consumerURLPostfix = consumerURLPostFix;
     }
 
-    public String getAttributeConsumingServiceIndex() {
-        return attributeConsumingServiceIndex;
+    public SkipURIs getSkipURIs() {
+        return skipURIs;
     }
 
-    public void setAttributeConsumingServiceIndex(String attributeConsumingServiceIndex) {
-        this.attributeConsumingServiceIndex = attributeConsumingServiceIndex;
+    public void setSkipURIs(SkipURIs skipURIs) {
+        this.skipURIs = skipURIs;
+    }
+
+    public String getOptionalParams() {
+        return optionalParams;
+    }
+
+    public void setOptionalParams(String optionalParams) {
+        this.optionalParams = optionalParams;
     }
 
     public Boolean isSLOEnabled() {
@@ -179,20 +135,12 @@ public class WebAppSingleSignOn {
         this.sloURLPostfix = sloURLPostFix;
     }
 
-    public Boolean isResponseSigningEnabled() {
-        return enableResponseSigning;
+    public Boolean isAssertionEncryptionEnabled() {
+        return enableAssertionEncryption;
     }
 
-    public void enableResponseSigning(Boolean enableResponseSigning) {
-        this.enableResponseSigning = enableResponseSigning;
-    }
-
-    public Boolean isRequestSigningEnabled() {
-        return enableRequestSigning;
-    }
-
-    public void enableRequestSigning(Boolean enableRequestSigning) {
-        this.enableRequestSigning = enableRequestSigning;
+    public void enableAssertionEncryption(Boolean enableAssertionEncryption) {
+        this.enableAssertionEncryption = enableAssertionEncryption;
     }
 
     public Boolean isAssertionSigningEnabled() {
@@ -203,28 +151,20 @@ public class WebAppSingleSignOn {
         this.enableAssertionSigning = enableAssertionSigning;
     }
 
-    public Boolean isAssertionEncryptionEnabled() {
-        return enableAssertionEncryption;
+    public Boolean isRequestSigningEnabled() {
+        return enableRequestSigning;
     }
 
-    public void enableAssertionEncryption(Boolean enableAssertionEncryption) {
-        this.enableAssertionEncryption = enableAssertionEncryption;
+    public void enableRequestSigning(Boolean enableRequestSigning) {
+        this.enableRequestSigning = enableRequestSigning;
     }
 
-    public Boolean isForceAuthnEnabled() {
-        return enableForceAuthn;
+    public Boolean isResponseSigningEnabled() {
+        return enableResponseSigning;
     }
 
-    public void enableForceAuthn(Boolean enableForceAuthn) {
-        this.enableForceAuthn = enableForceAuthn;
-    }
-
-    public Boolean isPassiveAuthnEnabled() {
-        return enablePassiveAuthn;
-    }
-
-    public void enablePassiveAuthn(Boolean enablePassiveAuthn) {
-        this.enablePassiveAuthn = enablePassiveAuthn;
+    public void enableResponseSigning(Boolean enableResponseSigning) {
+        this.enableResponseSigning = enableResponseSigning;
     }
 
     public List<Property> getProperties() {
@@ -288,24 +228,18 @@ public class WebAppSingleSignOn {
     void merge(WebAppSingleSignOn configurations) {
         Optional.ofNullable(configurations)
                 .ifPresent(configs -> {
-                    skipURIs = Optional.ofNullable(configs.skipURIs).orElse(skipURIs);
-                    handleConsumerURLAfterSLO = Optional.ofNullable(configs.handleConsumerURLAfterSLO)
-                            .orElse(handleConsumerURLAfterSLO);
-                    queryParams = Optional.ofNullable(configs.queryParams).orElse(queryParams);
-                    applicationServerURL = Optional.ofNullable(configs.applicationServerURL)
-                            .orElse(applicationServerURL);
                     enableSSO = Optional.ofNullable(configs.enableSSO)
                             .orElse(enableSSO);
-                    requestURLPostfix = Optional.ofNullable(configs.requestURLPostfix)
-                            .orElse(requestURLPostfix);
                     httpBinding = Optional.ofNullable(configs.httpBinding)
                             .orElse(httpBinding);
                     issuerId = configs.issuerId;
                     consumerURL = configs.consumerURL;
                     consumerURLPostfix = Optional.ofNullable(configs.consumerURLPostfix)
                             .orElse(consumerURLPostfix);
-                    attributeConsumingServiceIndex = Optional.ofNullable(configs.attributeConsumingServiceIndex)
-                            .orElse(attributeConsumingServiceIndex);
+                    skipURIs = Optional.ofNullable(configs.skipURIs)
+                            .orElse(skipURIs);
+                    optionalParams = Optional.ofNullable(configs.optionalParams)
+                            .orElse(optionalParams);
                     enableSLO = Optional.ofNullable(configs.enableSLO)
                             .orElse(enableSLO);
                     sloURLPostfix = Optional.ofNullable(configs.sloURLPostfix)
@@ -318,10 +252,6 @@ public class WebAppSingleSignOn {
                             .orElse(enableRequestSigning);
                     enableResponseSigning = Optional.ofNullable(configs.enableResponseSigning)
                             .orElse(enableResponseSigning);
-                    enableForceAuthn = Optional.ofNullable(configs.enableForceAuthn)
-                            .orElse(enableForceAuthn);
-                    enablePassiveAuthn = Optional.ofNullable(configs.enablePassiveAuthn)
-                            .orElse(enablePassiveAuthn);
 
                     List<WebAppSingleSignOn.Property> properties = prioritizeProperties(this.getProperties(),
                             configs.getProperties());
@@ -342,7 +272,7 @@ public class WebAppSingleSignOn {
      * @return the final, effective set of webapp descriptor additional SSO properties
      */
     private static List<WebAppSingleSignOn.Property> prioritizeProperties(List<WebAppSingleSignOn.Property> global,
-            List<WebAppSingleSignOn.Property> local) {
+                                                                          List<WebAppSingleSignOn.Property> local) {
         List<WebAppSingleSignOn.Property> effective = new ArrayList<>();
         if ((global != null) && (local != null)) {
             local

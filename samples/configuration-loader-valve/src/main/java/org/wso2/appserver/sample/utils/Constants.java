@@ -27,18 +27,14 @@ public class Constants {
 
     static final String IDP_URL = "https://localhost:9443/samlsso";
     static final String IDP_ENTITY_ID = "localhost";
-    static final String VALIDATOR_CLASS =
-            "org.wso2.appserver.webapp.security.signature.SAMLSignatureValidatorImplementation";
     static final String IDP_CERT_ALIAS = "wso2carbon";
     static final String SKIP_URI = "http://www.example.com";
     static final String QUERY_PARAMS = "tenant=admin&dialect=SAML";
-    static final String APP_SERVER_URL = "https://localhost:8443";
-    static final String REQUEST_URL_POSTFIX = "samlsso";
+    static final String ACS_BASE = "https://localhost:8443";
     static final String SAML_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect";
     static final String ISSUER_ID = "foo-app";
     static final String CONSUMER_URL = "https://localhost:8443/foo-app/acs";
-    static final String CONSUMER_URL_POSTFIX = "/acs";
-    static final String ATTR_CONSUMER_SERVICE_INDEX = "1784849";
+    static final String CONSUMER_URL_POSTFIX = "acs";
     static final String SLO_URL_POSTFIX = "logout";
     static final String LOGIN_URL_KEY = "LoginURL";
     static final String LOGIN_URL_VALUE = "index.jsp";
@@ -52,7 +48,7 @@ public class Constants {
     static final String PUBLISHER_URL = "tcp://127.0.0.1:7611";
     static final String STREAM_ID = "org.wso2.http.stats:1.0.0";
 
-    static final String KEYSTORE_PATH = "${catalina.base}/keystore.jks";
+    static final String KEYSTORE_PATH = "${catalina.base}/conf/wso2/wso2carbon.jks";
     static final String TYPE = "JKS";
     static final String KEYSTORE_PASSWORD = "wso2carbon";
     static final String PRIVATE_KEY_ALIAS = "wso2carbon";

@@ -49,7 +49,7 @@ import java.util.Optional;
  */
 public class AppServerWebAppConfigurationTest {
     private static final Path catalina_base = Paths.get(TestConstants.TEST_RESOURCES, TestConstants.CATALINA_BASE);
-    private static final Path config_base_webapp_descriptor = Paths.
+    private static final Path global_web_app_descriptor = Paths.
             get(catalina_base.toString(), Constants.TOMCAT_CONFIGURATION_DIRECTORY,
                     Constants.APP_SERVER_CONFIGURATION_DIRECTORY, Constants.WEBAPP_DESCRIPTOR);
     private static final ContextConfigurationLoader context_configuration_loader = new ContextConfigurationLoader();
@@ -71,18 +71,14 @@ public class AppServerWebAppConfigurationTest {
         components.add(sample_context);
         components
                 .stream()
-                .forEach(component -> {
-                    context_configuration_loader.
-                            lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null));
-                    context_configuration_loader.
-                            lifecycleEvent(new LifecycleEvent(component, Lifecycle.CONFIGURE_START_EVENT, null));
-                });
+                .forEach(component -> context_configuration_loader.
+                        lifecycleEvent(new LifecycleEvent(component, Lifecycle.BEFORE_START_EVENT, null)));
     }
 
     @Test(description = "Loads the XML file content of a WSO2 App Server specific webapp descriptor", priority = 2)
     public void testObjectLoadingFromDescriptor() throws IOException, ApplicationServerConfigurationException {
         Path source = Paths.get(TestConstants.TEST_RESOURCES, Constants.WEBAPP_DESCRIPTOR);
-        Files.copy(source, config_base_webapp_descriptor);
+        Files.copy(source, global_web_app_descriptor);
 
         context_configuration_loader.
                 lifecycleEvent(new LifecycleEvent(sample_context, Lifecycle.BEFORE_START_EVENT, null));
@@ -103,7 +99,7 @@ public class AppServerWebAppConfigurationTest {
                 lifecycleEvent(new LifecycleEvent(faulty_sample_context, Lifecycle.BEFORE_START_EVENT, null));
     }
 
-    @Test(description = "Checks the removal of per webapp configurations at Lifecycle.AFTER_STOP_EVENT", priority = 4)
+    @Test(description = "Checks the removal of per web app configurations at Lifecycle.AFTER_STOP_EVENT", priority = 4)
     public void testWebAppConfigurationUnloading() {
         context_configuration_loader.
                 lifecycleEvent(new LifecycleEvent(sample_context, Lifecycle.AFTER_STOP_EVENT, null));
@@ -114,15 +110,15 @@ public class AppServerWebAppConfigurationTest {
 
     @AfterClass
     public void destroy() throws IOException {
-        Files.delete(config_base_webapp_descriptor);
+        Files.delete(global_web_app_descriptor);
     }
 
     private static void prepareCatalinaComponents() {
-        host.setAppBase(TestConstants.WEBAPP_BASE);
+        host.setAppBase(TestConstants.WEB_APP_BASE);
         sample_context.setParent(host);
-        sample_context.setDocBase(TestConstants.SAMPLE_WEBAPP);
+        sample_context.setDocBase(TestConstants.SAMPLE_WEB_APP);
         faulty_sample_context.setParent(host);
-        faulty_sample_context.setDocBase(TestConstants.FAULTY_SAMPLE_WEBAPP);
+        faulty_sample_context.setDocBase(TestConstants.FAULTY_SAMPLE_WEB_APP);
     }
 
     private static AppServerWebAppConfiguration prepareDefault() {
@@ -143,30 +139,25 @@ public class AppServerWebAppConfigurationTest {
     private static WebAppSingleSignOn prepareSSOConfiguration() {
         WebAppSingleSignOn ssoConfiguration = new WebAppSingleSignOn();
 
+        ssoConfiguration.enableSSO(true);
+        ssoConfiguration.setHttpBinding(TestConstants.SAML_BINDING);
+        ssoConfiguration.setIssuerId(TestConstants.ISSUER_ID);
+        ssoConfiguration.setConsumerURL(TestConstants.CONSUMER_URL);
+        ssoConfiguration.setConsumerURLPostfix(TestConstants.CONSUMER_URL_POSTFIX);
+
         WebAppSingleSignOn.SkipURIs skipURIs = new WebAppSingleSignOn.SkipURIs();
         List<String> uris = new ArrayList<>();
         uris.add(TestConstants.SKIP_URI);
         skipURIs.setSkipURIs(uris);
         ssoConfiguration.setSkipURIs(skipURIs);
 
-        ssoConfiguration.enableHandlingConsumerURLAfterSLO(false);
-        ssoConfiguration.setQueryParams(TestConstants.QUERY_PARAMS);
-        ssoConfiguration.setApplicationServerURL(TestConstants.APP_SERVER_URL);
-        ssoConfiguration.enableSSO(true);
-        ssoConfiguration.setRequestURLPostfix(TestConstants.REQUEST_URL_POSTFIX);
-        ssoConfiguration.setHttpBinding(TestConstants.SAML_BINDING);
-        ssoConfiguration.setIssuerId(TestConstants.ISSUER_ID);
-        ssoConfiguration.setConsumerURL(TestConstants.CONSUMER_URL);
-        ssoConfiguration.setConsumerURLPostfix(TestConstants.CONSUMER_URL_POSTFIX);
-        ssoConfiguration.setAttributeConsumingServiceIndex(TestConstants.ATTR_CONSUMER_SERVICE_INDEX);
+        ssoConfiguration.setOptionalParams(TestConstants.QUERY_PARAMS);
         ssoConfiguration.enableSLO(true);
         ssoConfiguration.setSLOURLPostfix(TestConstants.SLO_URL_POSTFIX);
-        ssoConfiguration.enableAssertionSigning(true);
         ssoConfiguration.enableAssertionEncryption(true);
+        ssoConfiguration.enableAssertionSigning(true);
         ssoConfiguration.enableRequestSigning(true);
         ssoConfiguration.enableResponseSigning(true);
-        ssoConfiguration.enableForceAuthn(false);
-        ssoConfiguration.enablePassiveAuthn(false);
 
         WebAppSingleSignOn.Property relayState = new WebAppSingleSignOn.Property();
         relayState.setKey(TestConstants.RELAY_STATE_KEY);
@@ -209,26 +200,18 @@ public class AppServerWebAppConfigurationTest {
     private static boolean compareSSOConfigurations(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
         if ((actual != null) && (expected != null)) {
             boolean skipURIs = compareSkipURIs(actual.getSkipURIs(), expected.getSkipURIs());
-            boolean handlingConsumerURLAfterSLO = actual.handleConsumerURLAfterSLO().equals(expected.
-                    handleConsumerURLAfterSLO());
-            boolean queryParams = actual.getQueryParams().trim().equals(expected.getQueryParams());
-            boolean appServerURL = actual.getApplicationServerURL().trim().equals(expected.getApplicationServerURL());
+            boolean queryParams = actual.getOptionalParams().trim().equals(expected.getOptionalParams());
             boolean enableSSO = actual.isSSOEnabled().equals(expected.isSSOEnabled());
             boolean binding = actual.getHttpBinding().trim().equals(expected.getHttpBinding());
             boolean issuerID = actual.getIssuerId().trim().equals(expected.getIssuerId());
             boolean consumerURL = actual.getConsumerURL().trim().equals(expected.getConsumerURL());
-            boolean serviceIndex = actual.getAttributeConsumingServiceIndex().trim().
-                    equals(expected.getAttributeConsumingServiceIndex());
             boolean enableSLO = actual.isSLOEnabled().equals(expected.isSLOEnabled());
             boolean ssl = compareSSLProperties(actual, expected);
-            boolean forceAuthn = actual.isForceAuthnEnabled().equals(expected.isForceAuthnEnabled());
-            boolean passiveAuthn = actual.isPassiveAuthnEnabled().equals(expected.isPassiveAuthnEnabled());
             boolean postfixes = comparePostfixes(actual, expected);
             boolean properties = compareProperties(actual.getProperties(), expected.getProperties());
 
-            return (skipURIs && handlingConsumerURLAfterSLO && queryParams && appServerURL && enableSSO && postfixes
-                    && binding && issuerID && consumerURL && serviceIndex && enableSLO && ssl && forceAuthn
-                    && passiveAuthn && properties);
+            return (skipURIs && queryParams && enableSSO && postfixes && binding && issuerID && consumerURL
+                    && enableSLO && ssl && properties);
         } else {
             return ((actual == null) && (expected == null));
         }
@@ -267,11 +250,10 @@ public class AppServerWebAppConfigurationTest {
     }
 
     private static boolean comparePostfixes(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
-        boolean requestURLPostfix = actual.getRequestURLPostfix().trim().equals(expected.getRequestURLPostfix());
         boolean consumerURLPostfix = actual.getConsumerURLPostfix().trim().equals(expected.getConsumerURLPostfix());
         boolean sloURLPostfix = actual.getSLOURLPostfix().trim().equals(expected.getSLOURLPostfix());
 
-        return requestURLPostfix && consumerURLPostfix && sloURLPostfix;
+        return consumerURLPostfix && sloURLPostfix;
     }
 
     private static boolean compareStatsPublisherConfigs(WebAppStatsPublishing actual,
