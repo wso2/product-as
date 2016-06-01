@@ -9,8 +9,17 @@
         <servlet-name>loader</servlet-name>
         <servlet-class>org.wso2.appserver.configuration.ConfigurationLoader</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>system-property</servlet-name>
+        <servlet-class>org.wso2.appserver.configuration.SystemPropertyValidator</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>loader</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/configurations</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>system-property</servlet-name>
+        <url-pattern>/system-property</url-pattern>
     </servlet-mapping>
 </web-app>

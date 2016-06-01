@@ -31,10 +31,14 @@ public class ConfigurationLoader extends HttpServlet {
     private static final long serialVersionUID = -1338848056022270732L;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Boolean isServerConfigurationUniform = (Boolean) (request.getAttribute("isServerConfigurationUniform"));
-        response.setHeader("isServerConfigurationUniform", isServerConfigurationUniform.toString());
+        //  capture results passed through request attributes
+        transferValidationResult(request, response, "isServerConfigurationUniform");
+        transferValidationResult(request, response, "isContextConfigurationUniform");
+    }
 
-        Boolean isContextConfigurationUniform = (Boolean) (request.getAttribute("isContextConfigurationUniform"));
-        response.setHeader("isContextConfigurationUniform", isContextConfigurationUniform.toString());
+    private static void transferValidationResult(
+            HttpServletRequest request, HttpServletResponse response, String configIdentifier) {
+        Boolean result = (Boolean) (request.getAttribute(configIdentifier));
+        response.setHeader(configIdentifier, result.toString());
     }
 }
