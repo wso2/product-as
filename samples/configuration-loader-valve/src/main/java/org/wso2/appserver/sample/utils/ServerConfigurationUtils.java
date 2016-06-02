@@ -72,7 +72,6 @@ public class ServerConfigurationUtils {
         ssoConfiguration.setIdpURL(Constants.IDP_URL);
         ssoConfiguration.setIdpEntityId(Constants.IDP_ENTITY_ID);
         ssoConfiguration.setIdpCertificateAlias(Constants.IDP_CERT_ALIAS);
-        ssoConfiguration.setACSBase(Constants.ACS_BASE);
 
         return ssoConfiguration;
     }
@@ -151,9 +150,8 @@ public class ServerConfigurationUtils {
             boolean idpURL = actual.getIdpURL().trim().equals(expected.getIdpURL());
             boolean idpEntityID = actual.getIdpEntityId().trim().equals(expected.getIdpEntityId());
             boolean idpCertAlias = actual.getIdpCertificateAlias().trim().equals(expected.getIdpCertificateAlias());
-            boolean acsBase = actual.getACSBase().trim().equals(expected.getACSBase());
             boolean properties = compareSSOProperties(actual.getProperties(), expected.getProperties());
-            return (idpURL && idpEntityID && idpCertAlias && acsBase && properties);
+            return (idpURL && idpEntityID && idpCertAlias && properties);
         } else {
             return (actual == null) && (expected == null);
         }
