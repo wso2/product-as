@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.slf4j</groupId>
     <artifactId>slf4j-shaded</artifactId>
-    <version>1.7.22.wso2v1-SNAPSHOT</version>
+    <version>${slf4j.shade.version}</version>
 
     <dependencies>
         <dependency>
