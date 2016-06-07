@@ -48,7 +48,7 @@ public class SSOX509Credential {
         return privateKey;
     }
 
-    public PublicKey getPublicKey() {
+    PublicKey getPublicKey() {
         return publicKey;
     }
 
@@ -63,7 +63,7 @@ public class SSOX509Credential {
      * @throws SSOException if an error occurred while reading credentials
      */
     private void readX509Credentials(AppServerSecurity securityConfiguration) throws SSOException {
-        Optional generatedKeyStore = SSOUtils.generateKeyStore(securityConfiguration);
+        Optional generatedKeyStore = SSOUtils.generateKeyStore();
         if (generatedKeyStore.isPresent()) {
             KeyStore keyStore = (KeyStore) generatedKeyStore.get();
             try {

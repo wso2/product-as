@@ -28,9 +28,9 @@ import javax.servlet.http.HttpSession;
 /**
  * A class which manages authenticated sessions of a service provider.
  * <p>
- * Session Index at the identity provider is mapped to the session at the service provider so that a single-logout
- * (SLO) request can be handled by invalidating the service provider session mapped to identity provider session
- * index.
+ * Session Index at the identity provider is mapped to the session at the service provider so that a
+ * single-logout (SLO) request can be handled by invalidating the service provider session mapped to
+ * identity provider session index.
  *
  * @since 6.0.0
  */
@@ -38,19 +38,21 @@ public class SSOAgentSessionManager {
     private static final Map<String, Set<HttpSession>> ssoSessionsMap = new HashMap<>();
 
     /**
-     * Prevents initiating the SSOAgentSessionManager class.
+     * Prevents instantiating the SSOAgentSessionManager class.
      */
     private SSOAgentSessionManager() {
     }
 
     /**
-     * Invalidates all the sessions associated with the session index retrieved from the specified {@code HttpSession}
-     * from the global single-sign-on (SSO) agent session manager map.
+     * Returns all sessions associated with the session index retrieved from a specified {@code HttpSession}
+     * which are to be invalidated.
+     * <p>
+     * Internally, these sessions are removed from the global single-sign-on (SSO) agent session manager map.
      *
      * @param session the {@link HttpSession} instance
      * @return set of sessions associated with the session index
      */
-    public static Set<HttpSession> invalidateAllSessions(HttpSession session) {
+    public static Set<HttpSession> getAllInvalidatableSessions(HttpSession session) {
         LoggedInSession sessionBean = (LoggedInSession) session.getAttribute(Constants.SESSION_BEAN);
         Set<HttpSession> sessions = new HashSet<>();
         if ((sessionBean != null) && (sessionBean.getSAML2SSO() != null)) {
@@ -65,13 +67,14 @@ public class SSOAgentSessionManager {
     }
 
     /**
-     * Invalidates all the sessions associated with a specified session index from the global single-sign-on (SSO)
-     * agent session manager map.
+     * Returns all sessions associated with a specified session index, which are to be invalidated.
+     * <p>
+     * Internally, these sessions are removed from the global single-sign-on (SSO) agent session manager map.
      *
      * @param sessionIndex the session index of whom all sessions are to be invalidated
      * @return set of sessions associated with the session index
      */
-    public static Set<HttpSession> invalidateAllSessions(String sessionIndex) {
+    public static Set<HttpSession> getAllInvalidatableSessions(String sessionIndex) {
         Set<HttpSession> sessions = ssoSessionsMap.remove(sessionIndex);
         sessions = Optional.ofNullable(sessions)
                 .orElse(new HashSet<>());

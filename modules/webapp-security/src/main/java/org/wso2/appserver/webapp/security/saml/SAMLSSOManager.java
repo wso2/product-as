@@ -78,7 +78,7 @@ import javax.servlet.http.HttpSession;
  *
  * @since 6.0.0
  */
-public class SAMLSSOManager {
+class SAMLSSOManager {
     private SSOAgentConfiguration ssoAgentConfiguration;
 
     SAMLSSOManager(SSOAgentConfiguration ssoAgentConfiguration) throws SSOException {
@@ -530,8 +530,6 @@ public class SAMLSSOManager {
         }
     }
 
-    //  TODO: Change SSOAgentSessionManager method names
-
     /**
      * Performs single-logout (SLO) function based on the HTTP servlet request.
      *
@@ -555,7 +553,7 @@ public class SAMLSSOManager {
                     .stream()
                     .findFirst()
                     .ifPresent(
-                            index -> SSOAgentSessionManager.invalidateAllSessions(index.getSessionIndex())
+                            index -> SSOAgentSessionManager.getAllInvalidatableSessions(index.getSessionIndex())
                                     .stream()
                                     .forEach(HttpSession::invalidate));
         } else if (saml2Object instanceof LogoutResponse) {
@@ -564,8 +562,7 @@ public class SAMLSSOManager {
                         //  not invalidating session explicitly since there may be other listeners
                         //  still waiting to get triggered and at the end of the chain session needs to be
                         //  invalidated by the system.
-                        Set<HttpSession> sessions = SSOAgentSessionManager.invalidateAllSessions(request.getSession
-                                (false));
+                        Set<HttpSession> sessions = SSOAgentSessionManager.getAllInvalidatableSessions(session);
                         sessions
                                 .stream()
                                 .forEach(httpSession -> {

@@ -58,7 +58,6 @@ import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
-import org.wso2.appserver.configuration.server.AppServerSecurity;
 import org.wso2.appserver.webapp.security.Constants;
 import org.wso2.appserver.webapp.security.bean.RelayState;
 import org.wso2.appserver.webapp.security.saml.signature.SSOX509Credential;
@@ -245,19 +244,12 @@ public class SSOUtils {
     /**
      * Returns a {@code KeyStore} based on keystore properties specified.
      *
-     * @param configuration the keystore properties
      * @return the {@link KeyStore} instance generated
      * @throws SSOException if an error occurs while generating the {@link KeyStore} instance
      */
-    public static Optional generateKeyStore(AppServerSecurity configuration) throws SSOException {
-        if ((configuration == null) || (configuration.getKeystore() == null)) {
-            return Optional.empty();
-        }
-
-        AppServerSecurity.Keystore keystoreConfiguration = configuration.getKeystore();
-
-        String keystorePathString = keystoreConfiguration.getLocation();
-        String keystorePasswordString = keystoreConfiguration.getPassword();
+    public static Optional generateKeyStore() throws SSOException {
+        String keystorePathString = System.getProperty("javax.net.ssl.keyStore");
+        String keystorePasswordString = System.getProperty("javax.net.ssl.keyStorePassword");
         if ((keystorePasswordString == null) || (keystorePathString == null)) {
             return Optional.empty();
         }
@@ -265,7 +257,7 @@ public class SSOUtils {
         Path keyStorePath = Paths.get(URI.create(keystorePathString).getPath());
         if (Files.exists(keyStorePath)) {
             try (InputStream keystoreInputStream = Files.newInputStream(keyStorePath)) {
-                KeyStore keyStore = KeyStore.getInstance(keystoreConfiguration.getType());
+                KeyStore keyStore = KeyStore.getInstance(System.getProperty("javax.net.ssl.keyStoreType"));
                 keyStore.load(keystoreInputStream, keystorePasswordString.toCharArray());
                 return Optional.of(keyStore);
             } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException e) {

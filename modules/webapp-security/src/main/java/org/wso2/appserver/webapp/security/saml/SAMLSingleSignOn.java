@@ -167,8 +167,8 @@ public class SAMLSingleSignOn extends SingleSignOn {
      */
     private SSOAgentConfiguration createAgent(Request request) throws SSOException {
         if (serverConfiguration == null || contextConfiguration == null) {
-            throw new SSOException("SSO Agent configuration cannot be initialized due to invalid server level or " +
-                    "context level configurations");
+            throw new SSOException("SSO Agent configuration cannot be initialized. The server level and/or context" +
+                    " level configurations is/are invalid");
         }
 
         SSOAgentConfiguration ssoAgentConfiguration = new SSOAgentConfiguration();
@@ -213,9 +213,10 @@ public class SAMLSingleSignOn extends SingleSignOn {
      */
     private void setDefaultConfigurations(Request request) {
         if (serverConfiguration != null && contextConfiguration != null) {
+            String defaultACSBase = SSOUtils.constructApplicationServerURL(request)
+                    .orElse("");
             serverConfiguration.setACSBase(Optional.ofNullable(serverConfiguration.getACSBase())
-                    .orElse(SSOUtils.constructApplicationServerURL(request)
-                            .orElse(null)));
+                    .orElse(defaultACSBase));
             contextConfiguration.setConsumerURLPostfix(Optional.ofNullable(contextConfiguration.getConsumerURLPostfix())
                     .orElse(Constants.DEFAULT_CONSUMER_URL_POSTFIX));
         }
@@ -319,7 +320,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
                         .orElse(""));
             }
         } catch (IOException e) {
-            throw new SSOException("Error during redirecting after processing SAML 2.0 Response", e);
+            throw new SSOException("Errornull during redirecting after processing SAML 2.0 Response", e);
         }
     }
 
