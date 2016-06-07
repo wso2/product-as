@@ -74,6 +74,42 @@ public final class Constants {
     public static final String WEB_CONTAINER_RESOURCE_FOLDER = "META-INF";
 
     /**
+     * SSL configuration system property keys
+     */
+
+    /**
+     * System property key identifying the file path location of the Application Server keystore.
+     */
+    public static final String JAVA_KEYSTORE_LOCATION = "javax.net.ssl.keyStore";
+
+    /**
+     * System property key identifying the password to access the private key from the keystore file
+     * specified by system property 'javax.net.ssl.keyStore'.
+     */
+    public static final String JAVA_KEYSTORE_PASSWORD = "javax.net.ssl.keyStorePassword";
+
+    /**
+     * System property key identifying the Java keystore file format.
+     */
+    public static final String JAVA_KEYSTORE_TYPE = "javax.net.ssl.keyStoreType";
+
+    /**
+     * System property key identifying the file path location of the Application Server trust store.
+     */
+    public static final String JAVA_TRUST_STORE_LOCATION = "javax.net.ssl.trustStore";
+
+    /**
+     * System property key identifying the password to access the trust store file specified by
+     * system property 'javax.net.ssl.trustStore'.
+     */
+    public static final String JAVA_TRUST_STORE_PASSWORD = "javax.net.ssl.trustStorePassword";
+
+    /**
+     * System property key identifying the Java trust store file format.
+     */
+    public static final String JAVA_TRUST_STORE_TYPE = "javax.net.ssl.trustStoreType";
+
+    /**
      * Prevents instantiating this class.
      */
     private Constants() {

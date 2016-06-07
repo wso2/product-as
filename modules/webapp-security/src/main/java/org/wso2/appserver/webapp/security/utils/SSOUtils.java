@@ -248,8 +248,8 @@ public class SSOUtils {
      * @throws SSOException if an error occurs while generating the {@link KeyStore} instance
      */
     public static Optional generateKeyStore() throws SSOException {
-        String keystorePathString = System.getProperty("javax.net.ssl.keyStore");
-        String keystorePasswordString = System.getProperty("javax.net.ssl.keyStorePassword");
+        String keystorePathString = System.getProperty(org.wso2.appserver.Constants.JAVA_KEYSTORE_LOCATION);
+        String keystorePasswordString = System.getProperty(org.wso2.appserver.Constants.JAVA_KEYSTORE_PASSWORD);
         if ((keystorePasswordString == null) || (keystorePathString == null)) {
             return Optional.empty();
         }
@@ -257,7 +257,8 @@ public class SSOUtils {
         Path keyStorePath = Paths.get(URI.create(keystorePathString).getPath());
         if (Files.exists(keyStorePath)) {
             try (InputStream keystoreInputStream = Files.newInputStream(keyStorePath)) {
-                KeyStore keyStore = KeyStore.getInstance(System.getProperty("javax.net.ssl.keyStoreType"));
+                KeyStore keyStore = KeyStore.getInstance(System.getProperty(org.wso2.appserver.Constants
+                        .JAVA_KEYSTORE_TYPE));
                 keyStore.load(keystoreInputStream, keystorePasswordString.toCharArray());
                 return Optional.of(keyStore);
             } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException e) {
