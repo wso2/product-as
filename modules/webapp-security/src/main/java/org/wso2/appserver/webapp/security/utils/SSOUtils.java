@@ -58,7 +58,6 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 import org.wso2.appserver.webapp.security.Constants;
-import org.wso2.appserver.webapp.security.bean.RelayState;
 import org.wso2.appserver.webapp.security.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.saml.signature.X509CredentialImplementation;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
@@ -156,6 +155,9 @@ public class SSOUtils {
         if (request == null) {
             return Optional.empty();
         }
+
+        //  TODO: way to obtain the protocol and the actual ssl connector port
+
         StringBuilder appServerURL = new StringBuilder("https://");
         String requestHost = request.getHost().getName();
         int requestPort = request.getConnector().getPort();
@@ -270,22 +272,6 @@ public class SSOUtils {
     /**
      * Utility functions of the flow of single-sign-on and single-logout.
      */
-
-    /**
-     * Generates a {@code RelayState} based on the {@code Request}.
-     *
-     * @param request the {@link Request} instance
-     * @return the created {@link RelayState} instance
-     */
-    public static RelayState generateRelayState(Request request) {
-        RelayState relayState = new RelayState();
-
-        relayState.setRequestedURL(request.getRequestURI());
-        relayState.setRequestQueryString(request.getQueryString());
-        relayState.setRequestParameters(request.getParameterMap());
-
-        return relayState;
-    }
 
     /**
      * Sends character data specified by the {@code htmlPayload} in the servlet response body.

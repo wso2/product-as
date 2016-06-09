@@ -61,8 +61,6 @@ import org.wso2.appserver.webapp.security.utils.SSOAgentDataHolder;
 import org.wso2.appserver.webapp.security.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -191,10 +189,6 @@ class SAMLSSOManager {
 
         Map<String, String[]> parameters = new HashMap<>();
         parameters.put(Constants.HTTP_POST_PARAM_SAML_REQUEST, new String[]{encodedRequestMessage});
-        if (ssoAgentConfiguration.getSAML2().getRelayState() != null) {
-            parameters.put(Constants.RELAY_STATE_PARAMETER,
-                    new String[]{ssoAgentConfiguration.getSAML2().getRelayState()});
-        }
 
         //  add any additional parameters defined
         if ((ssoAgentConfiguration.getQueryParameters() != null) && (!ssoAgentConfiguration.
@@ -247,21 +241,6 @@ class SAMLSSOManager {
                 encodeRequestMessage(rawRequestMessage, SAMLConstants.SAML2_REDIRECT_BINDING_URI);
         StringBuilder httpQueryString = new StringBuilder(Constants.HTTP_POST_PARAM_SAML_REQUEST +
                 "=" + encodedRequestMessage);
-
-        //  arranges the query string if any RelayState data is to accompany the SAML 2.0 protocol message
-        String relayState = ssoAgentConfiguration.getSAML2().getRelayState();
-        if (relayState != null) {
-            try {
-                httpQueryString
-                        .append("&")
-                        .append(Constants.RELAY_STATE_PARAMETER)
-                        .append("=")
-                        .append(URLEncoder.encode(relayState, Constants.UTF8_ENC)
-                                .trim());
-            } catch (UnsupportedEncodingException e) {
-                throw new SSOException("Error occurred while URLEncoding " + Constants.RELAY_STATE_PARAMETER, e);
-            }
-        }
 
         //  adds any additional parameters defined
         if ((ssoAgentConfiguration.getQueryParameters() != null) && (!ssoAgentConfiguration.
@@ -418,12 +397,6 @@ class SAMLSSOManager {
                 } else {
                     processSingleSignInResponse(request);
                 }
-            }
-            String relayState = request.getParameter(Constants.RELAY_STATE_PARAMETER);
-
-            if ((relayState != null) && (!relayState.isEmpty()) && (!("null").equalsIgnoreCase(relayState))) {
-                //  additional checks for incompetent identity providers
-                ssoAgentConfiguration.getSAML2().setRelayState(relayState);
             }
         } else {
             throw new SSOException("Invalid SAML 2.0 Response, SAML Response cannot be null");

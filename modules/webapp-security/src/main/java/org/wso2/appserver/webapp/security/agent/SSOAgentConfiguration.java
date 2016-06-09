@@ -36,8 +36,13 @@ import java.util.stream.Collectors;
  */
 public class SSOAgentConfiguration {
     private Boolean isSSOEnabled;
+
     private Set<String> skipURIs;
     private Map<String, String[]> queryParameters;
+    private String requestedURL;
+    private String requestQueryString;
+    private Map requestParameters;
+
     private SAML2 saml2;
 
     public SSOAgentConfiguration() {
@@ -56,6 +61,30 @@ public class SSOAgentConfiguration {
 
     public Map<String, String[]> getQueryParameters() {
         return queryParameters;
+    }
+
+    public String getRequestedURL() {
+        return requestedURL;
+    }
+
+    public void setRequestedURL(String requestedURL) {
+        this.requestedURL = requestedURL;
+    }
+
+    public String getRequestQueryString() {
+        return requestQueryString;
+    }
+
+    public void setRequestQueryString(String requestQueryString) {
+        this.requestQueryString = requestQueryString;
+    }
+
+    public Map getRequestParameters() {
+        return requestParameters;
+    }
+
+    public void setRequestParameters(Map requestParameters) {
+        this.requestParameters = requestParameters;
     }
 
     public SAML2 getSAML2() {
@@ -166,7 +195,6 @@ public class SSOAgentConfiguration {
         private String idPURL;
         private Boolean isPassiveAuthenticationEnabled;
         private Boolean isForceAuthenticationEnabled;
-        private String relayState;
         private SSOX509Credential ssoX509Credential;
         private Boolean isAssertionSigned;
         private Boolean isAssertionEncrypted;
@@ -218,14 +246,6 @@ public class SSOAgentConfiguration {
 
         public void enableForceAuthentication(Boolean forceAuthenticationEnabled) {
             isForceAuthenticationEnabled = forceAuthenticationEnabled;
-        }
-
-        public String getRelayState() {
-            return relayState;
-        }
-
-        public void setRelayState(String relayState) {
-            this.relayState = relayState;
         }
 
         public SSOX509Credential getSSOX509Credential() {

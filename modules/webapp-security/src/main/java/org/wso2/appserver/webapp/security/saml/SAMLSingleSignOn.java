@@ -29,12 +29,12 @@ import org.wso2.appserver.configuration.server.AppServerSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
 import org.wso2.appserver.webapp.security.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.agent.SSOAgentRequestResolver;
-import org.wso2.appserver.webapp.security.bean.RelayState;
 import org.wso2.appserver.webapp.security.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import javax.servlet.ServletException;
 
@@ -230,28 +230,26 @@ public class SAMLSingleSignOn extends SingleSignOn {
      * @throws SSOException if an error occurs when handling an unauthenticated request
      */
     private void handleUnauthenticatedRequest(Request request, Response response) throws SSOException {
+        if (agentConfiguration == null) {
+            throw new SSOException("SSO Agent configurations have not been initialized");
+        }
+
         if (requestResolver == null) {
             throw new SSOException("SSO Agent request resolver has not been initialized");
         }
 
         SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
 
-        //  handle the generation of the SAML 2.0 RelayState
-        String relayStateId = SSOUtils.createID();
-        RelayState relayState = SSOUtils.generateRelayState(request);
-        if (agentConfiguration != null) {
-            agentConfiguration.getSAML2().setRelayState(relayStateId);
-        }
-        Optional.ofNullable(request.getSession(false))
-                .ifPresent(httpSession -> httpSession.setAttribute(relayStateId, relayState));
+        //  manage redirection after single-sign-on
+        agentConfiguration.setRequestedURL(request.getRequestURI());
+        agentConfiguration.setRequestQueryString(request.getQueryString());
+        agentConfiguration.setRequestParameters(request.getParameterMap());
 
         Optional.ofNullable(agentConfiguration)
                 .ifPresent(agent -> agent.getSAML2().enablePassiveAuthentication(false));
         if (requestResolver.isHttpPOSTBinding()) {
             containerLog.info("Handling the SAML 2.0 Authentication Request for HTTP-POST binding...");
-
             String htmlPayload = manager.handleAuthenticationRequestForPOSTBinding(request);
-
             SSOUtils.sendCharacterData(response, htmlPayload);
         } else {
             containerLog.info("Handling the SAML 2.0 Authentication Request for " +
@@ -298,21 +296,18 @@ public class SAMLSingleSignOn extends SingleSignOn {
 
         //  redirect according to relay state attribute
         try {
-            String relayStateId = agentConfiguration.getSAML2().getRelayState();
-            if ((relayStateId != null) && (request.getSession(false) != null)) {
-                RelayState relayState = (RelayState) request.getSession(false).getAttribute(relayStateId);
-                if (relayState != null) {
-                    request.getSession(false).removeAttribute(relayStateId);
-                    StringBuilder requestedURI = new StringBuilder(relayState.getRequestedURL());
-                    relayState.getRequestQueryString()
-                            .ifPresent(queryString -> requestedURI.append("?").append(queryString));
-                    relayState.getRequestParameters()
-                            .ifPresent(queryParameters -> request.getSession(false).
-                                    setAttribute(Constants.REQUEST_PARAM_MAP, queryParameters));
-                    response.sendRedirect(requestedURI.toString());
-                } else {
-                    response.sendRedirect(serverConfiguration.getACSBase() + request.getContextPath());
-                }
+            String requestURL = agentConfiguration.getRequestedURL();
+            String requestQueryString = agentConfiguration.getRequestQueryString();
+            Map requestParameters = agentConfiguration.getRequestParameters();
+
+            if ((requestURL != null) && (request.getSession(false) != null)) {
+                StringBuilder requestedURI = new StringBuilder(requestURL);
+                Optional.ofNullable(requestQueryString)
+                        .ifPresent(queryString -> requestedURI.append("?").append(queryString));
+                Optional.ofNullable(requestParameters)
+                        .ifPresent(queryParameters -> request.getSession(false).
+                                setAttribute(Constants.REQUEST_PARAM_MAP, queryParameters));
+                response.sendRedirect(requestedURI.toString());
             } else {
                 response.sendRedirect(SSOUtils.generateConsumerURL(
                         request.getContextPath(), serverConfiguration.getACSBase(),
