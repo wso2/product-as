@@ -15,6 +15,8 @@
  */
 package org.wso2.appserver.webapp.security.utils;
 
+import net.shibboleth.utilities.java.support.codec.Base64Support;
+import net.shibboleth.utilities.java.support.xml.SerializeSupport;
 import org.apache.catalina.connector.Request;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xml.security.Init;
@@ -24,12 +26,10 @@ import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.XMLObjectBuilder;
-import org.opensaml.core.xml.XMLObjectBuilderFactory;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
-import org.opensaml.core.xml.io.MarshallerFactory;
 import org.opensaml.core.xml.io.MarshallingException;
 import org.opensaml.core.xml.io.Unmarshaller;
-import org.opensaml.core.xml.io.UnmarshallerFactory;
 import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -40,9 +40,8 @@ import org.opensaml.saml.saml2.encryption.Decrypter;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.credential.Credential;
 import org.opensaml.security.x509.X509Credential;
-import org.opensaml.xml.util.Base64;
-import org.opensaml.xml.util.XMLHelper;
 import org.opensaml.xmlsec.encryption.EncryptedKey;
+import org.opensaml.xmlsec.encryption.EncryptionMethod;
 import org.opensaml.xmlsec.encryption.support.DecryptionException;
 import org.opensaml.xmlsec.keyinfo.KeyInfoCredentialResolver;
 import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
@@ -70,7 +69,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URI;
@@ -158,7 +156,7 @@ public class SSOUtils {
         if (request == null) {
             return Optional.empty();
         }
-        StringBuilder appServerURL = new StringBuilder(request.getConnector().getProtocol() + "://");
+        StringBuilder appServerURL = new StringBuilder("https://");
         String requestHost = request.getHost().getName();
         int requestPort = request.getConnector().getPort();
 
@@ -347,7 +345,7 @@ public class SSOUtils {
             signatureList.add(signature);
 
             //  marshall and sign
-            Marshaller marshaller = new MarshallerFactory().getMarshaller(request);
+            Marshaller marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(request);
             if (marshaller != null) {
                 marshaller.marshall(request);
             }
@@ -401,7 +399,7 @@ public class SSOUtils {
      * @throws SSOException if an error occurs while retrieving the builder for the fully qualified name
      */
     private static XMLObject buildXMLObject(QName objectQualifiedName) throws SSOException {
-        XMLObjectBuilder builder = new XMLObjectBuilderFactory().getBuilder(objectQualifiedName);
+        XMLObjectBuilder builder = XMLObjectProviderRegistrySupport.getBuilderFactory().getBuilder(objectQualifiedName);
         if (builder == null) {
             throw new SSOException("Unable to retrieve builder for object QName " + objectQualifiedName);
         }
@@ -419,11 +417,23 @@ public class SSOUtils {
      * @throws SSOException if an error occurs while encoding SAML request
      */
     public static String encodeRequestMessage(RequestAbstractType requestMessage, String binding) throws SSOException {
-        Element authDOM = requestMessage.getDOM();
-        StringWriter writer = new StringWriter();
-        //  writes the node out to the writer using the DOM
-        Optional.ofNullable(authDOM)
-                .ifPresent(dom -> XMLHelper.writeNode(dom, writer));
+        Marshaller marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(requestMessage);
+        Element authDOM = null;
+        try {
+            //  marshall this element, and its children, and root them in a newly created Document
+            if (marshaller != null) {
+                authDOM = marshaller.marshall(requestMessage);
+            }
+        } catch (MarshallingException e) {
+            throw new SSOException("Error occurred while encoding SAML 2.0 Request, failed to marshall the SAML 2.0. " +
+                    "Request element XMLObject to its corresponding W3C DOM element", e);
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //  writes the node out to an output stream using the DOM
+        if (authDOM != null) {
+            SerializeSupport.writeNode(authDOM, outputStream);
+        }
 
         if (SAMLConstants.SAML2_REDIRECT_BINDING_URI.equals(binding)) {
             //  compresses the message using default DEFLATE encoding, Base 64 encode and URL encode
@@ -431,13 +441,12 @@ public class SSOUtils {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             try (DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(byteArrayOutputStream,
                     deflater)) {
-                deflaterOutputStream.write(writer.toString().getBytes(Charset.forName(Constants.UTF8_ENC)));
+                deflaterOutputStream.write(outputStream.toByteArray());
             } catch (IOException e) {
                 throw new SSOException("Error occurred while deflate encoding SAML 2.0 request", e);
             }
 
-            String encodedRequestMessage = Base64.
-                    encodeBytes(byteArrayOutputStream.toByteArray(), Base64.DONT_BREAK_LINES);
+            String encodedRequestMessage = Base64Support.encode(byteArrayOutputStream.toByteArray(), false);
             try {
                 return URLEncoder.encode(encodedRequestMessage, Constants.UTF8_ENC).trim();
             } catch (UnsupportedEncodingException e) {
@@ -445,8 +454,7 @@ public class SSOUtils {
             }
         } else {
             //  if the binding type encountered is HTTP-POST binding or an unsupported binding type
-            return Base64.encodeBytes(writer.toString().getBytes(Charset.forName(Constants.UTF8_ENC)),
-                    Base64.DONT_BREAK_LINES);
+            return Base64Support.encode(outputStream.toByteArray(), false);
         }
     }
 
@@ -461,8 +469,11 @@ public class SSOUtils {
      */
     public static String marshall(XMLObject xmlObject) throws SSOException {
         try {
-            Marshaller marshaller = new MarshallerFactory().getMarshaller(xmlObject);
-            Element element = marshaller.marshall(xmlObject);
+            Marshaller marshaller = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(xmlObject);
+            Element element = null;
+            if (marshaller != null) {
+                element = marshaller.marshall(xmlObject);
+            }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
             DOMImplementationLS implementation = (DOMImplementationLS) registry.getDOMImplementation("LS");
@@ -483,15 +494,19 @@ public class SSOUtils {
      * @return an XML object from the {@link String} value representing the XML syntax
      * @throws SSOException if an error occurs when unmarshalling the XML string representation
      */
-    public static XMLObject unmarshall(String xmlString) throws SSOException {
+    public static Optional<XMLObject> unmarshall(String xmlString) throws SSOException {
         try {
             DocumentBuilder docBuilder = SSOUtils.getDocumentBuilder(false, true, new XMLEntityResolver());
             ByteArrayInputStream inputStream = new ByteArrayInputStream(
                     xmlString.getBytes(Charset.forName(Constants.UTF8_ENC)));
             Document document = docBuilder.parse(inputStream);
             Element element = document.getDocumentElement();
-            Unmarshaller unmarshaller = new UnmarshallerFactory().getUnmarshaller(element);
-            return unmarshaller.unmarshall(element);
+            Unmarshaller unmarshaller = XMLObjectProviderRegistrySupport.getUnmarshallerFactory()
+                    .getUnmarshaller(element);
+            if (unmarshaller == null) {
+                return Optional.empty();
+            }
+            return Optional.of(unmarshaller.unmarshall(element));
         } catch (UnmarshallingException | SAXException | IOException e) {
             throw new SSOException("Error in unmarshalling the XML string representation", e);
         }
@@ -511,18 +526,29 @@ public class SSOUtils {
             KeyInfoCredentialResolver keyResolver = new StaticKeyInfoCredentialResolver(
                     new X509CredentialImplementation(ssoAgentX509Credential));
 
-            Optional<EncryptedKey> key = encryptedAssertion.getEncryptedData().getKeyInfo().getEncryptedKeys()
-                    .stream()
-                    .findFirst();
+            KeyInfo keyInfo = encryptedAssertion.getEncryptedData().getKeyInfo();
+            Optional<EncryptedKey> key = Optional.empty();
+            if (keyInfo != null) {
+                key = keyInfo.getEncryptedKeys()
+                        .stream()
+                        .findFirst();
+            }
+
             EncryptedKey encryptedKey = null;
             if (key.isPresent()) {
                 encryptedKey = key.get();
             }
+
             Decrypter decrypter = new Decrypter(null, keyResolver, null);
-            SecretKey decrypterKey;
+            SecretKey decrypterKey = null;
             if (encryptedKey != null) {
-                decrypterKey = (SecretKey) decrypter.decryptKey(encryptedKey, encryptedAssertion.getEncryptedData().
-                        getEncryptionMethod().getAlgorithm());
+                EncryptionMethod encryptionMethod = encryptedAssertion.getEncryptedData().getEncryptionMethod();
+                if (encryptionMethod != null) {
+                    String algorithm = encryptionMethod.getAlgorithm();
+                    if (algorithm != null) {
+                        decrypterKey = (SecretKey) decrypter.decryptKey(encryptedKey, algorithm);
+                    }
+                }
                 Credential shared = SSOUtils.getSimpleCredential(decrypterKey);
                 decrypter = new Decrypter(new StaticKeyInfoCredentialResolver(shared), null, null);
                 decrypter.setRootInNewDocument(true);
@@ -564,8 +590,11 @@ public class SSOUtils {
                                         .stream()
                                         .findFirst();
                                 if (value.isPresent()) {
-                                    String attributeValue = value.get().getDOM().getTextContent();
-                                    results.put(attribute.getName(), attributeValue);
+                                    Optional.ofNullable(value.get().getDOM())
+                                            .ifPresent(dom -> {
+                                                String attributeValue = dom.getTextContent();
+                                                results.put(attribute.getName(), attributeValue);
+                                            });
                                 }
                             }));
         }
@@ -590,7 +619,7 @@ public class SSOUtils {
             signature.update(httpQueryString.toString().getBytes(Charset.forName(Constants.UTF8_ENC)));
             byte[] signatureByteArray = signature.sign();
 
-            String signatureBase64EncodedString = Base64.encodeBytes(signatureByteArray, Base64.DONT_BREAK_LINES);
+            String signatureBase64EncodedString = Base64Support.encode(signatureByteArray, false);
             httpQueryString.append("&Signature=").
                     append(URLEncoder.encode(signatureBase64EncodedString, Constants.UTF8_ENC).trim());
         } catch (NoSuchAlgorithmException | InvalidKeyException |

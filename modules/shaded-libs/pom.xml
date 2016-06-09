@@ -21,12 +21,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>shaded-libs</artifactId>
+    <name>WSO2 Application Server - Module - Shaded Libraries</name>
+    <url>http://wso2.com</url>
 
     <modules>
         <module>slf4j</module>
         <module>libthrift</module>
     </modules>
-
-
-
 </project>

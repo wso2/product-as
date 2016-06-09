@@ -100,6 +100,7 @@
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-utils</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-http-statistics-monitoring</artifactId>
@@ -107,6 +108,10 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-webapp-loader</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-webapp-security</artifactId>
         </dependency>
 
         <!-- WSO2 Application Server shaded libraries -->
@@ -196,6 +201,27 @@
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
         </dependency>
+
+        <!--<dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.shibboleth.utilities</groupId>
+            <artifactId>java-support</artifactId>
+        </dependency>-->
 
         <!-- Webapp loader dependencies -->
         <dependency>

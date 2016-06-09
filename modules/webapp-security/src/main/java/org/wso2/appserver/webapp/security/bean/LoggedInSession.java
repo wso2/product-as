@@ -189,12 +189,14 @@ public class LoggedInSession implements Serializable {
 
             responseString = (String) stream.readObject();
             if ((responseString != null) && (!emptyString.equals(responseString))) {
-                response = (Response) SSOUtils.unmarshall(responseString);
+                SSOUtils.unmarshall(responseString)
+                        .ifPresent(object -> response = (Response) object);
             }
 
             setAssertionString((String) stream.readObject());
             if ((responseString != null) && (!emptyString.equals(assertionString))) {
-                assertion = (Assertion) SSOUtils.unmarshall(assertionString);
+                SSOUtils.unmarshall(assertionString)
+                        .ifPresent(object -> assertion = (Assertion) object);
             }
 
             sessionIndex = (String) stream.readObject();

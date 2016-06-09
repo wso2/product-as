@@ -48,6 +48,7 @@
                 <include>org.wso2.appserver:appserver-utils:jar</include>
                 <include>org.wso2.appserver:appserver-http-statistics-monitoring:jar</include>
                 <include>org.wso2.appserver:appserver-webapp-loader:jar</include>
+                <include>org.wso2.appserver:appserver-webapp-security:jar</include>
             </includes>
         </dependencySet>
 
@@ -75,6 +76,13 @@
                 <include>commons-pool:commons-pool:jar</include>
                 <include>commons-io:commons-io:jar</include>
                 <include>com.lmax:disruptor:jar</include>
+
+                <!-- Application Server web-app security dependencies -->
+                <!--<include>com.google.code.findbugs:jsr305:jar</include>
+                <include>com.google.code.gson:gson:jar</include>
+                <include>com.google.guava:guava:jar</include>
+                <include>joda-time:joda-time:jar</include>
+                <include>net.shibboleth.utilities:java-support:jar</include>-->
             </includes>
         </dependencySet>
 

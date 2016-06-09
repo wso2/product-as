@@ -27,6 +27,10 @@
     <url>http://wso2.com</url>
 
     <dependencies>
+        <!--<dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -39,10 +43,10 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.santuario</groupId>
             <artifactId>xmlsec</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
@@ -67,10 +71,20 @@
             <groupId>org.opensaml</groupId>
             <artifactId>opensaml-saml-impl</artifactId>
         </dependency>
+
+        <!--<dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-security-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.opensaml</groupId>
-            <artifactId>xmltooling</artifactId>
+            <artifactId>opensaml-xmlsec-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-xmlsec-impl</artifactId>
+        </dependency>-->
+
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-utils</artifactId>

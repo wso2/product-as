@@ -141,6 +141,11 @@
                     <autoVersionSubmodules>false</autoVersionSubmodules>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven.shadeplugin.version}</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -188,15 +193,25 @@
                 <artifactId>commons-pool</artifactId>
                 <version>${commons-pool.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.googlecode.json-simple</groupId>
-                <artifactId>json-simple</artifactId>
-                <version>${googlecode.json-simple.version}</version>
-            </dependency>
+            <!--<dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${com.google.code.findbugs.version}</version>
+            </dependency>-->
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${com.google.code.gson.version}</version>
+            </dependency>
+            <!--<dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${com.google.guava.version}</version>
+            </dependency>-->
+            <dependency>
+                <groupId>com.googlecode.json-simple</groupId>
+                <artifactId>json-simple</artifactId>
+                <version>${googlecode.json-simple.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -214,11 +229,16 @@
                 <artifactId>joda-time</artifactId>
                 <version>${joda.time.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
+                <groupId>net.shibboleth.utilities</groupId>
+                <artifactId>java-support</artifactId>
+                <version>${net.shibboleth.utilities.version}</version>
+            </dependency>-->
+            <!--<dependency>
                 <groupId>org.apache.santuario</groupId>
                 <artifactId>xmlsec</artifactId>
                 <version>${org.apache.santuario.xmlsec.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>org.jacoco</groupId>
                 <artifactId>org.jacoco.agent</artifactId>
@@ -245,11 +265,21 @@
                 <artifactId>opensaml-saml-impl</artifactId>
                 <version>${org.opensaml.version}</version>
             </dependency>
+            <!--<dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-security-api</artifactId>
+                <version>${org.opensaml.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>xmltooling</artifactId>
-                <version>${org.opensaml.xmltooling.version}</version>
+                <artifactId>opensaml-xmlsec-api</artifactId>
+                <version>${org.opensaml.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-xmlsec-impl</artifactId>
+                <version>${org.opensaml.version}</version>
+            </dependency>-->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -410,6 +440,11 @@
                 <artifactId>appserver-webapp-loader</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>appserver-webapp-security</artifactId>
+                <version>6.0.0-SNAPSHOT</version>
+            </dependency>
 
             <!-- Shaded Dependency Modules -->
             <dependency>
@@ -551,12 +586,15 @@
         <!-- plugin version properties -->
         <maven.checkstyleplugin.version>2.17</maven.checkstyleplugin.version>
         <maven.findbugsplugin.version>3.0.3</maven.findbugsplugin.version>
+        <maven.shadeplugin.version>2.4.3</maven.shadeplugin.version>
 
         <!-- dependency version properties -->
         <tomcat.version>8.0.28</tomcat.version>
         <carbon.analyticscommon.version>5.0.8</carbon.analyticscommon.version>
         <carbon.logging.version>4.4.3</carbon.logging.version>
         <com.google.code.gson.version>2.6.2</com.google.code.gson.version>
+        <!--<com.google.code.findbugs.version>3.0.1</com.google.code.findbugs.version>-->
+        <!--<com.google.guava.version>19.0</com.google.guava.version>-->
         <commons.httpclient.version>3.1</commons.httpclient.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>3.4</commons.lang.version>
@@ -570,10 +608,11 @@
         <jsr.api.version>1.1.1</jsr.api.version>
         <libthrift.version>0.9.3</libthrift.version>
         <libthrift.shade.version>${libthrift.version}.wso2v1-SNAPSHOT</libthrift.shade.version>
+        <!--<net.shibboleth.utilities.version>7.2.0</net.shibboleth.utilities.version>-->
         <org.apache.santuario.xmlsec.version>2.0.6</org.apache.santuario.xmlsec.version>
         <org.jacoco.ant.version>0.7.5.201505241946</org.jacoco.ant.version>
         <org.opensaml.version>3.2.0</org.opensaml.version>
-        <org.opensaml.xmltooling.version>1.4.4</org.opensaml.xmltooling.version>
+        <org.opensaml.shade.version>${org.opensaml.version}.wso2v1-SNAPSHOT</org.opensaml.shade.version>
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
         <runtime.spring.version>4.2.5.RELEASE</runtime.spring.version>

@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.webapp.security.saml;
 
+import net.shibboleth.utilities.java.support.codec.Base64Support;
 import org.apache.catalina.connector.Request;
 import org.apache.juli.logging.Log;
 import org.apache.xml.security.signature.XMLSignature;
@@ -49,7 +50,6 @@ import org.opensaml.saml.saml2.core.impl.NameIDBuilder;
 import org.opensaml.saml.saml2.core.impl.NameIDPolicyBuilder;
 import org.opensaml.saml.saml2.core.impl.RequestedAuthnContextBuilder;
 import org.opensaml.saml.saml2.core.impl.SessionIndexBuilder;
-import org.opensaml.xml.util.Base64;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.wso2.appserver.webapp.security.Constants;
 import org.wso2.appserver.webapp.security.agent.SSOAgentConfiguration;
@@ -74,7 +74,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * This class manages the generation of varied request and response types that are utilized
- * within the SAML 2.0 single-sign-on (SSO) and single-logout (SLO) process.
+ * within the SAML 2.0 single-sign-on (SSO) and single-logout (SLO) processes.
  *
  * @since 6.0.0
  */
@@ -350,9 +350,8 @@ class SAMLSSOManager {
         authnRequest.setDestination(ssoAgentConfiguration.getSAML2().getIdPURL());
 
         //  if any optional protocol message extension elements that are agreed on between the communicating parties
-        if (request.getAttribute(Extensions.DEFAULT_ELEMENT_LOCAL_NAME) != null) {
-            authnRequest.setExtensions((Extensions) request.getAttribute(Extensions.DEFAULT_ELEMENT_LOCAL_NAME));
-        }
+        Optional.ofNullable(request.getAttribute(Extensions.DEFAULT_ELEMENT_LOCAL_NAME))
+                .ifPresent(extensions -> authnRequest.setExtensions((Extensions) extensions));
 
         return authnRequest;
     }
@@ -409,13 +408,16 @@ class SAMLSSOManager {
         String saml2SSOResponse = request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE);
 
         if (saml2SSOResponse != null) {
-            String decodedResponse = new String(Base64.decode(saml2SSOResponse), Charset.forName(Constants.UTF8_ENC));
-            XMLObject samlObject = SSOUtils.unmarshall(decodedResponse);
-            if (samlObject instanceof LogoutResponse) {
-                //  this is a SAML 2.0 Response for a single logout request from the service provider
-                performSingleLogout(request);
-            } else {
-                processSingleSignInResponse(request);
+            String decodedResponse = new String(Base64Support.decode(saml2SSOResponse),
+                    Charset.forName(Constants.UTF8_ENC));
+            Optional<XMLObject> samlObject = SSOUtils.unmarshall(decodedResponse);
+            if (samlObject.isPresent()) {
+                if (samlObject.get() instanceof LogoutResponse) {
+                    //  this is a SAML 2.0 Response for a single logout request from the service provider
+                    performSingleLogout(request);
+                } else {
+                    processSingleSignInResponse(request);
+                }
             }
             String relayState = request.getParameter(Constants.RELAY_STATE_PARAMETER);
 
@@ -438,9 +440,15 @@ class SAMLSSOManager {
         LoggedInSession session = new LoggedInSession();
         session.setSAML2SSO(new LoggedInSession.SAML2SSO());
 
-        String saml2ResponseString = new String(Base64.decode(request.getParameter(
+        String saml2ResponseString = new String(Base64Support.decode(request.getParameter(
                 Constants.HTTP_POST_PARAM_SAML_RESPONSE)), Charset.forName(Constants.UTF8_ENC));
-        Response saml2Response = (Response) SSOUtils.unmarshall(saml2ResponseString);
+
+        Optional<XMLObject> xmlObject = SSOUtils.unmarshall(saml2ResponseString);
+        if (!xmlObject.isPresent()) {
+            return;
+        }
+
+        Response saml2Response = (Response) xmlObject.get();
         session.getSAML2SSO().setResponseString(saml2ResponseString);
         session.getSAML2SSO().setSAMLResponse(saml2Response);
 
@@ -540,13 +548,20 @@ class SAMLSSOManager {
         XMLObject saml2Object = null;
 
         if (request.getParameter(Constants.HTTP_POST_PARAM_SAML_REQUEST) != null) {
-            saml2Object = SSOUtils.unmarshall(new String(Base64.decode(request.getParameter(
+            Optional<XMLObject> xmlObject = SSOUtils.unmarshall(new String(Base64Support.decode(request.getParameter(
                     Constants.HTTP_POST_PARAM_SAML_REQUEST)), Charset.forName(Constants.UTF8_ENC)));
+            if (xmlObject.isPresent()) {
+                saml2Object = xmlObject.get();
+            }
         }
         if (saml2Object == null) {
-            saml2Object = SSOUtils.unmarshall(new String(Base64.decode(request.getParameter(
+            Optional<XMLObject> xmlObject = SSOUtils.unmarshall(new String(Base64Support.decode(request.getParameter(
                     Constants.HTTP_POST_PARAM_SAML_RESPONSE)), Charset.forName(Constants.UTF8_ENC)));
+            if (xmlObject.isPresent()) {
+                saml2Object = xmlObject.get();
+            }
         }
+
         if (saml2Object instanceof LogoutRequest) {
             LogoutRequest logoutRequest = (LogoutRequest) saml2Object;
             logoutRequest.getSessionIndexes()
@@ -620,8 +635,7 @@ class SAMLSSOManager {
                 .stream()
                 .filter(audienceRestriction ->
                         (((audienceRestriction.getAudiences() != null) && (!audienceRestriction.getAudiences().
-                                isEmpty()))) &&
-                                (audienceRestriction.getAudiences()
+                                isEmpty()))) && (audienceRestriction.getAudiences()
                                         .stream()
                                         .filter(audience -> ssoAgentConfiguration.getSAML2().getSPEntityId().
                                                 equals(audience.getAudienceURI())))
@@ -664,8 +678,7 @@ class SAMLSSOManager {
             if (ssoAgentConfiguration.getSAML2().isAssertionSigned()) {
                 if (assertion.getSignature() == null) {
                     throw new SSOException("SAML 2.0 Assertion signing is enabled, but signature element not found in" +
-                            " " +
-                            "SAML 2.0 Assertion element");
+                            " SAML 2.0 Assertion element");
                 } else {
                     try {
                         org.opensaml.xmlsec.signature.support.SignatureValidator.validate(assertion.getSignature(),

@@ -15,9 +15,9 @@
  */
 package org.wso2.appserver.webapp.security.utils;
 
-
 /**
- * This is a singleton, utility class in which an instance acts as a holder for {@code Object} type instances.
+ * This is a singleton, utility class in which the single instance acts as a holder for {@code Object} type
+ * instances.
  *
  * @since 6.0.0
  */

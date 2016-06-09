@@ -138,7 +138,7 @@
 
                 <!-- uncomment this valve to enable HTTP statistics publishing to WSO2 DAS -->
                 <!--<Valve className="org.wso2.appserver.monitoring.HttpStatValve"/>-->
-
+                <!--<Valve className="org.wso2.appserver.webapp.security.saml.SAMLSingleSignOn"/>-->
             </Host>
         </Engine>
     </Service>
