@@ -35,56 +35,16 @@ import java.util.stream.Collectors;
  * @since 6.0.0
  */
 public class SSOAgentConfiguration {
-    private Boolean isSSOEnabled;
-
     private Set<String> skipURIs;
-    private Map<String, String[]> queryParameters;
-    private String requestedURL;
-    private String requestQueryString;
-    private Map requestParameters;
-
     private SAML2 saml2;
 
     public SSOAgentConfiguration() {
-        queryParameters = new HashMap<>();
         skipURIs = new HashSet<>();
         saml2 = new SAML2();
     }
 
-    Boolean isSSOEnabled() {
-        return isSSOEnabled;
-    }
-
-    Set<String> getSkipURIs() {
+    public Set<String> getSkipURIs() {
         return skipURIs;
-    }
-
-    public Map<String, String[]> getQueryParameters() {
-        return queryParameters;
-    }
-
-    public String getRequestedURL() {
-        return requestedURL;
-    }
-
-    public void setRequestedURL(String requestedURL) {
-        this.requestedURL = requestedURL;
-    }
-
-    public String getRequestQueryString() {
-        return requestQueryString;
-    }
-
-    public void setRequestQueryString(String requestQueryString) {
-        this.requestQueryString = requestQueryString;
-    }
-
-    public Map getRequestParameters() {
-        return requestParameters;
-    }
-
-    public void setRequestParameters(Map requestParameters) {
-        this.requestParameters = requestParameters;
     }
 
     public SAML2 getSAML2() {
@@ -98,46 +58,49 @@ public class SSOAgentConfiguration {
      * @param context the web app level SSO configurations
      */
     public void initialize(AppServerSingleSignOn server, WebAppSingleSignOn context) {
-        Optional.ofNullable(context).ifPresent(configuration -> {
-            isSSOEnabled = Optional.ofNullable(context.isSSOEnabled())
-                    .orElse(false);
-            saml2.httpBinding = Optional.ofNullable(configuration.getHttpBinding())
-                    .orElse(Constants.SAML2_HTTP_POST_BINDING);
-            saml2.spEntityId = configuration.getIssuerId();
-            saml2.acsURL = configuration.getConsumerURL();
-            //  add URIs to be skipped, if any
-            Optional.ofNullable(configuration.getSkipURIs())
-                    .ifPresent(uris ->
-                            skipURIs = uris.getSkipURIs()
-                                    .stream()
-                                    .collect(Collectors.toSet()));
-            queryParameters = SSOUtils.getSplitQueryParameters(configuration.getOptionalParams());
+        Optional.ofNullable(context)
+                .ifPresent(configuration -> {
+                    saml2.isSSOEnabled = Optional.ofNullable(context.isSSOEnabled())
+                            .orElse(false);
+                    saml2.httpBinding = Optional.ofNullable(configuration.getHttpBinding())
+                            .orElse(Constants.SAML2_HTTP_POST_BINDING);
+                    saml2.spEntityId = configuration.getIssuerId();
+                    saml2.acsURL = configuration.getConsumerURL();
+                    //  add URIs to be skipped, if any
+                    Optional.ofNullable(configuration.getSkipURIs())
+                            .ifPresent(uris ->
+                                    skipURIs = uris.getSkipURIs()
+                                            .stream()
+                                            .collect(Collectors.toSet()));
+                    saml2.queryParameters = SSOUtils.getSplitQueryParameters(configuration.getOptionalParams());
 
-            saml2.isAssertionSigned = Optional.ofNullable(configuration.isAssertionSigningEnabled())
-                    .orElse(false);
-            saml2.isAssertionEncrypted = Optional.ofNullable(configuration.isAssertionEncryptionEnabled())
-                    .orElse(false);
-            saml2.isRequestSigned = Optional.ofNullable(configuration.isRequestSigningEnabled())
-                    .orElse(false);
-            saml2.isResponseSigned = Optional.ofNullable(configuration.isResponseSigningEnabled())
-                    .orElse(false);
+                    saml2.isAssertionSigned = Optional.ofNullable(configuration.isAssertionSigningEnabled())
+                            .orElse(false);
+                    saml2.isAssertionEncrypted = Optional.ofNullable(configuration.isAssertionEncryptionEnabled())
+                            .orElse(false);
+                    saml2.isRequestSigned = Optional.ofNullable(configuration.isRequestSigningEnabled())
+                            .orElse(false);
+                    saml2.isResponseSigned = Optional.ofNullable(configuration.isResponseSigningEnabled())
+                            .orElse(false);
 
-            saml2.isSLOEnabled = Optional.ofNullable(configuration.isSLOEnabled())
-                    .orElse(false);
-            saml2.sloURLPostfix = Optional.ofNullable(configuration.getSLOURLPostfix())
-                    .orElse(Constants.DEFAULT_SLO_URL_POSTFIX);
-        });
+                    saml2.isSLOEnabled = Optional.ofNullable(configuration.isSLOEnabled())
+                            .orElse(false);
+                    saml2.sloURLPostfix = Optional.ofNullable(configuration.getSLOURLPostfix())
+                            .orElse(Constants.DEFAULT_SLO_URL_POSTFIX);
+                });
 
-        Optional.ofNullable(server).ifPresent(configuration -> {
-            saml2.idPURL = Optional.ofNullable(configuration.getIdpURL())
-                    .orElse(Constants.DEFAULT_IDP_URL);
-            saml2.idPEntityId = Optional.ofNullable(configuration.getIdpEntityId())
-                    .orElse(Constants.DEFAULT_IDP_ENTITY_ID);
-            if (saml2.isResponseSigned) {
-                saml2.signatureValidatorImplClass = Optional.ofNullable(configuration.getSignatureValidatorImplClass())
-                        .orElse(Constants.DEFAULT_SIGN_VALIDATOR_IMPL);
-            }
-        });
+        Optional.ofNullable(server)
+                .ifPresent(configuration -> {
+                    saml2.idPURL = Optional.ofNullable(configuration.getIdpURL())
+                            .orElse(Constants.DEFAULT_IDP_URL);
+                    saml2.idPEntityId = Optional.ofNullable(configuration.getIdpEntityId())
+                            .orElse(Constants.DEFAULT_IDP_ENTITY_ID);
+                    if (saml2.isResponseSigned) {
+                        saml2.signatureValidatorImplClass = Optional.ofNullable(configuration
+                                .getSignatureValidatorImplClass())
+                                .orElse(Constants.DEFAULT_SIGN_VALIDATOR_IMPL);
+                    }
+                });
     }
 
     /**
@@ -146,7 +109,7 @@ public class SSOAgentConfiguration {
      * @throws SSOException if an invalid configuration or a combination of configurations are encountered
      */
     public void validate() throws SSOException {
-        if (isSSOEnabled) {
+        if (saml2.isSSOEnabled) {
             if (saml2.spEntityId == null) {
                 throw new SSOException("SAML 2.0 Request issuer id not configured");
             }
@@ -188,6 +151,8 @@ public class SSOAgentConfiguration {
      * A nested class which defines the SAML 2.0 single-sign-on (SSO) configuration properties.
      */
     public static class SAML2 {
+        private Boolean isSSOEnabled;
+        private Map<String, String[]> queryParameters;
         private String httpBinding;
         private String spEntityId;
         private String acsURL;
@@ -203,6 +168,18 @@ public class SSOAgentConfiguration {
         private String signatureValidatorImplClass;
         private Boolean isSLOEnabled;
         private String sloURLPostfix;
+
+        public SAML2() {
+            queryParameters = new HashMap<>();
+        }
+
+        public Boolean isSSOEnabled() {
+            return isSSOEnabled;
+        }
+
+        public Map<String, String[]> getQueryParameters() {
+            return queryParameters;
+        }
 
         public String getHttpBinding() {
             return httpBinding;

@@ -17,6 +17,8 @@ package org.wso2.appserver.webapp.security.utils;
 
 import net.shibboleth.utilities.java.support.codec.Base64Support;
 import net.shibboleth.utilities.java.support.xml.SerializeSupport;
+import org.apache.catalina.Engine;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.connector.Request;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xml.security.Init;
@@ -84,6 +86,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,15 +159,36 @@ public class SSOUtils {
             return Optional.empty();
         }
 
-        //  TODO: way to obtain the protocol and the actual ssl connector port
-
-        StringBuilder appServerURL = new StringBuilder("https://");
+        String sslConnectorScheme = "https";
+        StringBuilder appServerURL = new StringBuilder(sslConnectorScheme + "://");
         String requestHost = request.getHost().getName();
-        int requestPort = request.getConnector().getPort();
 
-        return Optional.of(appServerURL.append(requestHost).append(":").append(requestPort).toString());
+        Optional<Connector> sslConnector = getConnector((Engine) request.getHost().getParent(), sslConnectorScheme);
+        if (sslConnector.isPresent()) {
+            return Optional.of(appServerURL.append(requestHost).append(":")
+                    .append(sslConnector.get().getPort()).toString());
+        } else {
+            return Optional.empty();
+        }
     }
 
+    /**
+     * Returns a Tomcat connector based associated with the specified {@code Engine} matching the {@code Connector}
+     * scheme.
+     *
+     * @param engine          the Tomcat {@code Engine} instance
+     * @param connectorScheme the {@code Connector} scheme
+     * @return the matching Tomcat {@code Connector}
+     */
+    private static Optional<Connector> getConnector(Engine engine, String connectorScheme) {
+        if (engine == null || connectorScheme == null) {
+            return Optional.empty();
+        }
+
+        return Arrays.stream(engine.getService().findConnectors())
+                .filter(connector -> connector.getScheme().equals(connectorScheme))
+                .findFirst();
+    }
 
     /**
      * Returns the query parameters split out of the query parameter string.
