@@ -11,25 +11,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>wso2appserver</artifactId>
+        <artifactId>appserver-sso-samples</artifactId>
         <groupId>org.wso2.appserver</groupId>
         <version>6.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <artifactId>samples</artifactId>
-    <name>WSO2 Application Server - Samples</name>
-    <description>WSO2 Application Server sample artifacts</description>
+    <artifactId>foo-app</artifactId>
+    <name>WSO2 Application Server - SSO Sample - Foo Web Application</name>
+    <description>Foo Web Application</description>
+    <packaging>war</packaging>
     <url>http://wso2.com</url>
 
-    <modules>
-        <module>configuration-loader</module>
-        <module>configuration-loader-valve</module>
-        <module>simple-jax-rs-service</module>
-        <module>jaxrs_basic</module>
-        <module>appserver-sso-samples</module>
-    </modules>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>
