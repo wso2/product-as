@@ -167,20 +167,19 @@ public class SAMLSingleSignOn extends SingleSignOn {
      */
     private SSOAgentConfiguration createAgent(Request request) throws SSOException {
         if (serverConfiguration == null || contextConfiguration == null) {
-            throw new SSOException("SSO Agent configuration cannot be initialized. The server level and/or context" +
-                    " level configurations is/are invalid");
+            String message = "SSO Agent configuration cannot be initialized, " +
+                    "server level and/or context level configurations are invalid";
+            throw new SSOException(message);
         }
+
+        setDefaultConfigurations(serverConfiguration, contextConfiguration, request);
 
         SSOAgentConfiguration ssoAgentConfiguration = new SSOAgentConfiguration();
 
-        setDefaultConfigurations(request);
-
         ssoAgentConfiguration.initialize(serverConfiguration, contextConfiguration);
-
         ssoAgentConfiguration.getSAML2().setSSOX509Credential(
                 new SSOX509Credential(serverConfiguration.getIdpCertificateAlias(),
                         ServerConfigurationLoader.getServerConfiguration().getSecurityConfiguration()));
-
         //  generates the service provider entity ID
         String issuerID = SSOUtils.generateIssuerID(request.getContextPath(), request.getHost().getAppBase())
                 .orElse("");
@@ -211,7 +210,8 @@ public class SAMLSingleSignOn extends SingleSignOn {
      *
      * @param request the servlet request processed
      */
-    private void setDefaultConfigurations(Request request) {
+    private void setDefaultConfigurations(AppServerSingleSignOn serverConfiguration, WebAppSingleSignOn
+            contextConfiguration, Request request) {
         if (serverConfiguration != null && contextConfiguration != null) {
             String defaultACSBase = SSOUtils.constructApplicationServerURL(request)
                     .orElse("");
@@ -240,10 +240,12 @@ public class SAMLSingleSignOn extends SingleSignOn {
 
         SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
 
-        //  manage redirection after single-sign-on
-        agentConfiguration.setRequestedURL(request.getRequestURI());
-        agentConfiguration.setRequestQueryString(request.getQueryString());
-        agentConfiguration.setRequestParameters(request.getParameterMap());
+        Optional.ofNullable(request.getSession(false))
+                .ifPresent(httpSession -> {
+                    httpSession.setAttribute(Constants.REQUEST_URL, request.getRequestURI());
+                    httpSession.setAttribute(Constants.REQUEST_QUERY_STRING, request.getQueryString());
+                    httpSession.setAttribute(Constants.REQUEST_PARAMETERS, request.getParameterMap());
+                });
 
         Optional.ofNullable(agentConfiguration)
                 .ifPresent(agent -> agent.getSAML2().enablePassiveAuthentication(false));
@@ -271,9 +273,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
      */
     private void handleResponse(Request request, Response response) throws SSOException {
         SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
-
         manager.processResponse(request);
-
         redirectAfterProcessingResponse(request, response);
     }
 
@@ -296,9 +296,9 @@ public class SAMLSingleSignOn extends SingleSignOn {
 
         //  redirect according to relay state attribute
         try {
-            String requestURL = agentConfiguration.getRequestedURL();
-            String requestQueryString = agentConfiguration.getRequestQueryString();
-            Map requestParameters = agentConfiguration.getRequestParameters();
+            String requestURL = (String) request.getSession(false).getAttribute(Constants.REQUEST_URL);
+            String requestQueryString = (String) request.getSession(false).getAttribute(Constants.REQUEST_QUERY_STRING);
+            Map requestParameters = (Map) request.getSession(false).getAttribute(Constants.REQUEST_PARAMETERS);
 
             if ((requestURL != null) && (request.getSession(false) != null)) {
                 StringBuilder requestedURI = new StringBuilder(requestURL);
@@ -309,13 +309,10 @@ public class SAMLSingleSignOn extends SingleSignOn {
                                 setAttribute(Constants.REQUEST_PARAM_MAP, queryParameters));
                 response.sendRedirect(requestedURI.toString());
             } else {
-                response.sendRedirect(SSOUtils.generateConsumerURL(
-                        request.getContextPath(), serverConfiguration.getACSBase(),
-                        contextConfiguration.getConsumerURLPostfix())
-                        .orElse(""));
+                response.sendRedirect(agentConfiguration.getSAML2().getACSURL());
             }
         } catch (IOException e) {
-            throw new SSOException("Errornull during redirecting after processing SAML 2.0 Response", e);
+            throw new SSOException("Error during redirecting after processing SAML 2.0 Response", e);
         }
     }
 

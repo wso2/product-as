@@ -107,7 +107,7 @@ class SAMLSSOManager {
      * @return the HTML payload to be transmitted
      * @throws SSOException if an error occurs when handling AuthnRequest
      */
-    String handleAuthenticationRequestForPOSTBinding(Request request) throws SSOException {
+    protected String handleAuthenticationRequestForPOSTBinding(Request request) throws SSOException {
         RequestAbstractType requestMessage = buildAuthnRequest(request);
         if (ssoAgentConfiguration.getSAML2().isRequestSigned()) {
             requestMessage = SSOUtils.setSignature(requestMessage, XMLSignature.ALGO_ID_SIGNATURE_RSA,
@@ -124,7 +124,7 @@ class SAMLSSOManager {
      * @return the Identity Provider URL with the query string appended based on the SAML 2.0 Request and configurations
      * @throws SSOException if an error occurs when handling AuthnRequest
      */
-    String handleAuthenticationRequestForRedirectBinding(Request request) throws SSOException {
+    protected String handleAuthenticationRequestForRedirectBinding(Request request) throws SSOException {
         RequestAbstractType requestMessage = buildAuthnRequest(request);
         return prepareRedirectRequest(requestMessage);
     }
@@ -191,9 +191,9 @@ class SAMLSSOManager {
         parameters.put(Constants.HTTP_POST_PARAM_SAML_REQUEST, new String[]{encodedRequestMessage});
 
         //  add any additional parameters defined
-        if ((ssoAgentConfiguration.getQueryParameters() != null) && (!ssoAgentConfiguration.
-                getQueryParameters().isEmpty())) {
-            parameters.putAll(ssoAgentConfiguration.getQueryParameters());
+        if ((ssoAgentConfiguration.getSAML2().getQueryParameters() != null) &&
+                (!ssoAgentConfiguration.getSAML2().getQueryParameters().isEmpty())) {
+            parameters.putAll(ssoAgentConfiguration.getSAML2().getQueryParameters());
         }
 
         StringBuilder htmlParameters = new StringBuilder();
@@ -243,11 +243,11 @@ class SAMLSSOManager {
                 "=" + encodedRequestMessage);
 
         //  adds any additional parameters defined
-        if ((ssoAgentConfiguration.getQueryParameters() != null) && (!ssoAgentConfiguration.
-                getQueryParameters().isEmpty())) {
+        Map<String, String[]> queryParameters = ssoAgentConfiguration.getSAML2().getQueryParameters();
+        if ((queryParameters != null) && (!queryParameters.isEmpty())) {
             StringBuilder builder = new StringBuilder();
 
-            ssoAgentConfiguration.getQueryParameters().entrySet()
+            queryParameters.entrySet()
                     .stream()
                     .filter(entry -> ((entry.getKey() != null) &&
                             (entry.getValue() != null) && (entry.getValue().length > 0)))

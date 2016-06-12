@@ -67,7 +67,7 @@ public class SSOAgentRequestResolver {
      * service provider
      */
     public boolean isSAML2SSOResponse() {
-        return (ssoAgentConfiguration.isSSOEnabled()) &&
+        return (ssoAgentConfiguration.getSAML2().isSSOEnabled()) &&
                 (request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE) != null);
     }
 
@@ -79,7 +79,7 @@ public class SSOAgentRequestResolver {
      * SAML 2.0 single-logout (SLO) request(s), else false
      */
     public boolean isSLOURL() {
-        return (ssoAgentConfiguration.isSSOEnabled()) && (ssoAgentConfiguration.getSAML2().isSLOEnabled()) &&
+        return (ssoAgentConfiguration.getSAML2().isSSOEnabled()) && (ssoAgentConfiguration.getSAML2().isSLOEnabled()) &&
                 (request.getRequestURI().endsWith(ssoAgentConfiguration.getSAML2().getSLOURLPostfix()));
     }
 }
