@@ -296,11 +296,12 @@ public class SAMLSingleSignOn extends SingleSignOn {
 
         //  redirect according to relay state attribute
         try {
-            String requestURL = (String) request.getSession(false).getAttribute(Constants.REQUEST_URL);
-            String requestQueryString = (String) request.getSession(false).getAttribute(Constants.REQUEST_QUERY_STRING);
-            Map requestParameters = (Map) request.getSession(false).getAttribute(Constants.REQUEST_PARAMETERS);
+            if (request.getSession(false) != null) {
+                String requestURL = (String) request.getSession(false).getAttribute(Constants.REQUEST_URL);
+                String requestQueryString = (String) request.getSession(false)
+                        .getAttribute(Constants.REQUEST_QUERY_STRING);
+                Map requestParameters = (Map) request.getSession(false).getAttribute(Constants.REQUEST_PARAMETERS);
 
-            if ((requestURL != null) && (request.getSession(false) != null)) {
                 StringBuilder requestedURI = new StringBuilder(requestURL);
                 Optional.ofNullable(requestQueryString)
                         .ifPresent(queryString -> requestedURI.append("?").append(queryString));

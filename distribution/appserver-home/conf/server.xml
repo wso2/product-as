@@ -127,7 +127,7 @@
                 <!--
                 <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
                 -->
-                <!--<Valve className="org.wso2.appserver.webapp.security.sso.saml.SAMLSSOValve"/>-->
+                <!--<Valve className="org.wso2.appserver.webapp.security.saml.SAMLSingleSignOn"/>-->
 
                 <!-- Access log processes all example.
                      Documentation at: /docs/config/valve.html

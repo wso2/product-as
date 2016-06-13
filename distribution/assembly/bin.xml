@@ -78,11 +78,32 @@
                 <include>com.lmax:disruptor:jar</include>
 
                 <!-- Application Server web-app security dependencies -->
-                <!--<include>com.google.code.findbugs:jsr305:jar</include>
+                <include>com.google.code.findbugs:jsr305:jar</include>
                 <include>com.google.code.gson:gson:jar</include>
                 <include>com.google.guava:guava:jar</include>
+                <include>commons-codec:commons-codec:jar</include>
+                <include>commons-collections:commons-collections:jar</include>
+                <include>commons-lang:commons-lang:jar</include>
                 <include>joda-time:joda-time:jar</include>
-                <include>net.shibboleth.utilities:java-support:jar</include>-->
+                <include>net.shibboleth.utilities:java-support:jar</include>
+                <include>org.apache.httpcomponents:httpclient:jar</include>
+                <include>org.apache.httpcomponents:httpcore:jar</include>
+                <include>org.apache.santuario:xmlsec:jar</include>
+                <include>org.apache.velocity:velocity:jar</include>
+                <include>org.bouncycastle:bcprov-jdk15on:jar</include>
+                <include>org.cryptacular:cryptacular:jar</include>
+                <include>org.opensaml:opensaml-core:jar</include>
+                <include>org.opensaml:opensaml-messaging-api:jar</include>
+                <include>org.opensaml:opensaml-profile-api:jar</include>
+                <include>org.opensaml:opensaml-saml-api:jar</include>
+                <include>org.opensaml:opensaml-saml-impl:jar</include>
+                <include>org.opensaml:opensaml-security-api:jar</include>
+                <include>org.opensaml:opensaml-security-impl:jar</include>
+                <include>org.opensaml:opensaml-soap-api:jar</include>
+                <include>org.opensaml:opensaml-soap-impl:jar</include>
+                <include>org.opensaml:opensaml-storage-api:jar</include>
+                <include>org.opensaml:opensaml-xmlsec-api:jar</include>
+                <include>org.opensaml:opensaml-xmlsec-impl:jar</include>
             </includes>
         </dependencySet>
 
@@ -90,6 +111,8 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
+                <include>org.wso2.appserver:bar-app:war</include>
+                <include>org.wso2.appserver:foo-app:war</include>
                 <include>org.wso2.appserver:jaxrs_basic:war</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
