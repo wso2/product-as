@@ -281,8 +281,8 @@ public class SSOUtils {
         Path keyStorePath = Paths.get(URI.create(keystorePathString).getPath());
         if (Files.exists(keyStorePath)) {
             try (InputStream keystoreInputStream = Files.newInputStream(keyStorePath)) {
-                KeyStore keyStore = KeyStore.getInstance(System.getProperty(org.wso2.appserver.Constants
-                        .JAVA_KEYSTORE_TYPE));
+                KeyStore keyStore = KeyStore.getInstance(System.getProperty(org.wso2.appserver.Constants.
+                        JAVA_KEYSTORE_TYPE));
                 keyStore.load(keystoreInputStream, keystorePasswordString.toCharArray());
                 return Optional.of(keyStore);
             } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException e) {
@@ -373,7 +373,7 @@ public class SSOUtils {
 
 
     /**
-     * Generates an XML Object representing an enveloped or detached XML Digital Signature.
+     * Generates an XML Object representing a digital signature.
      *
      * @param signatureAlgorithm the algorithm used to compute the signature
      * @param credential         the signature signing credentials
