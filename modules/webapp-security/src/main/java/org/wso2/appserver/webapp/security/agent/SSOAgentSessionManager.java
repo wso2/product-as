@@ -44,6 +44,23 @@ public class SSOAgentSessionManager {
     }
 
     /**
+     * Adds an authenticated session to the global single-sign-on (SSO) agent session manager map.
+     *
+     * @param session the authenticated session to be added to the session map
+     */
+    public static void addAuthenticatedSession(HttpSession session) {
+        String sessionIndex = ((LoggedInSession) session.getAttribute(Constants.SESSION_BEAN)).getSAML2SSO().
+                getSessionIndex();
+        if (ssoSessionsMap.get(sessionIndex) != null) {
+            ssoSessionsMap.get(sessionIndex).add(session);
+        } else {
+            Set<HttpSession> sessions = new HashSet<>();
+            sessions.add(session);
+            ssoSessionsMap.put(sessionIndex, sessions);
+        }
+    }
+
+    /**
      * Returns all sessions associated with the session index retrieved from a specified {@code HttpSession}
      * which are to be invalidated.
      * <p>
@@ -79,22 +96,5 @@ public class SSOAgentSessionManager {
         sessions = Optional.ofNullable(sessions)
                 .orElse(new HashSet<>());
         return sessions;
-    }
-
-    /**
-     * Adds an authenticated session to the global single-sign-on (SSO) agent session manager map.
-     *
-     * @param session the authenticated session to be added to the session map
-     */
-    public static void addAuthenticatedSession(HttpSession session) {
-        String sessionIndex = ((LoggedInSession) session.getAttribute(Constants.SESSION_BEAN)).getSAML2SSO().
-                getSessionIndex();
-        if (ssoSessionsMap.get(sessionIndex) != null) {
-            ssoSessionsMap.get(sessionIndex).add(session);
-        } else {
-            Set<HttpSession> sessions = new HashSet<>();
-            sessions.add(session);
-            ssoSessionsMap.put(sessionIndex, sessions);
-        }
     }
 }
