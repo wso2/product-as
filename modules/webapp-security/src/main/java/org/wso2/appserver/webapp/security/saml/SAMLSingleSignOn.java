@@ -60,7 +60,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
     protected void initInternal() throws LifecycleException {
         super.initInternal();
 
-        containerLog.info("Initializing SAML 2.0 based single-sign-on valve...");
+        containerLog.debug("Initializing SAML 2.0 based single-sign-on valve...");
         //  loads the global server level single-sign-on configurations
         serverConfiguration = ServerConfigurationLoader.getServerConfiguration().getSingleSignOnConfiguration();
     }
@@ -79,7 +79,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
      */
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
-        containerLog.info("Invoking SAML 2.0 single-sign-on valve. Request URI : " + request.getRequestURI());
+        containerLog.debug("Invoking SAML 2.0 single-sign-on valve. Request URI : " + request.getRequestURI());
 
         Optional<AppServerWebAppConfiguration> contextConfiguration = ContextConfigurationLoader.
                 getContextConfiguration(request.getContext());
@@ -106,7 +106,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
 
         //  checks if single-sign-on feature is enabled
         if (!this.contextConfiguration.isSSOEnabled()) {
-            containerLog.info("SAML 2.0 single-sign-on not enabled in web app " + request.getContext().getName() +
+            containerLog.debug("SAML 2.0 single-sign-on not enabled in web app " + request.getContext().getName() +
                     ", skipping SAML 2.0 based single-sign-on...");
             //  moves onto the next valve, if single-sign-on is not enabled
             getNext().invoke(request, response);
@@ -128,24 +128,24 @@ public class SAMLSingleSignOn extends SingleSignOn {
         requestResolver = new SSOAgentRequestResolver(request, agentConfiguration);
         //  if the request URL matches one of the URL(s) to skip, moves on to the next valve
         if (requestResolver.isURLToSkip()) {
-            containerLog.info("Request matched a URL to skip. Skipping...");
+            containerLog.debug("Request matched a URL to skip. Skipping...");
             getNext().invoke(request, response);
             return;
         }
 
         try {
             if (requestResolver.isSAML2SSOResponse()) {
-                containerLog.info("Processing a SAML 2.0 Response...");
+                containerLog.debug("Processing a SAML 2.0 Response...");
                 handleResponse(request, response);
                 return;
             } else if (requestResolver.isSLOURL()) {
                 //  handles single logout request initiated directly at the service provider
-                containerLog.info("Processing SAML 2.0 Single Logout URL...");
+                containerLog.debug("Processing SAML 2.0 Single Logout URL...");
                 handleLogoutRequest(request, response);
                 return;
             } else if ((request.getSession(false) == null) ||
                     (request.getSession(false).getAttribute(Constants.SESSION_BEAN) == null)) {
-                containerLog.info("Processing an SAML 2.0 Authentication Request...");
+                containerLog.debug("Processing an SAML 2.0 Authentication Request...");
                 handleUnauthenticatedRequest(request, response);
                 return;
             }
@@ -250,11 +250,11 @@ public class SAMLSingleSignOn extends SingleSignOn {
         Optional.ofNullable(agentConfiguration)
                 .ifPresent(agent -> agent.getSAML2().enablePassiveAuthentication(false));
         if (requestResolver.isHttpPOSTBinding()) {
-            containerLog.info("Handling the SAML 2.0 Authentication Request for HTTP-POST binding...");
+            containerLog.debug("Handling the SAML 2.0 Authentication Request for HTTP-POST binding...");
             String htmlPayload = manager.handleAuthenticationRequestForPOSTBinding(request);
             SSOUtils.sendCharacterData(response, htmlPayload);
         } else {
-            containerLog.info("Handling the SAML 2.0 Authentication Request for " +
+            containerLog.debug("Handling the SAML 2.0 Authentication Request for " +
                     agentConfiguration.getSAML2().getHttpBinding() + "...");
             try {
                 response.sendRedirect(manager.handleAuthenticationRequestForRedirectBinding(request));
