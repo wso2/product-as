@@ -35,7 +35,7 @@ public class Constants {
     public static final String DEFAULT_SLO_URL_POSTFIX = "logout";
 
     //  HTTP servlet request session notes' property name and attribute name constants
-    public static final String SSO_AGENT_CONFIG = "SSOAgentConfig";
+    public static final String SSOX509CREDENTIAL = "SS0X509Credential";
     public static final String SESSION_BEAN = "org.wso2.appserver.webapp.security.bean.LoggedInSession";
     public static final String IS_PASSIVE_AUTH_ENABLED = "IsPassiveAuthn";
     public static final String IS_FORCE_AUTH_ENABLED = "IsForceAuthn";

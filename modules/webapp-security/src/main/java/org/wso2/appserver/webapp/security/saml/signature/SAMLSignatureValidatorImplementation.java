@@ -18,7 +18,6 @@ package org.wso2.appserver.webapp.security.saml.signature;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import org.wso2.appserver.webapp.security.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
 /**
@@ -28,31 +27,30 @@ import org.wso2.appserver.webapp.security.utils.exception.SSOException;
  */
 public class SAMLSignatureValidatorImplementation implements SignatureValidator {
     @Override
-    public void validateSignature(Response response, Assertion assertion, SSOAgentConfiguration ssoAgentConfiguration)
+    public void validateSignature(Response response, Assertion assertion, SSOX509Credential ssox509Credential,
+                                  boolean isResponseSigningEnabled, boolean isAssertionSigningEnabled)
             throws SSOException {
-        if (ssoAgentConfiguration.getSAML2().isResponseSigned()) {
+        if (isResponseSigningEnabled) {
             if (response.getSignature() == null) {
                 throw new SSOException("SAML 2.0 Response signing is enabled, but signature element not found "
                         + "in SAML 2.0 Response element");
             } else {
                 try {
                     org.opensaml.xmlsec.signature.support.SignatureValidator.validate(response.getSignature(),
-                            new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().
-                                    getSSOX509Credential().getEntityCertificate()));
+                            new X509CredentialImplementation(ssox509Credential.getEntityCertificate()));
                 } catch (SignatureException e) {
                     throw new SSOException("Signature validation failed for SAML 2.0 Response");
                 }
             }
         }
-        if (ssoAgentConfiguration.getSAML2().isAssertionSigned()) {
+        if (isAssertionSigningEnabled) {
             if (assertion.getSignature() == null) {
                 throw new SSOException("SAML 2.0 Assertion signing is enabled, but signature element not found in "
                         + "SAML 2.0 Assertion element");
             } else {
                 try {
                     org.opensaml.xmlsec.signature.support.SignatureValidator.validate(assertion.getSignature(),
-                            new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().
-                                    getSSOX509Credential().getEntityCertificate()));
+                            new X509CredentialImplementation(ssox509Credential.getEntityCertificate()));
                 } catch (SignatureException e) {
                     throw new SSOException("Signature validation failed for SAML 2.0 Assertion");
                 }

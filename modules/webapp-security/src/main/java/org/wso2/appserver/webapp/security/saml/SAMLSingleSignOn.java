@@ -48,7 +48,6 @@ import javax.servlet.ServletException;
 public class SAMLSingleSignOn extends SingleSignOn {
     private AppServerSingleSignOn serverConfiguration;
     private WebAppSingleSignOn contextConfiguration;
-    private SSOAgentConfiguration agentConfiguration;
     private SSOAgentRequestResolver requestResolver;
 
     /**
@@ -113,19 +112,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
             return;
         }
 
-        agentConfiguration = (SSOAgentConfiguration) (request.getSessionInternal().getNote(Constants.SSO_AGENT_CONFIG));
-        if (agentConfiguration == null) {
-            try {
-                agentConfiguration = createAgent(request);
-                request.getSessionInternal().setNote(Constants.SSO_AGENT_CONFIG, agentConfiguration);
-            } catch (SSOException e) {
-                containerLog.warn("Error when initializing the SAML 2.0 single-sign-on agent", e);
-                getNext().invoke(request, response);
-                return;
-            }
-        }
-
-        requestResolver = new SSOAgentRequestResolver(request, agentConfiguration);
+        requestResolver = new SSOAgentRequestResolver(request, this.contextConfiguration);
         //  if the request URL matches one of the URL(s) to skip, moves on to the next valve
         if (requestResolver.isURLToSkip()) {
             containerLog.debug("Request matched a URL to skip. Skipping...");
@@ -159,70 +146,6 @@ public class SAMLSingleSignOn extends SingleSignOn {
     }
 
     /**
-     * Creates a single-sign-on (SSO) agent based on the configurations specified.
-     *
-     * @param request the servlet request processed
-     * @return the created single-sign-on (SSO) agent instance
-     * @throws SSOException if an error occurs during the validation of the constructed agent
-     */
-    private SSOAgentConfiguration createAgent(Request request) throws SSOException {
-        if (serverConfiguration == null || contextConfiguration == null) {
-            String message = "SSO Agent configuration cannot be initialized, " +
-                    "server level and/or context level configurations are invalid";
-            throw new SSOException(message);
-        }
-
-        setDefaultConfigurations(serverConfiguration, contextConfiguration, request);
-
-        SSOAgentConfiguration ssoAgentConfiguration = new SSOAgentConfiguration();
-
-        ssoAgentConfiguration.initialize(serverConfiguration, contextConfiguration);
-        ssoAgentConfiguration.getSAML2().setSSOX509Credential(
-                new SSOX509Credential(serverConfiguration.getIdpCertificateAlias(),
-                        ServerConfigurationLoader.getServerConfiguration().getSecurityConfiguration()));
-        //  generates the service provider entity ID
-        String issuerID = SSOUtils.generateIssuerID(request.getContextPath(), request.getHost().getAppBase())
-                .orElse("");
-        //  generates the SAML 2.0 Assertion Consumer URL
-        String consumerURL = SSOUtils.generateConsumerURL(request.getContextPath(), serverConfiguration.getACSBase(),
-                contextConfiguration.getConsumerURLPostfix())
-                .orElse("");
-        ssoAgentConfiguration.getSAML2().setSPEntityId(
-                Optional.ofNullable(ssoAgentConfiguration.getSAML2().getSPEntityId())
-                        .orElse(issuerID));
-        ssoAgentConfiguration.getSAML2().setACSURL(
-                Optional.ofNullable(ssoAgentConfiguration.getSAML2().getACSURL())
-                        .orElse(consumerURL));
-        //  captures request attributes enabling/disabling SAML 2.0 passive authentication and force authentication
-        ssoAgentConfiguration.getSAML2().enablePassiveAuthentication(
-                Optional.ofNullable((Boolean) (request.getAttribute(Constants.IS_PASSIVE_AUTH_ENABLED)))
-                        .orElse(false));
-        ssoAgentConfiguration.getSAML2().enableForceAuthentication(
-                Optional.ofNullable((Boolean) (request.getAttribute(Constants.IS_FORCE_AUTH_ENABLED)))
-                        .orElse(false));
-
-        ssoAgentConfiguration.validate();
-        return ssoAgentConfiguration;
-    }
-
-    /**
-     * Sets default configuration values to chosen configurations, if not set.
-     *
-     * @param request the servlet request processed
-     */
-    private void setDefaultConfigurations(AppServerSingleSignOn serverConfiguration, WebAppSingleSignOn
-            contextConfiguration, Request request) {
-        if (serverConfiguration != null && contextConfiguration != null) {
-            String defaultACSBase = SSOUtils.constructApplicationServerURL(request)
-                    .orElse("");
-            serverConfiguration.setACSBase(Optional.ofNullable(serverConfiguration.getACSBase())
-                    .orElse(defaultACSBase));
-            contextConfiguration.setConsumerURLPostfix(Optional.ofNullable(contextConfiguration.getConsumerURLPostfix())
-                    .orElse(Constants.DEFAULT_CONSUMER_URL_POSTFIX));
-        }
-    }
-
-    /**
      * Handles the unauthenticated requests for all contexts.
      *
      * @param request  the servlet request processed
@@ -230,32 +153,34 @@ public class SAMLSingleSignOn extends SingleSignOn {
      * @throws SSOException if an error occurs when handling an unauthenticated request
      */
     private void handleUnauthenticatedRequest(Request request, Response response) throws SSOException {
-        if (agentConfiguration == null) {
-            throw new SSOException("SSO Agent configurations have not been initialized");
-        }
-
         if (requestResolver == null) {
             throw new SSOException("SSO Agent request resolver has not been initialized");
         }
 
-        SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
+        SAMLSSOManager manager = new SAMLSSOManager(serverConfiguration, contextConfiguration);
+
+        SSOX509Credential ssoX509Credential = new SSOX509Credential(serverConfiguration.getIdpCertificateAlias(),
+                ServerConfigurationLoader.getServerConfiguration().getSecurityConfiguration());
+
 
         Optional.ofNullable(request.getSession(false))
                 .ifPresent(httpSession -> {
+                    //  sets the entity credential associated with X.509 Public Key Infrastructure
+                    httpSession.setAttribute(Constants.SSOX509CREDENTIAL, ssoX509Credential);
+
+                    //  TODO: to be changed
                     httpSession.setAttribute(Constants.REQUEST_URL, request.getRequestURI());
                     httpSession.setAttribute(Constants.REQUEST_QUERY_STRING, request.getQueryString());
                     httpSession.setAttribute(Constants.REQUEST_PARAMETERS, request.getParameterMap());
                 });
 
-        Optional.ofNullable(agentConfiguration)
-                .ifPresent(agent -> agent.getSAML2().enablePassiveAuthentication(false));
         if (requestResolver.isHttpPOSTBinding()) {
             containerLog.debug("Handling the SAML 2.0 Authentication Request for HTTP-POST binding...");
             String htmlPayload = manager.handleAuthenticationRequestForPOSTBinding(request);
             SSOUtils.sendCharacterData(response, htmlPayload);
         } else {
             containerLog.debug("Handling the SAML 2.0 Authentication Request for " +
-                    agentConfiguration.getSAML2().getHttpBinding() + "...");
+                    contextConfiguration.getHttpBinding() + "...");
             try {
                 response.sendRedirect(manager.handleAuthenticationRequestForRedirectBinding(request));
             } catch (IOException e) {
@@ -272,7 +197,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
      * @throws SSOException if an error occurs when handling a response
      */
     private void handleResponse(Request request, Response response) throws SSOException {
-        SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
+        SAMLSSOManager manager = new SAMLSSOManager(serverConfiguration, contextConfiguration);
         manager.processResponse(request);
         redirectAfterProcessingResponse(request, response);
     }
@@ -333,7 +258,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
             throw new SSOException("SSO Agent request resolver has not been initialized");
         }
 
-        SAMLSSOManager manager = new SAMLSSOManager(agentConfiguration);
+        SAMLSSOManager manager = new SAMLSSOManager(serverConfiguration, contextConfiguration);
         try {
             if (requestResolver.isHttpPOSTBinding()) {
                 if (request.getSession(false).getAttribute(Constants.SESSION_BEAN) != null) {

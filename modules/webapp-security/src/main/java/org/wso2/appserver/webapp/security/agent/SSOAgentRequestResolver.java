@@ -16,22 +16,23 @@
 package org.wso2.appserver.webapp.security.agent;
 
 import org.opensaml.saml.common.xml.SAMLConstants;
+import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides an implementation for resolving the type of an intercepted HTTP servlet request by analyzing
- * the single-sign-on (SSO) agent configurations and HTTP servlet request.
+ * the context level single-sign-on (SSO) configurations and HTTP servlet request.
  *
  * @since 6.0.0
  */
 public class SSOAgentRequestResolver {
-    private SSOAgentConfiguration ssoAgentConfiguration;
+    private WebAppSingleSignOn ssoConfiguration;
     private HttpServletRequest request;
 
-    public SSOAgentRequestResolver(HttpServletRequest request, SSOAgentConfiguration ssoAgentConfiguration) {
-        this.ssoAgentConfiguration = ssoAgentConfiguration;
+    public SSOAgentRequestResolver(HttpServletRequest request, WebAppSingleSignOn ssoConfiguration) {
+        this.ssoConfiguration = ssoConfiguration;
         this.request = request;
     }
 
@@ -44,7 +45,7 @@ public class SSOAgentRequestResolver {
      * @return true if the request URI is one of the URI(s) to be skipped (as specified by the agent), else false
      */
     public boolean isURLToSkip() {
-        return ssoAgentConfiguration.getSkipURIs().contains(request.getRequestURI());
+        return ssoConfiguration.getSkipURIs().getSkipURIs().contains(request.getRequestURI());
     }
 
     /**
@@ -53,7 +54,7 @@ public class SSOAgentRequestResolver {
      * @return true if SAML 2.0 binding type is of HTTP POST type, else false
      */
     public boolean isHttpPOSTBinding() {
-        String httpBindingString = ssoAgentConfiguration.getSAML2().getHttpBinding();
+        String httpBindingString = ssoConfiguration.getHttpBinding();
         return (httpBindingString != null) && (SAMLConstants.SAML2_POST_BINDING_URI.equals(httpBindingString));
     }
 
@@ -67,8 +68,7 @@ public class SSOAgentRequestResolver {
      * service provider
      */
     public boolean isSAML2SSOResponse() {
-        return (ssoAgentConfiguration.getSAML2().isSSOEnabled()) &&
-                (request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE) != null);
+        return request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE) != null;
     }
 
     /**
@@ -79,7 +79,7 @@ public class SSOAgentRequestResolver {
      * SAML 2.0 single-logout (SLO) request(s), else false
      */
     public boolean isSLOURL() {
-        return (ssoAgentConfiguration.getSAML2().isSSOEnabled()) && (ssoAgentConfiguration.getSAML2().isSLOEnabled()) &&
-                (request.getRequestURI().endsWith(ssoAgentConfiguration.getSAML2().getSLOURLPostfix()));
+        return (ssoConfiguration.isSLOEnabled()) &&
+                (request.getRequestURI().endsWith(ssoConfiguration.getSLOURLPostfix()));
     }
 }
