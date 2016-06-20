@@ -253,12 +253,12 @@ public class SSOUtils {
      *
      * @param contextPath the context path of the service provider application
      * @param acsBase     the base URL of the Assertion Consumer Service
-     * @param acsPostFix  the postfix which identifies a SAML 2.0 Assertion Consumer URL
+     * @param acsPostfix  the postfix which identifies a SAML 2.0 Assertion Consumer URL
      * @return a SAML 2.0 Assertion Consumer URL based on service provider application context path
      */
-    public static Optional<String> generateConsumerURL(String contextPath, String acsBase, String acsPostFix) {
-        if ((contextPath != null) && (acsBase != null) && (acsPostFix != null)) {
-            return Optional.of(acsBase + contextPath + "/" + acsPostFix);
+    public static Optional<String> generateConsumerURL(String contextPath, String acsBase, String acsPostfix) {
+        if ((contextPath != null) && (acsBase != null) && (acsPostfix != null)) {
+            return Optional.of(acsBase + contextPath + "/" + acsPostfix);
         } else {
             return Optional.empty();
         }

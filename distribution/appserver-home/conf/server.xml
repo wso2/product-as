@@ -127,7 +127,7 @@
                 <!--
                 <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
                 -->
-                <!--<Valve className="org.wso2.appserver.webapp.security.saml.SAMLSingleSignOn"/>-->
+                <!--<Valve className="org.wso2.appserver.webapp.security.saml.SAML2SSOValve"/>-->
 
                 <!-- Access log processes all example.
                      Documentation at: /docs/config/valve.html
@@ -138,7 +138,7 @@
 
                 <!-- uncomment this valve to enable HTTP statistics publishing to WSO2 DAS -->
                 <!--<Valve className="org.wso2.appserver.monitoring.HttpStatValve"/>-->
-                <!--<Valve className="org.wso2.appserver.webapp.security.saml.SAMLSingleSignOn"/>-->
+                <!--<Valve className="org.wso2.appserver.webapp.security.saml.SAML2SingleSignOnValvenValve"/>-->
             </Host>
         </Engine>
     </Service>

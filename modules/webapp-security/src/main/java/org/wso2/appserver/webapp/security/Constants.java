@@ -30,12 +30,9 @@ public class Constants {
             ".SAMLSignatureValidatorImplementation";
     public static final String DEFAULT_CONSUMER_URL_POSTFIX = "acs";
     public static final String SAML2_HTTP_POST_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
-    public static final String DEFAULT_IDP_URL = "https://localhost:9443/samlsso";
-    public static final String DEFAULT_IDP_ENTITY_ID = "localhost";
     public static final String DEFAULT_SLO_URL_POSTFIX = "logout";
 
     //  HTTP servlet request session notes' property name and attribute name constants
-    public static final String SSOX509CREDENTIAL = "SS0X509Credential";
     public static final String SESSION_BEAN = "org.wso2.appserver.webapp.security.bean.LoggedInSession";
     public static final String IS_PASSIVE_AUTH_ENABLED = "IsPassiveAuthn";
     public static final String IS_FORCE_AUTH_ENABLED = "IsForceAuthn";

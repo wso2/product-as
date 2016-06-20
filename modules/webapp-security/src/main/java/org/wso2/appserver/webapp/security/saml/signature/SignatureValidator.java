@@ -17,7 +17,6 @@ package org.wso2.appserver.webapp.security.saml.signature;
 
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
-import org.wso2.appserver.webapp.security.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
 /**
@@ -31,12 +30,10 @@ public interface SignatureValidator {
      *
      * @param response                  a SAML 2.0 based Response
      * @param assertion                 a SAML 2.0 based Assertion
-     * @param ssox509Credential         representation of entity credentials associated with X.509 Public Key
-     *                                  Infrastructure
      * @param isResponseSigningEnabled  indicates whether the SAML 2.0 Request signing is enabled
      * @param isAssertionSigningEnabled indicates whether the SAML 2.0 Assertion signing is enabled
      * @throws SSOException if an error occurs during signature validation
      */
-    void validateSignature(Response response, Assertion assertion, SSOX509Credential ssox509Credential,
-                           boolean isResponseSigningEnabled, boolean isAssertionSigningEnabled) throws SSOException;
+    void validateSignature(Response response, Assertion assertion, boolean isResponseSigningEnabled,
+                           boolean isAssertionSigningEnabled) throws SSOException;
 }

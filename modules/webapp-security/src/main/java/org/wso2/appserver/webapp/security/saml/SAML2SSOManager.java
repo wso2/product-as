@@ -52,11 +52,12 @@ import org.opensaml.saml.saml2.core.impl.RequestedAuthnContextBuilder;
 import org.opensaml.saml.saml2.core.impl.SessionIndexBuilder;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.AppServerSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
-import org.wso2.appserver.webapp.security.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.agent.SSOAgentSessionManager;
 import org.wso2.appserver.webapp.security.bean.LoggedInSession;
+import org.wso2.appserver.webapp.security.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.saml.signature.SignatureValidator;
 import org.wso2.appserver.webapp.security.saml.signature.X509CredentialImplementation;
 import org.wso2.appserver.webapp.security.utils.SSOAgentDataHolder;
@@ -78,14 +79,12 @@ import javax.servlet.http.HttpSession;
  *
  * @since 6.0.0
  */
-class SAMLSSOManager {
-    private SSOAgentConfiguration ssoAgentConfiguration;
-
+public class SAML2SSOManager {
     private AppServerSingleSignOn serverConfiguration;
     private WebAppSingleSignOn contextConfiguration;
 
-    protected SAMLSSOManager(AppServerSingleSignOn server, WebAppSingleSignOn context) throws SSOException {
-        serverConfiguration = server;
+    protected SAML2SSOManager(WebAppSingleSignOn context) throws SSOException {
+        serverConfiguration = ServerConfigurationLoader.getServerConfiguration().getSingleSignOnConfiguration();
         contextConfiguration = context;
 
         loadCustomSignatureValidatorClass();
@@ -97,9 +96,10 @@ class SAMLSSOManager {
      */
     private void loadCustomSignatureValidatorClass() throws SSOException {
         try {
-            if ((serverConfiguration != null) && (serverConfiguration.getSignatureValidatorImplClass() != null)) {
+            if (serverConfiguration != null) {
                 SSOAgentDataHolder.getInstance().setObject(Class.
-                        forName(serverConfiguration.getSignatureValidatorImplClass()).newInstance());
+                        forName(Optional.ofNullable(serverConfiguration.getSignatureValidatorImplClass())
+                                .orElse(Constants.DEFAULT_SIGN_VALIDATOR_IMPL)).newInstance());
             }
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             throw new SSOException("Error loading custom signature validator class", e);
@@ -115,10 +115,12 @@ class SAMLSSOManager {
      */
     protected String handleAuthenticationRequestForPOSTBinding(Request request) throws SSOException {
         RequestAbstractType requestMessage = buildAuthnRequest(request);
-        if (contextConfiguration.isRequestSigningEnabled()) {
-            //  TODO: passing the X509Credential
+
+        Boolean isRequestSigningEnabled = Optional.ofNullable(contextConfiguration.isRequestSigningEnabled())
+                .orElse(false);
+        if (isRequestSigningEnabled) {
             requestMessage = SSOUtils.setSignature(requestMessage, XMLSignature.ALGO_ID_SIGNATURE_RSA,
-                    new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().getSSOX509Credential()));
+                    new X509CredentialImplementation(SSOX509Credential.getInstance()));
         }
 
         return preparePOSTRequest(requestMessage);
@@ -147,12 +149,11 @@ class SAMLSSOManager {
         LoggedInSession session = (LoggedInSession) request.getSession(false).getAttribute(Constants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
-            requestMessage = buildLogoutRequest(request, session.getSAML2SSO().getSubjectId(),
+            requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
                     session.getSAML2SSO().getSessionIndex());
-            //  TODO: passing the X509Credential
             if (contextConfiguration.isRequestSigningEnabled()) {
                 requestMessage = SSOUtils.setSignature(requestMessage, XMLSignature.ALGO_ID_SIGNATURE_RSA,
-                        new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().getSSOX509Credential()));
+                        new X509CredentialImplementation(SSOX509Credential.getInstance()));
             }
         } else {
             throw new SSOException(
@@ -170,11 +171,11 @@ class SAMLSSOManager {
      * @return the Identity Provider URL with the query string appended based on the SAML 2.0 Request and configurations
      * @throws SSOException if an error occurs when handling LogoutRequest
      */
-    String handleLogoutRequestForRedirectBinding(Request request) throws SSOException {
+    protected String handleLogoutRequestForRedirectBinding(Request request) throws SSOException {
         LoggedInSession session = (LoggedInSession) request.getSession(false).getAttribute(Constants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
-            requestMessage = buildLogoutRequest(request, session.getSAML2SSO().getSubjectId(),
+            requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
                     session.getSAML2SSO().getSessionIndex());
         } else {
             throw new SSOException("Single Logout Request can not be built, single-sign-on session is null");
@@ -271,9 +272,8 @@ class SAMLSSOManager {
         }
 
         if (contextConfiguration.isRequestSigningEnabled()) {
-            //  TODO: passing the X509Credential
             SSOUtils.addDeflateSignatureToHTTPQueryString(httpQueryString,
-                    new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().getSSOX509Credential()));
+                    new X509CredentialImplementation(SSOX509Credential.getInstance()));
         }
 
         String idpUrl;
@@ -297,8 +297,10 @@ class SAMLSSOManager {
         //  generates the service provider entity ID
         String issuerID = SSOUtils.generateIssuerID(request.getContextPath(), request.getHost().getAppBase())
                 .orElse("");
-        issuer.setValue(Optional.ofNullable(contextConfiguration.getIssuerId())
+        contextConfiguration.setIssuerId(Optional.ofNullable(contextConfiguration.getIssuerId())
                 .orElse(issuerID));
+
+        issuer.setValue(contextConfiguration.getIssuerId());
 
         //  the NameIDPolicy element tailors the subject name identifier of assertions resulting from AuthnRequest
         NameIDPolicy nameIdPolicy = new NameIDPolicyBuilder().buildObject();
@@ -348,8 +350,10 @@ class SAMLSSOManager {
                 .orElse(Constants.DEFAULT_CONSUMER_URL_POSTFIX);
         String consumerURL = SSOUtils.generateConsumerURL(request.getContextPath(), acsBase, consumerURLPostfix)
                 .orElse("");
-        authnRequest.setAssertionConsumerServiceURL(Optional.ofNullable(contextConfiguration.getConsumerURL())
+        contextConfiguration.setConsumerURL(Optional.ofNullable(contextConfiguration.getConsumerURL())
                 .orElse(consumerURL));
+
+        authnRequest.setAssertionConsumerServiceURL(contextConfiguration.getConsumerURL());
 
         authnRequest.setIssuer(issuer);
         authnRequest.setNameIDPolicy(nameIdPolicy);
@@ -366,24 +370,19 @@ class SAMLSSOManager {
     /**
      * Returns a SAML 2.0 Logout Request (LogoutRequest) instance.
      *
-     * @param request      the HTTP servlet request
      * @param user         the identifier that specify the principal as currently recognized by the identity and
      *                     service providers
      * @param sessionIndex the identifier that indexes this session at the message recipient
      * @return a SAML 2.0 Logout Request (LogoutRequest) instance
      */
-    private LogoutRequest buildLogoutRequest(Request request, String user, String sessionIndex) {
+    private LogoutRequest buildLogoutRequest(String user, String sessionIndex) {
         //  creates a Logout Request instance
         LogoutRequest logoutRequest = new LogoutRequestBuilder().buildObject();
 
         DateTime issueInstant = new DateTime();
 
         Issuer issuer = new IssuerBuilder().buildObject();
-        //  generates the service provider entity ID
-        String issuerID = SSOUtils.generateIssuerID(request.getContextPath(), request.getHost().getAppBase())
-                .orElse("");
-        issuer.setValue(Optional.ofNullable(contextConfiguration.getIssuerId())
-                .orElse(issuerID));
+        issuer.setValue(contextConfiguration.getIssuerId());
 
         NameID nameId = new NameIDBuilder().buildObject();
         nameId.setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:entity");
@@ -416,7 +415,7 @@ class SAMLSSOManager {
      * @param request the servlet request processed
      * @throws SSOException if SAML 2.0 response is null
      */
-    void processResponse(Request request) throws SSOException {
+    protected void processResponse(Request request) throws SSOException {
         String saml2SSOResponse = request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE);
 
         if (saml2SSOResponse != null) {
@@ -468,9 +467,7 @@ class SAMLSSOManager {
                         .findFirst()
                         .orElse(null);
                 try {
-                    //  TODO: passing the X509Credential
-                    assertion = SSOUtils.decryptAssertion(ssoAgentConfiguration.getSAML2().getSSOX509Credential(),
-                            encryptedAssertion);
+                    assertion = SSOUtils.decryptAssertion(SSOX509Credential.getInstance(), encryptedAssertion);
                 } catch (Exception e) {
                     throw new SSOException("Unable to decrypt the SAML 2.0 Assertion");
                 }
@@ -516,7 +513,7 @@ class SAMLSSOManager {
         request.getSession().setAttribute(Constants.SESSION_BEAN, session);
 
         //  validates the audience restriction
-        validateAudienceRestriction(request, assertion);
+        validateAudienceRestriction(assertion);
 
         //  validates the signature
         validateSignature(saml2Response, assertion);
@@ -524,6 +521,7 @@ class SAMLSSOManager {
         //  marshalling SAML 2.0 assertion after signature validation due to an issue in OpenSAML
         session.getSAML2SSO().setAssertionString(SSOUtils.marshall(assertion));
 
+        //  TODO: consider the usage of http sessions
         ((LoggedInSession) request.getSession().getAttribute(Constants.SESSION_BEAN)).
                 getSAML2SSO().setSubjectAttributes(SSOUtils.getAssertionStatements(assertion));
 
@@ -620,11 +618,10 @@ class SAMLSSOManager {
     /**
      * Validates the SAML 2.0 Audience Restrictions set in the specified SAML 2.0 Assertion.
      *
-     * @param request   the HTTP servlet request
      * @param assertion the SAML 2.0 Assertion in which Audience Restrictions' validity is checked for
      * @throws SSOException if the Audience Restriction validation fails
      */
-    private void validateAudienceRestriction(Request request, Assertion assertion) throws SSOException {
+    private void validateAudienceRestriction(Assertion assertion) throws SSOException {
         if (assertion == null) {
             return;
         }
@@ -639,22 +636,18 @@ class SAMLSSOManager {
             throw new SSOException("SAML 2.0 Response doesn't contain AudienceRestrictions");
         }
 
-        //  generates the service provider entity ID
-        String issuerID = Optional.ofNullable(contextConfiguration.getIssuerId())
-                .orElse(SSOUtils.generateIssuerID(request.getContextPath(), request.getHost().getAppBase())
-                        .orElse(""));
-
         Stream<AudienceRestriction> audienceExistingStream = audienceRestrictions
                 .stream()
                 .filter(audienceRestriction ->
                         (((audienceRestriction.getAudiences() != null) && (!audienceRestriction.getAudiences().
                                 isEmpty()))) && (audienceRestriction.getAudiences()
                                         .stream()
-                                        .filter(audience -> issuerID.equals(audience.getAudienceURI())))
+                                        .filter(audience -> contextConfiguration.getIssuerId().equals(audience.
+                                                getAudienceURI())))
                                         .count() > 0);
 
         if (audienceExistingStream.count() == 0) {
-            throw new SSOException("SAML2 Assertion Audience Restriction validation failed.");
+            throw new SSOException("SAML2 Assertion Audience Restriction validation failed");
         }
     }
 
@@ -668,15 +661,12 @@ class SAMLSSOManager {
     private void validateSignature(Response response, Assertion assertion) throws SSOException {
         if (SSOAgentDataHolder.getInstance().getObject() != null) {
             //  custom implementation of signature validation
-            SignatureValidator signatureValidatorUtility = (SignatureValidator) SSOAgentDataHolder.
-                    getInstance().getObject();
-
-            //  TODO: passing the X509Credential
-            /*signatureValidatorUtility.validateSignature(response, assertion,
-                    contextConfiguration.isResponseSigningEnabled(), contextConfiguration.isAssertionSigningEnabled());*/
-
-            //  TODO: passing the X509Credential
+            SignatureValidator signatureValidatorUtility =
+                    (SignatureValidator) SSOAgentDataHolder.getInstance().getObject();
+            signatureValidatorUtility.validateSignature(response, assertion,
+                    contextConfiguration.isResponseSigningEnabled(), contextConfiguration.isAssertionSigningEnabled());
         } else {
+            SSOX509Credential ssoX509Credential = SSOX509Credential.getInstance();
             //  if custom implementation not found, execute the default implementation
             if (contextConfiguration.isResponseSigningEnabled()) {
                 if (response.getSignature() == null) {
@@ -685,8 +675,7 @@ class SAMLSSOManager {
                 } else {
                     try {
                         org.opensaml.xmlsec.signature.support.SignatureValidator.validate(response.getSignature(),
-                                new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().
-                                        getSSOX509Credential().getEntityCertificate()));
+                                new X509CredentialImplementation(ssoX509Credential.getEntityCertificate()));
                     } catch (SignatureException e) {
                         throw new SSOException("Signature validation failed for SAML 2.0 Response");
                     }
@@ -699,8 +688,7 @@ class SAMLSSOManager {
                 } else {
                     try {
                         org.opensaml.xmlsec.signature.support.SignatureValidator.validate(assertion.getSignature(),
-                                new X509CredentialImplementation(ssoAgentConfiguration.getSAML2().
-                                        getSSOX509Credential().getEntityCertificate()));
+                                new X509CredentialImplementation(ssoX509Credential.getEntityCertificate()));
                     } catch (SignatureException e) {
                         throw new SSOException("Signature validation failed for SAML 2.0 Assertion");
                     }

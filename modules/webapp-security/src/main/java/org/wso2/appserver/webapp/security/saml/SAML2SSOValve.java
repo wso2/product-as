@@ -17,7 +17,6 @@
  */
 package org.wso2.appserver.webapp.security.saml;
 
-import org.apache.catalina.LifecycleException;
 import org.apache.catalina.authenticator.SingleSignOn;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
@@ -25,11 +24,8 @@ import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
-import org.wso2.appserver.configuration.server.AppServerSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
-import org.wso2.appserver.webapp.security.agent.SSOAgentConfiguration;
 import org.wso2.appserver.webapp.security.agent.SSOAgentRequestResolver;
-import org.wso2.appserver.webapp.security.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
@@ -45,31 +41,15 @@ import javax.servlet.ServletException;
  *
  * @since 6.0.0
  */
-public class SAMLSingleSignOn extends SingleSignOn {
-    private AppServerSingleSignOn serverConfiguration;
+public class SAML2SSOValve extends SingleSignOn {
     private WebAppSingleSignOn contextConfiguration;
     private SSOAgentRequestResolver requestResolver;
 
     /**
-     * Retrieves the WSO2 Application Server level configurations.
-     *
-     * @throws LifecycleException if an error related to the lifecycle occurs
-     */
-    @Override
-    protected void initInternal() throws LifecycleException {
-        super.initInternal();
-
-        containerLog.debug("Initializing SAML 2.0 based single-sign-on valve...");
-        //  loads the global server level single-sign-on configurations
-        serverConfiguration = ServerConfigurationLoader.getServerConfiguration().getSingleSignOnConfiguration();
-    }
-
-    /**
      * Performs single-sign-on(SSO) or single-logout(SLO) processing based on the request, using SAML 2.0.
-     * SAML 2.0 Web Browser SSO and SAML 2.0 Single Logout Profiles are used for single-sign-on and single-logout,
-     * respectively.
      * <p>
-     * This method overrides the parent {@link SingleSignOn} class' invoke() method.
+     * This Valve implements SAML 2.0 Web Browser single-sign-on (SSO) and SAML 2.0 single-logout (SLO) Profiles,
+     * respectively. This method overrides the parent {@link SingleSignOn} class' invoke() method.
      *
      * @param request  the servlet request processed
      * @param response the servlet response generated
@@ -157,17 +137,10 @@ public class SAMLSingleSignOn extends SingleSignOn {
             throw new SSOException("SSO Agent request resolver has not been initialized");
         }
 
-        SAMLSSOManager manager = new SAMLSSOManager(serverConfiguration, contextConfiguration);
-
-        SSOX509Credential ssoX509Credential = new SSOX509Credential(serverConfiguration.getIdpCertificateAlias(),
-                ServerConfigurationLoader.getServerConfiguration().getSecurityConfiguration());
-
+        SAML2SSOManager manager = new SAML2SSOManager(contextConfiguration);
 
         Optional.ofNullable(request.getSession(false))
                 .ifPresent(httpSession -> {
-                    //  sets the entity credential associated with X.509 Public Key Infrastructure
-                    httpSession.setAttribute(Constants.SSOX509CREDENTIAL, ssoX509Credential);
-
                     //  TODO: to be changed
                     httpSession.setAttribute(Constants.REQUEST_URL, request.getRequestURI());
                     httpSession.setAttribute(Constants.REQUEST_QUERY_STRING, request.getQueryString());
@@ -197,7 +170,7 @@ public class SAMLSingleSignOn extends SingleSignOn {
      * @throws SSOException if an error occurs when handling a response
      */
     private void handleResponse(Request request, Response response) throws SSOException {
-        SAMLSSOManager manager = new SAMLSSOManager(serverConfiguration, contextConfiguration);
+        SAML2SSOManager manager = new SAML2SSOManager(contextConfiguration);
         manager.processResponse(request);
         redirectAfterProcessingResponse(request, response);
     }
@@ -211,12 +184,8 @@ public class SAMLSingleSignOn extends SingleSignOn {
      */
     private void redirectAfterProcessingResponse(Request request, Response response)
             throws SSOException {
-        if (serverConfiguration == null || contextConfiguration == null) {
+        if (contextConfiguration == null) {
             throw new SSOException("Server level or context level configurations may not be initialized");
-        }
-
-        if (agentConfiguration == null) {
-            throw new SSOException("SSO Agent configurations have not been initialized");
         }
 
         //  redirect according to relay state attribute
@@ -235,7 +204,8 @@ public class SAMLSingleSignOn extends SingleSignOn {
                                 setAttribute(Constants.REQUEST_PARAM_MAP, queryParameters));
                 response.sendRedirect(requestedURI.toString());
             } else {
-                response.sendRedirect(agentConfiguration.getSAML2().getACSURL());
+                //  generates the SAML 2.0 Assertion Consumer URL
+                response.sendRedirect(contextConfiguration.getConsumerURL());
             }
         } catch (IOException e) {
             throw new SSOException("Error during redirecting after processing SAML 2.0 Response", e);
@@ -250,19 +220,14 @@ public class SAMLSingleSignOn extends SingleSignOn {
      * @throws SSOException if an error occurs when handling a logout request
      */
     private void handleLogoutRequest(Request request, Response response) throws SSOException {
-        if (agentConfiguration == null) {
-            throw new SSOException("SSO Agent configurations have not been initialized");
-        }
-
         if (requestResolver == null) {
             throw new SSOException("SSO Agent request resolver has not been initialized");
         }
 
-        SAMLSSOManager manager = new SAMLSSOManager(serverConfiguration, contextConfiguration);
+        SAML2SSOManager manager = new SAML2SSOManager(contextConfiguration);
         try {
             if (requestResolver.isHttpPOSTBinding()) {
                 if (request.getSession(false).getAttribute(Constants.SESSION_BEAN) != null) {
-                    agentConfiguration.getSAML2().enablePassiveAuthentication(false);
                     String htmlPayload = manager.handleLogoutRequestForPOSTBinding(request);
                     SSOUtils.sendCharacterData(response, htmlPayload);
                 } else {
@@ -270,7 +235,6 @@ public class SAMLSingleSignOn extends SingleSignOn {
                     response.sendRedirect(request.getContext().getPath());
                 }
             } else {
-                agentConfiguration.getSAML2().enablePassiveAuthentication(false);
                 response.sendRedirect(manager.handleLogoutRequestForRedirectBinding(request));
             }
         } catch (IOException e) {

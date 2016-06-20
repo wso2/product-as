@@ -15,7 +15,9 @@
  */
 package org.wso2.appserver.webapp.security.saml.signature;
 
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.configuration.server.AppServerSecurity;
+import org.wso2.appserver.configuration.server.ApplicationServerConfiguration;
 import org.wso2.appserver.webapp.security.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
@@ -29,7 +31,7 @@ import java.security.cert.X509Certificate;
 import java.util.Optional;
 
 /**
- * This class represents an entity credential associated with X.509 Public Key Infrastructure.
+ * This is a singleton class which represents an entity credential associated with X.509 Public Key Infrastructure.
  *
  * @since 6.0.0
  */
@@ -39,21 +41,32 @@ public class SSOX509Credential {
     private X509Certificate entityCertificate;
     private String idpCertificateAlias;
 
-    public SSOX509Credential(String idpCertificateAlias, AppServerSecurity securityConfiguration) throws SSOException {
-        this.idpCertificateAlias = idpCertificateAlias;
-        readX509Credentials(securityConfiguration);
+    //  reference to the single instance of entity credential
+    private static SSOX509Credential ssoX509Credential;
+
+    private SSOX509Credential(ApplicationServerConfiguration serverConfiguration) throws SSOException {
+        this.idpCertificateAlias = serverConfiguration.getSingleSignOnConfiguration().getIdpCertificateAlias();
+        readX509Credentials(serverConfiguration.getSecurityConfiguration());
     }
 
     public PrivateKey getPrivateKey() {
         return privateKey;
     }
 
-    PublicKey getPublicKey() {
+    public PublicKey getPublicKey() {
         return publicKey;
     }
 
     public X509Certificate getEntityCertificate() {
         return entityCertificate;
+    }
+
+    public static SSOX509Credential getInstance() throws SSOException {
+        if (ssoX509Credential == null) {
+            ssoX509Credential = new SSOX509Credential(ServerConfigurationLoader.getServerConfiguration());
+        }
+
+        return ssoX509Credential;
     }
 
     /**
@@ -75,11 +88,14 @@ public class SSOX509Credential {
                         idpCertificateAlias);
             }
 
-            String privateKeyAlias = securityConfiguration.getKeystore().getKeyAlias();
-            String privateKeyPassword = securityConfiguration.getKeystore().getKeyPassword();
             try {
-                if ((privateKeyAlias != null) && (privateKeyPassword != null)) {
-                    privateKey = (PrivateKey) keyStore.getKey(privateKeyAlias, privateKeyPassword.toCharArray());
+                if ((securityConfiguration != null) && (securityConfiguration.getKeystore() != null)) {
+                    String privateKeyAlias = securityConfiguration.getKeystore().getKeyAlias();
+                    String privateKeyPassword = securityConfiguration.getKeystore().getKeyPassword();
+
+                    if ((privateKeyAlias != null) && (privateKeyPassword != null)) {
+                        privateKey = (PrivateKey) keyStore.getKey(privateKeyAlias, privateKeyPassword.toCharArray());
+                    }
                 }
             } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
                 throw new SSOException("Error occurred while retrieving the private key");

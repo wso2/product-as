@@ -20,10 +20,11 @@ import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * This class provides an implementation for resolving the type of an intercepted HTTP servlet request by analyzing
- * the context level single-sign-on (SSO) configurations and HTTP servlet request.
+ * the single-sign-on (SSO) and single-logout (SLO) configurations and HTTP servlet request.
  *
  * @since 6.0.0
  */
@@ -40,7 +41,7 @@ public class SSOAgentRequestResolver {
      * Returns true if the request URI is one of the URI(s) to be skipped (as specified by the agent), else false.
      * <p>
      * The URIs to be skipped are determined by all the 'skip-uri's specified under the 'skip-uris' property of
-     * wso2as-web.xml file.
+     * web application descriptor file.
      *
      * @return true if the request URI is one of the URI(s) to be skipped (as specified by the agent), else false
      */
@@ -54,7 +55,8 @@ public class SSOAgentRequestResolver {
      * @return true if SAML 2.0 binding type is of HTTP POST type, else false
      */
     public boolean isHttpPOSTBinding() {
-        String httpBindingString = ssoConfiguration.getHttpBinding();
+        String httpBindingString = Optional.ofNullable(ssoConfiguration.getHttpBinding())
+                .orElse(Constants.SAML2_HTTP_POST_BINDING);
         return (httpBindingString != null) && (SAMLConstants.SAML2_POST_BINDING_URI.equals(httpBindingString));
     }
 
@@ -72,14 +74,15 @@ public class SSOAgentRequestResolver {
     }
 
     /**
-     * Returns true if the request URI matches globally configured URL for sending session participant initiated
+     * Returns true if the request URI matches the globally configured URL for sending session participant initiated
      * SAML 2.0 single-logout (SLO) request(s), else false.
      *
-     * @return true if the request URI matches globally configured URL for sending session participant initiated
+     * @return true if the request URI matches the globally configured URL for sending session participant initiated
      * SAML 2.0 single-logout (SLO) request(s), else false
      */
     public boolean isSLOURL() {
         return (ssoConfiguration.isSLOEnabled()) &&
-                (request.getRequestURI().endsWith(ssoConfiguration.getSLOURLPostfix()));
+                (request.getRequestURI().endsWith(Optional.ofNullable(ssoConfiguration.getSLOURLPostfix())
+                        .orElse(Constants.DEFAULT_SLO_URL_POSTFIX)));
     }
 }
