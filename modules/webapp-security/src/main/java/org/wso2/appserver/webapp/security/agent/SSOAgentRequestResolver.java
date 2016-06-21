@@ -47,11 +47,9 @@ public class SSOAgentRequestResolver {
      * @return true if the request URI is one of the URI(s) to be skipped (as specified by the agent), else false
      */
     public boolean isURLToSkip() {
-        if (ssoConfiguration.getSkipURIs() == null) {
-            return false;
-        }
-        return Optional.ofNullable(ssoConfiguration.getSkipURIs().getSkipURIs())
-                .orElse(new ArrayList<>()).contains(request.getRequestURI());
+        return ssoConfiguration.getSkipURIs() != null &&
+                Optional.ofNullable(ssoConfiguration.getSkipURIs().getSkipURIs())
+                        .orElse(new ArrayList<>()).contains(request.getRequestURI());
     }
 
     /**

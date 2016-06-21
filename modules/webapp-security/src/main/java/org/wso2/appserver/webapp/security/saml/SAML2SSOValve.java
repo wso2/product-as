@@ -59,8 +59,8 @@ public class SAML2SSOValve extends SingleSignOn {
     public void invoke(Request request, Response response) throws IOException, ServletException {
         containerLog.debug("Invoking SAML 2.0 single-sign-on valve. Request URI : " + request.getRequestURI());
 
-        Optional<AppServerWebAppConfiguration> contextConfiguration = ContextConfigurationLoader.
-                getContextConfiguration(request.getContext());
+        Optional<AppServerWebAppConfiguration> contextConfiguration =
+                ContextConfigurationLoader.getContextConfiguration(request.getContext());
         if (contextConfiguration.isPresent()) {
             //  retrieves the configuration instance if exists
             this.contextConfiguration = contextConfiguration.get().getSingleSignOnConfiguration();
@@ -142,13 +142,13 @@ public class SAML2SSOValve extends SingleSignOn {
 
         SAML2SSOManager manager = new SAML2SSOManager(contextConfiguration);
 
-        Optional.ofNullable(request.getSession(false))
-                .ifPresent(httpSession -> {
-                    //  TODO: to be changed
-                    httpSession.setAttribute(Constants.REQUEST_URL, request.getRequestURI());
-                    httpSession.setAttribute(Constants.REQUEST_QUERY_STRING, request.getQueryString());
-                    httpSession.setAttribute(Constants.REQUEST_PARAMETERS, request.getParameterMap());
-                });
+        //  setup relay state
+        String relayStateID = SSOUtils.createID();
+        request.getSession(true).setAttribute(Constants.RELAY_STATE_ID, relayStateID);
+        request.getSession(false).setAttribute(relayStateID, SSOUtils.generateRelayState(request));
+
+        contextConfiguration.enableRequestSigning(Optional.ofNullable(contextConfiguration.isRequestSigningEnabled())
+                .orElse(false));
 
         if (requestResolver.isHttpPOSTBinding()) {
             containerLog.debug("Handling the SAML 2.0 Authentication Request for HTTP-POST binding...");
@@ -173,6 +173,19 @@ public class SAML2SSOValve extends SingleSignOn {
      * @throws SSOException if an error occurs when handling a response
      */
     private void handleResponse(Request request, Response response) throws SSOException {
+        if (contextConfiguration == null) {
+            throw new SSOException("Context level configurations may not be initialized");
+        }
+
+        contextConfiguration.enableResponseSigning(Optional.ofNullable(contextConfiguration.isResponseSigningEnabled())
+                .orElse(false));
+        contextConfiguration.enableAssertionSigning(
+                Optional.ofNullable(contextConfiguration.isAssertionSigningEnabled())
+                        .orElse(false));
+        contextConfiguration.enableAssertionEncryption(
+                Optional.ofNullable(contextConfiguration.isAssertionEncryptionEnabled())
+                        .orElse(false));
+
         SAML2SSOManager manager = new SAML2SSOManager(contextConfiguration);
         manager.processResponse(request);
         redirectAfterProcessingResponse(request, response);
@@ -194,10 +207,12 @@ public class SAML2SSOValve extends SingleSignOn {
         //  redirect according to relay state attribute
         try {
             if (request.getSession(false) != null) {
-                String requestURL = (String) request.getSession(false).getAttribute(Constants.REQUEST_URL);
-                String requestQueryString = (String) request.getSession(false)
-                        .getAttribute(Constants.REQUEST_QUERY_STRING);
-                Map requestParameters = (Map) request.getSession(false).getAttribute(Constants.REQUEST_PARAMETERS);
+                String relayStateID = (String) request.getSession(false).getAttribute(Constants.RELAY_STATE_ID);
+                Map relayState = (Map) request.getSession(false).getAttribute(relayStateID);
+
+                String requestURL = (String) relayState.get(Constants.REQUEST_URL);
+                String requestQueryString = (String) relayState.get(Constants.REQUEST_QUERY_STRING);
+                Map requestParameters = (Map) relayState.get(Constants.REQUEST_PARAMETERS);
 
                 StringBuilder requestedURI = new StringBuilder(requestURL);
                 Optional.ofNullable(requestQueryString)
@@ -234,7 +249,7 @@ public class SAML2SSOValve extends SingleSignOn {
                     String htmlPayload = manager.handleLogoutRequestForPOSTBinding(request);
                     SSOUtils.sendCharacterData(response, htmlPayload);
                 } else {
-                    containerLog.warn("Attempt to logout from a already logout session");
+                    containerLog.warn("Attempt to logout from an already logged out session");
                     response.sendRedirect(request.getContext().getPath());
                 }
             } else {

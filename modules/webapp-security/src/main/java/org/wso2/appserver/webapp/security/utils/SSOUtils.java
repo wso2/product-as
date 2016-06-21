@@ -151,7 +151,7 @@ public class SSOUtils {
     /**
      * Returns an application server URL constructed using the specified request.
      *
-     * @param request the servlet request processed
+     * @param request the HTTP servlet request
      * @return the application server URL constructed
      */
     public static Optional<String> constructApplicationServerURL(Request request) {
@@ -223,6 +223,25 @@ public class SSOUtils {
         }
 
         return queryParameters;
+    }
+
+    /**
+     * Returns a map of SAML 2.0 Relay State content in the form of key-value pairs.
+     *
+     * @param request the HTTP servlet request
+     * @return a map of SAML 2.0 Relay State content in the form of key-value pairs
+     */
+    public static Map<String, Object> generateRelayState(Request request) {
+        Map<String, Object> relayStateContent = new HashMap<>();
+
+        Optional.ofNullable(request)
+                .ifPresent(requestObject -> {
+                    relayStateContent.put(Constants.REQUEST_URL, requestObject.getRequestURI());
+                    relayStateContent.put(Constants.REQUEST_QUERY_STRING, requestObject.getQueryString());
+                    relayStateContent.put(Constants.REQUEST_PARAMETERS, requestObject.getParameterMap());
+                });
+
+        return relayStateContent;
     }
 
     /**
@@ -493,7 +512,7 @@ public class SSOUtils {
             writer.write(element, output);
             return new String(byteArrayOutputStream.toByteArray(), Charset.forName(Constants.UTF8_ENC));
         } catch (ClassNotFoundException | InstantiationException | MarshallingException | IllegalAccessException e) {
-            throw new SSOException("Error in marshalling SAML Assertion", e);
+            throw new SSOException("Error in marshalling SAML 2.0 Assertion", e);
         }
     }
 

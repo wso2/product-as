@@ -116,9 +116,7 @@ public class SAML2SSOManager {
     protected String handleAuthenticationRequestForPOSTBinding(Request request) throws SSOException {
         RequestAbstractType requestMessage = buildAuthnRequest(request);
 
-        Boolean isRequestSigningEnabled = Optional.ofNullable(contextConfiguration.isRequestSigningEnabled())
-                .orElse(false);
-        if (isRequestSigningEnabled) {
+        if (contextConfiguration.isRequestSigningEnabled()) {
             requestMessage = SSOUtils.setSignature(requestMessage, XMLSignature.ALGO_ID_SIGNATURE_RSA,
                     new X509CredentialImplementation(SSOX509Credential.getInstance()));
         }
@@ -157,7 +155,7 @@ public class SAML2SSOManager {
             }
         } else {
             throw new SSOException(
-                    "Single-logout (SLO) Request cannot be built. Single-sign-on (SSO) Session is null.");
+                    "Single-logout (SLO) Request cannot be built, single-sign-on (SSO) session is null");
         }
 
         return preparePOSTRequest(requestMessage);
@@ -521,7 +519,6 @@ public class SAML2SSOManager {
         //  marshalling SAML 2.0 assertion after signature validation due to an issue in OpenSAML
         session.getSAML2SSO().setAssertionString(SSOUtils.marshall(assertion));
 
-        //  TODO: consider the usage of http sessions
         ((LoggedInSession) request.getSession().getAttribute(Constants.SESSION_BEAN)).
                 getSAML2SSO().setSubjectAttributes(SSOUtils.getAssertionStatements(assertion));
 
@@ -535,7 +532,7 @@ public class SAML2SSOManager {
                 sessionId = authnStatement.get().getSessionIndex();
             }
             if (sessionId == null) {
-                throw new SSOException("Single Logout is enabled but IdP Session ID not found in SAML Assertion");
+                throw new SSOException("Single Logout is enabled but IdP Session ID not found in SAML 2.0 Assertion");
             }
             ((LoggedInSession) request.getSession().getAttribute(Constants.SESSION_BEAN)).getSAML2SSO().
                     setSessionIndex(sessionId);
@@ -647,7 +644,7 @@ public class SAML2SSOManager {
                                         .count() > 0);
 
         if (audienceExistingStream.count() == 0) {
-            throw new SSOException("SAML2 Assertion Audience Restriction validation failed");
+            throw new SSOException("SAML 2.0 Assertion Audience Restriction validation failed");
         }
     }
 

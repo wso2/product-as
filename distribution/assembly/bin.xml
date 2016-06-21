@@ -79,7 +79,6 @@
 
                 <!-- Application Server web-app security dependencies -->
                 <include>com.google.code.findbugs:jsr305:jar</include>
-                <include>com.google.code.gson:gson:jar</include>
                 <include>com.google.guava:guava:jar</include>
                 <include>commons-codec:commons-codec:jar</include>
                 <include>commons-collections:commons-collections:jar</include>
