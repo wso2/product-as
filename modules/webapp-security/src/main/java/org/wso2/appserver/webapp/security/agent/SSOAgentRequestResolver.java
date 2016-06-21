@@ -19,8 +19,9 @@ import org.opensaml.saml.common.xml.SAMLConstants;
 import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides an implementation for resolving the type of an intercepted HTTP servlet request by analyzing
@@ -46,7 +47,11 @@ public class SSOAgentRequestResolver {
      * @return true if the request URI is one of the URI(s) to be skipped (as specified by the agent), else false
      */
     public boolean isURLToSkip() {
-        return ssoConfiguration.getSkipURIs().getSkipURIs().contains(request.getRequestURI());
+        if (ssoConfiguration.getSkipURIs() == null) {
+            return false;
+        }
+        return Optional.ofNullable(ssoConfiguration.getSkipURIs().getSkipURIs())
+                .orElse(new ArrayList<>()).contains(request.getRequestURI());
     }
 
     /**

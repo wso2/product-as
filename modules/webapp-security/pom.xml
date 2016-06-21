@@ -26,7 +26,7 @@
     <description>Web application security functions</description>
     <url>http://wso2.com</url>
 
-    <build>
+    <!--<build>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -45,7 +45,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
     <dependencies>
         <dependency>
@@ -124,7 +124,7 @@
         </dependency>
 
         <!-- Test dependencies -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
             <classifier>runtime</classifier>
@@ -139,6 +139,6 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

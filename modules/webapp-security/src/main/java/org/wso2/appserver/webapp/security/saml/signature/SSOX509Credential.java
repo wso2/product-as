@@ -61,7 +61,7 @@ public class SSOX509Credential {
         return entityCertificate;
     }
 
-    public static SSOX509Credential getInstance() throws SSOException {
+    public static synchronized SSOX509Credential getInstance() throws SSOException {
         if (ssoX509Credential == null) {
             ssoX509Credential = new SSOX509Credential(ServerConfigurationLoader.getServerConfiguration());
         }

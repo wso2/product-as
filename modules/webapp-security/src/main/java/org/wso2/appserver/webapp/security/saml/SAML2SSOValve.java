@@ -23,7 +23,6 @@ import org.apache.catalina.connector.Response;
 import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
-import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 import org.wso2.appserver.webapp.security.Constants;
 import org.wso2.appserver.webapp.security.agent.SSOAgentRequestResolver;
 import org.wso2.appserver.webapp.security.utils.SSOUtils;
@@ -133,6 +132,10 @@ public class SAML2SSOValve extends SingleSignOn {
      * @throws SSOException if an error occurs when handling an unauthenticated request
      */
     private void handleUnauthenticatedRequest(Request request, Response response) throws SSOException {
+        if (contextConfiguration == null) {
+            throw new SSOException("Context level configurations may not be initialized");
+        }
+
         if (requestResolver == null) {
             throw new SSOException("SSO Agent request resolver has not been initialized");
         }
@@ -185,7 +188,7 @@ public class SAML2SSOValve extends SingleSignOn {
     private void redirectAfterProcessingResponse(Request request, Response response)
             throws SSOException {
         if (contextConfiguration == null) {
-            throw new SSOException("Server level or context level configurations may not be initialized");
+            throw new SSOException("Context level configurations may not be initialized");
         }
 
         //  redirect according to relay state attribute
