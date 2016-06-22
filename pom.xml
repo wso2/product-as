@@ -322,16 +322,6 @@
             </dependency>
             <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-soap-api</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-soap-impl</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
                 <artifactId>opensaml-storage-api</artifactId>
                 <version>${org.opensaml.version}</version>
             </dependency>

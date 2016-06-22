@@ -98,8 +98,6 @@
                 <include>org.opensaml:opensaml-saml-impl:jar</include>
                 <include>org.opensaml:opensaml-security-api:jar</include>
                 <include>org.opensaml:opensaml-security-impl:jar</include>
-                <include>org.opensaml:opensaml-soap-api:jar</include>
-                <include>org.opensaml:opensaml-soap-impl:jar</include>
                 <include>org.opensaml:opensaml-storage-api:jar</include>
                 <include>org.opensaml:opensaml-xmlsec-api:jar</include>
                 <include>org.opensaml:opensaml-xmlsec-impl:jar</include>

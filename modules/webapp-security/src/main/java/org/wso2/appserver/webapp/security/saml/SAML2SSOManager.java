@@ -216,7 +216,11 @@ public class SAML2SSOManager {
                                 .append(parameter)
                                 .append("'>\n")));
 
-        return "<html>\n" +
+        return "<!DOCTYPE html>" +
+                "<html>\n" +
+                "<head>" +
+                "<meta charset='utf-8'>" +
+                "</head>" +
                 "<body>\n" +
                 "<p>You are now redirected back to " + serverConfiguration.getIdpURL() + " \n" +
                 "If the redirection fails, please click the post button.</p>\n" +
