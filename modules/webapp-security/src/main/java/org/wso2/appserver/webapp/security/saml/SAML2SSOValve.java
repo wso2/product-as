@@ -24,7 +24,7 @@ import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
 import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import org.wso2.appserver.webapp.security.Constants;
-import org.wso2.appserver.webapp.security.agent.SSOAgentRequestResolver;
+import org.wso2.appserver.webapp.security.agent.SSORequestResolver;
 import org.wso2.appserver.webapp.security.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
@@ -34,21 +34,26 @@ import java.util.Optional;
 import javax.servlet.ServletException;
 
 /**
- * This class implements an Apache Tomcat valve, which performs SAML 2.0 based single-sign-on (SSO) function.
+ * This class implements an Apache Tomcat Valve, which performs SAML 2.0 based single-sign-on (SSO) and
+ * single-logout (SLO) functions.
  * <p>
  * This is a sub-class of the {@code org.apache.catalina.authenticator.SingleSignOn} class.
  *
  * @since 6.0.0
  */
 public class SAML2SSOValve extends SingleSignOn {
+    //  Holds a reference to the context level single-sign-on configurations representation depending on the
+    //  context of the request passed through the invoke method of the Valve.
     private WebAppSingleSignOn contextConfiguration;
-    private SSOAgentRequestResolver requestResolver;
+
+    //
+    private SSORequestResolver requestResolver;
 
     /**
      * Performs single-sign-on(SSO) or single-logout(SLO) processing based on the request, using SAML 2.0.
      * <p>
      * This Valve implements SAML 2.0 Web Browser single-sign-on (SSO) and SAML 2.0 single-logout (SLO) Profiles,
-     * respectively. This method overrides the parent {@link SingleSignOn} class' invoke() method.
+     * respectively. This method overrides the invoke() method of the parent {@link SingleSignOn} class.
      *
      * @param request  the servlet request processed
      * @param response the servlet response generated
@@ -62,7 +67,7 @@ public class SAML2SSOValve extends SingleSignOn {
         Optional<AppServerWebAppConfiguration> contextConfiguration =
                 ContextConfigurationLoader.getContextConfiguration(request.getContext());
         if (contextConfiguration.isPresent()) {
-            //  retrieves the configuration instance if exists
+            //  retrieves the configuration instance for the context, if exists
             this.contextConfiguration = contextConfiguration.get().getSingleSignOnConfiguration();
             if (this.contextConfiguration == null) {
                 if (containerLog.isDebugEnabled()) {
@@ -91,7 +96,7 @@ public class SAML2SSOValve extends SingleSignOn {
             return;
         }
 
-        requestResolver = new SSOAgentRequestResolver(request, this.contextConfiguration);
+        requestResolver = new SSORequestResolver(request, this.contextConfiguration);
         //  if the request URL matches one of the URL(s) to skip, moves on to the next valve
         if (requestResolver.isURLToSkip()) {
             containerLog.debug("Request matched a URL to skip. Skipping...");
@@ -102,8 +107,26 @@ public class SAML2SSOValve extends SingleSignOn {
         try {
             if (requestResolver.isSAML2SSOResponse()) {
                 containerLog.debug("Processing a SAML 2.0 Response...");
-                handleResponse(request, response);
-                return;
+                handleResponse(request);
+
+                if (request.getSession(false) != null) {
+                    //  handle redirection after being authenticated
+                    String relayStateID = (String) request.getSession(false).getAttribute(Constants.RELAY_STATE_ID);
+                    Map relayState = (Map) request.getSession(false).getAttribute(relayStateID);
+
+                    String requestURL = (String) relayState.get(Constants.REQUEST_URL);
+                    String requestQueryString = (String) relayState.get(Constants.REQUEST_QUERY_STRING);
+                    Map requestParameters = (Map) relayState.get(Constants.REQUEST_PARAMETERS);
+
+                    StringBuilder requestedURI = new StringBuilder(requestURL);
+                    Optional.ofNullable(requestQueryString)
+                            .ifPresent(queryString -> requestedURI.append("?").append(queryString));
+                    Optional.ofNullable(requestParameters)
+                            .ifPresent(queryParameters -> request.getSession(false).
+                                    setAttribute(Constants.REQUEST_PARAM_MAP, queryParameters));
+                    response.sendRedirect(requestedURI.toString());
+                    return;
+                }
             } else if (requestResolver.isSLOURL()) {
                 //  handles single logout request initiated directly at the service provider
                 containerLog.debug("Processing SAML 2.0 Single Logout URL...");
@@ -153,6 +176,7 @@ public class SAML2SSOValve extends SingleSignOn {
         if (requestResolver.isHttpPOSTBinding()) {
             containerLog.debug("Handling the SAML 2.0 Authentication Request for HTTP-POST binding...");
             String htmlPayload = manager.handleAuthenticationRequestForPOSTBinding(request);
+            response.setContentType(Constants.CONTENT_TYPE_HTML);
             SSOUtils.sendCharacterData(response, htmlPayload);
         } else {
             containerLog.debug("Handling the SAML 2.0 Authentication Request for " +
@@ -169,10 +193,9 @@ public class SAML2SSOValve extends SingleSignOn {
      * Handles single-sign-on (SSO) and single-logout (SLO) responses.
      *
      * @param request  the servlet request processed
-     * @param response the servlet response generated
      * @throws SSOException if an error occurs when handling a response
      */
-    private void handleResponse(Request request, Response response) throws SSOException {
+    private void handleResponse(Request request) throws SSOException {
         if (contextConfiguration == null) {
             throw new SSOException("Context level configurations may not be initialized");
         }
@@ -188,46 +211,6 @@ public class SAML2SSOValve extends SingleSignOn {
 
         SAML2SSOManager manager = new SAML2SSOManager(contextConfiguration);
         manager.processResponse(request);
-        redirectAfterProcessingResponse(request, response);
-    }
-
-    /**
-     * Handles redirection after processing a SAML 2.0 based Response.
-     *
-     * @param request  the servlet request processed
-     * @param response the servlet response generated
-     * @throws SSOException if an error occurs when redirecting
-     */
-    private void redirectAfterProcessingResponse(Request request, Response response)
-            throws SSOException {
-        if (contextConfiguration == null) {
-            throw new SSOException("Context level configurations may not be initialized");
-        }
-
-        //  redirect according to relay state attribute
-        try {
-            if (request.getSession(false) != null) {
-                String relayStateID = (String) request.getSession(false).getAttribute(Constants.RELAY_STATE_ID);
-                Map relayState = (Map) request.getSession(false).getAttribute(relayStateID);
-
-                String requestURL = (String) relayState.get(Constants.REQUEST_URL);
-                String requestQueryString = (String) relayState.get(Constants.REQUEST_QUERY_STRING);
-                Map requestParameters = (Map) relayState.get(Constants.REQUEST_PARAMETERS);
-
-                StringBuilder requestedURI = new StringBuilder(requestURL);
-                Optional.ofNullable(requestQueryString)
-                        .ifPresent(queryString -> requestedURI.append("?").append(queryString));
-                Optional.ofNullable(requestParameters)
-                        .ifPresent(queryParameters -> request.getSession(false).
-                                setAttribute(Constants.REQUEST_PARAM_MAP, queryParameters));
-                response.sendRedirect(requestedURI.toString());
-            } else {
-                //  generates the SAML 2.0 Assertion Consumer URL
-                response.sendRedirect(contextConfiguration.getConsumerURL());
-            }
-        } catch (IOException e) {
-            throw new SSOException("Error during redirecting after processing SAML 2.0 Response", e);
-        }
     }
 
     /**
@@ -247,6 +230,7 @@ public class SAML2SSOValve extends SingleSignOn {
             if (requestResolver.isHttpPOSTBinding()) {
                 if (request.getSession(false).getAttribute(Constants.SESSION_BEAN) != null) {
                     String htmlPayload = manager.handleLogoutRequestForPOSTBinding(request);
+                    response.setContentType(Constants.CONTENT_TYPE_HTML);
                     SSOUtils.sendCharacterData(response, htmlPayload);
                 } else {
                     containerLog.warn("Attempt to logout from an already logged out session");

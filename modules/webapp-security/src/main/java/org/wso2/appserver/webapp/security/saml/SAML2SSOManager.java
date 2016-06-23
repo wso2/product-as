@@ -60,10 +60,12 @@ import org.wso2.appserver.webapp.security.bean.LoggedInSession;
 import org.wso2.appserver.webapp.security.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.saml.signature.SignatureValidator;
 import org.wso2.appserver.webapp.security.saml.signature.X509CredentialImplementation;
-import org.wso2.appserver.webapp.security.utils.SSOAgentDataHolder;
+import org.wso2.appserver.webapp.security.utils.DataHolder;
 import org.wso2.appserver.webapp.security.utils.SSOUtils;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +99,7 @@ public class SAML2SSOManager {
     private void loadCustomSignatureValidatorClass() throws SSOException {
         try {
             if (serverConfiguration != null) {
-                SSOAgentDataHolder.getInstance().setObject(Class.
+                DataHolder.getInstance().setObject(Class.
                         forName(Optional.ofNullable(serverConfiguration.getSignatureValidatorImplClass())
                                 .orElse(Constants.DEFAULT_SIGN_VALIDATOR_IMPL)).newInstance());
             }
@@ -199,6 +201,21 @@ public class SAML2SSOManager {
 
         //  add any additional parameters defined
         Map<String, String[]> queryParams = SSOUtils.getSplitQueryParameters(contextConfiguration.getOptionalParams());
+
+        //  encode the optional parameter values
+        queryParams.entrySet()
+                .stream()
+                .forEach(filteredEntry -> filteredEntry.setValue((String[]) Stream.of(filteredEntry.getValue())
+                        .map(value -> {
+                            try {
+                                return URLEncoder.encode(value, Constants.UTF8_ENC);
+                            } catch (UnsupportedEncodingException e) {
+                                // ignore
+                            }
+                            return null;
+                        })
+                        .toArray()));
+
         if (!queryParams.isEmpty()) {
             parameters.putAll(queryParams);
         }
@@ -216,11 +233,7 @@ public class SAML2SSOManager {
                                 .append(parameter)
                                 .append("'>\n")));
 
-        return "<!DOCTYPE html>" +
-                "<html>\n" +
-                "<head>" +
-                "<meta charset='utf-8'>" +
-                "</head>" +
+        return "<html>\n" +
                 "<body>\n" +
                 "<p>You are now redirected back to " + serverConfiguration.getIdpURL() + " \n" +
                 "If the redirection fails, please click the post button.</p>\n" +
@@ -568,21 +581,10 @@ public class SAML2SSOManager {
             }
         }
 
-        if (saml2Object instanceof LogoutRequest) {
-            LogoutRequest logoutRequest = (LogoutRequest) saml2Object;
-            logoutRequest.getSessionIndexes()
-                    .stream()
-                    .findFirst()
-                    .ifPresent(
-                            index -> SSOAgentSessionManager.getAllInvalidatableSessions(index.getSessionIndex())
-                                    .stream()
-                                    .forEach(HttpSession::invalidate));
-        } else if (saml2Object instanceof LogoutResponse) {
+        if (saml2Object instanceof LogoutResponse) {
             Optional.ofNullable(request.getSession(false))
                     .ifPresent(session -> {
-                        //  not invalidating session explicitly since there may be other listeners
-                        //  still waiting to get triggered and at the end of the chain session needs to be
-                        //  invalidated by the system.
+                        //  handles the SAML 2.0 Logout Response for the Logout Request initiating service provider
                         Set<HttpSession> sessions = SSOAgentSessionManager.getAllInvalidatableSessions(session);
                         sessions
                                 .stream()
@@ -597,6 +599,17 @@ public class SAML2SSOManager {
                                     }
                                 });
                     });
+        } else if (saml2Object instanceof LogoutRequest) {
+            //  handles the back channel SAML 2.0 Logout Requests for the rest of the service providers other than
+            //  the Logout Request initiating Service Provider
+            LogoutRequest logoutRequest = (LogoutRequest) saml2Object;
+            logoutRequest.getSessionIndexes()
+                    .stream()
+                    .findFirst()
+                    .ifPresent(
+                            index -> SSOAgentSessionManager.getAllInvalidatableSessions(index.getSessionIndex())
+                                    .stream()
+                                    .forEach(HttpSession::invalidate));
         } else {
             throw new SSOException("Invalid SAML 2.0 Single Logout Request/Response.");
         }
@@ -660,10 +673,10 @@ public class SAML2SSOManager {
      * @throws SSOException if an error occurs during the signature validation
      */
     private void validateSignature(Response response, Assertion assertion) throws SSOException {
-        if (SSOAgentDataHolder.getInstance().getObject() != null) {
+        if (DataHolder.getInstance().getObject() != null) {
             //  custom implementation of signature validation
             SignatureValidator signatureValidatorUtility =
-                    (SignatureValidator) SSOAgentDataHolder.getInstance().getObject();
+                    (SignatureValidator) DataHolder.getInstance().getObject();
             signatureValidatorUtility.validateSignature(response, assertion,
                     contextConfiguration.isResponseSigningEnabled(), contextConfiguration.isAssertionSigningEnabled());
         } else {

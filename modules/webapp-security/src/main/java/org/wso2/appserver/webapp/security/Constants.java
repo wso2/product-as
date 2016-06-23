@@ -36,8 +36,8 @@ public class Constants {
     public static final String SESSION_BEAN = "org.wso2.appserver.webapp.security.bean.LoggedInSession";
     public static final String IS_PASSIVE_AUTH_ENABLED = "IsPassiveAuthn";
     public static final String IS_FORCE_AUTH_ENABLED = "IsForceAuthn";
+    public static final String RELAY_STATE = "RelayState";
     public static final String RELAY_STATE_ID = "RelayStateId";
-
     public static final String REQUEST_PARAM_MAP = "RequestParamMap";
     public static final String REQUEST_URL = "RequestURL";
     public static final String REQUEST_QUERY_STRING = "RequestQueryString";
@@ -45,4 +45,5 @@ public class Constants {
 
     //  miscellaneous constants
     public static final String UTF8_ENC = "UTF-8";
+    public static final String CONTENT_TYPE_HTML = "text/html";
 }

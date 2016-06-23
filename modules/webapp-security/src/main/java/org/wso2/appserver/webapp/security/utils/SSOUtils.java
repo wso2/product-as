@@ -163,31 +163,16 @@ public class SSOUtils {
         StringBuilder appServerURL = new StringBuilder(sslConnectorScheme + "://");
         String requestHost = request.getHost().getName();
 
-        Optional<Connector> sslConnector = getConnector((Engine) request.getHost().getParent(), sslConnectorScheme);
+        Optional<Connector> sslConnector =
+                Arrays.stream(((Engine) request.getHost().getParent()).getService().findConnectors())
+                        .filter(connector -> connector.getScheme().equals(sslConnectorScheme))
+                        .findFirst();
         if (sslConnector.isPresent()) {
             return Optional.of(appServerURL.append(requestHost).append(":")
                     .append(sslConnector.get().getPort()).toString());
         } else {
             return Optional.empty();
         }
-    }
-
-    /**
-     * Returns a Tomcat connector based associated with the specified {@code Engine} matching the {@code Connector}
-     * scheme.
-     *
-     * @param engine          the Tomcat {@code Engine} instance
-     * @param connectorScheme the {@code Connector} scheme
-     * @return the matching Tomcat {@code Connector}
-     */
-    private static Optional<Connector> getConnector(Engine engine, String connectorScheme) {
-        if (engine == null || connectorScheme == null) {
-            return Optional.empty();
-        }
-
-        return Arrays.stream(engine.getService().findConnectors())
-                .filter(connector -> connector.getScheme().equals(connectorScheme))
-                .findFirst();
     }
 
     /**
@@ -213,12 +198,13 @@ public class SSOUtils {
                                 queryParameterMap.put(splitParameters[0], newList);
                             }
                         }
-                        queryParameterMap.entrySet()
-                                .stream()
-                                .forEach(entry -> {
-                                    String[] values = entry.getValue().toArray(new String[entry.getValue().size()]);
-                                    queryParameters.put(entry.getKey(), values);
-                                });
+                    });
+            //  convert the map values to string arrays
+            queryParameterMap.entrySet()
+                    .stream()
+                    .forEach(entry -> {
+                        String[] values = entry.getValue().toArray(new String[entry.getValue().size()]);
+                        queryParameters.put(entry.getKey(), values);
                     });
         }
 
@@ -228,9 +214,10 @@ public class SSOUtils {
     /**
      * Returns a map of SAML 2.0 Relay State content in the form of key-value pairs.
      *
-     * @param request the HTTP servlet request
+     * @param request              the HTTP servlet request
      * @return a map of SAML 2.0 Relay State content in the form of key-value pairs
      */
+    @SuppressWarnings("unchecked")
     public static Map<String, Object> generateRelayState(Request request) {
         Map<String, Object> relayStateContent = new HashMap<>();
 
@@ -240,6 +227,11 @@ public class SSOUtils {
                     relayStateContent.put(Constants.REQUEST_QUERY_STRING, requestObject.getQueryString());
                     relayStateContent.put(Constants.REQUEST_PARAMETERS, requestObject.getParameterMap());
                 });
+
+        //  add the additional parameters defined in the request
+        Optional.ofNullable(request.getAttribute(Constants.RELAY_STATE))
+                .ifPresent(content -> ((Map<String, Object>) content)
+                        .forEach(relayStateContent::put));
 
         return relayStateContent;
     }

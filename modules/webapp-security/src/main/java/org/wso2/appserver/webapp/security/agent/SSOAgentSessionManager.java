@@ -26,9 +26,9 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 /**
- * A class which manages authenticated sessions of a service provider.
+ * This class manages the authenticated sessions of single-sign-on (SSO) function.
  * <p>
- * Session Index at the identity provider is mapped to the session at the service provider so that a
+ * Session Index received from the identity provider is mapped to service provider sessions, so that a
  * single-logout (SLO) request can be handled by invalidating the service provider session mapped to
  * identity provider session index.
  *
@@ -44,7 +44,7 @@ public class SSOAgentSessionManager {
     }
 
     /**
-     * Adds an authenticated session to the global single-sign-on (SSO) agent session manager map.
+     * Adds an authenticated session to the global single-sign-on (SSO) session manager map.
      *
      * @param session the authenticated session to be added to the session map
      */
@@ -86,7 +86,7 @@ public class SSOAgentSessionManager {
     /**
      * Returns all sessions associated with a specified session index, which are to be invalidated.
      * <p>
-     * Internally, these sessions are removed from the global single-sign-on (SSO) agent session manager map.
+     * Internally, these sessions are removed from the global single-sign-on (SSO) session manager map.
      *
      * @param sessionIndex the session index of whom all sessions are to be invalidated
      * @return set of sessions associated with the session index

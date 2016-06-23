@@ -21,15 +21,15 @@ package org.wso2.appserver.webapp.security.utils;
  *
  * @since 6.0.0
  */
-public class SSOAgentDataHolder {
-    private static final SSOAgentDataHolder instance = new SSOAgentDataHolder();
+public class DataHolder {
+    private static final DataHolder instance = new DataHolder();
 
     private Object object;
 
     /**
-     * Prevents instantiating the SSOAgentDataHolder class.
+     * Prevents instantiating the DataHolder class.
      */
-    private SSOAgentDataHolder() {
+    private DataHolder() {
     }
 
     public Object getObject() {
@@ -40,7 +40,7 @@ public class SSOAgentDataHolder {
         this.object = object;
     }
 
-    public static SSOAgentDataHolder getInstance() {
+    public static DataHolder getInstance() {
         return instance;
     }
 }

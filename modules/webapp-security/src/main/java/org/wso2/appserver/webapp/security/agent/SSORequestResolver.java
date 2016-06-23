@@ -29,11 +29,11 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @since 6.0.0
  */
-public class SSOAgentRequestResolver {
+public class SSORequestResolver {
     private WebAppSingleSignOn ssoConfiguration;
     private HttpServletRequest request;
 
-    public SSOAgentRequestResolver(HttpServletRequest request, WebAppSingleSignOn ssoConfiguration) {
+    public SSORequestResolver(HttpServletRequest request, WebAppSingleSignOn ssoConfiguration) {
         this.ssoConfiguration = ssoConfiguration;
         this.request = request;
     }
