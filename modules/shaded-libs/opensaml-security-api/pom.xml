@@ -11,23 +11,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.wso2.appserver</groupId>
         <artifactId>shaded-libs</artifactId>
+        <groupId>org.wso2.appserver</groupId>
         <version>6.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
-    <artifactId>libthrift-shaded</artifactId>
-    <version>${libthrift.shade.version}</version>
+    <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+    <artifactId>opensaml-security-api-shaded</artifactId>
+    <version>${org.opensaml.shade.version}</version>
     <url>http://wso2.com</url>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.thrift</groupId>
-            <artifactId>libthrift</artifactId>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-security-api</artifactId>
         </dependency>
     </dependencies>
 
@@ -51,12 +53,22 @@
                             </relocations>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>org.slf4j:slf4j-api:jar:</exclude>
+                                    <exclude>com.google.code.findbugs:jsr305:jar:</exclude>
+                                    <exclude>com.google.guava:guava:jar:</exclude>
+                                    <exclude>commons-codec:commons-codec:jar:</exclude>
+                                    <exclude>javax.xml.stream:stax-api:jar:</exclude>
+                                    <exclude>joda-time:joda-time:jar:</exclude>
+                                    <exclude>net.shibboleth.utilities:java-support:jar:</exclude>
                                     <exclude>org.apache.httpcomponents:httpclient:jar:</exclude>
                                     <exclude>org.apache.httpcomponents:httpcore:jar:</exclude>
-                                    <exclude>javax.servlet:servlet-api:jar:</exclude>
-                                    <exclude>commons-logging:commons-logging:jar:</exclude>
-                                    <exclude>commons-codec:commons-codec:jar:</exclude>
+                                    <exclude>org.apache.santuario:xmlsec:jar:</exclude>
+                                    <exclude>org.bouncycastle:bcprov-jdk15on:jar:</exclude>
+                                    <exclude>org.codehaus.woodstox:stax2-api:jar:</exclude>
+                                    <exclude>org.codehaus.woodstox:woodstox-core-asl:jar:</exclude>
+                                    <exclude>org.cryptacular:cryptacular:jar:</exclude>
+                                    <exclude>org.opensaml:opensaml-messaging-api:jar:</exclude>
+                                    <exclude>org.opensaml:opensaml-core:jar:</exclude>
+                                    <exclude>org.slf4j:slf4j-api:jar:</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>

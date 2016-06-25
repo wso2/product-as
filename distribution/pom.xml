@@ -123,6 +123,62 @@
             <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
             <artifactId>libthrift-shaded</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-core-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-messaging-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-profile-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-saml-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-saml-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-security-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-security-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-soap-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-soap-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-storage-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-xmlsec-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-xmlsec-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.apache.santuario</groupId>
+            <artifactId>santuario-xmlsec-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.net.shibboleth.utilities</groupId>
+            <artifactId>shibboleth-java-support-shaded</artifactId>
+        </dependency>
 
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
@@ -226,16 +282,16 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>javax.xml.stream</groupId>
+            <artifactId>stax-api</artifactId>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.shibboleth.utilities</groupId>
+            <artifactId>java-support</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -250,63 +306,21 @@
             <artifactId>xmlsec</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>stax2-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
         </dependency>
         <dependency>
             <groupId>org.cryptacular</groupId>
             <artifactId>cryptacular</artifactId>
         </dependency>
-        <!-- TODO: will be considered for shading -->
-        <dependency>
-            <groupId>net.shibboleth.utilities</groupId>
-            <artifactId>java-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-messaging-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-profile-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-saml-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-saml-impl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-security-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-security-impl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-storage-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-xmlsec-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml-xmlsec-impl</artifactId>
-        </dependency>
-        <!-- TODO: will be considered for shading -->
 
         <!-- Webapp loader dependencies -->
         <dependency>

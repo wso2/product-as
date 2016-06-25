@@ -40,7 +40,7 @@ public class SAMLSignatureValidatorImplementation implements SignatureValidator 
                     org.opensaml.xmlsec.signature.support.SignatureValidator.validate(response.getSignature(),
                             new X509CredentialImplementation(ssoX509Credential.getEntityCertificate()));
                 } catch (SignatureException e) {
-                    throw new SSOException("Signature validation failed for SAML 2.0 Response");
+                    throw new SSOException("Signature validation failed for SAML 2.0 Response", e);
                 }
             }
         }
@@ -53,7 +53,7 @@ public class SAMLSignatureValidatorImplementation implements SignatureValidator 
                     org.opensaml.xmlsec.signature.support.SignatureValidator.validate(assertion.getSignature(),
                             new X509CredentialImplementation(ssoX509Credential.getEntityCertificate()));
                 } catch (SignatureException e) {
-                    throw new SSOException("Signature validation failed for SAML 2.0 Assertion");
+                    throw new SSOException("Signature validation failed for SAML 2.0 Assertion", e);
                 }
             }
         }

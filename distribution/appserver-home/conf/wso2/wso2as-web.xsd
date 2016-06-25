@@ -61,9 +61,9 @@
                             <xs:element name="enable-assertion-signing" type="xs:boolean" minOccurs="0"
                                         maxOccurs="1" default="true"/>
                             <xs:element name="enable-request-signing" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1" default="true"/>
+                                        maxOccurs="1" default="false"/>
                             <xs:element name="enable-response-signing" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1" default="true"/>
+                                        maxOccurs="1" default="false"/>
                             <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>

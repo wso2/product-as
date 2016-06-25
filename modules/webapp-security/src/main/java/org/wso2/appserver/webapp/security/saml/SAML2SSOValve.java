@@ -42,11 +42,11 @@ import javax.servlet.ServletException;
  * @since 6.0.0
  */
 public class SAML2SSOValve extends SingleSignOn {
-    //  Holds a reference to the context level single-sign-on configurations representation depending on the
+    //  holds a reference to the context level single-sign-on configurations representation depending on the
     //  context of the request passed through the invoke method of the Valve.
     private WebAppSingleSignOn contextConfiguration;
 
-    //
+    //  the request resolver based on configurations and request content
     private SSORequestResolver requestResolver;
 
     /**
@@ -88,9 +88,12 @@ public class SAML2SSOValve extends SingleSignOn {
         }
 
         //  checks if single-sign-on feature is enabled
-        if (!this.contextConfiguration.isSSOEnabled()) {
-            containerLog.debug("SAML 2.0 single-sign-on not enabled in web app " + request.getContext().getName() +
-                    ", skipping SAML 2.0 based single-sign-on...");
+        if (!Optional.ofNullable(this.contextConfiguration.isSSOEnabled())
+                .orElse(false)) {
+            if (containerLog.isDebugEnabled()) {
+                containerLog.debug("SAML 2.0 single-sign-on not enabled in web app " + request.getContext().getName() +
+                        ", skipping SAML 2.0 based single-sign-on...");
+            }
             //  moves onto the next valve, if single-sign-on is not enabled
             getNext().invoke(request, response);
             return;
@@ -99,16 +102,20 @@ public class SAML2SSOValve extends SingleSignOn {
         requestResolver = new SSORequestResolver(request, this.contextConfiguration);
         //  if the request URL matches one of the URL(s) to skip, moves on to the next valve
         if (requestResolver.isURLToSkip()) {
-            containerLog.debug("Request matched a URL to skip. Skipping...");
+            if (containerLog.isDebugEnabled()) {
+                containerLog.debug("Request matched a URL to skip. Skipping...");
+            }
             getNext().invoke(request, response);
             return;
         }
 
         try {
             if (requestResolver.isSAML2SSOResponse()) {
-                containerLog.debug("Processing a SAML 2.0 Response...");
-                handleResponse(request);
+                if (containerLog.isDebugEnabled()) {
+                    containerLog.debug("Processing a SAML 2.0 Response...");
+                }
 
+                handleResponse(request);
                 if (request.getSession(false) != null) {
                     //  handle redirection after being authenticated
                     String relayStateID = (String) request.getSession(false).getAttribute(Constants.RELAY_STATE_ID);
@@ -129,12 +136,18 @@ public class SAML2SSOValve extends SingleSignOn {
                 }
             } else if (requestResolver.isSLOURL()) {
                 //  handles single logout request initiated directly at the service provider
-                containerLog.debug("Processing SAML 2.0 Single Logout URL...");
+                if (containerLog.isDebugEnabled()) {
+                    containerLog.debug("Processing SAML 2.0 Single Logout URL...");
+                }
+
                 handleLogoutRequest(request, response);
                 return;
             } else if ((request.getSession(false) == null) ||
                     (request.getSession(false).getAttribute(Constants.SESSION_BEAN) == null)) {
-                containerLog.debug("Processing an SAML 2.0 Authentication Request...");
+                if (containerLog.isDebugEnabled()) {
+                    containerLog.debug("Processing an SAML 2.0 Authentication Request...");
+                }
+
                 handleUnauthenticatedRequest(request, response);
                 return;
             }
@@ -204,7 +217,7 @@ public class SAML2SSOValve extends SingleSignOn {
                 .orElse(false));
         contextConfiguration.enableAssertionSigning(
                 Optional.ofNullable(contextConfiguration.isAssertionSigningEnabled())
-                        .orElse(false));
+                        .orElse(true));
         contextConfiguration.enableAssertionEncryption(
                 Optional.ofNullable(contextConfiguration.isAssertionEncryptionEnabled())
                         .orElse(false));

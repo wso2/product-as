@@ -15,6 +15,9 @@
  */
 package org.wso2.appserver.webapp.security;
 
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.core.StandardHost;
+import org.apache.catalina.core.StandardServer;
 import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 
 import java.util.ArrayList;
@@ -51,5 +54,13 @@ public class TestUtils {
         configuration.enableResponseSigning(false);
 
         return configuration;
+    }
+
+    public static List<Lifecycle> generateSampleTomcatComponents() {
+        List<Lifecycle> components = new ArrayList<>();
+        components.add(new StandardHost());
+        components.add(new StandardServer());
+
+        return components;
     }
 }

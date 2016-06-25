@@ -85,7 +85,7 @@ public class SSOX509Credential {
                 }
             } catch (KeyStoreException e) {
                 throw new SSOException("Error occurred while retrieving public certificate with certificateAlias " +
-                        idpCertificateAlias);
+                        idpCertificateAlias, e);
             }
 
             try {
@@ -98,7 +98,7 @@ public class SSOX509Credential {
                     }
                 }
             } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
-                throw new SSOException("Error occurred while retrieving the private key");
+                throw new SSOException("Error occurred while retrieving the private key", e);
             }
 
             if (entityCertificate != null) {

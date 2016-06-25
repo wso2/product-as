@@ -57,6 +57,20 @@
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
                 <include>org.wso2.appserver.shade.org.apache.thrift:libthrift-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-core-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-messaging-api-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-profile-api-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-saml-api-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-saml-impl-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-security-api-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-security-impl-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-soap-api-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-soap-impl-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-storage-api-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-xmlsec-api-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.opensaml:opensaml-xmlsec-impl-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.apache.santuario:santuario-xmlsec-shaded:jar</include>
+                <include>org.wso2.appserver.shade.net.shibboleth.utilities:shibboleth-java-support-shaded:jar</include>
                 <include>org.wso2.appserver.shade.slf4j:slf4j-shaded:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
@@ -77,30 +91,17 @@
                 <include>commons-io:commons-io:jar</include>
                 <include>com.lmax:disruptor:jar</include>
 
-                <!-- Application Server web-app security dependencies -->
                 <include>com.google.code.findbugs:jsr305:jar</include>
                 <include>com.google.guava:guava:jar</include>
                 <include>commons-codec:commons-codec:jar</include>
-                <include>commons-collections:commons-collections:jar</include>
-                <include>commons-lang:commons-lang:jar</include>
+                <include>javax.xml.stream:stax-api:jar</include>
                 <include>joda-time:joda-time:jar</include>
-                <include>net.shibboleth.utilities:java-support:jar</include>
                 <include>org.apache.httpcomponents:httpclient:jar</include>
                 <include>org.apache.httpcomponents:httpcore:jar</include>
-                <include>org.apache.santuario:xmlsec:jar</include>
-                <include>org.apache.velocity:velocity:jar</include>
                 <include>org.bouncycastle:bcprov-jdk15on:jar</include>
+                <include>org.codehaus.woodstox:stax2-api:jar</include>
+                <include>org.codehaus.woodstox:woodstox-core-asl:jar</include>
                 <include>org.cryptacular:cryptacular:jar</include>
-                <include>org.opensaml:opensaml-core:jar</include>
-                <include>org.opensaml:opensaml-messaging-api:jar</include>
-                <include>org.opensaml:opensaml-profile-api:jar</include>
-                <include>org.opensaml:opensaml-saml-api:jar</include>
-                <include>org.opensaml:opensaml-saml-impl:jar</include>
-                <include>org.opensaml:opensaml-security-api:jar</include>
-                <include>org.opensaml:opensaml-security-impl:jar</include>
-                <include>org.opensaml:opensaml-storage-api:jar</include>
-                <include>org.opensaml:opensaml-xmlsec-api:jar</include>
-                <include>org.opensaml:opensaml-xmlsec-impl:jar</include>
             </includes>
         </dependencySet>
 

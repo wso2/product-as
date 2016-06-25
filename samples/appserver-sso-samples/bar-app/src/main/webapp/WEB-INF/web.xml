@@ -16,4 +16,14 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <display-name>Bar-App</display-name>
+
+    <servlet>
+        <servlet-name>logout</servlet-name>
+        <servlet-class>org.wso2.appserver.sample.SingleSignOnServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>logout</servlet-name>
+        <url-pattern>/acs</url-pattern>
+    </servlet-mapping>
 </web-app>

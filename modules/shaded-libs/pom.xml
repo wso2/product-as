@@ -27,5 +27,19 @@
     <modules>
         <module>slf4j</module>
         <module>libthrift</module>
+        <module>opensaml-core</module>
+        <module>opensaml-saml-api</module>
+        <module>opensaml-saml-impl</module>
+        <module>opensaml-security-api</module>
+        <module>opensaml-xmlsec-api</module>
+        <module>opensaml-xmlsec-impl</module>
+        <module>opensaml-messaging-api</module>
+        <module>opensaml-profile-api</module>
+        <module>opensaml-security-impl</module>
+        <module>opensaml-soap-api</module>
+        <module>opensaml-soap-impl</module>
+        <module>opensaml-storage-api</module>
+        <module>shibboleth-java-support</module>
+        <module>santuario-xmlsec</module>
     </modules>
 </project>

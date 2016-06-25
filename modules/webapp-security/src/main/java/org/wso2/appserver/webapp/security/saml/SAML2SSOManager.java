@@ -210,7 +210,8 @@ public class SAML2SSOManager {
                             try {
                                 return URLEncoder.encode(value, Constants.UTF8_ENC);
                             } catch (UnsupportedEncodingException e) {
-                                // ignore
+                                //  ignore the exception since every implementation of the Java platform must support
+                                //  the 'UTF-8' character set
                             }
                             return null;
                         })
@@ -277,11 +278,20 @@ public class SAML2SSOManager {
                             (entry.getValue() != null) && (entry.getValue().length > 0)))
                     .forEach(filteredEntry ->
                             Stream.of(filteredEntry.getValue())
-                                    .forEach(parameter -> builder
-                                            .append("&")
-                                            .append(filteredEntry.getKey())
-                                            .append("=")
-                                            .append(parameter)));
+                                    .forEach(parameterValue -> {
+                                                try {
+                                                    builder
+                                                            .append("&")
+                                                            .append(filteredEntry.getKey())
+                                                            .append("=")
+                                                            .append(URLEncoder.encode(parameterValue, Constants
+                                                                    .UTF8_ENC));
+                                                } catch (UnsupportedEncodingException e) {
+                                                    //  ignore the exception since every implementation of the Java
+                                                    //  platform must support the 'UTF-8' character set
+                                                }
+                                            }
+                                            ));
 
             httpQueryString.append(builder);
         }
@@ -309,12 +319,13 @@ public class SAML2SSOManager {
     private AuthnRequest buildAuthnRequest(Request request) {
         //  the Issuer element identifies the entity that generated the request message
         Issuer issuer = new IssuerBuilder().buildObject();
-        //  generates the service provider entity ID
-        String issuerID = SSOUtils.generateIssuerID(request.getContextPath(), request.getHost().getAppBase())
-                .orElse("");
-        contextConfiguration.setIssuerId(Optional.ofNullable(contextConfiguration.getIssuerId())
-                .orElse(issuerID));
 
+        if (contextConfiguration.getIssuerId() == null) {
+            //  generates the service provider entity ID
+            String issuerID = SSOUtils.generateIssuerID(request.getContextPath(), request.getHost().getAppBase())
+                    .orElse("");
+            contextConfiguration.setIssuerId(issuerID);
+        }
         issuer.setValue(contextConfiguration.getIssuerId());
 
         //  the NameIDPolicy element tailors the subject name identifier of assertions resulting from AuthnRequest
@@ -357,17 +368,17 @@ public class SAML2SSOManager {
                         .orElse(false));
         authnRequest.setProtocolBinding(contextConfiguration.getHttpBinding());
 
-        //  generates the SAML 2.0 Assertion Consumer URL
-        String acsBase = Optional.ofNullable(serverConfiguration.getACSBase())
-                .orElse(SSOUtils.constructApplicationServerURL(request)
-                        .orElse(""));
-        String consumerURLPostfix = Optional.ofNullable(contextConfiguration.getConsumerURLPostfix())
-                .orElse(Constants.DEFAULT_CONSUMER_URL_POSTFIX);
-        String consumerURL = SSOUtils.generateConsumerURL(request.getContextPath(), acsBase, consumerURLPostfix)
-                .orElse("");
-        contextConfiguration.setConsumerURL(Optional.ofNullable(contextConfiguration.getConsumerURL())
-                .orElse(consumerURL));
-
+        if (contextConfiguration.getConsumerURL() == null) {
+            //  generates the SAML 2.0 Assertion Consumer URL
+            String acsBase = Optional.ofNullable(serverConfiguration.getACSBase())
+                    .orElse(SSOUtils.constructApplicationServerURL(request)
+                            .orElse(""));
+            String consumerURLPostfix = Optional.ofNullable(contextConfiguration.getConsumerURLPostfix())
+                    .orElse(Constants.DEFAULT_CONSUMER_URL_POSTFIX);
+            String consumerURL = SSOUtils.generateConsumerURL(request.getContextPath(), acsBase, consumerURLPostfix)
+                    .orElse("");
+            contextConfiguration.setConsumerURL(consumerURL);
+        }
         authnRequest.setAssertionConsumerServiceURL(contextConfiguration.getConsumerURL());
 
         authnRequest.setIssuer(issuer);
@@ -499,7 +510,10 @@ public class SAML2SSOManager {
 
         if (assertion == null) {
             if (isNoPassive(saml2Response)) {
-                request.getHost().getLogger().info("Cannot authenticate in passive mode");
+                Log containerLog = request.getHost().getLogger();
+                if (containerLog.isDebugEnabled()) {
+                    containerLog.debug("Cannot authenticate in passive mode");
+                }
                 return;
             }
             throw new SSOException("SAML 2.0 Assertion not found in the Response");
@@ -691,7 +705,7 @@ public class SAML2SSOManager {
                         org.opensaml.xmlsec.signature.support.SignatureValidator.validate(response.getSignature(),
                                 new X509CredentialImplementation(ssoX509Credential.getEntityCertificate()));
                     } catch (SignatureException e) {
-                        throw new SSOException("Signature validation failed for SAML 2.0 Response");
+                        throw new SSOException("Signature validation failed for SAML 2.0 Response", e);
                     }
                 }
             }
@@ -704,7 +718,7 @@ public class SAML2SSOManager {
                         org.opensaml.xmlsec.signature.support.SignatureValidator.validate(assertion.getSignature(),
                                 new X509CredentialImplementation(ssoX509Credential.getEntityCertificate()));
                     } catch (SignatureException e) {
-                        throw new SSOException("Signature validation failed for SAML 2.0 Assertion");
+                        throw new SSOException("Signature validation failed for SAML 2.0 Assertion", e);
                     }
                 }
             }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" elementFormDefault="qualified"
+           xmlns="http://wso2.org/2016/wso2as" targetNamespace="http://wso2.org/2016/wso2as">
+    <xs:element name="AppServer">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ClassLoader">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Environments">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Environment" minOccurs="1" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="Name" type="xs:string" maxOccurs="1"/>
+                                                    <xs:element name="Classpath" type="xs:string" maxOccurs="1"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="SAML2SingleSignOn" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="IdPURL" type="xs:anyURI"/>
+                            <xs:element name="IdPEntityId" type="xs:string"/>
+                            <xs:element name="SignatureValidatorImplClass" type="xs:string" minOccurs="0"
+                                        maxOccurs="1"/>
+                            <xs:element name="IdPCertificateAlias" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="AssertionConsumerServiceBase" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="Key" type="xs:string" use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="StatisticsPublisher" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Username" type="xs:string"/>
+                            <xs:element name="Password" type="xs:string"/>
+                            <xs:element name="DataAgentType" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="AuthenticationURL" type="xs:anyURI"/>
+                            <xs:element name="PublisherURL" type="xs:anyURI"/>
+                            <xs:element name="StreamId" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Security" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="KeyStore" minOccurs="0" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Location" type="xs:anyURI"/>
+                                        <xs:element name="Type" default="JKS">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="JKS"/>
+                                                    <xs:enumeration value="PKCS11"/>
+                                                    <xs:enumeration value="PKCS12"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="Password" type="xs:string"/>
+                                        <xs:element name="KeyAlias" type="xs:string"/>
+                                        <xs:element name="KeyPassword" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="TrustStore" minOccurs="0" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Location" type="xs:anyURI"/>
+                                        <xs:element name="Type" default="JKS">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:enumeration value="JKS"/>
+                                                    <xs:enumeration value="PKCS11"/>
+                                                    <xs:enumeration value="PKCS12"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="Password" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

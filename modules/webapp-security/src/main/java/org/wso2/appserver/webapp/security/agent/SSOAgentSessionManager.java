@@ -64,7 +64,7 @@ public class SSOAgentSessionManager {
      * Returns all sessions associated with the session index retrieved from a specified {@code HttpSession}
      * which are to be invalidated.
      * <p>
-     * Internally, these sessions are removed from the global single-sign-on (SSO) agent session manager map.
+     * Internally, these sessions are removed from the global single-sign-on (SSO) session manager map.
      *
      * @param session the {@link HttpSession} instance
      * @return set of sessions associated with the session index

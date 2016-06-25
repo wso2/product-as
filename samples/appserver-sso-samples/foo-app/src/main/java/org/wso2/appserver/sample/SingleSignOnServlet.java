@@ -36,6 +36,31 @@ public class SingleSignOnServlet extends HttpServlet {
         printMessage(resp, servletName);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
+        resp.setCharacterEncoding("UTF-8");
+        PrintWriter writer = resp.getWriter();
+        writer.append("<!DOCTYPE html>\r\n")
+                .append("<html>\r\n")
+                .append("<head>\r\n")
+                .append("<title>Foo-App</title>\r\n")
+                .append("</head>\r\n")
+                .append("<img src='images/cart-logo.gif' alt='Logo' />");
+
+        writer.append("<h2>");
+        writer.append("You have successfully logged out from the foo-app...");
+        writer.append("</h2>\r\n");
+
+        writer.append("<div id='footer-area'>");
+        writer.append("<p>©2016 WSO2</p>");
+        writer.append("</div>");
+
+        writer.append("<body>\r\n")
+                .append("</body>\r\n")
+                .append("</html>\r\n");
+    }
+
     /**
      * Prints a message based on the servlet name.
      *
@@ -55,10 +80,15 @@ public class SingleSignOnServlet extends HttpServlet {
                 .append("<img src='images/cart-logo.gif' alt='Logo' />");
 
         writer.append("<h2>");
-        if (servletName.equals("english")) {
-            writer.append("Welcome to WSO2 Application Server!");
-        } else if (servletName.equals("french")) {
-            writer.append("Bienvenue à WSO2 Application Server!");
+        switch (servletName) {
+            case "english":
+                writer.append("Welcome to WSO2 Application Server!");
+                break;
+            case "french":
+                writer.append("Bienvenue à WSO2 Application Server!");
+                break;
+            default:
+                break;
         }
         writer.append("</h2>\r\n");
 

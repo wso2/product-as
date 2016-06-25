@@ -47,9 +47,10 @@ public class SSORequestResolver {
      * @return true if the request URI is one of the URI(s) to be skipped (as specified by the agent), else false
      */
     public boolean isURLToSkip() {
-        return ssoConfiguration.getSkipURIs() != null &&
+        return !((ssoConfiguration == null) || (request == null)) && ssoConfiguration.getSkipURIs() != null &&
                 Optional.ofNullable(ssoConfiguration.getSkipURIs().getSkipURIs())
-                        .orElse(new ArrayList<>()).contains(request.getRequestURI());
+                        .orElse(new ArrayList<>())
+                        .contains(request.getRequestURI());
     }
 
     /**
@@ -58,6 +59,9 @@ public class SSORequestResolver {
      * @return true if SAML 2.0 binding type is of HTTP POST type, else false
      */
     public boolean isHttpPOSTBinding() {
+        if (ssoConfiguration == null) {
+            return false;
+        }
         String httpBindingString = Optional.ofNullable(ssoConfiguration.getHttpBinding())
                 .orElse(Constants.SAML2_HTTP_POST_BINDING);
         return (httpBindingString != null) && (SAMLConstants.SAML2_POST_BINDING_URI.equals(httpBindingString));
@@ -73,7 +77,7 @@ public class SSORequestResolver {
      * service provider
      */
     public boolean isSAML2SSOResponse() {
-        return request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE) != null;
+        return request != null && request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE) != null;
     }
 
     /**
@@ -84,7 +88,7 @@ public class SSORequestResolver {
      * SAML 2.0 single-logout (SLO) request(s), else false
      */
     public boolean isSLOURL() {
-        return (ssoConfiguration.isSLOEnabled()) &&
+        return !((ssoConfiguration == null) || (request == null)) && (ssoConfiguration.isSLOEnabled()) &&
                 (request.getRequestURI().endsWith(Optional.ofNullable(ssoConfiguration.getSLOURLPostfix())
                         .orElse(Constants.DEFAULT_SLO_URL_POSTFIX)));
     }

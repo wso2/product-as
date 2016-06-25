@@ -31,7 +31,7 @@ public class TestConstants {
     public static final String SSL_PROTOCOL = "https";
     public static final int SSL_PORT = 8443;
 
-    public static final String DEFAULT_KEY_STORE_LOCATION = TEST_RESOURCES_LOCATION + "/wso2carbon.jks";
+    public static final String DEFAULT_KEY_STORE_LOCATION = TEST_RESOURCES_LOCATION + "/conf/wso2/wso2carbon.jks";
     public static final String DEFAULT_KEY_STORE_TYPE = "JKS";
     public static final String DEFAULT_KEY_STORE_PASSWORD = "wso2carbon";
     public static final String DEFAULT_APPLICATION_SERVER_URL = SSL_PROTOCOL + "://" + DEFAULT_TOMCAT_HOST + ":" +
