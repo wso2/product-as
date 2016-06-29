@@ -26,22 +26,8 @@
                 <xs:element name="saml2-single-sign-on" minOccurs="0" maxOccurs="1">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="skip-uris" minOccurs="0" maxOccurs="1">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="skip-uri" type="xs:anyURI" minOccurs="1"
-                                                    maxOccurs="unbounded"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element name="handle-consumer-url-after-slo" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1"/>
-                            <xs:element name="query-params" type="xs:string" minOccurs="0" maxOccurs="1"/>
-                            <xs:element name="application-server-url" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
-                            <xs:element name="enable-sso" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1" default="false"/>
-                            <xs:element name="request-url-postfix" type="xs:string" minOccurs="0"
-                                        maxOccurs="1" default="samlsso"/>
+                            <xs:element name="enable-sso" type="xs:boolean" minOccurs="0" maxOccurs="1"
+                                        default="false"/>
                             <xs:element name="http-binding" minOccurs="0" maxOccurs="1"
                                         default="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST">
                                 <xs:simpleType>
@@ -57,8 +43,15 @@
                             <xs:element name="consumer-url" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="consumer-url-postfix" type="xs:string" minOccurs="0"
                                         maxOccurs="1" default="/acs"/>
-                            <xs:element name="attribute-consuming-service-index" type="xs:string"
-                                        minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="skip-uris" minOccurs="0" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="skip-uri" type="xs:anyURI" minOccurs="1"
+                                                    maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="optional-params" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="enable-slo" type="xs:boolean" minOccurs="0" maxOccurs="1"
                                         default="false"/>
                             <xs:element name="slo-url-postfix" type="xs:string" minOccurs="0"
@@ -71,10 +64,6 @@
                                         maxOccurs="1" default="true"/>
                             <xs:element name="enable-response-signing" type="xs:boolean" minOccurs="0"
                                         maxOccurs="1" default="true"/>
-                            <xs:element name="is-force-authn" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1" default="false"/>
-                            <xs:element name="is-passive-authn" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1" default="false"/>
                             <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>
@@ -84,6 +73,13 @@
                                     </xs:simpleContent>
                                 </xs:complexType>
                             </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="statistics-publisher" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="enable-stats-publisher" type="xs:boolean"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>

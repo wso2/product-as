@@ -16,26 +16,21 @@
         <environments>JAX-RS</environments>
     </class-loader>
     <saml2-single-sign-on>
-        <skip-uris>
-            <skip-uri>http://www.example.com</skip-uri>
-        </skip-uris>
-        <handle-consumer-url-after-slo>false</handle-consumer-url-after-slo>
-        <query-params>tenant=admin&amp;dialect=SAML</query-params>
-        <application-server-url>https://localhost:8443</application-server-url>
         <enable-sso>true</enable-sso>
-        <request-url-postfix>samlsso</request-url-postfix>
         <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</http-binding>
         <issuer-id>foo-app</issuer-id>
         <consumer-url>https://localhost:8443/foo-app/acs</consumer-url>
-        <consumer-url-postfix>/acs</consumer-url-postfix>
+        <consumer-url-postfix>acs</consumer-url-postfix>
+        <skip-uris>
+            <skip-uri>http://www.example.com</skip-uri>
+        </skip-uris>
+        <optional-params>tenant=admin&amp;dialect=SAML</optional-params>
         <enable-slo>true</enable-slo>
         <slo-url-postfix>logout</slo-url-postfix>
         <enable-assertion-encryption>true</enable-assertion-encryption>
         <enable-assertion-signing>true</enable-assertion-signing>
         <enable-request-signing>true</enable-request-signing>
         <enable-response-signing>true</enable-response-signing>
-        <is-force-authn>false</is-force-authn>
-        <is-passive-authn>false</is-passive-authn>
         <property key="RelayState">index.jsp</property>
         <property key="LoginURL">index.jsp</property>
     </saml2-single-sign-on>

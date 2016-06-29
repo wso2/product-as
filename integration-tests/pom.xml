@@ -192,7 +192,6 @@
                         <jacoco-agent.runtime>org.jacoco.agent-runtime.jar</jacoco-agent.runtime>
                         <jacoco-agent.data.file>jacoco-it.exec</jacoco-agent.data.file>
                     </systemPropertyVariables>
-
                 </configuration>
                 <executions>
                     <execution>

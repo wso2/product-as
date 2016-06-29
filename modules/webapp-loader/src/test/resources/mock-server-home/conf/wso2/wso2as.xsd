@@ -44,6 +44,7 @@
                             <xs:element name="SignatureValidatorImplClass" type="xs:string" minOccurs="0"
                                         maxOccurs="1"/>
                             <xs:element name="IdPCertificateAlias" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="AssertionConsumerServiceBase" type="xs:anyURI"/>
                             <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>
@@ -61,6 +62,7 @@
                         <xs:sequence>
                             <xs:element name="Username" type="xs:string"/>
                             <xs:element name="Password" type="xs:string"/>
+                            <xs:element name="DataAgentType" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="AuthenticationURL" type="xs:anyURI"/>
                             <xs:element name="PublisherURL" type="xs:anyURI"/>
                             <xs:element name="StreamId" type="xs:string"/>

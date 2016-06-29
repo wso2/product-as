@@ -44,6 +44,7 @@
                             <xs:element name="SignatureValidatorImplClass" type="xs:string" minOccurs="0"
                                         maxOccurs="1"/>
                             <xs:element name="IdPCertificateAlias" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="AssertionConsumerServiceBase" type="xs:anyURI" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>

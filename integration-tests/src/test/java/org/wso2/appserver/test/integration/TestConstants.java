@@ -23,7 +23,7 @@ package org.wso2.appserver.test.integration;
  * @since 6.0.0
  */
 public final class TestConstants {
-    //  System property constant names
+    //  system property constant names
     public static final String APPSERVER_HOME = "appserver.home";
     public static final String SERVER_TIMEOUT = "listener.server.timeout";
     public static final String APPSERVER_PORT = "appserver.port";
@@ -33,7 +33,7 @@ public final class TestConstants {
     public static final String TOMCAT_AJP_PORT_NAME = "AJP port";
     public static final String TOMCAT_SERVER_SHUTDOWN_PORT_NAME = "Server shutdown port";
 
-    //  Default port number constants
+    //  default port number constants
     public static final int TOMCAT_DEFAULT_PORT = 8080;
     public static final int TOMCAT_DEFAULT_AJP_PORT = 8009;
     public static final int TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT = 8005;

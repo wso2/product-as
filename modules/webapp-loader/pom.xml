@@ -71,10 +71,10 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/weapp-loader-test.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                    <systemPropertyVariables>
+                    <systemProperties>
                         <catalina.base>src/test/resources/mock-server-home</catalina.base>
                         <catalina.home>src/test/resources/mock-server-home</catalina.home>
-                    </systemPropertyVariables>
+                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>

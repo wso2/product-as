@@ -39,6 +39,8 @@ public class AppServerSingleSignOn {
     private String signatureValidatorImplClass;
     @XmlElement(name = "IdPCertificateAlias")
     private String idpCertificateAlias;
+    @XmlElement(name = "AssertionConsumerServiceBase")
+    private String acsBase;
     @XmlElement(name = "Property")
     private List<Property> properties;
 
@@ -72,6 +74,14 @@ public class AppServerSingleSignOn {
 
     public void setIdpCertificateAlias(String idpCertificateAlias) {
         this.idpCertificateAlias = idpCertificateAlias;
+    }
+
+    public String getACSBase() {
+        return acsBase;
+    }
+
+    public void setACSBase(String acsBase) {
+        this.acsBase = acsBase;
     }
 
     public List<Property> getProperties() {

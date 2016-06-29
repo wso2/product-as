@@ -71,7 +71,6 @@ public class ServerConfigurationUtils {
 
         ssoConfiguration.setIdpURL(Constants.IDP_URL);
         ssoConfiguration.setIdpEntityId(Constants.IDP_ENTITY_ID);
-        ssoConfiguration.setSignatureValidatorImplClass(Constants.VALIDATOR_CLASS);
         ssoConfiguration.setIdpCertificateAlias(Constants.IDP_CERT_ALIAS);
 
         return ssoConfiguration;
@@ -150,11 +149,9 @@ public class ServerConfigurationUtils {
         if ((actual != null) && (expected != null)) {
             boolean idpURL = actual.getIdpURL().trim().equals(expected.getIdpURL());
             boolean idpEntityID = actual.getIdpEntityId().trim().equals(expected.getIdpEntityId());
-            boolean validatorClass = actual.getSignatureValidatorImplClass().trim().
-                    equals(expected.getSignatureValidatorImplClass());
             boolean idpCertAlias = actual.getIdpCertificateAlias().trim().equals(expected.getIdpCertificateAlias());
             boolean properties = compareSSOProperties(actual.getProperties(), expected.getProperties());
-            return (idpURL && idpEntityID && validatorClass && idpCertAlias && properties);
+            return (idpURL && idpEntityID && idpCertAlias && properties);
         } else {
             return (actual == null) && (expected == null);
         }
