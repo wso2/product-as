@@ -134,15 +134,25 @@ public class ContextConfigurationUtils {
     }
 
     private static boolean compareSkipURIs(WebAppSingleSignOn.SkipURIs actual, WebAppSingleSignOn.SkipURIs expected) {
-        return actual.getSkipURIs().stream().filter(skipURI -> expected.getSkipURIs().stream().
-                filter(uri -> uri.trim().equals(skipURI)).count() > 0).count() == expected.getSkipURIs().size();
+        return actual.getSkipURIs()
+                .stream()
+                .filter(skipURI -> expected.getSkipURIs()
+                        .stream()
+                        .filter(uri -> uri.trim().equals(skipURI))
+                        .count() > 0)
+                .count() == expected.getSkipURIs().size();
     }
 
     private static boolean compareProperties(List<WebAppSingleSignOn.Property> actual,
-            List<WebAppSingleSignOn.Property> expected) {
-        return actual.stream().filter(property -> expected.stream().
-                filter(exp -> (property.getKey().trim().equals(exp.getKey()) && property.getValue().trim().
-                        equals(exp.getValue()))).count() > 0).count() == expected.size();
+                                             List<WebAppSingleSignOn.Property> expected) {
+        return actual
+                .stream()
+                .filter(property -> expected
+                        .stream()
+                        .filter(exp -> (property.getKey().trim().equals(exp.getKey()) && property.getValue().trim().
+                        equals(exp.getValue())))
+                        .count() > 0)
+                .count() == expected.size();
     }
 
     private static boolean compareSSLProperties(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {

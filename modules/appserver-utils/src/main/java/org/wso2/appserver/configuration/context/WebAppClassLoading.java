@@ -47,8 +47,10 @@ public class WebAppClassLoading {
      *
      * @param configuration the local, context level group of classloading configuration to be merged with
      */
-    public void merge(WebAppClassLoading configuration) {
-        Optional.ofNullable(configuration).ifPresent(
-                mergeable -> environments = Optional.ofNullable(mergeable.environments).orElse(environments));
+    void merge(WebAppClassLoading configuration) {
+        Optional.ofNullable(configuration)
+                .ifPresent(mergeable ->
+                        environments = Optional.ofNullable(mergeable.environments)
+                                .orElse(environments));
     }
 }

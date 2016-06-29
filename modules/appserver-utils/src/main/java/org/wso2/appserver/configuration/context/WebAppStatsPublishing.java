@@ -48,9 +48,10 @@ public class WebAppStatsPublishing {
      *
      * @param configuration the local, context level group of stats-publishing configuration to be merged with
      */
-    public void merge(WebAppStatsPublishing configuration) {
-        Optional.ofNullable(configuration).
-                ifPresent(mergeable -> enableStatsPublisher = Optional.ofNullable(mergeable.enableStatsPublisher).
-                        orElse(enableStatsPublisher));
+    void merge(WebAppStatsPublishing configuration) {
+        Optional.ofNullable(configuration)
+                .ifPresent(mergeable ->
+                        enableStatsPublisher = Optional.ofNullable(mergeable.enableStatsPublisher)
+                                .orElse(enableStatsPublisher));
     }
 }
