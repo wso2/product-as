@@ -15,7 +15,6 @@
  */
 package org.wso2.appserver.webapp.security.agent;
 
-
 import org.apache.catalina.connector.Request;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -23,8 +22,10 @@ import org.testng.annotations.Test;
 import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
 import org.wso2.appserver.webapp.security.TestConstants;
-import org.wso2.appserver.webapp.security.TestUtils;
 import org.wso2.appserver.webapp.security.utils.exception.SSOException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -39,7 +40,7 @@ public class SSORequestResolverTest {
 
     @BeforeClass
     public void init() throws SSOException {
-        ssoConfiguration = TestUtils.getDefaultWebAppSSOConfiguration();
+        ssoConfiguration = getDefaultWebAppSSOConfiguration();
     }
 
     @Test(description = "Tests for a request URI to be skipped")
@@ -99,5 +100,32 @@ public class SSORequestResolverTest {
 
         SSORequestResolver resolver = new SSORequestResolver(request, ssoConfiguration);
         Assert.assertFalse(resolver.isSLOURL());
+    }
+
+    public static WebAppSingleSignOn getDefaultWebAppSSOConfiguration() {
+        WebAppSingleSignOn configuration = new WebAppSingleSignOn();
+
+        configuration.enableSSO(true);
+        configuration.setHttpBinding(TestConstants.DEFAULT_HTTP_BINDING);
+        configuration.setIssuerId(TestConstants.DEFAULT_SP_ENTITY_ID);
+        configuration.setConsumerURL(TestConstants.DEFAULT_ACS_URL);
+        configuration.setConsumerURLPostfix(TestConstants.DEFAULT_CONSUMER_URL_POSTFIX);
+
+        List<String> skipURIs = new ArrayList<>();
+        skipURIs.add(TestConstants.SKIP_URI_ONE);
+        skipURIs.add(TestConstants.SKIP_URI_TWO);
+        WebAppSingleSignOn.SkipURIs uris = new WebAppSingleSignOn.SkipURIs();
+        uris.setSkipURIs(skipURIs);
+        configuration.setSkipURIs(uris);
+
+        configuration.setOptionalParams(TestConstants.DEFAULT_QUERY_PARAMS);
+        configuration.enableSLO(true);
+        configuration.setSLOURLPostfix(TestConstants.DEFAULT_SLO_URL_POSTFIX);
+        configuration.enableAssertionEncryption(false);
+        configuration.enableAssertionSigning(false);
+        configuration.enableRequestSigning(false);
+        configuration.enableResponseSigning(false);
+
+        return configuration;
     }
 }

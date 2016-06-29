@@ -137,7 +137,7 @@ public class SSOUtilsTest {
     public void testGeneratingRelayState() {
         //  mocks a Request object
         Request request = mock(Request.class);
-        when(request.getRequestURI()).thenReturn(TestConstants.CONTEXT_PATH);
+        when(request.getRequestURI()).thenReturn("/" + TestConstants.FOO_CONTEXT);
         when(request.getQueryString()).thenReturn(TestConstants.DEFAULT_QUERY_PARAMS);
         when(request.getParameterMap()).thenReturn(getQueryParams());
 
@@ -158,11 +158,11 @@ public class SSOUtilsTest {
 
     @Test(description = "Tests the validity of the issuer ID generated from a valid context path")
     public void testGeneratingIssuerID() {
-        String contextPath = "/" + TestConstants.WEB_APP_BASE + TestConstants.CONTEXT_PATH;
+        String contextPath = "/" + TestConstants.WEB_APP_BASE + "/" + TestConstants.FOO_CONTEXT;
 
         Optional<String> actualIssuerID = SSOUtils.generateIssuerID(contextPath, TestConstants.WEB_APP_BASE);
-        Assert.assertTrue(
-                (actualIssuerID.isPresent()) && (actualIssuerID.get().equals(TestConstants.CONTEXT_PATH.substring(1))));
+        Assert.assertTrue((actualIssuerID.isPresent()) &&
+                (actualIssuerID.get().equals(("/" + TestConstants.FOO_CONTEXT).substring(1))));
     }
 
     @Test(description = "Tests the validity of the issuer ID generated from an invalid context path")
@@ -173,9 +173,9 @@ public class SSOUtilsTest {
 
     @Test(description = "Tests the validity of the consumer URL generated from a valid context path")
     public void testGeneratingConsumerURL() {
-        String expected = TestConstants.DEFAULT_APPLICATION_SERVER_URL + TestConstants.CONTEXT_PATH + "/" +
+        String expected = TestConstants.DEFAULT_APPLICATION_SERVER_URL + "/" + TestConstants.FOO_CONTEXT + "/" +
                 TestConstants.DEFAULT_CONSUMER_URL_POSTFIX;
-        Optional<String> actual = SSOUtils.generateConsumerURL(TestConstants.CONTEXT_PATH, TestConstants.
+        Optional<String> actual = SSOUtils.generateConsumerURL("/" + TestConstants.FOO_CONTEXT, TestConstants.
                 DEFAULT_APPLICATION_SERVER_URL, Constants.DEFAULT_CONSUMER_URL_POSTFIX);
 
         Assert.assertTrue((actual.isPresent()) && (actual.get().equals(expected)));

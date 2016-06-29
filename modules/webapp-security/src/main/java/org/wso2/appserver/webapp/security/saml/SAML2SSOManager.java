@@ -85,7 +85,7 @@ public class SAML2SSOManager {
     private AppServerSingleSignOn serverConfiguration;
     private WebAppSingleSignOn contextConfiguration;
 
-    protected SAML2SSOManager(WebAppSingleSignOn context) throws SSOException {
+    public SAML2SSOManager(WebAppSingleSignOn context) throws SSOException {
         serverConfiguration = ServerConfigurationLoader.getServerConfiguration().getSingleSignOnConfiguration();
         contextConfiguration = context;
 
@@ -115,7 +115,7 @@ public class SAML2SSOManager {
      * @return the HTML payload to be transmitted
      * @throws SSOException if an error occurs when handling AuthnRequest
      */
-    protected String handleAuthenticationRequestForPOSTBinding(Request request) throws SSOException {
+    public String handleAuthenticationRequestForPOSTBinding(Request request) throws SSOException {
         RequestAbstractType requestMessage = buildAuthnRequest(request);
 
         if (contextConfiguration.isRequestSigningEnabled()) {
@@ -133,7 +133,7 @@ public class SAML2SSOManager {
      * @return the Identity Provider URL with the query string appended based on the SAML 2.0 Request and configurations
      * @throws SSOException if an error occurs when handling AuthnRequest
      */
-    protected String handleAuthenticationRequestForRedirectBinding(Request request) throws SSOException {
+    public String handleAuthenticationRequestForRedirectBinding(Request request) throws SSOException {
         RequestAbstractType requestMessage = buildAuthnRequest(request);
         return prepareRedirectRequest(requestMessage);
     }
@@ -145,7 +145,7 @@ public class SAML2SSOManager {
      * @return the HTML payload to be transmitted
      * @throws SSOException if an error occurs when handling LogoutRequest
      */
-    protected String handleLogoutRequestForPOSTBinding(Request request) throws SSOException {
+    public String handleLogoutRequestForPOSTBinding(Request request) throws SSOException {
         LoggedInSession session = (LoggedInSession) request.getSession(false).getAttribute(Constants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
@@ -171,7 +171,7 @@ public class SAML2SSOManager {
      * @return the Identity Provider URL with the query string appended based on the SAML 2.0 Request and configurations
      * @throws SSOException if an error occurs when handling LogoutRequest
      */
-    protected String handleLogoutRequestForRedirectBinding(Request request) throws SSOException {
+    public String handleLogoutRequestForRedirectBinding(Request request) throws SSOException {
         LoggedInSession session = (LoggedInSession) request.getSession(false).getAttribute(Constants.SESSION_BEAN);
         RequestAbstractType requestMessage;
         if (session != null) {
@@ -441,7 +441,7 @@ public class SAML2SSOManager {
      * @param request the servlet request processed
      * @throws SSOException if SAML 2.0 response is null
      */
-    protected void processResponse(Request request) throws SSOException {
+    public void processResponse(Request request) throws SSOException {
         String saml2SSOResponse = request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE);
 
         if (saml2SSOResponse != null) {
