@@ -74,7 +74,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -214,7 +214,7 @@ public class SSOUtils {
     /**
      * Returns a map of SAML 2.0 Relay State content in the form of key-value pairs.
      *
-     * @param request              the HTTP servlet request
+     * @param request the HTTP servlet request
      * @return a map of SAML 2.0 Relay State content in the form of key-value pairs
      */
     @SuppressWarnings("unchecked")
@@ -469,7 +469,7 @@ public class SSOUtils {
 
             String encodedRequestMessage = Base64Support.encode(byteArrayOutputStream.toByteArray(), false);
             try {
-                return URLEncoder.encode(encodedRequestMessage, Constants.UTF8_ENC).trim();
+                return URLEncoder.encode(encodedRequestMessage, StandardCharsets.UTF_8.name()).trim();
             } catch (UnsupportedEncodingException e) {
                 throw new SSOException("Error occurred while encoding SAML 2.0 request", e);
             }
@@ -502,7 +502,7 @@ public class SSOUtils {
             LSOutput output = implementation.createLSOutput();
             output.setByteStream(byteArrayOutputStream);
             writer.write(element, output);
-            return new String(byteArrayOutputStream.toByteArray(), Charset.forName(Constants.UTF8_ENC));
+            return new String(byteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8);
         } catch (ClassNotFoundException | InstantiationException | MarshallingException | IllegalAccessException e) {
             throw new SSOException("Error in marshalling SAML 2.0 Assertion", e);
         }
@@ -518,8 +518,7 @@ public class SSOUtils {
     public static Optional<XMLObject> unmarshall(String xmlString) throws SSOException {
         try {
             DocumentBuilder docBuilder = SSOUtils.getDocumentBuilder(false, true, new XMLEntityResolver());
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(
-                    xmlString.getBytes(Charset.forName(Constants.UTF8_ENC)));
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8));
             Document document = docBuilder.parse(inputStream);
             Element element = document.getDocumentElement();
             Unmarshaller unmarshaller = XMLObjectProviderRegistrySupport.getUnmarshallerFactory()
@@ -633,16 +632,16 @@ public class SSOUtils {
             throws SSOException {
         try {
             httpQueryString.append("&SigAlg=").
-                    append(URLEncoder.encode(XMLSignature.ALGO_ID_SIGNATURE_RSA, Constants.UTF8_ENC).trim());
+                    append(URLEncoder.encode(XMLSignature.ALGO_ID_SIGNATURE_RSA, StandardCharsets.UTF_8.name()).trim());
 
             java.security.Signature signature = java.security.Signature.getInstance("SHA1withRSA");
             signature.initSign(credential.getPrivateKey());
-            signature.update(httpQueryString.toString().getBytes(Charset.forName(Constants.UTF8_ENC)));
+            signature.update(httpQueryString.toString().getBytes(StandardCharsets.UTF_8));
             byte[] signatureByteArray = signature.sign();
 
             String signatureBase64EncodedString = Base64Support.encode(signatureByteArray, false);
             httpQueryString.append("&Signature=").
-                    append(URLEncoder.encode(signatureBase64EncodedString, Constants.UTF8_ENC).trim());
+                    append(URLEncoder.encode(signatureBase64EncodedString, StandardCharsets.UTF_8.name()).trim());
         } catch (NoSuchAlgorithmException | InvalidKeyException |
                 java.security.SignatureException | UnsupportedEncodingException e) {
             throw new SSOException("Error applying SAML 2.0 Redirect Binding signature", e);

@@ -66,7 +66,7 @@ import org.wso2.appserver.webapp.security.utils.exception.SSOException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -208,7 +208,7 @@ public class SAML2SSOManager {
                 .forEach(filteredEntry -> filteredEntry.setValue((String[]) Stream.of(filteredEntry.getValue())
                         .map(value -> {
                             try {
-                                return URLEncoder.encode(value, Constants.UTF8_ENC);
+                                return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
                             } catch (UnsupportedEncodingException e) {
                                 //  ignore the exception since every implementation of the Java platform must support
                                 //  the 'UTF-8' character set
@@ -284,8 +284,8 @@ public class SAML2SSOManager {
                                                             .append("&")
                                                             .append(filteredEntry.getKey())
                                                             .append("=")
-                                                            .append(URLEncoder.encode(parameterValue, Constants
-                                                                    .UTF8_ENC));
+                                                            .append(URLEncoder.encode(parameterValue,
+                                                                    StandardCharsets.UTF_8.name()));
                                                 } catch (UnsupportedEncodingException e) {
                                                     //  ignore the exception since every implementation of the Java
                                                     //  platform must support the 'UTF-8' character set
@@ -445,8 +445,7 @@ public class SAML2SSOManager {
         String saml2SSOResponse = request.getParameter(Constants.HTTP_POST_PARAM_SAML_RESPONSE);
 
         if (saml2SSOResponse != null) {
-            String decodedResponse = new String(Base64Support.decode(saml2SSOResponse),
-                    Charset.forName(Constants.UTF8_ENC));
+            String decodedResponse = new String(Base64Support.decode(saml2SSOResponse), StandardCharsets.UTF_8);
             Optional<XMLObject> samlObject = SSOUtils.unmarshall(decodedResponse);
             if (samlObject.isPresent()) {
                 if (samlObject.get() instanceof LogoutResponse) {
@@ -472,7 +471,7 @@ public class SAML2SSOManager {
         session.setSAML2SSO(new LoggedInSession.SAML2SSO());
 
         String saml2ResponseString = new String(Base64Support.decode(request.getParameter(
-                Constants.HTTP_POST_PARAM_SAML_RESPONSE)), Charset.forName(Constants.UTF8_ENC));
+                Constants.HTTP_POST_PARAM_SAML_RESPONSE)), StandardCharsets.UTF_8);
 
         Optional<XMLObject> xmlObject = SSOUtils.unmarshall(saml2ResponseString);
         if (!xmlObject.isPresent()) {
@@ -582,14 +581,14 @@ public class SAML2SSOManager {
 
         if (request.getParameter(Constants.HTTP_POST_PARAM_SAML_REQUEST) != null) {
             Optional<XMLObject> xmlObject = SSOUtils.unmarshall(new String(Base64Support.decode(request.getParameter(
-                    Constants.HTTP_POST_PARAM_SAML_REQUEST)), Charset.forName(Constants.UTF8_ENC)));
+                    Constants.HTTP_POST_PARAM_SAML_REQUEST)), StandardCharsets.UTF_8));
             if (xmlObject.isPresent()) {
                 saml2Object = xmlObject.get();
             }
         }
         if (saml2Object == null) {
             Optional<XMLObject> xmlObject = SSOUtils.unmarshall(new String(Base64Support.decode(request.getParameter(
-                    Constants.HTTP_POST_PARAM_SAML_RESPONSE)), Charset.forName(Constants.UTF8_ENC)));
+                    Constants.HTTP_POST_PARAM_SAML_RESPONSE)), StandardCharsets.UTF_8));
             if (xmlObject.isPresent()) {
                 saml2Object = xmlObject.get();
             }
@@ -669,10 +668,10 @@ public class SAML2SSOManager {
                 .filter(audienceRestriction ->
                         (((audienceRestriction.getAudiences() != null) && (!audienceRestriction.getAudiences().
                                 isEmpty()))) && (audienceRestriction.getAudiences()
-                                        .stream()
-                                        .filter(audience -> contextConfiguration.getIssuerId().equals(audience.
-                                                getAudienceURI())))
-                                        .count() > 0);
+                                .stream()
+                                .filter(audience -> contextConfiguration.getIssuerId().equals(audience.
+                                        getAudienceURI())))
+                                .count() > 0);
 
         if (audienceExistingStream.count() == 0) {
             throw new SSOException("SAML 2.0 Assertion Audience Restriction validation failed");
