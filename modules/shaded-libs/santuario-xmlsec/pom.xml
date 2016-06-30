@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.org.apache.santuario</groupId>
     <artifactId>santuario-xmlsec-shaded</artifactId>
-    <version>${org.apache.santuario.xmlsec.shade.version}</version>
+    <version>2.0.6.wso2v1-SNAPSHOT</version>
     <url>http://wso2.com</url>
 
     <dependencies>
