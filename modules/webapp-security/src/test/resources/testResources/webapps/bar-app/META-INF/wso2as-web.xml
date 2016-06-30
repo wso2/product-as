@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!--
+    The configurations defined in this global web application descriptor is applicable to all
+    web applications deployed within WSO2 Application Server. If desired, any of these configurations
+    can be overridden for a specific web application by defining a web application specific
+    descriptor (META-INF/wso2as-web.xml) and defining the overridden configurations in it.
+-->
+<wso2as-web xmlns="http://wso2.org/2016/wso2as-web">
+    <saml2-single-sign-on>
+        <enable-sso>true</enable-sso>
+        <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</http-binding>
+        <consumer-url-postfix>acs</consumer-url-postfix>
+        <optional-params>tenant=admin&amp;password=admin123</optional-params>
+        <enable-slo>false</enable-slo>
+        <slo-url-postfix>logout</slo-url-postfix>
+        <enable-assertion-encryption>false</enable-assertion-encryption>
+        <enable-assertion-signing>true</enable-assertion-signing>
+        <enable-request-signing>true</enable-request-signing>
+        <enable-response-signing>true</enable-response-signing>
+    </saml2-single-sign-on>
+</wso2as-web>

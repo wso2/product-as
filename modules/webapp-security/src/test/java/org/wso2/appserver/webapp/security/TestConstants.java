@@ -26,11 +26,13 @@ public class TestConstants {
 
     //  constants used to construct Tomcat internal components for unit-tests
     public static final String WEB_APP_BASE = "webapps";
-    public static final String CONTEXT_PATH = "/foo-app";
+    public static final String FOO_CONTEXT = "foo-app";
+    public static final String BAR_CONTEXT = "bar-app";
     public static final String DEFAULT_TOMCAT_HOST = "localhost";
     public static final String SSL_PROTOCOL = "https";
     public static final int SSL_PORT = 8443;
 
+    public static final String DEFAULT_IDP_URL = "https://localhost:9443/samlsso";
     public static final String DEFAULT_KEY_STORE_LOCATION = TEST_RESOURCES_LOCATION + "/conf/wso2/wso2carbon.jks";
     public static final String DEFAULT_KEY_STORE_TYPE = "JKS";
     public static final String DEFAULT_KEY_STORE_PASSWORD = "wso2carbon";
@@ -38,7 +40,7 @@ public class TestConstants {
             SSL_PORT;
     public static final String DEFAULT_SP_ENTITY_ID = "foo-app";
     public static final String DEFAULT_CONSUMER_URL_POSTFIX = "acs";
-    public static final String DEFAULT_ACS_URL = DEFAULT_APPLICATION_SERVER_URL + CONTEXT_PATH + "/" +
+    public static final String DEFAULT_ACS_URL = DEFAULT_APPLICATION_SERVER_URL + "/" + FOO_CONTEXT + "/" +
             DEFAULT_CONSUMER_URL_POSTFIX;
     public static final String DEFAULT_QUERY_PARAMS = "keyOne=valOne&keyTwo=valTwo";
     public static final String DEFAULT_HTTP_BINDING = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST";
