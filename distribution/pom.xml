@@ -100,6 +100,7 @@
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-utils</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-http-statistics-monitoring</artifactId>
@@ -107,6 +108,10 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>appserver-webapp-loader</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-webapp-security</artifactId>
         </dependency>
 
         <!-- WSO2 Application Server shaded libraries -->
@@ -118,8 +123,74 @@
             <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
             <artifactId>libthrift-shaded</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-core-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-messaging-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-profile-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-saml-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-saml-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-security-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-security-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-soap-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-soap-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-storage-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-xmlsec-api-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <artifactId>opensaml-xmlsec-impl-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.apache.santuario</groupId>
+            <artifactId>santuario-xmlsec-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.net.shibboleth.utilities</groupId>
+            <artifactId>shibboleth-java-support-shaded</artifactId>
+        </dependency>
 
         <!-- WSO2 Application Server Sample Webapps -->
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>bar-app</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>foo-app</artifactId>
+            <type>war</type>
+        </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jaxrs_basic</artifactId>
@@ -195,6 +266,60 @@
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
+        </dependency>
+
+        <!-- Web Application security dependencies -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.stream</groupId>
+            <artifactId>stax-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.shibboleth.utilities</groupId>
+            <artifactId>java-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.santuario</groupId>
+            <artifactId>xmlsec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>stax2-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.cryptacular</groupId>
+            <artifactId>cryptacular</artifactId>
         </dependency>
 
         <!-- Webapp loader dependencies -->

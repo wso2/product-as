@@ -30,5 +30,6 @@
         <module>configuration-loader-valve</module>
         <module>simple-jax-rs-service</module>
         <module>jaxrs_basic</module>
+        <module>appserver-sso-samples</module>
     </modules>
 </project>

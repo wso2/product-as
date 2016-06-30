@@ -42,7 +42,7 @@
                             <xs:element name="issuer-id" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="consumer-url" type="xs:string" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="consumer-url-postfix" type="xs:string" minOccurs="0"
-                                        maxOccurs="1" default="/acs"/>
+                                        maxOccurs="1" default="acs"/>
                             <xs:element name="skip-uris" minOccurs="0" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
@@ -61,9 +61,9 @@
                             <xs:element name="enable-assertion-signing" type="xs:boolean" minOccurs="0"
                                         maxOccurs="1" default="true"/>
                             <xs:element name="enable-request-signing" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1" default="true"/>
+                                        maxOccurs="1" default="false"/>
                             <xs:element name="enable-response-signing" type="xs:boolean" minOccurs="0"
-                                        maxOccurs="1" default="true"/>
+                                        maxOccurs="1" default="false"/>
                             <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:simpleContent>

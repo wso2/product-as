@@ -30,6 +30,7 @@
         <module>appserver-utils</module>
         <module>http-statistics-monitoring</module>
         <module>webapp-loader</module>
+        <module>webapp-security</module>
     </modules>
 
     <build>

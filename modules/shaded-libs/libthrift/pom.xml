@@ -21,26 +21,21 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
     <artifactId>libthrift-shaded</artifactId>
-    <version>0.9.4.wso2v1-SNAPSHOT</version>
+    <version>0.9.3.wso2v1-SNAPSHOT</version>
+    <url>http://wso2.com</url>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.thrift</groupId>
             <artifactId>libthrift</artifactId>
-            <version>${libthrift.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

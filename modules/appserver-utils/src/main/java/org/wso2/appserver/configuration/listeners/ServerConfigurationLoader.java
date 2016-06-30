@@ -86,14 +86,15 @@ public class ServerConfigurationLoader implements LifecycleListener {
         Optional.ofNullable(appServerConfiguration).ifPresent(configuration -> {
             AppServerSecurity securityConfiguration = configuration.getSecurityConfiguration();
 
-            System.setProperty("javax.net.ssl.keyStore",
+            System.setProperty(Constants.JAVA_KEYSTORE_LOCATION,
                     securityConfiguration.getKeystore().getLocation().replace("\\", "/"));
-            System.setProperty("javax.net.ssl.keyStorePassword", securityConfiguration.getKeystore().getPassword());
-            System.setProperty("javax.net.ssl.keyStoreType", securityConfiguration.getKeystore().getType());
-            System.setProperty("javax.net.ssl.trustStore",
+            System.setProperty(Constants.JAVA_KEYSTORE_PASSWORD, securityConfiguration.getKeystore().getPassword());
+            System.setProperty(Constants.JAVA_KEYSTORE_TYPE, securityConfiguration.getKeystore().getType());
+            System.setProperty(Constants.JAVA_TRUST_STORE_LOCATION,
                     securityConfiguration.getTruststore().getLocation().replace("\\", "/"));
-            System.setProperty("javax.net.ssl.trustStorePassword", securityConfiguration.getTruststore().getPassword());
-            System.setProperty("javax.net.ssl.trustStoreType", securityConfiguration.getTruststore().getType());
+            System.setProperty(Constants.JAVA_TRUST_STORE_PASSWORD,
+                    securityConfiguration.getTruststore().getPassword());
+            System.setProperty(Constants.JAVA_TRUST_STORE_TYPE, securityConfiguration.getTruststore().getType());
         });
     }
 }
