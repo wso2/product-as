@@ -181,4 +181,11 @@
             <class name="org.wso2.appserver.integration.tests.jndi.WSAS2185HibernateJNDITestCase"/>
         </classes>
     </test>-->
+
+    <!-- TODO : Uncomment this test once SAMLSSOValve fix is available -->
+    <!--<test name="jndi-hibernate-test" preserve-order="true" parallel="false">-->
+        <!--<classes>-->
+            <!--<class name="org.wso2.appserver.integration.tests.sso.TenantDomainAndContentHeaderTest"/>-->
+        <!--</classes>-->
+    <!--</test>-->
 </suite>
