@@ -45,6 +45,8 @@ public class TenantDomainAndContentHeaderTest extends ASIntegrationTest {
     private WebAppAdminClient webAppAdminClient;
     private static final String fooAppFileName = "foo-app.war";
     private static final String fooAppName = "foo-app";
+    private static final String fooAppT1FileName = "foo-app-t1.war";
+    private static final String fooAppT1Name = "foo-app-t1";
     private HttpClient httpClient = new HttpClient();
 
     @BeforeClass(alwaysRun = true)
@@ -68,8 +70,9 @@ public class TenantDomainAndContentHeaderTest extends ASIntegrationTest {
         // Uploading the foo-app
         webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "webapps" + File.separator + fooAppFileName);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, asSessionCookie, fooAppName),
-                "Foo Web Application Deployment failed");
+        // Uploading the foo-app-t1
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
+                "artifacts" + File.separator + "AS" + File.separator + "webapps" + File.separator + fooAppT1FileName);
 
         TenantManagementServiceClient tenantManagementServiceClient =
                 new TenantManagementServiceClient(backendURL, sessionCookie);
@@ -80,15 +83,23 @@ public class TenantDomainAndContentHeaderTest extends ASIntegrationTest {
         // Uploading the foo-app
         webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
                 "artifacts" + File.separator + "AS" + File.separator + "webapps" + File.separator + fooAppFileName);
-        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, sessionT1, fooAppName),
-                "Foo Web Application Deployment failed");
+        // Uploading the foo-app-t1
+        webAppAdminClient.uploadWarFile(FrameworkPathUtil.getSystemResourceLocation() +
+                "artifacts" + File.separator + "AS" + File.separator + "webapps" + File.separator + fooAppT1FileName);
 
-        // Waiting till the Apps available in the AS
-        Thread.sleep(20000);
+        // Verify webapp deployment
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, asSessionCookie, fooAppName),
+                "Foo Web Application Deployment failed in super tenant");
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, asSessionCookie, fooAppT1Name),
+                "Foo T1 Web Application Deployment failed in super tenant");
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, sessionT1, fooAppName),
+                "Foo Web Application Deployment failed in t1.com");
+        assertTrue(WebAppDeploymentUtil.isWebApplicationDeployed(asBackendURL, sessionT1, fooAppT1Name),
+                "Foo T1 Web Application Deployment failed in t1.com");
     }
 
-    @Test(groups = "wso2.as", description = "Verifying the Content-Type header and tenant domain in super tenant")
-    public void testPresenceOfContentTypeHeaderAndTenantDomainInResponse()
+    @Test(groups = "wso2.as", description = "Verifying the Content-Type header and no tenant domain in super tenant")
+    public void testPresenceOfContentTypeHeaderAndNoTenantDomainInResponse()
             throws IOException, InterruptedException, XPathExpressionException {
 
         GetMethod getMethod = new GetMethod(asServer.getContextUrls().getWebAppURL() + "/foo-app");
@@ -102,19 +113,14 @@ public class TenantDomainAndContentHeaderTest extends ASIntegrationTest {
             assertTrue(isContentTypeHeaderAvailable(headers));
 
             int index = getMethod.getResponseBodyAsString().indexOf("tenantDomain");
-            assertNotEquals(index, -1, "Response doesn't contain tenant domain");
-
-            String temp = getMethod.getResponseBodyAsString()
-                    .substring(getMethod.getResponseBodyAsString().indexOf("tenantDomain"));
-            String tenantDomain = temp.substring(temp.indexOf("value='") + 7, temp.indexOf("value='") + 19);
-            assertEquals(tenantDomain, "carbon.super", "Invalid tenant domain in the response");
+            assertEquals(index, -1, "Response contain tenant domain (response should not have tenant domain)");
         } finally {
             getMethod.releaseConnection();
         }
     }
 
-    @Test(groups = "wso2.as", description = "Verifying the Content-Type header and tenant domain in tenant t1.com")
-    public void testPresenceOfContentTypeHeaderAndTenantDomainInResponseForTenantApp()
+    @Test(groups = "wso2.as", description = "Verifying the Content-Type header and no tenant domain in tenant t1.com")
+    public void testPresenceOfContentTypeHeaderAndNoTenantDomainInResponseForTenantApp()
             throws IOException, InterruptedException, XPathExpressionException {
 
         GetMethod getMethod = new GetMethod(asServer.getContextUrls().getWebAppURL() + "/t/t1.com/webapps/foo-app");
@@ -126,6 +132,47 @@ public class TenantDomainAndContentHeaderTest extends ASIntegrationTest {
 
             Header[] headers = getMethod.getResponseHeaders();
             assertTrue(isContentTypeHeaderAvailable(headers));
+
+            int index = getMethod.getResponseBodyAsString().indexOf("tenantDomain");
+            assertEquals(index, -1, "Response contain tenant domain (response should not have tenant domain)");
+        } finally {
+            getMethod.releaseConnection();
+        }
+    }
+
+    @Test(groups = "wso2.as", description = "Verifying the Tenant domain in super tenant")
+    public void testPresenceOfContentTypeHeaderAndTenantDomainInResponse()
+            throws IOException, InterruptedException, XPathExpressionException {
+
+        GetMethod getMethod = new GetMethod(asServer.getContextUrls().getWebAppURL() + "/foo-app-t1");
+        try {
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethod.getStatusLine());
+            }
+
+            int index = getMethod.getResponseBodyAsString().indexOf("tenantDomain");
+            assertNotEquals(index, -1, "Response doesn't contain tenant domain");
+
+            String temp = getMethod.getResponseBodyAsString()
+                    .substring(getMethod.getResponseBodyAsString().indexOf("tenantDomain"));
+            String tenantDomain = temp.substring(temp.indexOf("value='") + 7, temp.indexOf("value='") + 13);
+            assertEquals(tenantDomain, "t1.com", "Invalid tenant domain in the response");
+        } finally {
+            getMethod.releaseConnection();
+        }
+    }
+
+    @Test(groups = "wso2.as", description = "Verifying Tenant domain in tenant t1.com")
+    public void testTenantDomainInResponseForTenantApp()
+            throws IOException, InterruptedException, XPathExpressionException {
+
+        GetMethod getMethod = new GetMethod(asServer.getContextUrls().getWebAppURL() + "/t/t1.com/webapps/foo-app-t1");
+        try {
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+                fail("Method failed: " + getMethod.getStatusLine());
+            }
 
             int index = getMethod.getResponseBodyAsString().indexOf("tenantDomain");
             assertNotEquals(index, -1, "Response doesn't contain tenant domain");
