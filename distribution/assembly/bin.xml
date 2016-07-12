@@ -121,6 +121,27 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib/runtimes/cxf</outputDirectory>
             <includes>
+                <include>aopalliance:aopalliance:jar</include>
+                <include>org.ow2.asm:asm:jar</include>
+                <include>org.apache.cxf:cxf-core:jar</include>
+                <include>org.apache.cxf:cxf-rt-bindings-soap:jar</include>
+                <include>org.apache.cxf:cxf-rt-bindings-xml:jar</include>
+                <include>org.apache.cxf:cxf-rt-databinding-jaxb:jar</include>
+                <include>org.apache.cxf:cxf-rt-frontend-simple:jar</include>
+                <include>org.apache.cxf:cxf-rt-ws-addr:jar</include>
+                <include>org.apache.cxf:cxf-rt-ws-policy:jar</include>
+                <include>org.apache.cxf:cxf-rt-wsdl:jar</include>
+                <include>javax.annotation:javax.annotation-api:jar</include>
+                <include>javax.ws.rs:javax.ws.rs-api:jar</include>
+                <include>com.sun.xml.bind:jaxb-core:jar</include>
+                <include>com.sun.xml.bind:jaxb-impl:jar</include>
+                <include>org.apache.neethi:neethi:jar</include>
+                <include>org.springframework:spring-beans:jar</include>
+                <include>org.springframework:spring-core:jar</include>
+                <include>org.springframework:spring-expression:jar</include>
+                <include>wsdl4j:wsdl4j:jar</include>
+                <include>xml-resolver:xml-resolver:jar</include>
+                <include>org.apache.ws.xmlschema:xmlschema-core:jar</include>
                 <include>org.apache.cxf:cxf-rt-frontend-jaxws:jar</include>
                 <include>org.apache.cxf:cxf-rt-frontend-jaxrs:jar</include>
                 <include>org.apache.cxf:cxf-rt-transports-http:jar</include>
@@ -131,6 +152,7 @@
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
         </dependencySet>
     </dependencySets>
 </assembly>
