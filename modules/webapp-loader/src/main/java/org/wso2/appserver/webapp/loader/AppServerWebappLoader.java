@@ -27,7 +27,6 @@ import org.apache.openejb.loader.SystemInstance;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -57,16 +56,12 @@ public class AppServerWebappLoader extends WebappLoader {
         final ClassLoaderEnricher classLoaderEnricher = SystemInstance.get().getComponent(ClassLoaderEnricher.class);
         if (null != classLoaderEnricher) {
             List<String> urls = webappClassLoaderContext.getProvidedRepositories();
-            List<URL> convertedUrls = new ArrayList<>();
-            for (String url: urls) {
+            for (String url : urls) {
                 try {
-                    convertedUrls.add(new URL(url));
+                    classLoaderEnricher.addUrl(new URL(url));
                 } catch (MalformedURLException e) {
-                    log.error(e);
+                    log.error("Incorrect jar path " + e);
                 }
-            }
-            for (final URL url : convertedUrls) {
-                classLoaderEnricher.addUrl(url);
             }
         }
         ((AppServerWebappClassLoader) getClassLoader()).setWebappClassLoaderContext(webappClassLoaderContext);

@@ -154,7 +154,7 @@
             <dependency>
                 <groupId>org.apache.tomee</groupId>
                 <artifactId>apache-tomee</artifactId>
-                <version>7.0.1</version>
+                <version>${org.apache.tomee.version}</version>
                 <classifier>webprofile</classifier>
                 <type>zip</type>
             </dependency>
@@ -718,102 +718,102 @@
             <dependency>
                 <groupId>aopalliance</groupId>
                 <artifactId>aopalliance</artifactId>
-                <version>1.0</version>
+                <version>${aopalliance.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm</artifactId>
-                <version>5.0.4</version>
+                <version>${asm.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-bindings-soap</artifactId>
-                <version>3.1.5</version>
+                <version>${runtime.cxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-bindings-xml</artifactId>
-                <version>3.1.5</version>
+                <version>${runtime.cxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-databinding-jaxb</artifactId>
-                <version>3.1.5</version>
+                <version>${runtime.cxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-ws-addr</artifactId>
-                <version>3.1.5</version>
+                <version>${runtime.cxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-ws-policy</artifactId>
-                <version>3.1.5</version>
+                <version>${runtime.cxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-wsdl</artifactId>
-                <version>3.1.5</version>
+                <version>${runtime.cxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.annotation</groupId>
                 <artifactId>javax.annotation-api</artifactId>
-                <version>1.2</version>
+                <version>${javax.annotation.api.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.ws.rs</groupId>
                 <artifactId>javax.ws.rs-api</artifactId>
-                <version>2.0.1</version>
+                <version>${javax.ws.rs.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-core</artifactId>
-                <version>2.2.11</version>
+                <version>${com.sun.xml.bind.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <version>2.2.11</version>
+                <version>${com.sun.xml.bind.jaxb.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.neethi</groupId>
                 <artifactId>neethi</artifactId>
-                <version>3.0.3</version>
+                <version>${org.apache.neethi.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
-                <version>4.2.5.RELEASE</version>
+                <version>${runtime.spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-                <version>4.2.5.RELEASE</version>
+                <version>${runtime.spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-expression</artifactId>
-                <version>4.2.5.RELEASE</version>
+                <version>${runtime.spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>wsdl4j</groupId>
                 <artifactId>wsdl4j</artifactId>
-                <version>1.6.3</version>
+                <version>${wsdl4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>xml-resolver</groupId>
                 <artifactId>xml-resolver</artifactId>
-                <version>1.2</version>
+                <version>${xml-resolver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-bindings-xml</artifactId>
-                <version>3.1.5</version>
+                <version>${runtime.cxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomee</groupId>
                 <artifactId>tomee-catalina</artifactId>
-                <version>7.0.1</version>
+                <version>${org.apache.tomee.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -888,6 +888,15 @@
         <uaparser.version>1.3.0.wso2v1</uaparser.version>
         <xerces.xerces.version>2.4.0</xerces.xerces.version>
         <xerces.xercesImpl.version>2.11.0</xerces.xercesImpl.version>
+        <aopalliance.version>1.0</aopalliance.version>
+        <asm.version>5.0.4</asm.version>
+        <javax.annotation.api.version>1.2</javax.annotation.api.version>
+        <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
+        <com.sun.xml.bind.jaxb.version>2.2.11</com.sun.xml.bind.jaxb.version>
+        <org.apache.neethi.version>3.0.3</org.apache.neethi.version>
+        <wsdl4j.version>1.6.3</wsdl4j.version>
+        <xml-resolver.version>1.2</xml-resolver.version>
+        <org.apache.tomee.version>7.0.1</org.apache.tomee.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>
