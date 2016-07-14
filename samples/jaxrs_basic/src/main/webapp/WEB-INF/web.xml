@@ -22,7 +22,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>WEB-INF/beans.xml</param-value>
+        <param-value>WEB-INF/customBeans.xml</param-value>
     </context-param>
 
     <listener>

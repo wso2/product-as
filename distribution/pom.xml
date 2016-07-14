@@ -57,8 +57,8 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>org.apache.tomcat</includeGroupIds>
-                            <includeArtifactIds>tomcat</includeArtifactIds>
+                            <includeGroupIds>org.apache.tomee, org.apache.tomcat</includeGroupIds>
+                            <includeArtifactIds>apache-tomee, tomcat</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/tomcat-dist/</outputDirectory>
                         </configuration>
                     </execution>
@@ -76,7 +76,7 @@
                                     <type>jar</type>
                                     <includes>Http_Stats_Analytics.car</includes>
                                     <outputDirectory>
-                                        ${project.build.directory}/tomcat-dist/apache-tomcat-${tomcat.version}/monitoring/
+                                        ${project.build.directory}/tomcat-dist/apache-tomee-webprofile-7.0.1/monitoring/
                                     </outputDirectory>
                                 </artifactItem>
                             </artifactItems>
@@ -92,6 +92,13 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
+            <type>zip</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>apache-tomee</artifactId>
+            <classifier>webprofile</classifier>
             <type>zip</type>
         </dependency>
 
@@ -225,14 +232,6 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-        </dependency>
 
         <!-- HTTP statistics publishing dependencies -->
         <dependency>
@@ -331,10 +330,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-bindings-soap</artifactId>
         </dependency>
         <dependency>
@@ -344,10 +339,6 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-databinding-jaxb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-simple</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
@@ -400,10 +391,6 @@
         <dependency>
             <groupId>xml-resolver</groupId>
             <artifactId>xml-resolver</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ws.xmlschema</groupId>
-            <artifactId>xmlschema-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>

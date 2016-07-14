@@ -41,7 +41,7 @@
                 <include name="commons-httpclient_3.1.0.wso2v2.jar"/>
                 <include name="commons-codec_1.4.0.wso2v1.jar"/>
             </fileset>
-	    <fileset dir="${wso2appserver.home}/lib/runtimes/cxf/">
+	    <fileset dir="${wso2appserver.home}/lib/runtimes/custom/">
                 <include name="*.jar"/>
             </fileset>
         </copy>

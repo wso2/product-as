@@ -152,6 +152,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>apache-tomee</artifactId>
+                <version>7.0.1</version>
+                <classifier>webprofile</classifier>
+                <type>zip</type>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat</artifactId>
                 <version>${tomcat.version}</version>
@@ -475,20 +482,9 @@
             <!-- Runtimes CXF -->
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-                <version>${runtime.cxf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxws</artifactId>
                 <version>${runtime.cxf.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-transports-http</artifactId>
-                <version>${runtime.cxf.version}</version>
-            </dependency>
-
             <!-- Runtime Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -731,11 +727,6 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-core</artifactId>
-                <version>3.1.5</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-bindings-soap</artifactId>
                 <version>3.1.5</version>
             </dependency>
@@ -747,11 +738,6 @@
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-databinding-jaxb</artifactId>
-                <version>3.1.5</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-simple</artifactId>
                 <version>3.1.5</version>
             </dependency>
             <dependency>
@@ -820,14 +806,14 @@
                 <version>1.2</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.ws.xmlschema</groupId>
-                <artifactId>xmlschema-core</artifactId>
-                <version>2.2.1</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-bindings-xml</artifactId>
                 <version>3.1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>tomee-catalina</artifactId>
+                <version>7.0.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -857,7 +843,7 @@
         <maven.shadeplugin.version>2.4.3</maven.shadeplugin.version>
 
         <!-- dependency version properties -->
-        <tomcat.version>8.0.28</tomcat.version>
+        <tomcat.version>8.5.3</tomcat.version>
         <carbon.analyticscommon.version>5.0.8</carbon.analyticscommon.version>
         <carbon.logging.version>4.4.3</carbon.logging.version>
         <com.google.code.findbugs.version>3.0.1</com.google.code.findbugs.version>
