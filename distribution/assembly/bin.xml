@@ -107,7 +107,6 @@
                 <include>org.codehaus.woodstox:woodstox-core-asl:jar</include>
                 <include>org.cryptacular:cryptacular:jar</include>
 
-
                 <include>aopalliance:aopalliance:jar</include>
                 <include>org.ow2.asm:asm:jar</include>
                 <include>org.apache.cxf:cxf-core:jar</include>
