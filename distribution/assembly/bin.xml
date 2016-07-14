@@ -27,7 +27,7 @@
             <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>target/tomcat-dist/apache-tomee-webprofile-7.0.1/bin</directory>
+            <directory>target/tomcat-dist/apache-tomee-${tomee.classifier}-${tomee.version}/bin</directory>
             <outputDirectory>${distribution.file.name}/bin</outputDirectory>
             <includes>
                 <include>*.sh</include>
@@ -35,7 +35,7 @@
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>target/tomcat-dist/apache-tomee-webprofile-7.0.1</directory>
+            <directory>target/tomcat-dist/apache-tomee-${tomee.classifier}-${tomee.version}</directory>
             <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
         <fileSet>

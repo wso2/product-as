@@ -76,7 +76,7 @@
                                     <type>jar</type>
                                     <includes>Http_Stats_Analytics.car</includes>
                                     <outputDirectory>
-                                        ${project.build.directory}/tomcat-dist/apache-tomee-webprofile-7.0.1/monitoring/
+                                        ${project.build.directory}/tomcat-dist/apache-tomee-${tomee.classifier}-${tomee.version}/monitoring/
                                     </outputDirectory>
                                 </artifactItem>
                             </artifactItems>
