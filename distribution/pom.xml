@@ -57,8 +57,8 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>org.apache.tomcat</includeGroupIds>
-                            <includeArtifactIds>tomcat</includeArtifactIds>
+                            <includeGroupIds>org.apache.tomee, org.apache.tomcat</includeGroupIds>
+                            <includeArtifactIds>apache-tomee, tomcat</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/tomcat-dist/</outputDirectory>
                         </configuration>
                     </execution>
@@ -76,7 +76,7 @@
                                     <type>jar</type>
                                     <includes>Http_Stats_Analytics.car</includes>
                                     <outputDirectory>
-                                        ${project.build.directory}/tomcat-dist/apache-tomcat-${tomcat.version}/monitoring/
+                                        ${project.build.directory}/tomcat-dist/apache-tomee-${tomee.classifier}-${tomee.version}/monitoring/
                                     </outputDirectory>
                                 </artifactItem>
                             </artifactItems>
@@ -92,6 +92,13 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
+            <type>zip</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>apache-tomee</artifactId>
+            <classifier>${tomee.classifier}</classifier>
             <type>zip</type>
         </dependency>
 
@@ -225,14 +232,6 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-        </dependency>
 
         <!-- HTTP statistics publishing dependencies -->
         <dependency>
@@ -320,6 +319,82 @@
         <dependency>
             <groupId>org.cryptacular</groupId>
             <artifactId>cryptacular</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-bindings-soap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-bindings-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-databinding-jaxb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-addr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-policy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-wsdl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.neethi</groupId>
+            <artifactId>neethi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xml-resolver</groupId>
+            <artifactId>xml-resolver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-bindings-xml</artifactId>
         </dependency>
 
         <!-- Webapp loader dependencies -->

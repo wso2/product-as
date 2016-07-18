@@ -21,8 +21,8 @@ package org.wso2.appserver.sample.utils;
  * @since 6.0.0
  */
 public class Constants {
-    static final String CXF_ENV_NAME = "CXF";
-    static final String CXF_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/cxf/";
+    static final String CUSTOM_ENV_NAME = "CUSTOM";
+    static final String CUSTOM_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/custom/";
     static final String SPRING_ENV_NAME = "Spring";
 
     static final String IDP_URL = "https://localhost:9443/samlsso";

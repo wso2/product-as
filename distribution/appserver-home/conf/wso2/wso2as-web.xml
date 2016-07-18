@@ -29,7 +29,7 @@
             using commas. For example,
                 <environments>MyEnv1, MyEnv2</environments>
         -->
-        <environments>CXF</environments>
+        <environments>CUSTOM</environments>
     </class-loader>
 
     <!--

@@ -115,15 +115,15 @@ public class ApplicationServerConfigurationTest {
     private static AppServerClassLoading prepareClassLoaderEnv() {
         AppServerClassLoading classloadingEnvironments = new AppServerClassLoading();
 
-        AppServerClassLoading.Environment cxf = new AppServerClassLoading.Environment();
-        cxf.setName(TestConstants.CXF_ENV_NAME);
-        cxf.setClasspath(TestConstants.CXF_ENV_CLASSPATH);
+        AppServerClassLoading.Environment customEnv = new AppServerClassLoading.Environment();
+        customEnv.setName(TestConstants.CUSTOM_ENV_NAME);
+        customEnv.setClasspath(TestConstants.CUSTOM_ENV_CLASSPATH);
         AppServerClassLoading.Environment jaxrs = new AppServerClassLoading.Environment();
         jaxrs.setName(TestConstants.JAXRS_ENV_NAME);
         jaxrs.setClasspath(TestConstants.JAXRS_ENV_CLASSPATH);
 
         List<AppServerClassLoading.Environment> envList = new ArrayList<>();
-        envList.add(cxf);
+        envList.add(customEnv);
         envList.add(jaxrs);
 
         envList
