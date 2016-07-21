@@ -1,0 +1,15 @@
+Quick Start Guide - SSO
+===================
+
+Introduction
+============
+
+This sample will demonstrate the single sign on functionality using wso2 application server and wso2 identity server.
+
+How to run the sample
+====================
+
+1. copy wso2is-5.1.0 pack to wso2as/samples/sso-quickstart/packs directory.
+2. For Linux - run the sso-quickstart.sh
+   For windows - run the sso-quickstart.bat
+4. use ctrl+c to exit from the sample.

@@ -38,6 +38,14 @@
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
             <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
+            <outputDirectory>${distribution.file.name}/</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/appserver-sso-samples/resources/</directory>
+            <outputDirectory>${distribution.file.name}/samples/</outputDirectory>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
@@ -128,6 +136,16 @@
                 <include>org.springframework:spring-context:jar</include>
                 <include>org.springframework:spring-aop:jar</include>
                 <include>org.springframework:spring-webmvc:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
+
+        <!--include quickstart sample-->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/samples/sso-quickstart/</outputDirectory>
+            <includes>
+                <include>org.wso2.appserver:sso-quickstart:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>

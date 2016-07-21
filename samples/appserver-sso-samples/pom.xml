@@ -30,5 +30,6 @@
     <modules>
         <module>bar-app</module>
         <module>foo-app</module>
+        <module>sso-quickstart</module>
     </modules>
 </project>
