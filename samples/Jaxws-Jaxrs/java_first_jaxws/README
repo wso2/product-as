@@ -1,0 +1,37 @@
+Java First demo using jax-ws APIs and jsr-181
+=============================================
+This demo illustrates how to develop a service using the "code first"
+approach using the JAX-WS APIs.
+
+Building and running the demo using Maven
+---------------------------------------
+From the base directory of this sample (i.e., where this README file is
+located), the pom.xml file is used to build and run the demo. 
+
+Using either UNIX or Windows:
+  * mvn clean install (builds the demo and creates a WAR file)
+  * Start the server (run bin/wso2server.sh/.bat)
+  * mvn -Pdeploy (deploys the generated WAR file on WSO2 AS with related logs on the console)
+  * mvn -Pclient (runs the client)
+
+NOTE :
+  * To remove the code generated from the WSDL file and the .class files, run "mvn clean".
+
+
+Building and running the demo using Ant
+---------------------------------------
+The base directory of this sample (i.e., where this README file is located) has the build.xml file
+which is used to build the necessary webapp and deploy it in WSO2 App Server.
+
+To build and deploy the sample,type :
+  * ant
+
+To run the sample demo :
+  * Start the App Server and access the Management Console at https://localhost:9443/carbon. Go to the Jaxws-Jaxrs service listing
+    page. You will see the deployed service.
+  * You have to run the run-client.sh or run-client.bat script. It has all the arguments and classpaths configured to run the sample.
+
+
+
+
+
