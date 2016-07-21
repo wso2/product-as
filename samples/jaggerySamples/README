@@ -1,0 +1,17 @@
+Samples : jaggery samples
+===================
+
+Introduction
+============
+
+Here is one simple sample that demonstrates the some functionality of the jaggery
+deployed as jaggery applications in WSO2 Application Server .
+
+
+Building the Service
+====================
+
+1. Use "ant" command in the wso2as/samples/jaggerySamples/ to deploy them.
+2. This will copy directory in to the
+wso2as/webapps/ directory. If you start AppServer, those jaggery apps will be
+available in the server.
