@@ -1,0 +1,52 @@
+WSO2 Application Server
+==========================
+
+Sample : Virtual Directory Listing
+===================================
+
+Introduction
+===============
+
+This sample is to demonstrate how to do vistual directory listing using a tomcat webapp.
+In other words contents of a external directory anc be mapped and shown in the webapp UI.
+This sample has functionality of both listing and downloading the given directory content.
+
+Instructions for building and configuring the webapp are as following.
+
+Configuring
+============
+
+1) Define the virtual directory mapping:
+open the virtualwebapp/WEB-INF/web.xml and modify the parameter,
+              <param-value>/path/to/virtual/directory/to/be/mapped/</param-value>
+      replace the path with the absolute directory path you want to map
+
+Building and deploying the Sample
+==================================
+
+2) Build and run the webapp:
+run $ant. This will create and auto deploy the webapp into [CARBON_HOME]/repository/deployment/server/webapps
+
+Contents of the packed the war will be as following
+          WEB-INF
+        |-- classes
+        |   `-- org
+        |       `-- wso2
+        |           `-- carbon
+        |               `-- servlets
+        |                   `- DirectoryListServlet.class
+        |-- jsp
+        |   |-- download.jsp
+        |   `-- list.jsp
+        `-- web.xml
+
+3) Check-out the virtual directory listing webapp,
+goto webapp url, [3]
+    eg: http://localhost:9763/virtual/
+    if you want https,
+    https://localhost:9443/virtual/
+
+
+ [1] http://wso2.org/project/app-server/4.1.2/docs/installation_guide.html
+ [2] http://docs.wso2.org/display/AS/Deploying+Web+Applications
+ [3] http://docs.wso2.org/display/AS/Accessing+Web+Applications      

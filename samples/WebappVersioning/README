@@ -1,0 +1,19 @@
+Sample : HelloWorldWebApp
+===================
+
+Introduction
+============
+
+WSO2 AppServer supports Apache tomcat based web application deployment as a latest feature. Now you can Deploy your custom web application under WSO2 AppServer. All you need to do is to bundle your web application as a '.war' archive with all your web application-related resources and all third party libraries needed, and then deploy the archive. This is a simple sample that demonstrates the functionality of the Web Application deployment support in WSO2 Application Server.
+
+Building and deploying the Sample
+=======================
+
+1. Start the WSO2AppServer server
+2. Switch to the WebappVersioning sample directory
+    e.g. In MS Windows cd CARBON_HOME\samples\WebappVersioning or in 
+	                  Linux        cd CARBON_HOME/samples/WebappVersioning
+3. Type ant and press enter
+    e.g. CARBON_HOME\samples\WebappVersioning>ant or 
+			CARBON_HOME/samples/WebappVersioning$ ant
+4. This will copy the sample webapp (wso2appserver-samples-hello-webapp-1.0.war file) in the "target" directory to the "CARBON_HOME/repository/deployment/server/webapps/" directory. If you start AppServer if its not already started, will be available as a deployed webapp under "Manage> Web Applications> List".

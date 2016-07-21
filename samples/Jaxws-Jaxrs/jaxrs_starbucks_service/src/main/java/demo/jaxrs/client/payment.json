@@ -1,0 +1,9 @@
+{
+    "Payment":{
+        "orderId":"123",
+        "name":"Kasun Gajasinghe",
+        "cardNumber":"1234 2345 3456 4567",
+        "expiryDate": "01-01-2015",
+        "amount": "50"
+    }
+}
