@@ -12,6 +12,5 @@ Building the Service
 ====================
 
 1. Use "ant" command in the wso2as/samples/jaggerySamples/ to deploy them.
-2. This will copy directory in to the
-wso2as/webapps/ directory. If you start AppServer, those jaggery apps will be
+2. This will copy directory in to the wso2as/webapps/ directory. If you start AppServer, those jaggery apps will be
 available in the server.

@@ -869,11 +869,6 @@
                 <version>${js.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.googlecode.json-simple</groupId>
-                <artifactId>json-simple</artifactId>
-                <version>${json-simple.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.wst.jsdt</groupId>
                 <artifactId>org.eclipse.wst.jsdt.debug.transport</artifactId>
                 <version>${org.eclipse.wst.jsdt.debug.transport.version}</version>
