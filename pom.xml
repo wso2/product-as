@@ -35,19 +35,6 @@
         <module>integration-tests</module>
     </modules>
 
-    <repositories>
-        <repository>
-            <id>wso2-nexus-staging</id>
-            <name>WSO2 staging Repository</name>
-            <url>https://maven.wso2.org/nexus/content/repositories/orgjaggeryjs-1008/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-    </repositories>
-
     <build>
         <pluginManagement>
             <plugins>
