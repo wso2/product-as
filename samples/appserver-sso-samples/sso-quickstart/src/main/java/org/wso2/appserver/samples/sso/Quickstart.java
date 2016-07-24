@@ -7,6 +7,7 @@ import org.apache.juli.logging.LogFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -16,37 +17,63 @@ import java.nio.file.Paths;
 public class Quickstart {
     private static final Log log = LogFactory.getLog(Quickstart.class);
 
-    private static final Path wso2asPath = Paths.get("../../");
-    private static final Path wso2isPath = Paths.get("packs/wso2is-5.1.0/");
-
-    private static Process wso2asprocess;
-    private static Process wso2isprocess;
+    private final Path wso2asPath = Paths.get("../../");
+    private final Path wso2isPath = Paths.get("packs/wso2is-5.1.0/");
+    private Process wso2asprocess;
+    private Process wso2isprocess;
+    private String operatingSystem = System.getProperty("os.name");
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        new Quickstart().runSample();
+    }
+
+    public void runSample() throws IOException, InterruptedException {
+        registerShutdownHook();
+
         // store original files
-        Path serverxmlOriginal = wso2asPath.resolve("conf/server.xml");
-        Path wso2aswebxmlOriginal = wso2asPath.resolve("conf").resolve("wso2/wso2as-web.xml");
-        Path ssoidpconfigxmlOriginal = wso2isPath.resolve("repository").resolve("conf").resolve
+        Path serverxmlOriginalSrc = wso2asPath.resolve("conf/server.xml");
+        Path wso2aswebxmlOriginalSrc = wso2asPath.resolve("conf").resolve("wso2/wso2as-web.xml");
+        Path ssoidpconfigxmlOriginalSrc = wso2isPath.resolve("repository").resolve("conf").resolve
                 ("identity").resolve("sso-idp-config.xml");
 
-        FileUtils.copyFile(serverxmlOriginal.toFile(), Paths.get("configfiles/originals/wso2as/server.xml").toFile());
-        FileUtils.copyFile(wso2aswebxmlOriginal.toFile(),
-                Paths.get("configfiles/originals/wso2as/wso2as-web.xml").toFile());
-        FileUtils
-                .copyFile(ssoidpconfigxmlOriginal.toFile(), Paths.get("configfiles/originals/wso2is/sso-idp-config.xml")
-                        .toFile());
+        Path serverxmlOriginalDest = Paths.get("configfiles/originals/wso2as/server.xml");
+        Path wso2aswebxmlOriginalDest = Paths.get("configfiles/originals/wso2as/wso2as-web.xml");
+        Path ssoidpconfigxmlOriginalDest = Paths.get("configfiles/originals/wso2is/sso-idp-config.xml");
+
+        FileUtils.copyFile(serverxmlOriginalSrc.toFile(), serverxmlOriginalDest.toFile());
+        FileUtils.copyFile(wso2aswebxmlOriginalSrc.toFile(), wso2aswebxmlOriginalDest.toFile());
+        FileUtils.copyFile(ssoidpconfigxmlOriginalSrc.toFile(), ssoidpconfigxmlOriginalDest.toFile());
 
         // copy sample files
-        Path serverxmlSample = Paths.get("configfiles/sampleconfigfiles/wso2as/server.xml");
-        Path wso2aswebxmlSample = Paths.get("configfiles/sampleconfigfiles/wso2as/wso2as-web.xml");
-        Path ssoidpconfigxmlSample = Paths.get("configfiles/sampleconfigfiles/wso2is/sso-idp-config.xml");
+        Path serverxmlSampleSrc = Paths.get("configfiles/sampleconfigfiles/wso2as/server.xml");
+        Path wso2aswebxmlSampleSrc = Paths.get("configfiles/sampleconfigfiles/wso2as/wso2as-web.xml");
+        Path ssoidpconfigxmlSampleSrc = Paths.get("configfiles/sampleconfigfiles/wso2is/sso-idp-config.xml");
 
-        FileUtils.copyFile(serverxmlSample.toFile(), wso2asPath.resolve("conf/server.xml").toFile());
-        FileUtils.copyFile(wso2aswebxmlSample.toFile(),
-                wso2asPath.resolve("conf").resolve("wso2/wso2as-web.xml").toFile());
-        FileUtils.copyFile(ssoidpconfigxmlSample.toFile(), wso2isPath.resolve("repository/conf").resolve
-                ("identity/sso-idp-config.xml").toFile());
+        Path serverxmlSampleDest = wso2asPath.resolve("conf/server.xml");
+        Path wso2aswebxmlSampleDest = wso2asPath.resolve("conf").resolve("wso2/wso2as-web.xml");
+        Path ssoidpconfigxmlSampleDest = wso2isPath.resolve("repository/conf").resolve("identity/sso-idp-config.xml");
 
+        FileUtils.copyFile(serverxmlSampleSrc.toFile(), serverxmlSampleDest.toFile());
+        FileUtils.copyFile(wso2aswebxmlSampleSrc.toFile(), wso2aswebxmlSampleDest.toFile());
+        FileUtils.copyFile(ssoidpconfigxmlSampleSrc.toFile(), ssoidpconfigxmlSampleDest.toFile());
+
+        // starting AS
+        startasServer();
+
+        // starting IS
+        startisServer();
+
+        log.info("URLS: ");
+        log.info("http://localhost:8080/foo-app/");
+        log.info("http://localhost:8080/bar-app/");
+
+        log.info("Press ctrl+c to exit from the sample....");
+        while (true) {
+            Thread.sleep(1000);
+        }
+    }
+
+    public void registerShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 if (wso2asprocess != null) {
@@ -57,61 +84,96 @@ public class Quickstart {
                 }
 
                 try {
-                    FileUtils.copyFile(Paths.get("configfiles/originals/wso2as/server.xml").toFile(), serverxmlOriginal
-                            .toFile());
-                    FileUtils.copyFile(Paths.get("configfiles/originals/wso2as/wso2as-web.xml").toFile(),
-                            wso2aswebxmlOriginal.toFile());
-                    FileUtils.copyFile(Paths.get("configfiles/originals/wso2is/sso-idp-config.xml")
-                            .toFile(), ssoidpconfigxmlOriginal.toFile());
+                    Path serverxmlOriginalSrc = Paths.get("configfiles/originals/wso2as/server.xml");
+                    Path wso2aswebxmlOriginalSrc = Paths.get("configfiles/originals/wso2as/wso2as-web.xml");
+                    Path ssoidpconfigxmlOriginalSrc = Paths.get("configfiles/originals/wso2is/sso-idp-config.xml");
+
+                    Path serverxmlOriginalDest = wso2asPath.resolve("conf/server.xml");
+                    Path wso2aswebxmlOriginalDest = wso2asPath.resolve("conf").resolve("wso2/wso2as-web.xml");
+                    Path ssoidpconfigxmlOriginalDest = wso2isPath.resolve("repository").resolve("conf").resolve
+                            ("identity").resolve("sso-idp-config.xml");
+
+                    //revert the changes made during the sample
+                    FileUtils.copyFile(serverxmlOriginalSrc.toFile(), serverxmlOriginalDest.toFile());
+                    FileUtils.copyFile(wso2aswebxmlOriginalSrc.toFile(), wso2aswebxmlOriginalDest.toFile());
+                    FileUtils.copyFile(ssoidpconfigxmlOriginalSrc.toFile(), ssoidpconfigxmlOriginalDest.toFile());
                 } catch (IOException e) {
+                    log.error("Interrupted during the sample.");
                 }
             }
         });
+    }
 
-        // starting AS
-        wso2asprocess = Runtime.getRuntime().exec(wso2asPath.resolve("bin").resolve("catalina.sh") + " run");
+    public void startasServer() throws IOException {
+        if (operatingSystem.toLowerCase().contains("windows")) {
+            wso2asprocess = Runtime.getRuntime()
+                    .exec("cmd.exe /C " + wso2asPath.resolve("bin").resolve("catalina.bat") + " run");
+        } else {
+            wso2asprocess = Runtime.getRuntime().exec(wso2asPath.resolve("bin").resolve("catalina.sh") + " run");
+        }
 
-        boolean wso2asStarted = false;
-        boolean wso2isStarted = false;
+        waitForServerStartup(8080);
+    }
+
+    public void startisServer() throws IOException {
+        if (operatingSystem.toLowerCase().contains("windows")) {
+            wso2isprocess = Runtime.getRuntime()
+                    .exec("cmd.exe /C " + wso2isPath.resolve("bin").resolve("wso2server.bat"));
+        } else {
+            wso2isprocess = Runtime.getRuntime().exec(wso2isPath.resolve("bin").resolve("wso2server.sh")
+                    .toAbsolutePath().toString());
+        }
 
         String line;
-        //        BufferedReader input = new BufferedReader(new InputStreamReader(wso2asprocess.getInputStream()));
-        //        while ((line = input.readLine()) != null) {
-        //            log.info(line);
-        //            if (line.contains("org.apache.catalina.startup.Catalina.start Server startup")) {
-        //                wso2asStarted = true;
-        //                break;
-        //            }
-        //        }
-        //        input.close();
-
-        Thread.sleep(45000);
-
-        // starting IS
-        wso2isprocess = Runtime.getRuntime().exec(wso2isPath.resolve("bin").resolve("wso2server.sh")
-                .toAbsolutePath().toString());
-
         BufferedReader input2 = new BufferedReader(new InputStreamReader(wso2isprocess.getInputStream()));
         while ((line = input2.readLine()) != null) {
-            log.info(line);
             if (line.contains("WSO2 Carbon started")) {
-                wso2isStarted = true;
                 break;
             }
         }
         input2.close();
+    }
 
-        //        if (!wso2asstarted || !wso2isstarted) {
-        //            throw new IllegalStateException("Servers did not started successfully.");
-        //        }
+    private void waitForServerStartup(int port) throws IOException {
+        int serverStartCheckTimeout = 120;
+        log.info("Checking server availability... (Timeout: " + serverStartCheckTimeout + " seconds)");
+        int startupCounter = 0;
+        boolean isTimeout = false;
+        while (!isServerListening("localhost", port)) {
+            if (startupCounter >= serverStartCheckTimeout) {
+                isTimeout = true;
+                break;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
+            startupCounter++;
+        }
 
-        log.info("URLS: ");
-        log.info("http://localhost:8080/foo-app/");
-        log.info("http://localhost:8080/bar-app/");
+        if (!isTimeout) {
+            log.info("Server started.");
+        } else {
+            String message = "Server startup timeout.";
+            log.error(message);
+            throw new IOException(message);
+        }
+    }
 
-        log.info("Press ctrl+c to exit from the sample....");
-        while (true) {
-            Thread.sleep(1000);
+    public boolean isServerListening(String host, int port) {
+        Socket socket = null;
+        try {
+            socket = new Socket(host, port);
+            return true;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (Exception ignored) {
+                }
+            }
         }
     }
 }

@@ -746,7 +746,7 @@
         <maven.shadeplugin.version>2.4.3</maven.shadeplugin.version>
 
         <!-- dependency version properties -->
-        <tomcat.version>8.0.28</tomcat.version>
+        <tomcat.version>8.0.36</tomcat.version>
         <carbon.analyticscommon.version>5.0.8</carbon.analyticscommon.version>
         <carbon.logging.version>4.4.3</carbon.logging.version>
         <com.google.code.findbugs.version>3.0.1</com.google.code.findbugs.version>
