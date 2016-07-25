@@ -13,45 +13,45 @@ var log = new Log();
 
 var uri = request.getRequestURI();
 uri = uri.substring(request.getContextPath().length);
-if(uri != null) {
+if (uri != null) {
 var uriMatcher = new URIMatcher(uri);
 
-	if(uriMatcher.match("/orders/{orderid}/{page}")) {
+	if (uriMatcher.match("/orders/{orderid}/{page}")) {
 		orderid = uriMatcher.elements().orderid;
 	}
-	if(uriMatcher.match("/orders/{orderid}/")) {
+	if (uriMatcher.match("/orders/{orderid}/")) {
 		orderid = uriMatcher.elements().orderid;
 	}
 }
 
-if(data != "") {
+if (data != "") {
     data = parse(data);
-	if(data.addition) {
+	if (data.addition) {
 		addition = data.addition;
 	}
-	if(data.status) {
+	if (data.status) {
 		status = data.status;
 	}
 }
 
 
 
-if(verb == "DELETE" && orderid != null) {
+if (verb == "DELETE" && orderid != null) {
 	deleteOrder(orderid);
 
-} else if(verb == "GET" && orderid != null && addition == null && status == null) {
+} else if (verb == "GET" && orderid != null && addition == null && status == null) {
 	viewOrder(orderid);
 
-} else if(verb == "PUT" && orderid != null && addition != null) {	
+} else if (verb == "PUT" && orderid != null && addition != null) {	
 	addAddition(orderid, addition);
 
-} else if(verb == "PUT" && orderid != null && status != null) {
+} else if (verb == "PUT" && orderid != null && status != null) {
 	updateStatus(orderid, status);
 
-} else if(verb == "POST" && order != null) {
+} else if (verb == "POST" && order != null) {
 	addOrder(order);
 
-} else if(verb == "GET") {
+} else if (verb == "GET") {
 	listAllOrders();
 }
 
