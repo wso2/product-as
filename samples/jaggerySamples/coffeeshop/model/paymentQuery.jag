@@ -2,7 +2,7 @@
 function isPaid(orderid) {
 
 	var order = session.get("o" + orderid);
-	if(order != null) {
+	if (order != null) {
 		print(order.PAY);
 	} else {
 		print({
@@ -15,9 +15,9 @@ function pay(orderid) {
 
 	var order = session.get("o" + orderid);
 	//checking order is there
-	if(order != null) {
+	if (order != null) {
 		//Order is existing
-		if(order.PAY) {
+		if (order.PAY) {
 			print({
 				"Infor" : "Sorry, Order was paid"
 			});

@@ -33,13 +33,13 @@ var coffedata = {
 };
 
 function addOrder(orderName) {
-	if(session.get("count") == null) {
+	if (session.get("count") == null) {
 		session.put("count", 0);
 	}
 	var orderIdx = session.get("count");
 
 	var orderO = session.get("orders");
-	if(orderO != null) {
+	if (orderO != null) {
 		//orderIdx = orderO.length;
 		var orderCount = session.get("count");
 		orderCount++;
@@ -50,14 +50,14 @@ function addOrder(orderName) {
 	var order = request.getParameter('order');
 	var price = 0;
 	//menuID.info(coffedata);
-	for(var key in coffedata.DRINKS) {
-		if(coffedata.DRINKS[key].name == orderName) {
+	for (var key in coffedata.DRINKS) {
+		if (coffedata.DRINKS[key].name == orderName) {
 			price = coffedata.DRINKS[key].cost;
 		}
 	}
-	if(price != 0) {
+	if (price != 0) {
 		var orders;
-		if(orderO != null) {
+		if (orderO != null) {
 			var orderJson = session.get("orders");
 			orderJson.push(orderIdx);
 			session.put("orders", orderJson);
@@ -86,9 +86,9 @@ function addOrder(orderName) {
 function listAllOrders() {
 	var orderO = session.get("orders");
 	var listOrder = [];
-	if(orderO != null) {
+	if (orderO != null) {
 		var order
-		for(var key in orderO) {
+		for (var key in orderO) {
 			order = session.get("o" + orderO[key]);
 			listOrder.push(order);
 		}
@@ -107,7 +107,7 @@ function updateStatus(orderid, status) {
 	//get order from session
 	var order = session.get("o" + orderid);
 	//checking order is there
-	if(order.length != 0) {
+	if (order.length != 0) {
 		//Order is existing
 		order.STATUS = status;
 		session.put("o" + orderid, order);
@@ -126,19 +126,19 @@ function addAddition(orderid, addition) {
 	var order = session.get("o" + orderid);
 	
 	//checking order is there
-	if(order != null) {
+	if (order != null) {
 		//checking for status
-		if(order.STATUS == "In Progress") {
+		if (order.STATUS == "In Progress") {
 			//Order is existing
 			//processing new price
 			var price = 0;
-			for(var key in coffedata.ADDITIONS) {
-				if(coffedata.ADDITIONS[key].name == addition) {
+			for (var key in coffedata.ADDITIONS) {
+				if (coffedata.ADDITIONS[key].name == addition) {
 					price = coffedata.ADDITIONS[key].cost;
 				}
 
 			}
-			if(price != 0) {
+			if (price != 0) {
 				var newPrice = parseFloat(price.substring(1)) + parseFloat(order.COST.substring(1));
 				order.ADDITION = addition;
 				order.COST = "$" + newPrice;
@@ -151,11 +151,11 @@ function addAddition(orderid, addition) {
 				});
 			}
 		} else {
-			if(order.STATUS == "Ready") {
+			if (order.STATUS == "Ready") {
 				print({
 					"Infor" : "Sorry, Order can be added addition only one time"
 				});
-			} else if(order.STATUS == "Complete") {
+			} else if (order.STATUS == "Complete") {
 				print({
 					"Infor" : "Sorry, Order has been completed"
 				});
@@ -177,7 +177,7 @@ function addAddition(orderid, addition) {
 
 function viewOrder(orderid) {
 	var order = session.get("o" + orderid);
-	if(order != null) {
+	if (order != null) {
 		print(order);
 	} else {
 
@@ -194,10 +194,10 @@ function deleteOrder(orderid) {
 	var orderO = session.get("orders");
 
 	//checking order is there
-	if(order != null && orderO != null) {
+	if (order != null && orderO != null) {
 		session.remove("o" + orderid);
-		for(var key in orderO) {
-			if(orderO[key] == orderid) {
+		for (var key in orderO) {
+			if (orderO[key] == orderid) {
 				orderO.splice(key, 1);
 				session.put("orders", orderO);
 			}
