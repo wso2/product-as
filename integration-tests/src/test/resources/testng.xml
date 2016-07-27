@@ -32,6 +32,12 @@ limitations under the License.
         </classes>
     </test>
 
+    <test name="wso2as-test-jaggery-webapp-deployer">
+        <classes>
+            <class name="org.wso2.appserver.test.integration.jaggery.JaggeryWebappDeployerTestCase"/>
+        </classes>
+    </test>
+
     <test name="wso2as-test-webapp-loader-failing-runtime-path">
         <parameter name="server-status-hook"
                    value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>

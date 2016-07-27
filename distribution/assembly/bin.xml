@@ -38,6 +38,10 @@
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}</directory>
             <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples</directory>
+            <outputDirectory>${distribution.file.name}/samples/jaggerySamples</outputDirectory>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
@@ -102,6 +106,9 @@
                 <include>org.codehaus.woodstox:stax2-api:jar</include>
                 <include>org.codehaus.woodstox:woodstox-core-asl:jar</include>
                 <include>org.cryptacular:cryptacular:jar</include>
+
+                <!--for jaggery app deployment-->
+                <include>org.jaggeryjs:org.jaggeryjs.jaggery.tomcat.listener:jar</include>
             </includes>
         </dependencySet>
 
@@ -131,6 +138,35 @@
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
+
+        <!-- jaggery runtime -->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib/runtimes/jaggery</outputDirectory>
+            <includes>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.file:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.jaggeryparser:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.log:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.oauth:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.stream:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.uri:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.web:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.xhr:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.xslt:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.jaggery.core:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.scriptengine:jar</include>
+                <include>commons-fileupload.wso2:commons-fileupload:jar</include>
+                <include>commons-httpclient.wso2:commons-httpclient:jar</include>
+                <include>rhino.wso2:js:jar</include>
+                <include>com.googlecode.json-simple:json-simple:jar</include>
+                <include>com.googlecode.json-simple:org.jaggeryjs.scriptengine:jar</include>
+                <include>org.jaggeryjs:json-simple:jar</include>
+                <include>org.eclipse.wst.jsdt:org.eclipse.wst.jsdt.debug.transport:jar</include>
+                <include>org.wso2.uri.template:wso2-uri-templates:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>false</useTransitiveFiltering>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
         </dependencySet>
     </dependencySets>
 </assembly>
