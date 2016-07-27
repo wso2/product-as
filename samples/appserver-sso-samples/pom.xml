@@ -28,8 +28,7 @@
     <url>http://wso2.com</url>
 
     <modules>
-        <module>musicstore-app</module>
-        <module>bookstore-app</module>
+        <module>sso-sample-apps</module>
         <module>sso-quickstart</module>
     </modules>
 </project>

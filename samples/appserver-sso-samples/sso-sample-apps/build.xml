@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="sso-sample" default="executeChildBuild">
+
+    <target name="executeChildBuild">
+        <ant antfile="build.xml" dir="bookstore-app" target="build-all"/>
+        <ant antfile="build.xml" dir="musicstore-app" target="build-all"/>
+    </target>
+
+</project>

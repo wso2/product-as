@@ -46,6 +46,16 @@
             <directory>../samples/appserver-sso-samples/resources/</directory>
             <outputDirectory>${distribution.file.name}/samples/</outputDirectory>
         </fileSet>
+        <!--  copying SSOSamples -->
+        <fileSet>
+            <directory>../samples/appserver-sso-samples/sso-sample-apps</directory>
+            <outputDirectory>${distribution.file.name}/samples/sso-sample-apps</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
+            </excludes>
+        </fileSet>
     </fileSets>
 
     <dependencySets>

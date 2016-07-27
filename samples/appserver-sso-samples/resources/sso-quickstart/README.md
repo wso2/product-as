@@ -16,3 +16,4 @@ How to run the sample
     For windows - run the sso-quickstart.bat
 4. Go to the given webapp urls to check the sso functionality.
 4. press ctrl+c to exit from the sample.
+

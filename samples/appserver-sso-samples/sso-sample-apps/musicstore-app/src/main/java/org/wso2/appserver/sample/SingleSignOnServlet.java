@@ -44,7 +44,7 @@ public class SingleSignOnServlet extends HttpServlet {
         writer.append("<!DOCTYPE html>\r\n")
                 .append("<html>\r\n")
                 .append("<head>\r\n")
-                .append("<title>Foo-App</title>\r\n")
+                .append("<title>MusicStore-App</title>\r\n")
                 .append("</head>\r\n");
 
         writer.append("<h2>");
@@ -74,7 +74,7 @@ public class SingleSignOnServlet extends HttpServlet {
         writer.append("<!DOCTYPE html>\r\n")
                 .append("<html>\r\n")
                 .append("<head>\r\n")
-                .append("<title>Foo-App</title>\r\n")
+                .append("<title>MusicStore-App</title>\r\n")
                 .append("</head>\r\n")
                 .append("<img src='images/cart-logo.gif' alt='Logo' />");
 

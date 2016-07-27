@@ -134,8 +134,8 @@ public class Quickstart {
         startisServer();
 
         log.info("Go to following web app URLs to check the sso functionality.");
-        log.info("Webapp1 URL: http://localhost:8080/foo-app/");
-        log.info("Webapp2 URL: http://localhost:8080/bar-app/");
+        log.info("Webapp1 URL: http://localhost:8080/musicstore-app/");
+        log.info("Webapp2 URL: http://localhost:8080/bookstore-app/");
 
         log.info("\nPress ctrl+c to exit from the sample....");
 
