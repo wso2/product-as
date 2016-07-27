@@ -183,12 +183,14 @@
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>bar-app</artifactId>
+            <artifactId>bookstore-app</artifactId>
+            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
-            <artifactId>foo-app</artifactId>
+            <artifactId>musicstore-app</artifactId>
+            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>

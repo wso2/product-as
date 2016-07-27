@@ -117,8 +117,6 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
             <includes>
-                <include>org.wso2.appserver:bar-app:war</include>
-                <include>org.wso2.appserver:foo-app:war</include>
                 <include>org.wso2.appserver:jaxrs_basic:war</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>

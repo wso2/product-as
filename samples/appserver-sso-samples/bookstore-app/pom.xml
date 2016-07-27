@@ -15,21 +15,26 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>samples</artifactId>
+        <artifactId>appserver-sso-samples</artifactId>
         <groupId>org.wso2.appserver</groupId>
         <version>6.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>appserver-sso-samples</artifactId>
-    <name>WSO2 Application Server - Sample - SAML 2.0 SSO Sample Web Applications</name>
-    <description>SAML 2.0 SSO Sample Web Applications</description>
-    <packaging>pom</packaging>
+    <artifactId>bookstore-app</artifactId>
+    <name>WSO2 Application Server - SSO Sample - Book Store Web Application</name>
+    <description>Book Store Web Application</description>
+    <packaging>war</packaging>
     <url>http://wso2.com</url>
 
-    <modules>
-        <module>musicstore-app</module>
-        <module>bookstore-app</module>
-        <module>sso-quickstart</module>
-    </modules>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>

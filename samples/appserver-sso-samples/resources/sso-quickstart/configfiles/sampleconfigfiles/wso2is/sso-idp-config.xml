@@ -31,11 +31,11 @@
       </AudiencesList>
     </ServiceProvider>
     <ServiceProvider>
-      <Issuer>foo-app</Issuer>
+      <Issuer>musicstore-app</Issuer>
       <AssertionConsumerServiceURLs>
-        <AssertionConsumerServiceURL>https://localhost:8443/foo-app/acs</AssertionConsumerServiceURL>
+        <AssertionConsumerServiceURL>https://localhost:8443/musicstore-app/acs</AssertionConsumerServiceURL>
       </AssertionConsumerServiceURLs>
-      <DefaultAssertionConsumerServiceURL>https://localhost:8443/foo-app/acs</DefaultAssertionConsumerServiceURL>
+      <DefaultAssertionConsumerServiceURL>https://localhost:8443/musicstore-app/acs</DefaultAssertionConsumerServiceURL>
       <EnableSingleLogout>true</EnableSingleLogout>
       <SignResponse>true</SignResponse>
       <ValidateSignatures>true</ValidateSignatures>
@@ -44,11 +44,11 @@
       <SAMLDefaultDigestAlgorithmURI>http://www.w3.org/2000/09/xmldsig#sha1</SAMLDefaultDigestAlgorithmURI>
     </ServiceProvider>
     <ServiceProvider>
-      <Issuer>bar-app</Issuer>
+      <Issuer>bookstore-app</Issuer>
       <AssertionConsumerServiceURLs>
-        <AssertionConsumerServiceURL>https://localhost:8443/bar-app/acs</AssertionConsumerServiceURL>
+        <AssertionConsumerServiceURL>https://localhost:8443/bookstore-app/acs</AssertionConsumerServiceURL>
       </AssertionConsumerServiceURLs>
-      <DefaultAssertionConsumerServiceURL>https://localhost:8443/bar-app/acs</DefaultAssertionConsumerServiceURL>
+      <DefaultAssertionConsumerServiceURL>https://localhost:8443/bookstore-app/acs</DefaultAssertionConsumerServiceURL>
       <EnableSingleLogout>true</EnableSingleLogout>
       <SignResponse>true</SignResponse>
       <ValidateSignatures>true</ValidateSignatures>
