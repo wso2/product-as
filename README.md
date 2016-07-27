@@ -7,7 +7,9 @@ Server with WSO2 Data Analytics Server.
 
 ## Features
 
-* HTTP statistics monitoring
+* HTTP statistics monitoring for webapplications
+* SAML based Single Sign On (SSO) for webapplications
+* Jaggerry applications deployment
 * Webapp classloading runtimes
 
 ## Building the product
