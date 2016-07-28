@@ -39,8 +39,8 @@
 
     <target name="war" depends="compile">
         <echo message="Creating webapp ${warName}."/>
-        <war destfile="${build.dir}/${warName}" webxml="src/main/resources/webapp/WEB-INF/web.xml">
-            <fileset dir="src/main/resources/WebContent"/>
+        <war destfile="${build.dir}/${warName}" webxml="src/main/webapp/WEB-INF/web.xml">
+            <fileset dir="src/main/webapp"/>
             <classes dir="${build.dir}/classes"/>
         </war>
     </target>

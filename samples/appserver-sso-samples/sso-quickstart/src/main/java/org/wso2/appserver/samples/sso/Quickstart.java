@@ -93,9 +93,12 @@ public class Quickstart {
 
         Path webappsDir = wso2asPath.resolve("webapps");
 
-//        deployWebapp("http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/appserver/org.wso2"
-//                + ".appserver.samples.bar-app/5.3.1-SNAPSHOT/org.wso2.appserver.samples.bar-app-5.3.1-20160323"
-//                + ".054246-163.war", webappsDir);
+        log.info("Deploying bookstore-app");
+        deployWebapp("http://product-dist.wso2.com/downloads/application-server/6.0.0/sso-samples/bookstore-app.war",
+                webappsDir.resolve("bookstore-app.war"));
+        log.info("Deploying musicstore-app\n");
+        deployWebapp("http://product-dist.wso2.com/downloads/application-server/6.0.0/sso-samples/musicstore-app.war",
+                webappsDir.resolve("musicstore-app.war"));
 
         // store original files
         Path serverxmlOriginalSrc = wso2asPath.resolve("conf").resolve("server.xml");
@@ -260,7 +263,7 @@ public class Quickstart {
     private void startasServer() throws IOException {
         if (operatingSystem.toLowerCase(Locale.ENGLISH).contains("windows")) {
             wso2asProcess = Runtime.getRuntime()
-                    .exec("cmd.exe /C " + wso2asPath.resolve("bin").resolve("catalina.bat") + " run");
+                    .exec(wso2asPath.resolve("bin").resolve("catalina.bat") + " run");
         } else {
             wso2asProcess = Runtime.getRuntime().exec(wso2asPath.resolve("bin").resolve("catalina.sh") + " run");
         }

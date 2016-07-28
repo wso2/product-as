@@ -1,33 +1,8 @@
-Quick Start Guide - SSO
-========================
+WSO2 Application Server- Single Sign on Samples
+=================================================
 
-Introduction
-------------
+1. sso-quickstart - A sso quick start sample which demonstrate sso functionality in AS 6.0.0 to the user with
+minimum configuration. The user would be able to run the sample by just running the script. The script is supposed to
+ do the configurations in both AS and IS, deploy the sso samples in AS.
 
-This sample will demonstrate the single sign on functionality using wso2 application server and wso2 identity server.
-
-Requirements
--------------
-
-1. JDK 1.8 or higher
-2. A JavaScript compatible web browser
-3. An active Internet connection
-
-How to run the sample
-----------------------
-
-1. Download wso2is-5.1.0.zip from [here](http://wso2.com/products/identity-server/)
-2. copy that to wso2as/samples/sso-quickstart/packs directory.
-3. Then run the script file.
-    * For Linux - run the sso-quickstart.sh
-    * For windows - run the sso-quickstart.bat
-4. Go to the given webapp urls to check the sso functionality.
-4. press ctrl+c to exit from the sample.
-
-Description
-------------
-
-This will first extract the identity server zip file and then it will deploy two sample webapps in WSO2 Application
- server(Book Store app and Music Store app). After that it will make relevant configuration file changes in the WSO2
- Application server and WSO2 Identity server. Finally it will start two servers and then you can observe sso
- functionality by check on the given urls.
+2. sso-sample-apps - Sample web applications requires to demonstrate sso functionality.

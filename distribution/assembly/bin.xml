@@ -39,8 +39,9 @@
             <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../samples/appserver-sso-samples/resources/</directory>
-            <outputDirectory>${distribution.file.name}/samples/</outputDirectory>
+            <directory>../samples/appserver-sso-samples/sso-quickstart/src/main/java/resources/sso-quickstart
+            </directory>
+            <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
         </fileSet>
         <!--  copying SSOSamples -->
         <fileSet>
@@ -57,6 +58,12 @@
             <outputDirectory>${distribution.file.name}/samples/jaggerySamples</outputDirectory>
         </fileSet>
     </fileSets>
+    <files>
+        <file>
+            <source>../samples/appserver-sso-samples/sso-quickstart/README.md</source>
+            <outputDirectory>${distribution.file.name}/samples/sso-sample-apps</outputDirectory>
+        </file>
+    </files>
 
     <dependencySets>
         <!-- Include application server modules here -->
