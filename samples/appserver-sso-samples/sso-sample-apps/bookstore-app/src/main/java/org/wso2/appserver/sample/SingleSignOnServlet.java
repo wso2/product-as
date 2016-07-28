@@ -46,7 +46,7 @@ public class SingleSignOnServlet extends HttpServlet {
         writer.append("</h2>\r\n");
 
         writer.append("<div id='footer-area'>");
-        writer.append("<p>©2016 WSO2</p>");
+        writer.append("<p>\u00a9 2016 WSO2</p>");
         writer.append("</div>");
 
         writer.append("<body>\r\n")
