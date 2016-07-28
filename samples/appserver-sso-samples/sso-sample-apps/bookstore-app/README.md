@@ -16,12 +16,12 @@ Building the Samples
 1. Open a command line, and navigate to the <AS_HOME>/samples/sso-sample-apps/bookstore-app directory.
 2. Run the relevant command to deploy the web app:
 * Using Maven
-** Create a WAR file for the sample using the following command:
-*** mvn clean install
-**Deploy the generated WAR file on WSO2 AS with the related logs on the console:
-*** mvn -Pdeploy
-*Using Ant
-**ant
+        * Create a WAR file for the sample using the following command:
+            * mvn clean install
+        * Deploy the generated WAR file on WSO2 AS with the related logs on the console:
+            * mvn -Pdeploy
+    *Using Ant
+        * ant
 
 3. This will deploy those webapps in <AS_HOME>/webapps directory. If you start AppServer, those web apps will be
 available in the server.
