@@ -23,6 +23,7 @@
 
     <artifactId>sso-quickstart</artifactId>
     <packaging>jar</packaging>
+    <name>WSO2 Application Server - SSO Quickstart</name>
 
     <dependencies>
         <dependency>
