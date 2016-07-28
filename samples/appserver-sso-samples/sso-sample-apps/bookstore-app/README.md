@@ -1,5 +1,5 @@
-Sample : Book Store
-===================
+Sample : Book Store Web App
+============================
 
 Introduction
 ------------
@@ -13,10 +13,9 @@ Requirements
 --------------
 
 1. JDK 1.7 or higher
-2. Apache ANT 1.7 or higher
-3. Apache Maven 3.0.4 or higher
-4. A JavaScript compatible web browser
-5. An active Internet connection
+2. Apache ANT 1.7 or higher or Apache Maven 3.0.4 or higher
+3. A JavaScript compatible web browser
+4. An active Internet connection
 
 Building the Samples
 ----------------------

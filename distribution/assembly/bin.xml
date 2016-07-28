@@ -39,7 +39,7 @@
             <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../samples/appserver-sso-samples/sso-quickstart/src/main/java/resources/sso-quickstart
+            <directory>../samples/appserver-sso-samples/sso-quickstart/src/main/resources/sso-quickstart
             </directory>
             <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
         </fileSet>
@@ -50,7 +50,6 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
-                <exclude>**/pom.xml.releaseBackup</exclude>
             </excludes>
         </fileSet>
         <fileSet>

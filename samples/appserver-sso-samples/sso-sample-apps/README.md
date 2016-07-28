@@ -1,4 +1,4 @@
-Samples : sso samples
+Samples : SSO samples
 ======================
 
 Introduction

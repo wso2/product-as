@@ -40,21 +40,23 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * Quick start sample for sso.
+ * Tool to run the sso quick start.
  */
 public class Quickstart {
     private static final Log log;
+    private static final String WSO2_IS_VERSION = "wso2is-5.1.0";
+    private Path wso2asPath = Paths.get("..", "..");
+    private Path wso2isPath = Paths.get("packs", WSO2_IS_VERSION);
+    private Path wso2isZipPath = Paths.get("packs", WSO2_IS_VERSION + ".zip");
+    private Process wso2asProcess;
+    private Process wso2isProcess;
+    private ProcessBuilder wso2asProcessBuilder;
 
     static {
         System.setProperty("org.apache.juli.formatter", "org.apache.juli.VerbatimFormatter");
         log = LogFactory.getLog(Quickstart.class);
     }
 
-    private Path wso2asPath = Paths.get("..", "..");
-    private Path wso2isPath = Paths.get("packs", "wso2is-5.1.0");
-    private Path wso2isZipPath = Paths.get("packs", "wso2is-5.1.0.zip");
-    private Process wso2asProcess;
-    private Process wso2isProcess;
     private String operatingSystem = System.getProperty("os.name");
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -63,6 +65,9 @@ public class Quickstart {
 
     private void runSample() throws IOException, InterruptedException {
         log.info("Starting sample...\n");
+
+        wso2asProcessBuilder = new ProcessBuilder().directory(wso2asPath.resolve("bin").toFile())
+                .redirectErrorStream(true);
 
         String wso2isZipPathProperty = System.getProperty("wso2is.zip.path");
         if (wso2isZipPathProperty != null) {
@@ -73,7 +78,7 @@ public class Quickstart {
             }
             Path parentisPath = wso2isZipPath.getParent();
             if (parentisPath != null) {
-                wso2isPath = parentisPath.resolve("wso2is-5.1.0");
+                wso2isPath = parentisPath.resolve(WSO2_IS_VERSION);
             } else {
                 log.error("WSO2 Identity Server path: " + wso2isZipPath + " could not be found. ");
                 return;
@@ -261,11 +266,11 @@ public class Quickstart {
      * @throws IOException
      */
     private void startasServer() throws IOException {
+        wso2asProcessBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(new File("wso2asServer.log")));
         if (operatingSystem.toLowerCase(Locale.ENGLISH).contains("windows")) {
-            wso2asProcess = Runtime.getRuntime()
-                    .exec(wso2asPath.resolve("bin").resolve("catalina.bat") + " run");
+            wso2asProcess = wso2asProcessBuilder.command("cmd.exe", "/C", "catalina.bat", "run").start();
         } else {
-            wso2asProcess = Runtime.getRuntime().exec(wso2asPath.resolve("bin").resolve("catalina.sh") + " run");
+            wso2asProcess = wso2asProcessBuilder.command("catalina.sh", "run").start();
         }
 
         waitForServerStartup(8080);
