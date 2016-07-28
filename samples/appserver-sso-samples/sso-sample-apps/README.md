@@ -23,7 +23,7 @@ Building the Samples
             * mvn clean install
         * Deploy the generated WAR file on WSO2 AS with the related logs on the console:
             * mvn -Pdeploy
-    *Using Ant
+    * Using Ant
         * ant
 3. Do this again for musicstore-app to deploy the music store web app.
 3. This will deploy those webapps in <AS_HOME>/webapps directory. If you start AppServer, those web apps will be

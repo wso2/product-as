@@ -20,7 +20,7 @@ How to run the sample
 Description
 ------------
 
-This sample first extract the identity server zip file and then it will deploy two sample webapps in WSO2 Application
+This will first extract the identity server zip file and then it will deploy two sample webapps in WSO2 Application
  server(Book Store app and Music Store app). After that it will make relevant configuration file changes in the WSO2
  Application server and WSO2 Identity server. Finally it will start two servers and then you can observe sso
  functionality by check on the given urls.
