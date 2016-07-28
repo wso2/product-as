@@ -93,9 +93,9 @@ public class Quickstart {
 
         Path webappsDir = wso2asPath.resolve("webapps");
 
-        deployWebapp("http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/appserver/org.wso2"
-                + ".appserver.samples.bar-app/5.3.1-SNAPSHOT/org.wso2.appserver.samples.bar-app-5.3.1-20160323"
-                + ".054246-163.war", webappsDir);
+//        deployWebapp("http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/appserver/org.wso2"
+//                + ".appserver.samples.bar-app/5.3.1-SNAPSHOT/org.wso2.appserver.samples.bar-app-5.3.1-20160323"
+//                + ".054246-163.war", webappsDir);
 
         // store original files
         Path serverxmlOriginalSrc = wso2asPath.resolve("conf").resolve("server.xml");

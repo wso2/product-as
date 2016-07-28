@@ -9,6 +9,14 @@ starting this sample you have to set up sso configurations using Identity server
  log into this application using identity server credentials. In the book store web page it will contain a link to go
   to other webapp and log out button to log out from the web app.
 
+Requirements
+--------------
+
+1. JDK 1.7 or higher
+2. Apache ANT 1.7 or higher
+3. Apache Maven 3.0.4 or higher
+4. A JavaScript compatible web browser
+5. An active Internet connection
 
 Building the Samples
 ----------------------
@@ -25,12 +33,3 @@ Building the Samples
 
 3. This will deploy those webapps in <AS_HOME>/webapps directory. If you start AppServer, those web apps will be
 available in the server.
-
-Requirements
---------------
-
-1. JDK 1.7 or higher
-2. Apache ANT 1.7 or higher
-3. Apache Maven 3.0.4 or higher
-4. A JavaScript compatible web browser
-5. An active Internet connection

@@ -6,6 +6,13 @@ Introduction
 
 This sample will demonstrate the single sign on functionality using wso2 application server and wso2 identity server.
 
+Requirements
+-------------
+
+1. JDK 1.8 or higher
+2. A JavaScript compatible web browser
+3. An active Internet connection
+
 How to run the sample
 ----------------------
 
@@ -24,10 +31,3 @@ This will first extract the identity server zip file and then it will deploy two
  server(Book Store app and Music Store app). After that it will make relevant configuration file changes in the WSO2
  Application server and WSO2 Identity server. Finally it will start two servers and then you can observe sso
  functionality by check on the given urls.
-
-Requirements
--------------
-
-1. JDK 1.7 or higher
-2. A JavaScript compatible web browser
-3. An active Internet connection

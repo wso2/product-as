@@ -13,6 +13,15 @@ Here are two simple sample that demonstrates the single sign on functionality in
     * This is a simple music store web application.
 
 
+Requirements
+--------------
+
+1. JDK 1.8 or higher
+2. Apache ANT 1.7 or higher
+3. Apache Maven 3.0.4 or higher
+4. A JavaScript compatible web browser
+5. An active Internet connection
+
 Building the Samples
 ----------------------
 
@@ -28,12 +37,3 @@ Building the Samples
 3. Do this again for musicstore-app to deploy the music store web app.
 3. This will deploy those webapps in <AS_HOME>/webapps directory. If you start AppServer, those web apps will be
 available in the server.
-
-Requirements
---------------
-
-1. JDK 1.7 or higher
-2. Apache ANT 1.7 or higher
-3. Apache Maven 3.0.4 or higher
-4. A JavaScript compatible web browser
-5. An active Internet connection
