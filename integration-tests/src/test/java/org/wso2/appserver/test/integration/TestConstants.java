@@ -40,6 +40,7 @@ public final class TestConstants {
 
     //  HTTP method constants
     public static final String HTTP_GET_METHOD = "GET";
+    public static final String HTTP_POST_METHOD = "POST";
 
     //  Apache Tomcat Valves
     public static final String CONFIGURATION_LOADER_SAMPLE_VALVE = "org.wso2.appserver.sample.ConfigurationLoaderValve";

@@ -17,6 +17,7 @@
  */
 package org.wso2.appserver.test.integration;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
@@ -89,6 +90,10 @@ public class TestListener implements ITestListener {
 
             appserverHome = new File(System.getProperty(TestConstants.APPSERVER_HOME));
             log.info("Application server home : " + appserverHome.toString());
+
+            // copying jaggery sample web app to webapps directory
+            copyJaggeryWebApp(appserverHome);
+
             processHandler = new ApplicationServerProcessHandler(appserverHome);
 
             serverStartCheckTimeout = Integer.valueOf(System.getProperty(TestConstants.SERVER_TIMEOUT));
@@ -147,6 +152,11 @@ public class TestListener implements ITestListener {
             log.error(message, ex);
             throw new RuntimeException(message, ex);
         }
+    }
+
+    private void copyJaggeryWebApp(File appserverHome) throws IOException {
+        FileUtils.copyDirectory(Paths.get(appserverHome.toString(), "samples", "jaggerySamples", "coffeeshop").toFile(),
+                Paths.get(appserverHome.toString(), "webapps", "coffeeshop").toFile());
     }
 
     @Override
