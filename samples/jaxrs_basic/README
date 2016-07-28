@@ -73,12 +73,8 @@ To remove the target dir, run mvn clean".
 Building and running the demo using ant
 ---------------------------------------
 
-1. Run "ant" on AS_HOME/samples/Jaxws-Jaxrs/jaxrs_basic directory. This will deploy the jaxrs_basic
+1. Run "ant" on AS_HOME/samples/jaxrs_basic directory. This will deploy the jaxrs_basic
    service in WSO2 AS.
-2. Start the server and access the Management Console at https://localhost:9443/carbon. Go to
-   the service listing page. You will see the deployed jaxrs_basic service.
-3. Execute "sh run-client.sh" or "run-client.bat" to run the client.
-4. Try the sample with different QoS options. Run "sh run-client.sh -help" for different options.
 
 Please download the Documentation Distribution and refer to the jaxrs_basic sample document
 for detailed instructions on how to run the jaxrs_basic sample.

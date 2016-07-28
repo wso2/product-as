@@ -254,7 +254,7 @@ public class Quickstart {
             entry = zipIn.getNextEntry();
         }
         zipIn.close();
-        log.info("Extracting completed.\n");
+        log.info("Extraction completed.\n");
     }
 
     private void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
