@@ -1,3 +1,4 @@
+@echo off
 REM ---------------------------------------------------------------------------
 REM   Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 REM
@@ -15,5 +16,5 @@ REM   limitations under the License.
 
 rem ---------------------------------------------------------------------------
 
-java -cp "../../bin/*:*" $* org.wso2.appserver.samples.sso.Quickstart
+java -cp "../../bin/*;*" %* org.wso2.appserver.samples.sso.Quickstart
 

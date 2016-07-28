@@ -96,6 +96,9 @@ public class Quickstart {
 
         registerShutdownHook();
 
+        log.info("Following files will be changed during this sample\n1. <AS_HOME>/conf/server.xml\n2. "
+                + "<AS_HOME>/conf/wso2/wso2as_web.xml\n3. <IS_HOME>/repository/conf/identity/sso-idp-config.xml\n");
+
         Path webappsDir = wso2asPath.resolve("webapps");
 
         log.info("Deploying bookstore-app");
@@ -199,6 +202,17 @@ public class Quickstart {
                         Files.move(ssoidpconfigxmlOriginalSrc, ssoidpconfigxmlOriginalDest,
                                 StandardCopyOption.ATOMIC_MOVE);
                     }
+
+                    Path musicStoreApp = wso2asPath.resolve("webapps").resolve("musicstore-app.war");
+                    Path bookStoreApp = wso2asPath.resolve("webapps").resolve("bookstore-app.war");
+                    Path musicStoreAppDir = wso2asPath.resolve("webapps").resolve("musicstore-app");
+                    Path bookStoreAppDir = wso2asPath.resolve("webapps").resolve("bookstore-app");
+
+                    Files.deleteIfExists(musicStoreApp);
+                    Files.deleteIfExists(bookStoreApp);
+                    Files.deleteIfExists(musicStoreAppDir);
+                    Files.deleteIfExists(bookStoreAppDir);
+
                 } catch (IOException e) {
                     log.warn("Error while reverting changes." + e.getMessage(), e);
                 }
@@ -270,7 +284,7 @@ public class Quickstart {
         if (operatingSystem.toLowerCase(Locale.ENGLISH).contains("windows")) {
             wso2asProcess = wso2asProcessBuilder.command("cmd.exe", "/C", "catalina.bat", "run").start();
         } else {
-            wso2asProcess = wso2asProcessBuilder.command("catalina.sh", "run").start();
+            wso2asProcess = wso2asProcessBuilder.command("./catalina.sh", "run").start();
         }
 
         waitForServerStartup(8080);
