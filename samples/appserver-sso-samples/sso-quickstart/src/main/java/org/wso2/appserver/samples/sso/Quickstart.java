@@ -26,6 +26,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -87,6 +90,12 @@ public class Quickstart {
         makeFilesInDirExecutable(wso2isPath.resolve("bin"));
 
         registerShutdownHook();
+
+        Path webappsDir = wso2asPath.resolve("webapps");
+
+        deployWebapp("http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/appserver/org.wso2"
+                + ".appserver.samples.bar-app/5.3.1-SNAPSHOT/org.wso2.appserver.samples.bar-app-5.3.1-20160323"
+                + ".054246-163.war", webappsDir);
 
         // store original files
         Path serverxmlOriginalSrc = wso2asPath.resolve("conf").resolve("server.xml");
@@ -187,6 +196,13 @@ public class Quickstart {
                 }
             }
         });
+    }
+
+    private void deployWebapp(String sourceUrl, Path target) throws IOException {
+        URL url = new URL(sourceUrl);
+        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        FileOutputStream fos = new FileOutputStream(target.toString());
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
     }
 
     private void unzip(String zipFilePath, String destDirectory) throws IOException {
