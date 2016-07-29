@@ -96,6 +96,11 @@
             <classifier>runtime</classifier>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jaxrs_basic</artifactId>
+            <type>war</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -137,6 +142,19 @@
                         <configuration>
                             <includeGroupIds>org.wso2.appserver</includeGroupIds>
                             <includeArtifactIds>configuration-loader</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-jaxrsbasic-webapps</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.wso2.appserver</includeGroupIds>
+                            <includeArtifactIds>jaxrs_basic</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
                             </outputDirectory>
                         </configuration>

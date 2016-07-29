@@ -155,7 +155,8 @@ public class TestListener implements ITestListener {
     }
 
     private void copyJaggeryWebApp(File appserverHome) throws IOException {
-        FileUtils.copyDirectory(Paths.get(appserverHome.toString(), "samples", "jaggerySamples", "coffeeshop").toFile(),
+        FileUtils.copyDirectory(
+                Paths.get(appserverHome.toString(), "samples", "jaggery-sample-apps", "coffeeshop").toFile(),
                 Paths.get(appserverHome.toString(), "webapps", "coffeeshop").toFile());
     }
 

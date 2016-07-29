@@ -50,17 +50,29 @@
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
+                <exclude>*.iml</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaxrs_basic</directory>
+            <outputDirectory>${distribution.file.name}/samples/jaxrs_basic</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
+                <exclude>*.iml</exclude>
             </excludes>
         </fileSet>
         <fileSet>
             <directory>../samples/jaggerySamples</directory>
-            <outputDirectory>${distribution.file.name}/samples/jaggerySamples</outputDirectory>
+            <outputDirectory>${distribution.file.name}/samples/jaggery-sample-apps</outputDirectory>
         </fileSet>
     </fileSets>
     <files>
         <file>
             <source>../samples/appserver-sso-samples/sso-quickstart/README.md</source>
-            <outputDirectory>${distribution.file.name}/samples/sso-sample-apps</outputDirectory>
+            <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
         </file>
     </files>
 
@@ -132,15 +144,6 @@
             </includes>
         </dependencySet>
 
-        <!-- Include sample web apps here -->
-        <dependencySet>
-            <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
-            <includes>
-                <include>org.wso2.appserver:jaxrs_basic:war</include>
-            </includes>
-            <useProjectArtifact>false</useProjectArtifact>
-            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-        </dependencySet>
         <!-- Include application server runtime libs here -->
         <!-- CXF runtime -->
         <dependencySet>
