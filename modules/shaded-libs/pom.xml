@@ -47,6 +47,12 @@
         <module>org.wso2.carbon.databridge.commons.thrift</module>
         <module>log4j</module>
 
+        <!-- CXF runtime related modules -->
+        <module>spring-web</module>
+        <module>spring-beans</module>
+        <module>spring-context</module>
+        <module>spring-core</module>
+
         <!-- jaggery related modules -->
         <module>org.jaggeryjs.hostobjects.file</module>
         <module>org.jaggeryjs.hostobjects.jaggeryparser</module>
