@@ -22,7 +22,7 @@
     <groupId>org.wso2.appserver</groupId>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>jaxrs_basic</artifactId>
-    <version>6.0.0-m3</version>
+    <version>6.0.0-SNAPSHOT</version>
     <name>WSO2 Application Server - Sample - JAX-RS Basic Demo</name>
     <description>JAX-RS Basic Demo</description>
     <packaging>war</packaging>
@@ -78,8 +78,4 @@
             <version>2.0.1</version>
         </dependency>
     </dependencies>
-
-  <scm>
-    <tag>v6.0.0-m3</tag>
-  </scm>
 </project>

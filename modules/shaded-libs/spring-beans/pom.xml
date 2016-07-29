@@ -22,13 +22,13 @@
     <parent>
         <groupId>org.wso2.appserver</groupId>
         <artifactId>shaded-libs</artifactId>
-        <version>6.0.0-m3</version>
+        <version>6.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.org.springframework</groupId>
     <artifactId>spring-beans-shaded</artifactId>
-    <version>4.2.5.wso2v1-m3</version>
+    <version>4.2.5.wso2v1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>

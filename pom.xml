@@ -22,7 +22,7 @@
     <groupId>org.wso2.appserver</groupId>
     <artifactId>wso2appserver</artifactId>
     <packaging>pom</packaging>
-    <version>6.0.0-m3</version>
+    <version>6.0.0-SNAPSHOT</version>
     <name>WSO2 Application Server - Parent</name>
     <description>WSO2 Application Server Parent Pom</description>
     <url>http://wso2.com</url>
@@ -547,7 +547,7 @@
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>appserver-webapp-security</artifactId>
-                <version>6.0.0-m3</version>
+                <version>6.0.0-SNAPSHOT</version>
             </dependency>
 
             <!--Quick Start Module-->
@@ -990,7 +990,7 @@
         <url>https://github.com/wso2/product-as.git</url>
         <developerConnection>scm:git:https://github.com/wso2/product-as.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/product-as.git</connection>
-        <tag>v6.0.0-m3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
@@ -998,7 +998,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- WSO2 Application Server version -->
-        <appserver.version>6.0.0-m3</appserver.version>
+        <appserver.version>6.0.0-SNAPSHOT</appserver.version>
         <!-- WSO2 Application Server distribution identifier -->
         <distribution.file.name>wso2as-${project.version}</distribution.file.name>
 
@@ -1018,7 +1018,7 @@
         <commons.codec.version>1.10</commons.codec.version>
         <commons.collctions.version>3.2.2</commons.collctions.version>
         <commons.httpclient.version>3.1</commons.httpclient.version>
-        <commons-httpclient.shade.version>3.1.0.wso2v1-m3</commons-httpclient.shade.version>
+        <commons-httpclient.shade.version>3.1.0.wso2v1-SNAPSHOT</commons-httpclient.shade.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.lang3.version>3.4</commons.lang3.version>
@@ -1032,16 +1032,16 @@
         <junit.version>4.12</junit.version>
         <jsr.api.version>1.1.1</jsr.api.version>
         <libthrift.version>0.9.3</libthrift.version>
-        <libthrift.shade.version>0.9.3.wso2v1-m3</libthrift.shade.version>
+        <libthrift.shade.version>0.9.3.wso2v1-SNAPSHOT</libthrift.shade.version>
         <log4j.version>1.2.17</log4j.version>
-        <log4j.shade.version>1.2.17.wso2v1-m3</log4j.shade.version>
+        <log4j.shade.version>1.2.17.wso2v1-SNAPSHOT</log4j.shade.version>
         <net.shibboleth.utilities.version>7.2.0</net.shibboleth.utilities.version>
-        <net.shibboleth.utilities.shade.version>7.2.0.wso2v1-m3
+        <net.shibboleth.utilities.shade.version>7.2.0.wso2v1-SNAPSHOT
         </net.shibboleth.utilities.shade.version>
         <org.apache.httpcomponents.httpclient>4.5.2</org.apache.httpcomponents.httpclient>
         <org.apache.httpcomponents.httpcore>4.4.4</org.apache.httpcomponents.httpcore>
         <org.apache.santuario.xmlsec.version>2.0.6</org.apache.santuario.xmlsec.version>
-        <org.apache.santuario.xmlsec.shade.version>2.0.6.wso2v1-m3
+        <org.apache.santuario.xmlsec.shade.version>2.0.6.wso2v1-SNAPSHOT
         </org.apache.santuario.xmlsec.shade.version>
         <org.bouncycastle.bcprov-jdk15on.version>1.54</org.bouncycastle.bcprov-jdk15on.version>
         <org.codehaus.woodstox.stax2-api.version>4.0.0</org.codehaus.woodstox.stax2-api.version>
@@ -1049,28 +1049,28 @@
         <org.cryptacular.version>1.1.0</org.cryptacular.version>
         <org.jacoco.ant.version>0.7.5.201505241946</org.jacoco.ant.version>
         <org.opensaml.version>3.2.0</org.opensaml.version>
-        <org.opensaml.shade.version>3.2.0.wso2v1-m3</org.opensaml.shade.version>
+        <org.opensaml.shade.version>3.2.0.wso2v1-SNAPSHOT</org.opensaml.shade.version>
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
         <runtime.spring.version>4.2.5.RELEASE</runtime.spring.version>
-        <runtime.spring.shade.version>4.2.5.wso2v1-m3</runtime.spring.shade.version>
+        <runtime.spring.shade.version>4.2.5.wso2v1-SNAPSHOT</runtime.spring.shade.version>
         <servlet.api.version>2.5</servlet.api.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <slf4j.shade.version>1.7.21.wso2v1-m3</slf4j.shade.version>
+        <slf4j.shade.version>1.7.21.wso2v1-SNAPSHOT</slf4j.shade.version>
         <testng.version>6.9.10</testng.version>
         <uaparser.version>1.3.0.wso2v1</uaparser.version>
         <xerces.xerces.version>2.4.0</xerces.xerces.version>
         <xerces.xercesImpl.version>2.11.0</xerces.xercesImpl.version>
         <jaggery.version>0.13.0</jaggery.version>
-        <jaggery.shade.version>0.13.0.wso2v1-m3</jaggery.shade.version>
+        <jaggery.shade.version>0.13.0.wso2v1-SNAPSHOT</jaggery.shade.version>
         <commons-fileupload.version>1.2.0.wso2v1</commons-fileupload.version>
         <js.version>1.7.0.R4.wso2v1</js.version>
         <json-simple.version>1.1.wso2v1</json-simple.version>
         <org.eclipse.wst.jsdt.debug.transport.version>1.0.100.v201109150330
         </org.eclipse.wst.jsdt.debug.transport.version>
         <wso2-uri-templates.version>1.0.0</wso2-uri-templates.version>
-        <org.wso2.carbon.analytics-common.shade.version>5.0.8.wso2v1-m3</org.wso2.carbon.analytics-common.shade.version>
-        <commons-logging.shade.version>1.2.0.wso2v1-m3</commons-logging.shade.version>
+        <org.wso2.carbon.analytics-common.shade.version>5.0.8.wso2v1-SNAPSHOT</org.wso2.carbon.analytics-common.shade.version>
+        <commons-logging.shade.version>1.2.0.wso2v1-SNAPSHOT</commons-logging.shade.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>

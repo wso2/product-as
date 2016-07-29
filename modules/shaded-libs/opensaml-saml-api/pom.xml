@@ -15,13 +15,13 @@
     <parent>
         <artifactId>shaded-libs</artifactId>
         <groupId>org.wso2.appserver</groupId>
-        <version>6.0.0-m3</version>
+        <version>6.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
     <artifactId>opensaml-saml-api-shaded</artifactId>
-    <version>3.2.0.wso2v1-m3</version>
+    <version>3.2.0.wso2v1-SNAPSHOT</version>
     <url>http://wso2.com</url>
 
     <dependencies>
