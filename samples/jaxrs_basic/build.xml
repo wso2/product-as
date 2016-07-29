@@ -62,7 +62,7 @@
 
     <target name="build-all" depends ="war">
         <echo message="Copying the created war file in to the deployment directory"/>
-        <copy file="${webapps}/${warName}" todir="${repo.location}/webapps"/>
+        <copy file="${webapps}/${warName}" todir="${wso2appserver.home}/webapps"/>
     </target>
 
     <target name="clean">
