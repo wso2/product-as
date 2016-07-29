@@ -56,14 +56,14 @@
                                     <pattern>org.slf4j</pattern>
                                     <shadedPattern>org.shaded.slf4j</shadedPattern>
                                 </relocation>
-                                <artifactSet>
-                                    <excludes>
-                                        <exclude>com.google.code.gson:gson</exclude>
-                                        <exclude>org.wso2.carbon:org.wso2.carbon.logging</exclude>
-                                        <exclude>org.json.wso2:json</exclude>
-                                    </excludes>
-                                </artifactSet>
                             </relocations>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>com.google.code.gson:gson</exclude>
+                                    <exclude>org.wso2.carbon:org.wso2.carbon.logging</exclude>
+                                    <exclude>org.json.wso2:json</exclude>
+                                </excludes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
