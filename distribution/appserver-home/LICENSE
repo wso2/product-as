@@ -15,12 +15,12 @@ Name                                                                            
 ------------------------------------------------------------------------------------------
 annotations-api.jar								apache2
 aopalliance-1.0.jar								apache2
-appserver-http-statistics-monitoring-6.0.0.jar					apache2
-appserver-utils-6.0.0.jar							apache2
-appserver-webapp-loader-6.0.0.jar						apache2
-appserver-webapp-security-6.0.0.jar						apache2
+appserver-http-statistics-monitoring-6.0.0-m3.jar				apache2
+appserver-utils-6.0.0-m3.jar							apache2
+appserver-webapp-loader-6.0.0-m3.jar						apache2
+appserver-webapp-security-6.0.0-m3.jar						apache2
 asm-5.0.4.jar									apache2
-bcprov-jdk15on-1.54.jar								BOUNCYCASTLE
+bcprov-jdk15on-1.54.jar								bouncy
 bootstrap.jar									apache2
 catalina-ant.jar								apache2
 catalina-ha.jar									apache2
@@ -30,9 +30,10 @@ catalina.jar									apache2
 commons-codec-1.10.jar								apache2
 commons-daemon.jar								apache2
 commons-fileupload-1.2.0.wso2v1.jar						apache2
-commons-httpclient-3.1.0.wso2v2.jar						apache2
+commons-httpclient-shaded-3.1.0.wso2v1-m3.jar					apache2
 commons-io-2.4.jar								apache2
 commons-lang3-3.4.jar								apache2
+commons-logging-shaded-1.2.0.wso2v1-m3.jar					apache2
 commons-pool-1.5.7.jar								apache2
 cryptacular-1.1.0.jar								apache2
 cxf-core-3.1.5.jar								apache2
@@ -63,50 +64,50 @@ js-1.7.0.R4.wso2v1.jar								apache2
 json-simple-1.1.1.jar								apache2
 jsp-api.jar									apache2
 jsr305-3.0.1.jar								apache2
-libthrift-shaded-0.9.3.wso2v1.jar						apache2
+libthrift-shaded-0.9.3.wso2v1-m3.jar						apache2
+log4j-shaded-1.2.17.wso2v1-m3.jar						apache2
 neethi-3.0.3.jar								apache2
-opensaml-core-shaded-3.2.0.wso2v1.jar						apache2
-opensaml-messaging-api-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-profile-api-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-saml-api-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-saml-impl-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-security-api-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-security-impl-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-soap-api-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-soap-impl-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-storage-api-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-xmlsec-api-shaded-3.2.0.wso2v1.jar					apache2
-opensaml-xmlsec-impl-shaded-3.2.0.wso2v1.jar					apache2
+opensaml-core-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-messaging-api-shaded-3.2.0.wso2v1-m3.jar				apache2
+opensaml-profile-api-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-saml-api-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-saml-impl-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-security-api-shaded-3.2.0.wso2v1-m3.jar				apache2
+opensaml-security-impl-shaded-3.2.0.wso2v1-m3.jar				apache2
+opensaml-soap-api-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-soap-impl-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-storage-api-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-xmlsec-api-shaded-3.2.0.wso2v1-m3.jar					apache2
+opensaml-xmlsec-impl-shaded-3.2.0.wso2v1-m3.jar					apache2
 org.eclipse.wst.jsdt.debug.transport-1.0.100.v201109150330.jar			epl1
-org.jaggeryjs.hostobjects.file-0.13.0.jar					apache2
-org.jaggeryjs.hostobjects.jaggeryparser-0.13.0.jar				apache2
-org.jaggeryjs.hostobjects.log-0.13.0.jar					apache2
+org.jaggeryjs.hostobjects.file-shaded-0.13.0.wso2v1-m3.jar			apache2
+org.jaggeryjs.hostobjects.jaggeryparser-shaded-0.13.0.wso2v1-m3.jar		apache2
+org.jaggeryjs.hostobjects.log-shaded-0.13.0.wso2v1-m3.jar			apache2
 org.jaggeryjs.hostobjects.oauth-0.13.0.jar					apache2
-org.jaggeryjs.hostobjects.stream-0.13.0.jar					apache2
-org.jaggeryjs.hostobjects.uri-0.13.0.jar					apache2
-org.jaggeryjs.hostobjects.web-0.13.0.jar					apache2
-org.jaggeryjs.hostobjects.xhr-0.13.0.jar					apache2
-org.jaggeryjs.hostobjects.xslt-0.13.0.jar					apache2
-org.jaggeryjs.jaggery.core-0.13.0.jar						apache2
+org.jaggeryjs.hostobjects.stream-shaded-0.13.0.wso2v1-m3.jar			apache2
+org.jaggeryjs.hostobjects.uri-shaded-0.13.0.wso2v1-m3.jar			apache2
+org.jaggeryjs.hostobjects.web-shaded-0.13.0.wso2v1-m3.jar			apache2
+org.jaggeryjs.hostobjects.xhr-shaded-0.13.0.wso2v1-m3.jar			apache2
+org.jaggeryjs.hostobjects.xslt-shaded-0.13.0.wso2v1-m3.jar			apache2
+org.jaggeryjs.jaggery.core-shaded-0.13.0.wso2v1-m3.jar				apache2
 org.jaggeryjs.jaggery.tomcat.listener-0.13.0.jar				apache2
-org.jaggeryjs.scriptengine-0.13.0.jar						apache2
-org.wso2.carbon.databridge.agent-5.0.8.jar					apache2
-org.wso2.carbon.databridge.commons-5.0.8.jar					apache2
+org.jaggeryjs.scriptengine-shaded-0.13.0.wso2v1-m3.jar				apache2
+org.wso2.carbon.databridge.agent-shaded-5.0.8.wso2v1-m3.jar			apache2
+org.wso2.carbon.databridge.commons-shaded-5.0.8.wso2v1-m3.jar			apache2
 org.wso2.carbon.databridge.commons.binary-5.0.8.jar				apache2
 org.wso2.carbon.databridge.commons.thrift-5.0.8.jar				apache2
-org.wso2.carbon.logging-4.4.3.jar						apache2
-santuario-xmlsec-shaded-2.0.6.wso2v1.jar					apache2
+santuario-xmlsec-shaded-2.0.6.wso2v1-m3.jar					apache2
 servlet-api.jar									apache2
-shibboleth-java-support-shaded-7.2.0.wso2v1.jar					apache2
-slf4j-shaded-1.7.21.wso2v1.jar							mit
+shibboleth-java-support-shaded-7.2.0.wso2v1-m3.jar				apache2
+slf4j-shaded-1.7.21.wso2v1-m3.jar						mit
 spring-aop-4.2.5.RELEASE.jar							apache2
-spring-beans-4.2.5.RELEASE.jar							apache2
-spring-context-4.2.5.RELEASE.jar						apache2
-spring-core-4.2.5.RELEASE.jar							apache2
+spring-beans-shaded-4.2.5.wso2v1-m3.jar						apache2
+spring-context-shaded-4.2.5.wso2v1-m3.jar					apache2
+spring-core-shaded-4.2.5.wso2v1-m3.jar						apache2
 spring-expression-4.2.5.RELEASE.jar						apache2
-spring-web-4.2.5.RELEASE.jar							apache2
+spring-web-shaded-4.2.5.wso2v1-m3.jar						apache2
 spring-webmvc-4.2.5.RELEASE.jar							apache2
-sso-quickstart-6.0.0.jar							apache2
+sso-quickstart-6.0.0-m3.jar							apache2
 stax-api-1.0-2.jar								GPL
 stax2-api-4.0.0.jar								bsd
 taglibs-standard-impl-1.2.5.jar							apache2
@@ -120,7 +121,6 @@ tomcat-i18n-ja.jar								apache2
 tomcat-jdbc.jar									apache2
 tomcat-jni.jar									apache2
 tomcat-juli.jar									apache2
-tomcat-servlet-api-8.0.36.jar							apache2
 tomcat-util-scan.jar								apache2
 tomcat-util.jar									apache2
 tomcat-websocket.jar								apache2
@@ -134,6 +134,9 @@ xmlschema-core-2.2.1.jar							apache2
 
 The license types used by the above libraries and their information is given below:
 
+bouncy         Bouncy Castle License
+               http://www.bouncycastle.org/licence.html
+
 bsd            Berkeley License
                http://www.opensource.org/licenses/bsd-license.php
 apache2        Apache License Version 2.0
@@ -146,8 +149,7 @@ cpl1           Common Public License
                http://opensource.org/licenses/cpl1.0.php
 cddl+gpl       CDDL + GPLv2
                https://glassfish.dev.java.net/public/CDDL+GPL.html
-epl1           Eclipse Public License               http://www.eclipse.org/legal/epl-v10.html
-BOUNCYCASTLE   Bouncy Castle Licence
-	       http://www.bouncycastle.org/licence.html
+epl1           Eclipse Public License
+               http://www.eclipse.org/legal/epl-v10.html
 GPL            GNU General Public Library
-	       http://www.gnu.org/licenses/gpl.txt
+http://www.gnu.org/licenses/gpl.txt

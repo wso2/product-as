@@ -185,6 +185,14 @@
             <groupId>org.wso2.appserver.shade.net.shibboleth.utilities</groupId>
             <artifactId>shibboleth-java-support-shaded</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.commons-logging</groupId>
+            <artifactId>commons-logging-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.log4j</groupId>
+            <artifactId>log4j-shaded</artifactId>
+        </dependency>
 
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
@@ -205,12 +213,20 @@
             <artifactId>spring-aop</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+            <artifactId>spring-context-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+            <artifactId>spring-web-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+            <artifactId>spring-core-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+            <artifactId>spring-beans-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -232,12 +248,12 @@
 
         <!-- HTTP statistics publishing dependencies -->
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+            <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge.agent-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
+            <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge.commons-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.analytics-common</groupId>
@@ -246,10 +262,6 @@
         <dependency>
             <groupId>org.wso2.carbon.analytics-common</groupId>
             <artifactId>org.wso2.carbon.databridge.commons.binary</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.logging</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -330,56 +342,56 @@
             <artifactId>org.jaggeryjs.jaggery.tomcat.listener</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.file</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.file-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.jaggeryparser</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.jaggeryparser-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.log</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.log-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jaggeryjs</groupId>
             <artifactId>org.jaggeryjs.hostobjects.oauth</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.stream</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.stream-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.uri</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.uri-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.web</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.web-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.xhr</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.xhr-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.xslt</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.xslt-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.jaggery.core</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.jaggery.core-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.scriptengine</artifactId>
+            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.scriptengine-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-fileupload.wso2</groupId>
             <artifactId>commons-fileupload</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-httpclient.wso2</groupId>
-            <artifactId>commons-httpclient</artifactId>
+            <groupId>org.wso2.appserver.shade.commons-httpclient</groupId>
+            <artifactId>commons-httpclient-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>rhino.wso2</groupId>

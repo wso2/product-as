@@ -11,8 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
@@ -384,6 +383,10 @@
                         <groupId>org.eclipse.osgi</groupId>
                         <artifactId>org.eclipse.osgi</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.logging</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -511,6 +514,16 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
                 <version>${runtime.spring.version}</version>
             </dependency>
@@ -625,6 +638,101 @@
                 <artifactId>shibboleth-java-support-shaded</artifactId>
                 <version>${net.shibboleth.utilities.shade.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.commons-logging</groupId>
+                <artifactId>commons-logging-shaded</artifactId>
+                <version>${commons-logging.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.databridge.agent-shaded</artifactId>
+                <version>${org.wso2.carbon.analytics-common.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.databridge.commons-shaded</artifactId>
+                <version>${org.wso2.carbon.analytics-common.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.log4j</groupId>
+                <artifactId>log4j-shaded</artifactId>
+                <version>${log4j.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.file-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.jaggeryparser-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.log-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.stream-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.uri-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.web-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.xhr-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.hostobjects.xslt-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.jaggery.core-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs.scriptengine-shaded</artifactId>
+                <version>${jaggery.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.commons-httpclient</groupId>
+                <artifactId>commons-httpclient-shaded</artifactId>
+                <version>${commons-httpclient.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-beans-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-context-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-core-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-web-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
+            </dependency>
 
             <!-- WSO2 Application Server Tests -->
             <dependency>
@@ -632,17 +740,6 @@
                 <artifactId>testng</artifactId>
                 <version>${testng.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.logging</artifactId>
-                <version>${carbon.logging.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.analytics-common</groupId>
@@ -742,6 +839,10 @@
                 <version>${jaggery.version}</version>
                 <exclusions>
                     <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.logging</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>org.eclipse.osgi</groupId>
                         <artifactId>org.eclipse.osgi</artifactId>
                     </exclusion>
@@ -778,6 +879,12 @@
                 <groupId>org.jaggeryjs</groupId>
                 <artifactId>org.jaggeryjs.hostobjects.log</artifactId>
                 <version>${jaggery.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.jaggeryjs</groupId>
@@ -857,11 +964,6 @@
                 <version>${commons-fileupload.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-httpclient.wso2</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>${commons-httpclient.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>rhino.wso2</groupId>
                 <artifactId>js</artifactId>
                 <version>${js.version}</version>
@@ -875,6 +977,11 @@
                 <groupId>org.wso2.uri.template</groupId>
                 <artifactId>wso2-uri-templates</artifactId>
                 <version>${wso2-uri-templates.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -906,12 +1013,12 @@
         <!-- dependency version properties -->
         <tomcat.version>8.0.36</tomcat.version>
         <carbon.analyticscommon.version>5.0.8</carbon.analyticscommon.version>
-        <carbon.logging.version>4.4.3</carbon.logging.version>
         <com.google.code.findbugs.version>3.0.1</com.google.code.findbugs.version>
         <com.google.guava.version>19.0</com.google.guava.version>
         <commons.codec.version>1.10</commons.codec.version>
         <commons.collctions.version>3.2.2</commons.collctions.version>
         <commons.httpclient.version>3.1</commons.httpclient.version>
+        <commons-httpclient.shade.version>3.1.0.wso2v1-SNAPSHOT</commons-httpclient.shade.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.lang3.version>3.4</commons.lang3.version>
@@ -926,6 +1033,8 @@
         <jsr.api.version>1.1.1</jsr.api.version>
         <libthrift.version>0.9.3</libthrift.version>
         <libthrift.shade.version>0.9.3.wso2v1-SNAPSHOT</libthrift.shade.version>
+        <log4j.version>1.2.17</log4j.version>
+        <log4j.shade.version>1.2.17.wso2v1-SNAPSHOT</log4j.shade.version>
         <net.shibboleth.utilities.version>7.2.0</net.shibboleth.utilities.version>
         <net.shibboleth.utilities.shade.version>7.2.0.wso2v1-SNAPSHOT
         </net.shibboleth.utilities.shade.version>
@@ -944,6 +1053,7 @@
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
         <runtime.spring.version>4.2.5.RELEASE</runtime.spring.version>
+        <runtime.spring.shade.version>4.2.5.wso2v1-SNAPSHOT</runtime.spring.shade.version>
         <servlet.api.version>2.5</servlet.api.version>
         <slf4j.version>1.7.21</slf4j.version>
         <slf4j.shade.version>1.7.21.wso2v1-SNAPSHOT</slf4j.shade.version>
@@ -952,13 +1062,15 @@
         <xerces.xerces.version>2.4.0</xerces.xerces.version>
         <xerces.xercesImpl.version>2.11.0</xerces.xercesImpl.version>
         <jaggery.version>0.13.0</jaggery.version>
+        <jaggery.shade.version>0.13.0.wso2v1-SNAPSHOT</jaggery.shade.version>
         <commons-fileupload.version>1.2.0.wso2v1</commons-fileupload.version>
-        <commons-httpclient.version>3.1.0.wso2v2</commons-httpclient.version>
         <js.version>1.7.0.R4.wso2v1</js.version>
         <json-simple.version>1.1.wso2v1</json-simple.version>
         <org.eclipse.wst.jsdt.debug.transport.version>1.0.100.v201109150330
         </org.eclipse.wst.jsdt.debug.transport.version>
         <wso2-uri-templates.version>1.0.0</wso2-uri-templates.version>
+        <org.wso2.carbon.analytics-common.shade.version>5.0.8.wso2v1-SNAPSHOT</org.wso2.carbon.analytics-common.shade.version>
+        <commons-logging.shade.version>1.2.0.wso2v1-SNAPSHOT</commons-logging.shade.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>
