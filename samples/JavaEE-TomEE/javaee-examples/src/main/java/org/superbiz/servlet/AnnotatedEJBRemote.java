@@ -19,6 +19,9 @@ package org.superbiz.servlet;
 
 import javax.ejb.Remote;
 
+/**
+ * EJB interface
+ */
 @Remote
 public interface AnnotatedEJBRemote {
 

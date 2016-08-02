@@ -20,6 +20,9 @@ package org.superbiz.servlet;
 import javax.ejb.Local;
 import javax.sql.DataSource;
 
+/**
+ * EJB interface
+ */
 @Local
 public interface AnnotatedEJBLocal {
 

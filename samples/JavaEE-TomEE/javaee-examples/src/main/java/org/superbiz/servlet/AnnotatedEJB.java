@@ -22,6 +22,9 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
+/**
+ * EJB Bean
+ */
 @Stateless
 @LocalBean
 public class AnnotatedEJB implements AnnotatedEJBLocal, AnnotatedEJBRemote {

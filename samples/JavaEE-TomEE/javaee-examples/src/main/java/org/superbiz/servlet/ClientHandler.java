@@ -20,6 +20,9 @@ package org.superbiz.servlet;
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.handler.MessageContext;
 
+/**
+ * XML WS Handler implementation
+ */
 public class ClientHandler implements Handler {
 
     public boolean handleMessage(MessageContext messageContext) {
