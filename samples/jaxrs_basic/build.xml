@@ -15,8 +15,7 @@
   -->
 <project default="build-all">
 
-    <property name="wso2appserver.home" value="../../../"/>
-    <property name="repo.location" value="${wso2appserver.home}/repository/deployment/server"/>
+    <property name="wso2appserver.home" value="../../"/>
     <property name="warName" value="jaxrs_basic.war"/>
     <property name="build.dir" value="build"/>
     <property name="classes" value="${build.dir}/classes"/>
@@ -37,7 +36,7 @@
         <mkdir dir="${lib}"/>
 
         <copy toDir="${lib}">
-	    <fileset dir="${wso2appserver.home}/repository/components/plugins/">
+	    <fileset dir="${wso2appserver.home}/lib/">
                 <include name="commons-httpclient_3.1.0.wso2v2.jar"/>
                 <include name="commons-codec_1.4.0.wso2v1.jar"/>
             </fileset>
@@ -55,8 +54,6 @@
 
     <target name="war" depends="compile">
         <echo message="Creating webapp ${warName}."/>
-        <copy file="src/main/java/demo/jaxrs/client/add_customer.xml" todir="${classes}/demo/jaxrs/client"/>
-        <copy file="src/main/java/demo/jaxrs/client/update_customer.xml" todir="${classes}/demo/jaxrs/client"/>
         <war destfile="${webapps}/${warName}" webxml="./src/main/webapp/WEB-INF/web.xml">
             <classes dir="${classes}"/>
             <fileset dir="src/main/webapp/"/>
@@ -65,7 +62,7 @@
 
     <target name="build-all" depends ="war">
         <echo message="Copying the created war file in to the deployment directory"/>
-        <copy file="${webapps}/${warName}" todir="${repo.location}/webapps"/>
+        <copy file="${webapps}/${warName}" todir="${wso2appserver.home}/webapps"/>
     </target>
 
     <target name="clean">

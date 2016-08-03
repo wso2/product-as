@@ -42,7 +42,43 @@
             <directory>target/tomcat-dist/apache-tomcat-${tomcat.version}/webapps/examples</directory>
             <outputDirectory>${distribution.file.name}/webapps/examples</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>../samples/appserver-sso-samples/sso-quickstart/src/main/resources/sso-quickstart
+            </directory>
+            <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
+        </fileSet>
+        <!--  copying SSOSamples -->
+        <fileSet>
+            <directory>../samples/appserver-sso-samples/sso-sample-apps</directory>
+            <outputDirectory>${distribution.file.name}/samples/sso-sample-apps</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
+                <exclude>*.iml</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaxrs_basic</directory>
+            <outputDirectory>${distribution.file.name}/samples/jaxrs_basic</outputDirectory>
+            <excludes>
+                <exclude>**/**.sh</exclude>
+                <exclude>**/target/**</exclude>
+                <exclude>**/pom.xml.releaseBackup</exclude>
+                <exclude>*.iml</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../samples/jaggerySamples</directory>
+            <outputDirectory>${distribution.file.name}/samples/jaggery-sample-apps</outputDirectory>
+        </fileSet>
     </fileSets>
+    <files>
+        <file>
+            <source>../samples/appserver-sso-samples/sso-quickstart/README.md</source>
+            <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
+        </file>
+    </files>
 
     <dependencySets>
         <!-- Include application server modules here -->
@@ -76,20 +112,25 @@
                 <include>org.wso2.appserver.shade.org.apache.santuario:santuario-xmlsec-shaded:jar</include>
                 <include>org.wso2.appserver.shade.net.shibboleth.utilities:shibboleth-java-support-shaded:jar</include>
                 <include>org.wso2.appserver.shade.slf4j:slf4j-shaded:jar</include>
+                <include>org.wso2.appserver.shade.commons-logging:commons-logging-shaded:jar</include>
+                <include>
+                    org.wso2.appserver.shade.org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.agent-shaded:jar
+                </include>
+                <include>
+                    org.wso2.appserver.shade.org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons-shaded:jar
+                </include>
+                <include>org.wso2.appserver.shade.log4j:log4j-shaded:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
 
-        <!-- Incldue dependencies for application server modules here -->
+        <!-- Include dependencies for application server modules here -->
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
-                <include>org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.agent:jar</include>
-                <include>org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons:jar</include>
                 <include>org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons.thrift:jar</include>
                 <include>org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons.binary:jar</include>
-                <include>org.wso2.carbon:org.wso2.carbon.logging:jar</include>
                 <include>org.apache.commons:commons-lang3:jar</include>
                 <include>commons-pool:commons-pool:jar</include>
                 <include>commons-io:commons-io:jar</include>
@@ -106,6 +147,9 @@
                 <include>org.codehaus.woodstox:stax2-api:jar</include>
                 <include>org.codehaus.woodstox:woodstox-core-asl:jar</include>
                 <include>org.cryptacular:cryptacular:jar</include>
+
+                <!--for jaggery app deployment-->
+                <include>org.jaggeryjs:org.jaggeryjs.jaggery.tomcat.listener:jar</include>
 
                 <include>aopalliance:aopalliance:jar</include>
                 <include>org.ow2.asm:asm:jar</include>
@@ -138,17 +182,6 @@
             </includes>
         </dependencySet>
 
-        <!-- Include sample web apps here -->
-        <dependencySet>
-            <outputDirectory>/${distribution.file.name}/webapps</outputDirectory>
-            <includes>
-                <include>org.wso2.appserver:bar-app:war</include>
-                <include>org.wso2.appserver:foo-app:war</include>
-                <include>org.wso2.appserver:jaxrs_basic:war</include>
-            </includes>
-            <useProjectArtifact>false</useProjectArtifact>
-            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-        </dependencySet>
         <!-- Include application server runtime libs here -->
         <!-- CUSTOM runtime -->
         <dependencySet>
@@ -159,6 +192,45 @@
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <useTransitiveDependencies>false</useTransitiveDependencies>
+        </dependencySet>
+        <!-- jaggery runtime -->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib/runtimes/jaggery</outputDirectory>
+            <includes>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.file-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.jaggeryparser-shaded:jar
+                </include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.log-shaded:jar</include>
+                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.oauth:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.stream-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.uri-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.web-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.xhr-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.xslt-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.jaggery.core-shaded:jar</include>
+                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.scriptengine-shaded:jar</include>
+                <include>commons-fileupload.wso2:commons-fileupload:jar</include>
+                <include>org.wso2.appserver.shade.commons-httpclient:commons-httpclient-shaded:jar</include>
+                <include>rhino.wso2:js:jar</include>
+                <include>com.googlecode.json-simple:json-simple:jar</include>
+                <include>com.googlecode.json-simple:org.jaggeryjs.scriptengine:jar</include>
+                <include>org.jaggeryjs:json-simple:jar</include>
+                <include>org.eclipse.wst.jsdt:org.eclipse.wst.jsdt.debug.transport:jar</include>
+                <include>org.wso2.uri.template:wso2-uri-templates:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>false</useTransitiveFiltering>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+        </dependencySet>
+
+        <!--include quickstart sample-->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/samples/sso-quickstart/</outputDirectory>
+            <includes>
+                <include>org.wso2.appserver:sso-quickstart:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
     </dependencySets>
 </assembly>
