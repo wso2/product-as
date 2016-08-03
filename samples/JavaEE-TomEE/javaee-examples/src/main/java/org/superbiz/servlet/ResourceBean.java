@@ -17,6 +17,9 @@
  */
 package org.superbiz.servlet;
 
+/**
+ * Resource Bean
+ */
 public class ResourceBean {
 
     private String value;

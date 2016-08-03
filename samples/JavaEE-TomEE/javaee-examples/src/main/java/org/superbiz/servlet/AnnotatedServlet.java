@@ -29,6 +29,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+/**
+ * JNDI lookup example
+ */
 public class AnnotatedServlet extends HttpServlet {
 
     @EJB
@@ -43,7 +46,8 @@ public class AnnotatedServlet extends HttpServlet {
     @Resource
     private DataSource ds;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         response.setContentType("text/plain");
         ServletOutputStream out = response.getOutputStream();
 

@@ -29,12 +29,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * JPA example
+ */
 public class JpaServlet extends HttpServlet {
 
     @PersistenceUnit(name = "jpa-example")
     private EntityManagerFactory emf;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         response.setContentType("text/plain");
         ServletOutputStream out = response.getOutputStream();
 

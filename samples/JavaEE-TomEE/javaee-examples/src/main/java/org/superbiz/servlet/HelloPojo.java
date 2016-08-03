@@ -19,6 +19,9 @@ package org.superbiz.servlet;
 
 import javax.jws.WebService;
 
+/**
+ * Hello Pojo interface
+ */
 @WebService(targetNamespace = "http://examples.org/wsdl")
 public interface HelloPojo {
 

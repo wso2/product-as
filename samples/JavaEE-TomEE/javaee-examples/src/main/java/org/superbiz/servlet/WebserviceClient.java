@@ -21,6 +21,9 @@ import java.io.PrintStream;
 import java.net.URL;
 import javax.xml.ws.Service;
 
+/**
+ * Web service Client.
+ */
 public class WebserviceClient {
 
     /**

@@ -21,6 +21,9 @@ import javax.ejb.Stateless;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
 
+/**
+ * Hello EJB service implementation
+ */
 @WebService(
         portName = "HelloEjbPort",
         serviceName = "HelloEjbService",
@@ -32,7 +35,7 @@ import javax.jws.WebService;
 public class HelloEjbService implements HelloEjb {
 
     public String hello(String name) {
-        WebserviceServlet.write("                HelloEjbService hello(" + name + ")");
+        WebserviceServlet.write(" HelloEjbService hello(" + name + ")");
         if (name == null) {
             name = "World";
         }

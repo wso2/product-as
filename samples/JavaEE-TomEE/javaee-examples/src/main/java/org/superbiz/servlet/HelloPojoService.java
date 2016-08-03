@@ -20,6 +20,9 @@ package org.superbiz.servlet;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
 
+/**
+ * Hello Pojo web service
+ */
 @WebService(
         portName = "HelloPojoPort",
         serviceName = "HelloPojoService",

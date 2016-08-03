@@ -26,6 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.WebServiceRef;
 
+/**
+ * Server entry point of pojo and ejb service
+ */
 public class WebserviceServlet extends HttpServlet {
 
     private static ServletOutputStream OUT;
@@ -45,7 +48,8 @@ public class WebserviceServlet extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         response.setContentType("text/plain");
         ServletOutputStream out = response.getOutputStream();
 
