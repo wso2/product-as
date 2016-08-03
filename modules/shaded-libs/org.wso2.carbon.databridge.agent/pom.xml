@@ -68,6 +68,7 @@
                                     <exclude>commons-pool.wso2:commons-pool</exclude>
                                     <exclue>org.wso2.orbit.org.apache.httpcomponents:httpclient</exclue>
                                     <exclue>org.wso2.orbit.com.lmax:disruptor</exclue>
+                                    <exclude>org.slf4j:slf4j-api</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>

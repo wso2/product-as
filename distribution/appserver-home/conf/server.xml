@@ -84,9 +84,9 @@
         <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
                    maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
                    clientAuth="false" sslProtocol="TLS" keystoreFile="conf/wso2/wso2carbon.jks"
-                   keystorePass="wso2carbon"/>
+                   keystorePass="wso2carbon" keyAlias="wso2carbon"/>
 
-        <!-- Define an AJP 1.3 Connector on port 8009 -->
+        <!-- Define an AJP 1.3 Connector on port 8009 -->`
         <Connector port="8009" protocol="AJP/1.3" redirectPort="8443"/>
 
 
