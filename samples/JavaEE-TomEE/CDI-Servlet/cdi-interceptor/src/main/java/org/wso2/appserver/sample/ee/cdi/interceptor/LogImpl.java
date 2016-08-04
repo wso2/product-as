@@ -18,7 +18,6 @@
 
 package org.wso2.appserver.sample.ee.cdi.interceptor;
 
-import org.apache.commons.logging.LogFactory;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
@@ -29,7 +28,7 @@ import javax.interceptor.InvocationContext;
 @Interceptor
 @Log
 public class LogImpl {
-    private static final org.apache.commons.logging.Log log = LogFactory.getLog(LogImpl.class);
+    private static final org.apache.juli.logging.Log log = org.apache.juli.logging.LogFactory.getLog(LogImpl.class);
 
     @AroundInvoke
     public Object log(InvocationContext context) throws Exception {

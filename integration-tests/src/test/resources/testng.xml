@@ -18,25 +18,43 @@ limitations under the License.
         <listener class-name="org.wso2.appserver.test.integration.TestListener"/>
     </listeners>
 
-    <test name="wso2as-test">
-        <classes>
-            <class name="org.wso2.appserver.test.integration.appserverutils.ConfigurationLoaderTestCase"/>
-            <class name="org.wso2.appserver.test.integration.status.HTTPStatusTestCase"/>
-            <class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestCase"/>
-        </classes>
-    </test>
+    <!--<test name="wso2as-test">-->
+        <!--<classes>-->
+            <!--<class name="org.wso2.appserver.test.integration.appserverutils.ConfigurationLoaderTestCase"/>-->
+            <!--<class name="org.wso2.appserver.test.integration.status.HTTPStatusTestCase"/>-->
+            <!--<class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestCase"/>-->
+        <!--</classes>-->
+    <!--</test>-->
 
     <test name="wso2as-test-webapp-loader-cxf-runtime">
         <classes>
-            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderRuntimeTestCase"/>
+            <!--<class name="org.wso2.appserver.test.integration.loader.WebappLoaderRuntimeTestCase"/>-->
         </classes>
     </test>
 
-    <test name="wso2as-test-webapp-loader-failing-runtime-path">
-        <parameter name="server-status-hook"
-                   value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>
+    <test name="javaee">
         <classes>
-            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderWithInvalidRuntimeTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiAlternativesTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiDecoratorTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiInjectTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiInteceptortTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiProducesTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiQualifierTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiScopeTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaJaxRsTestCase"/>
+            <!--<class name="org.wso2.appserver.test.integration.javaee.jpa.JpaJaxWsTestCase"/>-->
+            <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaServletCdiTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jsf.JsfBValTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jsf.JsfEjbTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jta.JtaServletTestCase"/>
         </classes>
     </test>
+
+    <!--<test name="wso2as-test-webapp-loader-failing-runtime-path">-->
+        <!--<parameter name="server-status-hook"-->
+                   <!--value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>-->
+        <!--<classes>-->
+            <!--<class name="org.wso2.appserver.test.integration.loader.WebappLoaderWithInvalidRuntimeTestCase"/>-->
+        <!--</classes>-->
+    <!--</test>-->
 </suite>

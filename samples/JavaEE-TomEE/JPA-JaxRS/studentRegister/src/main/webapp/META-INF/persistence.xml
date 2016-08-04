@@ -20,7 +20,6 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
     <persistence-unit name="rest-jpa">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-        <jta-data-source>java:/comp/env/jdbc/restDB</jta-data-source>
         <class>org.wso2.appserver.sample.ee.jpa.Student</class>
         <properties>
             <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>

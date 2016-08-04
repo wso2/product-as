@@ -18,16 +18,16 @@
 
 package org.wso2.appserver.sample.ee.jta.servlet;
 
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import org.apache.commons.logging.LogFactory;
+import java.util.List;
 
 public class AccountManagerBean {
 
-    private static final org.apache.commons.logging.Log logger = LogFactory.getLog(AccountManagerBean.class);
+    private static final org.apache.juli.logging.Log logger = org.apache.juli.logging.LogFactory
+            .getLog(AccountManagerBean.class);
 
     private EntityManagerFactory createEntityManager;
 
@@ -75,7 +75,6 @@ public class AccountManagerBean {
         printData();
     }
 
-
     private void printData() {
         Query query = entityManager.createQuery("select acc from Account1 acc");
         List<Account> acc = query.getResultList();
@@ -97,7 +96,8 @@ public class AccountManagerBean {
     private void printLog(List<Log> log) {
         logger.info("Log ID | Credit acc | Debit acc | Amount | Timestamp");
         for (Log l : log) {
-            logger.info(l.getLogId() + " | " + l.getCredit() + " | " + l.getDebit() + " | " + l.getAmount() + " | " + l.getTimestamp());
+            logger.info(l.getLogId() + " | " + l.getCredit() + " | " + l.getDebit() + " | " + l.getAmount() + " | " + l
+                    .getTimestamp());
         }
         logger.info("");
     }
@@ -105,7 +105,9 @@ public class AccountManagerBean {
     private void printAccount(List<Account> account) {
         logger.info("Transaction ID | Amount | Transaction Type | Timestamp");
         for (Account acc : account) {
-            logger.info(acc.getTransactionId() + " | " + acc.getAmount() + " | " + acc.getTransactionType() + " | " + acc.getTimestamp());
+            logger.info(
+                    acc.getTransactionId() + " | " + acc.getAmount() + " | " + acc.getTransactionType() + " | " + acc
+                            .getTimestamp());
         }
         logger.info("");
     }

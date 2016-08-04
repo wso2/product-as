@@ -65,7 +65,6 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.179</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.openejb</groupId>

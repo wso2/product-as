@@ -46,8 +46,8 @@
             <artifactId>javaee-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-juli</artifactId>
         </dependency>
     </dependencies>
 
