@@ -200,6 +200,10 @@
             <groupId>org.wso2.appserver.shade.log4j</groupId>
             <artifactId>log4j-shaded</artifactId>
         </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
 
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
