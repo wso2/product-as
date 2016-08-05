@@ -104,31 +104,43 @@ public class TestListener implements ITestListener {
             applicationServerPort = TestConstants.TOMCAT_DEFAULT_PORT;
             int ajpPort = TestConstants.TOMCAT_DEFAULT_AJP_PORT;
             int serverShutdownPort = TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT;
-            int redirectPort = TestConstants.TOMCAT_DEFAULT_REDIRECT_PORT;
+            int httpsPort = TestConstants.TOMCAT_DEFAULT_HTTPS_PORT;
 
             if (!TestUtils.isPortAvailable(applicationServerPort) || !TestUtils.isPortAvailable(ajpPort) ||
-                    !TestUtils.isPortAvailable(serverShutdownPort) || !TestUtils.isPortAvailable(redirectPort)) {
+                    !TestUtils.isPortAvailable(serverShutdownPort)) {
                 int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
                 int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
 
-                List<Integer> availablePorts = TestUtils.getAvailablePortsFromRange(portCheckMin, portCheckMax, 4);
+                List<Integer> availablePorts = TestUtils.getAvailablePortsFromRange(portCheckMin, portCheckMax, 3);
 
-                if ((availablePorts != null) && availablePorts.size() > 3) {
+                if ((availablePorts != null) && availablePorts.size() > 2) {
                     applicationServerPort = availablePorts.get(0);
                     ajpPort = availablePorts.get(1);
                     serverShutdownPort = availablePorts.get(2);
-                    redirectPort = availablePorts.get(3);
                 }
             }
 
-            updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort, redirectPort);
+            if (!TestUtils.isPortAvailable(httpsPort)) {
+                int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.HTTPS_PORT_CHECK_MIN));
+                int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.HTTPS_PORT_CHECK_MAX));
+
+                List<Integer> availablePorts = TestUtils.getAvailablePortsFromRange(portCheckMin, portCheckMax, 1);
+
+                if ((availablePorts != null) && availablePorts.size() > 0) {
+                    httpsPort = availablePorts.get(0);
+                }
+            }
+
+            updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort, httpsPort);
 
             System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
 
-            addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
+            if (iTestContext.getName().equals("configuration-loader-test")) {
+                addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
+            }
 
             //setting thrift ports and valve before starting statistics publishing tests
-            if (iTestContext.getName().equals("wso2as-test")) {
+            if (iTestContext.getName().equals("statistics-publishing-test")) {
                 thriftPort = Constants.DEFAULT_THRIFT_PORT;
                 thriftSSLPort = Constants.DEFAULT_THRIFT_SSL_PORT;
 
@@ -158,7 +170,7 @@ public class TestListener implements ITestListener {
                     TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
                     TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort,
                     TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME, serverShutdownPort,
-                    TestConstants.TOMCAT_SERVER_REDIRECT_PORT_NAME, redirectPort);
+                    TestConstants.TOMCAT_SERVER_HTTPS_PORT_NAME, httpsPort);
 
             processHandler.startServer();
             registerShutdownHook();
@@ -210,7 +222,8 @@ public class TestListener implements ITestListener {
         log.info("Finished test: " + iTestContext.getName());
         isSuccessTermination = true;
 
-        if (iTestContext.getName().equals("wso2as-test")) {
+        //revert thrift port changes made during the test
+        if (iTestContext.getName().equals("statistics-publishing-test")) {
             try {
                 updateThriftPorts(Constants.ORIGINAL_THRIFT_SSL_PORT, Constants.ORIGINAL_THRIFT_PORT);
             } catch (Exception ex) {
@@ -282,8 +295,9 @@ public class TestListener implements ITestListener {
      * @param httpConnectorPort  http connector port
      * @param ajpPort            ajp port
      * @param serverShutdownPort server shutdown port
+     * @param httpsPort https connector port
      */
-    private static void updateServerPorts(int httpConnectorPort, int ajpPort, int serverShutdownPort, int redirectPort)
+    private static void updateServerPorts(int httpConnectorPort, int ajpPort, int serverShutdownPort, int httpsPort)
             throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
 
@@ -294,7 +308,7 @@ public class TestListener implements ITestListener {
         Map<String, String> connectorProtocolPortMap = new HashMap<>();
         connectorProtocolPortMap.put("HTTP/1.1", String.valueOf(httpConnectorPort));
         connectorProtocolPortMap.put("AJP/1.3", String.valueOf(ajpPort));
-        connectorProtocolPortMap.put("org.apache.coyote.http11.Http11NioProtocol", String.valueOf(redirectPort));
+        connectorProtocolPortMap.put("org.apache.coyote.http11.Http11NioProtocol", String.valueOf(httpsPort));
 
         NodeList connectors = document.getElementsByTagName("Connector");
         for (int i = 0; i < connectors.getLength(); i++) {
@@ -304,7 +318,7 @@ public class TestListener implements ITestListener {
             if (connectorProtocolPortMap.containsKey(protocol)) {
                 connectorAttributes.getNamedItem("port").setTextContent(connectorProtocolPortMap.get(protocol));
                 if (connectorAttributes.getNamedItem("redirectPort") != null) {
-                    connectorAttributes.getNamedItem("redirectPort").setTextContent(String.valueOf(redirectPort));
+                    connectorAttributes.getNamedItem("redirectPort").setTextContent(String.valueOf(httpsPort));
                 }
             }
         }

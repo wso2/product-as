@@ -204,8 +204,10 @@
                         <build.directory>${project.build.directory}</build.directory>
                         <simplelogger.properties>simplelogger.properties</simplelogger.properties>
                         <listener.server.timeout>20</listener.server.timeout>
-                        <port.check.min>9547</port.check.min>
-                        <port.check.max>9643</port.check.max>
+                        <port.check.min>9863</port.check.min>
+                        <port.check.max>9962</port.check.max>
+                        <https.port.check.min>9543</https.port.check.min>
+                        <https.port.check.max>9642</https.port.check.max>
                         <jacoco-agent.dir>${project.build.directory}/jacoco/</jacoco-agent.dir>
                         <jacoco-agent.runtime>org.jacoco.agent-runtime.jar</jacoco-agent.runtime>
                         <jacoco-agent.data.file>jacoco-it.exec</jacoco-agent.data.file>

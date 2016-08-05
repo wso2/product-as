@@ -24,10 +24,15 @@ limitations under the License.
         </classes>
     </test>
 
+    <test name="statistics-publishing-test">
+        <classes>
+            <class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestCase"/>
+        </classes>
+    </test>
+
     <test name="wso2as-test">
         <classes>
             <class name="org.wso2.appserver.test.integration.status.HTTPStatusTestCase"/>
-            <class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestCase"/>
         </classes>
     </test>
 
