@@ -11,8 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
@@ -515,6 +514,16 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${runtime.spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
                 <version>${runtime.spring.version}</version>
             </dependency>
@@ -703,6 +712,26 @@
                 <groupId>org.wso2.appserver.shade.commons-httpclient</groupId>
                 <artifactId>commons-httpclient-shaded</artifactId>
                 <version>${commons-httpclient.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-beans-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-context-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-core-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+                <artifactId>spring-web-shaded</artifactId>
+                <version>${runtime.spring.shade.version}</version>
             </dependency>
 
             <!-- WSO2 Application Server Tests -->
@@ -1024,6 +1053,7 @@
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
         <runtime.spring.version>4.2.5.RELEASE</runtime.spring.version>
+        <runtime.spring.shade.version>4.2.5.wso2v1-SNAPSHOT</runtime.spring.shade.version>
         <servlet.api.version>2.5</servlet.api.version>
         <slf4j.version>1.7.21</slf4j.version>
         <slf4j.shade.version>1.7.21.wso2v1-SNAPSHOT</slf4j.shade.version>

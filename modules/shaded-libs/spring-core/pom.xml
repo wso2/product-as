@@ -26,17 +26,16 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-    <artifactId>org.jaggeryjs.hostobjects.web-shaded</artifactId>
-    <version>0.13.0.wso2v1-SNAPSHOT</version>
+    <groupId>org.wso2.appserver.shade.org.springframework</groupId>
+    <artifactId>spring-core-shaded</artifactId>
+    <version>4.2.5.wso2v1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.web</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
         </dependency>
     </dependencies>
-
 
     <build>
         <plugins>
@@ -58,31 +57,7 @@
                             </relocations>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.scriptengine</exclude>
-                                    <exclude>commons*</exclude>
-                                    <exclude>org.apache.commons.ssl</exclude>
-                                    <exclude>com.google.code.gson</exclude>
-                                    <exclude>org.eclipse.wst.jsdt</exclude>
-                                    <exclude>org.mozilla</exclude>
-                                    <exclude>rhino.wso2</exclude>
-                                    <exclude>org.eclipse.equinox</exclude>
-                                    <exclude>org.apache.geronimo.specs</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.stream</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.file</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.log</exclude>
-                                    <exclude>org.wso2.carbon:javax.servlet</exclude>
-                                    <exclude>org.apache.tomcat*</exclude>
-                                    <exclude>com.google.code*</exclude>
-                                    <exclude>dom4j</exclude>
-                                    <exclude>xml-apis</exclude>
-                                    <exclude>org.wo2.asm</exclude>
-                                    <exclude>javax.activation</exclude>
-                                    <exclude>net.jcip</exclude>
-                                    <exclude>org.ow2.asm</exclude>
-                                    <exclude>com.apple</exclude>
-                                    <exclude>jaxen</exclude>
-                                    <exclude>org.wso2.uri.template</exclude>
-                                    <exclude>org.eclipse.jdt.core.compiler</exclude>
+                                    <exclude>commons-logging</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
@@ -91,5 +66,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>
