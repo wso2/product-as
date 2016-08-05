@@ -97,6 +97,11 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
+            <artifactId>jaxrs_basic</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-alternatives</artifactId>
             <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
@@ -227,6 +232,19 @@
                         <configuration>
                             <includeGroupIds>org.wso2.appserver</includeGroupIds>
                             <includeArtifactIds>configuration-loader</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-jaxrsbasic-webapps</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.wso2.appserver</includeGroupIds>
+                            <includeArtifactIds>jaxrs_basic</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
                             </outputDirectory>
                         </configuration>

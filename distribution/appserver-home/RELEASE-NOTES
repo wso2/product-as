@@ -17,16 +17,16 @@
 ================================================================================
 
 
-                     WSO2 Application Server 6.0.0-M2
+                     WSO2 Application Server 6.0.0-M3
                             Release Notes
 
 Welcome to WSO2 Application Server, the successor of WSO2 Carbon based
 Application Server. WSO2 Application Server 6.0.0 is a complete revamp and is
 based on vanilla Apache Tomcat. WSO2 provides a number of features by means of
 extensions to Tomcat to add/enhance the functionality. It provides first class
-support for generic web applications and JAX-RS/JAX-WS web applications. The
-performance of the server and individual application can be monitored by
-integrating WSO2 Application Server with WSO2 Data Analytics Server.
+support for generic web applications, JAX-RS/JAX-WS web applications and Jaggery
+applications. The performance of the server and individual application can be
+monitored by integrating WSO2 Application Server with WSO2 Data Analytics Server.
 
 WSO2 Application Server is an open source project and it is available under the
 Apache Software License (v2.0)
@@ -35,20 +35,22 @@ Apache Software License (v2.0)
 =============
 KEY FEATURES:
 =============
-* HTTP Statistics Monitoring
+* HTTP statistics monitoring for web applications
+* SAML based Single Sign On (SSO) for web applications
+* Jaggerry applications deployment
 * Webapp classloading runtimes
 
 
 =============
 FIXED ISSUES:
 =============
-https://wso2.org/jira/browse/WSAS-2194?filter=13061
+https://wso2.org/jira/browse/WSAS-2194?filter=13173
 
 
 =============
 KNOWN ISSUES:
 =============
-https://wso2.org/jira/browse/WSAS-2237?filter=13062
+https://wso2.org/jira/browse/WSAS-2248?filter=13174
 
 
 =================

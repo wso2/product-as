@@ -31,7 +31,4 @@ public class TestBase {
         return "http://localhost:" + System.getProperty(TestConstants.APPSERVER_PORT);
     }
 
-    protected void copyFile() {
-
-    }
 }

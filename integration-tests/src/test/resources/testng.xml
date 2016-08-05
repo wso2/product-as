@@ -18,17 +18,23 @@ limitations under the License.
         <listener class-name="org.wso2.appserver.test.integration.TestListener"/>
     </listeners>
 
-    <!--<test name="wso2as-test">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.appserver.test.integration.appserverutils.ConfigurationLoaderTestCase"/>-->
-            <!--<class name="org.wso2.appserver.test.integration.status.HTTPStatusTestCase"/>-->
-            <!--<class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestCase"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="wso2as-test">
+        <classes>
+            <class name="org.wso2.appserver.test.integration.appserverutils.ConfigurationLoaderTestCase"/>
+            <class name="org.wso2.appserver.test.integration.status.HTTPStatusTestCase"/>
+            <class name="org.wso2.appserver.test.integration.statisticspublishing.StatisticsPublisherTestCase"/>
+        </classes>
+    </test>
 
     <test name="wso2as-test-webapp-loader-cxf-runtime">
         <classes>
-            <!--<class name="org.wso2.appserver.test.integration.loader.WebappLoaderRuntimeTestCase"/>-->
+            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderRuntimeTestCase"/>
+        </classes>
+    </test>
+
+    <test name="wso2as-test-jaggery-webapp-deployer">
+        <classes>
+            <class name="org.wso2.appserver.test.integration.jaggery.JaggeryWebappDeployerTestCase"/>
         </classes>
     </test>
 
@@ -50,11 +56,11 @@ limitations under the License.
         </classes>
     </test>
 
-    <!--<test name="wso2as-test-webapp-loader-failing-runtime-path">-->
-        <!--<parameter name="server-status-hook"-->
-                   <!--value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.appserver.test.integration.loader.WebappLoaderWithInvalidRuntimeTestCase"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="wso2as-test-webapp-loader-failing-runtime-path">
+        <parameter name="server-status-hook"
+                   value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>
+        <classes>
+            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderWithInvalidRuntimeTestCase"/>
+        </classes>
+    </test>
 </suite>

@@ -36,4 +36,7 @@
 
     <Loader className="org.wso2.appserver.webapp.loader.AppServerWebappLoader"
             loaderClass="org.wso2.appserver.webapp.loader.AppServerWebappClassLoader"/>
+
+    <!--for jaggery app deployment-->
+    <Listener className="org.jaggeryjs.jaggery.tomcat.listener.JaggeryAppListener" />
 </Context>

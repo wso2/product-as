@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.wso2.appserver</groupId>
+        <artifactId>shaded-libs</artifactId>
+        <version>6.0.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+    <artifactId>org.jaggeryjs.hostobjects.web-shaded</artifactId>
+    <version>0.13.0.wso2v1-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.web</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.apache.commons.logging</pattern>
+                                    <shadedPattern>shaded.org.apache.commons.logging</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.jaggeryjs:org.jaggeryjs.scriptengine</exclude>
+                                    <exclude>commons*</exclude>
+                                    <exclude>org.apache.commons.ssl</exclude>
+                                    <exclude>com.google.code.gson</exclude>
+                                    <exclude>org.eclipse.wst.jsdt</exclude>
+                                    <exclude>org.mozilla</exclude>
+                                    <exclude>rhino.wso2</exclude>
+                                    <exclude>org.eclipse.equinox</exclude>
+                                    <exclude>org.apache.geronimo.specs</exclude>
+                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.stream</exclude>
+                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.file</exclude>
+                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.log</exclude>
+                                    <exclude>org.wso2.carbon:javax.servlet</exclude>
+                                    <exclude>org.apache.tomcat*</exclude>
+                                    <exclude>com.google.code*</exclude>
+                                    <exclude>dom4j</exclude>
+                                    <exclude>xml-apis</exclude>
+                                    <exclude>org.wo2.asm</exclude>
+                                    <exclude>javax.activation</exclude>
+                                    <exclude>net.jcip</exclude>
+                                    <exclude>org.ow2.asm</exclude>
+                                    <exclude>com.apple</exclude>
+                                    <exclude>jaxen</exclude>
+                                    <exclude>org.wso2.uri.template</exclude>
+                                    <exclude>org.eclipse.jdt.core.compiler</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
