@@ -29,6 +29,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.wso2.appserver.test.integration.statisticspublishing.Constants;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -64,6 +65,8 @@ public class TestListener implements ITestListener {
     private int serverStartCheckTimeout;
     private File appserverHome;
     private int applicationServerPort;
+    private int thriftPort;
+    private int thriftSSLPort;
     private boolean isSuccessServerStartup;
     private ApplicationServerProcessHandler processHandler;
     private ServerStatusHook serverStatusHook;
@@ -115,8 +118,6 @@ public class TestListener implements ITestListener {
                     ajpPort = availablePorts.get(1);
                     serverShutdownPort = availablePorts.get(2);
                     redirectPort = availablePorts.get(3);
-
-                    updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort, redirectPort);
                 }
             }
 
@@ -125,7 +126,26 @@ public class TestListener implements ITestListener {
             System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
 
             addValveToServerXML(TestConstants.CONFIGURATION_LOADER_SAMPLE_VALVE);
-            addValveToServerXML(TestConstants.HTTP_STATISTICS_PUBLISHING_VALVE);
+
+            //setting thrift ports and valve before starting statistics publishing tests
+            if (iTestContext.getName().equals("wso2as-test")) {
+                thriftPort = Constants.DEFAULT_THRIFT_PORT;
+                thriftSSLPort = Constants.DEFAULT_THRIFT_SSL_PORT;
+
+                if (!TestUtils.isPortAvailable(thriftPort) || !TestUtils.isPortAvailable(thriftSSLPort)) {
+                    List<Integer> availablePort = TestUtils.getAvailablePortsFromRange(
+                            Constants.PORT_SCAN_MIN, Constants.PORT_SCAN_MAX, 2);
+                    if ((availablePort != null) && availablePort.size() > 1) {
+                        thriftPort = availablePort.get(0);
+                        thriftSSLPort = availablePort.get(1);
+                    }
+                }
+                updateThriftPorts(thriftSSLPort, thriftPort);
+                System.setProperty(Constants.THRIFT_PORT, String.valueOf(thriftPort));
+                System.setProperty(Constants.THRIFT_SSL_PORT, String.valueOf(thriftSSLPort));
+
+                addValveToServerXML(TestConstants.HTTP_STATISTICS_PUBLISHING_VALVE);
+            }
 
             log.info(processHandler.getOperatingSystem() + " operating system was detected");
             log.info("Jacoco argLine: " + processHandler.getJacocoArgLine());
@@ -189,6 +209,16 @@ public class TestListener implements ITestListener {
         log.info("Finished the post-integration tasks...");
         log.info("Finished test: " + iTestContext.getName());
         isSuccessTermination = true;
+
+        if (iTestContext.getName().equals("wso2as-test")) {
+            try {
+                updateThriftPorts(Constants.ORIGINAL_THRIFT_SSL_PORT, Constants.ORIGINAL_THRIFT_PORT);
+            } catch (Exception ex) {
+                String message = "Error while reverting thrift ports.";
+                log.error(message, ex);
+                throw new RuntimeException(message, ex);
+            }
+        }
     }
 
 
@@ -282,6 +312,35 @@ public class TestListener implements ITestListener {
         //  change server shutdown port
         Node server = document.getElementsByTagName("Server").item(0);
         server.getAttributes().getNamedItem("port").setTextContent(String.valueOf(serverShutdownPort));
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.transform(new DOMSource(document), new StreamResult(serverXML.toFile().getPath()));
+
+    }
+
+    /**
+     * Updates thrift ports in wso2as.xml.
+     *
+     * @param thriftPort
+     * @param thriftSSLPort
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     * @throws TransformerException
+     */
+    private static void updateThriftPorts(int thriftSSLPort, int thriftPort)
+            throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "wso2", "wso2as.xml");
+
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().
+                parse(new InputSource(serverXML.toString()));
+
+        Node authenticationURL = document.getElementsByTagName("AuthenticationURL").item(0);
+        authenticationURL.setTextContent("ssl://" + Constants.HOST + ":" + thriftSSLPort);
+
+        Node publisherURL = document.getElementsByTagName("PublisherURL").item(0);
+        publisherURL.setTextContent("tcp://" + Constants.HOST + ":" + thriftPort);
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();

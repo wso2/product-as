@@ -204,7 +204,7 @@
                         <build.directory>${project.build.directory}</build.directory>
                         <simplelogger.properties>simplelogger.properties</simplelogger.properties>
                         <listener.server.timeout>20</listener.server.timeout>
-                        <port.check.min>9543</port.check.min>
+                        <port.check.min>9547</port.check.min>
                         <port.check.max>9643</port.check.max>
                         <jacoco-agent.dir>${project.build.directory}/jacoco/</jacoco-agent.dir>
                         <jacoco-agent.runtime>org.jacoco.agent-runtime.jar</jacoco-agent.runtime>
