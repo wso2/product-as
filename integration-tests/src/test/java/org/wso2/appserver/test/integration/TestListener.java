@@ -101,22 +101,26 @@ public class TestListener implements ITestListener {
             applicationServerPort = TestConstants.TOMCAT_DEFAULT_PORT;
             int ajpPort = TestConstants.TOMCAT_DEFAULT_AJP_PORT;
             int serverShutdownPort = TestConstants.TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT;
+            int redirectPort = TestConstants.TOMCAT_DEFAULT_REDIRECT_PORT;
 
             if (!TestUtils.isPortAvailable(applicationServerPort) || !TestUtils.isPortAvailable(ajpPort) ||
-                    !TestUtils.isPortAvailable(serverShutdownPort)) {
+                    !TestUtils.isPortAvailable(serverShutdownPort) || !TestUtils.isPortAvailable(redirectPort)) {
                 int portCheckMin = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MIN));
                 int portCheckMax = Integer.valueOf(System.getProperty(TestConstants.PORT_CHECK_MAX));
 
-                List<Integer> availablePorts = TestUtils.getAvailablePortsFromRange(portCheckMin, portCheckMax, 3);
+                List<Integer> availablePorts = TestUtils.getAvailablePortsFromRange(portCheckMin, portCheckMax, 4);
 
-                if ((availablePorts != null) && availablePorts.size() > 2) {
+                if ((availablePorts != null) && availablePorts.size() > 3) {
                     applicationServerPort = availablePorts.get(0);
                     ajpPort = availablePorts.get(1);
                     serverShutdownPort = availablePorts.get(2);
+                    redirectPort = availablePorts.get(3);
 
-                    updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort);
+                    updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort, redirectPort);
                 }
             }
+
+            updateServerPorts(applicationServerPort, ajpPort, serverShutdownPort, redirectPort);
 
             System.setProperty(TestConstants.APPSERVER_PORT, String.valueOf(applicationServerPort));
 
@@ -130,10 +134,11 @@ public class TestListener implements ITestListener {
                 serverStatusHook.beforeServerStart();
             }
 
-            log.info("Starting the server [{}:{}, {}:{}, {}:{}] ...",
+            log.info("Starting the server [{}:{}, {}:{}, {}:{}, {}:{}] ...",
                     TestConstants.TOMCAT_DEFAULT_PORT_NAME, applicationServerPort,
                     TestConstants.TOMCAT_AJP_PORT_NAME, ajpPort,
-                    TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME, serverShutdownPort);
+                    TestConstants.TOMCAT_SERVER_SHUTDOWN_PORT_NAME, serverShutdownPort,
+                    TestConstants.TOMCAT_SERVER_REDIRECT_PORT_NAME, redirectPort);
 
             processHandler.startServer();
             registerShutdownHook();
@@ -248,7 +253,7 @@ public class TestListener implements ITestListener {
      * @param ajpPort            ajp port
      * @param serverShutdownPort server shutdown port
      */
-    private static void updateServerPorts(int httpConnectorPort, int ajpPort, int serverShutdownPort)
+    private static void updateServerPorts(int httpConnectorPort, int ajpPort, int serverShutdownPort, int redirectPort)
             throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Path serverXML = Paths.get(System.getProperty(TestConstants.APPSERVER_HOME), "conf", "server.xml");
 
@@ -259,6 +264,7 @@ public class TestListener implements ITestListener {
         Map<String, String> connectorProtocolPortMap = new HashMap<>();
         connectorProtocolPortMap.put("HTTP/1.1", String.valueOf(httpConnectorPort));
         connectorProtocolPortMap.put("AJP/1.3", String.valueOf(ajpPort));
+        connectorProtocolPortMap.put("org.apache.coyote.http11.Http11NioProtocol", String.valueOf(redirectPort));
 
         NodeList connectors = document.getElementsByTagName("Connector");
         for (int i = 0; i < connectors.getLength(); i++) {
@@ -267,6 +273,9 @@ public class TestListener implements ITestListener {
             String protocol = connectorAttributes.getNamedItem("protocol").getTextContent();
             if (connectorProtocolPortMap.containsKey(protocol)) {
                 connectorAttributes.getNamedItem("port").setTextContent(connectorProtocolPortMap.get(protocol));
+                if (connectorAttributes.getNamedItem("redirectPort") != null) {
+                    connectorAttributes.getNamedItem("redirectPort").setTextContent(String.valueOf(redirectPort));
+                }
             }
         }
 

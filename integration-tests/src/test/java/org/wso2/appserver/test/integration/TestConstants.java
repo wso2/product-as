@@ -32,11 +32,13 @@ public final class TestConstants {
     public static final String TOMCAT_DEFAULT_PORT_NAME = "Tomcat port";
     public static final String TOMCAT_AJP_PORT_NAME = "AJP port";
     public static final String TOMCAT_SERVER_SHUTDOWN_PORT_NAME = "Server shutdown port";
+    public static final String TOMCAT_SERVER_REDIRECT_PORT_NAME = "Server redirect port";
 
     //  default port number constants
-    public static final int TOMCAT_DEFAULT_PORT = 8080;
-    public static final int TOMCAT_DEFAULT_AJP_PORT = 8009;
-    public static final int TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT = 8005;
+    public static final int TOMCAT_DEFAULT_PORT = 9543;
+    public static final int TOMCAT_DEFAULT_AJP_PORT = 9544;
+    public static final int TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT = 9545;
+    public static final int TOMCAT_DEFAULT_REDIRECT_PORT = 9546;
 
     //  HTTP method constants
     public static final String HTTP_GET_METHOD = "GET";
