@@ -23,7 +23,7 @@
             auth="Container"
             type="javax.sql.DataSource"
             driverClassName="org.h2.Driver"
-            url="jdbc:h2:tmp/CONTACTS_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000;AUTO_SERVER=TRUE"
+            url="jdbc:h2:./tmp/CONTACTS_DB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=60000;AUTO_SERVER=TRUE"
             username="sa"
             password="sa"
             JtaManaged="true"/>
