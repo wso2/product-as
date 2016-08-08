@@ -17,7 +17,6 @@
 <project name="cdi-inject" default="build-all">
 
     <property name="wso2carbon.home" value="../../../../"/>
-    <property name="repo.location" value="${wso2carbon.home}/repository/deployment/server"/>
     <property name="warName" value="cdi-inject.war"/>
     <property name="build.dir" value="build"/>
 
@@ -55,7 +54,7 @@
     </target>
 
     <target name="copy-webapp">
-        <copy file="${build.dir}/${warName}" toDir="${repo.location}/webapps"/>
+        <copy file="${build.dir}/${warName}" toDir="${wso2carbon.home}/webapps"/>
     </target>
 
 </project>
