@@ -29,14 +29,18 @@ public final class TestConstants {
     public static final String APPSERVER_PORT = "appserver.port";
     public static final String PORT_CHECK_MIN = "port.check.min";
     public static final String PORT_CHECK_MAX = "port.check.max";
+    public static final String HTTPS_PORT_CHECK_MIN = "https.port.check.min";
+    public static final String HTTPS_PORT_CHECK_MAX = "https.port.check.max";
     public static final String TOMCAT_DEFAULT_PORT_NAME = "Tomcat port";
     public static final String TOMCAT_AJP_PORT_NAME = "AJP port";
     public static final String TOMCAT_SERVER_SHUTDOWN_PORT_NAME = "Server shutdown port";
+    public static final String TOMCAT_SERVER_HTTPS_PORT_NAME = "Server https port";
 
     //  default port number constants
-    public static final int TOMCAT_DEFAULT_PORT = 8080;
-    public static final int TOMCAT_DEFAULT_AJP_PORT = 8009;
-    public static final int TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT = 8005;
+    public static final int TOMCAT_DEFAULT_PORT = 9863;
+    public static final int TOMCAT_DEFAULT_AJP_PORT = 9864;
+    public static final int TOMCAT_DEFAULT_SERVER_SHUTDOWN_PORT = 9865;
+    public static final int TOMCAT_DEFAULT_HTTPS_PORT = 9543;
 
     //  HTTP method constants
     public static final String HTTP_GET_METHOD = "GET";
