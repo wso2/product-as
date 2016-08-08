@@ -31,7 +31,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 /**
  * This class defines integration tests for HTTP monitoring stats publisher.
@@ -44,7 +43,8 @@ public class StatisticsPublisherTestCase extends TestBase {
     private static final int TIMEOUT = 15;
 
     private ThriftTestServer thriftTestServer;
-    private int thriftPort = Constants.DEFAULT_THRIFT_PORT;
+    private int thriftPort;
+    private int thriftSSLPort;
 
     @BeforeClass
     public static void init() {
@@ -53,14 +53,9 @@ public class StatisticsPublisherTestCase extends TestBase {
 
     @Test(description = "tests whether the thrift server is started.")
     public void testThriftServerStart() throws Exception {
-        if (!TestUtils.isPortAvailable(thriftPort)) {
-            List<Integer> availablePort = TestUtils.getAvailablePortsFromRange(
-                    Constants.PORT_SCAN_MIN, Constants.PORT_SCAN_MAX, 1);
-            if ((availablePort != null) && availablePort.size() > 0) {
-                thriftPort = availablePort.get(0);
-            }
-        }
-        thriftTestServer = new ThriftTestServer(thriftPort);
+        thriftPort = Integer.parseInt(System.getProperty(Constants.THRIFT_PORT));
+        thriftSSLPort = Integer.parseInt(System.getProperty(Constants.THRIFT_SSL_PORT));
+        thriftTestServer = new ThriftTestServer(thriftSSLPort, thriftPort);
         thriftTestServer.start();
         thriftTestServer.addStreamDefinition(convertJSONtoString());
         Assert.assertTrue(TestUtils.isServerListening(Constants.HOST, thriftPort), "Thrift server is not started.");

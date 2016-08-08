@@ -37,16 +37,6 @@ public class DataPublisherTestUtil {
     }
 
     /**
-     * Returns the absolute path of data-bridge-config.xml.
-     *
-     * @return absolute path of data-bridge-config.xml
-     */
-    public static String getDataBridgeConfigPath() {
-        Path dataBridgeConfigPath = Paths.get("src", "test", "resources", "data-bridge-config.xml").toAbsolutePath();
-        return dataBridgeConfigPath.toString();
-    }
-
-    /**
      * Returns the absolute path of the org.wso2.http.stats_1.0.0.json.
      *
      * @return absolute path of the org.wso2.http.stats_1.0.0.json

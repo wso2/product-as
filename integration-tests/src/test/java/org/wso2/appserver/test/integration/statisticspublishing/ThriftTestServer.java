@@ -47,14 +47,16 @@ public class ThriftTestServer {
 
     private static Log log = LogFactory.getLog(ThriftTestServer.class);
     private int thriftPort;
+    private int thriftSSLPort;
 
     private InMemoryStreamDefinitionStore inMemoryStreamDefinitionStore;
     private ThriftDataReceiver thriftDataReceiver;
     private AtomicInteger numberOfEventsReceived;
 
 
-    public ThriftTestServer(int thriftPort) {
+    public ThriftTestServer(int thriftSSLPort, int thriftPort) {
         this.thriftPort = thriftPort;
+        this.thriftSSLPort = thriftSSLPort;
         inMemoryStreamDefinitionStore = new InMemoryStreamDefinitionStore();
         numberOfEventsReceived = new AtomicInteger(0);
     }
@@ -78,7 +80,7 @@ public class ThriftTestServer {
             }
         }, inMemoryStreamDefinitionStore);
 
-        thriftDataReceiver = new ThriftDataReceiver(thriftPort, dataBridge);
+        thriftDataReceiver = new ThriftDataReceiver(thriftSSLPort, thriftPort, dataBridge);
 
         dataBridge.subscribe(new AgentCallback() {
             @Override
