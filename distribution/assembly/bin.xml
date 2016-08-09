@@ -69,8 +69,8 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>../samples/JavaEE-TomEE</directory>
-            <outputDirectory>${distribution.file.name}/samples/JavaEE-TomEE</outputDirectory>
+            <directory>../samples/javaee-samples</directory>
+            <outputDirectory>${distribution.file.name}/samples/javaee-samples</outputDirectory>
             <excludes>
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
