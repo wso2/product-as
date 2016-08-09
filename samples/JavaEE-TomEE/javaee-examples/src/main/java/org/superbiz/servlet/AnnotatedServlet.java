@@ -35,16 +35,16 @@ import javax.sql.DataSource;
 public class AnnotatedServlet extends HttpServlet {
 
     @EJB
-    private AnnotatedEJBLocal localEJB;
+    private transient AnnotatedEJBLocal localEJB;
 
     @EJB
-    private AnnotatedEJBRemote remoteEJB;
+    private transient AnnotatedEJBRemote remoteEJB;
 
     @EJB
-    private AnnotatedEJB localbeanEJB;
+    private transient AnnotatedEJB localbeanEJB;
 
     @Resource
-    private DataSource ds;
+    private transient DataSource ds;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {

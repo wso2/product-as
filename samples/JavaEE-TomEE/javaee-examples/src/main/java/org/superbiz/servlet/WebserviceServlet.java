@@ -18,6 +18,8 @@
 package org.superbiz.servlet;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.HandlerChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -31,21 +33,26 @@ import javax.xml.ws.WebServiceRef;
  */
 public class WebserviceServlet extends HttpServlet {
 
-    private static ServletOutputStream OUT;
+    private static ServletOutputStream servletOutputStream;
+    private static Logger logger = Logger.getLogger(WebserviceServlet.class.toString());
     @WebServiceRef
     @HandlerChain(file = "client-handlers.xml")
-    private HelloPojo helloPojo;
+    private transient HelloPojo helloPojo;
     @WebServiceRef
     @HandlerChain(file = "client-handlers.xml")
-    private HelloEjb helloEjb;
+    private transient HelloEjb helloEjb;
 
     public static void write(String message) {
         try {
-            ServletOutputStream out = OUT;
+            ServletOutputStream out = servletOutputStream;
             out.println(message);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, e.toString());
         }
+    }
+
+    private static void setServletOutputStream(ServletOutputStream out) {
+        servletOutputStream = out;
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -53,7 +60,7 @@ public class WebserviceServlet extends HttpServlet {
         response.setContentType("text/plain");
         ServletOutputStream out = response.getOutputStream();
 
-        OUT = out;
+        setServletOutputStream(out);
         try {
             out.println("Pojo Webservice");
             out.println("    helloPojo.hello(\"Bob\")=" + helloPojo.hello("Bob"));
@@ -66,7 +73,7 @@ public class WebserviceServlet extends HttpServlet {
             out.println("    helloEjb.hello(null)=" + helloEjb.hello(null));
             out.println();
         } finally {
-            OUT = out;
+            setServletOutputStream(out);
         }
     }
 }

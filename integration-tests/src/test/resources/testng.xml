@@ -58,11 +58,12 @@ limitations under the License.
             <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiQualifierTestCase"/>
             <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiScopeTestCase"/>
             <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaJaxRsTestCase"/>
-            <!--<class name="org.wso2.appserver.test.integration.javaee.jpa.JpaJaxWsTestCase"/>-->
+            <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaJaxWsTestCase"/>
             <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaServletCdiTestCase"/>
             <class name="org.wso2.appserver.test.integration.javaee.jsf.JsfBValTestCase"/>
             <class name="org.wso2.appserver.test.integration.javaee.jsf.JsfEjbTestCase"/>
             <class name="org.wso2.appserver.test.integration.javaee.jta.JtaServletTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.JndiDumpTestCase"/>
         </classes>
     </test>
 

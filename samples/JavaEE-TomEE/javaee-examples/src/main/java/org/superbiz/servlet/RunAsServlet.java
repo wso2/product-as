@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RunAsServlet extends HttpServlet {
 
     @EJB
-    private SecureEJBLocal secureEJBLocal;
+    private transient SecureEJBLocal secureEJBLocal;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {

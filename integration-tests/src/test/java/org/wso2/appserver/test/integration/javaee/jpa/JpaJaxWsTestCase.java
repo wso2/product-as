@@ -15,25 +15,21 @@
 */
 package org.wso2.appserver.test.integration.javaee.jpa;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.Test;
 import org.wso2.appserver.sample.ee.cdi.jpa.jaxws.ContactDTO;
 import org.wso2.appserver.sample.ee.cdi.jpa.jaxws.ContactsDTO;
 import org.wso2.appserver.sample.ee.cdi.jpa.jaxws.CustomersDatabase;
 import org.wso2.appserver.test.integration.TestBase;
 
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
 import java.net.URL;
 import java.util.Date;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 public class JpaJaxWsTestCase extends TestBase {
-
-    private static final Log log = LogFactory.getLog(JpaJaxWsTestCase.class);
     private static final String webAppLocalURL = "/jpa-contacts-database-" + System.getProperty("appserver.version");
 
     @Test(description = "test jpa and jax-ws")
@@ -51,7 +47,6 @@ public class JpaJaxWsTestCase extends TestBase {
         ContactDTO contact = new ContactDTO("Bob", "(012)345-6789", 25, "bob@bob.com", new Date());
 
         String response = customersDatabase.addContact(contact);
-        log.info("Response : " + response);
 
         assertEquals("Contact was saved successfully.", response,
                 "AddContact response doesn't contain the expected success message");
@@ -59,7 +54,6 @@ public class JpaJaxWsTestCase extends TestBase {
         ContactsDTO contacts = customersDatabase.getContacts();
 
         ContactDTO contact1 = contacts.getContacts().get(0);
-        log.info("Contact details retrieved, name: " + contact1.getName() + ", email: " + contact1.getEmail());
 
         assertEquals(contact.getName(), contact1.getName(), "Contact name doesn't match");
     }

@@ -15,8 +15,6 @@
 */
 package org.wso2.appserver.test.integration.javaee.cdi;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.appserver.test.integration.TestBase;

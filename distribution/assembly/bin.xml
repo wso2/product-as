@@ -76,6 +76,7 @@
                 <exclude>**/target/**</exclude>
                 <exclude>**/pom.xml.releaseBackup</exclude>
                 <exclude>*.iml</exclude>
+                <exclude>**/pom.xml</exclude>
             </excludes>
         </fileSet>
         <fileSet>
@@ -190,6 +191,18 @@
                 <include>org.springframework:spring-context:jar</include>
                 <include>org.springframework:spring-aop:jar</include>
                 <include>org.springframework:spring-webmvc:jar</include>
+            </includes>
+        </dependencySet>
+
+        <!--Include tomee plus libs-->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
+            <includes>
+                <include>org.apache.tomee:tomee-webservices:jar</include>
+                <include>org.apache.tomee:openejb-webservices:jar</include>
+                <include>org.apache.tomee:openejb-cxf:jar</include>
+                <include>org.apache.wss4j:wss4j-ws-security-dom:jar</include>
+                <include>org.apache.wss4j:wss4j-ws-security-common:jar</include>
             </includes>
         </dependencySet>
 

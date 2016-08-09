@@ -32,10 +32,5 @@
         <module>simple-jax-rs-service</module>
         <module>jaxrs_basic</module>
         <module>appserver-sso-samples</module>
-        <module>HelloWorldWebapp</module>
-        <module>Jaxws-Jaxrs</module>
-        <module>TomcatWebApps/GenericJavaBeanResource</module>
-        <module>TomcatWebApps/JDBCDataSource</module>
-        <module>TomcatWebApps/CarbonDataSourceAccessExample</module>
     </modules>
 </project>

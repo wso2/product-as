@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 public class JpaServlet extends HttpServlet {
 
     @PersistenceUnit(name = "jpa-example")
-    private EntityManagerFactory emf;
+    private transient EntityManagerFactory emf;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {

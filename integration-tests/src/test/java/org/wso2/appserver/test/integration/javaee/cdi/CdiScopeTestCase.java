@@ -71,44 +71,5 @@ public class CdiScopeTestCase extends TestBase {
                     "Receptionist: Hi, this is the first time I meet youLift Operator: Hi, I met you for 1 time(s)"),
                     "Response doesn't contain the expected message");
         }
-
-        //        HttpResponse response = ASHttpRequestUtil.sendGetRequest(webAppURL, null);
-        //        String result = response.getData();
-        //        log.info("Response 1 : " + result);
-        //
-        //        response = ASHttpRequestUtil.sendGetRequest(webAppURL, null);
-        //        result = response.getData();
-        //        log.info("Response 2 : " + result);
-        //
-        //        LogViewerClient logViewerClient = new LogViewerClient(backendURL, sessionCookie);
-        //        PaginatedLogEvent paginatedLogEvent = logViewerClient.
-        //                getPaginatedApplicationLogEvents(0, "ALL", "", webAppName, "", "");
-        //
-        //        //post Construct & Pre Destroy tests
-        //        assertTrue("Post construct of LiftOperator".equals(paginatedLogEvent.getLogInfo()[8].getMessage()),
-        //                "Log doesn't contain the expected post construct");
-        //        assertTrue("Post construct of Receptionist".equals(paginatedLogEvent.getLogInfo()[7].getMessage()),
-        //                "Log doesn't contain the expected post construct");
-        //
-        //        assertTrue("Pre destroy of Receptionist".equals(paginatedLogEvent.getLogInfo()[4].getMessage()),
-        //                "Log doesn't contain the expected pre destroy");
-        //        assertTrue("Post construct of Receptionist".equals(paginatedLogEvent.getLogInfo()[3].getMessage()),
-        //                "Log doesn't contain the expected post construct");
-        //
-        //        assertTrue("Pre destroy of Receptionist".equals(paginatedLogEvent.getLogInfo()[0].getMessage()),
-        //                "Log doesn't contain the expected pre destroy");
-        //
-        //
-        //        //Scope Tests
-        //        assertTrue("Receptionist: Hi, this is the first time I meet you".equals(paginatedLogEvent.getLogInfo()[6].getMessage()),
-        //                "Log doesn't contain the expected message");
-        //        assertTrue("Lift Operator: Hi, this is the first time I meet you".equals(paginatedLogEvent.getLogInfo()[5].getMessage()),
-        //                "Log doesn't contain the expected message");
-        //
-        //        assertTrue("Receptionist: Hi, this is the first time I meet you".equals(paginatedLogEvent.getLogInfo()[2].getMessage()),
-        //                "Log doesn't contain the expected message");
-        //        assertTrue("Lift Operator: Hi, I met you for 1 time(s)".equals(paginatedLogEvent.getLogInfo()[1].getMessage()),
-        //                "Log doesn't contain the expected message");
-
     }
 }

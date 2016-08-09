@@ -1,6 +1,0 @@
-<Context>
-    <Resource name="bean/MyBeanFactory" auth="Container"
-              type="org.wso2.appserver.sample.genericjavabean.bean.MyBean"
-              factory="org.apache.naming.factory.BeanFactory"
-              bar="23" foo="68"/>
-</Context>

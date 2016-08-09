@@ -44,7 +44,8 @@ public class JpaServletCdiTestCase extends TestBase {
                 sb.append(output);
             }
             Assert.assertTrue(sb.toString().contains(
-                    "        <tr>        <td>1        </td>        <td>Item0001        </td>        <td>100        </td>"),
+                    "        <tr>        <td>1        </td>        "
+                            + "<td>Item0001        </td>        <td>100        </td>"),
                     "Response doesn't contain expected data");
         }
     }

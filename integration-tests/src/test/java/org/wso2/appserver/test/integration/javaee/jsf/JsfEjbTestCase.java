@@ -21,20 +21,18 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.wso2.appserver.test.integration.TestBase;
 import org.xml.sax.InputSource;
 
+import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import java.io.StringReader;
 
 import static org.testng.Assert.assertTrue;
 
@@ -43,18 +41,18 @@ public class JsfEjbTestCase extends TestBase {
 
     @Test(description = "test JSF Bean Validation")
     public void testJsfEjb() throws Exception {
-        String CalculatorEndpoint = getBaseUrl() + webAppLocalURL + "/index.jsf";
+        String calculatorEndpoint = getBaseUrl() + webAppLocalURL + "/index.jsf";
 
         //here used Commons http client in order to manage same session throughout
-        HttpMethod getMethod = new GetMethod(CalculatorEndpoint);
+        HttpMethod getMethod = new GetMethod(calculatorEndpoint);
         HttpClient client = new HttpClient();
 
         client.executeMethod(getMethod);
         String getResponse = getMethod.getResponseBodyAsString();
 
         String cookie = null;
-        for(Header header:getMethod.getResponseHeaders()){
-            if(header.getValue().contains("JSESSIONID")){
+        for (Header header : getMethod.getResponseHeaders()) {
+            if (header.getValue().contains("JSESSIONID")) {
                 cookie = header.getValue();
             }
         }
@@ -70,7 +68,7 @@ public class JsfEjbTestCase extends TestBase {
                 XPathConstants.NODESET);
         String viewState = nodes.item(0).getNodeValue();
 
-        HttpMethod postMethod = new PostMethod(CalculatorEndpoint);
+        HttpMethod postMethod = new PostMethod(calculatorEndpoint);
 
         NameValuePair[] nameValuePairs = new NameValuePair[4];
         nameValuePairs[0] = new NameValuePair("j_id_5:j_id_7", "John Doe");
@@ -78,7 +76,7 @@ public class JsfEjbTestCase extends TestBase {
         nameValuePairs[2] = new NameValuePair("j_id_5_SUBMIT", "1");
         nameValuePairs[3] = new NameValuePair("javax.faces.ViewState", viewState);
         postMethod.setQueryString(nameValuePairs);
-        postMethod.addRequestHeader("Cookie",cookie);
+        postMethod.addRequestHeader("Cookie", cookie);
         client.executeMethod(postMethod);
 
         String postResponse = postMethod.getResponseBodyAsString();

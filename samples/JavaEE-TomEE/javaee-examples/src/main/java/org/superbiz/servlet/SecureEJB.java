@@ -25,6 +25,9 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
+/**
+ * SecureEJB class.
+ */
 @Stateless
 @DeclareRoles({"admin", "manager", "fake"})
 public class SecureEJB implements SecureEJBLocal {

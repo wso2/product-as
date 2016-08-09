@@ -27,12 +27,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * SecureServlet class.
+ */
 public class SecureServlet extends HttpServlet {
 
     @EJB
-    private SecureEJBLocal secureEJBLocal;
+    private transient SecureEJBLocal secureEJBLocal;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/plain");
         ServletOutputStream out = response.getOutputStream();
 
