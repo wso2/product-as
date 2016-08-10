@@ -14,14 +14,17 @@
   ~ limitations under the License.
   -->
 
-<project name="cdi-alternative" default="build-all">
+<project name="cdi-interceptor" default="build-all">
 
     <property name="wso2carbon.home" value="../../../../"/>
-    <property name="warName" value="cdi-alternative.war"/>
+    <property name="warName" value="cdi-inteceptor.war"/>
     <property name="build.dir" value="build"/>
 
     <path id="compile.classpath">
         <fileset dir="${wso2carbon.home}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${wso2carbon.home}/bin">
             <include name="*.jar"/>
         </fileset>
     </path>

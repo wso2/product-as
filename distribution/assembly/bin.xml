@@ -55,7 +55,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>**/pom.xml.releaseBackup</exclude>
-                <exclude>*.iml</exclude>
+                <exclude>**/**.iml</exclude>
             </excludes>
         </fileSet>
         <fileSet>
@@ -65,7 +65,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>**/pom.xml.releaseBackup</exclude>
-                <exclude>*.iml</exclude>
+                <exclude>**/**.iml</exclude>
             </excludes>
         </fileSet>
         <fileSet>
@@ -75,7 +75,7 @@
                 <exclude>**/**.sh</exclude>
                 <exclude>**/target/**</exclude>
                 <exclude>**/pom.xml.releaseBackup</exclude>
-                <exclude>*.iml</exclude>
+                <exclude>**/**.iml</exclude>
                 <exclude>**/pom.xml</exclude>
             </excludes>
         </fileSet>
@@ -131,7 +131,7 @@
                     org.wso2.appserver.shade.org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons-shaded:jar
                 </include>
                 <include>org.wso2.appserver.shade.log4j:log4j-shaded:jar</include>
-                <include>log4j:log4j:jar</include>
+                <!--<include>log4j:log4j:jar</include>-->
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>

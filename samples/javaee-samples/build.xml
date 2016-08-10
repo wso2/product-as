@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="javaee-tomee" default="executeChildBuild">
+<project name="javaee-samples" default="executeChildBuild">
 
     <target name="executeChildBuild">
-        <ant antfile="build.xml" dir="javaee-examples" target="build-all"/>
-        <ant antfile="build.xml" dir="CDI-Servlet/cdi-alternative" target="build-all"/>
+        <ant antfile="build.xml" dir="ejb-examples" target="build-all"/>
+        <ant antfile="build.xml" dir="CDI-Servlet/cdi-alternatives" target="build-all"/>
         <ant antfile="build.xml" dir="CDI-Servlet/cdi-decorator" target="build-all"/>
         <ant antfile="build.xml" dir="CDI-Servlet/cdi-event" target="build-all"/>
         <ant antfile="build.xml" dir="CDI-Servlet/cdi-inject" target="build-all"/>
-        <ant antfile="build.xml" dir="CDI-Servlet/cdi-interceptor" target="build-all"/>
+        <ant antfile="build.xml" dir="CDI-Servlet/cdi-inteceptor" target="build-all"/>
         <ant antfile="build.xml" dir="CDI-Servlet/cdi-produces" target="build-all"/>
         <ant antfile="build.xml" dir="CDI-Servlet/cdi-qualifier" target="build-all"/>
         <ant antfile="build.xml" dir="CDI-Servlet/cdi-scope" target="build-all"/>
         <ant antfile="build.xml" dir="JPA-Servlet/jpa-order-processor" target="build-all"/>
-        <ant antfile="build.xml" dir="JPA-JaxRS/studentRegister" target="build-all"/>
+        <ant antfile="build.xml" dir="JPA-JaxRS/jpa-student-register" target="build-all"/>
         <ant antfile="build.xml" dir="JPA-JaxWS/jpa-contacts-database" target="build-all"/>
-        <ant antfile="build.xml" dir="JSF-EJB/greeting" target="build-all"/>
+        <ant antfile="build.xml" dir="JSF-EJB/jsf-greeting" target="build-all"/>
         <ant antfile="build.xml" dir="JSF-BVAL/jsf-marks-calculator" target="build-all"/>
         <ant antfile="build.xml" dir="JTA-Servlet/jta-money-transfer" target="build-all"/>
     </target>

@@ -14,14 +14,17 @@
   ~ limitations under the License.
   -->
 
-<project name="cdi-interceptor" default="build-all">
+<project name="javaee-examples" default="build-all">
 
-    <property name="wso2carbon.home" value="../../../../"/>
-    <property name="warName" value="cdi-interceptor.war"/>
+    <property name="wso2carbon.home" value="../../../"/>
+    <property name="warName" value="ejb-examples.war"/>
     <property name="build.dir" value="build"/>
 
     <path id="compile.classpath">
         <fileset dir="${wso2carbon.home}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${build.dir}/temp">
             <include name="*.jar"/>
         </fileset>
     </path>
@@ -32,12 +35,17 @@
 
     <target name="init" depends="clean">
         <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${build.dir}/temp"/>
+        <antcall target="download.jars"/>
     </target>
 
     <target name="compile" depends="init">
         <javac destdir="${build.dir}/classes" debug="true" srcdir="src">
             <classpath refid="compile.classpath"/>
         </javac>
+        <copy todir="${build.dir}/classes">
+            <fileset dir="src/main/resources"/>
+        </copy>
     </target>
 
     <target name="war" depends="compile">
@@ -55,6 +63,11 @@
 
     <target name="copy-webapp">
         <copy file="${build.dir}/${warName}" toDir="${wso2carbon.home}/webapps"/>
+    </target>
+
+    <target name="download.jars">
+        <get src="http://maven.wso2.org/nexus/content/groups/wso2-public//org/apache/openejb/javaee-api/6.0-6/javaee-api-6.0-6.jar"
+             dest="${build.dir}/temp"/>
     </target>
 
 </project>

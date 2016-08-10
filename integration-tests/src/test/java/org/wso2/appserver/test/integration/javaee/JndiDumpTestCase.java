@@ -27,11 +27,6 @@ import java.net.URL;
 
 import static org.testng.Assert.assertTrue;
 
-/**
- * JavaEE heavily leverages JNDi to expose the resources. So,
- * by analyzing the JNDi dump, we can get a quite a lot of information
- * on how the environment behaves.
- */
 public class JndiDumpTestCase extends TestBase {
     private static final String webAppLocalURL = "/ejb-examples-" + System.getProperty("appserver.version");
 

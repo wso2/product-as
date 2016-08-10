@@ -30,19 +30,19 @@
     <name>WSO2 Application Server - Sample - JavaEE - TomEE</name>
 
     <modules>
-        <module>javaee-examples</module>
-        <module>CDI-Servlet/cdi-alternative</module>
+        <module>ejb-examples</module>
+        <module>CDI-Servlet/cdi-alternatives</module>
         <module>CDI-Servlet/cdi-decorator</module>
         <module>CDI-Servlet/cdi-event</module>
         <module>CDI-Servlet/cdi-inject</module>
-        <module>CDI-Servlet/cdi-interceptor</module>
+        <module>CDI-Servlet/cdi-inteceptor</module>
         <module>CDI-Servlet/cdi-produces</module>
         <module>CDI-Servlet/cdi-qualifier</module>
         <module>CDI-Servlet/cdi-scope</module>
         <module>JPA-Servlet/jpa-order-processor</module>
-        <module>JPA-JaxRS/studentRegister</module>
+        <module>JPA-JaxRS/jpa-student-register</module>
         <module>JPA-JaxWS/jpa-contacts-database</module>
-        <module>JSF-EJB/greeting</module>
+        <module>JSF-EJB/jsf-greeting</module>
         <module>JSF-BVAL/jsf-marks-calculator</module>
         <module>JTA-Servlet/jta-money-transfer</module>
     </modules>
