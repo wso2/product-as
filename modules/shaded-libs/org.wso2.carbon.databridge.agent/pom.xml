@@ -66,8 +66,19 @@
                                         org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons.binary
                                     </exclude>
                                     <exclude>commons-pool.wso2:commons-pool</exclude>
+                                    <exclue>commons-pool:commons-pool</exclue>
                                     <exclue>org.wso2.orbit.org.apache.httpcomponents:httpclient</exclue>
                                     <exclue>org.wso2.orbit.com.lmax:disruptor</exclue>
+                                    <exclue>com.google.code.gson:gson</exclue>
+                                    <exclue>org.json.wso2:json</exclue>
+                                    <exclue>libthrift.wso2</exclue>
+                                    <exclue>org.apache.thrift:libthrift</exclue>
+                                    <exclue>org.apache.httpcomponents</exclue>
+                                    <exclue>commons-codec:commons-codec</exclue>
+                                    <exclue>org.apache.httpcomponents:httpcore</exclue>
+                                    <exclue>slf4j.wso2:slf4j</exclue>
+                                    <exclue>org.slf4j:slf4j-api</exclue>
+                                    <exclue>commons-logging:commons-logging</exclue>
                                 </excludes>
                             </artifactSet>
                         </configuration>
