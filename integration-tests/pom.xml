@@ -92,7 +92,6 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jpa-contacts-database</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <classifier>classes</classifier>
             <scope>test</scope>
         </dependency>
@@ -110,91 +109,71 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-alternatives</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-decorator</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-inject</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-inteceptor</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-produces</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-qualifier</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>cdi-scope</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>cdi-scope</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jpa-student-register</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jsf-marks-calculator</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jsf-greeting</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jpa-contacts-database</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jpa-order-processor</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jta-money-transfer</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>ejb-examples</artifactId>
-            <version>6.0.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
     </dependencies>

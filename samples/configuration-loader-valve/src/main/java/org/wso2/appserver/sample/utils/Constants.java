@@ -21,8 +21,8 @@ package org.wso2.appserver.sample.utils;
  * @since 6.0.0
  */
 public class Constants {
-    static final String CUSTOM_ENV_NAME = "CUSTOM";
-    static final String CUSTOM_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/custom/";
+    static final String JAGGERY_ENV_NAME = "jaggery";
+    static final String JAGGERY_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/jaggery/";
     static final String SPRING_ENV_NAME = "Spring";
 
     static final String IDP_URL = "https://localhost:9443/samlsso";

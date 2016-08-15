@@ -47,8 +47,8 @@ public class ServerConfigurationUtils {
         AppServerClassLoading classloadingEnvironments = new AppServerClassLoading();
 
         AppServerClassLoading.Environment customEnv = new AppServerClassLoading.Environment();
-        customEnv.setName(Constants.CUSTOM_ENV_NAME);
-        customEnv.setClasspath(Constants.CUSTOM_ENV_CLASSPATH);
+        customEnv.setName(Constants.JAGGERY_ENV_NAME);
+        customEnv.setClasspath(Constants.JAGGERY_ENV_CLASSPATH);
 
         List<AppServerClassLoading.Environment> envList = new ArrayList<>();
         envList.add(customEnv);

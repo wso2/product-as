@@ -32,6 +32,8 @@
 
     <target name="init" depends="clean">
         <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="src/main/webapp/WEB-INF/lib/"/>
+        <antcall target="download.jars"/>
     </target>
 
     <target name="compile" depends="init">
@@ -55,6 +57,11 @@
 
     <target name="copy-webapp">
         <copy file="${build.dir}/${warName}" toDir="${wso2carbon.home}/webapps"/>
+    </target>
+
+    <target name="download.jars">
+        <get src="http://maven.wso2.org/nexus/content/groups/wso2-public/commons-logging/commons-logging/1.2/commons-logging-1.2.jar"
+             dest="src/main/webapp/WEB-INF/lib" verbose="true" skipexisting="true"/>
     </target>
 
 </project>

@@ -26,14 +26,15 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-    <artifactId>org.jaggeryjs.jaggery.core-shaded</artifactId>
-    <version>0.13.0.wso2v1-SNAPSHOT</version>
+    <groupId>org.wso2.appserver.shade.commons-beanutils</groupId>
+    <artifactId>commons-beanutils-core-shaded</artifactId>
+    <version>1.8.3.wso2v1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.jaggery.core</artifactId>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core</artifactId>
+            <version>1.8.3</version>
         </dependency>
     </dependencies>
 
@@ -57,32 +58,7 @@
                             </relocations>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.scriptengine</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.stream</exclude>
-                                    <exclude>commons*</exclude>
-                                    <exclude>org.apache.commons.ssl</exclude>
-                                    <exclude>com.google.code.*</exclude>
-                                    <exclude>org.eclipse.wst.jsdt</exclude>
-                                    <exclude>org.mozilla</exclude>
-                                    <exclude>rhino.wso2</exclude>
-                                    <exclude>org.ow2.asm</exclude>
-                                    <exclude>com.apple</exclude>
-                                    <exclude>org.apache.tomcat*</exclude>
-                                    <exclude>org.eclipse.jdt.core.compiler</exclude>
-                                    <exclude>org.eclipse.equinox</exclude>
-                                    <exclude>org.apache.geronimo.specs</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.file</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.web</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.log</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.jaggeryparser</exclude>
-                                    <exclude>org.wso2.carbon:javax.servlet</exclude>
-                                    <exclude>javax.activation</exclude>
-                                    <exclude>net.jcip</exclude>
-                                    <exclude>dom4j</exclude>
-                                    <exclude>xml-apis</exclude>
-                                    <exclude>jaxen</exclude>
-                                    <exclude>com.googlecode.json-simple.wso2</exclude>
-                                    <exclude>org.wso2.uri.template</exclude>
+                                    <exclude>commons-logging</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
@@ -91,5 +67,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

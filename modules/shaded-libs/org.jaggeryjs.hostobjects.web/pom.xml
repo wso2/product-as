@@ -78,7 +78,6 @@
                                     <exclude>org.wo2.asm</exclude>
                                     <exclude>javax.activation</exclude>
                                     <exclude>net.jcip</exclude>
-                                    <exclude>org.ow2.asm</exclude>
                                     <exclude>com.apple</exclude>
                                     <exclude>jaxen</exclude>
                                     <exclude>org.wso2.uri.template</exclude>

@@ -27,21 +27,23 @@
     <modules>
         <module>slf4j</module>
         <module>libthrift</module>
-        <module>opensaml-core</module>
-        <module>opensaml-saml-api</module>
-        <module>opensaml-saml-impl</module>
-        <module>opensaml-security-api</module>
-        <module>opensaml-xmlsec-api</module>
-        <module>opensaml-xmlsec-impl</module>
-        <module>opensaml-messaging-api</module>
-        <module>opensaml-profile-api</module>
-        <module>opensaml-security-impl</module>
-        <module>opensaml-soap-api</module>
-        <module>opensaml-soap-impl</module>
-        <module>opensaml-storage-api</module>
+        <!--<module>opensaml-core</module>-->
+        <!--<module>opensaml-saml-api</module>-->
+        <!--<module>opensaml-saml-impl</module>-->
+        <!--<module>opensaml-security-api</module>-->
+        <!--<module>opensaml-xmlsec-api</module>-->
+        <!--<module>opensaml-xmlsec-impl</module>-->
+        <!--<module>opensaml-messaging-api</module>-->
+        <!--<module>opensaml-profile-api</module>-->
+        <!--<module>opensaml-security-impl</module>-->
+        <!--<module>opensaml-soap-api</module>-->
+        <!--<module>opensaml-soap-impl</module>-->
+        <!--<module>opensaml-storage-api</module>-->
         <module>shibboleth-java-support</module>
         <module>santuario-xmlsec</module>
         <module>commons-logging</module>
+        <module>commons-digester</module>
+        <module>commons-beanutils-core</module>
         <module>org.wso2.carbon.databridge.agent</module>
         <module>org.wso2.carbon.databridge.commons</module>
         <module>org.wso2.carbon.databridge.commons.thrift</module>
@@ -54,16 +56,23 @@
         <module>spring-core</module>
 
         <!-- jaggery related modules -->
-        <module>org.jaggeryjs.hostobjects.file</module>
-        <module>org.jaggeryjs.hostobjects.jaggeryparser</module>
-        <module>org.jaggeryjs.hostobjects.log</module>
-        <module>org.jaggeryjs.hostobjects.stream</module>
-        <module>org.jaggeryjs.hostobjects.uri</module>
-        <module>org.jaggeryjs.hostobjects.web</module>
-        <module>org.jaggeryjs.hostobjects.xhr</module>
-        <module>org.jaggeryjs.hostobjects.xslt</module>
-        <module>org.jaggeryjs.jaggery.core</module>
-        <module>org.jaggeryjs.scriptengine</module>
+        <!--<module>org.jaggeryjs.hostobjects.file</module>-->
+        <!--<module>org.jaggeryjs.hostobjects.jaggeryparser</module>-->
+        <!--<module>org.jaggeryjs.hostobjects.log</module>-->
+        <!--<module>org.jaggeryjs.hostobjects.stream</module>-->
+        <!--<module>org.jaggeryjs.hostobjects.uri</module>-->
+        <!--<module>org.jaggeryjs.hostobjects.web</module>-->
+        <!--<module>org.jaggeryjs.hostobjects.xhr</module>-->
+        <!--<module>org.jaggeryjs.hostobjects.xslt</module>-->
+        <!--<module>org.jaggeryjs.jaggery.core</module>-->
+        <!--<module>org.jaggeryjs.scriptengine</module>-->
         <module>commons-httpclient</module>
+
+        <module>opensaml</module>
+        <module>org.jaggeryjs</module>
+
+        <module>geronimo-transaction</module>
+        <module>wss4j-ws-security-dom</module>
+        <module>wss4j-ws-security-common</module>
     </modules>
 </project>

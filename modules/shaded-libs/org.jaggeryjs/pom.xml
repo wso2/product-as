@@ -27,13 +27,53 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-    <artifactId>org.jaggeryjs.jaggery.core-shaded</artifactId>
+    <artifactId>org.jaggeryjs-shaded</artifactId>
     <version>0.13.0.wso2v1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
             <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.file</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.jaggeryparser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.oauth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.uri</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.xhr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.hostobjects.xslt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
             <artifactId>org.jaggeryjs.jaggery.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jaggeryjs</groupId>
+            <artifactId>org.jaggeryjs.scriptengine</artifactId>
         </dependency>
     </dependencies>
 
@@ -54,35 +94,38 @@
                                     <pattern>org.apache.commons.logging</pattern>
                                     <shadedPattern>shaded.org.apache.commons.logging</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.apache.log4j</pattern>
+                                    <shadedPattern>shaded.org.apache.log4j</shadedPattern>
+                                </relocation>
                             </relocations>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.scriptengine</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.stream</exclude>
                                     <exclude>commons*</exclude>
-                                    <exclude>org.apache.commons.ssl</exclude>
-                                    <exclude>com.google.code.*</exclude>
                                     <exclude>org.eclipse.wst.jsdt</exclude>
-                                    <exclude>org.mozilla</exclude>
                                     <exclude>rhino.wso2</exclude>
-                                    <exclude>org.ow2.asm</exclude>
-                                    <exclude>com.apple</exclude>
-                                    <exclude>org.apache.tomcat*</exclude>
-                                    <exclude>org.eclipse.jdt.core.compiler</exclude>
+                                    <exclude>org.mozilla</exclude>
+                                    <exclude>org.apache.commons.ssl</exclude>
                                     <exclude>org.eclipse.equinox</exclude>
-                                    <exclude>org.apache.geronimo.specs</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.file</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.web</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.log</exclude>
-                                    <exclude>org.jaggeryjs:org.jaggeryjs.hostobjects.jaggeryparser</exclude>
-                                    <exclude>org.wso2.carbon:javax.servlet</exclude>
+                                    <exclude>org.wso2.carbon</exclude>
+                                    <exclude>org.apache.tomcat*</exclude>
+                                    <exclude>com.google.*</exclude>
                                     <exclude>javax.activation</exclude>
                                     <exclude>net.jcip</exclude>
                                     <exclude>dom4j</exclude>
                                     <exclude>xml-apis</exclude>
+                                    <exclude>org.ow2.asm*</exclude>
+                                    <exclude>com.apple</exclude>
                                     <exclude>jaxen</exclude>
-                                    <exclude>com.googlecode.json-simple.wso2</exclude>
+                                    <exclude>com.google.code.gson</exclude>
+                                    <exclude>org.eclipse.wst.jsdt</exclude>
+                                    <exclude>org.apache.geronimo.specs*</exclude>
                                     <exclude>org.wso2.uri.template</exclude>
+                                    <exclude>org.eclipse.jdt.core.compiler</exclude>
+                                    <exclude>org.codehaus.woodstox</exclude>
+                                    <exclude>org.apache.ws.commons.axiom.wso2</exclude>
+                                    <exclude>com.google.code.*</exclude>
+                                    <exclude>com.googlecode.json-simple.wso2</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>

@@ -27,10 +27,6 @@
                 <Classpath> - specifies the file path to the libraries relevant to the environment
             -->
             <Environment>
-                <Name>CUSTOM</Name>
-                <Classpath>${catalina.home}/lib/runtimes/custom/</Classpath>
-            </Environment>
-            <Environment>
                 <Name>jaggery</Name>
                 <Classpath>${catalina.home}/lib/runtimes/jaggery/</Classpath>
             </Environment>
