@@ -24,19 +24,6 @@
     <artifactId>commons-logging-shaded</artifactId>
     <version>1.2.0.wso2v1</version>
 
-    <repositories>
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-        </repository>
-    </repositories>
-
     <distributionManagement>
         <repository>
             <id>wso2.releases</id>

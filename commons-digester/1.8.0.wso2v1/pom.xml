@@ -20,22 +20,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.shade.org.wso2.carbon.analytics-common</groupId>
-    <artifactId>org.wso2.carbon.databridge.commons-shaded</artifactId>
-    <version>5.0.8.wso2v1</version>
-
-    <repositories>
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-        </repository>
-    </repositories>
+    <groupId>org.wso2.shade.commons-digester</groupId>
+    <artifactId>commons-digester-shaded</artifactId>
+    <version>1.8.0.wso2v1</version>
 
     <distributionManagement>
         <repository>
@@ -53,19 +40,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
-            <version>5.0.8</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.osgi</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.wso2.carbon</groupId>
-                    <artifactId>org.wso2.carbon.logging</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>1.8</version>
         </dependency>
     </dependencies>
 
@@ -84,15 +61,18 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>org.slf4j</pattern>
-                                    <shadedPattern>org.wso2.shade.org.slf4j</shadedPattern>
+                                    <pattern>org.apache.commons.logging</pattern>
+                                    <shadedPattern>org.wso2.shade.org.apache.commons.logging</shadedPattern>
                                 </relocation>
                             </relocations>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>com.google.code.gson:gson</exclude>
-                                    <exclude>org.wso2.carbon:org.wso2.carbon.logging</exclude>
-                                    <exclude>org.json.wso2:json</exclude>
+                                    <exclude>commons-beanutils</exclude>
+                                    <exclude>commons-logging</exclude>
+                                    <exclude>log4j</exclude>
+                                    <exclude>logkit</exclude>
+                                    <exclude>avalon-framework</exclude>
+                                    <exclude>javax.servlet:servlet-api</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
@@ -101,5 +81,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

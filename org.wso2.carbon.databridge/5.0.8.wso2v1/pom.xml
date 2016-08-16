@@ -17,11 +17,12 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.shade.org.wso2.carbon.analytics-common</groupId>
-    <artifactId>org.wso2.carbon.databridge.commons.thrift-shaded</artifactId>
+    <artifactId>org.wso2.carbon.databridge-shaded</artifactId>
     <version>5.0.8.wso2v1</version>
 
     <repositories>
@@ -54,8 +55,42 @@
     <dependencies>
         <dependency>
             <groupId>org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+            <version>${carbon.analyticscommon.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.osgi</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.osgi</groupId>
+                    <artifactId>org.eclipse.osgi.services</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wso2.carbon</groupId>
+                    <artifactId>org.wso2.carbon.core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
+            <version>${carbon.analyticscommon.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.osgi</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wso2.carbon</groupId>
+                    <artifactId>org.wso2.carbon.logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.analytics-common</groupId>
             <artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
-            <version>5.0.8</version>
+            <version>${carbon.analyticscommon.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.eclipse.osgi</groupId>
@@ -92,14 +127,34 @@
                         <configuration>
                             <relocations>
                                 <relocation>
+                                    <pattern>org.apache.commons.logging</pattern>
+                                    <shadedPattern>org.wso2.shade.org.apache.commons.logging</shadedPattern>
+                                </relocation>
+                                <relocation>
                                     <pattern>org.slf4j</pattern>
                                     <shadedPattern>org.wso2.shade.org.slf4j</shadedPattern>
                                 </relocation>
                             </relocations>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>libthrift.wso2:libthrift</exclude>
+                                    <exclude>
+                                        org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons.binary
+                                    </exclude>
+                                    <exclude>commons-pool</exclude>
+                                    <exclue>org.wso2.orbit.org.apache.httpcomponents:httpclient</exclue>
+                                    <exclue>org.wso2.orbit.com.lmax:disruptor</exclue>
+                                    <exclude>org.slf4j:slf4j-api</exclude>
+                                    <exclude>com.google.code.gson:gson</exclude>
+                                    <exclude>org.wso2.carbon:org.wso2.carbon.logging</exclude>
+                                    <exclude>org.json.wso2:json</exclude>
+                                    <exclude>libthrift*</exclude>
                                     <exclude>slf4j.wso2:slf4j</exclude>
+                                    <exclude>org.apache.httpcomponents*</exclude>
+                                    <exclude>commons-codec*</exclude>
+                                    <exclude>commons-logging*</exclude>
+                                    <exclude>org.apache.httpcomponents:httpclient:jar</exclude>
+                                    <exclude>commons-lang*</exclude>
+                                    <exclude>org.apache.thrift:libthrift:jar</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
@@ -108,5 +163,9 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <carbon.analyticscommon.version>5.0.8</carbon.analyticscommon.version>
+    </properties>
 
 </project>
