@@ -17,8 +17,6 @@
  */
 package org.wso2.appserver.sample.service;
 
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +35,6 @@ import javax.ws.rs.core.Response;
  *
  * @since 6.0.0
  */
-@Service
 @Path("/customerservice")
 public class CustomerService {
     long currentId = 123;
