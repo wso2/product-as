@@ -36,17 +36,11 @@
         <mkdir dir="${lib}"/>
 
         <copy toDir="${lib}">
-	    <fileset dir="${wso2appserver.home}/lib/">
-                <include name="commons-httpclient_3.1.0.wso2v2.jar"/>
-                <include name="commons-codec_1.4.0.wso2v1.jar"/>
-            </fileset>
-	    <fileset dir="${wso2appserver.home}/lib/runtimes/cxf/">
-                <include name="*.jar"/>
-            </fileset>
+            <fileset dir="${wso2appserver.home}/lib/"/>
         </copy>
     </target>
 
-    <target name="compile" depends="init" >
+    <target name="compile" depends="init">
         <javac destdir="${classes}" debug="true" srcdir="src">
             <classpath refid="compile.classpath"/>
         </javac>
@@ -60,13 +54,13 @@
         </war>
     </target>
 
-    <target name="build-all" depends ="war">
+    <target name="build-all" depends="war">
         <echo message="Copying the created war file in to the deployment directory"/>
         <copy file="${webapps}/${warName}" todir="${wso2appserver.home}/webapps"/>
     </target>
 
     <target name="clean">
-        <delete dir="${build.dir}" />
+        <delete dir="${build.dir}"/>
     </target>
 
 </project>
