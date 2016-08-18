@@ -20,23 +20,14 @@
                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>WEB-INF/customBeans.xml</param-value>
-    </context-param>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-
     <servlet>
         <servlet-name>JAXServlet</servlet-name>
         <display-name>JAX-WS/JAX-RS Servlet</display-name>
         <description>JAX-WS/JAX-RS Endpoint</description>
-        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+        <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
         <init-param>
-            <param-name>service-list-stylesheet</param-name>
-            <param-value>servicelist.css</param-value>
+            <param-name>jaxrs.serviceClasses</param-name>
+            <param-value>org.wso2.appserver.sample.service.CustomerService</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
