@@ -24,6 +24,9 @@
         <fileset dir="${wso2carbon.home}/lib">
             <include name="*.jar"/>
         </fileset>
+        <fileset dir="${wso2carbon.home}/bin">
+            <include name="*.jar"/>
+        </fileset>
     </path>
 
     <target name="clean">
@@ -61,8 +64,6 @@
 
     <target name="download.jars">
         <get src="http://maven.wso2.org/nexus/content/groups/wso2-public//com/h2database/h2/1.4.180/h2-1.4.180.jar"
-             dest="src/main/webapp/WEB-INF/lib" verbose="true" skipexisting="true"/>
-        <get src="http://maven.wso2.org/nexus/content/groups/wso2-public//commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"
              dest="src/main/webapp/WEB-INF/lib" verbose="true" skipexisting="true"/>
     </target>
 

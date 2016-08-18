@@ -36,11 +36,11 @@ limitations under the License.
         </classes>
     </test>
 
-    <test name="wso2as-test-webapp-loader-cxf-runtime">
-        <classes>
-            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderRuntimeTestCase"/>
-        </classes>
-    </test>
+    <!--<test name="wso2as-test-webapp-loader-cxf-runtime">-->
+        <!--<classes>-->
+            <!--<class name="org.wso2.appserver.test.integration.loader.WebappLoaderRuntimeTestCase"/>-->
+        <!--</classes>-->
+    <!--</test>-->
 
     <test name="wso2as-test-jaggery-webapp-deployer">
         <classes>

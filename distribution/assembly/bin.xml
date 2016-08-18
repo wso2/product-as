@@ -186,19 +186,19 @@
                 <include>org.apache.ws.xmlschema:xmlschema-core:jar</include>
                 <include>org.apache.cxf:cxf-rt-frontend-jaxws:jar</include>
 
-                <include>org.wso2.appserver.shade.org.springframework:spring-beans-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.springframework:spring-context-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.springframework:spring-core-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.springframework:spring-web-shaded:jar</include>
-                <include>org.springframework:spring-expression:jar</include>
-                <include>org.springframework:spring-aop:jar</include>
+                <!--<include>org.wso2.appserver.shade.org.springframework:spring-beans-shaded:jar</include>-->
+                <!--<include>org.wso2.appserver.shade.org.springframework:spring-context-shaded:jar</include>-->
+                <!--<include>org.wso2.appserver.shade.org.springframework:spring-core-shaded:jar</include>-->
+                <!--<include>org.wso2.appserver.shade.org.springframework:spring-web-shaded:jar</include>-->
+                <!--<include>org.springframework:spring-expression:jar</include>-->
+                <!--<include>org.springframework:spring-aop:jar</include>-->
             </includes>
-            <excludes>
-                <exclude>org.springframework:spring-beans:jar</exclude>
-                <exclude>org.springframework:spring-context:jar</exclude>
-                <exclude>org.springframework:spring-core:jar</exclude>
-                <exclude>org.springframework:spring-web:jar</exclude>
-            </excludes>
+            <!--<excludes>-->
+                <!--<exclude>org.springframework:spring-beans:jar</exclude>-->
+                <!--<exclude>org.springframework:spring-context:jar</exclude>-->
+                <!--<exclude>org.springframework:spring-core:jar</exclude>-->
+                <!--<exclude>org.springframework:spring-web:jar</exclude>-->
+            <!--</excludes>-->
         </dependencySet>
 
         <!--Include tomee plus libs-->

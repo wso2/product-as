@@ -18,8 +18,9 @@
 
 package org.wso2.appserver.sample.ee.cdi.jpa.jaxws;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 import java.util.List;
 import javax.ejb.Stateful;
 import javax.inject.Named;
