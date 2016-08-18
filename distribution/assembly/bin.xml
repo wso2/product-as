@@ -84,7 +84,6 @@
                 <exclude>**/target/**</exclude>
                 <exclude>**/pom.xml.releaseBackup</exclude>
                 <exclude>**/**.iml</exclude>
-                <exclude>**/pom.xml</exclude>
             </excludes>
         </fileSet>
         <fileSet>
