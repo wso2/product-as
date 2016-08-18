@@ -28,7 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class JpaServletCdiTestCase extends TestBase {
-    private static final String webAppLocalURL = "/jpa-order-processor-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/jpa-order-processor";
 
     @Test(description = "test jpa and jax-ws")
     public void testJpaServletCdi() throws Exception {

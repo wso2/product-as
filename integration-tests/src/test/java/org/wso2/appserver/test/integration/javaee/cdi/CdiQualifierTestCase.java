@@ -29,7 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class CdiQualifierTestCase extends TestBase {
-    private static final String webAppLocalURL = "/cdi-qualifier-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/cdi-qualifier";
 
     @Test(description = "test cdi qualifier with servlet")
     public void testCdiServlet() throws IOException {

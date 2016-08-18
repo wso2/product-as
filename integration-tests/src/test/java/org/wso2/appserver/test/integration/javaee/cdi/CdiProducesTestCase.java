@@ -29,7 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class CdiProducesTestCase extends TestBase {
-    private static final String webAppLocalURL = "/cdi-produces-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/cdi-produces";
 
     @Test(description = "test cdi produce with servlet")
     public void testCdiServlet() throws IOException {

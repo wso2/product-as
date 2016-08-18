@@ -219,6 +219,7 @@
                             <includeTypes>war</includeTypes>
                             <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
                             </outputDirectory>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                     <execution>

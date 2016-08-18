@@ -33,7 +33,7 @@ import java.net.URL;
 public class CdiScopeTestCase extends TestBase {
 
     private static final Log log = LogFactory.getLog(CdiScopeTestCase.class);
-    private static final String webAppLocalURL = "/cdi-scope-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/cdi-scope";
 
     @Test(description = "test cdi scopes, post construct & pre destroy with servlet")
     public void testCdiServlet() throws IOException {

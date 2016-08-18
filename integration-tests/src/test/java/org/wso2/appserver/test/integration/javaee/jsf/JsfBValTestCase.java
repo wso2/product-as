@@ -39,7 +39,7 @@ import javax.xml.xpath.XPathFactory;
 import static org.testng.Assert.assertTrue;
 
 public class JsfBValTestCase extends TestBase {
-    private static final String webAppLocalURL = "/jsf-marks-calculator-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/jsf-marks-calculator";
 
     @Test(description = "test JSF Bean Validation")
     public void testJsfBVal() throws Exception {

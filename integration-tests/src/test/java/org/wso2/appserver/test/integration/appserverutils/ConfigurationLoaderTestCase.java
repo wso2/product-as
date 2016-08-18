@@ -124,8 +124,7 @@ public class ConfigurationLoaderTestCase extends TestBase {
     }
 
     private HttpURLConnection getConnection(String servletMapping) throws IOException {
-        URL requestUrl = new URL(getBaseUrl() + "/configuration-loader-" + System.getProperty("appserver.version") +
-                servletMapping);
+        URL requestUrl = new URL(getBaseUrl() + "/configuration-loader" + servletMapping);
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
 

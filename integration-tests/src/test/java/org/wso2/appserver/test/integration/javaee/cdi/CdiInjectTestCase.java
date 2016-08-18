@@ -29,7 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class CdiInjectTestCase extends TestBase {
-    private static final String webAppLocalURL = "/cdi-inject-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/cdi-inject";
 
     @Test(description = "test cdi inject with servlet")
     public void testCdiServlet() throws IOException {

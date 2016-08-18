@@ -29,7 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class CdiDecoratorTestCase extends TestBase {
-    private static final String webAppLocalURL = "/cdi-decorator-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/cdi-decorator";
 
     @Test(description = "test cdi decorator with servlet")
     public void testCdiServlet() throws IOException {

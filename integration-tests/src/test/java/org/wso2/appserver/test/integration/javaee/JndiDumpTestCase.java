@@ -30,7 +30,7 @@ import java.net.URL;
 import static org.testng.Assert.assertTrue;
 
 public class JndiDumpTestCase extends TestBase {
-    private static final String webAppLocalURL = "/ejb-examples-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/ejb-examples";
 
     @Test(description = "test jndi dump")
     public void annotatedServletTest() throws Exception {

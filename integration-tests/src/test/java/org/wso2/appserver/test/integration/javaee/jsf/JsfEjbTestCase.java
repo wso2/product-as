@@ -39,7 +39,7 @@ import javax.xml.xpath.XPathFactory;
 import static org.testng.Assert.assertTrue;
 
 public class JsfEjbTestCase extends TestBase {
-    private static final String webAppLocalURL = "/jsf-greeting-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/jsf-greeting";
 
     @Test(description = "test JSF Bean Validation")
     public void testJsfEjb() throws Exception {

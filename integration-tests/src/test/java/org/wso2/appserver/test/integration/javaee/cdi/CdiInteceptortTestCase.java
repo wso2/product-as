@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CdiInteceptortTestCase extends TestBase {
-    private static final String webAppLocalURL = "/cdi-inteceptor-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/cdi-inteceptor";
 
     @Test(description = "test cdi interceptor with servlet")
     public void testCdiServlet() throws IOException {

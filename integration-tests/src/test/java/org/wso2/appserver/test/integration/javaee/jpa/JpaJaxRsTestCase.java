@@ -28,7 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class JpaJaxRsTestCase extends TestBase {
-    private static final String webAppLocalURL = "/jpa-student-register-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/jpa-student-register";
 
     @Test(description = "test jpa and jax-rs")
     public void testJpaRsGet() throws Exception {

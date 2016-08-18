@@ -32,7 +32,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 public class JpaJaxWsTestCase extends TestBase {
-    private static final String webAppLocalURL = "/jpa-contacts-database-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/jpa-contacts-database";
 
     @Test(description = "test jpa and jax-ws")
     public void testJpaWsGet() throws Exception {

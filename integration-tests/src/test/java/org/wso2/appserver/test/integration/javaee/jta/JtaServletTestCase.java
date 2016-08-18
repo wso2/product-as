@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public class JtaServletTestCase extends TestBase {
 
     private static final Log log = LogFactory.getLog(JtaServletTestCase.class);
-    private static final String webAppLocalURL = "/jta-money-transfer-" + System.getProperty("appserver.version");
+    private static final String webAppLocalURL = "/jta-money-transfer";
 
     @Test(description = "test cdi scopes, post construct & pre destroy with servlet")
     public void testJtaServlet() throws Exception {
