@@ -29,7 +29,6 @@
         <module>configuration-loader</module>
         <module>configuration-loader-valve</module>
         <module>javaee-samples</module>
-        <module>simple-jax-rs-service</module>
         <module>jaxrs_basic</module>
         <module>appserver-sso-samples</module>
     </modules>
