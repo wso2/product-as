@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.appserver.shade.commons-digester</groupId>
     <artifactId>commons-digester-shaded</artifactId>
-    <version>1.8.wso2v1-SNAPSHOT</version>
+    <version>1.8.0.wso2v1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
