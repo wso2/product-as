@@ -143,51 +143,51 @@
 
         <!-- WSO2 Application Server shaded libraries -->
         <dependency>
-            <groupId>org.wso2.appserver.shade.slf4j</groupId>
+            <groupId>org.wso2.shade.slf4j</groupId>
             <artifactId>slf4j-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
+            <groupId>org.wso2.shade.org.apache.thrift</groupId>
             <artifactId>libthrift-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
+            <groupId>org.wso2.shade.org.opensaml</groupId>
             <artifactId>opensaml-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.apache.santuario</groupId>
+            <groupId>org.wso2.shade.org.apache.santuario</groupId>
             <artifactId>santuario-xmlsec-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.net.shibboleth.utilities</groupId>
+            <groupId>org.wso2.shade.net.shibboleth.utilities</groupId>
             <artifactId>shibboleth-java-support-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.commons-logging</groupId>
+            <groupId>org.wso2.shade.commons-logging</groupId>
             <artifactId>commons-logging-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.log4j</groupId>
+            <groupId>org.wso2.shade.log4j</groupId>
             <artifactId>log4j-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.apache.geronimo.components</groupId>
+            <groupId>org.wso2.shade.org.apache.geronimo.components</groupId>
             <artifactId>geronimo-transaction-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.apache.wss4j</groupId>
+            <groupId>org.wso2.shade.org.apache.wss4j</groupId>
             <artifactId>wss4j-ws-security-dom-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.apache.wss4j</groupId>
+            <groupId>org.wso2.shade.org.apache.wss4j</groupId>
             <artifactId>wss4j-ws-security-common-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.commons-beanutils</groupId>
+            <groupId>org.wso2.shade.commons-beanutils</groupId>
             <artifactId>commons-beanutils-core-shaded</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.commons-digester</groupId>
+            <groupId>org.wso2.shade.commons-digester</groupId>
             <artifactId>commons-digester-shaded</artifactId>
         </dependency>
 
@@ -207,12 +207,8 @@
 
         <!-- HTTP statistics publishing dependencies -->
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.agent-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons-shaded</artifactId>
+            <groupId>org.wso2.shade.org.wso2.carbon.analytics-common</groupId>
+            <artifactId>org.wso2.carbon.databridge-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.analytics-common</groupId>
@@ -361,7 +357,7 @@
             <artifactId>org.jaggeryjs.jaggery.tomcat.listener</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
+            <groupId>org.wso2.shade.org.jaggeryjs</groupId>
             <artifactId>org.jaggeryjs-shaded</artifactId>
         </dependency>
         <dependency>
@@ -369,7 +365,7 @@
             <artifactId>commons-fileupload</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.appserver.shade.commons-httpclient</groupId>
+            <groupId>org.wso2.shade.commons-httpclient</groupId>
             <artifactId>commons-httpclient-shaded</artifactId>
         </dependency>
         <dependency>
