@@ -96,6 +96,7 @@ public class TestListener implements ITestListener {
 
             // copying jaggery sample web app to webapps directory
             copyJaggeryWebApp(appserverHome);
+            copySystemPropertiesFile();
 
             processHandler = new ApplicationServerProcessHandler(appserverHome);
 
@@ -195,6 +196,11 @@ public class TestListener implements ITestListener {
         FileUtils.copyDirectory(
                 Paths.get(appserverHome.toString(), "samples", "jaggery-sample-apps", "coffeeshop").toFile(),
                 Paths.get(appserverHome.toString(), "webapps", "coffeeshop").toFile());
+    }
+
+    private void copySystemPropertiesFile() throws IOException {
+        FileUtils.copyFile(Paths.get("src", "test", "resources", "system.properties").toFile(), Paths.get("target",
+                "wso2as-" + System.getProperty("appserver.version"), "conf", "system.properties").toFile());
     }
 
     @Override

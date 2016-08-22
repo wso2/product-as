@@ -48,6 +48,25 @@ limitations under the License.
         </classes>
     </test>
 
+    <test name="javaee">
+        <classes>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiAlternativesTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiDecoratorTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiInjectTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiInteceptortTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiProducesTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiQualifierTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.cdi.CdiScopeTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaJaxRsTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaJaxWsTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jpa.JpaServletCdiTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jsf.JsfBValTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jsf.JsfEjbTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.jta.JtaServletTestCase"/>
+            <class name="org.wso2.appserver.test.integration.javaee.JndiDumpTestCase"/>
+        </classes>
+    </test>
+
     <test name="wso2as-test-webapp-loader-failing-runtime-path">
         <parameter name="server-status-hook"
                    value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>

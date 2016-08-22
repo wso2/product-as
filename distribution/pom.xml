@@ -57,8 +57,8 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>org.apache.tomcat</includeGroupIds>
-                            <includeArtifactIds>tomcat</includeArtifactIds>
+                            <includeGroupIds>org.apache.tomee, org.apache.tomcat</includeGroupIds>
+                            <includeArtifactIds>apache-tomee, tomcat</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/tomcat-dist/</outputDirectory>
                         </configuration>
                     </execution>
@@ -76,7 +76,7 @@
                                     <type>jar</type>
                                     <includes>Http_Stats_Analytics.car</includes>
                                     <outputDirectory>
-                                        ${project.build.directory}/tomcat-dist/apache-tomcat-${tomcat.version}/monitoring/
+                                        ${project.build.directory}/tomcat-dist/apache-tomee-${tomee.classifier}-${tomee.version}/monitoring/
                                     </outputDirectory>
                                 </artifactItem>
                             </artifactItems>
@@ -93,6 +93,27 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
             <type>zip</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>apache-tomee</artifactId>
+            <classifier>${tomee.classifier}</classifier>
+            <type>zip</type>
+        </dependency>
+
+        <!--jaxws related libs-->
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>tomee-webservices</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>openejb-webservices</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>openejb-cxf</artifactId>
         </dependency>
 
         <!-- WSO2 Application Server Modules -->
@@ -131,51 +152,7 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-core-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-messaging-api-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-profile-api-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-saml-api-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-saml-impl-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-security-api-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-security-impl-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-soap-api-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-soap-impl-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-storage-api-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-xmlsec-api-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-            <artifactId>opensaml-xmlsec-impl-shaded</artifactId>
+            <artifactId>opensaml-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver.shade.org.apache.santuario</groupId>
@@ -193,6 +170,26 @@
             <groupId>org.wso2.appserver.shade.log4j</groupId>
             <artifactId>log4j-shaded</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.apache.geronimo.components</groupId>
+            <artifactId>geronimo-transaction-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.apache.wss4j</groupId>
+            <artifactId>wss4j-ws-security-dom-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.org.apache.wss4j</groupId>
+            <artifactId>wss4j-ws-security-common-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver.shade.commons-digester</groupId>
+            <artifactId>commons-digester-shaded</artifactId>
+        </dependency>
 
         <!-- WSO2 Application Server Sample Webapps -->
         <dependency>
@@ -200,50 +197,12 @@
             <artifactId>jaxrs_basic</artifactId>
             <type>war</type>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>simple-jax-rs-service</artifactId>
-            <type>war</type>
-        </dependency>
 
         <!-- Application Server runtime libs -->
-        <!-- Spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-            <artifactId>spring-context-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-            <artifactId>spring-web-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-            <artifactId>spring-core-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-            <artifactId>spring-beans-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
         <!-- CXF -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
         </dependency>
 
         <!-- HTTP statistics publishing dependencies -->
@@ -329,6 +288,66 @@
             <groupId>org.cryptacular</groupId>
             <artifactId>cryptacular</artifactId>
         </dependency>
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-bindings-soap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-databinding-jaxb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-addr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-policy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-wsdl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.neethi</groupId>
+            <artifactId>neethi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xml-resolver</groupId>
+            <artifactId>xml-resolver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-bindings-xml</artifactId>
+        </dependency>
 
         <!-- Webapp loader dependencies -->
         <dependency>
@@ -343,47 +362,7 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.file-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.jaggeryparser-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.log-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.oauth</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.stream-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.uri-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.web-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.xhr-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.hostobjects.xslt-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.jaggery.core-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-            <artifactId>org.jaggeryjs.scriptengine-shaded</artifactId>
+            <artifactId>org.jaggeryjs-shaded</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-fileupload.wso2</groupId>

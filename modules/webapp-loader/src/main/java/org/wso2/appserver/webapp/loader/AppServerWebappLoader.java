@@ -20,6 +20,15 @@ package org.wso2.appserver.webapp.loader;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.loader.WebappLoader;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+import org.apache.openejb.component.ClassLoaderEnricher;
+import org.apache.openejb.loader.SystemInstance;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
 
 /**
  * Customized {@link WebappLoader} for Application Server.
@@ -27,6 +36,8 @@ import org.apache.catalina.loader.WebappLoader;
  * @since 6.0.0
  */
 public class AppServerWebappLoader extends WebappLoader {
+
+    private static final Log log = LogFactory.getLog(AppServerWebappLoader.class);
     @SuppressWarnings("unused")
     public AppServerWebappLoader() {
         super();
@@ -42,6 +53,17 @@ public class AppServerWebappLoader extends WebappLoader {
         // build the class loading context for the webapp
         WebappClassLoaderContext webappClassLoaderContext = new WebappClassLoaderContext(getContext());
         super.startInternal();
+        final ClassLoaderEnricher classLoaderEnricher = SystemInstance.get().getComponent(ClassLoaderEnricher.class);
+        if (null != classLoaderEnricher) {
+            List<String> urls = webappClassLoaderContext.getProvidedRepositories();
+            for (String url : urls) {
+                try {
+                    classLoaderEnricher.addUrl(new URL(url));
+                } catch (MalformedURLException e) {
+                    log.error("Incorrect jar path " + e);
+                }
+            }
+        }
         ((AppServerWebappClassLoader) getClassLoader()).setWebappClassLoaderContext(webappClassLoaderContext);
     }
 }

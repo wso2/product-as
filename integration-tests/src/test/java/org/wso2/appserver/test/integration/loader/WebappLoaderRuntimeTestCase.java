@@ -36,7 +36,7 @@ import java.net.URL;
 public class WebappLoaderRuntimeTestCase extends TestBase {
     @Test(description = "tests whether the jaxrs_basic webapp can be invoked")
     public void testEnvironmentConfiguration() throws IOException {
-        URL requestUrl = new URL(getBaseUrl() + "/jaxrs_basic-" + System.getProperty("appserver.version")
+        URL requestUrl = new URL(getBaseUrl() + "/jaxrs_basic"
                 + "/services/customerservice/customers/123/");
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestMethod(TestConstants.HTTP_GET_METHOD);
