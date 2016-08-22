@@ -11,7 +11,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
@@ -155,6 +156,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>apache-tomee</artifactId>
+                <version>${tomee.version}</version>
+                <classifier>webprofile</classifier>
+                <type>zip</type>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat</artifactId>
                 <version>${tomcat.version}</version>
@@ -165,6 +173,21 @@
                 <artifactId>tomcat-catalina</artifactId>
                 <version>${tomcat.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>tomee-webservices</artifactId>
+                <version>${tomee.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>openejb-webservices</artifactId>
+                <version>${tomee.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>openejb-cxf</artifactId>
+                <version>${tomee.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
@@ -195,11 +218,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons.lang.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -305,16 +323,6 @@
             </dependency>
             <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-messaging-api</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-profile-api</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
                 <artifactId>opensaml-saml-api</artifactId>
                 <version>${org.opensaml.version}</version>
             </dependency>
@@ -326,26 +334,6 @@
             <dependency>
                 <groupId>org.opensaml</groupId>
                 <artifactId>opensaml-security-api</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-security-impl</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-soap-api</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-soap-impl</artifactId>
-                <version>${org.opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-storage-api</artifactId>
                 <version>${org.opensaml.version}</version>
             </dependency>
             <dependency>
@@ -448,84 +436,132 @@
                 <artifactId>configuration-loader</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>configuration-loader-valve</artifactId>
                 <version>${appserver.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>bar-app</artifactId>
-                <version>${appserver.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>foo-app</artifactId>
-                <version>${appserver.version}</version>
-                <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jaxrs_basic</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
-                <artifactId>simple-jax-rs-service</artifactId>
+                <artifactId>jpa-contacts-database</artifactId>
+                <version>${appserver.version}</version>
+                <classifier>classes</classifier>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>cdi-alternatives</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>cdi-decorator</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>cdi-inject</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>cdi-inteceptor</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>cdi-produces</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>cdi-qualifier</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>cdi-scope</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jpa-student-register</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jsf-marks-calculator</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jsf-greeting</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jpa-contacts-database</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jpa-order-processor</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>jta-money-transfer</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>ejb-examples</artifactId>
+                <version>${appserver.version}</version>
+                <type>war</type>
+                <scope>test</scope>
             </dependency>
 
             <!-- Runtimes CXF -->
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-                <version>${runtime.cxf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxws</artifactId>
                 <version>${runtime.cxf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-rt-transports-http</artifactId>
-                <version>${runtime.cxf.version}</version>
-            </dependency>
-
-            <!-- Runtime Spring -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>${runtime.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${runtime.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${runtime.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${runtime.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${runtime.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${runtime.spring.version}</version>
             </dependency>
 
             <!-- WSO2 Application Server Modules -->
@@ -547,7 +583,7 @@
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>appserver-webapp-security</artifactId>
-                <version>6.0.0-SNAPSHOT</version>
+                <version>${appserver.version}</version>
             </dependency>
 
             <!--Quick Start Module-->
@@ -559,179 +595,79 @@
 
             <!-- Shaded Dependency Modules -->
             <dependency>
-                <groupId>org.wso2.appserver.shade.slf4j</groupId>
+                <groupId>org.wso2.shade.slf4j</groupId>
                 <artifactId>slf4j-shaded</artifactId>
                 <version>${slf4j.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.apache.thrift</groupId>
+                <groupId>org.wso2.shade.org.apache.thrift</groupId>
                 <artifactId>libthrift-shaded</artifactId>
                 <version>${libthrift.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-core-shaded</artifactId>
+                <groupId>org.wso2.shade.org.opensaml</groupId>
+                <artifactId>opensaml-shaded</artifactId>
                 <version>${org.opensaml.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-messaging-api-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-profile-api-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-saml-api-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-saml-impl-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-security-api-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-security-impl-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-soap-api-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-soap-impl-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-storage-api-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-xmlsec-api-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.opensaml</groupId>
-                <artifactId>opensaml-xmlsec-impl-shaded</artifactId>
-                <version>${org.opensaml.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.apache.santuario</groupId>
+                <groupId>org.wso2.shade.org.apache.santuario</groupId>
                 <artifactId>santuario-xmlsec-shaded</artifactId>
                 <version>${org.apache.santuario.xmlsec.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.net.shibboleth.utilities</groupId>
+                <groupId>org.wso2.shade.net.shibboleth.utilities</groupId>
                 <artifactId>shibboleth-java-support-shaded</artifactId>
                 <version>${net.shibboleth.utilities.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.commons-logging</groupId>
+                <groupId>org.wso2.shade.commons-logging</groupId>
                 <artifactId>commons-logging-shaded</artifactId>
                 <version>${commons-logging.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
-                <artifactId>org.wso2.carbon.databridge.agent-shaded</artifactId>
+                <groupId>org.wso2.shade.org.wso2.carbon.analytics-common</groupId>
+                <artifactId>org.wso2.carbon.databridge-shaded</artifactId>
                 <version>${org.wso2.carbon.analytics-common.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.wso2.carbon.analytics-common</groupId>
-                <artifactId>org.wso2.carbon.databridge.commons-shaded</artifactId>
-                <version>${org.wso2.carbon.analytics-common.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.log4j</groupId>
+                <groupId>org.wso2.shade.log4j</groupId>
                 <artifactId>log4j-shaded</artifactId>
                 <version>${log4j.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.file-shaded</artifactId>
+                <groupId>org.wso2.shade.org.jaggeryjs</groupId>
+                <artifactId>org.jaggeryjs-shaded</artifactId>
                 <version>${jaggery.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.jaggeryparser-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.log-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.stream-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.uri-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.web-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.xhr-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.xslt-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.jaggery.core-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.scriptengine-shaded</artifactId>
-                <version>${jaggery.shade.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver.shade.commons-httpclient</groupId>
+                <groupId>org.wso2.shade.commons-httpclient</groupId>
                 <artifactId>commons-httpclient-shaded</artifactId>
                 <version>${commons-httpclient.shade.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-                <artifactId>spring-beans-shaded</artifactId>
-                <version>${runtime.spring.shade.version}</version>
+                <groupId>org.wso2.shade.org.apache.geronimo.components</groupId>
+                <artifactId>geronimo-transaction-shaded</artifactId>
+                <version>${geronimo-transaction.shaded.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-                <artifactId>spring-context-shaded</artifactId>
-                <version>${runtime.spring.shade.version}</version>
+                <groupId>org.wso2.shade.org.apache.wss4j</groupId>
+                <artifactId>wss4j-ws-security-dom-shaded</artifactId>
+                <version>${wss4j-ws-security-dom.shaded.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-                <artifactId>spring-core-shaded</artifactId>
-                <version>${runtime.spring.shade.version}</version>
+                <groupId>org.wso2.shade.org.apache.wss4j</groupId>
+                <artifactId>wss4j-ws-security-common-shaded</artifactId>
+                <version>${wss4j-ws-security-common.shaded.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.appserver.shade.org.springframework</groupId>
-                <artifactId>spring-web-shaded</artifactId>
-                <version>${runtime.spring.shade.version}</version>
+                <groupId>org.wso2.shade.commons-beanutils</groupId>
+                <artifactId>commons-beanutils-core-shaded</artifactId>
+                <version>${commons-beanutils-core.shaded.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.shade.commons-digester</groupId>
+                <artifactId>commons-digester-shaded</artifactId>
+                <version>${commons-digester.shaded.version}</version>
             </dependency>
 
             <!-- WSO2 Application Server Tests -->
@@ -834,131 +770,6 @@
                 <version>${jaggery.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.file</artifactId>
-                <version>${jaggery.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.logging</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi.services</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.utils</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.jaggeryparser</artifactId>
-                <version>${jaggery.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi.services</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.utils</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.log</artifactId>
-                <version>${jaggery.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.oauth</artifactId>
-                <version>${jaggery.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.stream</artifactId>
-                <version>${jaggery.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.uri</artifactId>
-                <version>${jaggery.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.web</artifactId>
-                <version>${jaggery.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.xhr</artifactId>
-                <version>${jaggery.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.hostobjects.xslt</artifactId>
-                <version>${jaggery.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.jaggery.core</artifactId>
-                <version>${jaggery.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi.services</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.utils</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.jaggeryjs</groupId>
-                <artifactId>org.jaggeryjs.scriptengine</artifactId>
-                <version>${jaggery.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.osgi</groupId>
-                        <artifactId>org.eclipse.osgi.services</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.wso2.carbon</groupId>
-                        <artifactId>org.wso2.carbon.utils</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
                 <groupId>commons-fileupload.wso2</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>${commons-fileupload.version}</version>
@@ -978,11 +789,103 @@
                 <artifactId>wso2-uri-templates</artifactId>
                 <version>${wso2-uri-templates.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
+                <groupId>aopalliance</groupId>
+                <artifactId>aopalliance</artifactId>
+                <version>${aopalliance.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-bindings-soap</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-databinding-jaxb</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-ws-addr</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-ws-policy</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-wsdl</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>${javax.annotation.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${javax.ws.rs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-core</artifactId>
+                <version>${com.sun.xml.bind.jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${com.sun.xml.bind.jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.neethi</groupId>
+                <artifactId>neethi</artifactId>
+                <version>${org.apache.neethi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>wsdl4j</groupId>
+                <artifactId>wsdl4j</artifactId>
+                <version>${wsdl4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xml-resolver</groupId>
+                <artifactId>xml-resolver</artifactId>
+                <version>${xml-resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-bindings-xml</artifactId>
+                <version>${runtime.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomee</groupId>
+                <artifactId>tomee-catalina</artifactId>
+                <version>${tomee.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${samples.version.mysql.connector.java}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jettison</groupId>
+                <artifactId>jettison</artifactId>
+                <version>${jettison.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -1011,14 +914,14 @@
         <maven.shadeplugin.version>2.4.3</maven.shadeplugin.version>
 
         <!-- dependency version properties -->
-        <tomcat.version>8.0.36</tomcat.version>
+        <tomcat.version>8.5.3</tomcat.version>
         <carbon.analyticscommon.version>5.0.8</carbon.analyticscommon.version>
         <com.google.code.findbugs.version>3.0.1</com.google.code.findbugs.version>
         <com.google.guava.version>19.0</com.google.guava.version>
         <commons.codec.version>1.10</commons.codec.version>
         <commons.collctions.version>3.2.2</commons.collctions.version>
         <commons.httpclient.version>3.1</commons.httpclient.version>
-        <commons-httpclient.shade.version>3.1.0.wso2v1-SNAPSHOT</commons-httpclient.shade.version>
+        <commons-httpclient.shade.version>3.1.0.wso2v1</commons-httpclient.shade.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.lang3.version>3.4</commons.lang3.version>
@@ -1032,16 +935,16 @@
         <junit.version>4.12</junit.version>
         <jsr.api.version>1.1.1</jsr.api.version>
         <libthrift.version>0.9.3</libthrift.version>
-        <libthrift.shade.version>0.9.3.wso2v1-SNAPSHOT</libthrift.shade.version>
+        <libthrift.shade.version>0.9.3.wso2v1</libthrift.shade.version>
         <log4j.version>1.2.17</log4j.version>
-        <log4j.shade.version>1.2.17.wso2v1-SNAPSHOT</log4j.shade.version>
+        <log4j.shade.version>1.2.17.wso2v1</log4j.shade.version>
         <net.shibboleth.utilities.version>7.2.0</net.shibboleth.utilities.version>
-        <net.shibboleth.utilities.shade.version>7.2.0.wso2v1-SNAPSHOT
+        <net.shibboleth.utilities.shade.version>7.2.0.wso2v1
         </net.shibboleth.utilities.shade.version>
         <org.apache.httpcomponents.httpclient>4.5.2</org.apache.httpcomponents.httpclient>
         <org.apache.httpcomponents.httpcore>4.4.4</org.apache.httpcomponents.httpcore>
         <org.apache.santuario.xmlsec.version>2.0.6</org.apache.santuario.xmlsec.version>
-        <org.apache.santuario.xmlsec.shade.version>2.0.6.wso2v1-SNAPSHOT
+        <org.apache.santuario.xmlsec.shade.version>2.0.6.wso2v1
         </org.apache.santuario.xmlsec.shade.version>
         <org.bouncycastle.bcprov-jdk15on.version>1.54</org.bouncycastle.bcprov-jdk15on.version>
         <org.codehaus.woodstox.stax2-api.version>4.0.0</org.codehaus.woodstox.stax2-api.version>
@@ -1049,28 +952,50 @@
         <org.cryptacular.version>1.1.0</org.cryptacular.version>
         <org.jacoco.ant.version>0.7.5.201505241946</org.jacoco.ant.version>
         <org.opensaml.version>3.2.0</org.opensaml.version>
-        <org.opensaml.shade.version>3.2.0.wso2v1-SNAPSHOT</org.opensaml.shade.version>
+        <org.opensaml.shade.version>3.2.0.wso2v1</org.opensaml.shade.version>
+        <geronimo-transaction.shaded.version>3.1.3.wso2v1</geronimo-transaction.shaded.version>
+        <wss4j-ws-security-dom.shaded.version>2.1.4.wso2v1</wss4j-ws-security-dom.shaded.version>
+        <wss4j-ws-security-common.shaded.version>2.1.4.wso2v1</wss4j-ws-security-common.shaded.version>
+        <commons-beanutils-core.shaded.version>1.8.3.wso2v1</commons-beanutils-core.shaded.version>
+        <commons-digester.shaded.version>1.8.0.wso2v1</commons-digester.shaded.version>
+
         <org.mockito.mockito-all.version>1.10.19</org.mockito.mockito-all.version>
         <runtime.cxf.version>3.1.5</runtime.cxf.version>
+        <cxf.bundle.version>2.7.18</cxf.bundle.version>
         <runtime.spring.version>4.2.5.RELEASE</runtime.spring.version>
-        <runtime.spring.shade.version>4.2.5.wso2v1-SNAPSHOT</runtime.spring.shade.version>
+        <runtime.spring.shade.version>4.2.5.wso2v1</runtime.spring.shade.version>
         <servlet.api.version>2.5</servlet.api.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <slf4j.shade.version>1.7.21.wso2v1-SNAPSHOT</slf4j.shade.version>
+        <slf4j.shade.version>1.7.21.wso2v1</slf4j.shade.version>
         <testng.version>6.9.10</testng.version>
         <uaparser.version>1.3.0.wso2v1</uaparser.version>
         <xerces.xerces.version>2.4.0</xerces.xerces.version>
         <xerces.xercesImpl.version>2.11.0</xerces.xercesImpl.version>
         <jaggery.version>0.13.0</jaggery.version>
-        <jaggery.shade.version>0.13.0.wso2v1-SNAPSHOT</jaggery.shade.version>
+        <jaggery.shade.version>0.13.0.wso2v1</jaggery.shade.version>
         <commons-fileupload.version>1.2.0.wso2v1</commons-fileupload.version>
         <js.version>1.7.0.R4.wso2v1</js.version>
         <json-simple.version>1.1.wso2v1</json-simple.version>
         <org.eclipse.wst.jsdt.debug.transport.version>1.0.100.v201109150330
         </org.eclipse.wst.jsdt.debug.transport.version>
         <wso2-uri-templates.version>1.0.0</wso2-uri-templates.version>
-        <org.wso2.carbon.analytics-common.shade.version>5.0.8.wso2v1-SNAPSHOT</org.wso2.carbon.analytics-common.shade.version>
-        <commons-logging.shade.version>1.2.0.wso2v1-SNAPSHOT</commons-logging.shade.version>
+        <org.wso2.carbon.analytics-common.shade.version>5.0.8.wso2v1</org.wso2.carbon.analytics-common.shade.version>
+        <commons-logging.shade.version>1.2.0.wso2v1</commons-logging.shade.version>
+        <aopalliance.version>1.0</aopalliance.version>
+        <asm.version>5.0.4</asm.version>
+        <javax.annotation.api.version>1.2</javax.annotation.api.version>
+        <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
+        <com.sun.xml.bind.jaxb.version>2.2.11</com.sun.xml.bind.jaxb.version>
+        <org.apache.neethi.version>3.0.3</org.apache.neethi.version>
+        <wsdl4j.version>1.6.3</wsdl4j.version>
+        <xml-resolver.version>1.2</xml-resolver.version>
+        <tomee.version>7.0.1</tomee.version>
+        <tomee.classifier>webprofile</tomee.classifier>
+        <commons.logging.version>1.2</commons.logging.version>
+        <samples.version.mysql.connector.java>5.1.18</samples.version.mysql.connector.java>
+        <jettison.version>1.3.8</jettison.version>
+        <maven.war.plugin.version>2.6</maven.war.plugin.version>
+        <maven.eclipse.plugin.version>2.10</maven.eclipse.plugin.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>

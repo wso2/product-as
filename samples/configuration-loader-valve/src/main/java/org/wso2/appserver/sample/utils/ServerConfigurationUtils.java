@@ -46,12 +46,12 @@ public class ServerConfigurationUtils {
     private static AppServerClassLoading prepareClassLoaderEnv() {
         AppServerClassLoading classloadingEnvironments = new AppServerClassLoading();
 
-        AppServerClassLoading.Environment cxf = new AppServerClassLoading.Environment();
-        cxf.setName(Constants.CXF_ENV_NAME);
-        cxf.setClasspath(Constants.CXF_ENV_CLASSPATH);
+        AppServerClassLoading.Environment customEnv = new AppServerClassLoading.Environment();
+        customEnv.setName(Constants.JAGGERY_ENV_NAME);
+        customEnv.setClasspath(Constants.JAGGERY_ENV_CLASSPATH);
 
         List<AppServerClassLoading.Environment> envList = new ArrayList<>();
-        envList.add(cxf);
+        envList.add(customEnv);
 
         envList
                 .forEach(environment -> environment.setClasspath(STRING_SUB.replace(environment.getClasspath())));

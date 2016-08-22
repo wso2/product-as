@@ -30,4 +30,5 @@ public class TestBase {
     public String getBaseUrl() {
         return "http://localhost:" + System.getProperty(TestConstants.APPSERVER_PORT);
     }
+
 }

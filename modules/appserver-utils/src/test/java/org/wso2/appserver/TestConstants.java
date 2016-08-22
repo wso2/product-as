@@ -32,8 +32,8 @@ public class TestConstants {
     static final String FAULTY_SAMPLE_WEB_APP = "faulty-sample";
 
     //  test constants for server level classloader environment configurations
-    static final String CXF_ENV_NAME = "CXF";
-    static final String CXF_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/cxf/";
+    static final String CUSTOM_ENV_NAME = "CUSTOM";
+    static final String CUSTOM_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/custom/";
     static final String JAXRS_ENV_NAME = "JAX-RS";
     static final String JAXRS_ENV_CLASSPATH = "${catalina.base}/lib/runtimes/hello-parent-runtime.jar";
 

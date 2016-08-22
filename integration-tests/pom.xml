@@ -90,6 +90,12 @@
             <artifactId>configuration-loader-valve</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-contacts-database</artifactId>
+            <classifier>classes</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
             <classifier>runtime</classifier>
@@ -98,6 +104,76 @@
         <dependency>
             <groupId>org.wso2.appserver</groupId>
             <artifactId>jaxrs_basic</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>cdi-alternatives</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>cdi-decorator</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>cdi-inject</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>cdi-inteceptor</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>cdi-produces</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>cdi-qualifier</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>cdi-scope</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-student-register</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jsf-marks-calculator</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jsf-greeting</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-contacts-database</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jpa-order-processor</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>jta-money-transfer</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>ejb-examples</artifactId>
             <type>war</type>
         </dependency>
     </dependencies>
@@ -140,22 +216,10 @@
                         </goals>
                         <configuration>
                             <includeGroupIds>org.wso2.appserver</includeGroupIds>
-                            <includeArtifactIds>configuration-loader</includeArtifactIds>
+                            <includeTypes>war</includeTypes>
                             <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
                             </outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-jaxrsbasic-webapps</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeGroupIds>org.wso2.appserver</includeGroupIds>
-                            <includeArtifactIds>jaxrs_basic</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
-                            </outputDirectory>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                     <execution>
