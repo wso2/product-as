@@ -471,23 +471,27 @@
                 <artifactId>configuration-loader</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>configuration-loader-valve</artifactId>
                 <version>${appserver.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jaxrs_basic</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>simple-jax-rs-service</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
@@ -501,84 +505,98 @@
                 <artifactId>cdi-alternatives</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>cdi-decorator</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>cdi-inject</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>cdi-inteceptor</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>cdi-produces</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>cdi-qualifier</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>cdi-scope</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jpa-student-register</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jsf-marks-calculator</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jsf-greeting</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jpa-contacts-database</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jpa-order-processor</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>jta-money-transfer</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
                 <artifactId>ejb-examples</artifactId>
                 <version>${appserver.version}</version>
                 <type>war</type>
+                <scope>test</scope>
             </dependency>
 
             <!-- Runtimes CXF -->
@@ -1084,16 +1102,6 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${commons.logging.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-core</artifactId>
-                <version>${tomcat.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-jdbc</artifactId>
-                <version>${tomcat.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
