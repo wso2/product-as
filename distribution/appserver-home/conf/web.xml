@@ -4689,4 +4689,8 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <listener>
+        <listener-class>org.wso2.appserver.apieverywhere.WebAppDeploymentListener</listener-class>
+    </listener>
+
 </web-app>

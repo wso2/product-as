@@ -13,16 +13,16 @@ import javax.servlet.annotation.WebListener;
  *
  */
 @WebListener
-public class WebAppDeployerListener implements ServletContextListener{
-
-    private static final Log log = LogFactory.getLog(WebAppDeployerListener.class);
+public class WebAppDeploymentListener implements ServletContextListener {
+    private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         //APIs of web application have to be extracted
         log.info("A web application is deployed");
         ServletContext servletContext = servletContextEvent.getServletContext();
-        servletContext.getServerInfo();
+        ClassLoader classLoader = servletContext.getClassLoader();
+        log.info("class loading :::" + classLoader.toString());
     }
 
     @Override

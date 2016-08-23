@@ -85,6 +85,7 @@
                 <include>org.wso2.appserver:appserver-http-statistics-monitoring:jar</include>
                 <include>org.wso2.appserver:appserver-webapp-loader:jar</include>
                 <include>org.wso2.appserver:appserver-webapp-security:jar</include>
+                <include>org.wso2.appserver:api-everywhere-as:jar</include>
             </includes>
         </dependencySet>
 
