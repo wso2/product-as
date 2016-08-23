@@ -92,30 +92,16 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
-                <include>org.wso2.appserver.shade.org.apache.thrift:libthrift-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-core-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-messaging-api-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-profile-api-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-saml-api-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-saml-impl-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-security-api-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-security-impl-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-soap-api-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-soap-impl-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-storage-api-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-xmlsec-api-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.opensaml:opensaml-xmlsec-impl-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.apache.santuario:santuario-xmlsec-shaded:jar</include>
-                <include>org.wso2.appserver.shade.net.shibboleth.utilities:shibboleth-java-support-shaded:jar</include>
-                <include>org.wso2.appserver.shade.slf4j:slf4j-shaded:jar</include>
-                <include>org.wso2.appserver.shade.commons-logging:commons-logging-shaded:jar</include>
+                <include>org.wso2.shade.org.apache.thrift:libthrift-shaded:jar</include>
+                <include>org.wso2.shade.org.opensaml:opensaml-shaded:jar</include>
+                <include>org.wso2.shade.org.apache.santuario:santuario-xmlsec-shaded:jar</include>
+                <include>org.wso2.shade.net.shibboleth.utilities:shibboleth-java-support-shaded:jar</include>
+                <include>org.wso2.shade.slf4j:slf4j-shaded:jar</include>
+                <include>org.wso2.shade.commons-logging:commons-logging-shaded:jar</include>
                 <include>
-                    org.wso2.appserver.shade.org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.agent-shaded:jar
+                    org.wso2.shade.org.wso2.carbon.analytics-common:org.wso2.carbon.databridge-shaded:jar
                 </include>
-                <include>
-                    org.wso2.appserver.shade.org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons-shaded:jar
-                </include>
-                <include>org.wso2.appserver.shade.log4j:log4j-shaded:jar</include>
+                <include>org.wso2.shade.log4j:log4j-shaded:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
@@ -125,8 +111,6 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
             <includes>
-                <include>org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons.thrift:jar</include>
-                <include>org.wso2.carbon.analytics-common:org.wso2.carbon.databridge.commons.binary:jar</include>
                 <include>org.apache.commons:commons-lang3:jar</include>
                 <include>commons-pool:commons-pool:jar</include>
                 <include>commons-io:commons-io:jar</include>
@@ -157,19 +141,7 @@
                 <include>org.apache.cxf:cxf-rt-frontend-jaxws:jar</include>
                 <include>org.apache.cxf:cxf-rt-frontend-jaxrs:jar</include>
                 <include>org.apache.cxf:cxf-rt-transports-http:jar</include>
-                <include>org.wso2.appserver.shade.org.springframework:spring-beans-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.springframework:spring-context-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.springframework:spring-core-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.springframework:spring-web-shaded:jar</include>
-                <include>org.springframework:spring-aop:jar</include>
-                <include>org.springframework:spring-webmvc:jar</include>
             </includes>
-            <excludes>
-                <exclude>org.springframework:spring-beans:jar</exclude>
-                <exclude>org.springframework:spring-context:jar</exclude>
-                <exclude>org.springframework:spring-core:jar</exclude>
-                <exclude>org.springframework:spring-web:jar</exclude>
-            </excludes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
         </dependencySet>
@@ -178,20 +150,9 @@
         <dependencySet>
             <outputDirectory>/${distribution.file.name}/lib/runtimes/jaggery</outputDirectory>
             <includes>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.file-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.jaggeryparser-shaded:jar
-                </include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.log-shaded:jar</include>
-                <include>org.jaggeryjs:org.jaggeryjs.hostobjects.oauth:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.stream-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.uri-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.web-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.xhr-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.hostobjects.xslt-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.jaggery.core-shaded:jar</include>
-                <include>org.wso2.appserver.shade.org.jaggeryjs:org.jaggeryjs.scriptengine-shaded:jar</include>
+                <include>org.wso2.shade.org.jaggeryjs:org.jaggeryjs-shaded:jar</include>
                 <include>commons-fileupload.wso2:commons-fileupload:jar</include>
-                <include>org.wso2.appserver.shade.commons-httpclient:commons-httpclient-shaded:jar</include>
+                <include>org.wso2.shade.commons-httpclient:commons-httpclient-shaded:jar</include>
                 <include>rhino.wso2:js:jar</include>
                 <include>com.googlecode.json-simple:json-simple:jar</include>
                 <include>com.googlecode.json-simple:org.jaggeryjs.scriptengine:jar</include>
