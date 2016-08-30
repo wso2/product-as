@@ -119,6 +119,10 @@
             <groupId>org.wso2.appserver</groupId>
             <artifactId>sso-quickstart</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>http-analytics-quickstart</artifactId>
+        </dependency>
 
         <!-- WSO2 Application Server shaded libraries -->
         <dependency>
