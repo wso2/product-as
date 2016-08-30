@@ -15,7 +15,7 @@
 <project default="build-all">
 
     <property name="wso2appserver.home" value="../../"/>
-	<property name="jaggerySamples" value="${wso2appserver.home}samples/jaggery-sample-apps"/>
+	<property name="jaggerySamples" value="${wso2appserver.home}samples/jaggerySamples"/>
 
     <target name="build-all">
         <echo message="Copying the jaggery samples repository ${jaggerySamples}"/>
