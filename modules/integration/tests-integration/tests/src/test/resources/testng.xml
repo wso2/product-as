@@ -9,6 +9,12 @@
         </packages>
     </test-->
 
+    <test name="loggingadmin-tests" parallel="false">
+        <packages>
+            <package name="org.wso2.appserver.integration.tests.loggingadmin"></package>
+        </packages>
+    </test>
+
     <test name="logviewer-tests" parallel="false">
         <!--todo-->
         <packages>
