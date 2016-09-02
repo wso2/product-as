@@ -988,6 +988,23 @@
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+
+            <!--api everywhere dependencies-->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflection.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${jax-ws-rs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassit.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1076,8 +1093,13 @@
         <wso2-uri-templates.version>1.0.0</wso2-uri-templates.version>
         <org.wso2.carbon.analytics-common.shade.version>5.0.8.wso2v1-SNAPSHOT</org.wso2.carbon.analytics-common.shade.version>
         <commons-logging.shade.version>1.2.0.wso2v1-SNAPSHOT</commons-logging.shade.version>
+        <reflection.version>0.9.10</reflection.version>
+        <jax-ws-rs.version>2.0.1</jax-ws-rs.version>
+        <javassit.version>3.12.1.GA</javassit.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>
+
+
     </properties>
 </project>

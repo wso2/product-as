@@ -1,4 +1,4 @@
-package org.wso2.appserver.apieverywhere;
+package org.wso2.appserver.apieverywhere.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

@@ -150,6 +150,16 @@
             </includes>
         </dependencySet>
 
+        <!-- Include dependencies for api everywhere modules here -->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
+            <includes>
+                <include>org.reflections:reflections:jar</include>
+                <include>javax.ws.rs:javax.ws.rs-api:jar</include>
+                <include>javassist:javassist:jar</include>
+            </includes>
+        </dependencySet>
+
         <!-- Include application server runtime libs here -->
         <!-- CXF runtime -->
         <dependencySet>
