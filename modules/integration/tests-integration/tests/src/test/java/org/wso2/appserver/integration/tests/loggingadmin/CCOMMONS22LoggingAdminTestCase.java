@@ -30,8 +30,8 @@ import static org.testng.Assert.assertEquals;
 
 /*
  * This test case is testing the following functionality in logging admin.
- *    1. Restore to defaults functionality.
- *    2. Get appender data for an appender name.
+ *    1. Restore to defaults functionality (CCOMMONS-22).
+ *    2. Get appender data for an appender name (CCOMMONS-23).
  */
 public class CCOMMONS22LoggingAdminTestCase extends ASIntegrationTest {
     private static final Log log = LogFactory.getLog(CCOMMONS22LoggingAdminTestCase.class);
