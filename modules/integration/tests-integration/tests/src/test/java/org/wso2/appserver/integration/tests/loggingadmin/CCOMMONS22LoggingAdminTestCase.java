@@ -28,8 +28,13 @@ import org.wso2.carbon.logging.admin.stub.types.carbon.AppenderData;
 
 import static org.testng.Assert.assertEquals;
 
-public class LoggingAdminTestCase extends ASIntegrationTest {
-    private static final Log log = LogFactory.getLog(LoggingAdminTestCase.class);
+/*
+ * This test case is testing the following functionality in logging admin.
+ *    1. Restore to defaults functionality.
+ *    2. Get appender data for an appender name.
+ */
+public class CCOMMONS22LoggingAdminTestCase extends ASIntegrationTest {
+    private static final Log log = LogFactory.getLog(CCOMMONS22LoggingAdminTestCase.class);
 
     @BeforeClass(alwaysRun = true)
     public void init() throws Exception {
