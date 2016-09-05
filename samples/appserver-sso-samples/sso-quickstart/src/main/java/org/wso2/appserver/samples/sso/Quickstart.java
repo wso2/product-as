@@ -157,6 +157,7 @@ public class Quickstart {
         // starting IS
         startisServer();
 
+        //creating new user in identity server
         createNewUser();
 
         log.info("Go to following web app URLs to check the sso functionality.");
@@ -166,6 +167,7 @@ public class Quickstart {
         log.info("Username: peter");
         log.info("Password: peter123");
 
+        log.info("\nPlease run clean.sh to revert the changes after exit from the sample.");
         log.info("\nPress ctrl+c to exit from the sample....");
 
         while (true) {
@@ -234,44 +236,6 @@ public class Quickstart {
                 // killing the identity server process
                 if (wso2isProcess != null) {
                     wso2isProcess.destroy();
-                }
-
-                try {
-                    Path serverxmlOriginalSrc = Paths.get("configfiles", "originals", "wso2as", "server.xml");
-                    Path wso2aswebxmlOriginalSrc = Paths.get("configfiles", "originals", "wso2as", "wso2as-web.xml");
-                    Path ssoidpconfigxmlOriginalSrc = Paths
-                            .get("configfiles", "originals", "wso2is", "sso-idp-config.xml");
-
-                    Path serverxmlOriginalDest = wso2asPath.resolve("conf").resolve("server.xml");
-                    Path wso2aswebxmlOriginalDest = wso2asPath.resolve("conf").resolve("wso2")
-                            .resolve("wso2as-web.xml");
-                    Path ssoidpconfigxmlOriginalDest = wso2isPath.resolve("repository").resolve("conf")
-                            .resolve("identity").resolve("sso-idp-config.xml");
-
-                    //revert the changes made during the sample
-                    if (Files.exists(serverxmlOriginalSrc)) {
-                        Files.move(serverxmlOriginalSrc, serverxmlOriginalDest, StandardCopyOption.ATOMIC_MOVE);
-                    }
-                    if (Files.exists(wso2aswebxmlOriginalSrc)) {
-                        Files.move(wso2aswebxmlOriginalSrc, wso2aswebxmlOriginalDest, StandardCopyOption.ATOMIC_MOVE);
-                    }
-                    if (Files.exists(ssoidpconfigxmlOriginalSrc)) {
-                        Files.move(ssoidpconfigxmlOriginalSrc, ssoidpconfigxmlOriginalDest,
-                                StandardCopyOption.ATOMIC_MOVE);
-                    }
-
-                    Path musicStoreApp = wso2asPath.resolve("webapps").resolve("musicstore-app.war");
-                    Path bookStoreApp = wso2asPath.resolve("webapps").resolve("bookstore-app.war");
-                    Path musicStoreAppDir = wso2asPath.resolve("webapps").resolve("musicstore-app");
-                    Path bookStoreAppDir = wso2asPath.resolve("webapps").resolve("bookstore-app");
-
-                    Files.deleteIfExists(musicStoreApp);
-                    Files.deleteIfExists(bookStoreApp);
-                    Files.deleteIfExists(musicStoreAppDir);
-                    Files.deleteIfExists(bookStoreAppDir);
-
-                } catch (IOException e) {
-                    log.warn("Error while reverting changes." + e.getMessage(), e);
                 }
             }
         });
