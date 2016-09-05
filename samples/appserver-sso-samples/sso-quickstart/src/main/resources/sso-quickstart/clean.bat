@@ -30,7 +30,7 @@ IF ERRORLEVEL 1 goto unknownJdk
 :unknownJdk
 echo [ERROR] WSO2 Application Server is supported only on JDK 1.8
 
-java -cp "../../bin/*;*" %* org.wso2.appserver.samples.sso.Quickstart
+java -cp "../../bin/*;*" %* org.wso2.appserver.samples.sso.QuickstartClean
 
 :end
 goto endlocal
