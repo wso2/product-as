@@ -11,7 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 /**
+ * Utility class to create an API to publish on API Publisher
  *
+ * @since 6.0.0
  */
 public class API {
     private Consumes consume;

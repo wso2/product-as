@@ -28,7 +28,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 
 /**
+ * An implementation of {@code ServletContextListener} that publishes API from deployed web apps to API Publisher
  *
+ * @since 6.0.0
  */
 public class WebAppDeploymentListener implements ServletContextListener {
     private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
@@ -144,7 +146,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        //no channge when an web app destroyed.
+        //no change when an web app destroyed.
     }
 
     private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
