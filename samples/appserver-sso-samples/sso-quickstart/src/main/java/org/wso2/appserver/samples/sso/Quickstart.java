@@ -133,9 +133,15 @@ public class Quickstart {
         Path wso2aswebxmlOriginalDest = originalsLocation.resolve("wso2as").resolve("wso2as-web.xml");
         Path ssoidpconfigxmlOriginalDest = originalsLocation.resolve("wso2is").resolve("sso-idp-config.xml");
 
-        Files.copy(serverxmlOriginalSrc, serverxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(wso2aswebxmlOriginalSrc, wso2aswebxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(ssoidpconfigxmlOriginalSrc, ssoidpconfigxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        if (Files.notExists(serverxmlOriginalDest)) {
+            Files.copy(serverxmlOriginalSrc, serverxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        }
+        if (Files.notExists(wso2aswebxmlOriginalDest)) {
+            Files.copy(wso2aswebxmlOriginalSrc, wso2aswebxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        }
+        if (Files.notExists(ssoidpconfigxmlOriginalDest)) {
+            Files.copy(ssoidpconfigxmlOriginalSrc, ssoidpconfigxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        }
 
         // copy sample files
         Path serverxmlSampleSrc = Paths.get("configfiles", "sampleconfigfiles", "wso2as", "server.xml");
@@ -167,7 +173,11 @@ public class Quickstart {
         log.info("Username: peter");
         log.info("Password: peter123");
 
-        log.info("\nPlease run clean.sh to revert the changes after exit from the sample.");
+        if (operatingSystem.toLowerCase(Locale.ENGLISH).contains("windows")) {
+            log.info("\nPlease run clean.bat file to revert the changes after exit from the sample.");
+        } else {
+            log.info("\nPlease run clean.sh file to revert the changes after exit from the sample.");
+        }
         log.info("\nPress ctrl+c to exit from the sample....");
 
         while (true) {
@@ -218,7 +228,7 @@ public class Quickstart {
                     throw new IOException("Error occured while creating a user in WSO2 Identity Server.");
                 }
             }
-        } else {
+        } else if (responseCodePost != 409) {
             throw new IOException("Error occured while creating a user in WSO2 Identity Server.");
         }
     }

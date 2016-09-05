@@ -19,10 +19,13 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This class is used for clean up the changes made by quick start guide.
@@ -42,7 +45,7 @@ public class QuickstartClean {
         new QuickstartClean().clean();
     }
 
-    public void clean() {
+    private void clean() {
         try {
             log.info("Reverting Changes....");
 
@@ -65,14 +68,33 @@ public class QuickstartClean {
             Path musicStoreAppDir = wso2asPath.resolve("webapps").resolve("musicstore-app");
             Path bookStoreAppDir = wso2asPath.resolve("webapps").resolve("bookstore-app");
 
-            Files.deleteIfExists(musicStoreApp);
-            Files.deleteIfExists(bookStoreApp);
-            Files.deleteIfExists(musicStoreAppDir);
-            Files.deleteIfExists(bookStoreAppDir);
+            delete(musicStoreApp);
+            delete(bookStoreApp);
+            delete(musicStoreAppDir);
+            delete(bookStoreAppDir);
 
             log.info("Successfully reverted the changes.");
         } catch (IOException e) {
             log.warn("Error while reverting changes." + e.getMessage(), e);
+        }
+    }
+
+    private void delete(Path filePath) throws IOException {
+        DeletingFileVisitor deletingFileVisitor = new DeletingFileVisitor();
+        Files.walkFileTree(filePath, deletingFileVisitor);
+    }
+
+    private static class DeletingFileVisitor extends SimpleFileVisitor<Path> {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            Files.deleteIfExists(file);
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            Files.deleteIfExists(dir);
+            return FileVisitResult.CONTINUE;
         }
     }
 }
