@@ -35,13 +35,11 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        //APIs of web application have to be extracted
+
         ServletContext servletContext = servletContextEvent.getServletContext();
         StringBuilder baseUrl = new StringBuilder(servletContext.getContextPath());
 
-
-        Boolean isJaxRs = true;
-        Map<String, String> serverParams = new HashMap<String, String>();
+        HashMap<String, String> serverParams = new HashMap<>();
         String webXmlPath = servletContext.getRealPath("/") + "/WEB-INF/web.xml";
         String servletXmlPath = servletContext.getRealPath("/") + "/WEB-INF/cxf-servlet.xml";
 
@@ -54,56 +52,62 @@ public class WebAppDeploymentListener implements ServletContextListener {
             Element servlet = (Element) webXmlDoc.getElementsByTagName("servlet").item(0);
             Element servletMapping = (Element) webXmlDoc.getElementsByTagName("servlet-mapping").item(0);
 
-            String urlPattern = servletMapping.getElementsByTagName("url-pattern").item(0).getTextContent();
-            baseUrl.append(urlPattern.substring(0, urlPattern.length() - 2));
+            if (servlet != null && servletMapping != null) {
+                String urlPattern = servletMapping.getElementsByTagName("url-pattern").item(0).getTextContent();
+                baseUrl.append(urlPattern.substring(0, urlPattern.length() - 2));
 
 
-            NodeList initParams = servlet.getElementsByTagName("init-param");
-            for (int i = 0; i < initParams.getLength(); i++) {
-                Element initParam = (Element) initParams.item(i);
-                String paramName = initParam.getElementsByTagName("param-name").item(0).getTextContent();
-                if (Objects.equals(paramName, "jaxrs.serviceClasses")) {
-                    String tempClass = initParam.getElementsByTagName("param-value").item(0).getTextContent();
-                    serverParams.put(tempClass, "");
+                String servletClassName = servlet.getElementsByTagName("servlet-class").item(0).getTextContent().trim();
+                switch (servletClassName) {
+                    case "org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet":
+                        //getting bean from init-param
+                        NodeList initParams = servlet.getElementsByTagName("init-param");
+                        for (int i = 0; i < initParams.getLength(); i++) {
+                            Element initParam = (Element) initParams.item(i);
+                            String paramName = initParam.getElementsByTagName("param-name").item(0).getTextContent();
+                            if (Objects.equals(paramName, "jaxrs.serviceClasses")) {
+                                String tempClass = initParam.getElementsByTagName("param-value")
+                                        .item(0).getTextContent();
+                                serverParams.put(tempClass, "");
 //                    log.info("adding class name in web.xml: " + tempClass);
-                    servletXmlPath = null;
-                }
-            }
+                            }
+                        }
+                        break;
+                    case "org.apache.cxf.transport.servlet.CXFServlet":
+                        //getting beans from cfx-servler.xml
+                        Document servletDoc = dbFactory.newDocumentBuilder().parse(servletXmlPath);
+                        servletDoc.getDocumentElement().normalize();
 
-            //reading form cxt-servlet.xml
-            if (servletXmlPath != null) {
-//                log.info("Scanning servlet.xml ");
-                Document servletDoc = dbFactory.newDocumentBuilder().parse(servletXmlPath);
+                        Element jaxrsServer = (Element) servletDoc.getElementsByTagName("jaxrs:server").item(0);
 
-
-                Element jaxrsServer = (Element) servletDoc.getElementsByTagName("jaxrs:server").item(0);
-
-                String address = jaxrsServer.getAttribute("address");
-
-//            Element serviceBeans = (Element) jaxrsServer.getElementsByTagName("jaxrs:serviceBeans").item(0);
-//            String beanName = ((Element) serviceBeans.getElementsByTagName("ref").item(0)).getAttribute("bean");
-
-                NodeList beans = servletDoc.getElementsByTagName("bean");
-                for (int i = 0; i < beans.getLength(); i++) {
-                    Element bean = (Element) beans.item(i);
-                    String tempClass = bean.getAttribute("class");
-                    serverParams.put(tempClass, address);
+                        if (jaxrsServer != null) {
+                            //jax rs configurations
+                            String address = jaxrsServer.getAttribute("address");
+                            NodeList beans = servletDoc.getElementsByTagName("bean");
+                            for (int i = 0; i < beans.getLength(); i++) {
+                                Element bean = (Element) beans.item(i);
+                                String tempClass = bean.getAttribute("class");
+                                serverParams.put(tempClass, address);
 //                    log.info("adding class name in servlet.xml: " + tempClass);
 
+                            }
+                        } else {
+                            //other server config
+                            Element jaxwsServer = (Element) servletDoc.getElementsByTagName("jaxws:server").item(0);
+                            //getting jaxws config
+                        }
+                        break;
+                    default:
+                        //other servlet config
+                        break;
                 }
             }
 
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             log.error(e);
-        } catch (SAXException e) {
-            log.error(e);
-        } catch (IOException e) {
-            log.error(e);
-        } catch (NullPointerException e) {
-            isJaxRs = false;
         }
 
-        if (isJaxRs && !serverParams.isEmpty()) {
+        if (!serverParams.isEmpty()) {
 
             for (Map.Entry<String, String> entry : serverParams.entrySet()) {
 
@@ -116,7 +120,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
 
                 Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Path.class);
-                methodAnnotated(baseUrl, reflections, classes);
+                scanMethodAnnotation(baseUrl, reflections, classes);
 
                 ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
                 try {
@@ -127,7 +131,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
                         Reflections tempReflection = new Reflections(cl.getName(), new TypeAnnotationsScanner(),
                                 new SubTypesScanner(), new MethodAnnotationsScanner());
                         classes = tempReflection.getTypesAnnotatedWith(Path.class);
-                        methodAnnotated(baseUrl, tempReflection, classes);
+                        scanMethodAnnotation(baseUrl, tempReflection, classes);
                     }
                 } catch (ClassNotFoundException e) {
                     log.error(e);
@@ -143,7 +147,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
         //no channge when an web app destroyed.
     }
 
-    private void methodAnnotated(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
+    private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
         for (Class cl : classes) {
             Path path = (Path) cl.getAnnotation(Path.class);
             if (path == null) {
