@@ -11,14 +11,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.wso2.appserver.apieverywhere.utils.API;
+import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -33,13 +37,21 @@ import javax.xml.parsers.ParserConfigurationException;
  * @since 6.0.0
  */
 public class WebAppDeploymentListener implements ServletContextListener {
+
     private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
+    private List<API> generatedAPIs = new ArrayList<>();
+    APICreateRequest apiCreateRequest = new APICreateRequest();
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
         ServletContext servletContext = servletContextEvent.getServletContext();
-        StringBuilder baseUrl = new StringBuilder(servletContext.getContextPath());
+
+        apiCreateRequest.setContext(servletContext.getContextPath());
+        //Todo: change name
+        apiCreateRequest.setName(servletContext.getContextPath());
+
+        StringBuilder baseUrl = new StringBuilder();
 
         HashMap<String, String> serverParams = new HashMap<>();
         String webXmlPath = servletContext.getRealPath("/") + "/WEB-INF/web.xml";
@@ -55,6 +67,9 @@ public class WebAppDeploymentListener implements ServletContextListener {
             Element servletMapping = (Element) webXmlDoc.getElementsByTagName("servlet-mapping").item(0);
 
             if (servlet != null && servletMapping != null) {
+//                String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
+//                apiCreateRequest.setName(servletName);
+
                 String urlPattern = servletMapping.getElementsByTagName("url-pattern").item(0).getTextContent();
                 baseUrl.append(urlPattern.substring(0, urlPattern.length() - 2));
 
@@ -140,6 +155,9 @@ public class WebAppDeploymentListener implements ServletContextListener {
                 }
 
             }
+
+            APIPublisher apiPublisher = new APIPublisher(apiCreateRequest, generatedAPIs);
+            apiPublisher.start();
         }
 
     }
@@ -161,6 +179,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
             Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
             for (Method me : methods) {
                 API api = new API(baseUrl.toString(), me);
+                generatedAPIs.add(api);
                 log.info(api.toString());
             }
         }

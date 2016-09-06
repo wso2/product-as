@@ -1,0 +1,77 @@
+//package org.wso2.appserver.apieverywhere.demo;
+//
+//
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import org.json.JSONObject;
+//import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
+//
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//import java.io.InputStreamReader;
+//
+//
+////"clientId":"fzr7f4asH5az3Ef4b7qrVJITYTka","clientSecret":"dYBYDKcfYRtOc6jVAIvAz0JCD2sa"}
+///**
+// *
+// */
+//public class APIPublisherDemo {
+//
+//    public static void main(String args[]) {
+//
+//        String clientId="fzr7f4asH5az3Ef4b7qrVJITYTka";
+//        String clientSecret="dYBYDKcfYRtOc6jVAIvAz0JCD2sa";
+//        String key = clientId + ":" + clientSecret;
+////        byte[]   bytesEncoded = Base64.encodeBase64(key.getBytes());
+//        String encodedKey = "ZnpyN2Y0YXNINWF6M0VmNGI3cXJWSklUWVRrYTpkWUJZREtjZllSdE9jNmpWQUl2QXowSkNEMnNh";
+//
+//        String accessTokenUrl="https://127.0.0.1:8243/token";
+//        String[] accessTokenCommand = {"curl" , "-k", "-d", "grant_type=password&username=admin&password=admin&scope=apim:api_create", "-H", "Authorization : Basic " + encodedKey,accessTokenUrl};
+//        String accessToken;
+//        try {
+//            JSONObject accessTokenResponse = curlCommand(accessTokenCommand);
+//            accessToken= (String) accessTokenResponse.get("access_token");
+//            String publishApiUrl = "https://127.0.0.1:9443/api/am/publisher/v0.10/apis";
+//            APICreateRequest api = new APICreateRequest();
+//            api.produceSample();
+//            String apiJson = new ObjectMapper().writeValueAsString(api);
+//            String[] publishApiCommand = {"curl", "-k", "-H", "Authorization: Bearer " + accessToken, "-H", "Content-Type: application/json", "-X", "POST", "-d", apiJson, publishApiUrl};
+//            JSONObject publishAPIResponse = curlCommand(publishApiCommand);
+//            System.out.println("Response of API publish JSON....................");
+//            System.out.println(publishAPIResponse);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        String apiDefinition = "{\"paths\":{\"/order\":{\"post\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\"}},\"/menu\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\"}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"consumes\":[\"application/json\"]}";
+//        StringBuilder tempApiDef = new StringBuilder();
+//        tempApiDef.append("{\"paths\":{");
+//        for (int i =0; i < 2; i++) {
+//            if (i != 0) {
+//                tempApiDef.append(",");
+//            }
+//            tempApiDef.append("\"" + "/someUrls"+"\":{");
+//            tempApiDef.append("\"" + "post" + "\":{");
+//            tempApiDef.append("\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\"}}");
+//        }
+//        tempApiDef.append("},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"consumes\":[\"application/json\"]}");
+//            System.out.println(apiDefinition);
+//            System.out.println(tempApiDef.toString());
+//
+//    }
+//
+//
+//    private static JSONObject curlCommand(String[] command) throws IOException {
+//        ProcessBuilder process = new ProcessBuilder(command);
+//        Process p;
+//        p = process.start();
+//        BufferedReader reader =  new BufferedReader(new InputStreamReader(p.getInputStream()));
+//        StringBuilder builder = new StringBuilder();
+//        String line = null;
+//        while ( (line = reader.readLine()) != null) {
+//            builder.append(line);
+//            builder.append(System.getProperty("line.separator"));
+//        }
+//        return new JSONObject(builder.toString());
+//    }
+//
+//}
