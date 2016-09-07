@@ -40,7 +40,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
     private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
     private List<API> generatedAPIs = new ArrayList<>();
-    APICreateRequest apiCreateRequest = new APICreateRequest();
+    private APICreateRequest apiCreateRequest = new APICreateRequest();
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -48,8 +48,6 @@ public class WebAppDeploymentListener implements ServletContextListener {
         ServletContext servletContext = servletContextEvent.getServletContext();
 
         apiCreateRequest.setContext(servletContext.getContextPath());
-        //Todo: change name
-        apiCreateRequest.setName(servletContext.getContextPath());
 
         StringBuilder baseUrl = new StringBuilder();
 
@@ -67,8 +65,10 @@ public class WebAppDeploymentListener implements ServletContextListener {
             Element servletMapping = (Element) webXmlDoc.getElementsByTagName("servlet-mapping").item(0);
 
             if (servlet != null && servletMapping != null) {
+                // // TODO: What to put in API name ?
 //                String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
 //                apiCreateRequest.setName(servletName);
+                apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 
                 String urlPattern = servletMapping.getElementsByTagName("url-pattern").item(0).getTextContent();
                 baseUrl.append(urlPattern.substring(0, urlPattern.length() - 2));
@@ -86,7 +86,6 @@ public class WebAppDeploymentListener implements ServletContextListener {
                                 String tempClass = initParam.getElementsByTagName("param-value")
                                         .item(0).getTextContent();
                                 serverParams.put(tempClass, "");
-//                    log.info("adding class name in web.xml: " + tempClass);
                             }
                         }
                         break;
@@ -105,14 +104,14 @@ public class WebAppDeploymentListener implements ServletContextListener {
                                 Element bean = (Element) beans.item(i);
                                 String tempClass = bean.getAttribute("class");
                                 serverParams.put(tempClass, address);
-//                    log.info("adding class name in servlet.xml: " + tempClass);
 
                             }
-                        } else {
-                            //other server config
-                            Element jaxwsServer = (Element) servletDoc.getElementsByTagName("jaxws:server").item(0);
-                            //getting jaxws config
                         }
+//                        else {
+//                            //other server config
+//                            Element jaxwsServer = (Element) servletDoc.getElementsByTagName("jaxws:server").item(0);
+//                            //getting jaxws config
+//                        }
                         break;
                     default:
                         //other servlet config
@@ -127,8 +126,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
         if (!serverParams.isEmpty()) {
 
             for (Map.Entry<String, String> entry : serverParams.entrySet()) {
-
-//                log.info(" class name :" + entry.getKey());
+                //append addess in beam
                 baseUrl.append(entry.getValue());
 
                 //scanning annotations
@@ -155,7 +153,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
                 }
 
             }
-
+            //Run Thread to publish generated apis into API Publisher
             APIPublisher apiPublisher = new APIPublisher(apiCreateRequest, generatedAPIs);
             apiPublisher.start();
         }
@@ -173,7 +171,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
             if (path == null) {
                 continue;
             }
-//            log.info("class : " + cl.getName() + " path : " + path);
+            //append path in class annotation
             baseUrl.append(path.value());
 
             Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);

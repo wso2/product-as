@@ -14,7 +14,6 @@ public class APICreateRequest {
 
     private static final Log log = LogFactory.getLog(APICreateRequest.class);
 
-    //ToDo: add default to api version
     private String name;
     private String description;
     private String context;
@@ -75,7 +74,7 @@ public class APICreateRequest {
         responseCaching = "Disabled";
         cacheTimeout = 300;
         destinationStatsEnabled = false;
-        isDefaultVersion = false;
+        isDefaultVersion = true;
         transport = new ArrayList<>(Arrays.asList("http", "https"));
         tiers = new ArrayList<>(Arrays.asList("Unlimited"));
         visibility = "PUBLIC";
@@ -84,7 +83,8 @@ public class APICreateRequest {
         visibleTenants = new ArrayList<>(Arrays.asList());
         ;
         endpointConfig = "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\"," +
-                "\"config\":null},\"sandbox_endpoints\":{\"url\":" +
+                "\"config\":null}," +
+                "\"sandbox_endpoints\":{\"url\":" +
                 "\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"endpoint_type\":\"http\"}";
     }
 }
