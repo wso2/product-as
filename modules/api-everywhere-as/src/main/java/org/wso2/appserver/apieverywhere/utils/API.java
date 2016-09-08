@@ -6,16 +6,16 @@ import org.apache.juli.logging.LogFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  * Utility class to create an API to publish on API Publisher
@@ -30,24 +30,8 @@ public class API {
     private String type;
     private String[] consume;
     private String[] produce;
-    private Map<String, String> paramsMap = new HashMap<>();
-    private Class<?> returnType;
-
-//    public String[] getConsume() {
-//        return consume;
-//    }
-//
-//    public void setConsume(String[] consume) {
-//        this.consume = consume;
-//    }
-//
-//    public String[] getProduce() {
-//        return produce;
-//    }
-//
-//    public void setProduce(String[] produce) {
-//        this.produce = produce;
-//    }
+    private ArrayList<Param> params = new ArrayList<>();
+    private String returnType;
 
     public String getType() {
         return type;
@@ -67,70 +51,130 @@ public class API {
 
 
     public API(String baseUrl, Method me) {
-        if (me.getAnnotation(GET.class) != null) {
-            type = "get";
+        Annotation[] methodAnnotations = me.getAnnotations();
+        for (Annotation ann : methodAnnotations) {
+            switch (ann.annotationType().getName()) {
+                case "javax.ws.rs.GET" :
+                    type = "get";
+                    break;
+                case "javax.ws.rs.POST" :
+                    type = "post";
+                    break;
+                case "javax.ws.rs.PUT" :
+                    type = "put";
+                    break;
+                case "javax.ws.rs.DELETE" :
+                    type = "delete";
+                    break;
+                //patch does dont support for jax-rs
+//                case "javax.ws.rs.PATCH" :
+//                    type = "patch";
+//                    break;
+                case "javax.ws.rs.HEAD" :
+                    type = "head";
+                    break;
+                case "javax.ws.rs.OPTIONS" :
+                    type = "options";
+                    break;
+                case "javax.ws.rs.Consumes" :
+                    Consumes cons = (Consumes) ann;
+                    consume = cons.value();
+                    break;
+                case "javax.ws.rs.Produces" :
+                    Produces pro = (Produces) ann;
+                    produce = pro.value();
+                    break;
+                case "javax.ws.rs.Path" :
+                    Path path = (Path) ann;
+                    this.url = baseUrl + path.value();
+                    break;
+                default:
+                    log.error("undefined annotation type " + ann);
+                    break;
+            }
         }
-        if (me.getAnnotation(POST.class) != null) {
-            type = "post";
-        }
-        if (me.getAnnotation(PUT.class) != null) {
-            type = "put";
-        }
-        if (me.getAnnotation(DELETE.class) != null) {
-            type = "delete";
-        }
-
-        Consumes cons = me.getAnnotation(Consumes.class);
-        if (cons != null) {
-            consume = cons.value();
-        }
-        Produces prod = me.getAnnotation(Produces.class);
-        if (prod != null) {
-            produce = prod.value();
-        }
-
-
-        Path path = me.getAnnotation(Path.class);
-        this.url = baseUrl + path.value();
 
         // if the Path in class has only '/' then the url have '//'
         this.url = this.url.replace("//", "/");
 
 
-        Parameter[] params = me.getParameters();
-        for (Parameter param : params) {
+        Parameter[] methodParams = me.getParameters();
+        for (Parameter param : methodParams) {
             Annotation[] paramAnnotations = param.getAnnotations();
-            String paramAnnotation = null;
+            Param paramObj = new Param();
             if (paramAnnotations.length > 0) {
                 Annotation paramAnn = paramAnnotations[0];
                 Class<? extends Annotation> annotationType = paramAnn.annotationType();
-                log.info("annotation type :" + annotationType);
                 if (annotationType.toString().contains("javax.ws.rs.PathParam")) {
-                    paramAnnotation = "path";
+                    paramObj.setParamType("path");
+                    paramObj.setParamName(((PathParam) paramAnn).value());
                 }
                 if (annotationType.toString().contains("javax.ws.rs.HeaderParam")) {
-                    paramAnnotation = "header";
+                    paramObj.setParamType("header");
+                    paramObj.setParamName(((HeaderParam) paramAnn).value());
+
                 }
                 if (annotationType.toString().contains("javax.ws.rs.QueryParam")) {
-                    paramAnnotation = "query";
+                    paramObj.setParamType("query");
+                    paramObj.setParamName(((QueryParam) paramAnn).value());
+                }
+                if (annotationType.toString().contains("javax.ws.rs.FormParam")) {
+                    paramObj.setParamType("formData");
+                    paramObj.setParamName(((FormParam) paramAnn).value());
                 }
             } else {
-                paramAnnotation = "body";
+                paramObj.setParamType("body");
             }
-            paramsMap.put(param.getType().getName(), paramAnnotation);
+            paramObj.setDataType(param.getType().getName());
+            params.add(paramObj);
         }
-        returnType = me.getReturnType();
+        returnType = me.getReturnType().getName();
     }
 
 
     public String toString() {
+        StringBuilder paramBuilder = new StringBuilder();
+        for (Param pa : params) {
+            paramBuilder.append(pa.toString());
+        }
         return ("API:"
                 + "\n url- " + url
                 + "\n type- " + type
                 + "\n produces- " + Arrays.toString(produce)
                 + "\n consumes- " + Arrays.toString(consume)
-                + "\n params- " + paramsMap.keySet() + " : " + paramsMap.values()
                 + "\n returns- " + returnType
+                + paramBuilder.toString()
         );
+    }
+
+    /**
+     * Utility inner class to create an params of API
+     *
+     * @since 6.0.0
+     */
+    private static class Param {
+        private String paramName;
+        private String paramType;
+        private String dataType;
+
+        void setParamName(String paramName) {
+            this.paramName = paramName;
+        }
+
+        void setParamType(String paramType) {
+            this.paramType = paramType;
+        }
+
+        void setDataType(String dataType) {
+            this.dataType = dataType;
+        }
+
+        public String toString() {
+            return ("\n params:"
+                    + "\n\t paramName- " + paramName
+                    + "\n\t paramtype- " + paramType
+                    + "\n\t datatype- " + dataType
+            );
+        }
     }
 }
