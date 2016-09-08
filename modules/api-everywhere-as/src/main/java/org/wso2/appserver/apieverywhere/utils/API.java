@@ -1,8 +1,14 @@
 package org.wso2.appserver.apieverywhere.utils;
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,11 +23,15 @@ import javax.ws.rs.Produces;
  * @since 6.0.0
  */
 public class API {
-    private Parameter[] params;
-    private String[] consume;
-    private String[] produce;
+
+    private static final Log log = LogFactory.getLog(API.class);
+
     private String url;
     private String type;
+    private String[] consume;
+    private String[] produce;
+    private Map<String, String> paramsMap = new HashMap<>();
+    private Class<?> returnType;
 
 //    public String[] getConsume() {
 //        return consume;
@@ -70,11 +80,11 @@ public class API {
             type = "delete";
         }
 
-        Consumes cons = me.getDeclaredAnnotation(Consumes.class);
+        Consumes cons = me.getAnnotation(Consumes.class);
         if (cons != null) {
             consume = cons.value();
         }
-        Produces prod = me.getDeclaredAnnotation(Produces.class);
+        Produces prod = me.getAnnotation(Produces.class);
         if (prod != null) {
             produce = prod.value();
         }
@@ -83,11 +93,33 @@ public class API {
         Path path = me.getAnnotation(Path.class);
         this.url = baseUrl + path.value();
 
-        params = me.getParameters();
-    }
+        // if the Path in class has only '/' then the url have '//'
+        this.url = this.url.replace("//", "/");
 
-    public API() {
 
+        Parameter[] params = me.getParameters();
+        for (Parameter param : params) {
+            Annotation[] paramAnnotations = param.getAnnotations();
+            String paramAnnotation = null;
+            if (paramAnnotations.length > 0) {
+                Annotation paramAnn = paramAnnotations[0];
+                Class<? extends Annotation> annotationType = paramAnn.annotationType();
+                log.info("annotation type :" + annotationType);
+                if (annotationType.toString().contains("javax.ws.rs.PathParam")) {
+                    paramAnnotation = "path";
+                }
+                if (annotationType.toString().contains("javax.ws.rs.HeaderParam")) {
+                    paramAnnotation = "header";
+                }
+                if (annotationType.toString().contains("javax.ws.rs.QueryParam")) {
+                    paramAnnotation = "query";
+                }
+            } else {
+                paramAnnotation = "body";
+            }
+            paramsMap.put(param.getType().getName(), paramAnnotation);
+        }
+        returnType = me.getReturnType();
     }
 
 
@@ -97,7 +129,8 @@ public class API {
                 + "\n type- " + type
                 + "\n produces- " + Arrays.toString(produce)
                 + "\n consumes- " + Arrays.toString(consume)
-                + "\n params- " + Arrays.toString(params)
+                + "\n params- " + paramsMap.keySet() + " : " + paramsMap.values()
+                + "\n returns- " + returnType
         );
     }
 }
