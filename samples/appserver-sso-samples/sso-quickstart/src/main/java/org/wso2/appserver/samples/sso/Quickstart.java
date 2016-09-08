@@ -49,6 +49,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class Quickstart {
     private static final Log log;
     private static final String WSO2_IS_VERSION = "wso2is-5.1.0";
+    private static final String WSO2_IS_URL = "https://localhost:9443";
+    private static final String USERNAME = "peter";
+    private static final String PASSWORD = "peter123";
 
     static {
         System.setProperty("org.apache.juli.formatter", "org.apache.juli.VerbatimFormatter");
@@ -194,14 +197,14 @@ public class Quickstart {
         System.setProperty("javax.net.ssl.trustStorePassword", trustStorePass);
         String encoding = new BASE64Encoder().encode("admin:admin".getBytes(UTF_8));
 
-        URL requestUrlPost = new URL("https://localhost:9443/wso2/scim/Users");
+        URL requestUrlPost = new URL(WSO2_IS_URL + "/wso2/scim/Users");
         HttpURLConnection connectionPost = (HttpURLConnection) requestUrlPost.openConnection();
         connectionPost.setDoOutput(true);
         connectionPost.setRequestMethod("POST");
         connectionPost.setRequestProperty("Authorization", "Basic " + encoding);
 
-        byte[] out = ("{\"schemas\":[],\"name\":{\"familyName\":\"family\",\"givenName\":\"Peter\"},"
-                + "\"userName\":\"peter\",\"password\":\"peter123\","
+        byte[] out = ("{\"schemas\":[],\"name\":{\"familyName\":\"family\",\"givenName\":\"" + USERNAME + "\"},"
+                + "\"userName\":\"" + USERNAME + "\",\"password\":\"" + PASSWORD + "\","
                 + "\"emails\":[{\"primary\":true,\"value\":\"wso2_home.com\",\"type\":\"home\"},"
                 + "{\"value\":\"wso2_work.com\",\"type\":\"work\"}]}")
                 .getBytes(UTF_8);

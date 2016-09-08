@@ -63,15 +63,8 @@ public class QuickstartClean {
                 Files.move(wso2aswebxmlOriginalSrc, wso2aswebxmlOriginalDest, StandardCopyOption.ATOMIC_MOVE);
             }
 
-            Path musicStoreApp = wso2asPath.resolve("webapps").resolve("musicstore-app.war");
-            Path bookStoreApp = wso2asPath.resolve("webapps").resolve("bookstore-app.war");
-            Path musicStoreAppDir = wso2asPath.resolve("webapps").resolve("musicstore-app");
-            Path bookStoreAppDir = wso2asPath.resolve("webapps").resolve("bookstore-app");
-
-            delete(musicStoreApp);
-            delete(bookStoreApp);
-            delete(musicStoreAppDir);
-            delete(bookStoreAppDir);
+            undeployWebApp("musicstore-app");
+            undeployWebApp("bookstore-app");
 
             log.info("Successfully reverted the changes.");
         } catch (IOException e) {
@@ -79,9 +72,13 @@ public class QuickstartClean {
         }
     }
 
-    private void delete(Path filePath) throws IOException {
+    private void undeployWebApp(String webAppName) throws IOException {
+        Path webApp = wso2asPath.resolve("webapps").resolve(webAppName + ".war");
+        Path webAppDir = wso2asPath.resolve("webapps").resolve(webAppName);
+
         DeletingFileVisitor deletingFileVisitor = new DeletingFileVisitor();
-        Files.walkFileTree(filePath, deletingFileVisitor);
+        Files.walkFileTree(webApp, deletingFileVisitor);
+        Files.walkFileTree(webAppDir, deletingFileVisitor);
     }
 
     private static class DeletingFileVisitor extends SimpleFileVisitor<Path> {
