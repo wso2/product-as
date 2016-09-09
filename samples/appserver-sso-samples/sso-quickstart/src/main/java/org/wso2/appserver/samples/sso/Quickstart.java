@@ -173,13 +173,13 @@ public class Quickstart {
         log.info("Webapp1 URL: http://localhost:8080/musicstore-app/");
         log.info("Webapp2 URL: http://localhost:8080/bookstore-app/");
         log.info("\nUse the following credentials to log into the webapps: ");
-        log.info("Username: peter");
-        log.info("Password: peter123");
+        log.info("Username: " + USERNAME);
+        log.info("Password: " + PASSWORD);
 
         if (operatingSystem.toLowerCase(Locale.ENGLISH).contains("windows")) {
-            log.info("\nPlease run clean.bat file to revert the changes after exit from the sample.");
+            log.info("\nPlease run clean.bat file to revert the changes after you exit from the sample.");
         } else {
-            log.info("\nPlease run clean.sh file to revert the changes after exit from the sample.");
+            log.info("\nPlease run clean.sh file to revert the changes after you exit from the sample.");
         }
         log.info("\nPress ctrl+c to exit from the sample....");
 
