@@ -1,5 +1,5 @@
 {
-  "name": "org.wso2.http.stats",
+  "name": "org.wso2.http.analytics.stream",
   "version": "1.0.0",
   "nickName": "Http_Stat_Stream",
   "description": "Sample of Http Statistics",

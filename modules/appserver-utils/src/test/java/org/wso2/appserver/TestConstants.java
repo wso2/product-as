@@ -65,7 +65,7 @@ public class TestConstants {
     static final String DATA_AGENT_TYPE = "Thrift";
     static final String AUTHN_URL = "ssl://127.0.0.1:7711";
     static final String PUBLISHER_URL = "tcp://127.0.0.1:7611";
-    static final String STREAM_ID = "org.wso2.http.stats:1.0.0";
+    static final String STREAM_ID = "org.wso2.http.analytics.stream:1.0.0";
 
     //  test constants for server level security configurations
     static final String KEYSTORE_PATH = "${catalina.base}/conf/wso2/wso2carbon.jks";
