@@ -16,15 +16,16 @@ Requirements
 How to run the sample
 ----------------------
 
-1. Download wso2is-5.1.0.zip from [here](http://wso2.com/products/identity-server/)
+1. Download **wso2is-5.1.0.zip** from [here](http://wso2.com/products/identity-server/)
 2. Copy that to <AS_HOME>/samples/sso-quickstart/packs directory or you can set path manually when running the script.
    (-Dwso2is.zip.path="path to wso2is-5.1.0.zip")
     * Note: Create a "packs" directory inside <AS_HOME>/samples/sso-quickstart if not present.
 3. Then run the script file.
-    * For Linux - run the sso-quickstart.sh
-    * For windows - run the sso-quickstart.bat
+    * For Linux - run the **sso-quickstart.sh**
+    * For windows - run the **sso-quickstart.bat**
 4. Go to the given webapp urls to check the sso functionality.
-4. Press ctrl+c to exit from the sample.
+5. Press ctrl+c to exit from the sample.
+6. Run **clean.sh** or **clean.bat** file according to your operating system to revert the changes after you exit from the sample.
 
 Description
 ------------
