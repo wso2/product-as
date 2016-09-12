@@ -94,7 +94,7 @@ public class Quickstart {
 
         if (Files.notExists(wso2isZipPath)) {
             log.error("WSO2 Identity server has not been found in the packs directory, "
-                    + "Please copy that in to the packs directory and restart the sample.");
+                    + "Please copy " + WSO2_IS_VERSION + ".zip in to the packs directory and restart the sample.");
             return;
         }
 
