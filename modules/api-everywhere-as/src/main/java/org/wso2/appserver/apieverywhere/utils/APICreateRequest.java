@@ -55,19 +55,30 @@ public class APICreateRequest {
         tempApiDef.append("{\"paths\":{");
         for (int i = 0; i < apiPaths.size(); i++) {
             APIPath apiPath = apiPaths.get(i);
-            if (apiPath.getType() == null) {
-                continue;
-            }
             if (i != 0) {
                 tempApiDef.append(",");
             }
             tempApiDef.append("\"" + apiPath.getUrl() + "\":{");
             tempApiDef.append("\"" + apiPath.getType() + "\":{");
-            tempApiDef.append("\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":" +
-                    "\"Unlimited\"}}");
+            ArrayList<APIPath.Param> params = apiPath.getParams();
+            tempApiDef.append("\"parameters\":[");
+            for (int j = 0; j < params.size(); j++) {
+                APIPath.Param param = params.get(j);
+                if (j != 0) {
+                    tempApiDef.append(",");
+                }
+                tempApiDef.append("{\"name\":\"" + param.getParamName() + "\"," +
+                                    "\"in\":\"" + param.getParamType() + "\"," +
+                                    "\"type\":\"" + param.getDataType() + "\"}");
+
+            }
+            tempApiDef.append("],");
+            tempApiDef.append("\"responses\":{\"200\":{}},");
+            tempApiDef.append("\"produces\":" + Arrays.toString(apiPath.getProduces()) + ",");
+            tempApiDef.append("\"consumes\":" + Arrays.toString(apiPath.getConsumes()));
+            tempApiDef.append("}}");
         }
-        tempApiDef.append("},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\"," +
-                "\"consumes\":[\"application/json\"]}");
+        tempApiDef.append("},\"schemes\":[\"https\"],\"swagger\":\"2.0\"" + "}");
         apiDefinition = tempApiDef.toString();
         log.info("............. API def" + apiDefinition);
         status = "PUBLISHED";

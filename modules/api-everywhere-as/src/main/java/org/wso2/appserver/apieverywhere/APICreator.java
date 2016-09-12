@@ -59,7 +59,6 @@ class APICreator extends Thread {
             log.error(e);
         }
 
-        //ToDo: replace curl with http method
         JSONObject accessTokenResponse = httpCall(encodedKey);
         if (accessTokenResponse != null) {
             String accessToken = (String) accessTokenResponse.get("access_token");

@@ -28,12 +28,15 @@ public class APIPath {
 
     private String url;
     private String type;
-    private String[] consume;
-    private String[] produce;
+    private String[] consumes;
+    private String[] produces;
     private ArrayList<Param> params = new ArrayList<>();
     private String returnType;
 
     public String getType() {
+        if (type == null) {
+            return "get";
+        }
         return type;
     }
 
@@ -49,6 +52,31 @@ public class APIPath {
         this.url = url;
     }
 
+    public ArrayList<Param> getParams() {
+        return params;
+    }
+
+    public String[] getConsumes() {
+        if (consumes == null) {
+            return new String[0];
+        }
+        String[] temp = new String[consumes.length];
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = "\"" + consumes[i] + "\"";
+        }
+        return temp;
+    }
+
+    public String[] getProduces() {
+        if (produces == null) {
+            return new String[0];
+        }
+        String[] temp = new String[produces.length];
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = "\"" + produces[i] + "\"";
+        }
+        return temp;
+    }
 
     public APIPath(String baseUrl, Method me) {
         Annotation[] methodAnnotations = me.getAnnotations();
@@ -78,11 +106,11 @@ public class APIPath {
                     break;
                 case "javax.ws.rs.Consumes" :
                     Consumes cons = (Consumes) ann;
-                    consume = cons.value();
+                    consumes = cons.value();
                     break;
                 case "javax.ws.rs.Produces" :
                     Produces pro = (Produces) ann;
-                    produce = pro.value();
+                    produces = pro.value();
                     break;
                 case "javax.ws.rs.Path" :
                     Path path = (Path) ann;
@@ -140,8 +168,8 @@ public class APIPath {
         return ("API:"
                 + "\n url- " + url
                 + "\n type- " + type
-                + "\n produces- " + Arrays.toString(produce)
-                + "\n consumes- " + Arrays.toString(consume)
+                + "\n produces- " + Arrays.toString(produces)
+                + "\n consumes- " + Arrays.toString(consumes)
                 + "\n returns- " + returnType
                 + paramBuilder.toString()
         );
@@ -152,7 +180,7 @@ public class APIPath {
      *
      * @since 6.0.0
      */
-    private static class Param {
+    static class Param {
         private String paramName;
         private String paramType;
         private String dataType;
@@ -167,6 +195,21 @@ public class APIPath {
 
         void setDataType(String dataType) {
             this.dataType = dataType;
+        }
+
+        public String getParamName() {
+            if (paramName == null) {
+                return "body arg";
+            }
+            return paramName;
+        }
+
+        public String getParamType() {
+            return paramType;
+        }
+
+        public String getDataType() {
+            return dataType;
         }
 
         public String toString() {
