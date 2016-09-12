@@ -15,5 +15,107 @@
 #  limitations under the License.
 
 # ----------------------------------------------------------------------------
-java -cp "../../bin/*:../../lib/*:*" $* org.wso2.appserver.samples.httpanalytics.Quickstart
 
+# OS specific support.  $var _must_ be set to either true or false.
+#ulimit -n 100000
+
+cygwin=false;
+darwin=false;
+os400=false;
+mingw=false;
+case "`uname`" in
+CYGWIN*) cygwin=true;;
+MINGW*) mingw=true;;
+OS400*) os400=true;;
+Darwin*) darwin=true
+        if [ -z "$JAVA_VERSION" ] ; then
+             JAVA_VERSION="CurrentJDK"
+           else
+             echo "Using Java version: $JAVA_VERSION"
+           fi
+           if [ -z "$JAVA_HOME" ] ; then
+             JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/${JAVA_VERSION}/Home
+           fi
+           ;;
+esac
+
+# resolve links - $0 may be a softlink
+PRG="$0"
+
+while [ -h "$PRG" ]; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '.*/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG=`dirname "$PRG"`/"$link"
+  fi
+done
+
+# Get standard environment variables
+PRGDIR=`dirname "$PRG"`
+
+# For Cygwin, ensure paths are in UNIX format before anything is touched
+if $cygwin; then
+  [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+  [ -n "$CARBON_HOME" ] && CARBON_HOME=`cygpath --unix "$CARBON_HOME"`
+  [ -n "$AXIS2_HOME" ] && CARBON_HOME=`cygpath --unix "$CARBON_HOME"`
+fi
+
+# For OS400
+if $os400; then
+  # Set job priority to standard for interactive (interactive - 6) by using
+  # the interactive priority - 6, the helper threads that respond to requests
+  # will be running at the same priority as interactive jobs.
+  COMMAND='chgjob job('$JOBNAME') runpty(6)'
+  system $COMMAND
+
+  # Enable multi threading
+  QIBM_MULTI_THREADED=Y
+  export QIBM_MULTI_THREADED
+fi
+
+# For Migwn, ensure paths are in UNIX format before anything is touched
+if $mingw ; then
+  [ -n "$JAVA_HOME" ] &&
+    JAVA_HOME="`(cd "$JAVA_HOME"; pwd)`"
+fi
+
+if [ -z "$JAVACMD" ] ; then
+  if [ -n "$JAVA_HOME"  ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+      # IBM's JDK on AIX uses strange locations for the executables
+      JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+      JAVACMD="$JAVA_HOME/bin/java"
+    fi
+  else
+    JAVACMD=java
+  fi
+fi
+
+if [ ! -x "$JAVACMD" ] ; then
+  echo "Error: JAVA_HOME is not defined correctly."
+  echo " CARBON cannot execute $JAVACMD"
+  exit 1
+fi
+
+# if JAVA_HOME is not set we're not happy
+if [ -z "$JAVA_HOME" ]; then
+  echo "You must set the JAVA_HOME variable before running the Quickstart."
+  exit 1
+fi
+
+# ---------- Handle the SSL Issue with proper JDK version --------------------
+
+jdk_18=`$JAVA_HOME/bin/java -version 2>&1 | grep "1.8"`
+if [ "$jdk_18" = "" ]; then
+   echo " [ERROR] You need to have JDK 1.8 or above to run this Quickstart"
+fi
+
+# For Cygwin, switch paths to Windows format before running java
+if $cygwin; then
+  JAVA_HOME=`cygpath --absolute --windows "$JAVA_HOME"`
+fi
+
+java -cp "../../bin/*:../../lib/*:*" $* org.wso2.appserver.samples.httpanalytics.Quickstart

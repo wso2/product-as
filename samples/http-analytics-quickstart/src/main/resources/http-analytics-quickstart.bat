@@ -16,5 +16,22 @@ REM   limitations under the License.
 
 rem ---------------------------------------------------------------------------
 
+rem ----- if JAVA_HOME is not set we're not happy ------------------------------
+:checkJava
+if "%JAVA_HOME%" == "" goto noJavaHome
+if not exist "%JAVA_HOME%\bin\java.exe" goto noJavaHome
+
+:noJavaHome
+echo "You must set the JAVA_HOME variable before running the Quickstart."
+goto end
+
+:checkJdk18
+"%JAVA_HOME%\bin\java" -version 2>&1 | findstr /r "1.8" >NUL
+IF ERRORLEVEL 1 goto unknownJdk
+
+:unknownJdk
+echo [ERROR] You need to have JDK 1.8 or above to run this Quickstart
+
 java -cp "../../bin/*;../../lib/*;*" %* org.wso2.appserver.samples.httpanalytics.Quickstart
 
+:end
