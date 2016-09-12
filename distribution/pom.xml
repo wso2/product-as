@@ -62,26 +62,6 @@
                             <outputDirectory>${project.build.directory}/tomcat-dist/</outputDirectory>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>unpack-car-file</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.wso2.appserver</groupId>
-                                    <artifactId>appserver-http-statistics-monitoring</artifactId>
-                                    <type>jar</type>
-                                    <includes>Http_Stats_Analytics.car</includes>
-                                    <outputDirectory>
-                                        ${project.build.directory}/tomcat-dist/apache-tomcat-${tomcat.version}/monitoring/
-                                    </outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>
