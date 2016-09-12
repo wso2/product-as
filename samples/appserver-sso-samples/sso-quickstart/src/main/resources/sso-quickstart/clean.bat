@@ -28,13 +28,13 @@ goto end
 :checkJdk18
 "%JAVA_HOME%\bin\java" -version 2>&1 | findstr /r "1.8" >NUL
 IF ERRORLEVEL 1 goto unknownJdk
-goto runQuickstart
+goto runQuickstartClean
 
 :unknownJdk
 echo [ERROR] You need to have JDK 1.8 or above to run this Quickstart
 goto end
 
-:runQuickstart
+:runQuickstartClean
 "%JAVA_HOME%\bin\java" -cp "../../bin/*;../../lib/*;*" %* org.wso2.appserver.samples.sso.QuickstartClean
 goto end
 
