@@ -68,11 +68,20 @@
             <directory>../samples/jaggerySamples</directory>
             <outputDirectory>${distribution.file.name}/samples/jaggery-sample</outputDirectory>
         </fileSet>
+        <!-- http-analytics-quickstart -->
+        <fileSet>
+            <directory>../samples/http-analytics-quickstart/src/main/resources</directory>
+            <outputDirectory>${distribution.file.name}/samples/http-analytics-quickstart/</outputDirectory>
+        </fileSet>
     </fileSets>
     <files>
         <file>
             <source>../samples/appserver-sso-samples/sso-quickstart/README.md</source>
             <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
+        </file>
+        <file>
+            <source>../samples/http-analytics-quickstart/README.md</source>
+            <outputDirectory>${distribution.file.name}/samples/http-analytics-quickstart</outputDirectory>
         </file>
     </files>
 
@@ -170,6 +179,14 @@
             <outputDirectory>/${distribution.file.name}/samples/sso-quickstart/</outputDirectory>
             <includes>
                 <include>org.wso2.appserver:sso-quickstart:jar</include>
+            </includes>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/samples/http-analytics-quickstart</outputDirectory>
+            <includes>
+                <include>org.wso2.appserver:http-analytics-quickstart:jar</include>
             </includes>
             <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>

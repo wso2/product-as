@@ -556,6 +556,11 @@
                 <artifactId>sso-quickstart</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>http-analytics-quickstart</artifactId>
+                <version>${appserver.version}</version>
+            </dependency>
 
             <!-- Shaded Dependency Modules -->
             <dependency>

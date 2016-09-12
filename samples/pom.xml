@@ -29,6 +29,8 @@
         <module>configuration-loader</module>
         <module>configuration-loader-valve</module>
         <module>jaxrs_basic</module>
+        <module>jaggerySamples</module>
         <module>appserver-sso-samples</module>
+        <module>http-analytics-quickstart</module>
     </modules>
 </project>
