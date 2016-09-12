@@ -118,4 +118,4 @@ if $cygwin; then
   JAVA_HOME=`cygpath --absolute --windows "$JAVA_HOME"`
 fi
 
-java -cp "../../bin/*:../../lib/*:*" $* org.wso2.appserver.samples.httpanalytics.Quickstart
+"$JAVA_HOME/bin/java" -cp "../../bin/*:../../lib/*:*" $* org.wso2.appserver.samples.httpanalytics.Quickstart
