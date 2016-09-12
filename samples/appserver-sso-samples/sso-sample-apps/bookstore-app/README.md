@@ -13,7 +13,7 @@ Requirements
 --------------
 
 1. JDK 1.7 or higher
-2. Apache ANT 1.7 or higher or Apache Maven 3.0.4 or higher
+2. Apache Ant 1.7 or higher or Apache Maven 3.0.4 or higher
 3. A JavaScript compatible web browser
 4. An active Internet connection
 
