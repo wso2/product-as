@@ -54,6 +54,4 @@ Building the sample
 
 1. Open a command line, and navigate to the <AS_HOME>/samples/jaxrs-basic directory.
 2. Build and deploy the sample with `mvn -Pdeploy`.
-4. Start WSO2 Application Server.
-
-Please refer https://docs.wso2.com/display/AS600/Running+a+JAX-RS+Application for more information.
+3. Start WSO2 Application Server.
