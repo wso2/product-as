@@ -17,6 +17,7 @@ package org.wso2.appserver.samples.sso;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import sun.misc.BASE64Encoder;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -25,11 +26,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,24 +41,29 @@ import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Tool to run the sso quick start.
  */
 public class Quickstart {
     private static final Log log;
     private static final String WSO2_IS_VERSION = "wso2is-5.1.0";
-    private Path wso2asPath = Paths.get("..", "..");
-    private Path wso2isPath = Paths.get("packs", WSO2_IS_VERSION);
-    private Path wso2isZipPath = Paths.get("packs", WSO2_IS_VERSION + ".zip");
-    private Process wso2asProcess;
-    private Process wso2isProcess;
-    private ProcessBuilder wso2asProcessBuilder;
+    private static final String WSO2_IS_URL = "https://localhost:9443";
+    private static final String USERNAME = "peter";
+    private static final String PASSWORD = "peter123";
 
     static {
         System.setProperty("org.apache.juli.formatter", "org.apache.juli.VerbatimFormatter");
         log = LogFactory.getLog(Quickstart.class);
     }
 
+    private Path wso2asPath = Paths.get("..", "..");
+    private Path wso2isPath = Paths.get("packs", WSO2_IS_VERSION);
+    private Path wso2isZipPath = Paths.get("packs", WSO2_IS_VERSION + ".zip");
+    private Process wso2asProcess;
+    private Process wso2isProcess;
+    private ProcessBuilder wso2asProcessBuilder;
     private String operatingSystem = System.getProperty("os.name");
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -129,9 +136,15 @@ public class Quickstart {
         Path wso2aswebxmlOriginalDest = originalsLocation.resolve("wso2as").resolve("wso2as-web.xml");
         Path ssoidpconfigxmlOriginalDest = originalsLocation.resolve("wso2is").resolve("sso-idp-config.xml");
 
-        Files.copy(serverxmlOriginalSrc, serverxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(wso2aswebxmlOriginalSrc, wso2aswebxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(ssoidpconfigxmlOriginalSrc, ssoidpconfigxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        if (Files.notExists(serverxmlOriginalDest)) {
+            Files.copy(serverxmlOriginalSrc, serverxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        }
+        if (Files.notExists(wso2aswebxmlOriginalDest)) {
+            Files.copy(wso2aswebxmlOriginalSrc, wso2aswebxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        }
+        if (Files.notExists(ssoidpconfigxmlOriginalDest)) {
+            Files.copy(ssoidpconfigxmlOriginalSrc, ssoidpconfigxmlOriginalDest, StandardCopyOption.REPLACE_EXISTING);
+        }
 
         // copy sample files
         Path serverxmlSampleSrc = Paths.get("configfiles", "sampleconfigfiles", "wso2as", "server.xml");
@@ -153,14 +166,73 @@ public class Quickstart {
         // starting IS
         startisServer();
 
+        //creating new user in identity server
+        createNewUser();
+
         log.info("Go to following web app URLs to check the sso functionality.");
         log.info("Webapp1 URL: http://localhost:8080/musicstore-app/");
         log.info("Webapp2 URL: http://localhost:8080/bookstore-app/");
+        log.info("\nUse the following credentials to log into the webapps: ");
+        log.info("Username: " + USERNAME);
+        log.info("Password: " + PASSWORD);
 
+        if (operatingSystem.toLowerCase(Locale.ENGLISH).contains("windows")) {
+            log.info("\nPlease run clean.bat file to revert the changes after you exit from the sample.");
+        } else {
+            log.info("\nPlease run clean.sh file to revert the changes after you exit from the sample.");
+        }
         log.info("\nPress ctrl+c to exit from the sample....");
 
         while (true) {
             Thread.sleep(1000);
+        }
+    }
+
+    private void createNewUser() throws IOException {
+        String trustStorePath = wso2isPath.resolve("repository").resolve("resources")
+                .resolve("security").resolve("wso2carbon.jks").toString();
+        String trustStorePass = "wso2carbon";
+
+        System.setProperty("javax.net.ssl.trustStore", trustStorePath);
+        System.setProperty("javax.net.ssl.trustStorePassword", trustStorePass);
+        String encoding = new BASE64Encoder().encode("admin:admin".getBytes(UTF_8));
+
+        URL requestUrlPost = new URL(WSO2_IS_URL + "/wso2/scim/Users");
+        HttpURLConnection connectionPost = (HttpURLConnection) requestUrlPost.openConnection();
+        connectionPost.setDoOutput(true);
+        connectionPost.setRequestMethod("POST");
+        connectionPost.setRequestProperty("Authorization", "Basic " + encoding);
+
+        byte[] out = ("{\"schemas\":[],\"name\":{\"familyName\":\"family\",\"givenName\":\"" + USERNAME + "\"},"
+                + "\"userName\":\"" + USERNAME + "\",\"password\":\"" + PASSWORD + "\","
+                + "\"emails\":[{\"primary\":true,\"value\":\"wso2_home.com\",\"type\":\"home\"},"
+                + "{\"value\":\"wso2_work.com\",\"type\":\"work\"}]}")
+                .getBytes(UTF_8);
+        int length = out.length;
+
+        connectionPost.setFixedLengthStreamingMode(length);
+        connectionPost.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        connectionPost.setRequestProperty("Accept", "application/json; charset=UTF-8");
+
+        try (OutputStream os = connectionPost.getOutputStream()) {
+            os.write(out);
+        }
+
+        int responseCodePost = connectionPost.getResponseCode();
+        if (responseCodePost == 201) {
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader((connectionPost.getInputStream()), UTF_8))) {
+                StringBuilder sb = new StringBuilder();
+                String output;
+                while ((output = br.readLine()) != null) {
+                    sb.append(output);
+                }
+                if (!sb.toString().contains("created")) {
+                    throw new IOException("Error occured while creating a user in WSO2 Identity Server.");
+                }
+            }
+        } else if (responseCodePost != 409) {
+            throw new IOException("Error occured while creating a user in WSO2 Identity Server.");
         }
     }
 
@@ -177,44 +249,6 @@ public class Quickstart {
                 // killing the identity server process
                 if (wso2isProcess != null) {
                     wso2isProcess.destroy();
-                }
-
-                try {
-                    Path serverxmlOriginalSrc = Paths.get("configfiles", "originals", "wso2as", "server.xml");
-                    Path wso2aswebxmlOriginalSrc = Paths.get("configfiles", "originals", "wso2as", "wso2as-web.xml");
-                    Path ssoidpconfigxmlOriginalSrc = Paths
-                            .get("configfiles", "originals", "wso2is", "sso-idp-config.xml");
-
-                    Path serverxmlOriginalDest = wso2asPath.resolve("conf").resolve("server.xml");
-                    Path wso2aswebxmlOriginalDest = wso2asPath.resolve("conf").resolve("wso2")
-                            .resolve("wso2as-web.xml");
-                    Path ssoidpconfigxmlOriginalDest = wso2isPath.resolve("repository").resolve("conf")
-                            .resolve("identity").resolve("sso-idp-config.xml");
-
-                    //revert the changes made during the sample
-                    if (Files.exists(serverxmlOriginalSrc)) {
-                        Files.move(serverxmlOriginalSrc, serverxmlOriginalDest, StandardCopyOption.ATOMIC_MOVE);
-                    }
-                    if (Files.exists(wso2aswebxmlOriginalSrc)) {
-                        Files.move(wso2aswebxmlOriginalSrc, wso2aswebxmlOriginalDest, StandardCopyOption.ATOMIC_MOVE);
-                    }
-                    if (Files.exists(ssoidpconfigxmlOriginalSrc)) {
-                        Files.move(ssoidpconfigxmlOriginalSrc, ssoidpconfigxmlOriginalDest,
-                                StandardCopyOption.ATOMIC_MOVE);
-                    }
-
-                    Path musicStoreApp = wso2asPath.resolve("webapps").resolve("musicstore-app.war");
-                    Path bookStoreApp = wso2asPath.resolve("webapps").resolve("bookstore-app.war");
-                    Path musicStoreAppDir = wso2asPath.resolve("webapps").resolve("musicstore-app");
-                    Path bookStoreAppDir = wso2asPath.resolve("webapps").resolve("bookstore-app");
-
-                    Files.deleteIfExists(musicStoreApp);
-                    Files.deleteIfExists(bookStoreApp);
-                    Files.deleteIfExists(musicStoreAppDir);
-                    Files.deleteIfExists(bookStoreAppDir);
-
-                } catch (IOException e) {
-                    log.warn("Error while reverting changes." + e.getMessage(), e);
                 }
             }
         });
@@ -309,7 +343,7 @@ public class Quickstart {
         String line;
         boolean isasStarted = false;
         try (BufferedReader input = new BufferedReader(
-                new InputStreamReader(wso2isProcess.getInputStream(), StandardCharsets.UTF_8))) {
+                new InputStreamReader(wso2isProcess.getInputStream(), UTF_8))) {
             while ((line = input.readLine()) != null) {
                 if (line.contains("WSO2 Carbon started")) {
                     isasStarted = true;

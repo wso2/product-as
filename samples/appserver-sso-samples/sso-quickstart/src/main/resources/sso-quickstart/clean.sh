@@ -104,4 +104,4 @@ if $cygwin; then
   JAVA_HOME=`cygpath --absolute --windows "$JAVA_HOME"`
 fi
 
-java -cp "../../bin/*:*" $* org.wso2.appserver.samples.sso.Quickstart
+java -cp "../../bin/*:*" $* org.wso2.appserver.samples.sso.QuickstartClean

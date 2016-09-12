@@ -17,7 +17,7 @@ Requirements
 --------------
 
 1. JDK 1.8 or higher
-2. Apache ANT 1.7 or higher
+2. Apache Ant 1.7 or higher
 3. Apache Maven 3.0.4 or higher
 4. A JavaScript compatible web browser
 5. An active Internet connection
