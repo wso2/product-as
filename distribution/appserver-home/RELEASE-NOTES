@@ -17,7 +17,7 @@
 ================================================================================
 
 
-                     WSO2 Application Server 6.0.0-M3
+                     WSO2 Application Server 6.0.0-M4
                             Release Notes
 
 Welcome to WSO2 Application Server, the successor of WSO2 Carbon based
@@ -35,7 +35,7 @@ Apache Software License (v2.0)
 =============
 KEY FEATURES:
 =============
-* HTTP statistics monitoring for web applications
+* HTTP analytics for web applications with WSO2 HTTP Analytics Server
 * SAML based Single Sign On (SSO) for web applications
 * Jaggerry applications deployment
 * Webapp classloading runtimes
@@ -44,13 +44,13 @@ KEY FEATURES:
 =============
 FIXED ISSUES:
 =============
-https://wso2.org/jira/browse/WSAS-2194?filter=13173
+https://wso2.org/jira/issues/?filter=13334
 
 
 =============
 KNOWN ISSUES:
 =============
-https://wso2.org/jira/browse/WSAS-2248?filter=13174
+https://wso2.org/jira/issues/?filter=13335
 
 
 =================

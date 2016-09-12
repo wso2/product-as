@@ -4,7 +4,7 @@ Welcome to WSO2 Application Server, the successor of WSO2 Carbon based Applicati
 
 ## Features
 
-* HTTP statistics publishing to WSO2 Data Analytics Server
+* HTTP analytics with [WSO2 HTTP Analytics Server] (https://github.com/wso2/analytics-http)
 * SAML based Single Sign On (SSO) for web applications
 * Support for Jaggery application deployment
 * Webapp classloading runtimes
