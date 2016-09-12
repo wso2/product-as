@@ -38,6 +38,10 @@
             <artifactId>fluent-hc</artifactId>
             <version>4.5.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.appserver</groupId>
+            <artifactId>appserver-utils</artifactId>
+        </dependency>
 
     </dependencies>
 

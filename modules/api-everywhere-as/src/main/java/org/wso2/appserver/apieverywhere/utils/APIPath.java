@@ -22,9 +22,9 @@ import javax.ws.rs.QueryParam;
  *
  * @since 6.0.0
  */
-public class API {
+public class APIPath {
 
-    private static final Log log = LogFactory.getLog(API.class);
+    private static final Log log = LogFactory.getLog(APIPath.class);
 
     private String url;
     private String type;
@@ -50,7 +50,7 @@ public class API {
     }
 
 
-    public API(String baseUrl, Method me) {
+    public APIPath(String baseUrl, Method me) {
         Annotation[] methodAnnotations = me.getAnnotations();
         for (Annotation ann : methodAnnotations) {
             switch (ann.annotationType().getName()) {

@@ -10,8 +10,8 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.wso2.appserver.apieverywhere.utils.API;
 import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
+import org.wso2.appserver.apieverywhere.utils.APIPath;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -39,9 +39,10 @@ import javax.xml.parsers.ParserConfigurationException;
 public class WebAppDeploymentListener implements ServletContextListener {
 
     private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
-    private List<API> generatedAPIs = new ArrayList<>();
     private APICreateRequest apiCreateRequest = new APICreateRequest();
+    private List<APIPath> generatedApiPaths = new ArrayList<>();
 
+    //catch a web app deployment event
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
@@ -50,7 +51,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
         apiCreateRequest.setContext(servletContext.getContextPath());
 
         StringBuilder baseUrl = new StringBuilder();
-
+        //Map that stores the class name and the address from beans
         HashMap<String, String> serverParams = new HashMap<>();
         String webXmlPath = servletContext.getRealPath("/") + "/WEB-INF/web.xml";
         String servletXmlPath = servletContext.getRealPath("/") + "/WEB-INF/cxf-servlet.xml";
@@ -65,10 +66,11 @@ public class WebAppDeploymentListener implements ServletContextListener {
             Element servletMapping = (Element) webXmlDoc.getElementsByTagName("servlet-mapping").item(0);
 
             if (servlet != null && servletMapping != null) {
-                // // TODO: What to put in API name ?
+                // TODO: What to put in API name ?
+                apiCreateRequest.setName(servletContext.getContextPath().substring(1));
+                // TODO: get the name to web app name
 //                String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
 //                apiCreateRequest.setName(servletName);
-                apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 
                 String urlPattern = servletMapping.getElementsByTagName("url-pattern").item(0).getTextContent();
                 baseUrl.append(urlPattern.substring(0, urlPattern.length() - 2));
@@ -90,7 +92,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
                         }
                         break;
                     case "org.apache.cxf.transport.servlet.CXFServlet":
-                        //getting beans from cfx-servler.xml
+                        //getting beans from cfx-servlet.xml
                         Document servletDoc = dbFactory.newDocumentBuilder().parse(servletXmlPath);
                         servletDoc.getDocumentElement().normalize();
 
@@ -107,6 +109,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
                             }
                         }
+                        // TODO: reading other config
 //                        else {
 //                            //other server config
 //                            Element jaxwsServer = (Element) servletDoc.getElementsByTagName("jaxws:server").item(0);
@@ -126,7 +129,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
         if (!serverParams.isEmpty()) {
 
             for (Map.Entry<String, String> entry : serverParams.entrySet()) {
-                //append addess in beam
+                //append address in beans
                 baseUrl.append(entry.getValue());
 
                 //scanning annotations
@@ -154,8 +157,8 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
             }
             //Run Thread to publish generated apis into API Publisher
-            APIPublisher apiPublisher = new APIPublisher(apiCreateRequest, generatedAPIs);
-            apiPublisher.start();
+            APICreator apiCreator = new APICreator(apiCreateRequest, generatedApiPaths);
+            apiCreator.start();
         }
 
     }
@@ -176,9 +179,9 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
             Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
             for (Method me : methods) {
-                API api = new API(baseUrl.toString(), me);
-                generatedAPIs.add(api);
-                log.info(api.toString());
+                APIPath apiPath = new APIPath(baseUrl.toString(), me);
+                generatedApiPaths.add(apiPath);
+                log.info(apiPath.toString());
             }
         }
     }

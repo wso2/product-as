@@ -44,7 +44,7 @@ public class APICreateRequest {
         this.context = context;
     }
 
-    public void produceSample(List<API> apis) {
+    public void produceSample(List<APIPath> apiPaths) {
 //        name = "PizzaShackAPI";
         description = "automatically published to API publisher.\r\n";
 //        context = "/pizzashack";
@@ -53,16 +53,16 @@ public class APICreateRequest {
 
         StringBuilder tempApiDef = new StringBuilder();
         tempApiDef.append("{\"paths\":{");
-        for (int i = 0; i < apis.size(); i++) {
-            API api = apis.get(i);
-            if (api.getType() == null) {
+        for (int i = 0; i < apiPaths.size(); i++) {
+            APIPath apiPath = apiPaths.get(i);
+            if (apiPath.getType() == null) {
                 continue;
             }
             if (i != 0) {
                 tempApiDef.append(",");
             }
-            tempApiDef.append("\"" + api.getUrl() + "\":{");
-            tempApiDef.append("\"" + api.getType() + "\":{");
+            tempApiDef.append("\"" + apiPath.getUrl() + "\":{");
+            tempApiDef.append("\"" + apiPath.getType() + "\":{");
             tempApiDef.append("\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":" +
                     "\"Unlimited\"}}");
         }
