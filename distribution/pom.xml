@@ -140,11 +140,6 @@
             <artifactId>jaxrs_basic</artifactId>
             <type>war</type>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.appserver</groupId>
-            <artifactId>simple-jax-rs-service</artifactId>
-            <type>war</type>
-        </dependency>
 
         <!-- Application Server runtime libs -->
 

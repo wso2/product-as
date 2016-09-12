@@ -472,12 +472,6 @@
                 <version>${appserver.version}</version>
                 <type>war</type>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.appserver</groupId>
-                <artifactId>simple-jax-rs-service</artifactId>
-                <version>${appserver.version}</version>
-                <type>war</type>
-            </dependency>
 
             <!-- Runtimes CXF -->
             <dependency>
