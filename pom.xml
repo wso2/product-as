@@ -536,6 +536,11 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.appserver</groupId>
+                <artifactId>appserver-http-statistics-monitoring</artifactId>
+                <version>${appserver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
                 <artifactId>appserver-webapp-loader</artifactId>
                 <version>${appserver.version}</version>
             </dependency>
