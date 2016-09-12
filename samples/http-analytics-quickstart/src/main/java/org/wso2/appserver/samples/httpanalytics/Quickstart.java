@@ -130,7 +130,7 @@ public class Quickstart {
     }
 
     /**
-     * Checks and returns the WSO2 HTTP Analytics distribution path set via -Dwso2http-analytics.zip.path
+     * Checks and returns the WSO2 HTTP Analytics distribution path set via -Dwso2http-analytics.zip.path.
      *
      * @return WSO2 HTTP Analytics distribution zip file path
      */
@@ -149,7 +149,7 @@ public class Quickstart {
     }
 
     /**
-     * Checks and returns the WSO2 HTTP Analytics distribution from "packs" directory
+     * Checks and returns the WSO2 HTTP Analytics distribution from "packs" directory.
      *
      * @return WSO2 HTTP Analytics distribution zip file path
      */
@@ -348,7 +348,7 @@ public class Quickstart {
     }
 
     /**
-     * Extracts files from zip input stream
+     * Extracts files from zip input stream.
      *
      * @param zipInputStream zip input stream
      * @param filePath       input file path
@@ -395,7 +395,7 @@ public class Quickstart {
     }
 
     /**
-     * Returns the truststore file path
+     * Returns the truststore file path.
      *
      * @return truststore file path
      */
@@ -404,7 +404,7 @@ public class Quickstart {
     }
 
     /**
-     * Returns data agent config file path
+     * Returns data agent config file path.
      *
      * @return data agent config file path
      * @throws URISyntaxException
@@ -414,3 +414,4 @@ public class Quickstart {
     }
 
 }
+
