@@ -43,40 +43,48 @@ public class APICreateRequest {
     }
 
     // method that set-up the API object to publish in API Publisher
-    public void produceSample(List<APIPath> apiPaths) {
+    public void buildAPI(List<APIPath> apiPaths) {
         description = "automatically created to API publisher.\r\n";
         version = "1.0.0";
         provider = "admin";
 
-        StringBuilder tempApiDef = new StringBuilder();
-        tempApiDef.append("{\"paths\":{");
+        StringBuilder apiDefBuilder = new StringBuilder();
+        apiDefBuilder.append("{\"paths\":{");
         for (int i = 0; i < apiPaths.size(); i++) {
             APIPath apiPath = apiPaths.get(i);
             if (i != 0) {
-                tempApiDef.append(",");
+                apiDefBuilder.append(",");
             }
-            tempApiDef.append("\"" + apiPath.getUrl() + "\":{");
-            tempApiDef.append("\"" + apiPath.getType() + "\":{");
-            ArrayList<APIPath.Param> params = apiPath.getParams();
-            tempApiDef.append("\"parameters\":[");
-            for (int j = 0; j < params.size(); j++) {
-                APIPath.Param param = params.get(j);
-                if (j != 0) {
-                    tempApiDef.append(",");
+            apiDefBuilder.append("\"" + apiPath.getUrl() + "\":{");
+            ArrayList<APIPath.APIProp> apiProps = apiPath.getApiProps();
+            for (int k = 0; k < apiProps.size(); k++) {
+                APIPath.APIProp apiProp = apiProps.get(k);
+                if (k != 0) {
+                    apiDefBuilder.append(",");
                 }
-                tempApiDef.append("{\"name\":\"" + param.getParamName() + "\"," +
-                                    "\"in\":\"" + param.getParamType() + "\"," +
-                                    "\"type\":\"" + param.getDataType() + "\"}");
+                apiDefBuilder.append("\"" + apiProp.getType() + "\":{");
+                ArrayList<APIPath.Param> params = apiProp.getParams();
+                apiDefBuilder.append("\"parameters\":[");
+                for (int j = 0; j < params.size(); j++) {
+                    APIPath.Param param = params.get(j);
+                    if (j != 0) {
+                        apiDefBuilder.append(",");
+                    }
+                    apiDefBuilder.append("{\"name\":\"" + param.getParamName() + "\"," +
+                            "\"in\":\"" + param.getParamType() + "\"," +
+                            "\"type\":\"" + param.getDataType() + "\"}");
 
+                }
+                apiDefBuilder.append("],");
+                apiDefBuilder.append("\"responses\":{\"200\":{}},");
+                apiDefBuilder.append("\"produces\":" + Arrays.toString(apiProp.getProduces()) + ",");
+                apiDefBuilder.append("\"consumes\":" + Arrays.toString(apiProp.getConsumes()));
+                apiDefBuilder.append("}");
             }
-            tempApiDef.append("],");
-            tempApiDef.append("\"responses\":{\"200\":{}},");
-            tempApiDef.append("\"produces\":" + Arrays.toString(apiPath.getProduces()) + ",");
-            tempApiDef.append("\"consumes\":" + Arrays.toString(apiPath.getConsumes()));
-            tempApiDef.append("}}");
+            apiDefBuilder.append("}");
         }
-        tempApiDef.append("},\"schemes\":[\"https\"],\"swagger\":\"2.0\"" + "}");
-        apiDefinition = tempApiDef.toString();
+        apiDefBuilder.append("},\"schemes\":[\"https\"],\"swagger\":\"2.0\"" + "}");
+        apiDefinition = apiDefBuilder.toString();
         log.info("............. API def" + apiDefinition);
         status = "CREATED";
         responseCaching = "Disabled";

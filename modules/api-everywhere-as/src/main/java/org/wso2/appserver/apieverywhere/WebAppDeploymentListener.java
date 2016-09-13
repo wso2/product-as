@@ -1,6 +1,10 @@
 package org.wso2.appserver.apieverywhere;
 
 
+import org.apache.catalina.Container;
+import org.apache.catalina.connector.Connector;
+import org.apache.catalina.core.StandardEngine;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.reflections.Reflections;
@@ -22,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -46,6 +51,28 @@ public class WebAppDeploymentListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         ServletContext servletContext = servletContextEvent.getServletContext();
+
+        try {
+            Object o = FieldUtils.readField(servletContext, "context", true);
+            Container container = (Container) FieldUtils.readField(o, "context", true);
+
+            Container c = container.getParent();
+            while (c != null && !(c instanceof StandardEngine)) {
+                c = c.getParent();
+            }
+
+            if (c != null) {
+                StandardEngine engine = (StandardEngine) c;
+//                log.info(engine.getDefaultHost());
+                for (Connector connector : engine.getService().findConnectors()) {
+                    // Get port for each connector. Store it in the ServletContext or whatever
+//                    log.info(connector.getProtocol());
+                    log.info(connector.getPort());
+                }
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
 
         apiCreateRequest.setContext(servletContext.getContextPath());
 
@@ -154,6 +181,9 @@ public class WebAppDeploymentListener implements ServletContextListener {
                 }
 
             }
+            for (APIPath apiPath : generatedApiPaths) {
+                log.info(apiPath.toString());
+            }
             //Run Thread to publish generated apis into API Publisher
             APICreator apiCreator = new APICreator(apiCreateRequest, generatedApiPaths);
             apiCreator.start();
@@ -178,9 +208,28 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
             Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
             for (Method me : methods) {
-                APIPath apiPath = new APIPath(baseUrl.toString(), me);
-                generatedApiPaths.add(apiPath);
-                log.info(apiPath.toString());
+                Path methodPath = me.getAnnotation(Path.class);
+                String url = baseUrl + methodPath.value();
+                // if the Path in class has only '/' then the url have '//'
+                url = url.replace("//", "/");
+                //remove path param
+                int index = url.indexOf("{");
+                if (index > 0) {
+                    url = url.substring(0, index);
+                }
+
+                String finalUrl = url;
+                List<APIPath> sameAPI = generatedApiPaths
+                        .stream()
+                        .filter(p -> p.getUrl().equals((finalUrl)))
+                        .collect(Collectors.toList());
+                if (sameAPI.size() > 0) {
+                    sameAPI.get(0).addProp(me);
+                } else {
+                    APIPath apiPath = new APIPath(finalUrl);
+                    apiPath.addProp(me);
+                    generatedApiPaths.add(apiPath);
+                }
             }
         }
     }

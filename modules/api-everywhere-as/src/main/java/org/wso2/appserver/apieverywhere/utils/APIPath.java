@@ -12,7 +12,6 @@ import java.util.Arrays;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -27,101 +26,62 @@ public class APIPath {
     private static final Log log = LogFactory.getLog(APIPath.class);
 
     private String url;
-    private APIType type;
-    private String[] consumes;
-    private String[] produces;
-    private ArrayList<Param> params = new ArrayList<>();
-    private String returnType;
+    private ArrayList<APIProp> apiProps = new ArrayList<>();
 
-    String getType() {
-        if (type == null) {
-            return APIType.get.toString();
-        }
-        return type.toString();
-    }
-
-    String getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    ArrayList<Param> getParams() {
-        return params;
+    public APIPath(String baseUrl) {
+       this.url = baseUrl;
     }
 
-    String[] getConsumes() {
-        if (consumes == null) {
-            return new String[0];
-        }
-        String[] temp = new String[consumes.length];
-        for (int i = 0; i < temp.length; i++) {
-            temp[i] = "\"" + consumes[i] + "\"";
-        }
-        return temp;
+    public ArrayList<APIProp> getApiProps() {
+        return apiProps;
     }
 
-    String[] getProduces() {
-        if (produces == null) {
-            return new String[0];
-        }
-        String[] temp = new String[produces.length];
-        for (int i = 0; i < temp.length; i++) {
-            temp[i] = "\"" + produces[i] + "\"";
-        }
-        return temp;
-    }
-
-    public APIPath(String baseUrl, Method me) {
+    public void addProp(Method me) {
+        APIProp apiProp = new APIProp();
         Annotation[] methodAnnotations = me.getAnnotations();
         for (Annotation ann : methodAnnotations) {
             switch (ann.annotationType().getName()) {
                 case "javax.ws.rs.GET" :
-                    type = APIType.get;
+                    apiProp.setType(APIType.get);
                     break;
                 case "javax.ws.rs.POST" :
-                    type = APIType.post;
+                    apiProp.setType(APIType.post);
                     break;
                 case "javax.ws.rs.PUT" :
-                    type = APIType.put;
+                    apiProp.setType(APIType.put);
                     break;
                 case "javax.ws.rs.DELETE" :
-                    type = APIType.delete;
+                    apiProp.setType(APIType.delete);
                     break;
                 //patch does dont support for jax-rs
                 case "javax.ws.rs.PATCH" :
-                    type = APIType.patch;
+                    apiProp.setType(APIType.patch);
                     break;
                 case "javax.ws.rs.HEAD" :
-                    type = APIType.head;
+                    apiProp.setType(APIType.head);
                     break;
                 case "javax.ws.rs.OPTIONS" :
-                    type = APIType.options;
+                    apiProp.setType(APIType.options);
                     break;
                 case "javax.ws.rs.Consumes" :
                     Consumes cons = (Consumes) ann;
-                    consumes = cons.value();
+                    apiProp.setConsumes(cons.value());
                     break;
                 case "javax.ws.rs.Produces" :
                     Produces pro = (Produces) ann;
-                    produces = pro.value();
+                    apiProp.setProduces(pro.value());
                     break;
                 case "javax.ws.rs.Path" :
-                    Path path = (Path) ann;
-                    this.url = baseUrl + path.value();
                     break;
                 default:
                     log.error("undefined annotation type " + ann);
                     break;
             }
         }
-
-        // if the Path in class has only '/' then the url have '//'
-        this.url = this.url.replace("//", "/");
-        //remove path param
-        int index = this.url.indexOf("{");
-        if (index > 0) {
-            this.url = this.url.substring(0, index);
-        }
-
 
         Parameter[] methodParams = me.getParameters();
         for (Parameter param : methodParams) {
@@ -151,25 +111,101 @@ public class APIPath {
                 paramObj.setParamType(ParamType.body);
             }
             paramObj.setDataType(param.getType().getName());
-            params.add(paramObj);
+            apiProp.addParam(paramObj);
         }
-        returnType = me.getReturnType().getName();
+        apiProp.setReturnType(me.getReturnType().getName());
+        apiProps.add(apiProp);
     }
 
-
     public String toString() {
-        StringBuilder paramBuilder = new StringBuilder();
-        for (Param pa : params) {
-            paramBuilder.append(pa.toString());
+        StringBuilder probBuilder = new StringBuilder();
+        for (APIProp pr : apiProps) {
+            probBuilder.append(pr.toString());
         }
         return ("API:"
                 + "\n url- " + url
-                + "\n type- " + type
-                + "\n produces- " + Arrays.toString(produces)
-                + "\n consumes- " + Arrays.toString(consumes)
-                + "\n returns- " + returnType
-                + paramBuilder.toString()
+                + probBuilder.toString()
         );
+    }
+
+    /**
+     * Utility inner class to add properties of API definition
+     *
+     * @since 6.0.0
+     */
+    static class APIProp {
+        private APIType type;
+        private String[] consumes;
+        private String[] produces;
+        private ArrayList<Param> params = new ArrayList<>();
+        private String returnType;
+
+        public void setType(APIType type) {
+            this.type = type;
+        }
+
+        public void setConsumes(String[] consumes) {
+            this.consumes = consumes;
+        }
+
+        public void setProduces(String[] produces) {
+            this.produces = produces;
+        }
+
+        public void addParam(Param param) {
+            params.add(param);
+        }
+
+        public void setReturnType(String returnType) {
+            this.returnType = returnType;
+        }
+
+        String getType() {
+            if (type == null) {
+                return APIType.get.toString();
+            }
+            return type.toString();
+        }
+
+        ArrayList<Param> getParams() {
+            return params;
+        }
+
+        String[] getConsumes() {
+            if (consumes == null) {
+                return new String[0];
+            }
+            String[] temp = new String[consumes.length];
+            for (int i = 0; i < temp.length; i++) {
+                temp[i] = "\"" + consumes[i] + "\"";
+            }
+            return temp;
+        }
+
+        String[] getProduces() {
+            if (produces == null) {
+                return new String[0];
+            }
+            String[] temp = new String[produces.length];
+            for (int i = 0; i < temp.length; i++) {
+                temp[i] = "\"" + produces[i] + "\"";
+            }
+            return temp;
+        }
+
+        public String toString() {
+            StringBuilder paramBuilder = new StringBuilder();
+            for (Param pa : params) {
+                paramBuilder.append(pa.toString());
+            }
+            return ("\n props"
+                    + "\n\t type- " + type
+                    + "\n\t produces- " + Arrays.toString(produces)
+                    + "\n\t consumes- " + Arrays.toString(consumes)
+                    + "\n\t returns- " + returnType
+                    + paramBuilder.toString()
+            );
+        }
     }
 
     /**
@@ -213,10 +249,10 @@ public class APIPath {
         }
 
         public String toString() {
-            return ("\n params:"
-                    + "\n\t paramName- " + paramName
-                    + "\n\t paramtype- " + paramType
-                    + "\n\t datatype- " + dataType
+            return ("\n\t params:"
+                    + "\n\t\t paramName- " + paramName
+                    + "\n\t\t paramtype- " + paramType
+                    + "\n\t\t datatype- " + dataType
             );
         }
     }
@@ -233,9 +269,7 @@ public class APIPath {
         head,
         options,
         patch
-
     }
-
     /**
      * types of params in API Path
      */
@@ -246,5 +280,4 @@ public class APIPath {
         query,
         formData
     }
-
 }

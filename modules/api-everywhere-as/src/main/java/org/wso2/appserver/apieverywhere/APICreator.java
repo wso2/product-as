@@ -65,7 +65,7 @@ class APICreator extends Thread {
         if (accessTokenResponse != null) {
             String accessToken = (String) accessTokenResponse.get("access_token");
             log.info("access token : " + accessTokenResponse);
-            apiCreateRequest.produceSample(generatedApiPaths);
+            apiCreateRequest.buildAPI(generatedApiPaths);
             Gson gson = new Gson();
             String apiJson = gson.toJson(apiCreateRequest);
             JSONObject jsonObject = createAPI(accessToken, apiJson);
@@ -89,7 +89,8 @@ class APICreator extends Thread {
         /* Load the keyStore that includes self-signed cert as a "trusted" entry. */
                 KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
                 fis = new FileInputStream(keystoreLocation);
-                keyStore.load(fis, "wso2carbon".toCharArray());
+                keyStore.load(fis, ServerConfigurationLoader.getServerConfiguration().
+                        getSecurityConfiguration().getKeystore().getPassword().toCharArray());
                 TrustManagerFactory tmf =
                         TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
                 tmf.init(keyStore);
