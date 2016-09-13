@@ -29,7 +29,9 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
+ *  The class which publish the produced APIs into the API Publisher
  *
+ * @since 6.0.0
  */
 class APICreator extends Thread {
 
@@ -71,19 +73,6 @@ class APICreator extends Thread {
         } else {
             log.error("Failed to connect to APIM");
         }
-
-//        try {
-//            apiCreateRequest.produceSample(generatedApiPaths);
-//            Gson gson = new Gson();
-//            String apiJson = gson.toJson(apiCreateRequest);
-//            String[] publishApiCommand = {"curl", "-k", "-H", "Authorization: Bearer " + accessToken,
-//                    "-H", "Content-Type: application/json", "-X", "POST", "-d", apiJson, publishApiUrl};
-//            JSONObject publishAPIResponse = curlCommand(publishApiCommand);
-//            log.info("Response of API publish JSON....................");
-//            log.info(publishAPIResponse);
-//        } catch (IOException e) {
-//            log.error(e);
-//        }
     }
 
     private JSONObject httpCall(String encodedKey) {

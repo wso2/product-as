@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ *Utility class to create an API from the web app
  *
+ * @since 6.0.0
  */
 public class APICreateRequest {
 
@@ -36,18 +38,13 @@ public class APICreateRequest {
         this.name = name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public void setContext(String context) {
         this.context = context;
     }
 
+    // method that set-up the API object to publish in API Publisher
     public void produceSample(List<APIPath> apiPaths) {
-//        name = "PizzaShackAPI";
-        description = "automatically published to API publisher.\r\n";
-//        context = "/pizzashack";
+        description = "automatically created to API publisher.\r\n";
         version = "1.0.0";
         provider = "admin";
 
@@ -81,7 +78,7 @@ public class APICreateRequest {
         tempApiDef.append("},\"schemes\":[\"https\"],\"swagger\":\"2.0\"" + "}");
         apiDefinition = tempApiDef.toString();
         log.info("............. API def" + apiDefinition);
-        status = "PUBLISHED";
+        status = "CREATED";
         responseCaching = "Disabled";
         cacheTimeout = 300;
         destinationStatsEnabled = false;
@@ -90,9 +87,7 @@ public class APICreateRequest {
         tiers = new ArrayList<>(Arrays.asList("Unlimited"));
         visibility = "PUBLIC";
         visibleRoles = new ArrayList<>(Arrays.asList());
-        ;
         visibleTenants = new ArrayList<>(Arrays.asList());
-        ;
         endpointConfig = "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\"," +
                 "\"config\":null}," +
                 "\"sandbox_endpoints\":{\"url\":" +

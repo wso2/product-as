@@ -32,7 +32,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 
 /**
- * An implementation of {@code ServletContextListener} that publishes API from deployed web apps to API Publisher
+ * An implementation of {@code ServletContextListener} that scan deployed web apps and extracts the annotations
  *
  * @since 6.0.0
  */
@@ -45,7 +45,6 @@ public class WebAppDeploymentListener implements ServletContextListener {
     //catch a web app deployment event
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
         ServletContext servletContext = servletContextEvent.getServletContext();
 
         apiCreateRequest.setContext(servletContext.getContextPath());
@@ -66,9 +65,8 @@ public class WebAppDeploymentListener implements ServletContextListener {
             Element servletMapping = (Element) webXmlDoc.getElementsByTagName("servlet-mapping").item(0);
 
             if (servlet != null && servletMapping != null) {
-                // TODO: What to put in API name ?
+                // TODO: What to put in API name ? get the name to web app name
                 apiCreateRequest.setName(servletContext.getContextPath().substring(1));
-                // TODO: get the name to web app name
 //                String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
 //                apiCreateRequest.setName(servletName);
 
@@ -168,6 +166,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
         //no change when an web app destroyed.
     }
 
+    //produces API paths from scanned web apps
     private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
         for (Class cl : classes) {
             Path path = (Path) cl.getAnnotation(Path.class);
