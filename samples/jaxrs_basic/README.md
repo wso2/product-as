@@ -47,11 +47,12 @@ Requirements
 -------------
 
 1. JDK 1.8 or higher
-2. Apache Ant 1.7 or higher
+2. Apache Maven 3.0.4 or higher
 
 Building the sample
 -------------------
 
 1. Open a command line, and navigate to the <AS_HOME>/samples/jaxrs-basic directory.
-2. Build and deploy the sample with `mvn -Pdeploy`.
-3. Start WSO2 Application Server.
+2. Build the sample with `mvn clean install`.
+3. Deploy the sample with `mvn -Pdeploy`.
+4. Start WSO2 Application Server.

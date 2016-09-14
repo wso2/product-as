@@ -39,13 +39,13 @@
             <outputDirectory>${distribution.file.name}/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../samples/appserver-sso-samples/sso-quickstart/src/main/resources/sso-quickstart
+            <directory>../samples/sso-quickstart/src/main/resources/sso-quickstart
             </directory>
             <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
         </fileSet>
         <!--  copying SSOSamples -->
         <fileSet>
-            <directory>../samples/appserver-sso-samples/sso-sample-apps</directory>
+            <directory>../samples/sso-sample-apps</directory>
             <outputDirectory>${distribution.file.name}/samples/sso-sample-apps</outputDirectory>
             <excludes>
                 <exclude>**/**.sh</exclude>
@@ -67,6 +67,11 @@
         <fileSet>
             <directory>../samples/jaggerySamples</directory>
             <outputDirectory>${distribution.file.name}/samples/jaggery-sample</outputDirectory>
+            <includes>
+                <include>coffeeshop/**</include>
+                <include>pom.xml</include>
+                <include>README.md</include>
+            </includes>
         </fileSet>
         <!-- http-analytics-quickstart -->
         <fileSet>
@@ -76,12 +81,17 @@
     </fileSets>
     <files>
         <file>
-            <source>../samples/appserver-sso-samples/sso-quickstart/README.md</source>
+            <source>../samples/sso-quickstart/README.md</source>
             <outputDirectory>${distribution.file.name}/samples/sso-quickstart</outputDirectory>
         </file>
         <file>
             <source>../samples/http-analytics-quickstart/README.md</source>
             <outputDirectory>${distribution.file.name}/samples/http-analytics-quickstart</outputDirectory>
+        </file>
+        <!-- copy samples pom.xml -->
+        <file>
+            <source>../samples/pom.xml</source>
+            <outputDirectory>${distribution.file.name}/samples</outputDirectory>
         </file>
     </files>
 
