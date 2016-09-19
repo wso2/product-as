@@ -2,6 +2,7 @@ package org.wso2.appserver.apieverywhere.utils;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,43 +55,31 @@ public class APICreateRequest {
         version = "1.0.0";
         provider = "admin";
 
-        StringBuilder apiDefBuilder = new StringBuilder();
-        apiDefBuilder.append("{\"paths\":{");
-        for (int i = 0; i < apiPaths.size(); i++) {
-            APIPath apiPath = apiPaths.get(i);
-            if (i != 0) {
-                apiDefBuilder.append(",");
-            }
-            apiDefBuilder.append("\"" + apiPath.getUrl() + "\":{");
-            ArrayList<APIPath.APIProp> apiProps = apiPath.getApiProps();
-            for (int k = 0; k < apiProps.size(); k++) {
-                APIPath.APIProp apiProp = apiProps.get(k);
-                if (k != 0) {
-                    apiDefBuilder.append(",");
+        JSONObject apiDefBuilder = new JSONObject();
+        JSONObject pathsJSON = new JSONObject();
+        for (APIPath apiPath : apiPaths) {
+            JSONObject propsJSON = new JSONObject();
+            for (APIPath.APIProp apiProp : apiPath.getApiProps()) {
+                ArrayList<JSONObject> paramsJSONList = new ArrayList<>();
+                for (APIPath.Param param : apiProp.getParams()) {
+                    JSONObject apiParamJSON = new JSONObject();
+                    apiParamJSON.put("name", param.getParamName());
+                    apiParamJSON.put("in", param.getParamType());
+                    apiParamJSON.put("type", param.getDataType());
+                    paramsJSONList.add(apiParamJSON);
                 }
-                apiDefBuilder.append("\"" + apiProp.getType() + "\":{");
-                ArrayList<APIPath.Param> params = apiProp.getParams();
-                apiDefBuilder.append("\"parameters\":[");
-                for (int j = 0; j < params.size(); j++) {
-                    APIPath.Param param = params.get(j);
-                    if (j != 0) {
-                        apiDefBuilder.append(",");
-                    }
-                    apiDefBuilder.append("{\"name\":\"" + param.getParamName() + "\"," +
-                            "\"in\":\"" + param.getParamType() + "\"," +
-                            "\"type\":\"" + param.getDataType() + "\"}");
-
-                }
-                apiDefBuilder.append("],");
-                apiDefBuilder.append("\"responses\":{\"200\":{}},");
-                apiDefBuilder.append("\"produces\":" + Arrays.toString(apiProp.getProduces()) +
-                                                                                ",");
-                apiDefBuilder.append("\"consumes\":" + Arrays.toString(apiProp.getConsumes()));
-                apiDefBuilder.append("}");
+                JSONObject apiPropJSON = new JSONObject();
+                apiPropJSON.put("parameters", paramsJSONList);
+                apiPropJSON.put("responses", new JSONObject().put("default", ""));
+                apiPropJSON.put("produces", apiProp.getProduces());
+                apiPropJSON.put("consumes", apiProp.getConsumes());
+                propsJSON.put(apiProp.getType(), apiPropJSON);
             }
-            apiDefBuilder.append("}");
+            pathsJSON.put(apiPath.getUrl(), propsJSON);;
         }
-        apiDefBuilder.append("},\"schemes\":[\"https\"],\"swagger\":\"2.0\"" + "}");
+        apiDefBuilder.put("paths", pathsJSON);
+        apiDefBuilder.put("schemes", new ArrayList<>(Arrays.asList("http")));
+        apiDefBuilder.put("swagger", "2.0");
         apiDefinition = apiDefBuilder.toString();
         log.info("............. API def" + apiDefinition);
         status = "CREATED";
@@ -103,12 +92,22 @@ public class APICreateRequest {
         visibility = "PUBLIC";
         visibleRoles = new ArrayList<>(Arrays.asList());
         visibleTenants = new ArrayList<>(Arrays.asList());
-        endpointConfig = "{\"production_endpoints\":" +
-                "{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\"," +
-                "\"config\":null}," +
-                "\"sandbox_endpoints\":" +
-                "{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\"," +
-                "\"config\":null}," +
-                "\"endpoint_type\":\"http\"}";
+
+
+        JSONObject endPointConfigJSON = new JSONObject();
+        JSONObject productionJSON = new JSONObject();
+        productionJSON.put("url", "https://localhost:9443/am/sample/pizzashack/v1/api/");
+        productionJSON.put("config", "null");
+
+        JSONObject sandboxJSON = new JSONObject();
+        sandboxJSON.put("url", "https://localhost:9443/am/sample/pizzashack/v1/api/");
+        sandboxJSON.put("config", "null");
+
+        endPointConfigJSON.put("production_endpoints", productionJSON);
+        endPointConfigJSON.put("sandbox_endpoints", sandboxJSON);
+        endPointConfigJSON.put("endpoint_type", "http");
+
+
+        endpointConfig = endPointConfigJSON.toString();
     }
 }

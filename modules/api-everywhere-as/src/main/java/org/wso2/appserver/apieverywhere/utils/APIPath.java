@@ -175,22 +175,14 @@ public class APIPath {
             if (consumes == null) {
                 return new String[0];
             }
-            String[] temp = new String[consumes.length];
-            for (int i = 0; i < temp.length; i++) {
-                temp[i] = "\"" + consumes[i] + "\"";
-            }
-            return temp;
+            return this.consumes;
         }
 
         String[] getProduces() {
             if (produces == null) {
                 return new String[0];
             }
-            String[] temp = new String[produces.length];
-            for (int i = 0; i < temp.length; i++) {
-                temp[i] = "\"" + produces[i] + "\"";
-            }
-            return temp;
+            return this.produces.clone();
         }
 
         public String toString() {
@@ -261,7 +253,7 @@ public class APIPath {
     /**
      * http types of the api path
      */
-    private enum APIType {
+    public enum APIType {
         get,
         post,
         put,
@@ -273,7 +265,7 @@ public class APIPath {
     /**
      * types of params in API Path
      */
-    private enum ParamType {
+    public enum ParamType {
         body,
         path,
         header,
