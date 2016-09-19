@@ -42,7 +42,13 @@ public class APICreateRequest {
         this.context = context;
     }
 
-    // method that set-up the API object to publish in API Publisher
+
+    /**
+     * set-up the API object for publishing
+     *
+     * @param apiPaths     the API paths scanned by API scanner
+     *
+     */
     public void buildAPI(List<APIPath> apiPaths) {
         description = "automatically created to API publisher.\r\n";
         version = "1.0.0";
@@ -77,7 +83,8 @@ public class APICreateRequest {
                 }
                 apiDefBuilder.append("],");
                 apiDefBuilder.append("\"responses\":{\"200\":{}},");
-                apiDefBuilder.append("\"produces\":" + Arrays.toString(apiProp.getProduces()) + ",");
+                apiDefBuilder.append("\"produces\":" + Arrays.toString(apiProp.getProduces()) +
+                                                                                ",");
                 apiDefBuilder.append("\"consumes\":" + Arrays.toString(apiProp.getConsumes()));
                 apiDefBuilder.append("}");
             }
@@ -88,7 +95,7 @@ public class APICreateRequest {
         log.info("............. API def" + apiDefinition);
         status = "CREATED";
         responseCaching = "Disabled";
-        cacheTimeout = 300;
+        cacheTimeout = 0;
         destinationStatsEnabled = false;
         isDefaultVersion = true;
         transport = new ArrayList<>(Arrays.asList("http", "https"));
@@ -96,9 +103,12 @@ public class APICreateRequest {
         visibility = "PUBLIC";
         visibleRoles = new ArrayList<>(Arrays.asList());
         visibleTenants = new ArrayList<>(Arrays.asList());
-        endpointConfig = "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\"," +
+        endpointConfig = "{\"production_endpoints\":" +
+                "{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\"," +
                 "\"config\":null}," +
-                "\"sandbox_endpoints\":{\"url\":" +
-                "\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"endpoint_type\":\"http\"}";
+                "\"sandbox_endpoints\":" +
+                "{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\"," +
+                "\"config\":null}," +
+                "\"endpoint_type\":\"http\"}";
     }
 }

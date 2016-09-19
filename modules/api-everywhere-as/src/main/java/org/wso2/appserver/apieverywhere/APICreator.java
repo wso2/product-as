@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.JSONObject;
+import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
 import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
-import org.wso2.appserver.apieverywhere.utils.APIPath;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +25,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.Base64;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -41,50 +40,43 @@ class APICreator extends Thread {
 
     private static final Log log = LogFactory.getLog(APICreator.class);
     private final APICreateRequest apiCreateRequest;
-    private final List<APIPath> generatedApiPaths;
 
-
-    APICreator(APICreateRequest apiCreateRequest, List<APIPath> generatedApiPaths) {
+    APICreator(APICreateRequest apiCreateRequest) {
         this.apiCreateRequest = apiCreateRequest;
-        this.generatedApiPaths = generatedApiPaths;
     }
 
 
     @Override
     public void run() {
-        // TODO: have to get the keys from web-as.xml
-        String clientId = "fzr7f4asH5az3Ef4b7qrVJITYTka";
-        String clientSecret = "dYBYDKcfYRtOc6jVAIvAz0JCD2sa";
-
-
-        String key = clientId + ":" + clientSecret;
-        String encodedKey = null;
         try {
-            encodedKey = Base64.getEncoder().encodeToString(key.getBytes("utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            log.error(e);
-        }
+            // TODO: have to get the keys from web-as.xml
+            String clientId = "fzr7f4asH5az3Ef4b7qrVJITYTka";
+            String clientSecret = "dYBYDKcfYRtOc6jVAIvAz0JCD2sa";
 
-        JSONObject accessTokenResponse = httpCall(encodedKey);
-        if (accessTokenResponse != null) {
-            String accessToken = (String) accessTokenResponse.get("access_token");
-            log.info("access token : " + accessTokenResponse);
-            apiCreateRequest.buildAPI(generatedApiPaths);
+
+            String key = clientId + ":" + clientSecret;
+            String encodedKey = Base64.getEncoder().encodeToString(key.getBytes("utf-8"));
+
+            String accessToken = httpCall(encodedKey);
             Gson gson = new Gson();
             String apiJson = gson.toJson(apiCreateRequest);
-            JSONObject jsonObject = createAPI(accessToken, apiJson);
-            log.info("response from APIM : " + jsonObject);
-        } else {
-            log.error("Failed to connect to APIM");
+            createAPI(accessToken, apiJson);
+        } catch (APIEverywhereException e) {
+            // what to do here?
+        } catch (UnsupportedEncodingException e) {
+            log.error("Failed to generate encoded key " + e);
         }
     }
 
-    private JSONObject httpCall(String encodedKey) {
+    /**
+     * Https call for access token
+     *
+     * @param encodedKey     the encoded key from clentId:clientSecret
+     * @return JSONObject of the response
+     */
+    private String httpCall(String encodedKey) throws APIEverywhereException {
         String requestAccessTokenUrl = "https://127.0.0.1:8243/token";
         SSLSocketFactory sslSocketFactory = generateSSL();
-        if (sslSocketFactory == null) {
-            return null;
-        }
         try {
             //Create connection
             URL url = new URL(requestAccessTokenUrl);
@@ -95,12 +87,10 @@ class APICreator extends Thread {
             connection.setDoInput(true);
             connection.setSSLSocketFactory(sslSocketFactory);
             // for development purpose only
-            connection.setHostnameVerifier((hostname, sslSession) -> {
-                log.info("hostname: " + hostname);
-                return hostname.equals("127.0.0.1");
-            });
+            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
-            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(), "utf-8")) {
+            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
+                    "utf-8")) {
                 os.write("grant_type=password&username=admin&password=admin&scope=apim:api_create");
             }
 
@@ -114,23 +104,30 @@ class APICreator extends Thread {
                     stringBuilder.append(line);
                 }
             }
-
             connection.disconnect();
-            return new JSONObject(stringBuilder.toString());
+            JSONObject accessTokenResponse = new JSONObject(stringBuilder.toString());
+            String accessToken = (String) accessTokenResponse.get("access_token");
+            if (accessToken == null) {
+                log.error("Authentication failed: " + stringBuilder.toString());
+                throw new APIEverywhereException("Authentication failed ", null);
+            }
+            return accessToken;
         } catch (IOException e) {
-            log.error(e);
+            log.error("Error in establishing connection : " + e);
+            throw new APIEverywhereException("Error in establishing connection ", e);
         }
-        return null;
     }
 
 
-    private JSONObject createAPI(String accessToken, String apiJson) {
+    /**
+     * Https call to create API in API Publisher.
+     *
+     * @param accessToken     access token for the request
+     * @param apiJson   APICreateRequest object as string which to publish
+     */
+    private void createAPI(String accessToken, String apiJson) throws APIEverywhereException {
         String publishApiUrl = "https://127.0.0.1:9443/api/am/publisher/v0.10/apis";
         SSLSocketFactory sslSocketFactory = generateSSL();
-        if (sslSocketFactory == null) {
-            return null;
-        }
-
         try {
             //Create connection
             URL url = new URL(publishApiUrl);
@@ -142,59 +139,81 @@ class APICreator extends Thread {
             connection.setDoInput(true);
             connection.setSSLSocketFactory(sslSocketFactory);
             // for development purpose only
-            connection.setHostnameVerifier((hostname, sslSession) -> {
-                log.info("hostname: " + hostname);
-                return hostname.equals("127.0.0.1");
-            });
+            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
-            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(), "utf-8")) {
+            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
+                    "utf-8")) {
                 os.write(apiJson);
             }
-            log.info("Status code " + connection.getResponseCode());
+            int responseCode = connection.getResponseCode();
 
             StringBuilder stringBuilder = new StringBuilder();
-            try (InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream(), "utf-8");
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+            try (InputStreamReader inputStreamReader = new InputStreamReader(
+                    connection.getInputStream(), "utf-8");
+                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     stringBuilder.append(line);
                 }
             }
             connection.disconnect();
-            return new JSONObject(stringBuilder.toString());
+            JSONObject response = new JSONObject(stringBuilder.toString());
+            if (responseCode == 201) {
+                log.info("API created successfully: API id - " + response.get("id"));
+            } else {
+                log.error("Error in creating API: " + response.toString());
+                throw new APIEverywhereException("Error in creating API ", null);
+            }
         } catch (IOException e) {
-            log.error(e);
+            log.error("Error in establishing connection with API Publisher: " + e);
+            throw new APIEverywhereException("Error in establishing connection with API Publisher ",
+                    e);
+
         }
-        return null;
     }
 
-    private SSLSocketFactory generateSSL() {
-        String keystorePathString = System.getProperty(org.wso2.appserver.Constants.JAVA_KEYSTORE_LOCATION);
-        String keystorePasswordString = System.getProperty(org.wso2.appserver.Constants.JAVA_KEYSTORE_PASSWORD);
+    /**
+     * Produce SSL certificate
+     *
+     * @return SSLSocketFactory
+     */
+    private SSLSocketFactory generateSSL() throws APIEverywhereException {
+        String keystorePathString = System.getProperty(
+                org.wso2.appserver.Constants.JAVA_KEYSTORE_LOCATION);
+        String keystorePasswordString = System.getProperty(
+                org.wso2.appserver.Constants.JAVA_KEYSTORE_PASSWORD);
 
         Path keyStorePath = Paths.get(URI.create(keystorePathString).getPath());
-        if (Files.exists(keyStorePath)) {
-            try (InputStream keystoreInputStream = Files.newInputStream(keyStorePath)) {
-                KeyStore keyStore = KeyStore.getInstance(System.getProperty(org.wso2.appserver.Constants.
-                        JAVA_KEYSTORE_TYPE));
-                keyStore.load(keystoreInputStream, keystorePasswordString.toCharArray());
+        try (InputStream keystoreInputStream = Files.newInputStream(keyStorePath)) {
+            KeyStore keyStore = KeyStore.getInstance(System.getProperty(
+                    org.wso2.appserver.Constants.JAVA_KEYSTORE_TYPE));
+            keyStore.load(keystoreInputStream, keystorePasswordString.toCharArray());
 
-                TrustManagerFactory tmf =
-                        TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-                tmf.init(keyStore);
+            TrustManagerFactory tmf =
+                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(keyStore);
 
 
-                SSLContext ctx = SSLContext.getInstance("TLS");
-                ctx.init(null, tmf.getTrustManagers(), null);
+            SSLContext ctx = SSLContext.getInstance("TLS");
+            ctx.init(null, tmf.getTrustManagers(), null);
 
-                return ctx.getSocketFactory();
-            } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException |
-                    KeyManagementException e) {
-                log.error(e);
-            }
-        } else {
-            log.error("File path specified for the keystore does not exist");
+            return ctx.getSocketFactory();
+        } catch (IOException e) {
+            log.error("Provided keystore file does not exist: " + e);
+            throw new APIEverywhereException("File path specified for the keystore does not exist "
+                    , e);
+        } catch (CertificateException e) {
+            log.error("Failed to create SSL certificate: " + e);
+            throw new APIEverywhereException("Failed to create SSL certificate ", e);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("Wrong algorithm applied for certificate creation: " + e);
+            throw new APIEverywhereException("Wrong algorithm applied for certificate creation ", e);
+        } catch (KeyStoreException e) {
+            log.error("Failed to load to provided keystore: " + e);
+            throw new APIEverywhereException("Failed to load to provided keystore ", e);
+        } catch (KeyManagementException e) {
+            log.error("Failed to load KeyManagement: " + e);
+            throw new APIEverywhereException("Failed to load KeyManagement ", e);
         }
-        return null;
     }
 }
