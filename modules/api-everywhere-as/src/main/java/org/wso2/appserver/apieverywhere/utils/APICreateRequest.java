@@ -21,7 +21,6 @@ public class APICreateRequest {
     private String description;
     private String context;
     private String version;
-    private String provider;
     private String apiDefinition;
     private String status;
     private String responseCaching;
@@ -53,7 +52,6 @@ public class APICreateRequest {
     public void buildAPI(List<APIPath> apiPaths) {
         description = "automatically created to API publisher.\r\n";
         version = "1.0.0";
-        provider = "admin";
 
         JSONObject apiDefBuilder = new JSONObject();
         JSONObject pathsJSON = new JSONObject();
@@ -81,7 +79,6 @@ public class APICreateRequest {
         apiDefBuilder.put("schemes", new ArrayList<>(Arrays.asList("http")));
         apiDefBuilder.put("swagger", "2.0");
         apiDefinition = apiDefBuilder.toString();
-        log.info("............. API def" + apiDefinition);
         status = "CREATED";
         responseCaching = "Disabled";
         cacheTimeout = 0;

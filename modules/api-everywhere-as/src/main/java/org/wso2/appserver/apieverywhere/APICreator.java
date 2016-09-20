@@ -91,10 +91,10 @@ class APICreator extends Thread {
 
             try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
                     "utf-8")) {
-                os.write("grant_type=password&username=admin&password=admin&scope=apim:api_create");
+                os.write("grant_type=client_credentials&scope=apim:api_create");
             }
 
-            log.info("Status code " + connection.getResponseCode());
+            connection.getResponseCode();
 
             StringBuilder stringBuilder = new StringBuilder();
             try (InputStreamReader is = new InputStreamReader(connection.getInputStream(), "utf-8");
@@ -111,6 +111,7 @@ class APICreator extends Thread {
                 log.error("Authentication failed: " + stringBuilder.toString());
                 throw new APIEverywhereException("Authentication failed ", null);
             }
+            log.info("access token received");
             return accessToken;
         } catch (IOException e) {
             log.error("Error in establishing connection : " + e);
