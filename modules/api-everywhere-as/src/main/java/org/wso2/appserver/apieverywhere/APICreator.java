@@ -6,6 +6,7 @@ import org.apache.juli.logging.LogFactory;
 import org.json.JSONObject;
 import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
 import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,17 +51,23 @@ class APICreator extends Thread {
     public void run() {
         try {
             // TODO: have to get the keys from web-as.xml
-            String clientId = "fzr7f4asH5az3Ef4b7qrVJITYTka";
-            String clientSecret = "dYBYDKcfYRtOc6jVAIvAz0JCD2sa";
+//            String clientId = "fzr7f4asH5az3Ef4b7qrVJITYTka";
+//            String clientSecret = "dYBYDKcfYRtOc6jVAIvAz0JCD2sa";
 
 
-            String key = clientId + ":" + clientSecret;
+            String key  = ServerConfigurationLoader.
+                    getServerConfiguration().getApiEverywhereConfiguration().getKeys();
+            String apiPublisherUrl = ServerConfigurationLoader.
+                    getServerConfiguration().getApiEverywhereConfiguration().getApiPublisherUrl();
+            String authenticationUrl = ServerConfigurationLoader.
+                    getServerConfiguration().getApiEverywhereConfiguration().getApiAuthenticationUrl();
+
             String encodedKey = Base64.getEncoder().encodeToString(key.getBytes("utf-8"));
 
-            String accessToken = httpCall(encodedKey);
+            String accessToken = httpCall(encodedKey, authenticationUrl);
             Gson gson = new Gson();
             String apiJson = gson.toJson(apiCreateRequest);
-            createAPI(accessToken, apiJson);
+            createAPI(accessToken, apiJson, apiPublisherUrl);
         } catch (APIEverywhereException e) {
             // what to do here?
         } catch (UnsupportedEncodingException e) {
@@ -72,10 +79,11 @@ class APICreator extends Thread {
      * Https call for access token
      *
      * @param encodedKey     the encoded key from clentId:clientSecret
+     * @param authenticationUrl
      * @return JSONObject of the response
      */
-    private String httpCall(String encodedKey) throws APIEverywhereException {
-        String requestAccessTokenUrl = "https://127.0.0.1:8243/token";
+    private String httpCall(String encodedKey, String authenticationUrl) throws APIEverywhereException {
+        String requestAccessTokenUrl = authenticationUrl + "/token";
         SSLSocketFactory sslSocketFactory = generateSSL();
         try {
             //Create connection
@@ -111,7 +119,7 @@ class APICreator extends Thread {
                 log.error("Authentication failed: " + stringBuilder.toString());
                 throw new APIEverywhereException("Authentication failed ", null);
             }
-            log.info("access token received");
+            log.info("Access token received");
             return accessToken;
         } catch (IOException e) {
             log.error("Error in establishing connection : " + e);
@@ -122,12 +130,12 @@ class APICreator extends Thread {
 
     /**
      * Https call to create API in API Publisher.
-     *
-     * @param accessToken     access token for the request
+     *  @param accessToken     access token for the request
      * @param apiJson   APICreateRequest object as string which to publish
+     * @param apiPublisherUrl
      */
-    private void createAPI(String accessToken, String apiJson) throws APIEverywhereException {
-        String publishApiUrl = "https://127.0.0.1:9443/api/am/publisher/v0.10/apis";
+    private void createAPI(String accessToken, String apiJson, String apiPublisherUrl) throws APIEverywhereException {
+        String publishApiUrl = apiPublisherUrl + "/api/am/publisher/v0.10/apis";
         SSLSocketFactory sslSocketFactory = generateSSL();
         try {
             //Create connection
@@ -142,8 +150,7 @@ class APICreator extends Thread {
             // for development purpose only
             connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
-            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
-                    "utf-8")) {
+            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(), "utf-8")) {
                 os.write(apiJson);
             }
             int responseCode = connection.getResponseCode();
@@ -167,8 +174,7 @@ class APICreator extends Thread {
             }
         } catch (IOException e) {
             log.error("Error in establishing connection with API Publisher: " + e);
-            throw new APIEverywhereException("Error in establishing connection with API Publisher ",
-                    e);
+            throw new APIEverywhereException("Error in establishing connection with API Publisher ", e);
 
         }
     }

@@ -1,8 +1,7 @@
 package org.wso2.appserver.apieverywhere.utils;
 
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
 import org.json.JSONObject;
+import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,9 +12,9 @@ import java.util.List;
  *
  * @since 6.0.0
  */
+@SuppressWarnings("URF_UNREAD_FIELD")
 public class APICreateRequest {
 
-    private static final Log log = LogFactory.getLog(APICreateRequest.class);
 
     private String name;
     private String description;
@@ -91,13 +90,15 @@ public class APICreateRequest {
         visibleTenants = new ArrayList<>(Arrays.asList());
 
 
+        String applicationServerUrl = ServerConfigurationLoader.
+                getServerConfiguration().getApiEverywhereConfiguration().getApplicationServerUrl();
         JSONObject endPointConfigJSON = new JSONObject();
         JSONObject productionJSON = new JSONObject();
-        productionJSON.put("url", "https://localhost:9443/am/sample/pizzashack/v1/api/");
+        productionJSON.put("url", applicationServerUrl);
         productionJSON.put("config", "null");
 
         JSONObject sandboxJSON = new JSONObject();
-        sandboxJSON.put("url", "https://localhost:9443/am/sample/pizzashack/v1/api/");
+        sandboxJSON.put("url", applicationServerUrl);
         sandboxJSON.put("config", "null");
 
         endPointConfigJSON.put("production_endpoints", productionJSON);
@@ -106,5 +107,69 @@ public class APICreateRequest {
 
 
         endpointConfig = endPointConfigJSON.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getApiDefinition() {
+        return apiDefinition;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getResponseCaching() {
+        return responseCaching;
+    }
+
+    public Integer getCacheTimeout() {
+        return cacheTimeout;
+    }
+
+    public Boolean getDestinationStatsEnabled() {
+        return destinationStatsEnabled;
+    }
+
+    public Boolean getDefaultVersion() {
+        return isDefaultVersion;
+    }
+
+    public List<String> getTransport() {
+        return transport;
+    }
+
+    public List<String> getTiers() {
+        return tiers;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public List<Object> getVisibleRoles() {
+        return visibleRoles;
+    }
+
+    public List<Object> getVisibleTenants() {
+        return visibleTenants;
+    }
+
+    public String getEndpointConfig() {
+        return endpointConfig;
     }
 }
