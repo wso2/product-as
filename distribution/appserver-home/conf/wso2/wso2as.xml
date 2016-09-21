@@ -126,4 +126,15 @@
             <Password>wso2carbon</Password>
         </TrustStore>
     </Security>
+
+    <!--
+    The child elements under this defines the Configurations for Creating API
+     of deployed web app in API Publisher
+    -->
+    <ApiEverywhere>
+        <Keys>fzr7f4asH5az3Ef4b7qrVJITYTka:dYBYDKcfYRtOc6jVAIvAz0JCD2sa</Keys>
+        <ApiPublisherUrl>https://127.0.0.1:9443</ApiPublisherUrl>
+        <AuthenticationUrl>https://127.0.0.1:8243</AuthenticationUrl>
+        <ApplicationServerUrl>https://127.0.0.1:8080</ApplicationServerUrl>
+    </ApiEverywhere>
 </AppServer>

@@ -111,6 +111,17 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <!--api everywhere-->
+                <xs:element name="ApiEverywhere" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Keys" type="xs:string"/>
+                            <xs:element name="ApiPublisherUrl" type="xs:anyURI"/>
+                            <xs:element name="AuthenticationUrl" type="xs:anyURI"/>
+                            <xs:element name="ApplicationServerUrl" type="xs:anyURI"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
