@@ -73,4 +73,13 @@
         <!-- Enable/disable HTTP statistics monitoring. -->
         <enable-stats-publisher>false</enable-stats-publisher>
     </statistics-publisher>
+
+    <!--
+    Defines the web application level configurations required for creating API of
+    web applications to WSO2 API Publisher
+    -->
+    <api-everywhere>
+        <!-- Enable/disable creation of API -->
+        <create-api>false</create-api>
+    </api-everywhere>
 </wso2as-web>
