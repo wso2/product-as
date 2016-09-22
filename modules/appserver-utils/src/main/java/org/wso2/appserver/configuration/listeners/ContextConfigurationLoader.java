@@ -130,9 +130,6 @@ public class ContextConfigurationLoader implements LifecycleListener {
      */
     public static Optional<AppServerWebAppConfiguration> getContextConfiguration(ServletContext servletContext) {
         for (Map.Entry<Context, AppServerWebAppConfiguration> context : contextToConfigurationMap.entrySet()) {
-            if (context.getKey().getServletContext() == null) {
-                continue;
-            }
             if (context.getKey().getServletContext() == servletContext) {
                 return Optional.ofNullable(context.getValue());
             }
