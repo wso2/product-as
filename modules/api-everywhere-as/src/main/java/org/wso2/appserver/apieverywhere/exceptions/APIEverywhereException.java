@@ -1,11 +1,11 @@
 package org.wso2.appserver.apieverywhere.exceptions;
 
 /**
- * Custom exception class for the api-everywhere-as module.
+ * Custom run time exception class for the api-everywhere-as module.
  *
  * @since 6.0.0
  */
-public class APIEverywhereException extends Exception {
+public class APIEverywhereException extends RuntimeException {
 
     /**
      * Exception to be thrown when an error occurs in the api-everywhere-as module.

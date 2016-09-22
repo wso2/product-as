@@ -36,7 +36,7 @@ public class APIPath {
        this.url = baseUrl;
     }
 
-    public ArrayList<APIProp> getApiProps() {
+    ArrayList<APIProp> getApiProps() {
         return apiProps;
     }
 
@@ -57,7 +57,7 @@ public class APIPath {
                 case "javax.ws.rs.DELETE" :
                     apiProp.setType(APIType.delete);
                     break;
-                //patch does dont support for jax-rs
+                //patch does don't support for jax-rs
                 case "javax.ws.rs.PATCH" :
                     apiProp.setType(APIType.patch);
                     break;
@@ -144,19 +144,19 @@ public class APIPath {
             this.type = type;
         }
 
-        public void setConsumes(String[] consumes) {
+        void setConsumes(String[] consumes) {
             this.consumes = consumes;
         }
 
-        public void setProduces(String[] produces) {
+        void setProduces(String[] produces) {
             this.produces = produces;
         }
 
-        public void addParam(Param param) {
+        void addParam(Param param) {
             params.add(param);
         }
 
-        public void setReturnType(String returnType) {
+        void setReturnType(String returnType) {
             this.returnType = returnType;
         }
 
@@ -253,7 +253,7 @@ public class APIPath {
     /**
      * http types of the api path
      */
-    public enum APIType {
+    private enum APIType {
         get,
         post,
         put,
@@ -262,10 +262,11 @@ public class APIPath {
         options,
         patch
     }
+
     /**
      * types of params in API Path
      */
-    public enum ParamType {
+    private enum ParamType {
         body,
         path,
         header,

@@ -72,7 +72,7 @@ public class APICreateRequest {
                 apiPropJSON.put("consumes", apiProp.getConsumes());
                 propsJSON.put(apiProp.getType(), apiPropJSON);
             }
-            pathsJSON.put(apiPath.getUrl(), propsJSON);;
+            pathsJSON.put(apiPath.getUrl(), propsJSON);
         }
         apiDefBuilder.put("paths", pathsJSON);
         apiDefBuilder.put("schemes", new ArrayList<>(Arrays.asList("http")));

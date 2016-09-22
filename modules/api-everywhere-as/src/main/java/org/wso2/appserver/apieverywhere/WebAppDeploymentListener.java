@@ -23,7 +23,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
     //catch a web app deployment event
     @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
+    public void contextInitialized(ServletContextEvent servletContextEvent) throws APIEverywhereException {
         ServletContext servletContext = servletContextEvent.getServletContext();
         log.info("New web app is deployed : " + servletContext.getContextPath());
 
@@ -34,11 +34,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
                     if (apiEverywhereConfiguration != null && apiEverywhereConfiguration.getCreateApi() != null) {
                         if (apiEverywhereConfiguration.getCreateApi()) {
                             APIScanner apiScanner = new APIScanner();
-                            try {
                                 apiScanner.scan(servletContext);
-                            } catch (APIEverywhereException e) {
-                                //what to do here??
-                            }
                         } else {
                             log.info("Creation of API is blocked by the user.");
                         }

@@ -33,7 +33,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
- *  The class which publish the produced APIs into the API Publisher
+ *  The thread class which create the produced APIs into the API Publisher
  *
  * @since 6.0.0
  */
@@ -48,13 +48,8 @@ class APICreator extends Thread {
 
 
     @Override
-    public void run() {
+    public void run() throws APIEverywhereException {
         try {
-            // TODO: have to get the keys from web-as.xml
-//            String clientId = "fzr7f4asH5az3Ef4b7qrVJITYTka";
-//            String clientSecret = "dYBYDKcfYRtOc6jVAIvAz0JCD2sa";
-
-
             String key  = ServerConfigurationLoader.
                     getServerConfiguration().getApiEverywhereConfiguration().getKeys();
             String apiPublisherUrl = ServerConfigurationLoader.
@@ -68,18 +63,17 @@ class APICreator extends Thread {
             Gson gson = new Gson();
             String apiJson = gson.toJson(apiCreateRequest);
             createAPI(accessToken, apiJson, apiPublisherUrl);
-        } catch (APIEverywhereException e) {
-            // what to do here?
         } catch (UnsupportedEncodingException e) {
-            log.error("Failed to generate encoded key " + e);
+            log.error("Failed to generate encoded key: " + e);
+            throw new APIEverywhereException("Failed to generate encoded key", e);
         }
     }
 
     /**
-     * Https call for access token
+     * Https call for access token from authentication end point
      *
      * @param encodedKey     the encoded key from clentId:clientSecret
-     * @param authenticationUrl
+     * @param authenticationUrl the authentication end point of the WSO2 API manager
      * @return JSONObject of the response
      */
     private String httpCall(String encodedKey, String authenticationUrl) throws APIEverywhereException {
@@ -132,7 +126,7 @@ class APICreator extends Thread {
      * Https call to create API in API Publisher.
      *  @param accessToken     access token for the request
      * @param apiJson   APICreateRequest object as string which to publish
-     * @param apiPublisherUrl
+     * @param apiPublisherUrl the base usl of API Publisher
      */
     private void createAPI(String accessToken, String apiJson, String apiPublisherUrl) throws APIEverywhereException {
         String publishApiUrl = apiPublisherUrl + "/api/am/publisher/v0.10/apis";
