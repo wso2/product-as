@@ -40,6 +40,16 @@ class APIScanner {
     private List<APIPath> generatedApiPaths = new ArrayList<>();
 
 
+    /**
+     * Scan the deployed web apps
+     * It will scan the web.xml and cxf-servlet.xml of the web app and find out the service classes and it's base path
+     * Then it will scan those classes for the annotation and get the list of the methods.
+     * Then scan those methods, method params annotation and return type
+     * Then initiate a new Thread to create API in the API Publisher
+     *
+     * @param servletContext     the deployed web apps' servlet context
+     *
+     */
     void scan(ServletContext servletContext) throws APIEverywhereException {
         apiCreateRequest.setContext(servletContext.getContextPath());
         HashMap<String, String> serverParams = scanConfigs(servletContext);
@@ -188,7 +198,8 @@ class APIScanner {
 
 
     /**
-     * produces APIs and add to the @generatedApiPaths array List
+     * Scan the classes to get the annotated methods and generate APIPath
+     * Add to the gerneratedApiPath arraylist
      *
      * @param baseUrl     the url generated from the config
      * @param reflections      the Reflection object which scanned the current classes
@@ -217,8 +228,8 @@ class APIScanner {
                 }
 
                 String finalUrl = url;
-                List<APIPath> sameAPI = generatedApiPaths
-                        .stream()
+                //search for the same API Path in the array list and  and attach it to the list
+                List<APIPath> sameAPI = generatedApiPaths.stream()
                         .filter(p -> p.getUrl().equals((finalUrl)))
                         .collect(Collectors.toList());
                 if (sameAPI.size() > 0) {

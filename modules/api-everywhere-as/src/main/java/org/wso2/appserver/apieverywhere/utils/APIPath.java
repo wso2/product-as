@@ -45,37 +45,37 @@ public class APIPath {
         Annotation[] methodAnnotations = me.getAnnotations();
         for (Annotation ann : methodAnnotations) {
             switch (ann.annotationType().getName()) {
-                case "javax.ws.rs.GET" :
+                case Constants.JAVAX_GET_METHOD:
                     apiProp.setType(APIType.get);
                     break;
-                case "javax.ws.rs.POST" :
+                case Constants.JAVAX_POST_METHOD :
                     apiProp.setType(APIType.post);
                     break;
-                case "javax.ws.rs.PUT" :
+                case Constants.JAX_RS_PUT_METHOD :
                     apiProp.setType(APIType.put);
                     break;
-                case "javax.ws.rs.DELETE" :
+                case Constants.JAX_RS_DELETE_METHOD :
                     apiProp.setType(APIType.delete);
                     break;
                 //patch does don't support for jax-rs
-                case "javax.ws.rs.PATCH" :
+                case Constants.JAX_RS_PATCH_METHOD :
                     apiProp.setType(APIType.patch);
                     break;
-                case "javax.ws.rs.HEAD" :
+                case Constants.JAX_RS_HEAD_METHOD :
                     apiProp.setType(APIType.head);
                     break;
-                case "javax.ws.rs.OPTIONS" :
+                case Constants.JAX_RS_OPTIONS_METHOD :
                     apiProp.setType(APIType.options);
                     break;
-                case "javax.ws.rs.Consumes" :
+                case Constants.JAX_RS_CONSUMES_METHOD :
                     Consumes cons = (Consumes) ann;
                     apiProp.setConsumes(cons.value());
                     break;
-                case "javax.ws.rs.Produces" :
+                case Constants.JAX_RS_PRODUCES_METHOD :
                     Produces pro = (Produces) ann;
                     apiProp.setProduces(pro.value());
                     break;
-                case "javax.ws.rs.Path" :
+                case Constants.JAX_RS_PATH_METHOD :
                     break;
                 default:
                     log.error("undefined annotation type " + ann);

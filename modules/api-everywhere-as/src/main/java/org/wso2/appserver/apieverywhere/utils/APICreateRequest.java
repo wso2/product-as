@@ -8,11 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *Utility class to create an API from the web app
+ * Utility class to create an API from the web app
  *
  * @since 6.0.0
  */
-@SuppressWarnings("URF_UNREAD_FIELD")
 public class APICreateRequest {
 
 
