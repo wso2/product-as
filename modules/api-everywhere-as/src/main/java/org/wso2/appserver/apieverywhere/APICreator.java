@@ -6,6 +6,7 @@ import org.apache.juli.logging.LogFactory;
 import org.json.JSONObject;
 import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
 import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
+import org.wso2.appserver.apieverywhere.utils.Constants;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 
 import java.io.BufferedReader;
@@ -83,7 +84,7 @@ class APICreator extends Thread {
             //Create connection
             URL url = new URL(requestAccessTokenUrl);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(Constants.HTTP_POST_METHOD);
             connection.setRequestProperty("Authorization", "Basic " + encodedKey);
             connection.setDoOutput(true);
             connection.setDoInput(true);
@@ -96,23 +97,34 @@ class APICreator extends Thread {
                 os.write("grant_type=client_credentials&scope=apim:api_create");
             }
 
-            connection.getResponseCode();
+            int responseCode = connection.getResponseCode();
 
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder responseBuilder = new StringBuilder();
+            if (responseCode != Constants.REQUEST_ACCESS_TOKEN_SUCCESS_CODE) {
+                try (InputStreamReader inputStreamReader = new InputStreamReader(
+                        connection.getErrorStream(), "utf-8");
+                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        responseBuilder.append(line);
+                    }
+                }
+                connection.disconnect();
+                JSONObject errorObject = new JSONObject(responseBuilder.toString());
+                log.error("Authentication failed: " + errorObject.get("error"));
+                throw new APIEverywhereException("Authentication failed ", null);
+            }
+
             try (InputStreamReader is = new InputStreamReader(connection.getInputStream(), "utf-8");
                  BufferedReader bufferedReader = new BufferedReader(is)) {
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line);
+                    responseBuilder.append(line);
                 }
             }
             connection.disconnect();
-            JSONObject accessTokenResponse = new JSONObject(stringBuilder.toString());
+            JSONObject accessTokenResponse = new JSONObject(responseBuilder.toString());
             String accessToken = (String) accessTokenResponse.get("access_token");
-            if (accessToken == null) {
-                log.error("Authentication failed: " + stringBuilder.toString());
-                throw new APIEverywhereException("Authentication failed ", null);
-            }
             log.info("Access token received");
             return accessToken;
         } catch (IOException e) {
@@ -129,13 +141,13 @@ class APICreator extends Thread {
      * @param apiPublisherUrl the base usl of API Publisher
      */
     private void createAPI(String accessToken, String apiJson, String apiPublisherUrl) throws APIEverywhereException {
-        String publishApiUrl = apiPublisherUrl + "/api/am/publisher/v0.10/apis";
+        String publishApiUrl = apiPublisherUrl + "/api/am/publisher/" + Constants.API_PUBLISHER_API_VERSION + "/apis";
         SSLSocketFactory sslSocketFactory = generateSSL();
         try {
             //Create connection
             URL url = new URL(publishApiUrl);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(Constants.HTTP_POST_METHOD);
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
@@ -149,23 +161,33 @@ class APICreator extends Thread {
             }
             int responseCode = connection.getResponseCode();
 
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder responseBuilder = new StringBuilder();
+            if (responseCode != Constants.CREATE_API_SUCCESS_CODE) {
+                try (InputStreamReader inputStreamReader = new InputStreamReader(
+                        connection.getErrorStream(), "utf-8");
+                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        responseBuilder.append(line);
+                    }
+                }
+                connection.disconnect();
+                JSONObject errorObject = new JSONObject(responseBuilder.toString());
+                log.error("Error in creating API: " + errorObject.get("description"));
+                throw new APIEverywhereException("Error in ceating API ", null);
+            }
+
             try (InputStreamReader inputStreamReader = new InputStreamReader(
                     connection.getInputStream(), "utf-8");
                  BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line);
+                    responseBuilder.append(line);
                 }
             }
             connection.disconnect();
-            JSONObject response = new JSONObject(stringBuilder.toString());
-            if (responseCode == 201) {
-                log.info("API created successfully: API id - " + response.get("id"));
-            } else {
-                log.error("Error in creating API: " + response.toString());
-                throw new APIEverywhereException("Error in creating API ", null);
-            }
+            JSONObject apiCreateResponse = new JSONObject(responseBuilder.toString());
+            log.info("API created successfully: API id - " + apiCreateResponse.get("id"));
         } catch (IOException e) {
             log.error("Error in establishing connection with API Publisher: " + e);
             throw new APIEverywhereException("Error in establishing connection with API Publisher ", e);
