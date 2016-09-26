@@ -14,9 +14,11 @@ import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
 import org.wso2.appserver.apieverywhere.utils.APIPath;
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,19 +51,19 @@ class APIScanner {
      *
      */
     Optional<APICreateRequest> scan(ServletContext servletContext) throws APIEverywhereException {
-        APICreateRequest apiCreateRequest = new APICreateRequest();
-        List<APIPath> generatedApiPaths = new ArrayList<>();
 
-        apiCreateRequest.setContext(servletContext.getContextPath());
-        apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 
-        Map<String, String> serverParams = scanConfigs(servletContext);
+        HashMap<String, StringBuilder> serverParams = scanConfigs(servletContext);
 
         if (!serverParams.isEmpty()) {
+            APICreateRequest apiCreateRequest = new APICreateRequest();
+            List<APIPath> generatedApiPaths = new ArrayList<>();
+            apiCreateRequest.setContext(servletContext.getContextPath());
+            apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 
-            for (Map.Entry<String, String> entry : serverParams.entrySet()) {
+            for (Map.Entry<String, StringBuilder> entry : serverParams.entrySet()) {
                 //append address in beans
-                StringBuilder url = new StringBuilder(entry.getValue());
+                StringBuilder url = entry.getValue();
 
                 //scanning annotations
                 Reflections reflections = new Reflections(entry.getKey(),
@@ -102,86 +104,141 @@ class APIScanner {
 
     /**
      * Scan for beans in config xml files in cxf servlet
+     * http://cxf.apache.org/docs/jaxrs-services-configuration.html
      *
      * @param servletContext     the deployed web apps' servlet context
-     * @return Map of <Bean class name, Bean url>
+     * @return HashMap of <Bean class name, Bean url>
      */
-    private Map<String, String> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
+    private HashMap<String, StringBuilder> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
         //Map that stores the class name and the address from beans
-        StringBuilder baseUrl = new StringBuilder();
-        baseUrl.append(servletContext.getContextPath());
-        HashMap<String, String> serverParams = new HashMap<>();
+        String baseUrl = servletContext.getContextPath();
+
+
+        HashMap<String, StringBuilder> beanParams = new HashMap<>();   // <className, UrlPattern>
+
         String webXmlPath = servletContext.getRealPath("/") + "/WEB-INF/web.xml";
+        //default servlet xml path;
         String servletXmlPath = servletContext.getRealPath("/") + "/WEB-INF/cxf-servlet.xml";
 
         try {
             //reading from web.xml
+            File webXmlFile = new File(webXmlPath);
+            if (!webXmlFile.exists()) {
+                if (log.isDebugEnabled()) {
+                    log.debug("It is not a CXF Servlet : " + servletContext.getContextPath());
+                }
+                return beanParams;
+            }
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+
             Document webXmlDoc = dbFactory.newDocumentBuilder().parse(webXmlPath);
             webXmlDoc.getDocumentElement().normalize();
 
-            Element servlet = (Element) webXmlDoc.getElementsByTagName("servlet").item(0);
-            Element servletMapping = (Element) webXmlDoc.getElementsByTagName("servlet-mapping")
-                                                                            .item(0);
+            NodeList servletList = webXmlDoc.getElementsByTagName("servlet");
+            NodeList servletMappingList = webXmlDoc.getElementsByTagName("servlet-mapping");
 
-            if (servlet != null && servletMapping != null) {
-                // TODO: What to put in API name ? get the name to web app name
-//                String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
-//                apiCreateRequest.setName(servletName);
+            if (servletList != null && servletMappingList != null) {
 
-                String urlPattern = servletMapping.getElementsByTagName("url-pattern")
-                                                                .item(0).getTextContent();
-                baseUrl.append(urlPattern.substring(0, urlPattern.length() - 2));
+                // check for cxf-servlet config from context param.
+                NodeList contextParams = webXmlDoc.getElementsByTagName("context-param");
+                for (int i = 0; i < contextParams.getLength(); i++) {
+                    Element contextParam = (Element) contextParams.item(i);
+                    String paramName = contextParam.getElementsByTagName("param-name").item(0).getTextContent().trim();
+                    if (Objects.equals(paramName, "contextConfigLocation")) {
+                        servletXmlPath = servletContext.getRealPath("/") + contextParam.
+                                getElementsByTagName("param-value").item(0).getTextContent().trim();
+                    }
+                }
 
+                HashMap<String, String> servletMappingParams = new HashMap<>(); // <servletName, UrlPattern>
+                for (int i = 0; i < servletMappingList.getLength(); i++) {
+                    Element servletMapping = (Element) servletMappingList.item(i);
+                    String urlPattern = servletMapping.getElementsByTagName("url-pattern")
+                            .item(0).getTextContent();
+                    //// TODO: 9/26/16 all the users will not give *
+                    String urlPatternString = urlPattern.substring(0, urlPattern.length() - 2);
+                    String servletName = servletMapping.getElementsByTagName("servlet-name").item(0).
+                            getTextContent().trim();
+                    servletMappingParams.put(servletName, urlPatternString);
+                }
 
-                String servletClassName = servlet.getElementsByTagName("servlet-class")
-                                                            .item(0).getTextContent().trim();
-                switch (servletClassName) {
-                    case "org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet":
-                        //getting bean from init-param
+                for (int i = 0; i < servletList.getLength(); i++) {
+                    Element servlet = (Element) servletList.item(i);
+                    String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
+                    if (servletMappingParams.containsKey(servletName)) {
+                        StringBuilder urlBuilder = new StringBuilder(baseUrl);
+                        String urlPatternString = servletMappingParams.get(servletName);
+                        urlBuilder.append(urlPatternString);
+                        String servletClassName = servlet.getElementsByTagName("servlet-class")
+                                .item(0).getTextContent().trim();
+
                         NodeList initParams = servlet.getElementsByTagName("init-param");
-                        for (int i = 0; i < initParams.getLength(); i++) {
-                            Element initParam = (Element) initParams.item(i);
-                            String paramName = initParam.getElementsByTagName("param-name")
-                                                                        .item(0).getTextContent();
-                            if (Objects.equals(paramName, "jaxrs.serviceClasses")) {
-                                String tempClass = initParam.getElementsByTagName("param-value")
-                                        .item(0).getTextContent();
-                                serverParams.put(tempClass, baseUrl.toString());
-                            }
+                        switch (servletClassName) {
+                            case "org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet":
+                                //getting bean from init-param
+                                for (int j = 0; j < initParams.getLength(); j++) {
+                                    Element initParam = (Element) initParams.item(j);
+                                    String paramName = initParam.getElementsByTagName("param-name")
+                                            .item(0).getTextContent().trim();
+                                    if (Objects.equals(paramName, "jaxrs.serviceClasses")) {
+                                        String[] classNames = initParam.getElementsByTagName("param-value")
+                                                .item(0).getTextContent().trim().split(",");
+                                        Arrays.stream(classNames).forEach(className ->
+                                                beanParams.put(className, urlBuilder));
+                                    }
+                                }
+                                break;
+                            case "org.apache.cxf.transport.servlet.CXFServlet":
+                                for (int j = 0; j < initParams.getLength(); j++) {
+                                    Element initParam = (Element) initParams.item(j);
+                                    String paramName = initParam.getElementsByTagName("param-name")
+                                            .item(0).getTextContent().trim();
+                                    if (Objects.equals(paramName, "config-location")) {
+                                        String xmlPath = initParam.getElementsByTagName("param-value")
+                                                .item(0).getTextContent().trim();
+                                        servletXmlPath = servletContext.getRealPath("/") + xmlPath;
+                                    }
+                                }
+
+
+                                //getting beans from servletXml file
+                                Document servletDoc = dbFactory.newDocumentBuilder().parse(servletXmlPath);
+                                servletDoc.getDocumentElement().normalize();
+
+                                HashMap<String, String> serverParams = new HashMap<>(); // <beanId, address>
+                                NodeList jaxrsServerList = servletDoc.getElementsByTagName("jaxrs:server");
+                                for (int j = 0; j < jaxrsServerList.getLength(); j++) {
+                                    Element jaxrsServer = (Element) jaxrsServerList.item(j);
+                                    String address = jaxrsServer.getAttribute("address");
+                                    NodeList jaxrsServerBeans = jaxrsServer.getElementsByTagName("jaxrs:serviceBeans");
+                                    for (int k = 0; k < jaxrsServerBeans.getLength(); k++) {
+                                        Element jaxrsServerBean = (Element) jaxrsServerBeans.item(k);
+                                        Element ref = (Element) jaxrsServerBean.getElementsByTagName("ref").item(0);
+                                        String beanId = ref.getAttribute("bean").trim();
+                                        serverParams.put(beanId, address);
+
+                                    }
+                                }
+
+                                if (!serverParams.isEmpty()) {
+                                    NodeList beans = servletDoc.getElementsByTagName("bean");
+                                    for (int j = 0; j < beans.getLength(); j++) {
+                                        Element bean = (Element) beans.item(j);
+                                        String beanId = bean.getAttribute("id");
+                                        if (serverParams.containsKey(beanId)) {
+                                            String address = serverParams.get(beanId);
+                                            String className = bean.getAttribute("class");
+                                            urlBuilder.append(address);
+                                            beanParams.put(className, urlBuilder);
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                //other servlet config
+                                break;
                         }
-                        break;
-                    case "org.apache.cxf.transport.servlet.CXFServlet":
-                        //getting beans from cfx-servlet.xml
-                        Document servletDoc = dbFactory.newDocumentBuilder().parse(servletXmlPath);
-                        servletDoc.getDocumentElement().normalize();
-
-                        Element jaxrsServer = (Element) servletDoc.getElementsByTagName
-                                                                    ("jaxrs:server").item(0);
-
-                        if (jaxrsServer != null) {
-                            //jax rs configurations
-                            String address = jaxrsServer.getAttribute("address");
-                            baseUrl.append(address);
-                            NodeList beans = servletDoc.getElementsByTagName("bean");
-                            for (int i = 0; i < beans.getLength(); i++) {
-                                Element bean = (Element) beans.item(i);
-                                String tempClass = bean.getAttribute("class");
-                                serverParams.put(tempClass, baseUrl.toString());
-
-                            }
-                        }
-                        // TODO: reading other config
-//                        else {
-//                            //other server config
-//                            Element jaxwsServer = (Element) servletDoc.getElementsByTagName
-//                                                                  ("jaxws:server").item(0);
-//                            //getting jaxws config
-//                        }
-                        break;
-                    default:
-                        //other servlet config
-                        break;
+                    }
                 }
             }
 
@@ -195,7 +252,7 @@ class APIScanner {
             log.error("The config file is not found: " + e);
             throw new APIEverywhereException("The config file is not found ", e);
         }
-        return serverParams;
+        return beanParams;
     }
 
 
