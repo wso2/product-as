@@ -1,77 +1,191 @@
-//package org.wso2.appserver.apieverywhere.demo;
-//
-//
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.json.JSONObject;
-//import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
-//
-//import java.io.BufferedReader;
-//import java.io.IOException;
-//import java.io.InputStreamReader;
-//
-//
-////"clientId":"fzr7f4asH5az3Ef4b7qrVJITYTka","clientSecret":"dYBYDKcfYRtOc6jVAIvAz0JCD2sa"}
-///**
-// *
-// */
-//public class APIPublisherDemo {
-//
-//    public static void main(String args[]) {
-//
-//        String clientId="fzr7f4asH5az3Ef4b7qrVJITYTka";
-//        String clientSecret="dYBYDKcfYRtOc6jVAIvAz0JCD2sa";
-//        String key = clientId + ":" + clientSecret;
-////        byte[]   bytesEncoded = Base64.encodeBase64(key.getBytes());
-//        String encodedKey = "ZnpyN2Y0YXNINWF6M0VmNGI3cXJWSklUWVRrYTpkWUJZREtjZllSdE9jNmpWQUl2QXowSkNEMnNh";
-//
-//        String accessTokenUrl="https://127.0.0.1:8243/token";
-//        String[] accessTokenCommand = {"curl" , "-k", "-d", "grant_type=password&username=admin&password=admin&scope=apim:api_create", "-H", "Authorization : Basic " + encodedKey,accessTokenUrl};
-//        String accessToken;
-//        try {
-//            JSONObject accessTokenResponse = curlCommand(accessTokenCommand);
-//            accessToken= (String) accessTokenResponse.get("access_token");
-//            String publishApiUrl = "https://127.0.0.1:9443/api/am/publisher/v0.10/apis";
-//            APICreateRequest api = new APICreateRequest();
-//            api.produceSample();
-//            String apiJson = new ObjectMapper().writeValueAsString(api);
-//            String[] publishApiCommand = {"curl", "-k", "-H", "Authorization: Bearer " + accessToken, "-H", "Content-Type: application/json", "-X", "POST", "-d", apiJson, publishApiUrl};
-//            JSONObject publishAPIResponse = curlCommand(publishApiCommand);
-//            System.out.println("Response of API publish JSON....................");
-//            System.out.println(publishAPIResponse);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        String apiDefinition = "{\"paths\":{\"/order\":{\"post\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\"}},\"/menu\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\"}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"consumes\":[\"application/json\"]}";
-//        StringBuilder tempApiDef = new StringBuilder();
-//        tempApiDef.append("{\"paths\":{");
-//        for (int i =0; i < 2; i++) {
-//            if (i != 0) {
-//                tempApiDef.append(",");
+package org.wso2.appserver.apieverywhere.demo;
+
+
+import org.json.JSONObject;
+import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
+
+//"clientId":"fzr7f4asH5az3Ef4b7qrVJITYTka","clientSecret":"dYBYDKcfYRtOc6jVAIvAz0JCD2sa"}
+
+/**
+ *
+ * https://localhost:9443/authenticationendpoint/login.do?
+ * client_id=fzr7f4asH5az3Ef4b7qrVJITYTka
+ * &commonAuthCallerPath=%2Foauth2%2Fauthorize
+ * &forceAuth=false
+ * &passiveAuth=false
+ * &redirect_uri=www.google.lk
+ * &response_type=code
+ * &scope=PRODUCTION
+ * &tenantDomain=carbon.super
+ * &sessionDataKey=b177a95f-4d0e-4849-8020-597c1d9cfad7
+ * &relyingParty=fzr7f4asH5az3Ef4b7qrVJITYTka
+ * &type=oauth2
+ * &sp=admin_rest_api_publisher_demo
+ * &isSaaSApp=true
+ * &authenticators=BasicAuthenticator:LOCAL
+
+ */
+public class APIPublisherDemo {
+
+    public static void main(String args[]) throws APIEverywhereException {
+//        String api = getAccessToken();
+//        System.out.println("returns : " + api);
+        httpCall("ZnpyN2Y0YXNINWF6M0VmNGI3cXJWSklUWVRrYTpkWUJZREtjZllSdE9jNmpWQUl2QXowSkNEMnNh");
+    }
+
+    private static String getAccessToken() {
+        String publishApiUrl = "https://localhost:8243/authorize?response_type=code&" +
+                "client_id=fzr7f4asH5az3Ef4b7qrVJITYTka&scope=PRODUCTION&" +
+                "redirect_uri=www%2Egoogle%2Elk";
+
+        try {
+            /* Load the keyStore that includes self-signed cert as a "trusted" entry. */
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            FileInputStream fis = new FileInputStream("/home/senthalan/wso2_projects/product-as/distribution/appserver-home/conf/wso2/client-truststore.jks");
+            keyStore.load(fis, "wso2carbon".toCharArray());
+            TrustManagerFactory tmf =
+                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(keyStore);
+            SSLContext ctx = SSLContext.getInstance("TLS");
+            ctx.init(null, tmf.getTrustManagers(), null);
+            SSLSocketFactory sslFactory = ctx.getSocketFactory();
+            //Create connection
+            URL url = new URL(publishApiUrl);
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setSSLSocketFactory(sslFactory);
+            connection.setInstanceFollowRedirects(false);
+//            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("Host","localhost");
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            // for development purpose only
+            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
+
+//            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(), "utf-8")) {
+//                os.write(apiJson);
 //            }
-//            tempApiDef.append("\"" + "/someUrls"+"\":{");
-//            tempApiDef.append("\"" + "post" + "\":{");
-//            tempApiDef.append("\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\"}}");
-//        }
-//        tempApiDef.append("},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"consumes\":[\"application/json\"]}");
-//            System.out.println(apiDefinition);
-//            System.out.println(tempApiDef.toString());
-//
-//    }
-//
-//
-//    private static JSONObject curlCommand(String[] command) throws IOException {
-//        ProcessBuilder process = new ProcessBuilder(command);
-//        Process p;
-//        p = process.start();
-//        BufferedReader reader =  new BufferedReader(new InputStreamReader(p.getInputStream()));
-//        StringBuilder builder = new StringBuilder();
-//        String line = null;
-//        while ( (line = reader.readLine()) != null) {
-//            builder.append(line);
-//            builder.append(System.getProperty("line.separator"));
-//        }
-//        return new JSONObject(builder.toString());
-//    }
-//
-//}
+            System.out.println("Status code " + connection.getResponseCode());
+
+            System.out.println("location : " + connection.getHeaderField("Location"));
+
+            StringBuilder stringBuilder = new StringBuilder();
+            try (InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream(), "utf-8");
+                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+            }
+            connection.disconnect();
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            System.out.println(e);
+        } catch (CertificateException e) {
+
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * Https call for access token
+     *
+     * @param encodedKey     the encoded key from clentId:clientSecret
+     * @return JSONObject of the response
+     */
+    private static String httpCall(String encodedKey) throws APIEverywhereException {
+        String requestAccessTokenUrl = "https://127.0.0.1:8243/token";
+
+        try {
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            FileInputStream fis = new FileInputStream("/home/senthalan/wso2_projects/product-as/distribution/appserver-home/conf/wso2/client-truststore.jks");
+            keyStore.load(fis, "wso2carbon".toCharArray());
+            TrustManagerFactory tmf =
+                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(keyStore);
+            SSLContext ctx = SSLContext.getInstance("TLS");
+            ctx.init(null, tmf.getTrustManagers(), null);
+            SSLSocketFactory sslFactory = ctx.getSocketFactory();
+            //Create connection
+            URL url = new URL(requestAccessTokenUrl);
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Authorization", "Basic " + encodedKey);
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setSSLSocketFactory(sslFactory);
+            // for development purpose only
+            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
+
+            try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
+                    "utf-8")) {
+                os.write("grant_type=client_credentials&scope=apim:api_create");
+            }
+
+            System.out.println("Status code " + connection.getResponseCode());
+
+            StringBuilder stringBuilder = new StringBuilder();
+            try (InputStreamReader is = new InputStreamReader(connection.getInputStream(), "utf-8");
+                 BufferedReader bufferedReader = new BufferedReader(is)) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+            }
+            connection.disconnect();
+            JSONObject accessTokenResponse = new JSONObject(stringBuilder.toString());
+            String accessToken = (String) accessTokenResponse.get("access_token");
+            if (accessToken == null) {
+                System.out.printf("Authentication failed: " + stringBuilder.toString());
+                throw new APIEverywhereException("Authentication failed ", null);
+            }
+            System.out.printf(accessToken);
+            return accessToken;
+        } catch (IOException e) {
+//            log.error("Error in establishing connection : " + e);
+            throw new APIEverywhereException("Error in establishing connection ", e);
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+}

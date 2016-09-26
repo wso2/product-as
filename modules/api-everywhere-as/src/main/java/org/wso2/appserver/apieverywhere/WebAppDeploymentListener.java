@@ -17,7 +17,7 @@ import javax.servlet.ServletContextListener;
  *
  * @since 6.0.0
  */
-//// TODO: 9/23/16 change the class name
+// TODO: 9/23/16 change the class name
 public class WebAppDeploymentListener implements ServletContextListener {
 
     private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
@@ -51,8 +51,7 @@ public class WebAppDeploymentListener implements ServletContextListener {
                                 apiCreator.setAPIRequest(apiCreateRequest);
                                 apiCreator.start();
                             });
-                        }
-                        else {
+                        } else {
                             if (log.isDebugEnabled()) {
                                 log.debug("Creation of API is blocked by the user.");
                             }
