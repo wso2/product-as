@@ -41,9 +41,9 @@ import javax.net.ssl.TrustManagerFactory;
 class APICreator extends Thread {
 
     private static final Log log = LogFactory.getLog(APICreator.class);
-    private final APICreateRequest apiCreateRequest;
+    private APICreateRequest apiCreateRequest;
 
-    APICreator(APICreateRequest apiCreateRequest) {
+    void setAPIRequest(APICreateRequest apiCreateRequest) {
         this.apiCreateRequest = apiCreateRequest;
     }
 
@@ -188,7 +188,8 @@ class APICreator extends Thread {
             }
             connection.disconnect();
             JSONObject apiCreateResponse = new JSONObject(responseBuilder.toString());
-            log.info("API created successfully: API id - " + apiCreateResponse.get("id"));
+            log.info("API created successfully: API id- " + apiCreateResponse.get("id") + " API name- "
+                    + apiCreateResponse.get("name"));
         } catch (IOException e) {
             log.error("Error in establishing connection with API Publisher: " + e);
             throw new APIEverywhereException("Error in establishing connection with API Publisher ", e);

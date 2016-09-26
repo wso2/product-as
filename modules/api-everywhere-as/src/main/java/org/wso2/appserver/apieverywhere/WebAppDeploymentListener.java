@@ -17,15 +17,17 @@ import javax.servlet.ServletContextListener;
  *
  * @since 6.0.0
  */
+//// TODO: 9/23/16 change the class name
 public class WebAppDeploymentListener implements ServletContextListener {
 
     private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
+    private APIScanner apiScanner = new APIScanner();
+    private APICreator apiCreator = new APICreator();
 
     //catch a web app deployment event
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) throws APIEverywhereException {
         ServletContext servletContext = servletContextEvent.getServletContext();
-        log.info("New web app is deployed : " + servletContext.getContextPath());
 
         ContextConfigurationLoader.getContextConfiguration(servletContext)
                 .ifPresent(configuration -> {
@@ -33,13 +35,32 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
                     if (apiEverywhereConfiguration != null && apiEverywhereConfiguration.getCreateApi() != null) {
                         if (apiEverywhereConfiguration.getCreateApi()) {
-                            APIScanner apiScanner = new APIScanner();
-                                apiScanner.scan(servletContext);
-                        } else {
-                            log.info("Creation of API is blocked by the user.");
+                            apiScanner.scan(servletContext).ifPresent(apiCreateRequest -> {
+                                if (apiCreator.isAlive()) {
+                                    log.info("Thread is already running!!!");
+//                                    while (apiCreator.isAlive()) {
+//                                        try {
+//                                            Thread.sleep(10);
+//                                        } catch (InterruptedException e) {
+//                                            log.info("Thread not found: ", e);
+//                                            throw new APIEverywhereException("Thread not found", e);
+//                                        }
+//                                    }
+
+                                }
+                                apiCreator.setAPIRequest(apiCreateRequest);
+                                apiCreator.start();
+                            });
+                        }
+                        else {
+                            if (log.isDebugEnabled()) {
+                                log.debug("Creation of API is blocked by the user.");
+                            }
                         }
                     } else {
-                        log.info("No configuration found to set up API creation");
+                        if (log.isDebugEnabled()) {
+                            log.debug("No configuration found to set up API creation");
+                        }
                     }
                 });
 

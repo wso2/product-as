@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
@@ -36,9 +37,6 @@ import javax.xml.parsers.ParserConfigurationException;
 class APIScanner {
 
     private static final Log log = LogFactory.getLog(APIScanner.class);
-    private APICreateRequest apiCreateRequest = new APICreateRequest();
-    private List<APIPath> generatedApiPaths = new ArrayList<>();
-
 
     /**
      * Scan the deployed web apps
@@ -50,9 +48,14 @@ class APIScanner {
      * @param servletContext     the deployed web apps' servlet context
      *
      */
-    void scan(ServletContext servletContext) throws APIEverywhereException {
+    Optional<APICreateRequest> scan(ServletContext servletContext) throws APIEverywhereException {
+        APICreateRequest apiCreateRequest = new APICreateRequest();
+        List<APIPath> generatedApiPaths = new ArrayList<>();
+
         apiCreateRequest.setContext(servletContext.getContextPath());
-        HashMap<String, String> serverParams = scanConfigs(servletContext);
+        apiCreateRequest.setName(servletContext.getContextPath().substring(1));
+
+        Map<String, String> serverParams = scanConfigs(servletContext);
 
         if (!serverParams.isEmpty()) {
 
@@ -67,7 +70,7 @@ class APIScanner {
 
 
                 Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Path.class);
-                scanMethodAnnotation(url, reflections, classes);
+                generatedApiPaths = scanMethodAnnotation(url, reflections, classes, generatedApiPaths);
 
                 ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
                 try {
@@ -79,7 +82,7 @@ class APIScanner {
                                 new TypeAnnotationsScanner(), new SubTypesScanner(),
                                 new MethodAnnotationsScanner());
                         classes = tempReflection.getTypesAnnotatedWith(Path.class);
-                        scanMethodAnnotation(url, tempReflection, classes);
+                        generatedApiPaths = scanMethodAnnotation(url, tempReflection, classes, generatedApiPaths);
                     }
                 } catch (ClassNotFoundException e) {
                     log.error("The class is not found in scanning: " + e);
@@ -91,9 +94,9 @@ class APIScanner {
             }
             //Run Thread to publish generated apis into API Publisher
             apiCreateRequest.buildAPI(generatedApiPaths);
-            APICreator apiCreator = new APICreator(apiCreateRequest);
-            apiCreator.start();
+            return Optional.of(apiCreateRequest);
         }
+        return Optional.empty();
     }
 
 
@@ -101,9 +104,9 @@ class APIScanner {
      * Scan for beans in config xml files in cxf servlet
      *
      * @param servletContext     the deployed web apps' servlet context
-     * @return Hash map of <Bean class name, Bean url>
+     * @return Map of <Bean class name, Bean url>
      */
-    private HashMap<String, String> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
+    private Map<String, String> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
         //Map that stores the class name and the address from beans
         StringBuilder baseUrl = new StringBuilder();
         baseUrl.append(servletContext.getContextPath());
@@ -123,7 +126,6 @@ class APIScanner {
 
             if (servlet != null && servletMapping != null) {
                 // TODO: What to put in API name ? get the name to web app name
-                apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 //                String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
 //                apiCreateRequest.setName(servletName);
 
@@ -200,13 +202,13 @@ class APIScanner {
     /**
      * Scan the classes to get the annotated methods and generate APIPath
      * Add to the gerneratedApiPath arraylist
-     *
      * @param baseUrl     the url generated from the config
      * @param reflections      the Reflection object which scanned the current classes
      * @param classes     the classes for scanning
+     * @param generatedApiPaths     the List of APIPath generated
      */
-    private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections,
-                                      Set<Class<?>> classes) {
+    private List<APIPath> scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections,
+                                               Set<Class<?>> classes, List<APIPath> generatedApiPaths) {
         for (Class cl : classes) {
             Path path = (Path) cl.getAnnotation(Path.class);
             if (path == null) {
@@ -241,5 +243,6 @@ class APIScanner {
                 }
             }
         }
+        return generatedApiPaths;
     }
 }

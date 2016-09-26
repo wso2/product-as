@@ -12,6 +12,7 @@ import java.util.List;
  *
  * @since 6.0.0
  */
+@SuppressWarnings("unused")
 public class APICreateRequest {
 
 
@@ -106,69 +107,5 @@ public class APICreateRequest {
 
 
         endpointConfig = endPointConfigJSON.toString();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getApiDefinition() {
-        return apiDefinition;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getResponseCaching() {
-        return responseCaching;
-    }
-
-    public Integer getCacheTimeout() {
-        return cacheTimeout;
-    }
-
-    public Boolean getDestinationStatsEnabled() {
-        return destinationStatsEnabled;
-    }
-
-    public Boolean getDefaultVersion() {
-        return isDefaultVersion;
-    }
-
-    public List<String> getTransport() {
-        return transport;
-    }
-
-    public List<String> getTiers() {
-        return tiers;
-    }
-
-    public String getVisibility() {
-        return visibility;
-    }
-
-    public List<Object> getVisibleRoles() {
-        return visibleRoles;
-    }
-
-    public List<Object> getVisibleTenants() {
-        return visibleTenants;
-    }
-
-    public String getEndpointConfig() {
-        return endpointConfig;
     }
 }
