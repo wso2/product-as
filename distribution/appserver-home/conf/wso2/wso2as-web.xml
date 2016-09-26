@@ -80,6 +80,6 @@
     -->
     <api-everywhere>
         <!-- Enable/disable creation of API -->
-        <create-api>false</create-api>
+        <create-api>true</create-api>
     </api-everywhere>
 </wso2as-web>
