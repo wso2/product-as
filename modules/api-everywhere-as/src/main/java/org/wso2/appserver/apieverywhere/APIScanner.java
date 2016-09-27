@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
 import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
 import org.wso2.appserver.apieverywhere.utils.APIPath;
+import org.wso2.appserver.apieverywhere.utils.Constants;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -38,6 +39,8 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 class APIScanner {
 
+    // TODO: 9/26/16 refactor this class
+
     private static final Log log = LogFactory.getLog(APIScanner.class);
 
     /**
@@ -59,7 +62,8 @@ class APIScanner {
             APICreateRequest apiCreateRequest = new APICreateRequest();
             List<APIPath> generatedApiPaths = new ArrayList<>();
             apiCreateRequest.setContext(servletContext.getContextPath());
-            apiCreateRequest.setName(servletContext.getContextPath().substring(1));
+            String realPath = servletContext.getRealPath("/");
+            apiCreateRequest.setName(realPath.substring(realPath.lastIndexOf("/")));
 
             for (Map.Entry<String, StringBuilder> entry : serverParams.entrySet()) {
                 //append address in beans
@@ -116,9 +120,9 @@ class APIScanner {
 
         HashMap<String, StringBuilder> beanParams = new HashMap<>();   // <className, UrlPattern>
 
-        String webXmlPath = servletContext.getRealPath("/") + "/WEB-INF/web.xml";
+        String webXmlPath = servletContext.getRealPath("/") + Constants.WEB_XML_LOCATION;
         //default servlet xml path;
-        String servletXmlPath = servletContext.getRealPath("/") + "/WEB-INF/cxf-servlet.xml";
+        String servletXmlPath = servletContext.getRealPath("/") +  Constants.CXF_SERVLET_XML_LOCATION;
 
         try {
             //reading from web.xml
@@ -134,67 +138,70 @@ class APIScanner {
             Document webXmlDoc = dbFactory.newDocumentBuilder().parse(webXmlPath);
             webXmlDoc.getDocumentElement().normalize();
 
-            NodeList servletList = webXmlDoc.getElementsByTagName("servlet");
-            NodeList servletMappingList = webXmlDoc.getElementsByTagName("servlet-mapping");
+            NodeList servletList = webXmlDoc.getElementsByTagName(Constants.SERVLET);
+            NodeList servletMappingList = webXmlDoc.getElementsByTagName(Constants.SERVLET_MAPPING);
 
             if (servletList != null && servletMappingList != null) {
 
                 // check for cxf-servlet config from context param.
-                NodeList contextParams = webXmlDoc.getElementsByTagName("context-param");
+                NodeList contextParams = webXmlDoc.getElementsByTagName(Constants.CONTEXT_PARAM);
                 for (int i = 0; i < contextParams.getLength(); i++) {
                     Element contextParam = (Element) contextParams.item(i);
-                    String paramName = contextParam.getElementsByTagName("param-name").item(0).getTextContent().trim();
-                    if (Objects.equals(paramName, "contextConfigLocation")) {
+                    String paramName = contextParam.getElementsByTagName(Constants.PARAM_NAME)
+                                                                                .item(0).getTextContent().trim();
+                    if (Objects.equals(paramName, Constants.CONTEXT_CONFIG_LOC)) {
                         servletXmlPath = servletContext.getRealPath("/") + contextParam.
-                                getElementsByTagName("param-value").item(0).getTextContent().trim();
+                                getElementsByTagName(Constants.PARAM_VALUE).item(0).getTextContent().trim();
                     }
                 }
 
                 HashMap<String, String> servletMappingParams = new HashMap<>(); // <servletName, UrlPattern>
                 for (int i = 0; i < servletMappingList.getLength(); i++) {
                     Element servletMapping = (Element) servletMappingList.item(i);
-                    String urlPattern = servletMapping.getElementsByTagName("url-pattern")
+                    String urlPattern = servletMapping.getElementsByTagName(Constants.URL_PATTERN)
                             .item(0).getTextContent();
-                    //// TODO: 9/26/16 all the users will not give *
+                    // TODO: 9/26/16 all the users will not give *
+                    //http://stackoverflow.com/questions/4140448/difference-between-and-in-servlet-mapping-url-pattern
                     String urlPatternString = urlPattern.substring(0, urlPattern.length() - 2);
-                    String servletName = servletMapping.getElementsByTagName("servlet-name").item(0).
+                    String servletName = servletMapping.getElementsByTagName(Constants.SERVLET_NAME).item(0).
                             getTextContent().trim();
                     servletMappingParams.put(servletName, urlPatternString);
                 }
 
                 for (int i = 0; i < servletList.getLength(); i++) {
                     Element servlet = (Element) servletList.item(i);
-                    String servletName = servlet.getElementsByTagName("servlet-name").item(0).getTextContent().trim();
+                    String servletName = servlet.getElementsByTagName(Constants.SERVLET_NAME)
+                                                                            .item(0).getTextContent().trim();
                     if (servletMappingParams.containsKey(servletName)) {
                         StringBuilder urlBuilder = new StringBuilder(baseUrl);
                         String urlPatternString = servletMappingParams.get(servletName);
                         urlBuilder.append(urlPatternString);
-                        String servletClassName = servlet.getElementsByTagName("servlet-class")
+                        String servletClassName = servlet.getElementsByTagName(Constants.SERVLET_CLASS)
                                 .item(0).getTextContent().trim();
 
-                        NodeList initParams = servlet.getElementsByTagName("init-param");
+                        NodeList initParams = servlet.getElementsByTagName(Constants.INIT_PARAM);
                         switch (servletClassName) {
-                            case "org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet":
+                            case Constants.CXF_NON_SPRING_JAXRS_SERVLET:
                                 //getting bean from init-param
                                 for (int j = 0; j < initParams.getLength(); j++) {
                                     Element initParam = (Element) initParams.item(j);
-                                    String paramName = initParam.getElementsByTagName("param-name")
+                                    String paramName = initParam.getElementsByTagName(Constants.PARAM_NAME)
                                             .item(0).getTextContent().trim();
-                                    if (Objects.equals(paramName, "jaxrs.serviceClasses")) {
-                                        String[] classNames = initParam.getElementsByTagName("param-value")
+                                    if (Objects.equals(paramName, Constants.JAXRS_SERVICE_CLASSES)) {
+                                        String[] classNames = initParam.getElementsByTagName(Constants.PARAM_VALUE)
                                                 .item(0).getTextContent().trim().split(",");
                                         Arrays.stream(classNames).forEach(className ->
                                                 beanParams.put(className, urlBuilder));
                                     }
                                 }
                                 break;
-                            case "org.apache.cxf.transport.servlet.CXFServlet":
+                            case Constants.CXF_SERVLET:
                                 for (int j = 0; j < initParams.getLength(); j++) {
                                     Element initParam = (Element) initParams.item(j);
-                                    String paramName = initParam.getElementsByTagName("param-name")
+                                    String paramName = initParam.getElementsByTagName(Constants.PARAM_NAME)
                                             .item(0).getTextContent().trim();
-                                    if (Objects.equals(paramName, "config-location")) {
-                                        String xmlPath = initParam.getElementsByTagName("param-value")
+                                    if (Objects.equals(paramName, Constants.CONFIG_LOC)) {
+                                        String xmlPath = initParam.getElementsByTagName(Constants.PARAM_VALUE)
                                                 .item(0).getTextContent().trim();
                                         servletXmlPath = servletContext.getRealPath("/") + xmlPath;
                                     }
@@ -206,28 +213,30 @@ class APIScanner {
                                 servletDoc.getDocumentElement().normalize();
 
                                 HashMap<String, String> serverParams = new HashMap<>(); // <beanId, address>
-                                NodeList jaxrsServerList = servletDoc.getElementsByTagName("jaxrs:server");
+                                NodeList jaxrsServerList = servletDoc.getElementsByTagName(Constants.JAXRS_SERVER);
                                 for (int j = 0; j < jaxrsServerList.getLength(); j++) {
                                     Element jaxrsServer = (Element) jaxrsServerList.item(j);
-                                    String address = jaxrsServer.getAttribute("address");
-                                    NodeList jaxrsServerBeans = jaxrsServer.getElementsByTagName("jaxrs:serviceBeans");
+                                    String address = jaxrsServer.getAttribute(Constants.ADDRESS);
+                                    NodeList jaxrsServerBeans = jaxrsServer
+                                                                .getElementsByTagName(Constants.JAXRS_SERVICE_BEANS);
                                     for (int k = 0; k < jaxrsServerBeans.getLength(); k++) {
                                         Element jaxrsServerBean = (Element) jaxrsServerBeans.item(k);
-                                        Element ref = (Element) jaxrsServerBean.getElementsByTagName("ref").item(0);
-                                        String beanId = ref.getAttribute("bean").trim();
+                                        Element ref = (Element) jaxrsServerBean
+                                                                        .getElementsByTagName(Constants.REF).item(0);
+                                        String beanId = ref.getAttribute(Constants.BEAN).trim();
                                         serverParams.put(beanId, address);
 
                                     }
                                 }
 
                                 if (!serverParams.isEmpty()) {
-                                    NodeList beans = servletDoc.getElementsByTagName("bean");
+                                    NodeList beans = servletDoc.getElementsByTagName(Constants.BEAN);
                                     for (int j = 0; j < beans.getLength(); j++) {
                                         Element bean = (Element) beans.item(j);
-                                        String beanId = bean.getAttribute("id");
+                                        String beanId = bean.getAttribute(Constants.ID);
                                         if (serverParams.containsKey(beanId)) {
                                             String address = serverParams.get(beanId);
-                                            String className = bean.getAttribute("class");
+                                            String className = bean.getAttribute(Constants.CLASS);
                                             urlBuilder.append(address);
                                             beanParams.put(className, urlBuilder);
                                         }
