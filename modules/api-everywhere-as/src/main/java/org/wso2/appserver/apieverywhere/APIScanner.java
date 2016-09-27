@@ -108,17 +108,16 @@ class APIScanner {
 
     /**
      * Scan for beans in config xml files in cxf servlet
-     * http://cxf.apache.org/docs/jaxrs-services-configuration.html
      *
      * @param servletContext     the deployed web apps' servlet context
      * @return HashMap of <Bean class name, Bean url>
      */
     private HashMap<String, StringBuilder> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
-        //Map that stores the class name and the address from beans
+
         String baseUrl = servletContext.getContextPath();
 
-
-        HashMap<String, StringBuilder> beanParams = new HashMap<>();   // <className, UrlPattern>
+        //Map of <className, UrlPattern> that stores the class name and the address from beans
+        HashMap<String, StringBuilder> beanParams = new HashMap<>();
 
         String webXmlPath = servletContext.getRealPath("/") + Constants.WEB_XML_LOCATION;
         //default servlet xml path;
@@ -160,12 +159,16 @@ class APIScanner {
                     Element servletMapping = (Element) servletMappingList.item(i);
                     String urlPattern = servletMapping.getElementsByTagName(Constants.URL_PATTERN)
                             .item(0).getTextContent();
-                    // TODO: 9/26/16 all the users will not give *
-                    //http://stackoverflow.com/questions/4140448/difference-between-and-in-servlet-mapping-url-pattern
-                    String urlPatternString = urlPattern.substring(0, urlPattern.length() - 2);
+                    if (urlPattern.endsWith("*")){
+                        urlPattern = urlPattern.substring(0, urlPattern.length() - 2);
+                    } else {
+                        if (urlPattern.endsWith("/")) {
+                            urlPattern = urlPattern.substring(0, urlPattern.length() - 1);
+                        }
+                    }
                     String servletName = servletMapping.getElementsByTagName(Constants.SERVLET_NAME).item(0).
                             getTextContent().trim();
-                    servletMappingParams.put(servletName, urlPatternString);
+                    servletMappingParams.put(servletName, urlPattern);
                 }
 
                 for (int i = 0; i < servletList.getLength(); i++) {
