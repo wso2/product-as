@@ -159,7 +159,7 @@ class APIScanner {
                     Element servletMapping = (Element) servletMappingList.item(i);
                     String urlPattern = servletMapping.getElementsByTagName(Constants.URL_PATTERN)
                             .item(0).getTextContent();
-                    if (urlPattern.endsWith("*")){
+                    if (urlPattern.endsWith("*")) {
                         urlPattern = urlPattern.substring(0, urlPattern.length() - 2);
                     } else {
                         if (urlPattern.endsWith("/")) {
