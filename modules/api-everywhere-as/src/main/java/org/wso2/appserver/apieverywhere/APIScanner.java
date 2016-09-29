@@ -62,8 +62,7 @@ class APIScanner {
             APICreateRequest apiCreateRequest = new APICreateRequest();
             List<APIPath> generatedApiPaths = new ArrayList<>();
             apiCreateRequest.setContext(servletContext.getContextPath());
-            String realPath = servletContext.getRealPath("/");
-            apiCreateRequest.setName(realPath.substring(realPath.lastIndexOf("/")));
+            apiCreateRequest.setName(servletContext.getContextPath().substring(1).toUpperCase());
 
             for (Map.Entry<String, StringBuilder> entry : serverParams.entrySet()) {
                 //append address in beans
