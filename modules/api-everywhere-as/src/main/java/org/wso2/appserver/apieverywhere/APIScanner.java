@@ -62,7 +62,7 @@ class APIScanner {
             APICreateRequest apiCreateRequest = new APICreateRequest();
             List<APIPath> generatedApiPaths = new ArrayList<>();
             apiCreateRequest.setContext(servletContext.getContextPath());
-            apiCreateRequest.setName(servletContext.getContextPath().substring(1).toUpperCase());
+            apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 
             for (Map.Entry<String, StringBuilder> entry : serverParams.entrySet()) {
                 //append address in beans
@@ -99,6 +99,7 @@ class APIScanner {
             }
             //Run Thread to publish generated apis into API Publisher
             apiCreateRequest.buildAPI(generatedApiPaths);
+            log.info(apiCreateRequest.toString());
             return Optional.of(apiCreateRequest);
         }
         return Optional.empty();

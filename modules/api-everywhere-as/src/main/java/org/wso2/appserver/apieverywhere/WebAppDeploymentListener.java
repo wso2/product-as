@@ -35,21 +35,11 @@ public class WebAppDeploymentListener implements ServletContextListener {
 
                     if (apiEverywhereConfiguration != null && apiEverywhereConfiguration.getCreateApi() != null) {
                         if (apiEverywhereConfiguration.getCreateApi()) {
-                            apiScanner.scan(servletContext).ifPresent(apiCreateRequest -> {
-                                if (apiCreator.isAlive()) {
-                                    log.info("Thread is already running!!!");
-//                                    while (apiCreator.isAlive()) {
-//                                        try {
-//                                            Thread.sleep(10);
-//                                        } catch (InterruptedException e) {
-//                                            log.info("Thread not found: ", e);
-//                                            throw new APIEverywhereException("Thread not found", e);
-//                                        }
-//                                    }
-
+                            apiScanner.scan(servletContext).ifPresent(apiRequest -> {
+                                apiCreator.addAPIRequest(apiRequest);
+                                if (!apiCreator.isAlive()) {
+                                    apiCreator.start();
                                 }
-                                apiCreator.setAPIRequest(apiCreateRequest);
-                                apiCreator.start();
                             });
                         } else {
                             if (log.isDebugEnabled()) {

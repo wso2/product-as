@@ -16,6 +16,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -26,10 +28,10 @@ import javax.net.ssl.HttpsURLConnection;
 class APICreator extends Thread {
 
     private static final Log log = LogFactory.getLog(APICreator.class);
-    private APICreateRequest apiCreateRequest;
+    private Queue<APICreateRequest> apiCreateRequests = new ConcurrentLinkedQueue<>();
 
-    void setAPIRequest(APICreateRequest apiCreateRequest) {
-        this.apiCreateRequest = apiCreateRequest;
+    void addAPIRequest(APICreateRequest apiCreateRequest) {
+        this.apiCreateRequests.add(apiCreateRequest);
     }
 
 
@@ -47,7 +49,8 @@ class APICreator extends Thread {
 
             String accessToken = httpCall(encodedKey, authenticationUrl);
             Gson gson = new Gson();
-            String apiJson = gson.toJson(apiCreateRequest);
+            APICreateRequest apiRequest = apiCreateRequests.poll();
+            String apiJson = gson.toJson(apiRequest);
             createAPI(accessToken, apiJson, apiPublisherUrl);
         } catch (UnsupportedEncodingException e) {
             log.error("Failed to generate encoded key: " + e);
@@ -73,7 +76,7 @@ class APICreator extends Thread {
             connection.setDoOutput(true);
             connection.setDoInput(true);
             // for development purpose only
-//            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
+            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
             try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
                     "utf-8")) {
@@ -127,7 +130,6 @@ class APICreator extends Thread {
     private void createAPI(String accessToken, String apiJson, String apiPublisherUrl) throws APIEverywhereException {
         String publishApiUrl = apiPublisherUrl + "/api/am/publisher/" + Constants.API_PUBLISHER_API_VERSION + "/apis";
         try {
-            log.info("api request : " + apiJson);
             //Create connection
             URL url = new URL(publishApiUrl);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -137,7 +139,7 @@ class APICreator extends Thread {
             connection.setDoOutput(true);
             connection.setDoInput(true);
             // for development purpose only
-//            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
+            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
             try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(), "utf-8")) {
                 os.write(apiJson);
