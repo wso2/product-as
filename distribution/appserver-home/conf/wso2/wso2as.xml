@@ -133,7 +133,7 @@
     -->
     <ApiEverywhere>
         <!--Base64 encoded value of clientId:clientSecret-->
-        <Keys>fzr7f4asH5az3Ef4b7qrVJITYTka:dYBYDKcfYRtOc6jVAIvAz0JCD2sa</Keys>
+        <Keys>I3oqPSfxX6VQcN5QZGuEbdXMvS8a:fgBEtMelLyvjejtvIrKT2BobCcoa</Keys>
         <!--Base url of API Publisher-->
         <ApiPublisherUrl>https://127.0.0.1:9443</ApiPublisherUrl>
         <!--API Publisher Authentication base url-->
