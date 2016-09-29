@@ -11,27 +11,12 @@ import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.Base64;
-
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
 
 /**
  *  The thread class which create the produced APIs into the API Publisher
@@ -79,7 +64,6 @@ class APICreator extends Thread {
      */
     private String httpCall(String encodedKey, String authenticationUrl) throws APIEverywhereException {
         String requestAccessTokenUrl = authenticationUrl + "/token";
-        SSLSocketFactory sslSocketFactory = generateSSL();
         try {
             //Create connection
             URL url = new URL(requestAccessTokenUrl);
@@ -88,9 +72,8 @@ class APICreator extends Thread {
             connection.setRequestProperty("Authorization", "Basic " + encodedKey);
             connection.setDoOutput(true);
             connection.setDoInput(true);
-            connection.setSSLSocketFactory(sslSocketFactory);
             // for development purpose only
-            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
+//            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
             try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
                     "utf-8")) {
@@ -143,8 +126,8 @@ class APICreator extends Thread {
      */
     private void createAPI(String accessToken, String apiJson, String apiPublisherUrl) throws APIEverywhereException {
         String publishApiUrl = apiPublisherUrl + "/api/am/publisher/" + Constants.API_PUBLISHER_API_VERSION + "/apis";
-        SSLSocketFactory sslSocketFactory = generateSSL();
         try {
+            log.info("api request : " + apiJson);
             //Create connection
             URL url = new URL(publishApiUrl);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -153,9 +136,8 @@ class APICreator extends Thread {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
             connection.setDoInput(true);
-            connection.setSSLSocketFactory(sslSocketFactory);
             // for development purpose only
-            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
+//            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
             try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(), "utf-8")) {
                 os.write(apiJson);
@@ -194,51 +176,6 @@ class APICreator extends Thread {
             log.error("Error in establishing connection with API Publisher: " + e);
             throw new APIEverywhereException("Error in establishing connection with API Publisher ", e);
 
-        }
-    }
-
-    /**
-     * Produce SSL certificate
-     *
-     * @return SSLSocketFactory
-     */
-    private SSLSocketFactory generateSSL() throws APIEverywhereException {
-        String keystorePathString = System.getProperty(
-                org.wso2.appserver.Constants.JAVA_KEYSTORE_LOCATION);
-        String keystorePasswordString = System.getProperty(
-                org.wso2.appserver.Constants.JAVA_KEYSTORE_PASSWORD);
-
-        Path keyStorePath = Paths.get(URI.create(keystorePathString).getPath());
-        try (InputStream keystoreInputStream = Files.newInputStream(keyStorePath)) {
-            KeyStore keyStore = KeyStore.getInstance(System.getProperty(
-                    org.wso2.appserver.Constants.JAVA_KEYSTORE_TYPE));
-            keyStore.load(keystoreInputStream, keystorePasswordString.toCharArray());
-
-            TrustManagerFactory tmf =
-                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(keyStore);
-
-
-            SSLContext ctx = SSLContext.getInstance("TLS");
-            ctx.init(null, tmf.getTrustManagers(), null);
-
-            return ctx.getSocketFactory();
-        } catch (IOException e) {
-            log.error("Provided keystore file does not exist: " + e);
-            throw new APIEverywhereException("File path specified for the keystore does not exist "
-                    , e);
-        } catch (CertificateException e) {
-            log.error("Failed to create SSL certificate: " + e);
-            throw new APIEverywhereException("Failed to create SSL certificate ", e);
-        } catch (NoSuchAlgorithmException e) {
-            log.error("Wrong algorithm applied for certificate creation: " + e);
-            throw new APIEverywhereException("Wrong algorithm applied for certificate creation ", e);
-        } catch (KeyStoreException e) {
-            log.error("Failed to load to provided keystore: " + e);
-            throw new APIEverywhereException("Failed to load to provided keystore ", e);
-        } catch (KeyManagementException e) {
-            log.error("Failed to load KeyManagement: " + e);
-            throw new APIEverywhereException("Failed to load KeyManagement ", e);
         }
     }
 }
