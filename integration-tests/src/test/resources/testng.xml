@@ -56,10 +56,10 @@ limitations under the License.
         </classes>
     </test>
 
-    <!--<test name="wso2as-test-api-everywhere-as">-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.appserver.test.integration.apieverywhere.ApiEverywhereTestCase"/>-->
-        <!--</classes>-->
-    <!--</test>-->
+    <test name="wso2as-test-api-everywhere-as">
+        <classes>
+            <class name="org.wso2.appserver.test.integration.apieverywhere.ApiEverywhereTestCase"/>
+        </classes>
+    </test>
 
 </suite>
