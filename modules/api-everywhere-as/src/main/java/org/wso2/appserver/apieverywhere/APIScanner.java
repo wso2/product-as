@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -39,9 +38,9 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 class APIScanner {
 
-    // TODO: 9/26/16 refactor this class
 
     private static final Log log = LogFactory.getLog(APIScanner.class);
+    private ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
     /**
      * Scan the deployed web apps
@@ -64,40 +63,24 @@ class APIScanner {
             apiCreateRequest.setContext(servletContext.getContextPath());
             apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 
-            for (Map.Entry<String, StringBuilder> entry : serverParams.entrySet()) {
+
+            serverParams.keySet().forEach(className -> {
                 //append address in beans
-                StringBuilder url = entry.getValue();
+                StringBuilder url = serverParams.get(className);
 
-                //scanning annotations
-                Reflections reflections = new Reflections(entry.getKey(),
-                        new MethodAnnotationsScanner(), new TypeAnnotationsScanner(),
-                        new SubTypesScanner());
-
+                log.info("server params : " + className + " & " + url.toString());
+                //scanning annotations of the class
+                Reflections reflections = new Reflections(className,
+                        new MethodAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner());
 
                 Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Path.class);
-                generatedApiPaths = scanMethodAnnotation(url, reflections, classes, generatedApiPaths);
+                generatedApiPaths.addAll(scanMethodAnnotation(url, reflections, classes));
 
-                ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-                try {
-                    //adding interfaces of the class
-                    Class<?> aClass = contextClassLoader.loadClass(entry.getKey());
-                    Class<?>[] interfaces = aClass.getInterfaces();
-                    for (Class cl : interfaces) {
-                        Reflections tempReflection = new Reflections(cl.getName(),
-                                new TypeAnnotationsScanner(), new SubTypesScanner(),
-                                new MethodAnnotationsScanner());
-                        classes = tempReflection.getTypesAnnotatedWith(Path.class);
-                        generatedApiPaths = scanMethodAnnotation(url, tempReflection, classes, generatedApiPaths);
-                    }
-                } catch (ClassNotFoundException e) {
-                    log.error("The class is not found in scanning: " + e);
-                    throw new APIEverywhereException("The class is not found in scanning ", e);
-                }
-            }
+            });
+
 //            for (APIPath apiPath : generatedApiPaths) {
 //                log.info(apiPath.toString());
 //            }
-            //Run Thread to publish generated apis into API Publisher
             apiCreateRequest.buildAPI(generatedApiPaths);
             log.info("API Builded : " + apiCreateRequest.getName());
             return Optional.of(apiCreateRequest);
@@ -110,13 +93,13 @@ class APIScanner {
      * Scan for beans in config xml files in cxf servlet
      *
      * @param servletContext     the deployed web apps' servlet context
-     * @return HashMap of <Bean class name, Bean url>
+     * @return HashMap of <Bean class name, url pattern>
      */
     private HashMap<String, StringBuilder> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
 
         String baseUrl = servletContext.getContextPath();
 
-        //Map of <className, UrlPattern> that stores the class name and the address from beans
+        //Map of <Bean class name, UrlPattern> that stores the class name and the address from beans
         HashMap<String, StringBuilder> beanParams = new HashMap<>();
 
         String webXmlPath = servletContext.getRealPath("/") + Constants.WEB_XML_LOCATION;
@@ -274,44 +257,60 @@ class APIScanner {
      * @param baseUrl     the url generated from the config
      * @param reflections      the Reflection object which scanned the current classes
      * @param classes     the classes for scanning
-     * @param generatedApiPaths     the List of APIPath generated
      */
-    private List<APIPath> scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections,
-                                               Set<Class<?>> classes, List<APIPath> generatedApiPaths) {
-        for (Class cl : classes) {
-            Path path = (Path) cl.getAnnotation(Path.class);
-            if (path == null) {
-                continue;
-            }
-            //append path in class annotation
-            baseUrl.append(path.value());
+    private List<APIPath> scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
+        ArrayList<APIPath> generatedApiPaths = new ArrayList<>();
 
-            Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
-            for (Method me : methods) {
-                Path methodPath = me.getAnnotation(Path.class);
-                String url = baseUrl + methodPath.value();
-                // if the Path in class has only '/' then the url have '//'
-                url = url.replace("//", "/");
-                //remove path param
-                int index = url.indexOf("{");
-                if (index > 0) {
-                    url = url.substring(0, index);
-                }
+        classes.forEach(cl -> {
+            Path path = cl.getAnnotation(Path.class);
 
-                String finalUrl = url;
-                //search for the same API Path in the array list and  and attach it to the list
-                List<APIPath> sameAPI = generatedApiPaths.stream()
-                        .filter(p -> p.getUrl().equals((finalUrl)))
-                        .collect(Collectors.toList());
-                if (sameAPI.size() > 0) {
-                    sameAPI.get(0).addProp(me);
-                } else {
-                    APIPath apiPath = new APIPath(finalUrl);
-                    apiPath.addProp(me);
-                    generatedApiPaths.add(apiPath);
+            if (path != null) {
+                //append path in class annotation
+                baseUrl.append(path.value());
+
+                Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
+                methods.forEach(me -> {
+                    Path methodPath = me.getAnnotation(Path.class);
+                    String url = baseUrl + methodPath.value();
+                    // if the Path in class has only '/' then the url have '//'
+                    url = url.replace("//", "/");
+                    //remove path param
+                    int index = url.indexOf("{");
+                    if (index > 0) {
+                        url = url.substring(0, index);
+                    }
+
+                    String finalUrl = url;
+
+                    List<APIPath> sameAPI = generatedApiPaths.stream()
+                            .filter(p -> p.getUrl().equals((finalUrl)))
+                            .collect(Collectors.toList());
+                    if (sameAPI.size() > 0) {
+                        sameAPI.get(0).addProp(me);
+                    } else {
+                        APIPath apiPath = new APIPath(finalUrl);
+                        apiPath.addProp(me);
+                        generatedApiPaths.add(apiPath);
+                    }
+                });
+            } else {
+                try {
+                    //interfaces of the class
+                    Class<?> aClass = contextClassLoader.loadClass(cl.getName());
+                    Class<?>[] interfaces = aClass.getInterfaces();
+                    for (Class in : interfaces) {
+                        Reflections tempReflection = new Reflections(in.getName(),
+                                new TypeAnnotationsScanner(), new SubTypesScanner(), new MethodAnnotationsScanner());
+                        Set<Class<?>> pathInterfaces = tempReflection.getTypesAnnotatedWith(Path.class);
+                        log.info("server params from interface: " + classes.isEmpty() + " & " + baseUrl);
+                        generatedApiPaths.addAll(scanMethodAnnotation(baseUrl, tempReflection, pathInterfaces));
+                    }
+                } catch (ClassNotFoundException e) {
+                    log.error("The class is not found in scanning: " + e);
+                    throw new APIEverywhereException("The class is not found in scanning ", e);
                 }
             }
-        }
+        });
         return generatedApiPaths;
     }
 }
