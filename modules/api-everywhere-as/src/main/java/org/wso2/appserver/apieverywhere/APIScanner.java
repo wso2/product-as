@@ -94,12 +94,12 @@ class APIScanner {
                     throw new APIEverywhereException("The class is not found in scanning ", e);
                 }
             }
-            for (APIPath apiPath : generatedApiPaths) {
-                log.info(apiPath.toString());
-            }
+//            for (APIPath apiPath : generatedApiPaths) {
+//                log.info(apiPath.toString());
+//            }
             //Run Thread to publish generated apis into API Publisher
             apiCreateRequest.buildAPI(generatedApiPaths);
-            log.info(apiCreateRequest.toString());
+            log.info("API Builded : " + apiCreateRequest.getName());
             return Optional.of(apiCreateRequest);
         }
         return Optional.empty();
