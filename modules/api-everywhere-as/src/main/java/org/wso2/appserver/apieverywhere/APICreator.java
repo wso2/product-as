@@ -49,9 +49,10 @@ class APICreator extends Thread {
             String encodedKey = Base64.getEncoder().encodeToString(key.getBytes("utf-8"));
 
             String accessToken = httpCall(encodedKey, authenticationUrl);
-            while (apiCreateRequests.isEmpty()) {
+            while (!apiCreateRequests.isEmpty()) {
                 APICreateRequest apiRequest = apiCreateRequests.poll();
                 String apiJson = gson.toJson(apiRequest);
+                log.info("Creating API in API Publisher : " + apiRequest.getName());
                 createAPI(accessToken, apiJson, apiPublisherUrl);
             }
         } catch (UnsupportedEncodingException e) {
