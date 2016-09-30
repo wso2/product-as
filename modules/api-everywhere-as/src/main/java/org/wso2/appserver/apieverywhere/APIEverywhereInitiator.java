@@ -10,6 +10,7 @@ import org.wso2.appserver.configuration.listeners.ContextConfigurationLoader;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 
 /**
@@ -17,10 +18,10 @@ import javax.servlet.ServletContextListener;
  *
  * @since 6.0.0
  */
-// TODO: 9/23/16 change the class name
-public class WebAppDeploymentListener implements ServletContextListener {
+@WebListener
+public class APIEverywhereInitiator implements ServletContextListener {
 
-    private static final Log log = LogFactory.getLog(WebAppDeploymentListener.class);
+    private static final Log log = LogFactory.getLog(APIEverywhereInitiator.class);
     private APIScanner apiScanner = new APIScanner();
     private APICreator apiCreator = new APICreator();
 

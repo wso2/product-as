@@ -4690,7 +4690,7 @@
     </welcome-file-list>
 
     <listener>
-        <listener-class>org.wso2.appserver.apieverywhere.WebAppDeploymentListener</listener-class>
+        <listener-class>org.wso2.appserver.apieverywhere.APIEverywhereInitiator</listener-class>
     </listener>
 
 </web-app>
