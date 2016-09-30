@@ -13,8 +13,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class AppServerApiEverywhere {
-    @XmlElement(name = "Keys")
-    private String keys;
+    @XmlElement(name = "ClientId")
+    private String clientId;
+    @XmlElement(name = "ClientSecret")
+    private String clientSecret;
     @XmlElement(name = "ApiPublisherUrl")
     private String apiPublisherUrl;
     @XmlElement(name = "ApplicationServerUrl")
@@ -23,12 +25,9 @@ public class AppServerApiEverywhere {
     private String authenticationUrl;
 
     public String getKeys() {
-        return keys;
+        return clientId + ":" + clientSecret;
     }
 
-    public void setKeys(String keys) {
-        this.keys = keys;
-    }
 
     public String getApiPublisherUrl() {
         return apiPublisherUrl;
@@ -52,5 +51,21 @@ public class AppServerApiEverywhere {
 
     public void setApiAuthenticationUrl(String authenticationUrl) {
         this.authenticationUrl = authenticationUrl;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 }

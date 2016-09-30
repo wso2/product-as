@@ -132,13 +132,14 @@
      of deployed web app in API Publisher
     -->
     <ApiEverywhere>
-        <!--Base64 encoded value of clientId:clientSecret-->
-        <Keys>I3oqPSfxX6VQcN5QZGuEbdXMvS8a:fgBEtMelLyvjejtvIrKT2BobCcoa</Keys>
+        <!--Base64 encoded value of clientId and clientSecret-->
+        <ClientId>I3oqPSfxX6VQcN5QZGuEbdXMvS8a</ClientId>
+        <ClientSecret>fgBEtMelLyvjejtvIrKT2BobCcoa</ClientSecret>
         <!--Base url of API Publisher-->
-        <ApiPublisherUrl>https://127.0.0.1:9443</ApiPublisherUrl>
+        <ApiPublisherUrl>https://localhost:9443</ApiPublisherUrl>
         <!--API Publisher Authentication base url-->
-        <AuthenticationUrl>https://127.0.0.1:8243</AuthenticationUrl>
+        <AuthenticationUrl>https://localhost:8243</AuthenticationUrl>
         <!--Base url of Application Server-->
-        <ApplicationServerUrl>https://127.0.0.1:8080</ApplicationServerUrl>
+        <ApplicationServerUrl>https://localhost:8080</ApplicationServerUrl>
     </ApiEverywhere>
 </AppServer>
