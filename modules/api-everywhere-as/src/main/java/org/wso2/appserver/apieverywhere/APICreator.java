@@ -75,8 +75,6 @@ class APICreator extends Thread {
             connection.setRequestProperty("Authorization", "Basic " + encodedKey);
             connection.setDoOutput(true);
             connection.setDoInput(true);
-            // for development purpose only
-            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
             try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(),
                     "utf-8")) {
@@ -138,8 +136,6 @@ class APICreator extends Thread {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
             connection.setDoInput(true);
-            // for development purpose only
-            connection.setHostnameVerifier((hostname, sslSession) -> hostname.equals("127.0.0.1"));
 
             try (OutputStreamWriter os = new OutputStreamWriter(connection.getOutputStream(), "utf-8")) {
                 os.write(apiJson);
