@@ -29,6 +29,7 @@ class APICreator extends Thread {
 
     private static final Log log = LogFactory.getLog(APICreator.class);
     private Queue<APICreateRequest> apiCreateRequests = new ConcurrentLinkedQueue<>();
+    private Gson gson = new Gson();
 
     void addAPIRequest(APICreateRequest apiCreateRequest) {
         this.apiCreateRequests.add(apiCreateRequest);
@@ -48,10 +49,11 @@ class APICreator extends Thread {
             String encodedKey = Base64.getEncoder().encodeToString(key.getBytes("utf-8"));
 
             String accessToken = httpCall(encodedKey, authenticationUrl);
-            Gson gson = new Gson();
-            APICreateRequest apiRequest = apiCreateRequests.poll();
-            String apiJson = gson.toJson(apiRequest);
-            createAPI(accessToken, apiJson, apiPublisherUrl);
+            while (apiCreateRequests.isEmpty()) {
+                APICreateRequest apiRequest = apiCreateRequests.poll();
+                String apiJson = gson.toJson(apiRequest);
+                createAPI(accessToken, apiJson, apiPublisherUrl);
+            }
         } catch (UnsupportedEncodingException e) {
             log.error("Failed to generate encoded key: " + e);
             throw new APIEverywhereException("Failed to generate encoded key", e);
