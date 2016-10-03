@@ -288,10 +288,8 @@ class APIScanner {
                     String url = baseUrl + methodPath.value();
                     // if the Path in class has only '/' then the url have '//'
                     url = url.replace("//", "/");
-                    //remove path param
-                    int index = url.indexOf("{");
-                    if (index > 0) {
-                        url = url.substring(0, index);
+                    if (url.endsWith("/")) {
+                        url = url.substring(0, url.lastIndexOf("/"));
                     }
 
                     String finalUrl = url;
