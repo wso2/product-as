@@ -46,6 +46,20 @@ class APICreator extends Thread {
             String authenticationUrl = ServerConfigurationLoader.
                     getServerConfiguration().getApiEverywhereConfiguration().getApiAuthenticationUrl();
 
+            if (!authenticationUrl.startsWith("https://")) {
+                authenticationUrl = "https://" + authenticationUrl;
+            }
+            if (authenticationUrl.endsWith("/")) {
+                authenticationUrl = authenticationUrl.substring(0, authenticationUrl.lastIndexOf("/"));
+            }
+
+            if (!apiPublisherUrl.startsWith("https://")) {
+                apiPublisherUrl = "https://" + apiPublisherUrl;
+            }
+            if (apiPublisherUrl.endsWith("/")) {
+                apiPublisherUrl = apiPublisherUrl.substring(0, apiPublisherUrl.lastIndexOf("/"));
+            }
+
             String encodedKey = Base64.getEncoder().encodeToString(key.getBytes("utf-8"));
 
             String accessToken = httpCall(encodedKey, authenticationUrl);
