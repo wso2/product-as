@@ -112,7 +112,6 @@ class APIScanner {
      */
     private HashMap<String, StringBuilder> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
 
-        String baseUrl = servletContext.getContextPath();
 
         //Map of <Bean class name, UrlPattern> that stores the class name and the address from beans
         HashMap<String, StringBuilder> beanParams = new HashMap<>();
@@ -174,7 +173,7 @@ class APIScanner {
                     String servletName = servlet.getElementsByTagName(Constants.SERVLET_NAME)
                                                                             .item(0).getTextContent().trim();
                     if (servletMappingParams.containsKey(servletName)) {
-                        StringBuilder urlBuilder = new StringBuilder(baseUrl);
+                        StringBuilder urlBuilder = new StringBuilder();
                         String urlPatternString = servletMappingParams.get(servletName);
                         urlBuilder.append(urlPatternString);
                         String servletClassName = servlet.getElementsByTagName(Constants.SERVLET_CLASS)
