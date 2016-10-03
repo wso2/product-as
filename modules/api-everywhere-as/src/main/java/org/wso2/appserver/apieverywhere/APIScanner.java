@@ -68,7 +68,7 @@ class APIScanner {
                 //append address in beans
                 StringBuilder url = serverParams.get(className);
 
-                log.info("server params : " + className + " & " + url.toString());
+//                log.info("server params : " + className + " & " + url.toString());
                 //scanning annotations of the class
                 Reflections reflections = new Reflections(className,
                         new MethodAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner());
@@ -76,11 +76,26 @@ class APIScanner {
                 Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Path.class);
                 generatedApiPaths.addAll(scanMethodAnnotation(url, reflections, classes));
 
+                try {
+                    //interfaces of the class
+                    Class<?> aClass = contextClassLoader.loadClass(className);
+                    Class<?>[] interfaces = aClass.getInterfaces();
+                    for (Class in : interfaces) {
+                        Reflections tempReflection = new Reflections(in.getName(),
+                                new TypeAnnotationsScanner(), new SubTypesScanner(), new MethodAnnotationsScanner());
+                        Set<Class<?>> pathInterfaces = tempReflection.getTypesAnnotatedWith(Path.class);
+//                        log.info("server params from interface: " + classes.isEmpty() + " & " + url);
+                        generatedApiPaths.addAll(scanMethodAnnotation(url, tempReflection, pathInterfaces));
+                    }
+                } catch (ClassNotFoundException e) {
+                    log.error("The class is not found in scanning: " + e);
+                    throw new APIEverywhereException("The class is not found in scanning ", e);
+                }
             });
 
-//            for (APIPath apiPath : generatedApiPaths) {
-//                log.info(apiPath.toString());
-//            }
+            for (APIPath apiPath : generatedApiPaths) {
+                log.info(apiPath.toString());
+            }
             apiCreateRequest.buildAPI(generatedApiPaths);
             log.info("API Builded : " + apiCreateRequest.getName());
             return Optional.of(apiCreateRequest);
@@ -293,22 +308,6 @@ class APIScanner {
                         generatedApiPaths.add(apiPath);
                     }
                 });
-            } else {
-                try {
-                    //interfaces of the class
-                    Class<?> aClass = contextClassLoader.loadClass(cl.getName());
-                    Class<?>[] interfaces = aClass.getInterfaces();
-                    for (Class in : interfaces) {
-                        Reflections tempReflection = new Reflections(in.getName(),
-                                new TypeAnnotationsScanner(), new SubTypesScanner(), new MethodAnnotationsScanner());
-                        Set<Class<?>> pathInterfaces = tempReflection.getTypesAnnotatedWith(Path.class);
-                        log.info("server params from interface: " + classes.isEmpty() + " & " + baseUrl);
-                        generatedApiPaths.addAll(scanMethodAnnotation(baseUrl, tempReflection, pathInterfaces));
-                    }
-                } catch (ClassNotFoundException e) {
-                    log.error("The class is not found in scanning: " + e);
-                    throw new APIEverywhereException("The class is not found in scanning ", e);
-                }
             }
         });
         return generatedApiPaths;
