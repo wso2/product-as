@@ -92,6 +92,13 @@ public class APICreateRequest {
 
         String applicationServerUrl = ServerConfigurationLoader.
                 getServerConfiguration().getApiEverywhereConfiguration().getApplicationServerUrl();
+        if (!applicationServerUrl.startsWith("http://")) {
+            applicationServerUrl = "http://" + applicationServerUrl;
+        }
+        if (applicationServerUrl.endsWith("/")) {
+            applicationServerUrl = applicationServerUrl.substring(0, applicationServerUrl.lastIndexOf("/"));
+        }
+        applicationServerUrl = applicationServerUrl  + context;
         JSONObject endPointConfigJSON = new JSONObject();
         JSONObject productionJSON = new JSONObject();
         productionJSON.put("url", applicationServerUrl);
