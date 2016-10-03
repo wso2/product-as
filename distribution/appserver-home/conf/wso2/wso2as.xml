@@ -140,6 +140,6 @@
         <!--API Publisher Authentication base url-->
         <AuthenticationUrl>https://localhost:8243</AuthenticationUrl>
         <!--Base url of Application Server-->
-        <ApplicationServerUrl>https://localhost:8080</ApplicationServerUrl>
+        <ApplicationServerUrl>http://localhost:8080/</ApplicationServerUrl>
     </ApiEverywhere>
 </AppServer>
