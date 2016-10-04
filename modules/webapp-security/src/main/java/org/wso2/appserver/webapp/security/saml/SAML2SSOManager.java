@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.webapp.security.saml;
 
+import com.google.gson.Gson;
 import net.shibboleth.utilities.java.support.codec.Base64Support;
 import org.apache.catalina.connector.Request;
 import org.apache.juli.logging.Log;
@@ -57,6 +58,7 @@ import org.wso2.appserver.configuration.server.AppServerSingleSignOn;
 import org.wso2.appserver.webapp.security.Constants;
 import org.wso2.appserver.webapp.security.agent.SSOAgentSessionManager;
 import org.wso2.appserver.webapp.security.bean.LoggedInSession;
+import org.wso2.appserver.webapp.security.bean.SAML2SSO;
 import org.wso2.appserver.webapp.security.saml.signature.SSOX509Credential;
 import org.wso2.appserver.webapp.security.saml.signature.SignatureValidator;
 import org.wso2.appserver.webapp.security.saml.signature.X509CredentialImplementation;
@@ -146,7 +148,10 @@ public class SAML2SSOManager {
      * @throws SSOException if an error occurs when handling LogoutRequest
      */
     public String handleLogoutRequestForPOSTBinding(Request request) throws SSOException {
-        LoggedInSession session = (LoggedInSession) request.getSession(false).getAttribute(Constants.SESSION_BEAN);
+        Gson gson = new Gson();
+        LoggedInSession session = gson.fromJson(
+                request.getSession(false).getAttribute(Constants.LOGGED_IN_SESSION).toString(),
+                LoggedInSession.class);
         RequestAbstractType requestMessage;
         if (session != null) {
             requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
@@ -172,7 +177,10 @@ public class SAML2SSOManager {
      * @throws SSOException if an error occurs when handling LogoutRequest
      */
     public String handleLogoutRequestForRedirectBinding(Request request) throws SSOException {
-        LoggedInSession session = (LoggedInSession) request.getSession(false).getAttribute(Constants.SESSION_BEAN);
+        Gson gson = new Gson();
+        LoggedInSession session = gson.fromJson(
+                request.getSession(false).getAttribute(Constants.LOGGED_IN_SESSION).toString(),
+                LoggedInSession.class);
         RequestAbstractType requestMessage;
         if (session != null) {
             requestMessage = buildLogoutRequest(session.getSAML2SSO().getSubjectId(),
@@ -468,7 +476,8 @@ public class SAML2SSOManager {
      */
     private void processSingleSignInResponse(Request request) throws SSOException {
         LoggedInSession session = new LoggedInSession();
-        session.setSAML2SSO(new LoggedInSession.SAML2SSO());
+        SAML2SSO saml2SSO = new SAML2SSO();
+        Gson gson = new Gson();
 
         String saml2ResponseString = new String(Base64Support.decode(request.getParameter(
                 Constants.HTTP_POST_PARAM_SAML_RESPONSE)), StandardCharsets.UTF_8);
@@ -479,8 +488,7 @@ public class SAML2SSOManager {
         }
 
         Response saml2Response = (Response) xmlObject.get();
-        session.getSAML2SSO().setResponseString(saml2ResponseString);
-        session.getSAML2SSO().setSAMLResponse(saml2Response);
+        saml2SSO.setResponseString(saml2ResponseString);
 
         Assertion assertion = null;
         if (contextConfiguration.isAssertionEncryptionEnabled()) {
@@ -524,8 +532,6 @@ public class SAML2SSOManager {
         } else if (!idPEntityIdValue.equals(serverConfiguration.getIdpEntityId())) {
             throw new SSOException("SAML 2.0 Response Issuer verification failed");
         }
-        session.getSAML2SSO().setAssertion(assertion);
-        //  cannot marshall SAML 2.0 Assertion here, before signature validation due to an issue in OpenSAML
 
         //  gets the subject name from the Response Object and forward it to login_action.jsp
         String subject = null;
@@ -537,8 +543,7 @@ public class SAML2SSOManager {
         }
 
         //  sets the subject in the session bean
-        session.getSAML2SSO().setSubjectId(subject);
-        request.getSession().setAttribute(Constants.SESSION_BEAN, session);
+        saml2SSO.setSubjectId(subject);
 
         //  validates the audience restriction
         validateAudienceRestriction(assertion);
@@ -547,10 +552,9 @@ public class SAML2SSOManager {
         validateSignature(saml2Response, assertion);
 
         //  marshalling SAML 2.0 assertion after signature validation due to an issue in OpenSAML
-        session.getSAML2SSO().setAssertionString(SSOUtils.marshall(assertion));
+        saml2SSO.setAssertionString(SSOUtils.marshall(assertion));
 
-        ((LoggedInSession) request.getSession().getAttribute(Constants.SESSION_BEAN)).
-                getSAML2SSO().setSubjectAttributes(SSOUtils.getAssertionStatements(assertion));
+        saml2SSO.setSubjectAttributes(SSOUtils.getAssertionStatements(assertion));
 
         //  for removing the session when the single-logout request made by the service provider itself
         if (contextConfiguration.isSLOEnabled()) {
@@ -564,8 +568,9 @@ public class SAML2SSOManager {
             if (sessionId == null) {
                 throw new SSOException("Single Logout is enabled but IdP Session ID not found in SAML 2.0 Assertion");
             }
-            ((LoggedInSession) request.getSession().getAttribute(Constants.SESSION_BEAN)).getSAML2SSO().
-                    setSessionIndex(sessionId);
+            saml2SSO.setSessionIndex(sessionId);
+            session.setSAML2SSO(saml2SSO);
+            request.getSession().setAttribute(Constants.LOGGED_IN_SESSION, gson.toJson(session));
             SSOAgentSessionManager.addAuthenticatedSession(request.getSession(false));
         }
     }

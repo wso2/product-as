@@ -598,25 +598,22 @@ public class SSOUtils {
      * @param assertion the SAML Assertion whose content is to be returned
      * @return the SAML 2.0 Assertion Attribute Statement content of the SAML 2.0 Assertion specified
      */
-    public static Map<String, String> getAssertionStatements(Assertion assertion) {
-        Map<String, String> results = new HashMap<>();
+    public static Map<String, List<String>> getAssertionStatements(Assertion assertion) {
+        Map<String, List<String>> results = new HashMap<>();
         if ((assertion != null) && (assertion.getAttributeStatements() != null)) {
-            Stream<AttributeStatement> attributeStatements = assertion.getAttributeStatements().stream();
-            attributeStatements.
-                    forEach(attributeStatement -> attributeStatement.getAttributes()
-                            .stream()
-                            .forEach(attribute -> {
-                                Optional<XMLObject> value = attribute.getAttributeValues()
-                                        .stream()
-                                        .findFirst();
-                                if (value.isPresent()) {
-                                    Optional.ofNullable(value.get().getDOM())
-                                            .ifPresent(dom -> {
-                                                String attributeValue = dom.getTextContent();
-                                                results.put(attribute.getName(), attributeValue);
-                                            });
-                                }
-                            }));
+            Stream<AttributeStatement> attributeStatements =
+                    assertion.getAttributeStatements().stream();
+            attributeStatements.forEach(attributeStatement -> attributeStatement
+                    .getAttributes().stream().forEach(attribute -> {
+                        List<String> attributeValues = new ArrayList<>();
+                        attribute.getAttributeValues().stream()
+                                 .forEach(value -> Optional.ofNullable(value.getDOM())
+                                                       .ifPresent(dom -> attributeValues
+                                                 .add(dom.getTextContent())));
+                                                   results.put(attribute.getName(),
+                                                               attributeValues);
+
+                    }));
         }
         return results;
     }

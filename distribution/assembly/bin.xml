@@ -146,6 +146,7 @@
                 <include>org.codehaus.woodstox:stax2-api:jar</include>
                 <include>org.codehaus.woodstox:woodstox-core-asl:jar</include>
                 <include>org.cryptacular:cryptacular:jar</include>
+                <include>com.google.code.gson:gson:jar</include>
 
                 <!--for jaggery app deployment-->
                 <include>org.jaggeryjs:org.jaggeryjs.jaggery.tomcat.listener:jar</include>
