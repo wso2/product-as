@@ -857,6 +857,11 @@
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -941,6 +946,7 @@
         <wso2-uri-templates.version>1.0.0</wso2-uri-templates.version>
         <org.wso2.carbon.databridge.shade.version>5.0.8.wso2v1</org.wso2.carbon.databridge.shade.version>
         <commons.logging.shade.version>1.2.0.wso2v1</commons.logging.shade.version>
+        <gson.version>2.7</gson.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>

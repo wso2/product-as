@@ -143,7 +143,7 @@ public class SAML2SSOValve extends SingleSignOn {
                 handleLogoutRequest(request, response);
                 return;
             } else if ((request.getSession(false) == null) ||
-                    (request.getSession(false).getAttribute(Constants.SESSION_BEAN) == null)) {
+                    (request.getSession(false).getAttribute(Constants.LOGGED_IN_SESSION) == null)) {
                 if (containerLog.isDebugEnabled()) {
                     containerLog.debug("Processing an SAML 2.0 Authentication Request...");
                 }
@@ -241,7 +241,7 @@ public class SAML2SSOValve extends SingleSignOn {
         SAML2SSOManager manager = new SAML2SSOManager(contextConfiguration);
         try {
             if (requestResolver.isHttpPOSTBinding()) {
-                if (request.getSession(false).getAttribute(Constants.SESSION_BEAN) != null) {
+                if (request.getSession(false).getAttribute(Constants.LOGGED_IN_SESSION) != null) {
                     String htmlPayload = manager.handleLogoutRequestForPOSTBinding(request);
                     response.setContentType(Constants.CONTENT_TYPE_HTML);
                     SSOUtils.sendCharacterData(response, htmlPayload);
