@@ -608,11 +608,9 @@ public class SSOUtils {
                         List<String> attributeValues = new ArrayList<>();
                         attribute.getAttributeValues().stream()
                                  .forEach(value -> Optional.ofNullable(value.getDOM())
-                                                       .ifPresent(dom -> attributeValues
-                                                 .add(dom.getTextContent())));
-                                                   results.put(attribute.getName(),
-                                                               attributeValues);
-
+                                                           .ifPresent(dom -> attributeValues
+                                                                   .add(dom.getTextContent())));
+                        results.put(attribute.getName(), attributeValues);
                     }));
         }
         return results;
