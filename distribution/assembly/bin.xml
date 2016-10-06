@@ -159,6 +159,7 @@
                 <include>javassist:javassist:jar</include>
                 <include>org.json.wso2:json:jar</include>
                 <include>com.google.code.gson:gson:jar</include>
+                <include>io.swagger:swagger-models:jar</include>
             </includes>
         </dependencySet>
 
