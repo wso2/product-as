@@ -5,6 +5,7 @@ import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,53 +49,27 @@ public class APICreateRequest {
      * @param apiPaths     the API paths scanned by API scanner
      *
      */
-    public void buildAPI(List<APIPath> apiPaths) {
+    public void buildAPICreateRequest(String apiPaths) {
         description = "automatically created to API publisher.\r\n";
         version = "1.0.0";
-
-        JSONObject apiDefBuilder = new JSONObject();
-        JSONObject pathsJSON = new JSONObject();
-        for (APIPath apiPath : apiPaths) {
-            JSONObject propsJSON = new JSONObject();
-            for (APIPath.APIProp apiProp : apiPath.getApiProps()) {
-                ArrayList<JSONObject> paramsJSONList = new ArrayList<>();
-                for (APIPath.Param param : apiProp.getParams()) {
-                    JSONObject apiParamJSON = new JSONObject();
-                    apiParamJSON.put("name", param.getParamName());
-                    apiParamJSON.put("in", param.getParamType());
-                    apiParamJSON.put("type", param.getDataType());
-                    paramsJSONList.add(apiParamJSON);
-                }
-                JSONObject apiPropJSON = new JSONObject();
-                apiPropJSON.put("parameters", paramsJSONList);
-                apiPropJSON.put("responses", new JSONObject().put("default", ""));
-                apiPropJSON.put("produces", apiProp.getProduces());
-                apiPropJSON.put("consumes", apiProp.getConsumes());
-                propsJSON.put(apiProp.getType(), apiPropJSON);
-            }
-            pathsJSON.put(apiPath.getUrl(), propsJSON);
-        }
-        apiDefBuilder.put("paths", pathsJSON);
-        apiDefBuilder.put("schemes", new ArrayList<>(Arrays.asList("http")));
-        apiDefBuilder.put("swagger", "2.0");
-        apiDefinition = apiDefBuilder.toString();
+        apiDefinition = apiPaths;
         status = "CREATED";
         responseCaching = "Disabled";
         cacheTimeout = 0;
         destinationStatsEnabled = false;
         isDefaultVersion = true;
         transport = new ArrayList<>(Arrays.asList("http", "https"));
-        tiers = new ArrayList<>(Arrays.asList("Unlimited"));
+        tiers = new ArrayList<>(Collections.singletonList("Unlimited"));
         visibility = "PUBLIC";
-        visibleRoles = new ArrayList<>(Arrays.asList());
-        visibleTenants = new ArrayList<>(Arrays.asList());
+        visibleRoles = new ArrayList<>(Collections.emptyList());
+        visibleTenants = new ArrayList<>(Collections.emptyList());
 
 
         String applicationServerUrl = ServerConfigurationLoader.
                 getServerConfiguration().getApiEverywhereConfiguration().getApplicationServerUrl();
-        if (!applicationServerUrl.startsWith("http://")) {
-            applicationServerUrl = "http://" + applicationServerUrl;
-        }
+//        if (!applicationServerUrl.startsWith("http://")) {
+//            applicationServerUrl = "http://" + applicationServerUrl;
+//        }
         if (applicationServerUrl.endsWith("/")) {
             applicationServerUrl = applicationServerUrl.substring(0, applicationServerUrl.lastIndexOf("/"));
         }

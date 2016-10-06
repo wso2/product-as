@@ -1,5 +1,7 @@
 package org.wso2.appserver.apieverywhere;
 
+import com.google.gson.Gson;
+import io.swagger.models.Swagger;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.reflections.Reflections;
@@ -11,21 +13,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
 import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
-import org.wso2.appserver.apieverywhere.utils.APIPath;
+import org.wso2.appserver.apieverywhere.utils.APIPathBuilder;
 import org.wso2.appserver.apieverywhere.utils.Constants;
 import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Path;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,7 +40,9 @@ class APIScanner {
 
 
     private static final Log log = LogFactory.getLog(APIScanner.class);
+    private Gson gson = new Gson();
     private ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+    private Map<String, io.swagger.models.Path> paths = new HashMap<>();
 
     /**
      * Scan the deployed web apps
@@ -59,7 +61,6 @@ class APIScanner {
 
         if (!serverParams.isEmpty()) {
             APICreateRequest apiCreateRequest = new APICreateRequest();
-            List<APIPath> generatedApiPaths = new ArrayList<>();
             apiCreateRequest.setContext(servletContext.getContextPath());
             apiCreateRequest.setName(servletContext.getContextPath().substring(1));
 
@@ -68,13 +69,12 @@ class APIScanner {
                 //append address in beans
                 StringBuilder url = serverParams.get(className);
 
-//                log.info("server params : " + className + " & " + url.toString());
                 //scanning annotations of the class
                 Reflections reflections = new Reflections(className,
                         new MethodAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner());
 
                 Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Path.class);
-                generatedApiPaths.addAll(scanMethodAnnotation(url, reflections, classes));
+                scanMethodAnnotation(url, reflections, classes);
 
                 try {
                     //interfaces of the class
@@ -84,8 +84,7 @@ class APIScanner {
                         Reflections tempReflection = new Reflections(in.getName(),
                                 new TypeAnnotationsScanner(), new SubTypesScanner(), new MethodAnnotationsScanner());
                         Set<Class<?>> pathInterfaces = tempReflection.getTypesAnnotatedWith(Path.class);
-//                        log.info("server params from interface: " + classes.isEmpty() + " & " + url);
-                        generatedApiPaths.addAll(scanMethodAnnotation(url, tempReflection, pathInterfaces));
+                        scanMethodAnnotation(url, tempReflection, pathInterfaces);
                     }
                 } catch (ClassNotFoundException e) {
                     log.error("The class is not found in scanning: " + e);
@@ -93,10 +92,14 @@ class APIScanner {
                 }
             });
 
-            for (APIPath apiPath : generatedApiPaths) {
-                log.info(apiPath.toString());
+            Swagger swagger = new Swagger();
+            swagger.setPaths(paths);
+
+            String toJson = gson.toJson(swagger);
+            while (toJson.contains("\"vendorExtensions\":{},")) {
+                toJson = toJson.replace("\"vendorExtensions\":{},", "");
             }
-            apiCreateRequest.buildAPI(generatedApiPaths);
+            apiCreateRequest.buildAPICreateRequest(toJson);
             log.info("API Builded : " + apiCreateRequest.getName());
             return Optional.of(apiCreateRequest);
         }
@@ -136,6 +139,9 @@ class APIScanner {
 
             NodeList servletList = webXmlDoc.getElementsByTagName(Constants.SERVLET);
             NodeList servletMappingList = webXmlDoc.getElementsByTagName(Constants.SERVLET_MAPPING);
+//            Stream<Element>   nodeStream= IntStream.range(0,servletMappingList.getLength()).
+//                    mapToObj(i -> (Element) servletMappingList.item(i));
+//            nodeStream.forEach();
 
             if (servletList != null && servletMappingList != null) {
 
@@ -266,21 +272,20 @@ class APIScanner {
 
 
     /**
-     * Scan the classes to get the annotated methods and generate APIPath
+     * Scan the classes to get the annotated methods and generate APIPathBuilder
      * Add to the gerneratedApiPath arraylist
      * @param baseUrl     the url generated from the config
      * @param reflections      the Reflection object which scanned the current classes
      * @param classes     the classes for scanning
      */
-    private List<APIPath> scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
-        ArrayList<APIPath> generatedApiPaths = new ArrayList<>();
+    private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
 
         classes.forEach(cl -> {
-            Path path = cl.getAnnotation(Path.class);
+            Path pathAnnotation = cl.getAnnotation(Path.class);
 
-            if (path != null) {
+            if (pathAnnotation != null) {
                 //append path in class annotation
-                baseUrl.append(path.value());
+                baseUrl.append(pathAnnotation.value());
 
                 Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
                 methods.forEach(me -> {
@@ -291,22 +296,19 @@ class APIScanner {
                     if (url.endsWith("/")) {
                         url = url.substring(0, url.lastIndexOf("/"));
                     }
-
-                    String finalUrl = url;
-
-                    List<APIPath> sameAPI = generatedApiPaths.stream()
-                            .filter(p -> p.getUrl().equals((finalUrl)))
-                            .collect(Collectors.toList());
-                    if (sameAPI.size() > 0) {
-                        sameAPI.get(0).addProp(me);
+                    APIPathBuilder apiPath = new APIPathBuilder();
+                    io.swagger.models.Path path;
+                    if (paths.containsKey(url)) {
+                        path = paths.get(url);
+                        paths.remove(url);
                     } else {
-                        APIPath apiPath = new APIPath(finalUrl);
-                        apiPath.addProp(me);
-                        generatedApiPaths.add(apiPath);
+                        path = new io.swagger.models.Path();
                     }
+                    path = apiPath.addProp(path, me);
+
+                    paths.put(url, path);
                 });
             }
         });
-        return generatedApiPaths;
     }
 }
