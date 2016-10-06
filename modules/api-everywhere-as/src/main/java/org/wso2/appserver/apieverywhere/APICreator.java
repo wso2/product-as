@@ -1,11 +1,9 @@
 package org.wso2.appserver.apieverywhere;
 
-import com.google.gson.Gson;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.JSONObject;
 import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
-import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
 import org.wso2.appserver.apieverywhere.utils.Constants;
 import org.wso2.appserver.configuration.listeners.ServerConfigurationLoader;
 
@@ -28,10 +26,9 @@ import javax.net.ssl.HttpsURLConnection;
 class APICreator extends Thread {
 
     private static final Log log = LogFactory.getLog(APICreator.class);
-    private Queue<APICreateRequest> apiCreateRequests = new ConcurrentLinkedQueue<>();
-    private Gson gson = new Gson();
+    private Queue<String> apiCreateRequests = new ConcurrentLinkedQueue<>();
 
-    void addAPIRequest(APICreateRequest apiCreateRequest) {
+    void addAPIRequest(String apiCreateRequest) {
         this.apiCreateRequests.add(apiCreateRequest);
     }
 
@@ -64,10 +61,8 @@ class APICreator extends Thread {
 
             String accessToken = httpCall(encodedKey, authenticationUrl);
             while (!apiCreateRequests.isEmpty()) {
-                APICreateRequest apiRequest = apiCreateRequests.poll();
-                String apiJson = gson.toJson(apiRequest);
-                log.info("Creating API in API Publisher : " + apiRequest.getName());
-                createAPI(accessToken, apiJson, apiPublisherUrl);
+                String apiRequest = apiCreateRequests.poll();
+                createAPI(accessToken, apiRequest, apiPublisherUrl);
             }
         } catch (UnsupportedEncodingException e) {
             log.error("Failed to generate encoded key: " + e);

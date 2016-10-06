@@ -54,7 +54,7 @@ class APIScanner {
      * @param servletContext     the deployed web apps' servlet context
      *
      */
-    Optional<APICreateRequest> scan(ServletContext servletContext) throws APIEverywhereException {
+    Optional<String> scan(ServletContext servletContext) throws APIEverywhereException {
 
 
         HashMap<String, StringBuilder> serverParams = scanConfigs(servletContext);
@@ -95,13 +95,15 @@ class APIScanner {
             Swagger swagger = new Swagger();
             swagger.setPaths(paths);
 
-            String toJson = gson.toJson(swagger);
-            while (toJson.contains("\"vendorExtensions\":{},")) {
-                toJson = toJson.replace("\"vendorExtensions\":{},", "");
+            String swaggerString = gson.toJson(swagger);
+            while (swaggerString.contains("\"vendorExtensions\":{},")) {
+                swaggerString = swaggerString.replace("\"vendorExtensions\":{},", "");
             }
-            apiCreateRequest.buildAPICreateRequest(toJson);
+            apiCreateRequest.buildAPICreateRequest(swaggerString);
+            String apiCreateRequestString = gson.toJson(apiCreateRequest);
             log.info("API Builded : " + apiCreateRequest.getName());
-            return Optional.of(apiCreateRequest);
+
+            return Optional.of(apiCreateRequestString);
         }
         return Optional.empty();
     }
