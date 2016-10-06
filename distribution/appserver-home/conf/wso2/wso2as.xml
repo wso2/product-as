@@ -132,6 +132,7 @@
      of deployed web app in API Publisher
     -->
     <ApiEverywhere>
+        <!--todo security for clientid and clientsecret-->
         <!--Base64 encoded value of clientId and clientSecret-->
         <ClientId>I3oqPSfxX6VQcN5QZGuEbdXMvS8a</ClientId>
         <ClientSecret>fgBEtMelLyvjejtvIrKT2BobCcoa</ClientSecret>
