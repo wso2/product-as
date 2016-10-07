@@ -14,8 +14,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Base64;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -23,13 +21,13 @@ import javax.net.ssl.HttpsURLConnection;
  *
  * @since 6.0.0
  */
-class APICreator extends Thread {
+class APICreator implements Runnable {
 
     private static final Log log = LogFactory.getLog(APICreator.class);
-    private Queue<String> apiCreateRequests = new ConcurrentLinkedQueue<>();
+    private String apiCreateRequest;
 
     void addAPIRequest(String apiCreateRequest) {
-        this.apiCreateRequests.add(apiCreateRequest);
+        this.apiCreateRequest = apiCreateRequest;
     }
 
 
@@ -60,10 +58,7 @@ class APICreator extends Thread {
             String encodedKey = Base64.getEncoder().encodeToString(key.getBytes("utf-8"));
 
             String accessToken = httpCall(encodedKey, authenticationUrl);
-            while (!apiCreateRequests.isEmpty()) {
-                String apiRequest = apiCreateRequests.poll();
-                createAPI(accessToken, apiRequest, apiPublisherUrl);
-            }
+                createAPI(accessToken, apiCreateRequest, apiPublisherUrl);
         } catch (UnsupportedEncodingException e) {
             log.error("Failed to generate encoded key: " + e);
             throw new APIEverywhereException("Failed to generate encoded key", e);
