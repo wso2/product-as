@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Path;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,6 +40,8 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 class APIScanner {
 
+    //default servlet xml path;
+    private String cxfServletXmlLocation = "/WEB-INF/cxf-servlet.xml";
 
     private static final Log log = LogFactory.getLog(APIScanner.class);
     private Gson gson = new Gson();
@@ -51,8 +55,7 @@ class APIScanner {
      * Then scan those methods, method params annotation and return type
      * Then initiate a new Thread to create API in the API Publisher
      *
-     * @param servletContext     the deployed web apps' servlet context
-     *
+     * @param servletContext the deployed web apps' servlet context
      */
     Optional<String> scan(ServletContext servletContext) throws APIEverywhereException {
 
@@ -101,7 +104,8 @@ class APIScanner {
             }
             apiCreateRequest.buildAPICreateRequest(swaggerString);
             String apiCreateRequestString = gson.toJson(apiCreateRequest);
-            log.info("API Builded : " + apiCreateRequest.getName());
+            log.info("API Builded : " + apiCreateRequestString);
+//            log.info("API Builded : " + apiCreateRequest.getName());
 
             return Optional.of(apiCreateRequestString);
         }
@@ -112,18 +116,16 @@ class APIScanner {
     /**
      * Scan for beans in config xml files in cxf servlet
      *
-     * @param servletContext     the deployed web apps' servlet context
+     * @param servletContext the deployed web apps' servlet context
      * @return HashMap of <Bean class name, url pattern>
      */
     private HashMap<String, StringBuilder> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
-
 
         //Map of <Bean class name, UrlPattern> that stores the class name and the address from beans
         HashMap<String, StringBuilder> beanParams = new HashMap<>();
 
         String webXmlPath = servletContext.getRealPath("/") + Constants.WEB_XML_LOCATION;
-        //default servlet xml path;
-        String servletXmlPath = servletContext.getRealPath("/") +  Constants.CXF_SERVLET_XML_LOCATION;
+
 
         try {
             //reading from web.xml
@@ -141,122 +143,164 @@ class APIScanner {
 
             NodeList servletList = webXmlDoc.getElementsByTagName(Constants.SERVLET);
             NodeList servletMappingList = webXmlDoc.getElementsByTagName(Constants.SERVLET_MAPPING);
-//            Stream<Element>   nodeStream= IntStream.range(0,servletMappingList.getLength()).
-//                    mapToObj(i -> (Element) servletMappingList.item(i));
-//            nodeStream.forEach();
+
 
             if (servletList != null && servletMappingList != null) {
-
                 // check for cxf-servlet config from context param.
                 NodeList contextParams = webXmlDoc.getElementsByTagName(Constants.CONTEXT_PARAM);
-                for (int i = 0; i < contextParams.getLength(); i++) {
-                    Element contextParam = (Element) contextParams.item(i);
-                    String paramName = contextParam.getElementsByTagName(Constants.PARAM_NAME)
-                                                                                .item(0).getTextContent().trim();
-                    if (Objects.equals(paramName, Constants.CONTEXT_CONFIG_LOC)) {
-                        servletXmlPath = servletContext.getRealPath("/") + contextParam.
-                                getElementsByTagName(Constants.PARAM_VALUE).item(0).getTextContent().trim();
-                    }
-                }
+
+                IntStream.range(0, contextParams.getLength()).mapToObj(i -> (Element) contextParams.item(i))
+                        .filter(contextParam ->
+                                Objects.equals(Constants.CONTEXT_CONFIG_LOC,
+                                        contextParam.getElementsByTagName(Constants.PARAM_NAME).item(0)
+                                                .getTextContent().trim())
+                        )
+                        .findFirst()
+                        .ifPresent(contextParam -> cxfServletXmlLocation = contextParam
+                                .getElementsByTagName(Constants.PARAM_VALUE).item(0).getTextContent().trim());
+
 
                 HashMap<String, String> servletMappingParams = new HashMap<>(); // <servletName, UrlPattern>
-                for (int i = 0; i < servletMappingList.getLength(); i++) {
-                    Element servletMapping = (Element) servletMappingList.item(i);
-                    String urlPattern = servletMapping.getElementsByTagName(Constants.URL_PATTERN)
-                            .item(0).getTextContent();
-                    if (urlPattern.endsWith("*")) {
-                        urlPattern = urlPattern.substring(0, urlPattern.length() - 2);
-                    } else {
-                        if (urlPattern.endsWith("/")) {
-                            urlPattern = urlPattern.substring(0, urlPattern.length() - 1);
-                        }
-                    }
-                    String servletName = servletMapping.getElementsByTagName(Constants.SERVLET_NAME).item(0).
-                            getTextContent().trim();
-                    servletMappingParams.put(servletName, urlPattern);
-                }
-
-                for (int i = 0; i < servletList.getLength(); i++) {
-                    Element servlet = (Element) servletList.item(i);
-                    String servletName = servlet.getElementsByTagName(Constants.SERVLET_NAME)
-                                                                            .item(0).getTextContent().trim();
-                    if (servletMappingParams.containsKey(servletName)) {
-                        StringBuilder urlBuilder = new StringBuilder();
-                        String urlPatternString = servletMappingParams.get(servletName);
-                        urlBuilder.append(urlPatternString);
-                        String servletClassName = servlet.getElementsByTagName(Constants.SERVLET_CLASS)
-                                .item(0).getTextContent().trim();
-
-                        NodeList initParams = servlet.getElementsByTagName(Constants.INIT_PARAM);
-                        switch (servletClassName) {
-                            case Constants.CXF_NON_SPRING_JAXRS_SERVLET:
-                                //getting bean from init-param
-                                for (int j = 0; j < initParams.getLength(); j++) {
-                                    Element initParam = (Element) initParams.item(j);
-                                    String paramName = initParam.getElementsByTagName(Constants.PARAM_NAME)
-                                            .item(0).getTextContent().trim();
-                                    if (Objects.equals(paramName, Constants.JAXRS_SERVICE_CLASSES)) {
-                                        String[] classNames = initParam.getElementsByTagName(Constants.PARAM_VALUE)
-                                                .item(0).getTextContent().trim().split(",");
-                                        Arrays.stream(classNames).forEach(className ->
-                                                beanParams.put(className, urlBuilder));
-                                    }
+                IntStream.range(0, servletMappingList.getLength()).mapToObj(i -> (Element) servletMappingList.item(i))
+                        .forEach(servletMapping -> {
+                            String urlPattern = servletMapping.getElementsByTagName(Constants.URL_PATTERN)
+                                    .item(0).getTextContent();
+                            if (urlPattern.endsWith("*")) {
+                                urlPattern = urlPattern.substring(0, urlPattern.length() - 2);
+                            } else {
+                                if (urlPattern.endsWith("/")) {
+                                    urlPattern = urlPattern.substring(0, urlPattern.length() - 1);
                                 }
-                                break;
-                            case Constants.CXF_SERVLET:
-                                for (int j = 0; j < initParams.getLength(); j++) {
-                                    Element initParam = (Element) initParams.item(j);
-                                    String paramName = initParam.getElementsByTagName(Constants.PARAM_NAME)
-                                            .item(0).getTextContent().trim();
-                                    if (Objects.equals(paramName, Constants.CONFIG_LOC)) {
-                                        String xmlPath = initParam.getElementsByTagName(Constants.PARAM_VALUE)
-                                                .item(0).getTextContent().trim();
-                                        servletXmlPath = servletContext.getRealPath("/") + xmlPath;
-                                    }
-                                }
+                            }
+                            String servletName = servletMapping.getElementsByTagName(Constants.SERVLET_NAME).item(0).
+                                    getTextContent().trim();
+                            if (log.isDebugEnabled()) {
+                                log.debug("adding servlet : " + servletName);
+                            }
+                            servletMappingParams.put(servletName, urlPattern);
+                        });
 
 
-                                //getting beans from servletXml file
-                                Document servletDoc = dbFactory.newDocumentBuilder().parse(servletXmlPath);
-                                servletDoc.getDocumentElement().normalize();
+                IntStream.range(0, servletList.getLength()).mapToObj(i -> (Element) servletList.item(i))
+                        .filter(servlet ->
+                                servletMappingParams.containsKey(servlet.getElementsByTagName(Constants.SERVLET_NAME)
+                                        .item(0).getTextContent().trim()))
+                        .forEach(servlet -> {
+                            String servletName = servlet.getElementsByTagName(Constants.SERVLET_NAME)
+                                    .item(0).getTextContent().trim();
+                            if (log.isDebugEnabled()) {
+                                log.debug("reading servlet: " + servletName);
+                            }
+                            StringBuilder urlBuilder = new StringBuilder();
+                            String urlPatternString = servletMappingParams.get(servletName);
+                            urlBuilder.append(urlPatternString);
+                            String servletClassName = servlet.getElementsByTagName(Constants.SERVLET_CLASS)
+                                    .item(0).getTextContent().trim();
 
-                                HashMap<String, String> serverParams = new HashMap<>(); // <beanId, address>
-                                NodeList jaxrsServerList = servletDoc.getElementsByTagName(Constants.JAXRS_SERVER);
-                                for (int j = 0; j < jaxrsServerList.getLength(); j++) {
-                                    Element jaxrsServer = (Element) jaxrsServerList.item(j);
-                                    String address = jaxrsServer.getAttribute(Constants.ADDRESS);
-                                    NodeList jaxrsServerBeans = jaxrsServer
-                                                                .getElementsByTagName(Constants.JAXRS_SERVICE_BEANS);
-                                    for (int k = 0; k < jaxrsServerBeans.getLength(); k++) {
-                                        Element jaxrsServerBean = (Element) jaxrsServerBeans.item(k);
-                                        Element ref = (Element) jaxrsServerBean
-                                                                        .getElementsByTagName(Constants.REF).item(0);
-                                        String beanId = ref.getAttribute(Constants.BEAN).trim();
-                                        serverParams.put(beanId, address);
-
-                                    }
-                                }
-
-                                if (!serverParams.isEmpty()) {
-                                    NodeList beans = servletDoc.getElementsByTagName(Constants.BEAN);
-                                    for (int j = 0; j < beans.getLength(); j++) {
-                                        Element bean = (Element) beans.item(j);
-                                        String beanId = bean.getAttribute(Constants.ID);
-                                        if (serverParams.containsKey(beanId)) {
-                                            String address = serverParams.get(beanId);
-                                            String className = bean.getAttribute(Constants.CLASS);
-                                            urlBuilder.append(address);
-                                            beanParams.put(className, urlBuilder);
+                            NodeList initParams = servlet.getElementsByTagName(Constants.INIT_PARAM);
+                            if (log.isDebugEnabled()) {
+                                log.debug("reading servlet class name" + servletClassName);
+                            }
+                            switch (servletClassName) {
+                                case Constants.CXF_NON_SPRING_JAXRS_SERVLET:
+                                    //getting bean from init-param
+                                    IntStream.range(0, initParams.getLength())
+                                            .mapToObj(i -> (Element) initParams.item(i))
+                                            .filter(initParam ->
+                                                    Objects.equals(Constants.JAXRS_SERVICE_CLASSES,
+                                                            initParam.getElementsByTagName(Constants.PARAM_NAME)
+                                                                    .item(0).getTextContent().trim())
+                                            )
+                                            .forEach(initParam -> {
+                                                String[] classNames = initParam
+                                                                        .getElementsByTagName(Constants.PARAM_VALUE)
+                                                                        .item(0).getTextContent().trim().split(",");
+                                                if (log.isDebugEnabled()) {
+                                                    log.debug("addind service class: " + classNames[0]
+                                                            + " with url:" + urlBuilder);
+                                                }
+                                                beanParams.putAll(Arrays.stream(classNames).collect(Collectors.toMap(
+                                                        className -> className,
+                                                        className -> urlBuilder)));
+                                            });
+                                    break;
+                                case Constants.CXF_SERVLET:
+                                    IntStream.range(0, initParams.getLength())
+                                            .mapToObj(i -> (Element) initParams.item(i))
+                                            .filter(initParam ->
+                                                    Objects.equals(Constants.CONTEXT_CONFIG_LOC,
+                                                            initParam.getElementsByTagName(Constants.PARAM_NAME).item(0)
+                                                                        .getTextContent().trim())
+                                            )
+                                            .findFirst()
+                                            .ifPresent(initParam ->
+                                                    cxfServletXmlLocation = initParam
+                                                                            .getElementsByTagName(Constants.PARAM_VALUE)
+                                                                            .item(0).getTextContent().trim());
+                                    try {
+                                        //getting beans from servletXml file
+                                        String servletXmlPath = servletContext.getRealPath("/") + cxfServletXmlLocation;
+                                        if (log.isDebugEnabled()) {
+                                            log.debug("reading servlet config : " + servletXmlPath);
                                         }
+                                        Document servletDoc = dbFactory.newDocumentBuilder().parse(servletXmlPath);
+                                        servletDoc.getDocumentElement().normalize();
+
+                                        HashMap<String, String> serverParams = new HashMap<>(); // <beanId, address>
+                                        NodeList jaxrsServerList =
+                                                servletDoc.getElementsByTagName(Constants.JAXRS_SERVER);
+
+                                        IntStream.range(0, jaxrsServerList
+                                                .getLength())
+                                                .mapToObj(i -> (Element) jaxrsServerList.item(i))
+                                                .forEach(jaxrsServer -> {
+                                                    String address = jaxrsServer.getAttribute(Constants.ADDRESS);
+                                                    NodeList jaxrsServerBeans = jaxrsServer
+                                                            .getElementsByTagName(Constants.JAXRS_SERVICE_BEANS);
+                                                    serverParams.putAll(
+                                                            IntStream.range(0, jaxrsServerBeans.getLength())
+                                                            .mapToObj(i ->
+                                                                    ((Element) ((Element) jaxrsServerBeans.item(i))
+                                                                            .getElementsByTagName(Constants.REF)
+                                                                    .item(0)).getAttribute(Constants.BEAN).trim())
+                                                            .collect(Collectors.toMap(ref -> ref, ref -> address))
+                                                    );
+                                                });
+
+                                        NodeList beans = servletDoc.getElementsByTagName(Constants.BEAN);
+                                        beanParams.putAll(
+                                                IntStream.range(0, beans.getLength())
+                                                .mapToObj(i -> (Element) beans.item(i))
+                                                .filter(bean -> serverParams
+                                                                        .containsKey(bean.getAttribute(Constants.ID)))
+                                                .collect(Collectors.toMap(
+                                                        bean -> bean.getAttribute(Constants.CLASS),
+                                                        bean -> urlBuilder.append(serverParams
+                                                                                .get(bean.getAttribute(Constants.ID)))
+                                                        )
+                                                )
+                                        );
+                                    } catch (ParserConfigurationException e) {
+                                        log.error("Failed to parse configuration: " + e);
+                                        throw new APIEverywhereException("Failed to parse configuration ", e);
+                                    } catch (SAXException e) {
+                                        log.error("Failed to parse xml configuration: " + e);
+                                        throw new APIEverywhereException("Failed to parse xml configuration ", e);
+                                    } catch (IOException e) {
+                                        log.error("The config file is not found: " + e);
+                                        throw new APIEverywhereException("The config file is not found ", e);
                                     }
-                                }
-                                break;
-                            default:
-                                //other servlet config
-                                break;
-                        }
-                    }
-                }
+                                    break;
+                                default:
+                                    if (log.isDebugEnabled()) {
+                                        log.debug("servlet with non jax-rs config -- servlet class name: " +
+                                                servletClassName);
+                                    }
+                                    //other servlet config
+                                    break;
+                            }
+
+                        });
             }
 
         } catch (ParserConfigurationException e) {
@@ -276,8 +320,9 @@ class APIScanner {
     /**
      * Scan the classes to get the annotated methods and generate APIPathBuilder
      * Add to the gerneratedApiPath arraylist
+     *
      * @param baseUrl     the url generated from the config
-     * @param reflections      the Reflection object which scanned the current classes
+     * @param reflections the Reflection object which scanned the current classes
      * @param classes     the classes for scanning
      */
     private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
