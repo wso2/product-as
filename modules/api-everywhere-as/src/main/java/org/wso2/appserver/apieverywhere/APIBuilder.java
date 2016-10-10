@@ -103,7 +103,7 @@ class APIBuilder {
         apiCreateRequest.buildAPICreateRequest(swaggerString);
         String apiCreateRequestString = gson.toJson(apiCreateRequest);
         log.info("API Builded : " + apiCreateRequestString);
-//            log.info("API Builded : " + apiCreateRequest.getName());
+            log.info("API Builded : " + apiCreateRequest.getName());
 
         return apiCreateRequestString;
 
@@ -176,32 +176,41 @@ class APIBuilder {
         operation.setProduces(produces);
         Arrays.stream(methodParams).forEach(param -> {
             Annotation[] paramAnnotations = param.getAnnotations();
-            io.swagger.models.parameters.Parameter parameter = null;
             if (paramAnnotations.length > 0) {
                 Annotation paramAnn = paramAnnotations[0];
                 Class<? extends Annotation> annotationType = paramAnn.annotationType();
                 if (annotationType.toString().contains(Constants.JAX_RS_PATH_PARAM)) {
-                    parameter = new PathParameter();
-                    parameter.setName(((PathParam) paramAnn).value());
+                    PathParameter pathParameter = new PathParameter();
+                    pathParameter.setName(((PathParam) paramAnn).value());
+                    pathParameter.setType(param.getType().getName());
+                    operation.addParameter(pathParameter);
                 }
                 if (annotationType.toString().contains(Constants.JAX_RS_HEADER_PARAM)) {
-                    parameter = new HeaderParameter();
-                    parameter.setName(((HeaderParam) paramAnn).value());
-
+                    HeaderParameter headerParameter = new HeaderParameter();
+                    headerParameter.setName(((HeaderParam) paramAnn).value());
+                    headerParameter.setType(param.getType().getName());
+                    operation.addParameter(headerParameter);
                 }
                 if (annotationType.toString().contains(Constants.JAX_RS_QUERY_PARAM)) {
-                    parameter = new QueryParameter();
-                    parameter.setName(((QueryParam) paramAnn).value());
+                    QueryParameter queryParameter = new QueryParameter();
+                    queryParameter.setName(((QueryParam) paramAnn).value());
+                    queryParameter.setType(param.getType().getName());
+                    operation.addParameter(queryParameter);
                 }
                 if (annotationType.toString().contains(Constants.JAX_RS_FORM_PARAM)) {
-                    parameter = new FormParameter();
-                    parameter.setName(((FormParam) paramAnn).value());
+                    FormParameter formParameter = new FormParameter();
+                    formParameter.setName(((FormParam) paramAnn).value());
+                    formParameter.setType(param.getType().getName());
+                    operation.addParameter(formParameter);
                 }
             } else {
-                parameter = new BodyParameter();
-                parameter.setName("body param");
+                BodyParameter bodyParameterparameter = new BodyParameter();
+                bodyParameterparameter.setName("body param");
+//                ModelImpl model = new ModelImpl();
+//                model.setDefaultValue(param.getType().getName());
+//                bodyParameterparameter.setSchema(model);
+                operation.addParameter(bodyParameterparameter);
             }
-            operation.addParameter(parameter);
         });
 
         String method = Constants.GET;
