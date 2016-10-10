@@ -48,18 +48,18 @@ limitations under the License.
         </classes>
     </test>
 
-    <!--<test name="wso2as-test-webapp-loader-failing-runtime-path">-->
-        <!--<parameter name="server-status-hook"-->
-                   <!--value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>-->
-        <!--<classes>-->
-            <!--<class name="org.wso2.appserver.test.integration.loader.WebappLoaderWithInvalidRuntimeTestCase"/>-->
-        <!--</classes>-->
-    <!--</test>-->
-
-    <test name="wso2as-test-api-everywhere-as">
+    <test name="wso2as-test-webapp-loader-failing-runtime-path">
+        <parameter name="server-status-hook"
+                   value="org.wso2.appserver.test.integration.loader.ClassLoaderEnvironmentWriterHook"/>
         <classes>
-            <class name="org.wso2.appserver.test.integration.apieverywhere.ApiEverywhereTestCase"/>
+            <class name="org.wso2.appserver.test.integration.loader.WebappLoaderWithInvalidRuntimeTestCase"/>
         </classes>
     </test>
+
+    <!--<test name="wso2as-test-api-everywhere-as">-->
+        <!--<classes>-->
+            <!--<class name="org.wso2.appserver.test.integration.apieverywhere.ApiEverywhereTestCase"/>-->
+        <!--</classes>-->
+    <!--</test>-->
 
 </suite>
