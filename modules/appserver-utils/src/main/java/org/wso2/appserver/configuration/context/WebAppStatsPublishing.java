@@ -34,6 +34,17 @@ public class WebAppStatsPublishing {
     @XmlElement(name = "enable-stats-publisher")
     private Boolean enableStatsPublisher;
 
+    @XmlElement(name = "publisher-implementation")
+    private String publisherImplementation;
+
+    public String getPublisherImplementation() {
+        return publisherImplementation;
+    }
+
+    public void setPublisherImplementation(String publisherImplementation) {
+        this.publisherImplementation = publisherImplementation;
+    }
+
     public Boolean isStatsPublisherEnabled() {
         return enableStatsPublisher;
     }

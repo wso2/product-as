@@ -72,5 +72,6 @@
     <statistics-publisher>
         <!-- Enable/disable HTTP statistics monitoring. -->
         <enable-stats-publisher>false</enable-stats-publisher>
+        <publisher-implementation></publisher-implementation>
     </statistics-publisher>
 </wso2as-web>

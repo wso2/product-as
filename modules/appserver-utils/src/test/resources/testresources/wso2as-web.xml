@@ -30,5 +30,6 @@
     </saml2-single-sign-on>
     <statistics-publisher>
         <enable-stats-publisher>false</enable-stats-publisher>
+        <publisher-implementation>false</publisher-implementation>
     </statistics-publisher>
 </wso2as-web>
