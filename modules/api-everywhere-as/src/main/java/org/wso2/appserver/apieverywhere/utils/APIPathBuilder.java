@@ -38,26 +38,26 @@ public class APIPathBuilder {
 
 
         Operation operation = new Operation();
-        for (Parameter param : methodParams) {
+        Arrays.stream(methodParams).forEach(param -> {
             Annotation[] paramAnnotations = param.getAnnotations();
             io.swagger.models.parameters.Parameter parameter = null;
             if (paramAnnotations.length > 0) {
                 Annotation paramAnn = paramAnnotations[0];
                 Class<? extends Annotation> annotationType = paramAnn.annotationType();
-                if (annotationType.toString().contains("javax.ws.rs.PathParam")) {
+                if (annotationType.toString().contains(Constants.JAX_RS_PATH_PARAM)) {
                     parameter = new PathParameter();
                     parameter.setName(((PathParam) paramAnn).value());
                 }
-                if (annotationType.toString().contains("javax.ws.rs.HeaderParam")) {
+                if (annotationType.toString().contains(Constants.JAX_RS_HEADER_PARAM)) {
                     parameter = new HeaderParameter();
                     parameter.setName(((HeaderParam) paramAnn).value());
 
                 }
-                if (annotationType.toString().contains("javax.ws.rs.QueryParam")) {
+                if (annotationType.toString().contains(Constants.JAX_RS_QUERY_PARAM)) {
                     parameter = new QueryParameter();
                     parameter.setName(((QueryParam) paramAnn).value());
                 }
-                if (annotationType.toString().contains("javax.ws.rs.FormParam")) {
+                if (annotationType.toString().contains(Constants.JAX_RS_FORM_PARAM)) {
                     parameter = new FormParameter();
                     parameter.setName(((FormParam) paramAnn).value());
                 }
@@ -65,35 +65,33 @@ public class APIPathBuilder {
                 parameter = new BodyParameter();
                 parameter.setName("body param");
             }
-            if (parameter != null) {
-                operation.addParameter(parameter);
-            }
-        }
+            operation.addParameter(parameter);
+        });
 
-        String method = "get";
+        String method = Constants.GET;
         for (Annotation ann : methodAnnotations) {
             switch (ann.annotationType().getName()) {
                 case Constants.JAVAX_GET_METHOD:
-                    method = "get";
+                    method = Constants.GET;
                     break;
                 case Constants.JAVAX_POST_METHOD :
-                    method = "post";
+                    method = Constants.POST;
                     break;
                 case Constants.JAX_RS_PUT_METHOD :
-                    method = "put";
+                    method = Constants.PUT;
                     break;
                 case Constants.JAX_RS_DELETE_METHOD :
-                    method = "delete";
+                    method = Constants.DELETE;
                     break;
                 //patch does don't support for jax-rs
                 case Constants.JAX_RS_PATCH_METHOD :
-                    method = "patch";
+                    method = Constants.PATCH;
                     break;
                 case Constants.JAX_RS_HEAD_METHOD :
-                    method = "head";
+                    method = Constants.HEAD;
                     break;
                 case Constants.JAX_RS_OPTIONS_METHOD :
-                    method = "options";
+                    method = Constants.OPTIONS;
                     break;
                 case Constants.JAX_RS_PATH_METHOD :
                     break;
@@ -113,6 +111,4 @@ public class APIPathBuilder {
         path.set(method, operation);
         return path;
     }
-
-
 }

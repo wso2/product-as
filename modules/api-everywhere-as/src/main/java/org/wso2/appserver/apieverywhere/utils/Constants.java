@@ -40,14 +40,30 @@ public class Constants {
 
     public static final String JAX_RS_PATH_METHOD = "javax.ws.rs.Path";
 
+    public static final String JAX_RS_PATH_PARAM = "javax.ws.rs.PathParam";
+
+    public static final String JAX_RS_HEADER_PARAM = "javax.ws.rs.HeaderParam";
+
+    public static final String JAX_RS_QUERY_PARAM = "javax.ws.rs.QueryParam";
+
+    public static final String JAX_RS_FORM_PARAM = "javax.ws.rs.FormParam";
+
+
+    public static final String GET = "get";
+    public static final String POST = "post";
+    public static final String PUT = "put";
+    public static final String DELETE = "delete";
+    public static final String PATCH = "patch";
+    public static final String HEAD = "head";
+    public static final String OPTIONS = "options";
 
     /**
      * Success codes for http requests
      */
     public static final int CREATE_API_SUCCESS_CODE = 201;
 
-    public static final int REQUEST_ACCESS_TOKEN_SUCCESS_CODE = 200;
 
+    public static final int REQUEST_ACCESS_TOKEN_SUCCESS_CODE = 200;
 
     /**
      * Constants for jax-rs config scanning
@@ -95,5 +111,4 @@ public class Constants {
     public static final String ID = "id";
 
     public static final String CLASS = "class";
-
 }
