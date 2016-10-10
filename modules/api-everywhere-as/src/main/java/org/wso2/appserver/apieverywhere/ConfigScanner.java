@@ -1,131 +1,46 @@
 package org.wso2.appserver.apieverywhere;
 
-import com.google.gson.Gson;
-import io.swagger.models.Swagger;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.wso2.appserver.apieverywhere.exceptions.APIEverywhereException;
-import org.wso2.appserver.apieverywhere.utils.APICreateRequest;
-import org.wso2.appserver.apieverywhere.utils.APIPathBuilder;
 import org.wso2.appserver.apieverywhere.utils.Constants;
 import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * The class which scan the deployed web app and extract the APIs.
+ * The class which scan the deployed web app and extract the config information.
  *
  * @since 6.0.0
  */
-class APIScanner {
+class ConfigScanner {
 
     //default servlet xml path;
     private String cxfServletXmlLocation = "/WEB-INF/cxf-servlet.xml";
 
-    private static final Log log = LogFactory.getLog(APIScanner.class);
-    private Gson gson = new Gson();
-    private ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-    private Map<String, io.swagger.models.Path> paths = new HashMap<>();
+    private static final Log log = LogFactory.getLog(ConfigScanner.class);
 
     /**
      * Scan the deployed web apps
      * It will scan the web.xml and cxf-servlet.xml of the web app and find out the service classes and it's base path
-     * Then it will scan those classes for the annotation and get the list of the methods.
-     * Then scan those methods, method params annotation and return type
-     * Then initiate a new Thread to create API in the API Publisher
-     *
-     * @param servletContext the deployed web apps' servlet context
-     */
-    Optional<String> scan(ServletContext servletContext) throws APIEverywhereException {
-
-
-        HashMap<String, StringBuilder> serverParams = scanConfigs(servletContext);
-
-        if (!serverParams.isEmpty()) {
-            APICreateRequest apiCreateRequest = new APICreateRequest();
-            apiCreateRequest.setContext(servletContext.getContextPath());
-            apiCreateRequest.setName(servletContext.getContextPath().substring(1));
-
-
-            serverParams.keySet().forEach(className -> {
-                //append address in beans
-                StringBuilder url = serverParams.get(className);
-
-                //scanning annotations of the class
-                Reflections reflections = new Reflections(className,
-                        new MethodAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner());
-
-                Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Path.class);
-                scanMethodAnnotation(url, reflections, classes);
-
-                try {
-                    //interfaces of the class
-                    Class<?> aClass = contextClassLoader.loadClass(className);
-                    Class<?>[] interfaces = aClass.getInterfaces();
-                    for (Class in : interfaces) {
-                        Reflections tempReflection = new Reflections(in.getName(),
-                                new TypeAnnotationsScanner(), new SubTypesScanner(), new MethodAnnotationsScanner());
-                        Set<Class<?>> pathInterfaces = tempReflection.getTypesAnnotatedWith(Path.class);
-                        scanMethodAnnotation(url, tempReflection, pathInterfaces);
-                    }
-                } catch (ClassNotFoundException e) {
-                    log.error("The class is not found in scanning: " + e);
-                    throw new APIEverywhereException("The class is not found in scanning ", e);
-                }
-            });
-
-            Swagger swagger = new Swagger();
-            swagger.setPaths(paths);
-
-            String swaggerString = gson.toJson(swagger);
-            while (swaggerString.contains("\"vendorExtensions\":{},")) {
-                swaggerString = swaggerString.replace("\"vendorExtensions\":{},", "");
-            }
-            while (swaggerString.contains("\"vendorExtensions\":{}")) {
-                swaggerString = swaggerString.replace("\"vendorExtensions\":{}", "");
-            }
-            apiCreateRequest.buildAPICreateRequest(swaggerString);
-            String apiCreateRequestString = gson.toJson(apiCreateRequest);
-            log.info("API Builded : " + apiCreateRequestString);
-//            log.info("API Builded : " + apiCreateRequest.getName());
-
-            return Optional.of(apiCreateRequestString);
-        }
-        return Optional.empty();
-    }
-
-
-    /**
      * Scan for beans in config xml files in cxf servlet
      *
      * @param servletContext the deployed web apps' servlet context
      * @return HashMap of <Bean class name, url pattern>
      */
-    private HashMap<String, StringBuilder> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
+    HashMap<String, StringBuilder> scanConfigs(ServletContext servletContext) throws APIEverywhereException {
 
         //Map of <Bean class name, UrlPattern> that stores the class name and the address from beans
         HashMap<String, StringBuilder> beanParams = new HashMap<>();
@@ -320,64 +235,5 @@ class APIScanner {
             throw new APIEverywhereException("The config file is not found ", e);
         }
         return beanParams;
-    }
-
-
-    /**
-     * Scan the classes to get the annotated methods and generate APIPathBuilder
-     * Add to the gerneratedApiPath arraylist
-     *
-     * @param baseUrl     the url generated from the config
-     * @param reflections the Reflection object which scanned the current classes
-     * @param classes     the classes for scanning
-     */
-    private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
-        APIPathBuilder apiPath = new APIPathBuilder();
-
-        classes.forEach(cl -> {
-            Path pathAnnotation = cl.getAnnotation(Path.class);
-
-            if (pathAnnotation != null) {
-                //append path in class annotation
-                baseUrl.append(pathAnnotation.value());
-
-                Annotation[] classAnnotations = cl.getAnnotations();
-                Arrays.stream(classAnnotations).forEach( ann -> {
-                            switch (ann.annotationType().getName()) {
-                                case Constants.JAX_RS_CONSUMES_METHOD :
-                                    Consumes cons = (Consumes) ann;
-                                    apiPath.setConsumes(Arrays.asList(cons.value()));
-                                    break;
-                                case Constants.JAX_RS_PRODUCES_METHOD :
-                                    Produces pro = (Produces) ann;
-                                    apiPath.setProduces(Arrays.asList(pro.value()));
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                );
-                Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
-                methods.forEach(me -> {
-                    Path methodPath = me.getAnnotation(Path.class);
-                    String url = baseUrl + methodPath.value();
-                    // if the Path in class has only '/' then the url have '//'
-                    url = url.replace("//", "/");
-                    if (url.endsWith("/")) {
-                        url = url.substring(0, url.lastIndexOf("/"));
-                    }
-                    io.swagger.models.Path path;
-                    if (paths.containsKey(url)) {
-                        path = paths.get(url);
-                        paths.remove(url);
-                    } else {
-                        path = new io.swagger.models.Path();
-                    }
-                    path = apiPath.addProp(path, me);
-
-                    paths.put(url, path);
-                });
-            }
-        });
     }
 }
