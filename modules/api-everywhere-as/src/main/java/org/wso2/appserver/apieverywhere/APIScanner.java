@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +30,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -101,6 +104,9 @@ class APIScanner {
             String swaggerString = gson.toJson(swagger);
             while (swaggerString.contains("\"vendorExtensions\":{},")) {
                 swaggerString = swaggerString.replace("\"vendorExtensions\":{},", "");
+            }
+            while (swaggerString.contains("\"vendorExtensions\":{}")) {
+                swaggerString = swaggerString.replace("\"vendorExtensions\":{}", "");
             }
             apiCreateRequest.buildAPICreateRequest(swaggerString);
             String apiCreateRequestString = gson.toJson(apiCreateRequest);
@@ -326,6 +332,7 @@ class APIScanner {
      * @param classes     the classes for scanning
      */
     private void scanMethodAnnotation(StringBuilder baseUrl, Reflections reflections, Set<Class<?>> classes) {
+        APIPathBuilder apiPath = new APIPathBuilder();
 
         classes.forEach(cl -> {
             Path pathAnnotation = cl.getAnnotation(Path.class);
@@ -334,6 +341,22 @@ class APIScanner {
                 //append path in class annotation
                 baseUrl.append(pathAnnotation.value());
 
+                Annotation[] classAnnotations = cl.getAnnotations();
+                Arrays.stream(classAnnotations).forEach( ann -> {
+                            switch (ann.annotationType().getName()) {
+                                case Constants.JAX_RS_CONSUMES_METHOD :
+                                    Consumes cons = (Consumes) ann;
+                                    apiPath.setConsumes(Arrays.asList(cons.value()));
+                                    break;
+                                case Constants.JAX_RS_PRODUCES_METHOD :
+                                    Produces pro = (Produces) ann;
+                                    apiPath.setProduces(Arrays.asList(pro.value()));
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                );
                 Set<Method> methods = reflections.getMethodsAnnotatedWith(Path.class);
                 methods.forEach(me -> {
                     Path methodPath = me.getAnnotation(Path.class);
@@ -343,7 +366,6 @@ class APIScanner {
                     if (url.endsWith("/")) {
                         url = url.substring(0, url.lastIndexOf("/"));
                     }
-                    APIPathBuilder apiPath = new APIPathBuilder();
                     io.swagger.models.Path path;
                     if (paths.containsKey(url)) {
                         path = paths.get(url);

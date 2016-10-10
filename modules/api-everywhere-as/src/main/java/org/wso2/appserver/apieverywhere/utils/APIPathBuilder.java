@@ -14,6 +14,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -30,6 +31,8 @@ import javax.ws.rs.QueryParam;
 public class APIPathBuilder {
 
     private static final Log log = LogFactory.getLog(APIPathBuilder.class);
+    private List<String> consumes;
+    private List<String> produces;
 
 
     public Path addProp(Path path, Method me) {
@@ -38,6 +41,8 @@ public class APIPathBuilder {
 
 
         Operation operation = new Operation();
+        operation.setConsumes(consumes);
+        operation.setProduces(produces);
         Arrays.stream(methodParams).forEach(param -> {
             Annotation[] paramAnnotations = param.getAnnotations();
             io.swagger.models.parameters.Parameter parameter = null;
@@ -97,11 +102,11 @@ public class APIPathBuilder {
                     break;
                 case Constants.JAX_RS_CONSUMES_METHOD :
                     Consumes cons = (Consumes) ann;
-                    operation.addConsumes(Arrays.toString(cons.value()));
+                    operation.setConsumes(Arrays.asList(cons.value()));
                     break;
                 case Constants.JAX_RS_PRODUCES_METHOD :
                     Produces pro = (Produces) ann;
-                    operation.addProduces(Arrays.toString(pro.value()));
+                    operation.setProduces(Arrays.asList(pro.value()));
                     break;
                 default:
                     log.info("Invalid annotation !!! " + ann.annotationType().getName());
@@ -110,5 +115,13 @@ public class APIPathBuilder {
         }
         path.set(method, operation);
         return path;
+    }
+
+    public void setConsumes(List<String> consumes) {
+        this.consumes = consumes;
+    }
+
+    public void setProduces(List<String> produces) {
+        this.produces = produces;
     }
 }
