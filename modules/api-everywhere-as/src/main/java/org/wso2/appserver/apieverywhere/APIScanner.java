@@ -228,7 +228,7 @@ class APIScanner {
                                     IntStream.range(0, initParams.getLength())
                                             .mapToObj(i -> (Element) initParams.item(i))
                                             .filter(initParam ->
-                                                    Objects.equals(Constants.CONTEXT_CONFIG_LOC,
+                                                    Objects.equals(Constants.CONFIG_LOC,
                                                             initParam.getElementsByTagName(Constants.PARAM_NAME).item(0)
                                                                         .getTextContent().trim())
                                             )
