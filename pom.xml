@@ -28,7 +28,8 @@
     <url>http://wso2.com</url>
 
     <modules>
-        <module>modules</module>
+        <module>appserver-configs</module>
+        <module>appserver-utils</module>
     </modules>
 
     <build>
