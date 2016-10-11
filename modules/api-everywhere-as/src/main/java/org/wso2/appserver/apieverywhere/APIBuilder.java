@@ -204,12 +204,9 @@ class APIBuilder {
                     operation.addParameter(formParameter);
                 }
             } else {
-                BodyParameter bodyParameterparameter = new BodyParameter();
-                bodyParameterparameter.setName("body param");
-//                ModelImpl model = new ModelImpl();
-//                model.setDefaultValue(param.getType().getName());
-//                bodyParameterparameter.setSchema(model);
-                operation.addParameter(bodyParameterparameter);
+                BodyParameter bodyParameter = new BodyParameter();
+                bodyParameter.setName("body param");
+                operation.addParameter(bodyParameter);
             }
         });
 
