@@ -15,6 +15,7 @@
  */
 package org.wso2.appserver.webapp.security.agent;
 
+import com.google.gson.Gson;
 import org.wso2.appserver.webapp.security.Constants;
 import org.wso2.appserver.webapp.security.bean.LoggedInSession;
 
@@ -49,8 +50,11 @@ public class SSOAgentSessionManager {
      * @param session the authenticated session to be added to the session map
      */
     public static void addAuthenticatedSession(HttpSession session) {
-        String sessionIndex = ((LoggedInSession) session.getAttribute(Constants.SESSION_BEAN)).getSAML2SSO().
-                getSessionIndex();
+        Gson gson = new Gson();
+        LoggedInSession loggedInSession =
+                gson.fromJson(session.getAttribute(Constants.LOGGED_IN_SESSION).toString(),
+                              LoggedInSession.class);
+        String sessionIndex = loggedInSession.getSAML2SSO().getSessionIndex();
         if (ssoSessionsMap.get(sessionIndex) != null) {
             ssoSessionsMap.get(sessionIndex).add(session);
         } else {
@@ -70,7 +74,10 @@ public class SSOAgentSessionManager {
      * @return set of sessions associated with the session index
      */
     public static Set<HttpSession> getAllInvalidatableSessions(HttpSession session) {
-        LoggedInSession sessionBean = (LoggedInSession) session.getAttribute(Constants.SESSION_BEAN);
+        Gson gson = new Gson();
+        LoggedInSession sessionBean =
+                gson.fromJson(session.getAttribute(Constants.LOGGED_IN_SESSION).toString(),
+                              LoggedInSession.class);
         Set<HttpSession> sessions = new HashSet<>();
         if ((sessionBean != null) && (sessionBean.getSAML2SSO() != null)) {
             String sessionIndex = sessionBean.getSAML2SSO().getSessionIndex();

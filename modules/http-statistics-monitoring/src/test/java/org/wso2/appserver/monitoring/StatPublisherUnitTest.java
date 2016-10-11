@@ -141,12 +141,12 @@ public class StatPublisherUnitTest {
         payload.add("Content-Type:(text/html;charset=utf-8),Content-Length:(1046)");
         payload.add("en");
 
-        Event testEvent = new Event("org.wso2.http.stats:1.0.0", startTime,
+        Event testEvent = new Event("org.wso2.http.analytics.stream:1.0.0", startTime,
                 new ArrayList<>(Arrays.asList("localhost", "localhost.localdomain")).toArray(),
                 null, payload.toArray(), new HashMap<String, String>());
         Event event = null;
         try {
-            event = EventBuilder.buildEvent("org.wso2.http.stats:1.0.0", request, response, startTime, 0);
+            event = EventBuilder.buildEvent("org.wso2.http.analytics.stream:1.0.0", request, response, startTime, 0);
         } catch (StatPublisherException e) {
             Assert.fail("Building event failed.");
         }

@@ -1,10 +1,16 @@
 # Welcome to WSO2 Application Server
+---
+
+|  Branch | Build Status |
+| :------------ |:-------------
+| master      | [![Build Status](https://wso2.org/jenkins/job/product-as/badge/icon)](https://wso2.org/jenkins/job/product-as) |
+---
 
 Welcome to WSO2 Application Server, the successor of WSO2 Carbon based Application Server. WSO2 Application Server 6.0.0 is a complete revamp and is based on vanilla Apache Tomcat. WSO2 provides a number of features by means of extensions to Apache Tomcat to add/enhance the functionality. It provides first class support for generic web applications, JAX-RS/JAX-WS web applications and Jaggery applications. The performance of the server and individual application can be monitored by integrating WSO2 Application Server with WSO2 Data Analytics Server.
 
 ## Features
 
-* HTTP statistics publishing to WSO2 Data Analytics Server
+* HTTP analytics with [WSO2 HTTP Analytics Server] (https://github.com/wso2/analytics-http)
 * SAML based Single Sign On (SSO) for web applications
 * Support for Jaggery application deployment
 * Webapp classloading runtimes

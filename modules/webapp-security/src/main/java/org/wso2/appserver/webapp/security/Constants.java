@@ -33,7 +33,7 @@ public class Constants {
     public static final String DEFAULT_SLO_URL_POSTFIX = "logout";
 
     //  HTTP servlet request session notes' property name and attribute name constants
-    public static final String SESSION_BEAN = "org.wso2.appserver.webapp.security.bean.LoggedInSession";
+    public static final String LOGGED_IN_SESSION = "LoggedInSession";
     public static final String IS_PASSIVE_AUTH_ENABLED = "IsPassiveAuthn";
     public static final String IS_FORCE_AUTH_ENABLED = "IsForceAuthn";
     public static final String RELAY_STATE = "RelayState";

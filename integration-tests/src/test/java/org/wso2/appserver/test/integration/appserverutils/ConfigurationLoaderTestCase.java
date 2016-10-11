@@ -60,7 +60,8 @@ public class ConfigurationLoaderTestCase extends TestBase {
     @Test(description = "Tests whether the 'javax.net.ssl.keyStore' system property is correctly set")
     public void testKeystoreLocationSystemProperty() throws IOException {
         String expectedKeystoreRelativePath = "/conf/wso2/wso2carbon.jks";
-        testSystemProperty("javax.net.ssl.keyStore", getAppserverHome() + expectedKeystoreRelativePath);
+        testSystemProperty("javax.net.ssl.keyStore", (getAppserverHome() + expectedKeystoreRelativePath)
+                .replaceAll("\\\\", "/"));
     }
 
     @Test(description = "Tests whether the 'javax.net.ssl.keyStorePassword' system property is correctly set")
@@ -76,7 +77,8 @@ public class ConfigurationLoaderTestCase extends TestBase {
     @Test(description = "Tests whether the 'javax.net.ssl.trustStore' system property is correctly set")
     public void testTrustStoreLocationSystemProperty() throws IOException {
         String expectedTrustStoreRelativePath = "/conf/wso2/client-truststore.jks";
-        testSystemProperty("javax.net.ssl.trustStore", getAppserverHome() + expectedTrustStoreRelativePath);
+        testSystemProperty("javax.net.ssl.trustStore", (getAppserverHome() + expectedTrustStoreRelativePath)
+                .replaceAll("\\\\", "/"));
     }
 
     @Test(description = "Tests whether the 'javax.net.ssl.trustStorePassword' system property is correctly set")

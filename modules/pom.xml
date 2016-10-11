@@ -26,7 +26,6 @@
     <url>http://wso2.com</url>
 
     <modules>
-        <module>shaded-libs</module>
         <module>appserver-utils</module>
         <module>http-statistics-monitoring</module>
         <module>webapp-loader</module>

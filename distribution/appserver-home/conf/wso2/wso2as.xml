@@ -76,7 +76,7 @@
         <PublisherURL>tcp://127.0.0.1:7611</PublisherURL>
 
         <!-- The event stream defined in WSO2 Data Analytics Server (DAS) to receive the data published. -->
-        <StreamId>org.wso2.http.stats:1.0.0</StreamId>
+        <StreamId>org.wso2.http.analytics.stream:1.0.0</StreamId>
     </StatisticsPublisher>
 
     <!--

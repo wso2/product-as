@@ -37,12 +37,12 @@ public class DataPublisherTestUtil {
     }
 
     /**
-     * Returns the absolute path of the org.wso2.http.stats_1.0.0.json.
+     * Returns the absolute path of the org.wso2.http.analytics.stream_1.0.0.json.
      *
-     * @return absolute path of the org.wso2.http.stats_1.0.0.json
+     * @return absolute path of the org.wso2.http.analytics.stream_1.0.0.json
      */
     public static String getStreamDefinitionPath() {
-        Path streamDefinitionPath = Paths.get("src", "test", "resources", "org.wso2.http.stats_1.0.0.json")
+        Path streamDefinitionPath = Paths.get("src", "test", "resources", "org.wso2.http.analytics.stream_1.0.0.json")
                 .toAbsolutePath();
         return streamDefinitionPath.toString();
     }

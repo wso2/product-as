@@ -1,0 +1,119 @@
+{
+  "name": "org.wso2.http.analytics.stream",
+  "version": "1.0.0",
+  "nickName": "Http_Stat_Stream",
+  "description": "Sample of Http Statistics",
+  "metaData": [
+    {
+      "name": "server_address",
+      "type": "STRING"
+    },
+    {
+      "name": "server_name",
+      "type": "STRING"
+    }
+  ],
+  "payloadData": [
+    {
+      "name": "appName",
+      "type": "STRING"
+    },
+    {
+      "name": "appVersion",
+      "type": "STRING"
+    },
+    {
+      "name": "userId",
+      "type": "STRING"
+    },
+    {
+      "name": "requestUri",
+      "type": "STRING"
+    },
+    {
+      "name": "timestamp",
+      "type": "LONG"
+    },
+    {
+      "name": "resourcePath",
+      "type": "STRING"
+    },
+    {
+      "name": "appType",
+      "type": "STRING"
+    },
+    {
+      "name": "appDisplayName",
+      "type": "STRING"
+    },
+    {
+      "name": "sessionId",
+      "type": "STRING"
+    },
+    {
+      "name": "httpMethod",
+      "type": "STRING"
+    },
+    {
+      "name": "requestContentType",
+      "type": "STRING"
+    },
+    {
+      "name": "responseContentType",
+      "type": "STRING"
+    },
+    {
+      "name": "responseHttpStatusCode",
+      "type": "LONG"
+    },
+    {
+      "name": "remoteAddress",
+      "type": "STRING"
+    },
+    {
+      "name": "referrer",
+      "type": "STRING"
+    },
+    {
+      "name": "userAgent",
+      "type": "STRING"
+    },
+    {
+      "name": "host",
+      "type": "STRING"
+    },
+    {
+      "name": "remoteUser",
+      "type": "STRING"
+    },
+    {
+      "name": "authType",
+      "type": "STRING"
+    },
+    {
+      "name": "responseTime",
+      "type": "LONG"
+    },
+    {
+      "name": "requestSizeBytes",
+      "type": "LONG"
+    },
+    {
+      "name": "responseSizeBytes",
+      "type": "LONG"
+    },
+    {
+      "name": "requestHeader",
+      "type": "STRING"
+    },
+    {
+      "name": "responseHeader",
+      "type": "STRING"
+    },
+    {
+      "name": "language",
+      "type": "STRING"
+    }
+
+  ]
+}
