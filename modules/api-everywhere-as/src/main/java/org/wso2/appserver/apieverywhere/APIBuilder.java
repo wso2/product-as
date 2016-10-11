@@ -102,8 +102,8 @@ class APIBuilder {
         }
         apiCreateRequest.buildAPICreateRequest(swaggerString);
         String apiCreateRequestString = gson.toJson(apiCreateRequest);
-        log.info("API Builded : " + apiCreateRequestString);
-            log.info("API Builded : " + apiCreateRequest.getName());
+//        log.info("API Builded : " + apiCreateRequestString);
+        log.info("API Builded : " + apiCreateRequest.getName());
 
         return apiCreateRequestString;
 
