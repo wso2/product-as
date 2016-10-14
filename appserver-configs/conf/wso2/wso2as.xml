@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<AppServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as"
+           xsi:schemaLocation="http://wso2.org/2016/wso2as wso2as.xsd">
+    <!--
+        Defines the server level configurations for classloader runtime environments, which enable the
+        storage of runtime libraries required by your web applications in a central repository.
+    -->
+    <ClassLoader>
+        <!-- The classloader runtime environments. -->
+        <Environments>
+            <!--
+                Defines a classloader runtime environment. A classloader runtime defined must have the
+                following two elements defined:
+                <Name> - name of the runtime
+                <Classpath> - specifies the file path to the libraries relevant to the environment
+            -->
+            <Environment>
+                <Name>CXF</Name>
+                <Classpath>${catalina.home}/lib/runtimes/cxf/</Classpath>
+            </Environment>
+            <Environment>
+                <Name>jaggery</Name>
+                <Classpath>${catalina.home}/lib/runtimes/jaggery/</Classpath>
+            </Environment>
+        </Environments>
+    </ClassLoader>
+
+    <!--
+        Defines the server level configurations required for SAML 2.0 based Web Browser Single-Sign-On (SSO)
+        and Single-Logout (SLO) Profiles.
+    -->
+    <SAML2SingleSignOn>
+        <!--
+            The URL identifying the SAML 2.0 Identity Provider in order to perform single-sign-on
+            and single-logout.
+        -->
+        <IdPURL>https://localhost:9443/samlsso</IdPURL>
+
+        <!-- The unique entity identifier of the SAML 2.0 Identity Provider. -->
+        <IdPEntityId>localhost</IdPEntityId>
+
+        <!-- The alias of the Identity Provider's Public certificate. -->
+        <IdPCertificateAlias>wso2carbon</IdPCertificateAlias>
+    </SAML2SingleSignOn>
+
+    <!--
+        Defines the server level configurations required for HTTP statistics monitoring of web applications using
+        WSO2 Data Analytics Server (DAS).
+    -->
+    <StatisticsPublisher>
+        <!-- The username credential required to log into WSO2 Data Analytics Server (DAS) -->
+        <Username>admin</Username>
+
+        <!-- The password required to log into WSO2 Data Analytics Server (DAS) -->
+        <Password>admin</Password>
+
+        <!-- The data agent configured in WSO2 Data Analytics Server (DAS) -->
+        <DataAgentType>Thrift</DataAgentType>
+
+        <!-- The secure Thrift SSL port in WSO2 Data Analytics Server (DAS) for publishing statistics. -->
+        <AuthenticationURL>ssl://127.0.0.1:7711</AuthenticationURL>
+
+        <!-- The URL of WSO2 Data Analytics Server (DAS), which will be used for publishing the statistics. -->
+        <PublisherURL>tcp://127.0.0.1:7611</PublisherURL>
+
+        <!-- The event stream defined in WSO2 Data Analytics Server (DAS) to receive the data published. -->
+        <StreamId>org.wso2.http.analytics.stream:1.0.0</StreamId>
+    </StatisticsPublisher>
+
+    <!--
+        The child elements under this defines the Application Server SSL communication configurations.
+        This includes the Application Server keystore and trust-store configurations.
+     -->
+    <Security>
+        <!--
+            The Application Server keystore configurations. This is a store for SSL certificates and
+            private keys corresponding to their public keys.
+         -->
+        <KeyStore>
+            <!--
+                File path location of the Application Server keystore. Environmental variable placeholders can
+                be used within the file path provided.
+             -->
+            <Location>${catalina.base}/conf/wso2/wso2carbon.jks</Location>
+
+            <!-- The type of the keystore. Types - JKS, PKCS11 and PKCS12 are recognized. -->
+            <Type>JKS</Type>
+
+            <!-- The password to unlock the keystore file. -->
+            <Password>wso2carbon</Password>
+
+            <!-- The alias of the private key. -->
+            <KeyAlias>wso2carbon</KeyAlias>
+
+            <!-- The password to be used to retrieve the private key. -->
+            <KeyPassword>wso2carbon</KeyPassword>
+        </KeyStore>
+
+        <!--
+            The Application Server trust-store configurations. This is used as a store for third-party
+            SSL certificates for verification of credentials.
+        -->
+        <TrustStore>
+            <!--
+                File path location of the Application Server trust-store. Environmental variable placeholders can
+                be used within the file path provided.
+             -->
+            <Location>${catalina.base}/conf/wso2/client-truststore.jks</Location>
+
+            <!-- The type of the trust-store. Types - JKS, PKCS11 and PKCS12 are recognized. -->
+            <Type>JKS</Type>
+
+            <!-- The password to unlock the trust-store file. -->
+            <Password>wso2carbon</Password>
+        </TrustStore>
+    </Security>
+</AppServer>

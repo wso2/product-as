@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!--
+    The configurations defined in this global web application descriptor is applicable to all
+    web applications deployed within WSO2 Application Server. If desired, any of these configurations
+    can be overridden for a specific web application by defining a web application specific
+    descriptor (META-INF/wso2as-web.xml) and defining the overridden configurations in it.
+-->
+<wso2as-web xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://wso2.org/2016/wso2as-web"
+            xsi:schemaLocation="http://wso2.org/2016/wso2as-web wso2as-web.xsd">
+    <!--
+        Defines the name(s) of the runtime environments which are to be loaded, applicable for all the
+        web applications deployed in WSO2 Application Server.
+    -->
+    <class-loader>
+        <!--
+            Name(s) of the classloader runtime environments. Multiple environments can be separated
+            using commas. For example,
+                <environments>MyEnv1, MyEnv2</environments>
+        -->
+        <environments>CXF</environments>
+    </class-loader>
+
+    <!--
+        Defines the web application level configurations required for SAML 2.0 based Web Browser
+        Single-Sign-On (SSO) and Single-Logout (SLO) Profiles.
+    -->
+    <saml2-single-sign-on>
+        <!-- Enable/disable SAML 2.0 based Web Browser single-sign-on (SSO) profile. -->
+        <enable-sso>false</enable-sso>
+
+        <!-- The SAML 2.0 based binding type used for SAML 2.0 Request sending. -->
+        <http-binding>urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</http-binding>
+
+        <!-- The postfix to a URL in order to identify the SAML 2.0 Assertion Consumer. -->
+        <consumer-url-postfix>acs</consumer-url-postfix>
+
+        <!-- Enable/disable SAML 2.0 based Single-Logout (SLO) Profile. -->
+        <enable-slo>false</enable-slo>
+
+        <!-- The postfix to a URL which identifies a SAML 2.0 Single Logout Request. -->
+        <slo-url-postfix>logout</slo-url-postfix>
+
+        <!-- Enable/disable SAML 2.0 Assertion encryption. -->
+        <enable-assertion-encryption>false</enable-assertion-encryption>
+
+        <!-- Enable/disable the application of digital signature to SAML 2.0 Assertions. -->
+        <enable-assertion-signing>false</enable-assertion-signing>
+
+        <!-- Enable/disable the application of digital signature to SAML 2.0 based Requests. -->
+        <enable-request-signing>false</enable-request-signing>
+
+        <!-- Enable/disable the application of digital signature to SAML 2.0 based Responses. -->
+        <enable-response-signing>false</enable-response-signing>
+    </saml2-single-sign-on>
+
+    <!--
+        Defines the web application level configurations required for HTTP statistics monitoring of
+        web applications using WSO2 Data Analytics Server (DAS).
+    -->
+    <statistics-publisher>
+        <!-- Enable/disable HTTP statistics monitoring. -->
+        <enable-stats-publisher>false</enable-stats-publisher>
+        <publisher-implementation>false</publisher-implementation>
+    </statistics-publisher>
+</wso2as-web>
