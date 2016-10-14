@@ -1,0 +1,167 @@
+/*
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package org.wso2.appserver.sample.utils;
+
+import org.wso2.appserver.configuration.context.AppServerWebAppConfiguration;
+import org.wso2.appserver.configuration.context.WebAppClassLoading;
+import org.wso2.appserver.configuration.context.WebAppSingleSignOn;
+import org.wso2.appserver.configuration.context.WebAppStatsPublishing;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Contains the utility methods for testing context level configuration loading.
+ *
+ * @since 6.0.0
+ */
+public class ContextConfigurationUtils {
+    public static AppServerWebAppConfiguration prepareDefault() {
+        AppServerWebAppConfiguration configuration = new AppServerWebAppConfiguration();
+        configuration.setClassLoaderConfiguration(prepareClassLoaderConfiguration());
+        configuration.setSingleSignOnConfiguration(prepareSSOConfiguration());
+        configuration.setStatsPublisherConfiguration(prepareStatsPublisherConfiguration());
+        return configuration;
+    }
+
+    private static WebAppClassLoading prepareClassLoaderConfiguration() {
+        WebAppClassLoading classloading = new WebAppClassLoading();
+        classloading.setEnvironments(Constants.SPRING_ENV_NAME);
+        return classloading;
+    }
+
+    private static WebAppSingleSignOn prepareSSOConfiguration() {
+        WebAppSingleSignOn ssoConfiguration = new WebAppSingleSignOn();
+
+        ssoConfiguration.enableSSO(true);
+        ssoConfiguration.setHttpBinding(Constants.SAML_BINDING);
+        ssoConfiguration.setIssuerId(Constants.ISSUER_ID);
+        ssoConfiguration.setConsumerURL(Constants.CONSUMER_URL);
+        ssoConfiguration.setConsumerURLPostfix(Constants.CONSUMER_URL_POSTFIX);
+
+        WebAppSingleSignOn.SkipURIs skipURIs = new WebAppSingleSignOn.SkipURIs();
+        List<String> uris = new ArrayList<>();
+        uris.add(Constants.SKIP_URI);
+        skipURIs.setSkipURIs(uris);
+        ssoConfiguration.setSkipURIs(skipURIs);
+
+        ssoConfiguration.setOptionalParams(Constants.QUERY_PARAMS);
+        ssoConfiguration.enableSLO(true);
+        ssoConfiguration.setSLOURLPostfix(Constants.SLO_URL_POSTFIX);
+        ssoConfiguration.enableAssertionSigning(true);
+        ssoConfiguration.enableAssertionEncryption(true);
+        ssoConfiguration.enableRequestSigning(true);
+        ssoConfiguration.enableResponseSigning(true);
+
+        WebAppSingleSignOn.Property relayState = new WebAppSingleSignOn.Property();
+        relayState.setKey(Constants.RELAY_STATE_KEY);
+        relayState.setValue(Constants.RELAY_STATE_VALUE);
+        WebAppSingleSignOn.Property loginURL = new WebAppSingleSignOn.Property();
+        loginURL.setKey(Constants.LOGIN_URL_KEY);
+        loginURL.setValue(Constants.LOGIN_URL_VALUE);
+        List<WebAppSingleSignOn.Property> properties = new ArrayList<>();
+        properties.add(relayState);
+        properties.add(loginURL);
+        ssoConfiguration.setProperties(properties);
+
+        return ssoConfiguration;
+    }
+
+    private static WebAppStatsPublishing prepareStatsPublisherConfiguration() {
+        WebAppStatsPublishing configuration = new WebAppStatsPublishing();
+        configuration.enableStatsPublisher(true);
+        return configuration;
+    }
+
+    public static boolean compare(AppServerWebAppConfiguration actual, AppServerWebAppConfiguration expected) {
+        return ((compareClassloadingConfigs(actual.getClassLoaderConfiguration(),
+                expected.getClassLoaderConfiguration())) && (compareSSOConfigurations(
+                actual.getSingleSignOnConfiguration(), expected.getSingleSignOnConfiguration()))
+                && (compareStatsPublisherConfigs(actual.getStatsPublisherConfiguration(),
+                expected.getStatsPublisherConfiguration())));
+    }
+
+    private static boolean compareClassloadingConfigs(WebAppClassLoading actual,
+            WebAppClassLoading expected) {
+        return ((actual != null) && (expected != null) && (actual.getEnvironments().trim().
+                equals(expected.getEnvironments())));
+    }
+
+    private static boolean compareSSOConfigurations(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
+        if ((actual != null) && (expected != null)) {
+            boolean skipURIs = compareSkipURIs(actual.getSkipURIs(), expected.getSkipURIs());
+            boolean queryParams = actual.getOptionalParams().trim().equals(expected.getOptionalParams());
+            boolean enableSSO = actual.isSSOEnabled().equals(expected.isSSOEnabled());
+            boolean binding = actual.getHttpBinding().trim().equals(expected.getHttpBinding());
+            boolean issuerID = actual.getIssuerId().trim().equals(expected.getIssuerId());
+            boolean consumerURL = actual.getConsumerURL().trim().equals(expected.getConsumerURL());
+            boolean enableSLO = actual.isSLOEnabled().equals(expected.isSLOEnabled());
+            boolean ssl = compareSSLProperties(actual, expected);
+            boolean postfixes = comparePostfixes(actual, expected);
+            boolean properties = compareProperties(actual.getProperties(), expected.getProperties());
+
+            return (skipURIs && queryParams && enableSSO && postfixes
+                    && binding && issuerID && consumerURL && enableSLO && ssl && properties);
+        } else {
+            return ((actual == null) && (expected == null));
+        }
+    }
+
+    private static boolean compareSkipURIs(WebAppSingleSignOn.SkipURIs actual, WebAppSingleSignOn.SkipURIs expected) {
+        return actual.getSkipURIs()
+                .stream()
+                .filter(skipURI -> expected.getSkipURIs()
+                        .stream()
+                        .filter(uri -> uri.trim().equals(skipURI))
+                        .count() > 0)
+                .count() == expected.getSkipURIs().size();
+    }
+
+    private static boolean compareProperties(List<WebAppSingleSignOn.Property> actual,
+                                             List<WebAppSingleSignOn.Property> expected) {
+        return actual
+                .stream()
+                .filter(property -> expected
+                        .stream()
+                        .filter(exp -> (property.getKey().trim().equals(exp.getKey()) && property.getValue().trim().
+                        equals(exp.getValue())))
+                        .count() > 0)
+                .count() == expected.size();
+    }
+
+    private static boolean compareSSLProperties(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
+        boolean assertionSigning = actual.isAssertionSigningEnabled().equals(expected.isAssertionSigningEnabled());
+        boolean assertionEncryption = actual.isAssertionEncryptionEnabled().equals(expected.
+                isAssertionEncryptionEnabled());
+        boolean requestSigning = actual.isRequestSigningEnabled().equals(expected.isRequestSigningEnabled());
+        boolean responseSigning = actual.isResponseSigningEnabled().equals(expected.isResponseSigningEnabled());
+
+        return assertionSigning && assertionEncryption && requestSigning && responseSigning;
+    }
+
+    private static boolean comparePostfixes(WebAppSingleSignOn actual, WebAppSingleSignOn expected) {
+        boolean consumerURLPostfix = actual.getConsumerURLPostfix().trim().equals(expected.getConsumerURLPostfix());
+        boolean sloURLPostfix = actual.getSLOURLPostfix().trim().equals(expected.getSLOURLPostfix());
+
+        return consumerURLPostfix && sloURLPostfix;
+    }
+
+    private static boolean compareStatsPublisherConfigs(WebAppStatsPublishing actual,
+            WebAppStatsPublishing expected) {
+        return ((actual != null) && (expected != null) && (actual.isStatsPublisherEnabled().
+                equals(expected.isStatsPublisherEnabled())));
+    }
+}
