@@ -84,8 +84,11 @@ public class ApplicationServerConfiguration {
      */
     private void resolveEnvVariables() {
         StrSubstitutor strSubstitutor = new StrSubstitutor(System.getenv());
-        classLoaderEnvironments.getEnvironments().getEnvironments().
-                forEach(environment -> environment.setClasspath(strSubstitutor.replace(environment.getClasspath())));
+        if (classLoaderEnvironments != null) {
+            classLoaderEnvironments.getEnvironments().getEnvironments().
+                    forEach(environment -> environment
+                            .setClasspath(strSubstitutor.replace(environment.getClasspath())));
+        }
         securityConfiguration.getKeystore().
                 setLocation(strSubstitutor.replace(securityConfiguration.getKeystore().getLocation()));
         securityConfiguration.getTruststore().
@@ -96,8 +99,12 @@ public class ApplicationServerConfiguration {
      * Resolves the system variable placeholders specified among the configurations.
      */
     private void resolveSystemProperties() {
-        classLoaderEnvironments.getEnvironments().getEnvironments().forEach(environment -> environment.
-                setClasspath(StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
+        if (classLoaderEnvironments != null) {
+            classLoaderEnvironments.getEnvironments().getEnvironments().
+                    forEach(environment -> environment.setClasspath(
+                            StrSubstitutor.replaceSystemProperties(environment.getClasspath())));
+        }
+
         securityConfiguration.getKeystore().
                 setLocation(StrSubstitutor.replaceSystemProperties(securityConfiguration.getKeystore().getLocation()));
         securityConfiguration.getTruststore().setLocation(
