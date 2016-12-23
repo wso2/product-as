@@ -43,6 +43,11 @@
             <package name="org.wso2.appserver.integration.tests.javaee.jsf.*"/>
             <package name="org.wso2.appserver.integration.tests.javaee.jta.*"/>
         </packages>
+
+        <!-- TODO: Enable following test after updating carbon-deployment to > 4.6.x -->
+        <!--classes>
+            <class name="org.wso2.appserver.integration.tests.javaee.WSAS2099DuplicateDeploymentIDTestCase"></class>
+        </classes-->
     </test>
 
     <test name="logging-tests" preserve-order="true" parallel="false">
