@@ -154,6 +154,7 @@
                         <configuration>
                             <includeGroupIds>org.wso2.appserver</includeGroupIds>
                             <includeArtifactIds>jaxrs_basic</includeArtifactIds>
+                            <includeScope></includeScope>
                             <outputDirectory>${project.build.directory}/${distribution.file.name}/webapps
                             </outputDirectory>
                         </configuration>

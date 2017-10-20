@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.servlet.ServletContext;
 
 /**
  * A Java class which loads WSO2 specific context level configurations for all contexts.
@@ -117,6 +118,24 @@ public class ContextConfigurationLoader implements LifecycleListener {
             return effective;
         } else {
             throw new ApplicationServerRuntimeException("Context cannot be null");
+        }
+    }
+
+    /**
+     * Retrieves the {@code AppServerWebAppConfiguration} matching the specified context.
+     *
+     * @param servletContext the servletContext for which the matching {@link AppServerWebAppConfiguration}
+     *                       is to be returned
+     * @return the {@code AppServerWebAppConfiguration} matching the specified context
+     */
+    public static Optional<AppServerWebAppConfiguration> getContextConfiguration(ServletContext servletContext) {
+        Optional<Context> firstContext = contextToConfigurationMap.keySet().stream().filter(
+                            context -> servletContext.equals(context.getServletContext())).findFirst();
+
+        if (firstContext.isPresent()) {
+            return Optional.ofNullable(contextToConfigurationMap.get(firstContext.get()));
+        } else {
+            return Optional.empty();
         }
     }
 }

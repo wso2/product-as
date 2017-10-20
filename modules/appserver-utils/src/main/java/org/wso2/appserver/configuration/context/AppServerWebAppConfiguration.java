@@ -35,6 +35,8 @@ public class AppServerWebAppConfiguration {
     private WebAppSingleSignOn singleSignOnConfiguration;
     @XmlElement(name = "statistics-publisher")
     private WebAppStatsPublishing statsPublisherConfiguration;
+    @XmlElement(name = "api-everywhere")
+    private WebAppApiEverywhere apiEverywhereConfiguration;
 
     public WebAppClassLoading getClassLoaderConfiguration() {
         return classLoaderConfiguration;
@@ -88,6 +90,21 @@ public class AppServerWebAppConfiguration {
 
                     statsPublisherConfiguration = Optional.ofNullable(statsPublisherConfiguration)
                             .orElse(configuration.statsPublisherConfiguration);
+
+                    Optional.ofNullable(apiEverywhereConfiguration)
+                            .ifPresent(apiEverywhere ->
+                                    apiEverywhere.merge(configuration.apiEverywhereConfiguration));
+
+                    apiEverywhereConfiguration = Optional.ofNullable(apiEverywhereConfiguration)
+                            .orElse(configuration.apiEverywhereConfiguration);
                 });
+    }
+
+    public WebAppApiEverywhere getApiEverywhereConfiguration() {
+        return apiEverywhereConfiguration;
+    }
+
+    public void setApiEverywhereConfiguration(WebAppApiEverywhere apiEverywhereConfiguration) {
+        this.apiEverywhereConfiguration = apiEverywhereConfiguration;
     }
 }

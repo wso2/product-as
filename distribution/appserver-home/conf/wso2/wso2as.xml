@@ -126,4 +126,21 @@
             <Password>wso2carbon</Password>
         </TrustStore>
     </Security>
+
+    <!--
+    The child elements under this defines the Configurations to Create API
+     of deployed web app in API Publisher
+    -->
+    <ApiEverywhere>
+        <!--todo security for clientid and clientsecret-->
+        <!--Base64 encoded value of clientId and clientSecret-->
+        <ClientId>I3oqPSfxX6VQcN5QZGuEbdXMvS8a</ClientId>
+        <ClientSecret>fgBEtMelLyvjejtvIrKT2BobCcoa</ClientSecret>
+        <!--Base url of API Publisher-->
+        <ApiPublisherUrl>https://localhost:9443</ApiPublisherUrl>
+        <!--API Publisher Authentication base url-->
+        <AuthenticationUrl>https://localhost:8243</AuthenticationUrl>
+        <!--Base url of Application Server-->
+        <ApplicationServerUrl>http://localhost:8080/</ApplicationServerUrl>
+    </ApiEverywhere>
 </AppServer>

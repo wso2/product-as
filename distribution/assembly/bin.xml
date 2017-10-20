@@ -104,6 +104,7 @@
                 <include>org.wso2.appserver:appserver-http-statistics-monitoring:jar</include>
                 <include>org.wso2.appserver:appserver-webapp-loader:jar</include>
                 <include>org.wso2.appserver:appserver-webapp-security:jar</include>
+                <include>org.wso2.appserver:api-everywhere-as:jar</include>
             </includes>
         </dependencySet>
 
@@ -150,6 +151,19 @@
 
                 <!--for jaggery app deployment-->
                 <include>org.jaggeryjs:org.jaggeryjs.jaggery.tomcat.listener:jar</include>
+            </includes>
+        </dependencySet>
+
+        <!-- Include dependencies for api everywhere modules here -->
+        <dependencySet>
+            <outputDirectory>/${distribution.file.name}/lib</outputDirectory>
+            <includes>
+                <include>org.reflections:reflections:jar</include>
+                <include>javax.ws.rs:javax.ws.rs-api:jar</include>
+                <include>javassist:javassist:jar</include>
+                <include>org.json.wso2:json:jar</include>
+                <include>com.google.code.gson:gson:jar</include>
+                <include>io.swagger:swagger-models:jar</include>
             </includes>
         </dependencySet>
 

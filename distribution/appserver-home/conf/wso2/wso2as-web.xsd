@@ -83,6 +83,13 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="api-everywhere" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="create-api" type="xs:boolean"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

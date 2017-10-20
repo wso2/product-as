@@ -38,6 +38,8 @@ public class ApplicationServerConfiguration {
     private AppServerStatsPublishing statsPublisherConfiguration;
     @XmlElement(name = "Security")
     private AppServerSecurity securityConfiguration;
+    @XmlElement(name = "ApiEverywhere")
+    private AppServerApiEverywhere apiEverywhereConfiguration;
 
     public AppServerClassLoading getClassLoaderEnvironments() {
         return classLoaderEnvironments;
@@ -102,5 +104,13 @@ public class ApplicationServerConfiguration {
                 setLocation(StrSubstitutor.replaceSystemProperties(securityConfiguration.getKeystore().getLocation()));
         securityConfiguration.getTruststore().setLocation(
                 StrSubstitutor.replaceSystemProperties(securityConfiguration.getTruststore().getLocation()));
+    }
+
+    public AppServerApiEverywhere getApiEverywhereConfiguration() {
+        return apiEverywhereConfiguration;
+    }
+
+    public void setApiEverywhereConfiguration(AppServerApiEverywhere apiEverywhereConfiguration) {
+        this.apiEverywhereConfiguration = apiEverywhereConfiguration;
     }
 }

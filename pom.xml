@@ -543,6 +543,11 @@
                 <artifactId>appserver-webapp-security</artifactId>
                 <version>6.0.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.appserver</groupId>
+                <artifactId>api-everywhere-as</artifactId>
+                <version>6.0.0-SNAPSHOT</version>
+            </dependency>
 
             <!--Quick Start Module-->
             <dependency>
@@ -857,10 +862,37 @@
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+
+            <!--api everywhere dependencies-->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflection.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${jax-ws-rs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.json.wso2</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -947,6 +979,13 @@
         <org.wso2.carbon.databridge.shade.version>5.0.8.wso2v1</org.wso2.carbon.databridge.shade.version>
         <commons.logging.shade.version>1.2.0.wso2v1</commons.logging.shade.version>
         <gson.version>2.7</gson.version>
+        <org.wso2.carbon.analytics-common.shade.version>5.0.8.wso2v1-SNAPSHOT</org.wso2.carbon.analytics-common.shade.version>
+        <commons-logging.shade.version>1.2.0.wso2v1-SNAPSHOT</commons-logging.shade.version>
+        <reflection.version>0.9.10</reflection.version>
+        <jax-ws-rs.version>2.0.1</jax-ws-rs.version>
+        <javassit.version>3.12.1.GA</javassit.version>
+        <json.version>3.0.0.wso2v1</json.version>
+        <swagger.version>1.5.3</swagger.version>
 
         <!-- databridge component dependency for http statistics publishing integration test -->
         <databridge.component.version>4.2.0</databridge.component.version>
