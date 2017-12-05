@@ -162,4 +162,26 @@ public class LogViewerClient {
             throw e;
         }
     }
+
+    /**
+     * Reads and returns the specified log lines from the given log file.
+     *
+     * @param logFile log file path relative to carbon logs
+     * @param maxLogs maximum number of lines of the log
+     * @param start   starting line of the log
+     * @param end     ending line of the log
+     * @return requested log lines from the given log file
+     * @throws RemoteException
+     * @throws LogViewerLogViewerException
+     */
+    public String[] getLogLinesFromFile(String logFile, int maxLogs, int start, int end)
+            throws RemoteException, LogViewerLogViewerException {
+        try {
+            return logViewerStub.getLogLinesFromFile(logFile, maxLogs, start, end);
+        } catch (RemoteException e) {
+            throw e;
+        } catch (LogViewerLogViewerException e) {
+            throw e;
+        }
+    }
 }
