@@ -443,6 +443,10 @@
             <artifactId>org.wso2.carbon.registry.info.stub</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.carbon.commons</groupId>
+            <artifactId>org.wso2.carbon.logging.admin.stub</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.xfer</groupId>
             <artifactId>wso2xfer</artifactId>
             <type>jar</type>
