@@ -10,10 +10,11 @@
     </test-->
 
     <test name="logviewer-tests" parallel="false">
-        <!--todo-->
-        <packages>
-            <package name="org.wso2.appserver.integration.tests.logviewer"></package>
-        </packages>
+        <classes>
+            <class name="org.wso2.appserver.integration.tests.logviewer.CARBON15188LogViewerWithFileAppenderTestCase" />
+            <class name="org.wso2.appserver.integration.tests.logviewer.LogViewerTestCase"/>
+            <class name="org.wso2.appserver.integration.tests.logviewer.TenantLogViewerTestCase"/>
+        </classes>
     </test>
 
     <test name="webapp-tests" preserve-order="true" parallel="false">
