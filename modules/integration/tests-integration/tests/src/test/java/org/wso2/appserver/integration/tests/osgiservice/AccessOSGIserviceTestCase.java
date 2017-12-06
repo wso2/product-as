@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -108,7 +108,8 @@ public class AccessOSGIserviceTestCase extends ASIntegrationTest {
         String webAppURLLocal = webAppURL + "/t/" + tenantContext.getContextTenant().getDomain() +
                 "/webapps/org.wso2.carbon.tenant.config.test/tenant.do";
         // access web application org.wso2.carbon.tenant.config.test
-        // will invoke CarbonContext.getThreadLocalCarbonContext().getOSGiService(Axis2ClientConfigContextProvider.class);
+        // will invoke CarbonContext.getThreadLocalCarbonContext().getOSGiService(
+        // Axis2ClientConfigContextProvider.class);
         // if the osgi service is invoked successfully, it will return value "axis2/services" else will return null
         HttpResponse response = HttpURLConnectionClient.sendGetRequest(webAppURLLocal, "", "text/html");
         assertTrue(response.getData().contains("axis2/services"), "Unexpected response: " + response.getData());
@@ -130,3 +131,4 @@ public class AccessOSGIserviceTestCase extends ASIntegrationTest {
                         "got a response even after web app is undeployed");
     }
 }
+
