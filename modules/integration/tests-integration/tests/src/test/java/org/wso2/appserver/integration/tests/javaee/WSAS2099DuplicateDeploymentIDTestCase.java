@@ -34,6 +34,9 @@ import java.io.File;
 
 import static org.testng.Assert.assertFalse;
 
+/**
+ * This test is to verify when an app with ejb is deployed to 2 tenants.
+ */
 public class WSAS2099DuplicateDeploymentIDTestCase extends ASIntegrationTest {
 
     private TestUserMode userMode;
@@ -49,12 +52,12 @@ public class WSAS2099DuplicateDeploymentIDTestCase extends ASIntegrationTest {
 
     @DataProvider
     private static TestUserMode[][] userModeDataProvider() {
-        return new TestUserMode[][] {{ TestUserMode.SUPER_TENANT_ADMIN }};
+        return new TestUserMode[][]{{TestUserMode.SUPER_TENANT_ADMIN}};
     }
 
     @BeforeClass(alwaysRun = true)
     public void setEnvironment() throws Exception {
-        if(userMode == TestUserMode.SUPER_TENANT_ADMIN) {
+        if (userMode == TestUserMode.SUPER_TENANT_ADMIN) {
             super.init(userMode);
 
             File sourceFile = new File(TestConfigurationProvider.getResourceLocation() + File.separator +

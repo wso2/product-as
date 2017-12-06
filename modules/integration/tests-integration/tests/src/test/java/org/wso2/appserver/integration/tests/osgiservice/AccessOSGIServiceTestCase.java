@@ -40,11 +40,13 @@ import java.io.File;
 
 import static org.testng.Assert.assertTrue;
 
-// This test will upload a OSGI bundle to dropins and add service name to carboncontext-osgi-services.properties file
-// Then it will upload a webapp via tenant user and will access uploaded webapp
-// This webapp will access above exposed OSGI service with the new method "CarbonContext.getOSGIService(clazz,props)"
-
-public class AccessOSGIserviceTestCase extends ASIntegrationTest {
+/**
+ * This test is to verify for CarbonContext to read OSGi services.
+ * This will upload a OSGI bundle to dropins and add service name to carboncontext-osgi-services.properties file
+ * Then it will upload a webapp via tenant user and will access uploaded webapp
+ * This webapp will access above exposed OSGI service with the new method "CarbonContext.getOSGIService(clazz,props)"
+ */
+public class AccessOSGIServiceTestCase extends ASIntegrationTest {
     private ServerConfigurationManager serverManager;
     private WebAppAdminClient webAppAdminClient;
     private final String webAppFileName = "org.wso2.carbon.tenant.config.test.war";
@@ -120,7 +122,7 @@ public class AccessOSGIserviceTestCase extends ASIntegrationTest {
     public void testDeleteWebApplication() throws Exception {
         webAppAdminClient.deleteWebAppFile(webAppFileName, "localhost");
         assertTrue(WebAppDeploymentUtil.isWebApplicationUnDeployed(
-                        tenantContext.getContextUrls().getBackEndUrl(), tenantSession, webAppName),
+                tenantContext.getContextUrls().getBackEndUrl(), tenantSession, webAppName),
                 "Web Application unDeployment failed");
 
         String webAppURLLocal = webAppURL + "/t/" + tenantContext.getContextTenant().getDomain() +
